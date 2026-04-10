@@ -20,14 +20,23 @@ public class DisplayServiceImpl implements DisplayService {
     private final Logger logger;
     private final ExternalServiceIntegration externalServices;
     private final Map<UUID, PlayerDisplay> displays = new ConcurrentHashMap<>();
-    private final Scoreboard mainScoreboard;
+    private Scoreboard mainScoreboard;
     private boolean enabled = true;
     
     public DisplayServiceImpl(RPGCore plugin) {
         this.plugin = plugin;
         this.logger = plugin.getLogger();
         this.externalServices = plugin.getExternalServices();
-        this.mainScoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+    }
+    
+    private Scoreboard getMainScoreboard() {
+        if (mainScoreboard == null) {
+            var manager = Bukkit.getScoreboardManager();
+            if (manager != null) {
+                mainScoreboard = manager.getMainScoreboard();
+            }
+        }
+        return mainScoreboard;
     }
     
     @Override
@@ -78,7 +87,9 @@ public class DisplayServiceImpl implements DisplayService {
     @Override
     public void clearAll(Player player) {
         displays.remove(player.getUniqueId());
-        Team team = mainScoreboard.getTeam(getTeamName(player));
+        Scoreboard board = getMainScoreboard();
+        if (board == null) return;
+        Team team = board.getTeam(getTeamName(player));
         if (team != null) {
             team.unregister();
         }
@@ -141,10 +152,13 @@ public class DisplayServiceImpl implements DisplayService {
     private void applyDisplay(Player player, PlayerDisplay display) {
         if (!enabled) return;
         
+        Scoreboard board = getMainScoreboard();
+        if (board == null) return;
+        
         String teamName = getTeamName(player);
-        Team team = mainScoreboard.getTeam(teamName);
+        Team team = board.getTeam(teamName);
         if (team == null) {
-            team = mainScoreboard.registerNewTeam(teamName);
+            team = board.registerNewTeam(teamName);
         }
         
         team.addEntry(player.getName());

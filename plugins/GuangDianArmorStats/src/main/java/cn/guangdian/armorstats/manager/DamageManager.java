@@ -249,21 +249,30 @@ public class DamageManager {
     }
     
     private boolean isVanillaWeapon(Player player) {
-        ItemStack weapon = player.getInventory().getItemInMainHand();
-        if (weapon == null || weapon.getType() == Material.AIR) {
-            return true;
+        ItemStack mainHand = player.getInventory().getItemInMainHand();
+        ItemStack offHand = player.getInventory().getItemInOffHand();
+        
+        boolean mainHandHasRpg = hasRpgAttributes(mainHand);
+        boolean offHandHasRpg = hasRpgAttributes(offHand);
+        
+        return !mainHandHasRpg && !offHandHasRpg;
+    }
+    
+    private boolean hasRpgAttributes(ItemStack item) {
+        if (item == null || item.getType() == Material.AIR) {
+            return false;
         }
         
-        if (!weapon.hasItemMeta()) {
-            return true;
+        if (!item.hasItemMeta()) {
+            return false;
         }
         
-        var lore = weapon.getItemMeta().getLore();
+        var lore = item.getItemMeta().getLore();
         if (lore == null || lore.isEmpty()) {
-            return true;
+            return false;
         }
         
-        return !LoreParser.hasRpgAttributes(weapon);
+        return LoreParser.hasRpgAttributes(item);
     }
 
     public void handlePlayerDamage(EntityDamageByEntityEvent event) {

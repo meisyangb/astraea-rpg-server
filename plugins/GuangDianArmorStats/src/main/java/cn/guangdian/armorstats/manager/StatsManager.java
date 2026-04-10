@@ -57,6 +57,9 @@ public class StatsManager {
     private final Map<UUID, List<String>> accessorySkillsCache = new ConcurrentHashMap<>();
     private final Map<UUID, List<String>> offHandSkillsCache = new ConcurrentHashMap<>();
     
+    // 武器物品变更检测缓存（避免重复解析）
+    private final Map<UUID, String> weaponItemHashCache = new ConcurrentHashMap<>();
+    
     // 智能装备识别和动态缓存
     private final SmartAttributeDetector attributeDetector = new SmartAttributeDetector();
     private final DynamicCacheManager cacheManager = new DynamicCacheManager();
@@ -527,9 +530,22 @@ public class StatsManager {
      * 注意：切换武器不改变血量，只更新属性modifier
      * 
      * 重构: 使用 PlayerLockManager 保护并发操作
+     * 优化: 变更检测，避免重复解析
      */
     public void refreshWeaponOnly(Player player) {
         UUID uuid = player.getUniqueId();
+        
+        // 变更检测：计算当前物品哈希
+        ItemStack mainHand = player.getInventory().getItemInMainHand();
+        ItemStack offHand = player.getInventory().getItemInOffHand();
+        String currentHash = computeItemHash(mainHand) + ":" + computeItemHash(offHand);
+        
+        // 比较哈希，如果没变化则跳过
+        String lastHash = weaponItemHashCache.get(uuid);
+        if (currentHash.equals(lastHash)) {
+            return; // 物品没变化，跳过刷新
+        }
+        weaponItemHashCache.put(uuid, currentHash);
         
         try {
             lockManager.executeWithLock(uuid, () -> {
@@ -544,6 +560,18 @@ public class StatsManager {
         } catch (LockTimeoutException e) {
             plugin.getLogger().warning("刷新武器属性超时: " + player.getName());
         }
+    }
+    
+    /**
+     * 计算物品的唯一标识哈希（用于变更检测）
+     */
+    private String computeItemHash(ItemStack item) {
+        if (item == null || item.getType() == Material.AIR) {
+            return "AIR";
+        }
+        return item.getType().name() + ":" + 
+               item.getAmount() + ":" + 
+               (item.hasItemMeta() ? item.getItemMeta().hashCode() : "0");
     }
     
     /**
@@ -1088,6 +1116,7 @@ public class StatsManager {
         weaponSkillsCache.remove(uuid);
         accessorySkillsCache.remove(uuid);
         offHandSkillsCache.remove(uuid);
+        weaponItemHashCache.remove(uuid);
         // 移除动态缓存记录
         cacheManager.removePlayer(uuid);
         // 移除登录加载标记

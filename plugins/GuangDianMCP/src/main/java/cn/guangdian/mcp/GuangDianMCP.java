@@ -36,10 +36,12 @@ public class GuangDianMCP extends JavaPlugin {
         
         if (config.isServerEnabled()) {
             startMCPServer();
+            this.eventPusher = new EventPusher(this, mcpServer.getSSEHandler());
+            this.eventPusher.register();
+        } else {
+            this.eventPusher = new EventPusher(this, null);
+            this.eventPusher.register();
         }
-        
-        this.eventPusher = new EventPusher(this, mcpServer.getSSEHandler());
-        this.eventPusher.register();
         
         this.scheduler = new SchedulerManager(this);
         loadDefaultTasks();

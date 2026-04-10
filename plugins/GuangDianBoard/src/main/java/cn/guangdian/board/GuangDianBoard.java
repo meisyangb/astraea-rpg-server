@@ -46,6 +46,7 @@ public class GuangDianBoard extends JavaPlugin implements Listener {
     private FileConfiguration config;
     private ExternalServiceIntegration externalServices;
     private RPGCore rpgCore;
+    private boolean debug = false;
     
     private final Map<UUID, Boolean> boardToggleState = new ConcurrentHashMap<>();
     private final Map<UUID, Scoreboard> playerBoards = new ConcurrentHashMap<>();
@@ -208,6 +209,7 @@ public class GuangDianBoard extends JavaPlugin implements Listener {
         titleRefreshInterval = config.getLong("title-refresh-interval", 3000L);
         eventCooldown = config.getLong("smart-refresh.event-cooldown", 1000L);
         defaultTitle = config.getString("title", "&6&l光点RPG");
+        debug = config.getBoolean("advanced.debug", false);
         
         titleAnimationEnabled = config.getBoolean("title-animation.enabled", false);
         titleFrames = config.getStringList("title-animation.frames");
@@ -612,7 +614,12 @@ public class GuangDianBoard extends JavaPlugin implements Listener {
     private String processPlaceholders(Player player, String text) {
         String world = player.getWorld().getName();
         String worldAlias = worldAliases.getOrDefault(world, world);
-        
+
+        if (debug) {
+            getLogger().info("[DEBUG] 原始文本: " + text);
+            getLogger().info("[DEBUG] externalServices: " + (externalServices != null ? "已初始化" : "null"));
+        }
+
         text = text.replace("%player%", player.getName());
         text = text.replace("%player_name%", player.getName());
         text = text.replace("%world%", worldAlias);
@@ -628,20 +635,44 @@ public class GuangDianBoard extends JavaPlugin implements Listener {
         text = text.replace("%player_exp%", String.valueOf((int) (player.getExp() * 100)));
         text = text.replace("%player_ping%", String.valueOf(player.getPing()));
 
-        text = processLuckPermsPlaceholders(player, text);
         text = processServerTpsPlaceholders(text);
-        
-        if (externalServices != null) {
-            text = externalServices.parsePlaceholders(player, text);
+
+        if (text.contains("%luckperms_prefix%")) {
+            String prefix = "";
+            if (externalServices != null) {
+                prefix = externalServices.getPlayerPrefix(player);
+            }
+            text = text.replace("%luckperms_prefix%", prefix != null ? prefix : "");
         }
-        
-        text = processRoundedPlaceholder(text, player, "server_tps");
-        text = processRoundedPlaceholder(text, player, "server_tps_1");
-        text = processRoundedPlaceholder(text, player, "server_tps_5");
-        text = processRoundedPlaceholder(text, player, "server_tps_15");
-        text = processRoundedPlaceholder(text, player, "vault_eco_balance");
-        text = processRoundedPlaceholder(text, player, "vault_eco_balance_formatted");
-        
+
+        if (text.contains("%luckperms_suffix%")) {
+            String suffix = "";
+            if (externalServices != null) {
+                suffix = externalServices.getPlayerSuffix(player);
+            }
+            text = text.replace("%luckperms_suffix%", suffix != null ? suffix : "");
+        }
+
+        if (text.contains("%luckperms_primary_group_name%")) {
+            String group = "default";
+            if (externalServices != null) {
+                group = externalServices.getPlayerPrimaryGroup(player);
+            }
+            text = text.replace("%luckperms_primary_group_name%", group != null ? group : "default");
+        }
+
+        if (externalServices != null) {
+            String before = text;
+            text = externalServices.parsePlaceholders(player, text);
+            if (debug && !before.equals(text)) {
+                getLogger().info("[DEBUG] PlaceholderAPI 解析: " + before + " -> " + text);
+            }
+        }
+
+        if (debug) {
+            getLogger().info("[DEBUG] 最终文本: " + text);
+        }
+
         return text;
     }
 
@@ -674,19 +705,29 @@ public class GuangDianBoard extends JavaPlugin implements Listener {
     }
 
     private String processLuckPermsPlaceholders(Player player, String text) {
+        if (externalServices == null) {
+            return text;
+        }
+
         if (text.contains("%luckperms_prefix%")) {
-            String prefix = getLuckPermsPrefix(player);
-            text = text.replace("%luckperms_prefix%", prefix != null ? prefix : "");
+            String prefix = externalServices.parsePlaceholders(player, "%luckperms_prefix%");
+            if (prefix != null && !prefix.equals("%luckperms_prefix%")) {
+                text = text.replace("%luckperms_prefix%", prefix);
+            }
         }
 
         if (text.contains("%luckperms_suffix%")) {
-            String suffix = getLuckPermsSuffix(player);
-            text = text.replace("%luckperms_suffix%", suffix != null ? suffix : "");
+            String suffix = externalServices.parsePlaceholders(player, "%luckperms_suffix%");
+            if (suffix != null && !suffix.equals("%luckperms_suffix%")) {
+                text = text.replace("%luckperms_suffix%", suffix);
+            }
         }
 
         if (text.contains("%luckperms_primary_group_name%")) {
-            String group = getPrimaryGroup(player);
-            text = text.replace("%luckperms_primary_group_name%", group != null ? group : "default");
+            String group = externalServices.parsePlaceholders(player, "%luckperms_primary_group_name%");
+            if (group != null && !group.equals("%luckperms_primary_group_name%")) {
+                text = text.replace("%luckperms_primary_group_name%", group);
+            }
         }
 
         return text;
@@ -707,14 +748,18 @@ public class GuangDianBoard extends JavaPlugin implements Listener {
         if (!text.contains(fullPlaceholder)) {
             return text;
         }
-        
+
         String value = externalServices != null ? externalServices.parsePlaceholders(player, fullPlaceholder) : fullPlaceholder;
-        if (value.equals(fullPlaceholder)) {
+        if (value == null || value.equals(fullPlaceholder)) {
             return text;
         }
-        
+
         try {
-            double numValue = Double.parseDouble(value.replaceAll("[^0-9.\\-]", ""));
+            String numericPart = value.replaceAll("[^0-9.\\-]", "");
+            if (numericPart.isEmpty()) {
+                return text.replace(fullPlaceholder, value);
+            }
+            double numValue = Double.parseDouble(numericPart);
             int roundedValue = (int) Math.round(numValue);
             return text.replace(fullPlaceholder, String.valueOf(roundedValue));
         } catch (NumberFormatException e) {

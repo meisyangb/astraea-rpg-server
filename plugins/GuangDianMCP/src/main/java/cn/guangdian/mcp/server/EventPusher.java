@@ -43,7 +43,7 @@ public class EventPusher implements Listener {
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if (!enabled) return;
+        if (!enabled || sseHandler == null) return;
         
         Player player = event.getPlayer();
         JsonObject data = new JsonObject();
@@ -57,7 +57,7 @@ public class EventPusher implements Listener {
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        if (!enabled) return;
+        if (!enabled || sseHandler == null) return;
         
         Player player = event.getPlayer();
         JsonObject data = new JsonObject();
@@ -104,7 +104,7 @@ public class EventPusher implements Listener {
     }
     
     public void pushCustomEvent(String eventType, JsonObject data) {
-        if (!enabled) return;
+        if (!enabled || sseHandler == null) return;
         
         data.addProperty("type", eventType);
         data.addProperty("timestamp", System.currentTimeMillis());
@@ -149,7 +149,7 @@ public class EventPusher implements Listener {
     }
     
     public void pushPluginEvent(String pluginName, String action) {
-        if (!enabled) return;
+        if (!enabled || sseHandler == null) return;
         
         JsonObject data = new JsonObject();
         data.addProperty("type", "plugin_event");

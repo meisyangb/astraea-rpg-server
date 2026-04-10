@@ -71,6 +71,15 @@ public class ExternalServiceIntegrationImpl implements ExternalServiceIntegratio
         }
     }
     
+    public void refreshPlaceholderAPI() {
+        if (!placeholderAPIEnabled) {
+            hookPlaceholderAPI();
+            if (placeholderAPIEnabled) {
+                logger.info("[ExternalService] PlaceholderAPI refreshed and enabled");
+            }
+        }
+    }
+    
     @Override
     public Optional<LuckPerms> getLuckPerms() {
         return Optional.ofNullable(luckPerms);
@@ -148,7 +157,13 @@ public class ExternalServiceIntegrationImpl implements ExternalServiceIntegratio
     
     @Override
     public String parsePlaceholders(Player player, String text) {
-        if (!placeholderAPIEnabled || text == null) return text != null ? text : "";
+        if (text == null) return "";
+        
+        if (!placeholderAPIEnabled) {
+            refreshPlaceholderAPI();
+        }
+        
+        if (!placeholderAPIEnabled) return text;
         
         try {
             return me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, text);
