@@ -1,0 +1,31 @@
+rootProject.name = 'astraea-rpg-server'
+
+// 包含所有插件项目
+include(
+    'plugins:RPGCore',
+    'plugins:GuangDianArmorStats',
+    'plugins:GuangDianPoints',
+    'plugins:GuangDianName',
+    'plugins:GuangDianBoard',
+    'plugins:GuangDianQuest',
+    'plugins:GuangDianMarket',
+    'plugins:GuangDianTab',
+    'plugins:GuangDianNPC',
+    'plugins:GuangDianMobHealth',
+    'plugins:GuangDianForge',
+    'plugins:GuangDianCaveFu',
+    'plugins:GuangDianDropControl',
+    'plugins:GuangDianCleaner',
+    'plugins:GuangDianItemTrigger',
+    'plugins:GuangDianWorld',
+    'plugins:GuangDianLocation',
+    'plugins:GuangDianDecompose',
+    'plugins:GuangDianGift',
+    'plugins:GuangDianMenu',
+    'plugins:GuangDianChat',
+    'plugins:GuangDianMCP',
+    'plugins:GuangDianGuild',
+    'plugins:GuangDianMarriage',
+    'plugins:GuangDianHolo',
+    'plugins:GuangDianTrade'
+)

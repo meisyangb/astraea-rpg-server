@@ -1,0 +1,43 @@
+// Astraea RPG - 根构建配置
+plugins {
+    id 'java'
+}
+
+allprojects {
+    group = 'cn.guangdian'
+    version = '1.0.0'
+    
+    repositories {
+        mavenCentral()
+        maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+        maven { url = 'https://repo.luckperms.net/repository/maven-public/' }
+        maven { url = 'https://jitpack.io' }
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    
+    java {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+    
+    compileJava {
+        options.encoding = 'UTF-8'
+    }
+}
+
+// 任务: 构建所有插件
+task buildAll {
+    group = 'build'
+    description = '构建所有插件'
+    dependsOn subprojects*.build
+}
+
+// 任务: 清理所有
+task cleanAll {
+    group = 'build'
+    description = '清理所有构建输出'
+    dependsOn subprojects*.clean
+}

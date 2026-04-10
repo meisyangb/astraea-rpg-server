@@ -6,12 +6,17 @@ plugins {
     id 'java'
 }
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
     compileOnly project(':plugins:RPGCore')
-    compileOnly('com.github.MilkBowl:VaultAPI:1.7') {
-        exclude group: 'org.bukkit', module: 'bukkit'
-    }
+    // 使用本地 Vault API
+    compileOnly files('libs/Vault.jar')
 }
 
 jar {

@@ -299,23 +299,34 @@ if (points != null) {  // 总是做null检查
 
 ## 📦 构建命令速查
 
+> **唯一构建方法**: 详见 [BUILD_GUIDE.md](../../../BUILD_GUIDE.md)
+> 
+> 以下命令必须在项目根目录执行：
+
 ```powershell
-# 环境设置
+# 1. 设置环境
 cd e:\原创RPG服务端
 $env:JAVA_HOME="e:\原创RPG服务端\tools\jdk-21.0.10+7"
 
-# 全量构建
+# 2. 构建所有插件 (唯一标准命令)
 & "D:\gradle\gradle-9.4.0\bin\gradle.bat" build --no-configuration-cache -x test
 
-# 单插件构建
-& "D:\gradle\gradle-9.4.0\bin\gradle.bat" :plugins:RPGCore:build --no-configuration-cache -x test
-
-# 含静态检查的构建 (推荐)
-& "D:\gradle\gradle-9.4.0\bin\gradle.bat" build checkstyle --no-configuration-cache -x test
-
-# 清理重建
+# 3. 清理并构建
 & "D:\gradle\gradle-9.4.0\bin\gradle.bat" clean build --no-configuration-cache -x test
 ```
+
+### 构建输出位置
+```
+plugins/{插件名}/build/libs/{插件名}-1.0.0.jar
+```
+
+### 依赖文件要求
+确保 `plugins/RPGCore/libs/` 包含以下文件：
+- `paper-api.jar`
+- `PlaceholderAPI.jar`
+- `LuckPerms.jar`
+- `Vault.jar`
+- `ProtocolLib.jar`
 
 ---
 

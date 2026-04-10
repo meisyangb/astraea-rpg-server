@@ -3,6 +3,7 @@ package cn.guangdian.name;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.SyncScheduler;
 import cn.guangdian.rpgcore.service.api.GuildService;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
