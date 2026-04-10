@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    flatDir { dirs '../RPGCore/libs' }
+    mavenCentral()
+    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+    compileOnly project(':plugins:RPGCore')
+    compileOnly files('../RPGCore/libs/PlaceholderAPI.jar')
+}
+
+jar {
+    archiveBaseName.set('GuangDianAuth')
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}

@@ -27,5 +27,17 @@ include(
     'plugins:GuangDianMarriage',
     'plugins:GuangDianHolo',
     'plugins:GuangDianTrade',
-    'plugins:GuangDianAggro'
+    'plugins:GuangDianAggro',
+    'plugins:GuangDianChain',
+    'plugins:GuangDianBank',
+    'plugins:GuangDianSignIn',
+    'plugins:GuangDianMonthlyCard',
+    'plugins:GuangDianSoulBind',
+    'plugins:GuangDianRaid',
+    'plugins:GuangDianAccessory',
+    'plugins:GuangDianBattlePass',
+    'plugins:GuangDianGearScore',
+    'plugins:GuangDianCollection',
+    'plugins:GuangDianClass',
+    'plugins:GuangDianAuth'
 )
