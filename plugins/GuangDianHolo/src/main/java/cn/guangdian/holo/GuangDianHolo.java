@@ -5,6 +5,7 @@ import cn.guangdian.rpgcore.api.AsyncExecutor;
 import cn.guangdian.rpgcore.api.CacheProvider;
 import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.holo.adapter.HoloServiceAdapter;
 import cn.guangdian.holo.api.HologramAPI;
 import cn.guangdian.holo.api.HologramAPIImpl;
@@ -14,9 +15,8 @@ import cn.guangdian.holo.manager.HologramManager;
 import cn.guangdian.holo.papi.HoloPlaceholders;
 import cn.guangdian.holo.storage.ConfigManager;
 import me.clip.placeholderapi.PlaceholderAPI;
-import org.bukkit.plugin.java.JavaPlugin;
 
-public final class GuangDianHolo extends JavaPlugin {
+public final class GuangDianHolo extends AbstractRPGPlugin {
 
     private static GuangDianHolo instance;
     private ConfigManager configManager;
@@ -32,7 +32,7 @@ public final class GuangDianHolo extends JavaPlugin {
     private ServiceRegistry serviceRegistry;
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
 
         if (!hookRPGCore()) {
@@ -65,7 +65,7 @@ public final class GuangDianHolo extends JavaPlugin {
     }
 
     @Override
-    public void onDisable() {
+    protected void onPluginDisable() {
         // 注销服务适配器
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
@@ -81,7 +81,18 @@ public final class GuangDianHolo extends JavaPlugin {
             hologramManager.saveHolograms();
             hologramManager.removeAllHolograms();
         }
+        
+        // 取消所有任务
+        if (scheduler != null) {
+            scheduler.cancelAllTasks();
+        }
+
         getLogger().info("GuangDianHolo 全息显示插件已禁用！");
+    }
+    
+    @Override
+    protected String getPluginName() {
+        return "GuangDianHolo";
     }
 
     private boolean hookRPGCore() {

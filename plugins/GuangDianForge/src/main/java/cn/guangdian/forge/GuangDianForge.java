@@ -13,8 +13,8 @@ import cn.guangdian.forge.manager.RecipeManager;
 import cn.guangdian.forge.placeholder.ForgePlaceholder;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Optional;
 
@@ -24,7 +24,7 @@ import java.util.Optional;
  * <p>支持 RPGCore 服务框架集成，提供 ForgeService 服务。</p>
  * <p>支持 MythicMobs 自定义物品作为材料和锻造结果。</p>
  */
-public class GuangDianForge extends JavaPlugin {
+public class GuangDianForge extends AbstractRPGPlugin {
     private static GuangDianForge instance;
     private RecipeManager recipeManager;
     private PlayerDataManager playerDataManager;
@@ -33,7 +33,7 @@ public class GuangDianForge extends JavaPlugin {
     private boolean useRPGCore;
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
         
         // 检查 RPGCore 是否可用
@@ -80,10 +80,15 @@ public class GuangDianForge extends JavaPlugin {
     }
 
     @Override
-    public void onDisable() {
+    protected void onPluginDisable() {
         // 注销服务
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
+        }
+        
+        // 取消所有任务
+        if (scheduler != null) {
+            scheduler.cancelAllTasks();
         }
         
         // 保存所有在线玩家数据 (使用 RPGCore 异步执行器或同步保存)
@@ -97,6 +102,11 @@ public class GuangDianForge extends JavaPlugin {
             }
         }
         getLogger().info("GuangDianForge 已关闭，数据已保存");
+    }
+    
+    @Override
+    protected String getPluginName() {
+        return "GuangDianForge";
     }
 
     public static GuangDianForge getInstance() { return instance; }

@@ -3,12 +3,12 @@ package cn.guangdian.gift;
 import cn.guangdian.gift.adapter.GiftServiceAdapter;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -16,13 +16,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 
-public class GuangDianGift extends JavaPlugin {
+public class GuangDianGift extends AbstractRPGPlugin {
 
     private Map<String, List<String>> giftItems = new HashMap<>();
     private GiftServiceAdapter giftServiceAdapter;
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         saveDefaultConfig();
         loadGifts();
         registerRPGCoreService();
@@ -30,8 +30,17 @@ public class GuangDianGift extends JavaPlugin {
     }
 
     @Override
-    public void onDisable() {
+    protected void onPluginDisable() {
         unregisterRPGCoreService();
+        // 取消所有任务
+        if (scheduler != null) {
+            scheduler.cancelAllTasks();
+        }
+    }
+    
+    @Override
+    protected String getPluginName() {
+        return "GuangDianGift";
     }
     
     private void registerRPGCoreService() {
@@ -124,9 +133,20 @@ public class GuangDianGift extends JavaPlugin {
         // 使用调度延迟执行，确保命令正确执行
         final Player finalTarget = target;
         final String finalGiftName = giftName;
-        Bukkit.getScheduler().runTask(this, () -> {
+        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+        if (rpgCore != null) {
+            rpgCore.getScheduler().runSyncLater(() -> {
+                for (String item : items) {
+                    String cmd = "mm items give " + finalTarget.getName() + " " + item;
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+                }
+                finalTarget.sendMessage("§a你获得了礼包: §e" + finalGiftName);
+                if (sender != finalTarget) {
+                    sender.sendMessage("§a已给予 " + finalTarget.getName() + " 礼包: " + finalGiftName);
+                }
+            }, 1L);
+        } else {
             for (String item : items) {
-                // 调用 MythicMobs 命令给予物品
                 String cmd = "mm items give " + finalTarget.getName() + " " + item;
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
             }
@@ -134,7 +154,7 @@ public class GuangDianGift extends JavaPlugin {
             if (sender != finalTarget) {
                 sender.sendMessage("§a已给予 " + finalTarget.getName() + " 礼包: " + finalGiftName);
             }
-        });
+        }
 
         return true;
     }

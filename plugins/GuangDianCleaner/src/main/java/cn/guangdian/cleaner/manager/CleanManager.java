@@ -2,30 +2,25 @@ package cn.guangdian.cleaner.manager;
 
 import cn.guangdian.cleaner.GuangDianCleaner;
 import cn.guangdian.cleaner.config.ConfigManager;
+import cn.guangdian.rpgcore.RPGCore;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-/**
- * 清理管理器
- * 负责清理地面掉落物的核心逻辑
- */
 public class CleanManager {
 
     private final GuangDianCleaner plugin;
     private final ConfigManager configManager;
 
-    // 自动清理任务
-    private BukkitTask autoCleanTask;
-    private BukkitTask warningTask;
+    private long autoCleanTaskId = -1;
+    private long warningTaskId = -1;
 
     // 玩家掉落物追踪（用于保护刚掉落的物品）
     private final ConcurrentHashMap<UUID, Long> playerDropTimeMap = new ConcurrentHashMap<>();
@@ -42,15 +37,12 @@ public class CleanManager {
         this.configManager = configManager;
     }
 
-    /**
-     * 启动自动清理任务
-     */
     public void startAutoCleanTask() {
         if (!configManager.isAutoCleanEnabled()) {
             return;
         }
 
-        stopAutoCleanTask(); // 确保没有重复任务
+        stopAutoCleanTask();
 
         int interval = configManager.getAutoCleanInterval();
         int warningTime = configManager.getWarningTime();
@@ -58,15 +50,19 @@ public class CleanManager {
         long intervalTicks = interval * 20L;
         long warningTicks = warningTime * 20L;
 
-        // 定时清理任务
-        autoCleanTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore == null) {
+            plugin.getLogger().warning("RPGCore 未加载，无法启动自动清理任务");
+            return;
+        }
+
+        autoCleanTaskId = rpgCore.getScheduler().runSyncRepeating(() -> {
             performClean(true);
         }, intervalTicks, intervalTicks);
 
-        // 预警任务
         if (warningTime > 0 && warningTime < interval) {
             long warningDelay = intervalTicks - warningTicks;
-            warningTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+            warningTaskId = rpgCore.getScheduler().runSyncRepeating(() -> {
                 broadcastWarning(warningTime);
             }, warningDelay, intervalTicks);
         }
@@ -74,17 +70,17 @@ public class CleanManager {
         plugin.getLogger().info("自动清理任务已启动，间隔: " + interval + "秒");
     }
 
-    /**
-     * 停止自动清理任务
-     */
     public void stopAutoCleanTask() {
-        if (autoCleanTask != null) {
-            autoCleanTask.cancel();
-            autoCleanTask = null;
-        }
-        if (warningTask != null) {
-            warningTask.cancel();
-            warningTask = null;
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            if (autoCleanTaskId != -1) {
+                rpgCore.getScheduler().cancelTask(autoCleanTaskId);
+                autoCleanTaskId = -1;
+            }
+            if (warningTaskId != -1) {
+                rpgCore.getScheduler().cancelTask(warningTaskId);
+                warningTaskId = -1;
+            }
         }
     }
 
@@ -215,11 +211,8 @@ public class CleanManager {
         }
     }
 
-    /**
-     * 检查自动清理是否启用
-     */
     public boolean isAutoCleanEnabled() {
-        return autoCleanTask != null && !autoCleanTask.isCancelled();
+        return autoCleanTaskId != -1;
     }
 
     /**

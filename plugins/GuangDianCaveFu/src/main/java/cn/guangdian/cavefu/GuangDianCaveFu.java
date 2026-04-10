@@ -12,12 +12,9 @@ import cn.guangdian.cavefu.upgrade.UpgradeManager;
 import cn.guangdian.cavefu.world.CaveWorldManager;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
-import org.bukkit.plugin.java.JavaPlugin;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 
-/**
- * 光点洞府插件主类
- */
-public final class GuangDianCaveFu extends JavaPlugin {
+public final class GuangDianCaveFu extends AbstractRPGPlugin {
 
     private static GuangDianCaveFu instance;
 
@@ -31,7 +28,7 @@ public final class GuangDianCaveFu extends JavaPlugin {
     private ExternalServiceIntegration externalServices;
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
 
         // 初始化配置
@@ -83,7 +80,7 @@ public final class GuangDianCaveFu extends JavaPlugin {
     }
 
     @Override
-    public void onDisable() {
+    protected void onPluginDisable() {
         if (dataManager != null) {
             dataManager.saveSyncAndAwait();
         }
@@ -98,6 +95,11 @@ public final class GuangDianCaveFu extends JavaPlugin {
         }
 
         getLogger().info("GuangDianCaveFu 洞府插件已禁用！");
+    }
+
+    @Override
+    protected String getPluginName() {
+        return "GuangDianCaveFu";
     }
 
     public static GuangDianCaveFu getInstance() {

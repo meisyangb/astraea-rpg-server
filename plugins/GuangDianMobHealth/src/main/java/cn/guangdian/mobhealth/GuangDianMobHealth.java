@@ -3,6 +3,7 @@ package cn.guangdian.mobhealth;
 import cn.guangdian.mobhealth.adapter.MobHealthServiceAdapter;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,9 +17,8 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
-public class GuangDianMobHealth extends JavaPlugin implements Listener {
+public class GuangDianMobHealth extends AbstractRPGPlugin implements Listener {
 
     private static GuangDianMobHealth instance;
     private MobHealthDisplayManager displayManager;
@@ -28,7 +28,7 @@ public class GuangDianMobHealth extends JavaPlugin implements Listener {
     private MobHealthServiceAdapter mobHealthServiceAdapter;
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
         saveDefaultConfig();
         
@@ -52,7 +52,7 @@ public class GuangDianMobHealth extends JavaPlugin implements Listener {
     }
 
     @Override
-    public void onDisable() {
+    protected void onPluginDisable() {
         unregisterRPGCoreService();
         
         if (displayManager != null) {
@@ -60,7 +60,17 @@ public class GuangDianMobHealth extends JavaPlugin implements Listener {
             displayManager.clear();
         }
         
+        // 取消所有任务
+        if (scheduler != null) {
+            scheduler.cancelAllTasks();
+        }
+        
         getLogger().info("GuangDianMobHealth 已关闭");
+    }
+    
+    @Override
+    protected String getPluginName() {
+        return "GuangDianMobHealth";
     }
     
     private void registerRPGCoreService() {

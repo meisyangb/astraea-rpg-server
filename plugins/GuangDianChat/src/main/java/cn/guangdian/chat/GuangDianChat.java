@@ -2,6 +2,7 @@ package cn.guangdian.chat;
 
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.chat.adapter.ChatServiceAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,7 +19,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
-public class GuangDianChat extends JavaPlugin implements Listener, TabCompleter {
+public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCompleter {
 
     private static final Pattern URL_PATTERN = Pattern.compile("(?i)(https?://|www\\.)\\S+");
     private static final int LUCKPERMS_CACHE_DURATION_SECONDS = 30;
@@ -58,7 +58,7 @@ public class GuangDianChat extends JavaPlugin implements Listener, TabCompleter 
     }
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
         if (!Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             getLogger().severe("PlaceholderAPI is required.");
@@ -68,7 +68,6 @@ public class GuangDianChat extends JavaPlugin implements Listener, TabCompleter 
 
         saveDefaultConfig();
         config = getConfig();
-        hookRPGCore();
         loadWorldAliases();
         registerEvents();
         registerCommands();
@@ -84,11 +83,29 @@ public class GuangDianChat extends JavaPlugin implements Listener, TabCompleter 
     }
 
     @Override
-    public void onDisable() {
+    protected void onPluginDisable() {
         if (chatServiceAdapter != null) {
             chatServiceAdapter.unregister();
         }
+        if (scheduler != null) {
+            scheduler.cancelAllTasks();
+        }
         getLogger().info("GuangDianChat disabled.");
+    }
+    
+    @Override
+    protected String getPluginName() {
+        return "GuangDianChat";
+    }
+    
+    private void startLuckPermsCleanupTask() {
+        if (externalServices == null) return;
+        scheduler.runAsyncRepeating(() -> {
+            long now = System.currentTimeMillis();
+            luckPermsCache.entrySet().removeIf(entry ->
+                now - entry.getValue().timestamp > LUCKPERMS_CACHE_DURATION_SECONDS * 1000L * 2
+            );
+        }, LUCKPERMS_CACHE_DURATION_SECONDS * 2 * 20L, LUCKPERMS_CACHE_DURATION_SECONDS * 2 * 20L);
     }
     
     /**
@@ -96,26 +113,6 @@ public class GuangDianChat extends JavaPlugin implements Listener, TabCompleter 
      */
     public void refreshPlayerCache(UUID playerId) {
         luckPermsCache.remove(playerId);
-    }
-
-    private void hookRPGCore() {
-        var plugin = Bukkit.getPluginManager().getPlugin("RPGCore");
-        if (plugin instanceof RPGCore core) {
-            externalServices = core.getExternalServices();
-            getLogger().info("已连接到 RPGCore: " + (externalServices != null ? externalServices.getExternalServiceStatus() : "服务不可用"));
-        } else {
-            getLogger().warning("未找到 RPGCore，部分功能受限!");
-        }
-    }
-
-    private void startLuckPermsCleanupTask() {
-        if (externalServices == null) return;
-        RPGCore.getInstance().getScheduler().runAsyncRepeating(() -> {
-            long now = System.currentTimeMillis();
-            luckPermsCache.entrySet().removeIf(entry ->
-                now - entry.getValue().timestamp > LUCKPERMS_CACHE_DURATION_SECONDS * 1000L * 2
-            );
-        }, LUCKPERMS_CACHE_DURATION_SECONDS * 2 * 20L, LUCKPERMS_CACHE_DURATION_SECONDS * 2 * 20L);
     }
 
     private void loadWorldAliases() {

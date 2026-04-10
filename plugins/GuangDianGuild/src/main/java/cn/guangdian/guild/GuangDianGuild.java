@@ -1,7 +1,7 @@
 package cn.guangdian.guild;
 
 import cn.guangdian.guild.adapter.GuildServiceAdapter;
-import org.bukkit.plugin.java.JavaPlugin;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,18 +20,17 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public class GuangDianGuild extends JavaPlugin implements Listener, CommandExecutor, TabCompleter {
+public class GuangDianGuild extends AbstractRPGPlugin implements Listener, CommandExecutor, TabCompleter {
     private static GuangDianGuild instance;
     private FileConfiguration config;
     private Map<String, Guild> guilds;
     private Map<String, Guild> playerGuilds;
     private Map<String, GuildInvite> pendingInvites;
     
-    // RPGCore 服务适配器
     private GuildServiceAdapter serviceAdapter;
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
         guilds = new ConcurrentHashMap<>();
         playerGuilds = new ConcurrentHashMap<>();
@@ -58,14 +57,18 @@ public class GuangDianGuild extends JavaPlugin implements Listener, CommandExecu
     }
 
     @Override
-    public void onDisable() {
-        // 注销 RPGCore 服务
+    protected void onPluginDisable() {
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
         }
         
         saveGuilds();
         getLogger().info("GuangDianGuild 工会插件已禁用!");
+    }
+
+    @Override
+    protected String getPluginName() {
+        return "GuangDianGuild";
     }
 
     public static GuangDianGuild getInstance() {

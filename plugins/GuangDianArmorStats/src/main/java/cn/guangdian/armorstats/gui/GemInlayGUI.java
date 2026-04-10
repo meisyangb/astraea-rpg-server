@@ -282,12 +282,15 @@ public class GemInlayGUI implements InventoryHolder {
         GemInlayEvent inlayEvent = new GemInlayEvent(player, finalItem, originalEquipment, allGems, totalAttrs);
         Bukkit.getPluginManager().callEvent(inlayEvent);
 
-        Bukkit.getScheduler().runTaskLater(GuangDianArmorStats.getInstance(), () -> {
-            GuangDianArmorStats.getInstance().getStatsManager().refreshPlayerStats(player);
-            if (GuangDianArmorStats.getInstance().getBossBarManager() != null) {
-                GuangDianArmorStats.getInstance().getBossBarManager().updateBossBar(player);
-            }
-        }, 1L);
+        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+        if (rpgCore != null) {
+            rpgCore.getScheduler().runSyncLater(() -> {
+                GuangDianArmorStats.getInstance().getStatsManager().refreshPlayerStats(player);
+                if (GuangDianArmorStats.getInstance().getBossBarManager() != null) {
+                    GuangDianArmorStats.getInstance().getBossBarManager().updateBossBar(player);
+                }
+            }, 1L);
+        }
     }
 
     private void cancelSession() {

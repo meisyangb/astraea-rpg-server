@@ -3,6 +3,7 @@ package cn.guangdian.board;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.SyncScheduler;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -18,7 +19,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
@@ -40,7 +40,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @QQ 2271257344
  * @version 1.0.0
  */
-public class GuangDianBoard extends JavaPlugin implements Listener {
+public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
 
     private static GuangDianBoard instance;
     private FileConfiguration config;
@@ -106,10 +106,9 @@ public class GuangDianBoard extends JavaPlugin implements Listener {
     private static final long TPS_UPDATE_INTERVAL = 1000;
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
         
-        hookRPGCore();
         loadConfig();
         loadWorldAliases();
         registerEvents();
@@ -129,18 +128,6 @@ public class GuangDianBoard extends JavaPlugin implements Listener {
 
         getLogger().info("光点侧边栏插件已启用! 版本: " + getDescription().getVersion());
         getLogger().info("作者: Gumin | QQ: 2271257344");
-    }
-    
-    private void hookRPGCore() {
-        var plugin = getServer().getPluginManager().getPlugin("RPGCore");
-        if (plugin instanceof RPGCore core) {
-            this.rpgCore = core;
-            this.externalServices = core.getExternalServices();
-            this.scheduler = core.getScheduler();
-            getLogger().info("已连接到 RPGCore: " + externalServices.getExternalServiceStatus());
-        } else {
-            getLogger().warning("未找到 RPGCore，部分功能受限!");
-        }
     }
 
     private boolean shouldShowTopSeparator() {
@@ -184,7 +171,7 @@ public class GuangDianBoard extends JavaPlugin implements Listener {
     }
 
     @Override
-    public void onDisable() {
+    protected void onPluginDisable() {
         // 注销玩家生命周期处理器
         if (dataHandler != null) {
             dataHandler.unregister();
@@ -195,10 +182,20 @@ public class GuangDianBoard extends JavaPlugin implements Listener {
             serviceAdapter.unregister();
         }
         
+        // 取消所有任务
+        if (scheduler != null) {
+            scheduler.cancelAllTasks();
+        }
+        
         stopTasks();
         clearAllBoards();
         
         getLogger().info("光点侧边栏插件已禁用!");
+    }
+    
+    @Override
+    protected String getPluginName() {
+        return "GuangDianBoard";
     }
 
     private void loadConfig() {

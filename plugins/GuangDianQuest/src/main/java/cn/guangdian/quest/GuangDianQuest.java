@@ -12,16 +12,15 @@ import cn.guangdian.quest.placeholder.QuestPlaceholder;
 import cn.guangdian.quest.repository.PlayerQuestRepository;
 import cn.guangdian.quest.repository.QuestRepository;
 import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.api.SyncScheduler;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 
-public class GuangDianQuest extends JavaPlugin {
+public class GuangDianQuest extends AbstractRPGPlugin {
 
     private static GuangDianQuest instance;
 
@@ -34,16 +33,13 @@ public class GuangDianQuest extends JavaPlugin {
     private QuestServiceAdapter serviceAdapter;
     private QuestDataHandler dataHandler;
     
-    private ExternalServiceIntegration externalServices;
-    private SyncScheduler scheduler;
-
     private int maxActiveQuests;
     private int dailyQuestLimit;
     private int autoSaveInterval;
     private long autoSaveTaskId = -1;
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
 
         if (!Bukkit.getPluginManager().isPluginEnabled("RPGCore")) {
@@ -74,7 +70,7 @@ public class GuangDianQuest extends JavaPlugin {
     }
 
     @Override
-    public void onDisable() {
+    protected void onPluginDisable() {
         stopAutoSave();
 
         if (dataHandler != null) {
@@ -90,6 +86,11 @@ public class GuangDianQuest extends JavaPlugin {
         }
 
         getLogger().info("GuangDianQuest 已停止！");
+    }
+
+    @Override
+    protected String getPluginName() {
+        return "GuangDianQuest";
     }
 
     private void loadConfiguration() {

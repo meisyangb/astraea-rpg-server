@@ -1,6 +1,6 @@
 package cn.guangdian.mobhealth;
 
-import org.bukkit.Bukkit;
+import cn.guangdian.rpgcore.RPGCore;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -36,11 +36,14 @@ public class MobListener implements Listener {
                 displayManager.createDisplay(entity);
             }
             
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                if (entity.isValid() && !entity.isDead()) {
-                    displayManager.updateDisplay(entity);
-                }
-            }, 1L);
+            RPGCore rpgCore = RPGCore.getInstance();
+            if (rpgCore != null) {
+                rpgCore.getScheduler().runSyncLater(() -> {
+                    if (entity.isValid() && !entity.isDead()) {
+                        displayManager.updateDisplay(entity);
+                    }
+                }, 1L);
+            }
         }
     }
 
@@ -52,11 +55,14 @@ public class MobListener implements Listener {
         LivingEntity entity = (LivingEntity) event.getEntity();
         
         if (displayManager.hasDisplay(entity.getUniqueId())) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                if (entity.isValid() && !entity.isDead()) {
-                    displayManager.updateDisplay(entity);
-                }
-            }, 1L);
+            RPGCore rpgCore = RPGCore.getInstance();
+            if (rpgCore != null) {
+                rpgCore.getScheduler().runSyncLater(() -> {
+                    if (entity.isValid() && !entity.isDead()) {
+                        displayManager.updateDisplay(entity);
+                    }
+                }, 1L);
+            }
         }
     }
 

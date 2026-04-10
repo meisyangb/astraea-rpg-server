@@ -39,15 +39,18 @@ public class ArmorStatsDataHandler extends AbstractPlayerDataHandler {
             bossBarManager.createBossBar(player);
         }
         
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (player.isOnline()) {
-                statsManager.loadPlayerData(player);
-                healthManager.syncPlayerHealth(player);
-                plugin.getLogger().info("[登录] " + player.getName() + " 属性加载完成");
-                
-                publishHealthEvents(player);
-            }
-        }, 40L);
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            rpgCore.getScheduler().runSyncLater(() -> {
+                if (player.isOnline()) {
+                    statsManager.loadPlayerData(player);
+                    healthManager.syncPlayerHealth(player);
+                    plugin.getLogger().info("[登录] " + player.getName() + " 属性加载完成");
+                    
+                    publishHealthEvents(player);
+                }
+            }, 40L);
+        }
     }
     
     private void publishHealthEvents(Player player) {

@@ -1,6 +1,7 @@
 package cn.guangdian.dropcontrol;
 
 import cn.guangdian.dropcontrol.adapter.DropControlServiceAdapter;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -13,14 +14,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class GuangDianDropControl extends JavaPlugin implements Listener, CommandExecutor, TabExecutor {
+public class GuangDianDropControl extends AbstractRPGPlugin implements Listener, CommandExecutor, TabExecutor {
 
     private static GuangDianDropControl instance;
     private FileConfiguration config;
@@ -42,7 +42,7 @@ public class GuangDianDropControl extends JavaPlugin implements Listener, Comman
     private boolean playerDefaultEnabled = false;
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
         saveDefaultConfig();
         config = getConfig();
@@ -65,13 +65,17 @@ public class GuangDianDropControl extends JavaPlugin implements Listener, Comman
     }
 
     @Override
-    public void onDisable() {
-        // 注销 RPGCore 服务
+    protected void onPluginDisable() {
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
         }
         playerDropStatus.clear();
         getLogger().info("光点丢弃控制插件已禁用!");
+    }
+
+    @Override
+    protected String getPluginName() {
+        return "GuangDianDropControl";
     }
 
     @EventHandler

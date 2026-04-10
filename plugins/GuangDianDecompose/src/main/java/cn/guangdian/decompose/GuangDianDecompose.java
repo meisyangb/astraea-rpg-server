@@ -10,11 +10,11 @@ import cn.guangdian.decompose.manager.DecomposeManager;
 import cn.guangdian.decompose.manager.RuleManager;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
-import org.bukkit.plugin.java.JavaPlugin;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 
 import java.io.File;
 
-public class GuangDianDecompose extends JavaPlugin {
+public class GuangDianDecompose extends AbstractRPGPlugin {
 
     private static GuangDianDecompose instance;
     private RPGCore rpgCore;
@@ -25,7 +25,7 @@ public class GuangDianDecompose extends JavaPlugin {
     private DecomposeServiceAdapter serviceAdapter;
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
 
         if (!checkDependencies()) {
@@ -49,7 +49,7 @@ public class GuangDianDecompose extends JavaPlugin {
     }
 
     @Override
-    public void onDisable() {
+    protected void onPluginDisable() {
         if (serviceAdapter != null && rpgCore != null) {
             ServiceRegistry registry = rpgCore.getServiceRegistry();
             if (registry != null) {
@@ -57,6 +57,11 @@ public class GuangDianDecompose extends JavaPlugin {
             }
         }
         getLogger().info("GuangDianDecompose 装备分解系统已关闭!");
+    }
+
+    @Override
+    protected String getPluginName() {
+        return "GuangDianDecompose";
     }
 
     private boolean checkDependencies() {

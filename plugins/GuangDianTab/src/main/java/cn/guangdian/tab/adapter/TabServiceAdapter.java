@@ -93,19 +93,25 @@ public class TabServiceAdapter implements TabService {
     @Override
     public void refreshTabName(Player player) {
         // 强制更新该玩家的Tab显示
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            plugin.updatePlayerTab(player);
-            plugin.updateHeaderFooter(player);
-        }, 1L);
+        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+        if (rpgCore != null) {
+            rpgCore.getScheduler().runSyncLater(() -> {
+                plugin.updatePlayerTab(player);
+                plugin.updateHeaderFooter(player);
+            }, 1L);
+        }
     }
 
     @Override
     public void refreshAllTabNames() {
         // 强制更新所有玩家的Tab显示
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            plugin.refreshAll();
-            plugin.updateAllHeadersAndFooters();
-        }, 1L);
+        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+        if (rpgCore != null) {
+            rpgCore.getScheduler().runSyncLater(() -> {
+                plugin.refreshAll();
+                plugin.updateAllHeadersAndFooters();
+            }, 1L);
+        }
     }
 
     @Override

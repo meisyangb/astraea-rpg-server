@@ -5,6 +5,7 @@ import cn.guangdian.rpgcore.event.events.HologramDeletedEvent;
 import cn.guangdian.holo.GuangDianHolo;
 import cn.guangdian.holo.model.Hologram;
 import cn.guangdian.holo.storage.ConfigManager;
+import cn.guangdian.rpgcore.RPGCore;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -15,7 +16,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,7 +26,7 @@ public class HologramManager {
     private final GuangDianHolo plugin;
     private final ConfigManager configManager;
     private final Map<String, Hologram> holograms = new ConcurrentHashMap<>();
-    private BukkitTask updateTask;
+    private long updateTaskId = -1;
     private final Object saveLock = new Object();
     private final AtomicBoolean dirty = new AtomicBoolean(false);
 
@@ -79,13 +79,19 @@ public class HologramManager {
 
     public void startUpdateTask() {
         int interval = configManager.getUpdateInterval();
-        updateTask = Bukkit.getScheduler().runTaskTimer(plugin, this::updateHolograms, interval, interval);
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            updateTaskId = rpgCore.getScheduler().runSyncRepeating(this::updateHolograms, interval, interval);
+        }
     }
 
     public void stopUpdateTask() {
-        if (updateTask != null) {
-            updateTask.cancel();
-            updateTask = null;
+        if (updateTaskId != -1) {
+            RPGCore rpgCore = RPGCore.getInstance();
+            if (rpgCore != null) {
+                rpgCore.getScheduler().cancelTask(updateTaskId);
+            }
+            updateTaskId = -1;
         }
     }
 

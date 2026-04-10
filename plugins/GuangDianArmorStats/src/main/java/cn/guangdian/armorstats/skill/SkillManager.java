@@ -269,14 +269,18 @@ public class SkillManager {
         int tickInterval = 20;
         double damagePerTick = baseDamage * skill.getDamageMultiplier() * 0.1;
         
-        int[] taskId = { -1 };
+        long[] taskId = { -1 };
         int[] ticksElapsed = { 0 };
         
-        taskId[0] = Bukkit.getScheduler().runTaskTimer(GuangDianArmorStats.getInstance(), () -> {
-            if (!target.isValid() || ticksElapsed[0] >= tickDuration) {
-                Bukkit.getScheduler().cancelTask(taskId[0]);
-                return;
-            }
+        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+        if (rpgCore != null) {
+            taskId[0] = rpgCore.getScheduler().runSyncRepeating(() -> {
+                if (!target.isValid() || ticksElapsed[0] >= tickDuration) {
+                    if (rpgCore != null) {
+                        rpgCore.getScheduler().cancelTask(taskId[0]);
+                    }
+                    return;
+                }
             
             if (ticksElapsed[0] % tickInterval == 0) {
                 double currentHealth = target.getHealth();
@@ -291,7 +295,8 @@ public class SkillManager {
             }
             
             ticksElapsed[0] += 2;
-        }, 0L, 2L).getTaskId();
+        }, 0L, 2L);
+        }
     }
 
     private PotionEffectType getPotionEffectType(String name) {

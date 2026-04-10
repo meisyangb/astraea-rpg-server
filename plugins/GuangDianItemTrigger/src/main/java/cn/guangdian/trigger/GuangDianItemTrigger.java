@@ -1,6 +1,7 @@
 package cn.guangdian.trigger;
 
 import cn.guangdian.trigger.adapter.ItemTriggerServiceAdapter;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -24,14 +25,13 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class GuangDianItemTrigger extends JavaPlugin implements Listener, CommandExecutor, TabExecutor {
+public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener, CommandExecutor, TabExecutor {
 
     private static GuangDianItemTrigger instance;
     private FileConfiguration config;
@@ -49,7 +49,7 @@ public class GuangDianItemTrigger extends JavaPlugin implements Listener, Comman
     private final Map<String, PotionEffectType> effectCache = new ConcurrentHashMap<>();
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
         saveDefaultConfig();
         config = getConfig();
@@ -57,7 +57,6 @@ public class GuangDianItemTrigger extends JavaPlugin implements Listener, Comman
         preCacheEnums();
         loadTriggers();
         
-        // 初始化 RPGCore 服务适配器
         serviceAdapter = new ItemTriggerServiceAdapter(this);
 
         getCommand("gdtrigger").setExecutor(this);
@@ -73,8 +72,7 @@ public class GuangDianItemTrigger extends JavaPlugin implements Listener, Comman
     }
 
     @Override
-    public void onDisable() {
-        // 注销 RPGCore 服务
+    protected void onPluginDisable() {
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
         }
@@ -87,6 +85,11 @@ public class GuangDianItemTrigger extends JavaPlugin implements Listener, Comman
         soundCache.clear();
         effectCache.clear();
         getLogger().info("光点物品触发插件已禁用!");
+    }
+
+    @Override
+    protected String getPluginName() {
+        return "GuangDianItemTrigger";
     }
 
     /**

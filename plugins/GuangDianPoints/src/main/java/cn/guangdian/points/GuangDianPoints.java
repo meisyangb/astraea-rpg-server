@@ -5,6 +5,7 @@ import cn.guangdian.points.lifecycle.PointsDataHandler;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.concurrency.LockTimeoutException;
 import cn.guangdian.rpgcore.concurrency.PlayerLockManager;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.points.monitor.OperationTimer;
 import cn.guangdian.points.monitor.PerformanceMonitor;
 import cn.guangdian.points.monitor.PerformanceReport;
@@ -24,11 +25,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.ServicePriority;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +35,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
-public class GuangDianPoints extends JavaPlugin implements Listener, TabCompleter {
+public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabCompleter {
 
     private static GuangDianPoints instance;
     private FileConfiguration config;
@@ -64,7 +63,7 @@ public class GuangDianPoints extends JavaPlugin implements Listener, TabComplete
     private String lockTimeoutMessage;
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
 
         saveDefaultConfig();
@@ -83,7 +82,7 @@ public class GuangDianPoints extends JavaPlugin implements Listener, TabComplete
     }
 
     @Override
-    public void onDisable() {
+    protected void onPluginDisable() {
         // 注销 RPGCore 服务
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
@@ -99,11 +98,18 @@ public class GuangDianPoints extends JavaPlugin implements Listener, TabComplete
         if (transactionLogger != null) {
             transactionLogger.close();
         }
-        if (lockManager != null) {
-            lockManager.releaseAllLocks();
+        
+        // 取消所有任务
+        if (scheduler != null) {
+            scheduler.cancelAllTasks();
         }
-
+        
         getLogger().info("光点点卷插件已禁用!");
+    }
+    
+    @Override
+    protected String getPluginName() {
+        return "GuangDianPoints";
     }
 
     private void loadData() {

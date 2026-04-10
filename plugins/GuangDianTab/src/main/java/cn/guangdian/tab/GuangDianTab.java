@@ -3,6 +3,7 @@ package cn.guangdian.tab;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.SyncScheduler;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.tab.adapter.TabServiceAdapter;
 import cn.guangdian.tab.placeholder.TabPlaceholder;
 import org.bukkit.Bukkit;
@@ -21,7 +22,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -33,13 +33,11 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class GuangDianTab extends JavaPlugin implements Listener, TabCompleter {
+public class GuangDianTab extends AbstractRPGPlugin implements Listener, TabCompleter {
 
     private static GuangDianTab instance;
     private TabServiceAdapter tabServiceAdapter;
     
-    private ExternalServiceIntegration externalServices;
-    private SyncScheduler scheduler;
     private long refreshTaskId = -1;
     private long headerFooterTaskId = -1;
 
@@ -57,11 +55,10 @@ public class GuangDianTab extends JavaPlugin implements Listener, TabCompleter {
     private long headerFooterTicks;
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
         saveDefaultConfig();
         config = getConfig();
-        hookRPGCore();
         loadFormats();
         registerEvents();
         registerCommands();
@@ -81,12 +78,13 @@ public class GuangDianTab extends JavaPlugin implements Listener, TabCompleter {
     }
 
     @Override
-    public void onDisable() {
+    protected void onPluginDisable() {
         // 注销 RPGCore 服务适配器
         if (tabServiceAdapter != null) {
             tabServiceAdapter.unregister();
         }
         if (scheduler != null) {
+            scheduler.cancelAllTasks();
             if (refreshTaskId >= 0) {
                 scheduler.cancelTask(refreshTaskId);
             }
@@ -99,15 +97,19 @@ public class GuangDianTab extends JavaPlugin implements Listener, TabCompleter {
         }
         getLogger().info("GuangDianTab disabled.");
     }
+    
+    @Override
+    protected String getPluginName() {
+        return "GuangDianTab";
+    }
 
-    private void hookRPGCore() {
-        var plugin = Bukkit.getPluginManager().getPlugin("RPGCore");
-        if (plugin instanceof RPGCore core) {
-            externalServices = core.getExternalServices();
-            scheduler = core.getScheduler();
-            getLogger().info("已连接到 RPGCore: " + (externalServices != null ? externalServices.getExternalServiceStatus() : "服务不可用"));
-        } else {
-            getLogger().warning("未找到 RPGCore，部分功能受限!");
+    private void registerCommands() {
+        if (getCommand("gdtab") != null) {
+            getCommand("gdtab").setExecutor(this);
+            getCommand("gdtab").setTabCompleter(this);
+        }
+        if (getCommand("tablist") != null) {
+            getCommand("tablist").setExecutor(this);
         }
     }
 
@@ -143,16 +145,6 @@ public class GuangDianTab extends JavaPlugin implements Listener, TabCompleter {
 
     private void registerEvents() {
         Bukkit.getPluginManager().registerEvents(this, this);
-    }
-
-    private void registerCommands() {
-        if (getCommand("gdtab") != null) {
-            getCommand("gdtab").setExecutor(this);
-            getCommand("gdtab").setTabCompleter(this);
-        }
-        if (getCommand("tablist") != null) {
-            getCommand("tablist").setExecutor(this);
-        }
     }
 
     private void loadFormats() {
@@ -502,7 +494,7 @@ public class GuangDianTab extends JavaPlugin implements Listener, TabCompleter {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onJoin(PlayerJoinEvent event) {
-        Bukkit.getScheduler().runTaskLater(this, () -> {
+        scheduler.runSyncLater(() -> {
             updatePlayerTab(event.getPlayer());
             updateHeaderFooter(event.getPlayer());
         }, 10L);
@@ -524,7 +516,7 @@ public class GuangDianTab extends JavaPlugin implements Listener, TabCompleter {
         }
         if (!event.getFrom().getWorld().equals(event.getTo().getWorld())) {
             Player player = event.getPlayer();
-            Bukkit.getScheduler().runTaskLater(this, () -> {
+            scheduler.runSyncLater(() -> {
                 updatePlayerTab(player);
                 updateHeaderFooter(player);
             }, 1L);

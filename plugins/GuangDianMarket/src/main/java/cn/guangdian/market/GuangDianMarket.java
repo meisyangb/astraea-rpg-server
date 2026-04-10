@@ -4,6 +4,7 @@ import cn.guangdian.market.adapter.MarketServiceAdapter;
 import cn.guangdian.market.gui.MarketGUI;
 import cn.guangdian.market.lifecycle.MarketDataHandler;
 import cn.guangdian.market.placeholder.MarketPlaceholder;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -22,7 +23,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -37,7 +37,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class GuangDianMarket extends JavaPlugin implements Listener, TabCompleter {
+public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabCompleter {
 
     private static GuangDianMarket instance;
     private FileConfiguration config;
@@ -65,7 +65,7 @@ public class GuangDianMarket extends JavaPlugin implements Listener, TabComplete
     private boolean economyEnabled; // 经济是否启用
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
 
         saveDefaultConfig();
@@ -92,7 +92,7 @@ public class GuangDianMarket extends JavaPlugin implements Listener, TabComplete
     }
 
     @Override
-    public void onDisable() {
+    protected void onPluginDisable() {
         // 取消定时任务
         if (autoSaveTask != null) {
             autoSaveTask.cancel();
@@ -103,6 +103,11 @@ public class GuangDianMarket extends JavaPlugin implements Listener, TabComplete
             expireCheckTask = null;
         }
 
+        // 取消所有任务
+        if (scheduler != null) {
+            scheduler.cancelAllTasks();
+        }
+
         saveData();
         // 注销RPGCore服务适配器
         if (serviceAdapter != null) {
@@ -111,6 +116,11 @@ public class GuangDianMarket extends JavaPlugin implements Listener, TabComplete
         }
 
         getLogger().info("光点全球市场插件已禁用!");
+    }
+    
+    @Override
+    protected String getPluginName() {
+        return "GuangDianMarket";
     }
 
     private void loadData() {
@@ -872,24 +882,26 @@ public class GuangDianMarket extends JavaPlugin implements Listener, TabComplete
         event.setCancelled(true);
         String message = event.getMessage();
         
-        Bukkit.getScheduler().runTaskLater(this, () -> {
-            if (message.equalsIgnoreCase("cancel")) {
-                player.sendMessage(colorize("&e已取消搜索"));
+        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+        if (rpgCore != null) {
+            rpgCore.getScheduler().runSyncLater(() -> {
+                if (message.equalsIgnoreCase("cancel")) {
+                    player.sendMessage(colorize("&e已取消搜索"));
+                    setSearchMode(player, false);
+                    openMarketGUI(player, 1);
+                    return;
+                }
+                
+                MarketGUI gui = openGUIs.get(player.getUniqueId());
+                if (gui != null) {
+                    gui.setSearchQuery(message);
+                    gui.refreshItems();
+                    player.openInventory(gui.getInventory());
+                    player.sendMessage(colorize("&a搜索: &f" + message));
+                }
                 setSearchMode(player, false);
-                openMarketGUI(player, 1);
-                return;
-            }
-            
-            // 更新搜索词并重新打开GUI
-            MarketGUI gui = openGUIs.get(player.getUniqueId());
-            if (gui != null) {
-                gui.setSearchQuery(message);
-                gui.refreshItems();
-                player.openInventory(gui.getInventory());
-                player.sendMessage(colorize("&a搜索: &f" + message));
-            }
-            setSearchMode(player, false);
-        }, 1L);
+            }, 1L);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

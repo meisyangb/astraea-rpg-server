@@ -2,6 +2,7 @@ package cn.guangdian.trade;
 
 import cn.guangdian.trade.adapter.TradeServiceAdapter;
 import cn.guangdian.trade.placeholder.TradePlaceholder;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -18,13 +19,11 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class GuangDianTrade extends JavaPlugin implements Listener {
+public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
 
     private static GuangDianTrade instance;
     
@@ -40,7 +39,7 @@ public class GuangDianTrade extends JavaPlugin implements Listener {
     private TradeServiceAdapter serviceAdapter;
     
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
         saveDefaultConfig();
         loadConfig();
@@ -60,22 +59,32 @@ public class GuangDianTrade extends JavaPlugin implements Listener {
     }
 
     @Override
-    public void onDisable() {
+    protected void onPluginDisable() {
         for (TradeSession session : new ArrayList<>(activeTrades.values())) {
             cancelTrade(session);
         }
+        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
         for (TradeRequest request : new ArrayList<>(pendingRequests.values())) {
-            request.getTask().cancel();
+            if (rpgCore != null) {
+                rpgCore.getScheduler().cancelTask(request.getTaskId());
+            }
         }
         activeTrades.clear();
         pendingRequests.clear();
         requestCooldowns.clear();
-        // 注销RPGCore服务适配器
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
             serviceAdapter = null;
         }
+        if (scheduler != null) {
+            scheduler.cancelAllTasks();
+        }
         getLogger().info("光点交易插件已禁用!");
+    }
+    
+    @Override
+    protected String getPluginName() {
+        return "GuangDianTrade";
     }
 
     private void loadConfig() {
@@ -161,7 +170,10 @@ public class GuangDianTrade extends JavaPlugin implements Listener {
         TradeRequest reverseRequest = findRequestFrom(target, player);
         if (reverseRequest != null) {
             pendingRequests.remove(reverseRequest.getRequester());
-            reverseRequest.getTask().cancel();
+            cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+            if (rpgCore != null) {
+                rpgCore.getScheduler().cancelTask(reverseRequest.getTaskId());
+            }
             startTrade(player, target);
         } else {
             sendTradeRequest(player, target);
@@ -179,17 +191,21 @@ public class GuangDianTrade extends JavaPlugin implements Listener {
     }
 
     private void sendTradeRequest(Player sender, Player target) {
-        BukkitTask task = Bukkit.getScheduler().runTaskLater(this, () -> {
-            TradeRequest req = pendingRequests.remove(sender.getUniqueId());
-            if (req != null) {
-                sender.sendMessage(prefix + getMessage("request-timeout"));
-                if (target.isOnline()) {
-                    target.sendMessage(prefix + getMessage("request-timeout"));
+        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+        long taskId = -1;
+        if (rpgCore != null) {
+            taskId = rpgCore.getScheduler().runSyncLater(() -> {
+                TradeRequest req = pendingRequests.remove(sender.getUniqueId());
+                if (req != null) {
+                    sender.sendMessage(prefix + getMessage("request-timeout"));
+                    if (target.isOnline()) {
+                        target.sendMessage(prefix + getMessage("request-timeout"));
+                    }
                 }
-            }
-        }, requestTimeout * 20L);
+            }, requestTimeout * 20L);
+        }
         
-        TradeRequest request = new TradeRequest(sender.getUniqueId(), target.getUniqueId(), task);
+        TradeRequest request = new TradeRequest(sender.getUniqueId(), target.getUniqueId(), taskId);
         pendingRequests.put(sender.getUniqueId(), request);
         requestCooldowns.put(sender.getUniqueId(), System.currentTimeMillis() / 1000);
         
@@ -236,13 +252,15 @@ public class GuangDianTrade extends JavaPlugin implements Listener {
      * 启动呼吸灯动画
      */
     private void startBreathingAnimation(TradeSession session) {
-        BukkitTask task = Bukkit.getScheduler().runTaskTimer(this, () -> {
+        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+        if (rpgCore == null) return;
+        
+        long taskId = rpgCore.getScheduler().runSyncRepeating(() -> {
             if (session.isClosing()) {
                 stopBreathingAnimation(session);
                 return;
             }
             
-            // 检查玩家是否在线
             Player p1 = session.getPlayer1();
             Player p2 = session.getPlayer2();
             if (p1 == null || p2 == null || !p1.isOnline() || !p2.isOnline()) {
@@ -252,7 +270,6 @@ public class GuangDianTrade extends JavaPlugin implements Listener {
             
             Inventory inv = session.getInventory();
             
-            // 如果双方都已确认，停止呼吸灯，显示绿色静态
             if (session.isBothConfirmed()) {
                 ItemStack divider = createGlass(Material.GREEN_STAINED_GLASS_PANE, "§a交易即将完成");
                 for (int i = 4; i < 54; i += 9) {
@@ -261,7 +278,6 @@ public class GuangDianTrade extends JavaPlugin implements Listener {
                 return;
             }
             
-            // 获取当前颜色
             Material currentColor = session.getCurrentBreathingColor();
             String displayName;
             
@@ -280,21 +296,23 @@ public class GuangDianTrade extends JavaPlugin implements Listener {
                 inv.setItem(i, divider);
             }
             
-            // 切换到下一帧
             session.nextBreathingFrame();
-        }, 0L, 10L); // 每0.5秒更新
+        }, 0L, 10L);
         
-        session.setBreathingAnimationTask(task);
+        session.setBreathingAnimationTask(taskId);
     }
     
     /**
      * 停止呼吸灯动画
      */
     private void stopBreathingAnimation(TradeSession session) {
-        BukkitTask task = session.getBreathingAnimationTask();
-        if (task != null) {
-            task.cancel();
-            session.setBreathingAnimationTask(null);
+        long taskId = session.getBreathingAnimationTaskId();
+        if (taskId != -1) {
+            cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+            if (rpgCore != null) {
+                rpgCore.getScheduler().cancelTask(taskId);
+            }
+            session.setBreathingAnimationTask(-1);
         }
     }
 
@@ -423,11 +441,14 @@ public class GuangDianTrade extends JavaPlugin implements Listener {
         
         updateStatus(session);
         
-        BukkitTask task = Bukkit.getScheduler().runTaskTimer(this, () -> {
+        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+        if (rpgCore == null) return;
+        
+        long taskId = rpgCore.getScheduler().runSyncRepeating(() -> {
             int countdown = session.getCountdown();
             
             if (countdown <= 0) {
-                session.getCountdownTask().cancel();
+                stopBreathingAnimation(session);
                 completeTrade(session);
             } else {
                 String msg = getMessage("countdown", "time", String.valueOf(countdown));
@@ -442,7 +463,7 @@ public class GuangDianTrade extends JavaPlugin implements Listener {
             }
         }, 20L, 20L);
         
-        session.setCountdownTask(task);
+        session.setCountdownTask(taskId);
     }
 
     private void updateStatus(TradeSession session) {
@@ -488,11 +509,14 @@ public class GuangDianTrade extends JavaPlugin implements Listener {
         
         TradeSession session = getTradeSession(player);
         if (session != null && activeTrades.containsKey(player.getUniqueId()) && !session.isClosing()) {
-            Bukkit.getScheduler().runTaskLater(this, () -> {
-                if (activeTrades.containsKey(player.getUniqueId()) && !session.isClosing()) {
-                    cancelTrade(session);
-                }
-            }, 1L);
+            cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+            if (rpgCore != null) {
+                rpgCore.getScheduler().runSyncLater(() -> {
+                    if (activeTrades.containsKey(player.getUniqueId()) && !session.isClosing()) {
+                        cancelTrade(session);
+                    }
+                }, 1L);
+            }
         }
     }
 
@@ -503,12 +527,18 @@ public class GuangDianTrade extends JavaPlugin implements Listener {
         
         TradeRequest request = pendingRequests.remove(playerId);
         if (request != null) {
-            request.getTask().cancel();
+            cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+            if (rpgCore != null) {
+                rpgCore.getScheduler().cancelTask(request.getTaskId());
+            }
         }
         
         pendingRequests.entrySet().removeIf(entry -> {
             if (entry.getValue().getTarget().equals(playerId)) {
-                entry.getValue().getTask().cancel();
+                cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+                if (rpgCore != null) {
+                    rpgCore.getScheduler().cancelTask(entry.getValue().getTaskId());
+                }
                 return true;
             }
             return false;
@@ -603,11 +633,14 @@ public class GuangDianTrade extends JavaPlugin implements Listener {
         }
         session.setClosing(true);
 
-        // 停止呼吸灯动画
         stopBreathingAnimation(session);
         
-        if (session.getCountdownTask() != null) {
-            session.getCountdownTask().cancel();
+        long countdownTaskId = session.getCountdownTaskId();
+        if (countdownTaskId != -1) {
+            cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+            if (rpgCore != null) {
+                rpgCore.getScheduler().cancelTask(countdownTaskId);
+            }
         }
         
         UUID player1Id = session.getPlayer1Id();
@@ -794,17 +827,17 @@ public class GuangDianTrade extends JavaPlugin implements Listener {
     private static class TradeRequest {
         private final UUID requester;
         private final UUID target;
-        private final BukkitTask task;
+        private final long taskId;
 
-        public TradeRequest(UUID requester, UUID target, BukkitTask task) {
+        public TradeRequest(UUID requester, UUID target, long taskId) {
             this.requester = requester;
             this.target = target;
-            this.task = task;
+            this.taskId = taskId;
         }
 
         public UUID getRequester() { return requester; }
         public UUID getTarget() { return target; }
-        public BukkitTask getTask() { return task; }
+        public long getTaskId() { return taskId; }
     }
 
     private static class TradeSession {
@@ -817,10 +850,9 @@ public class GuangDianTrade extends JavaPlugin implements Listener {
         private boolean countingDown = false;
         private boolean closing = false;
         private int countdown = 0;
-        private BukkitTask countdownTask = null;
+        private long countdownTaskId = -1;
         
-        // 呼吸灯动画相关
-        private BukkitTask breathingAnimationTask = null;
+        private long breathingAnimationTaskId = -1;
         private int breathingFrame = 0;
         private static final Material[] BREATHING_COLORS = {
             Material.BLACK_STAINED_GLASS_PANE,
@@ -872,12 +904,11 @@ public class GuangDianTrade extends JavaPlugin implements Listener {
         public int getCountdown() { return countdown; }
         public void setCountdown(int countdown) { this.countdown = countdown; }
         
-        public BukkitTask getCountdownTask() { return countdownTask; }
-        public void setCountdownTask(BukkitTask task) { this.countdownTask = task; }
+        public long getCountdownTaskId() { return countdownTaskId; }
+        public void setCountdownTask(long taskId) { this.countdownTaskId = taskId; }
         
-        // 呼吸灯动画相关方法
-        public BukkitTask getBreathingAnimationTask() { return breathingAnimationTask; }
-        public void setBreathingAnimationTask(BukkitTask task) { this.breathingAnimationTask = task; }
+        public long getBreathingAnimationTaskId() { return breathingAnimationTaskId; }
+        public void setBreathingAnimationTask(long taskId) { this.breathingAnimationTaskId = taskId; }
         public int getBreathingFrame() { return breathingFrame; }
         public void setBreathingFrame(int frame) { this.breathingFrame = frame; }
         public Material getCurrentBreathingColor() {

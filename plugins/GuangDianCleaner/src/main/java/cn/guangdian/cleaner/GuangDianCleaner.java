@@ -5,22 +5,9 @@ import cn.guangdian.cleaner.command.CleanerCommand;
 import cn.guangdian.cleaner.config.ConfigManager;
 import cn.guangdian.cleaner.listener.DropListener;
 import cn.guangdian.cleaner.manager.CleanManager;
-import org.bukkit.plugin.java.JavaPlugin;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 
-/**
- * 光点扫地娘 - 高性能地面掉落物清理插件
- *
- * 功能特性：
- * - 定时自动清理地面掉落物
- * - 手动命令触发清理
- * - 物品黑白名单过滤
- * - 世界过滤
- * - 高性能异步处理（使用 RPGCore AsyncExecutor）
- * - 清理统计与报告
- *
- * @author Gumin
- */
-public class GuangDianCleaner extends JavaPlugin {
+public class GuangDianCleaner extends AbstractRPGPlugin {
 
     private static GuangDianCleaner instance;
 
@@ -29,7 +16,7 @@ public class GuangDianCleaner extends JavaPlugin {
     private CleanerServiceAdapter serviceAdapter;
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
 
         // 初始化配置管理器
@@ -64,18 +51,21 @@ public class GuangDianCleaner extends JavaPlugin {
     }
 
     @Override
-    public void onDisable() {
-        // 停止所有任务
+    protected void onPluginDisable() {
         if (cleanManager != null) {
             cleanManager.stopAutoCleanTask();
         }
 
-        // 注销 RPGCore 服务
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
         }
 
         getLogger().info("光点扫地娘插件已禁用!");
+    }
+
+    @Override
+    protected String getPluginName() {
+        return "GuangDianCleaner";
     }
 
     /**

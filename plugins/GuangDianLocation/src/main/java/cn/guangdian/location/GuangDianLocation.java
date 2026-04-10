@@ -6,6 +6,7 @@ import cn.guangdian.location.service.LocationStorageService;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
 import cn.guangdian.rpgcore.database.CoreDatabase;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.rpgcore.service.api.LocationService;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -18,7 +19,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,28 +26,13 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-/**
- * GuangDianLocation - 坐标点选择插件
- * 
- * <p>功能：</p>
- * <ul>
- *   <li>使用木锄头右键选点</li>
- *   <li>给坐标命名保存</li>
- *   <li>选点时有提示效果</li>
- *   <li>存储到MySQL数据库</li>
- * </ul>
- * 
- * @author GuangDian
- * @since 1.0.0
- */
-public class GuangDianLocation extends JavaPlugin implements CommandExecutor, TabCompleter {
+public class GuangDianLocation extends AbstractRPGPlugin implements CommandExecutor, TabCompleter {
 
     private static GuangDianLocation instance;
     private LocationStorageService storageService;
     private LocationServiceAdapter serviceAdapter;
     private AsyncExecutor asyncExecutor;
 
-    // 配置参数
     private int maxLocationsPerPlayer;
     private boolean selectionParticleEnabled;
     private boolean selectionSoundEnabled;
@@ -55,7 +40,7 @@ public class GuangDianLocation extends JavaPlugin implements CommandExecutor, Ta
     private String selectionSoundType;
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
 
         // 加载配置
@@ -82,13 +67,17 @@ public class GuangDianLocation extends JavaPlugin implements CommandExecutor, Ta
     }
 
     @Override
-    public void onDisable() {
-        // 注销 RPGCore 服务
+    protected void onPluginDisable() {
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
         }
 
         getLogger().info("光点坐标插件已禁用!");
+    }
+
+    @Override
+    protected String getPluginName() {
+        return "GuangDianLocation";
     }
 
     private void loadSettings() {

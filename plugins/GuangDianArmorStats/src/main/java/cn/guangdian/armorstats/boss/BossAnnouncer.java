@@ -189,8 +189,10 @@ public class BossAnnouncer implements Listener {
 
         String plainName = bossName.replaceAll("[&§][0-9a-fk-or]", "");
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (!boss.isValid() || boss.isDead()) return;
+        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+        if (rpgCore != null) {
+            rpgCore.getScheduler().runSyncLater(() -> {
+                if (!boss.isValid() || boss.isDead()) return;
 
             Component title = LegacyComponentSerializer.legacySection().deserialize("§c§lBOSS战");
             Component subtitle = LegacyComponentSerializer.legacySection().deserialize(
@@ -207,5 +209,6 @@ public class BossAnnouncer implements Listener {
                 }
             }
         }, 20L);
+        }
     }
 }

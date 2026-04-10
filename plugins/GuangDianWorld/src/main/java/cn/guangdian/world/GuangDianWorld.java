@@ -5,6 +5,7 @@ import cn.guangdian.rpgcore.api.AsyncExecutor;
 import cn.guangdian.rpgcore.api.CacheProvider;
 import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.world.adapter.WorldServiceAdapter;
 import cn.guangdian.world.api.WorldAPI;
 import cn.guangdian.world.api.WorldAPIImpl;
@@ -16,9 +17,8 @@ import cn.guangdian.world.manager.WorldManager;
 import cn.guangdian.world.papi.WorldPlaceholders;
 import cn.guangdian.world.storage.ConfigManager;
 import me.clip.placeholderapi.PlaceholderAPI;
-import org.bukkit.plugin.java.JavaPlugin;
 
-public final class GuangDianWorld extends JavaPlugin {
+public final class GuangDianWorld extends AbstractRPGPlugin {
 
     private static GuangDianWorld instance;
     private ConfigManager configManager;
@@ -34,7 +34,7 @@ public final class GuangDianWorld extends JavaPlugin {
     private ServiceRegistry serviceRegistry;
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
 
         if (!hookRPGCore()) {
@@ -67,8 +67,7 @@ public final class GuangDianWorld extends JavaPlugin {
     }
 
     @Override
-    public void onDisable() {
-        // 注销服务适配器
+    protected void onPluginDisable() {
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
         }
@@ -82,6 +81,11 @@ public final class GuangDianWorld extends JavaPlugin {
             worldManager.saveAllWorlds();
         }
         getLogger().info("GuangDianWorld 世界管理插件已禁用！");
+    }
+
+    @Override
+    protected String getPluginName() {
+        return "GuangDianWorld";
     }
 
     private boolean hookRPGCore() {

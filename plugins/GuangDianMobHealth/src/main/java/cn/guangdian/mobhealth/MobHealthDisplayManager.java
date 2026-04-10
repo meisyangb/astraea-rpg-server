@@ -1,7 +1,7 @@
 package cn.guangdian.mobhealth;
 
+import cn.guangdian.rpgcore.RPGCore;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -10,7 +10,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.TextDisplay;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,7 +23,7 @@ public class MobHealthDisplayManager {
     private final Map<UUID, String> originalNames = new ConcurrentHashMap<>();
     private final Map<UUID, Boolean> originalNameVisible = new ConcurrentHashMap<>();
     private final Map<UUID, Long> lastAttackTime = new ConcurrentHashMap<>();
-    private BukkitTask timeoutCheckTask;
+    private long timeoutCheckTaskId = -1;
 
     private boolean enabled = true;
     private float displayHeight = 2.5f;
@@ -96,7 +95,10 @@ public class MobHealthDisplayManager {
     public void startUpdateTask() {
         if (!enabled) return;
         
-        timeoutCheckTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore == null) return;
+        
+        timeoutCheckTaskId = rpgCore.getScheduler().runSyncRepeating(() -> {
             long now = System.currentTimeMillis();
             List<UUID> toRemove = new ArrayList<>();
             
@@ -117,9 +119,12 @@ public class MobHealthDisplayManager {
     }
 
     public void stopUpdateTask() {
-        if (timeoutCheckTask != null) {
-            timeoutCheckTask.cancel();
-            timeoutCheckTask = null;
+        if (timeoutCheckTaskId != -1) {
+            RPGCore rpgCore = RPGCore.getInstance();
+            if (rpgCore != null) {
+                rpgCore.getScheduler().cancelTask(timeoutCheckTaskId);
+            }
+            timeoutCheckTaskId = -1;
         }
     }
 

@@ -76,50 +76,53 @@ public class EventListeners implements Listener {
             bossBarManager.createBossBar(player);
         }
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (player.isOnline()) {
-                statsManager.loadPlayerData(player);
-                healthManager.syncPlayerHealth(player);
-                plugin.getLogger().info("[登录] " + player.getName() + " 属性加载完成");
-                
-                if (cn.guangdian.rpgcore.RPGCore.getInstance() != null) {
-                    cn.guangdian.rpgcore.event.events.PlayerStatsChangedEvent statsEvent = 
-                        new cn.guangdian.rpgcore.event.events.PlayerStatsChangedEvent(
-                            player.getUniqueId(),
-                            player.getName(),
-                            0, player.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH).getValue(),
-                            0, 0,
-                            0, 0
-                        );
-                    cn.guangdian.rpgcore.RPGCore.getInstance().getEventBus().publish(statsEvent);
+        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+        if (rpgCore != null) {
+            rpgCore.getScheduler().runSyncLater(() -> {
+                if (player.isOnline()) {
+                    statsManager.loadPlayerData(player);
+                    healthManager.syncPlayerHealth(player);
+                    plugin.getLogger().info("[登录] " + player.getName() + " 属性加载完成");
                     
-                    double maxHealth = player.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH).getValue();
-                    double currentHealth = player.getHealth();
-                    
-                    if (currentHealth >= maxHealth) {
-                        cn.guangdian.rpgcore.event.events.PlayerFullHealthEvent fullHealthEvent = 
-                            new cn.guangdian.rpgcore.event.events.PlayerFullHealthEvent(
+                    if (cn.guangdian.rpgcore.RPGCore.getInstance() != null) {
+                        cn.guangdian.rpgcore.event.events.PlayerStatsChangedEvent statsEvent = 
+                            new cn.guangdian.rpgcore.event.events.PlayerStatsChangedEvent(
                                 player.getUniqueId(),
                                 player.getName(),
-                                maxHealth,
-                                cn.guangdian.rpgcore.event.events.PlayerFullHealthEvent.FullHealthReason.LOGIN
+                                0, player.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH).getValue(),
+                                0, 0,
+                                0, 0
                             );
-                        cn.guangdian.rpgcore.RPGCore.getInstance().getEventBus().publish(fullHealthEvent);
-                    } else {
-                        cn.guangdian.rpgcore.event.events.PlayerHealthChangedEvent healthEvent = 
-                            new cn.guangdian.rpgcore.event.events.PlayerHealthChangedEvent(
-                                player.getUniqueId(),
-                                player.getName(),
-                                0,
-                                currentHealth,
-                                maxHealth,
-                                cn.guangdian.rpgcore.event.events.PlayerHealthChangedEvent.ChangeReason.OTHER
-                            );
-                        cn.guangdian.rpgcore.RPGCore.getInstance().getEventBus().publish(healthEvent);
+                        cn.guangdian.rpgcore.RPGCore.getInstance().getEventBus().publish(statsEvent);
+                        
+                        double maxHealth = player.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH).getValue();
+                        double currentHealth = player.getHealth();
+                        
+                        if (currentHealth >= maxHealth) {
+                            cn.guangdian.rpgcore.event.events.PlayerFullHealthEvent fullHealthEvent = 
+                                new cn.guangdian.rpgcore.event.events.PlayerFullHealthEvent(
+                                    player.getUniqueId(),
+                                    player.getName(),
+                                    maxHealth,
+                                    cn.guangdian.rpgcore.event.events.PlayerFullHealthEvent.FullHealthReason.LOGIN
+                                );
+                            cn.guangdian.rpgcore.RPGCore.getInstance().getEventBus().publish(fullHealthEvent);
+                        } else {
+                            cn.guangdian.rpgcore.event.events.PlayerHealthChangedEvent healthEvent = 
+                                new cn.guangdian.rpgcore.event.events.PlayerHealthChangedEvent(
+                                    player.getUniqueId(),
+                                    player.getName(),
+                                    0,
+                                    currentHealth,
+                                    maxHealth,
+                                    cn.guangdian.rpgcore.event.events.PlayerHealthChangedEvent.ChangeReason.OTHER
+                                );
+                            cn.guangdian.rpgcore.RPGCore.getInstance().getEventBus().publish(healthEvent);
+                        }
                     }
                 }
-            }
-        }, 40L);
+            }, 40L);
+        }
     }
 
     @EventHandler
@@ -148,27 +151,30 @@ public class EventListeners implements Listener {
             plugin.getRegenTask().clearCombat(player.getUniqueId());
         }
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (player.isOnline()) {
-                statsManager.refreshFullStats(player);
-                healthManager.restoreFullHealth(player);
-                if (bossBarManager != null) {
-                    bossBarManager.updateBossBar(player);
+        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+        if (rpgCore != null) {
+            rpgCore.getScheduler().runSyncLater(() -> {
+                if (player.isOnline()) {
+                    statsManager.refreshFullStats(player);
+                    healthManager.restoreFullHealth(player);
+                    if (bossBarManager != null) {
+                        bossBarManager.updateBossBar(player);
+                    }
+                    
+                    if (cn.guangdian.rpgcore.RPGCore.getInstance() != null) {
+                        double maxHealth = player.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH).getValue();
+                        cn.guangdian.rpgcore.event.events.PlayerFullHealthEvent fullHealthEvent = 
+                            new cn.guangdian.rpgcore.event.events.PlayerFullHealthEvent(
+                                player.getUniqueId(),
+                                player.getName(),
+                                maxHealth,
+                                cn.guangdian.rpgcore.event.events.PlayerFullHealthEvent.FullHealthReason.RESPAWN
+                            );
+                        cn.guangdian.rpgcore.RPGCore.getInstance().getEventBus().publish(fullHealthEvent);
+                    }
                 }
-                
-                if (cn.guangdian.rpgcore.RPGCore.getInstance() != null) {
-                    double maxHealth = player.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH).getValue();
-                    cn.guangdian.rpgcore.event.events.PlayerFullHealthEvent fullHealthEvent = 
-                        new cn.guangdian.rpgcore.event.events.PlayerFullHealthEvent(
-                            player.getUniqueId(),
-                            player.getName(),
-                            maxHealth,
-                            cn.guangdian.rpgcore.event.events.PlayerFullHealthEvent.FullHealthReason.RESPAWN
-                        );
-                    cn.guangdian.rpgcore.RPGCore.getInstance().getEventBus().publish(fullHealthEvent);
-                }
-            }
-        }, 10L);
+            }, 10L);
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -223,14 +229,17 @@ public class EventListeners implements Listener {
         plugin.getLogger().info("[主手切换] " + player.getName() + " 切换到槽位: " + newSlot);
 
         // 延迟1tick，让物品栏先更新
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (player.isOnline()) {
-                statsManager.refreshWeaponOnly(player);
-                if (bossBarManager != null) {
-                    bossBarManager.updateBossBar(player);
+        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+        if (rpgCore != null) {
+            rpgCore.getScheduler().runSyncLater(() -> {
+                if (player.isOnline()) {
+                    statsManager.refreshWeaponOnly(player);
+                    if (bossBarManager != null) {
+                        bossBarManager.updateBossBar(player);
+                    }
                 }
-            }
-        }, 1L);
+            }, 1L);
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -239,14 +248,17 @@ public class EventListeners implements Listener {
 
         plugin.getLogger().info("[副手切换] " + player.getName());
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (player.isOnline()) {
-                statsManager.refreshWeaponOnly(player);
-                if (bossBarManager != null) {
-                    bossBarManager.updateBossBar(player);
+        cn.guangdian.rpgcore.RPGCore rpgCore2 = cn.guangdian.rpgcore.RPGCore.getInstance();
+        if (rpgCore2 != null) {
+            rpgCore2.getScheduler().runSyncLater(() -> {
+                if (player.isOnline()) {
+                    statsManager.refreshWeaponOnly(player);
+                    if (bossBarManager != null) {
+                        bossBarManager.updateBossBar(player);
+                    }
                 }
-            }
-        }, 1L);
+            }, 1L);
+        }
     }
 
     // ==================== 伤害事件 ====================
@@ -275,8 +287,10 @@ public class EventListeners implements Listener {
             if (!event.isCancelled() && plugin.getRegenTask() != null) {
                 plugin.getRegenTask().markDamaged(player);
             }
-            if (bossBarManager != null) {
-                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            
+            cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+            if (bossBarManager != null && rpgCore != null) {
+                rpgCore.getScheduler().runSyncLater(() -> {
                     if (player.isOnline()) {
                         bossBarManager.updateBossBar(player);
                     }
@@ -284,23 +298,25 @@ public class EventListeners implements Listener {
             }
             
             // 【新增】发布血量变化事件，让 GuangDianName 等插件可以监听
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                if (player.isOnline() && cn.guangdian.rpgcore.RPGCore.getInstance() != null) {
-                    double currentHealth = player.getHealth();  // 伤害后的血量
+            if (rpgCore != null) {
+                rpgCore.getScheduler().runSyncLater(() -> {
+                    if (player.isOnline() && cn.guangdian.rpgcore.RPGCore.getInstance() != null) {
+                        double currentHealth = player.getHealth();  // 伤害后的血量
                     
-                    // 使用完整版构造函数，传入伤害前后的血量
-                    cn.guangdian.rpgcore.event.events.PlayerHealthChangedEvent healthEvent = 
-                        new cn.guangdian.rpgcore.event.events.PlayerHealthChangedEvent(
-                            player.getUniqueId(),
-                            player.getName(),
-                            oldHealth,      // 伤害前的血量
-                            currentHealth,  // 伤害后的血量
-                            maxHealth,
-                            cn.guangdian.rpgcore.event.events.PlayerHealthChangedEvent.ChangeReason.DAMAGE
-                        );
-                    cn.guangdian.rpgcore.RPGCore.getInstance().getEventBus().publish(healthEvent);
-                }
-            }, 1L);
+                        // 使用完整版构造函数，传入伤害前后的血量
+                        cn.guangdian.rpgcore.event.events.PlayerHealthChangedEvent healthEvent = 
+                            new cn.guangdian.rpgcore.event.events.PlayerHealthChangedEvent(
+                                player.getUniqueId(),
+                                player.getName(),
+                                oldHealth,      // 伤害前的血量
+                                currentHealth,  // 伤害后的血量
+                                maxHealth,
+                                cn.guangdian.rpgcore.event.events.PlayerHealthChangedEvent.ChangeReason.DAMAGE
+                            );
+                        cn.guangdian.rpgcore.RPGCore.getInstance().getEventBus().publish(healthEvent);
+                    }
+                }, 1L);
+            }
         }
     }
 

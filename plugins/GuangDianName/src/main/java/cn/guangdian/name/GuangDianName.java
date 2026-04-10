@@ -5,6 +5,7 @@ import cn.guangdian.name.lifecycle.NameDataHandler;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
 import cn.guangdian.rpgcore.api.SyncScheduler;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,7 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * GuangDianName - 玩家头顶显示插件
@@ -35,7 +35,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * 3. 使用 Scoreboard Team 方式显示称号/婚姻
  * 4. 使用 TextDisplay 实体方式显示工会（1.19.4+最优方案）
  */
-public class GuangDianName extends JavaPlugin implements Listener {
+public class GuangDianName extends AbstractRPGPlugin implements Listener {
     
     private HealthDisplay healthDisplay;
     private TitleDisplay titleDisplay;
@@ -45,19 +45,12 @@ public class GuangDianName extends JavaPlugin implements Listener {
     private NameDataHandler dataHandler;
     private NamePlaceholder namePlaceholder;
     private DisplayServiceAdapter displayServiceAdapter;
-    private SyncScheduler scheduler;
     private long joinTaskId = -1;
     private long respawnTaskId = -1;
     
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         saveDefaultConfig();
-        
-        // 初始化 RPGCore 调度器
-        RPGCore rpgCore = RPGCore.getInstance();
-        if (rpgCore != null) {
-            this.scheduler = rpgCore.getScheduler();
-        }
         
         healthDisplay = new HealthDisplay(this);
         titleDisplay = new TitleDisplay(this);
@@ -92,7 +85,7 @@ public class GuangDianName extends JavaPlugin implements Listener {
     }
     
     @Override
-    public void onDisable() {
+    protected void onPluginDisable() {
         // 取消所有调度任务
         if (scheduler != null) {
             if (joinTaskId >= 0) {
@@ -128,6 +121,11 @@ public class GuangDianName extends JavaPlugin implements Listener {
         titleDisplay.clear();
         
         getLogger().info("GuangDianName 已关闭");
+    }
+    
+    @Override
+    protected String getPluginName() {
+        return "GuangDianName";
     }
     
     private void registerPlaceholderAPI() {

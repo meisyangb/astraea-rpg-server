@@ -5,6 +5,7 @@ import cn.guangdian.menu.placeholder.MenuPlaceholder;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.SyncScheduler;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -34,7 +35,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -49,7 +49,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.logging.Level;
 
-public class GuangDianMenu extends JavaPlugin implements Listener, CommandExecutor, TabExecutor {
+public class GuangDianMenu extends AbstractRPGPlugin implements Listener, CommandExecutor, TabExecutor {
 
     private static GuangDianMenu instance;
     private FileConfiguration config;
@@ -64,14 +64,13 @@ public class GuangDianMenu extends JavaPlugin implements Listener, CommandExecut
     private MenuServiceAdapter serviceAdapter;
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
         saveDefaultConfig();
         config = getConfig();
         menuItemKey = new NamespacedKey(this, "menu_item");
 
         initStarterKitScoreboard();
-        hookRPGCore();
         loadMenus();
 
         if (getCommand("menu") != null) {
@@ -95,13 +94,21 @@ public class GuangDianMenu extends JavaPlugin implements Listener, CommandExecut
     }
 
     @Override
-    public void onDisable() {
+    protected void onPluginDisable() {
         menus.clear();
         playerMenus.clear();
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
             serviceAdapter = null;
         }
+        if (scheduler != null) {
+            scheduler.cancelAllTasks();
+        }
+    }
+    
+    @Override
+    protected String getPluginName() {
+        return "GuangDianMenu";
     }
 
     private void initStarterKitScoreboard() {
@@ -133,17 +140,6 @@ public class GuangDianMenu extends JavaPlugin implements Listener, CommandExecut
             score.setScore(1);
         } else {
             claimedStarterKit.add(player.getUniqueId().toString());
-        }
-    }
-
-    private void hookRPGCore() {
-        var plugin = Bukkit.getPluginManager().getPlugin("RPGCore");
-        if (plugin instanceof RPGCore core) {
-            externalServices = core.getExternalServices();
-            scheduler = core.getScheduler();
-            getLogger().info("已连接到 RPGCore: " + (externalServices != null ? externalServices.getExternalServiceStatus() : "服务不可用"));
-        } else {
-            getLogger().warning("未找到 RPGCore，部分功能受限!");
         }
     }
 
@@ -670,9 +666,9 @@ public class GuangDianMenu extends JavaPlugin implements Listener, CommandExecut
                 if (trimmedCmd.toLowerCase().startsWith("mm ")) {
                     getLogger().info("[DEBUG] MythicMobs 命令通过控制台执行: " + trimmedCmd);
                     final String mmCmd = trimmedCmd;
-                    Bukkit.getScheduler().runTask(this, () -> {
+                    scheduler.runSyncLater(() -> {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), mmCmd);
-                    });
+                    }, 0L);
                 } else {
                     // 其他命令正常处理
                     if (isConsole && !trimmedCmd.toLowerCase().startsWith("console:")) {
@@ -680,13 +676,13 @@ public class GuangDianMenu extends JavaPlugin implements Listener, CommandExecut
                     }
                     getLogger().info("[DEBUG] dispatchCommand: " + trimmedCmd);
                     final String finalCmd = trimmedCmd;
-                    Bukkit.getScheduler().runTask(this, () -> {
+                    scheduler.runSyncLater(() -> {
                         if (isConsole) {
                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCmd);
                         } else {
                             player.performCommand(finalCmd);
                         }
-                    });
+                    }, 0L);
                 }
             }
         }

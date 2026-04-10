@@ -24,13 +24,13 @@ import cn.guangdian.armorstats.storage.PlayerDataStorage;
 import cn.guangdian.armorstats.task.RegenTask;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.concurrent.TimeUnit;
 
-public final class GuangDianArmorStats extends JavaPlugin {
+public final class GuangDianArmorStats extends AbstractRPGPlugin {
 
     private static GuangDianArmorStats instance;
     private ConfigManager configManager;
@@ -55,7 +55,7 @@ public final class GuangDianArmorStats extends JavaPlugin {
     private ArmorStatsDataHandler dataHandler;
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
 
         // 加载所有配置文件
@@ -218,7 +218,7 @@ public final class GuangDianArmorStats extends JavaPlugin {
     }
 
     @Override
-    public void onDisable() {
+    protected void onPluginDisable() {
         // 注销玩家生命周期处理器
         if (dataHandler != null) {
             dataHandler.unregister();
@@ -227,6 +227,11 @@ public final class GuangDianArmorStats extends JavaPlugin {
         // 注销 RPGCore 服务
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
+        }
+        
+        // 取消所有任务
+        if (scheduler != null) {
+            scheduler.cancelAllTasks();
         }
         
         // 等待所有异步保存完成
@@ -267,6 +272,11 @@ public final class GuangDianArmorStats extends JavaPlugin {
         DebugLogManager.shutdown();
         
         getLogger().info("GuangDianArmorStats Plugin Disabled!");
+    }
+    
+    @Override
+    protected String getPluginName() {
+        return "GuangDianArmorStats";
     }
 
     public static GuangDianArmorStats getInstance() {

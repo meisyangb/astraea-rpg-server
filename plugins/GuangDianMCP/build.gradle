@@ -2,8 +2,13 @@ plugins {
     id 'java'
 }
 
+repositories {
+    flatDir { dirs '../RPGCore/build/libs' }
+}
+
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+    compileOnly project(':plugins:RPGCore')
     implementation 'com.google.code.gson:gson:2.10.1'
 }
 

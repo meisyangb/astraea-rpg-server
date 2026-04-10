@@ -1,7 +1,7 @@
 package cn.guangdian.marriage;
 
 import cn.guangdian.marriage.adapter.MarriageServiceAdapter;
-import org.bukkit.plugin.java.JavaPlugin;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public class GuangDianMarriage extends JavaPlugin implements Listener, CommandExecutor, TabCompleter {
+public class GuangDianMarriage extends AbstractRPGPlugin implements Listener, CommandExecutor, TabCompleter {
     private static GuangDianMarriage instance;
     private FileConfiguration config;
     private Map<String, Marriage> marriages;
@@ -30,7 +30,7 @@ public class GuangDianMarriage extends JavaPlugin implements Listener, CommandEx
     private MarriageServiceAdapter serviceAdapter;
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
         marriages = new ConcurrentHashMap<>();
         proposeRequests = new ConcurrentHashMap<>();
@@ -53,14 +53,18 @@ public class GuangDianMarriage extends JavaPlugin implements Listener, CommandEx
     }
 
     @Override
-    public void onDisable() {
+    protected void onPluginDisable() {
         saveMarriages();
-        // 注销RPGCore服务适配器
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
             serviceAdapter = null;
         }
         getLogger().info("GuangDianMarriage 结婚插件已禁用!");
+    }
+
+    @Override
+    protected String getPluginName() {
+        return "GuangDianMarriage";
     }
 
     public static GuangDianMarriage getInstance() {

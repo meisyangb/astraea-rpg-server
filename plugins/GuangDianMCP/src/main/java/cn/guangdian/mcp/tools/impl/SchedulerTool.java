@@ -118,7 +118,7 @@ public class SchedulerTool implements MCPTool {
             return ToolResult.error("缺少action参数");
         }
         
-        SchedulerManager scheduler = plugin.getScheduler();
+        SchedulerManager scheduler = plugin.getSchedulerManager();
         if (scheduler == null) {
             return ToolResult.error("定时任务管理器未初始化");
         }

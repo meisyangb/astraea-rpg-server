@@ -6,22 +6,21 @@ import cn.guangdian.mcp.scheduler.SchedulerManager;
 import cn.guangdian.mcp.command.MCPCommand;
 import cn.guangdian.mcp.config.MCPConfig;
 import cn.guangdian.mcp.tools.ToolRegistry;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 
 import java.util.logging.Level;
 
-public class GuangDianMCP extends JavaPlugin {
+public class GuangDianMCP extends AbstractRPGPlugin {
     
     private static GuangDianMCP instance;
     private MCPConfig config;
     private MCPServer mcpServer;
     private ToolRegistry toolRegistry;
     private EventPusher eventPusher;
-    private SchedulerManager scheduler;
+    private SchedulerManager schedulerManager;
     
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
         
         saveDefaultConfig();
@@ -43,9 +42,9 @@ public class GuangDianMCP extends JavaPlugin {
             this.eventPusher.register();
         }
         
-        this.scheduler = new SchedulerManager(this);
+        this.schedulerManager = new SchedulerManager(this);
         loadDefaultTasks();
-        this.scheduler.start();
+        this.schedulerManager.start();
         
         startTPSMonitor();
         
@@ -59,9 +58,14 @@ public class GuangDianMCP extends JavaPlugin {
     }
     
     @Override
-    public void onDisable() {
+    protected void onPluginDisable() {
+        if (schedulerManager != null) {
+            schedulerManager.stop();
+        }
+        
+        // 取消所有任务
         if (scheduler != null) {
-            scheduler.stop();
+            scheduler.cancelAllTasks();
         }
         
         if (mcpServer != null && mcpServer.isRunning()) {
@@ -71,16 +75,21 @@ public class GuangDianMCP extends JavaPlugin {
         getLogger().info("GuangDianMCP 已禁用!");
     }
     
+    @Override
+    protected String getPluginName() {
+        return "GuangDianMCP";
+    }
+    
     private void loadDefaultTasks() {
         // 每小时自动保存
         SchedulerManager.ScheduledTask saveTask = new SchedulerManager.ScheduledTask("auto_save", "save_all");
         saveTask.setIntervalSeconds(3600);
-        scheduler.addTask(saveTask);
+        schedulerManager.addTask(saveTask);
         
         // 每30分钟清理掉落物
         SchedulerManager.ScheduledTask clearLagTask = new SchedulerManager.ScheduledTask("auto_clear_lag", "clear_lag");
         clearLagTask.setIntervalSeconds(1800);
-        scheduler.addTask(clearLagTask);
+        schedulerManager.addTask(clearLagTask);
     }
     
     public void startMCPServer() {
@@ -168,7 +177,7 @@ public class GuangDianMCP extends JavaPlugin {
         return eventPusher;
     }
     
-    public SchedulerManager getScheduler() {
-        return scheduler;
+    public SchedulerManager getSchedulerManager() {
+        return schedulerManager;
     }
 }

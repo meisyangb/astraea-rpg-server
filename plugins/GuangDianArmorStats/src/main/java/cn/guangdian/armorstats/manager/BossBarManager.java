@@ -66,11 +66,14 @@ public class BossBarManager {
     public void startUpdateTask() {
         if (!enabled) return;
 
-        Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                updateBossBar(player);
-            }
-        }, 20L, updateInterval);
+        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+        if (rpgCore != null) {
+            rpgCore.getScheduler().runSyncRepeating(() -> {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    updateBossBar(player);
+                }
+            }, 20L, updateInterval);
+        }
     }
 
     public void createBossBar(Player player) {

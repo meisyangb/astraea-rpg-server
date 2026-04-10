@@ -9,6 +9,7 @@ import cn.guangdian.npc.model.NPCType;
 import cn.guangdian.npc.papi.NPCPlaceholders;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
+import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -39,12 +40,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.ServicePriority;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public final class GuangDianNPC extends JavaPlugin implements Listener, CommandExecutor, TabCompleter {
+public final class GuangDianNPC extends AbstractRPGPlugin implements Listener, CommandExecutor, TabCompleter {
 
     private static final String NPC_TAG = "guangdian_npc";
     private static final String NPC_ID_KEY = "npc_id";
@@ -59,7 +59,7 @@ public final class GuangDianNPC extends JavaPlugin implements Listener, CommandE
     private org.bukkit.NamespacedKey npcIdKey;
 
     @Override
-    public void onEnable() {
+    protected void onPluginEnable() {
         instance = this;
 
         saveDefaultConfig();
@@ -96,7 +96,7 @@ public final class GuangDianNPC extends JavaPlugin implements Listener, CommandE
     }
 
     @Override
-    public void onDisable() {
+    protected void onPluginDisable() {
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
         }
@@ -112,6 +112,11 @@ public final class GuangDianNPC extends JavaPlugin implements Listener, CommandE
         }
 
         getLogger().info("GuangDianNPC 已禁用");
+    }
+
+    @Override
+    protected String getPluginName() {
+        return "GuangDianNPC";
     }
 
     private void initRPGCoreIntegration() {
