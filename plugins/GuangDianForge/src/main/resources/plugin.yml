@@ -1,0 +1,32 @@
+name: GuangDianForge
+version: 1.0.0
+main: cn.guangdian.forge.GuangDianForge
+api-version: '1.21'
+author: GuangDian
+description: 锻造插件 - 支持装备合成、锻造等级、图纸解锁
+
+softdepend:
+  - MythicMobs
+  - RPGCore
+
+commands:
+  forge:
+    description: 打开锻造界面
+    usage: /forge [配方ID]
+    permission: guangdian.forge.use
+  forgegive:
+    description: 获取配方图纸
+    usage: /forgegive <配方ID>
+    permission: guangdian.forge.admin
+  forgeadmin:
+    description: 锻造管理命令
+    usage: /forgeadmin <reload|give|setlevel|unlock> [玩家] [值]
+    permission: guangdian.forge.admin
+
+permissions:
+  guangdian.forge.use:
+    description: 允许使用锻造功能
+    default: true
+  guangdian.forge.admin:
+    description: 允许使用管理命令
+    default: op

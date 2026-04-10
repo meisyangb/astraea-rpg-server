@@ -1,0 +1,31 @@
+name: GuangDianMenu
+version: 1.0.0
+main: cn.guangdian.menu.GuangDianMenu
+api-version: '1.21'
+author: Gumin
+description: 光点RPG菜单插件
+website: www.guangdianrpg.com
+depend:
+  - PlaceholderAPI
+softdepend:
+  - LuckPerms
+  - Vault
+commands:
+  menu:
+    description: 打开主菜单
+    usage: /menu [菜单名称]
+    aliases: [m, cd]
+  guangdianmenu:
+    description: 菜单插件管理命令
+    usage: /guangdianmenu reload
+    aliases: [gdm]
+permissions:
+  guangdian.menu.use:
+    description: 使用菜单权限
+    default: true
+  guangdian.menu.admin:
+    description: 管理员权限
+    default: op
+  guangdian.menu.reload:
+    description: 重载配置权限
+    default: op

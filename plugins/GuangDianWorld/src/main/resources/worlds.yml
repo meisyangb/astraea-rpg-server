@@ -1,0 +1,90 @@
+worlds:
+  world:
+    alias: ''
+    environment: normal
+    difficulty: normal
+    gamemode: survival
+    pvp: true
+    allow-flight: false
+    allow-weather: true
+    hunger: true
+    keep-spawn-in-memory: true
+    auto-load: true
+    do-mob-spawning: true
+    do-fire-tick: true
+    keep-inventory: false
+    respawn-world: ''
+    generator: ''
+    spawn-location:
+      x: 0.0
+      y: 67.0
+      z: 0.0
+      pitch: 0.0
+      yaw: 0.0
+
+  spawn:
+    alias: '&a出生点大厅'
+    environment: normal
+    difficulty: peaceful
+    gamemode: adventure
+    pvp: false
+    allow-flight: true
+    allow-weather: false
+    hunger: false
+    keep-spawn-in-memory: true
+    auto-load: true
+    do-mob-spawning: false
+    do-fire-tick: false
+    keep-inventory: true
+    respawn-world: ''
+    generator: ''
+    spawn-location:
+      x: 0.0
+      y: 64.0
+      z: 0.0
+      pitch: 0.0
+      yaw: 0.0
+  CaveFuWorld:
+    alias: '&b洞府世界'
+    environment: normal
+    difficulty: easy
+    gamemode: survival
+    pvp: true
+    allow-flight: false
+    allow-weather: true
+    hunger: true
+    keep-spawn-in-memory: false
+    auto-load: true
+    do-mob-spawning: false
+    do-fire-tick: false
+    keep-inventory: true
+    respawn-world: spawn
+    generator: void
+    spawn-location:
+      x: 0.5
+      y: 65.0
+      z: 0.5
+      pitch: 0.0
+      yaw: 0.0
+  DemonLands:
+    alias: '&c恶魔之地'
+    environment: normal
+    difficulty: normal
+    gamemode: survival
+    pvp: true
+    allow-flight: false
+    allow-weather: true
+    hunger: true
+    keep-spawn-in-memory: true
+    auto-load: true
+    do-mob-spawning: true
+    do-fire-tick: true
+    keep-inventory: false
+    respawn-world: ''
+    generator: ''
+    spawn-location:
+      x: 266.0
+      y: -13.0
+      z: -64.0
+      pitch: 0.0
+      yaw: 0.0

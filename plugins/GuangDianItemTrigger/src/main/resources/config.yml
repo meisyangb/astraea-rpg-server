@@ -1,0 +1,250 @@
+﻿# ========================================
+# 光点物品触发插件配置文件
+# GuangDianItemTrigger Configuration
+# ========================================
+# 作者: Gumin
+# QQ: 2271257344
+# 版本: 1.0.0
+# ========================================
+
+# ========================================
+# 基础设置
+# ========================================
+enabled: true
+
+# 调试模式
+debug: false
+
+# ========================================
+# 触发器配置
+# ========================================
+# 通过物品描述(Lore)中的关键字触发动作
+#
+# 触发类型:
+#   - right_click: 右键点击(空气/方块)
+#   - left_click: 左键点击(攻击)
+#   - shift_right_click: 潜行+右键
+#   - shift_left_click: 潜行+左键
+#   - on_hit: 攻击命中时触发
+#   - consume: 消耗物品
+#   - drop: 丢弃物品
+#   - pickup: 捡起物品
+#
+# 动作类型:
+#   - command: 执行命令 (玩家身份)
+#   - console: 执行命令 (控制台身份)
+#   - message: 发送消息
+#   - menu: 打开菜单 (需要GuangDianMenu插件)
+#   - sound: 播放声音
+#   - effect: 添加药水效果
+#   - teleport: 传送到指定位置
+#   - give: 给予物品
+#   - take: 移除物品
+#   - damage: 对物品造成伤害
+#   - cooldown: 设置冷却时间
+#   - rpg_skill: 触发RPG技能 (需要GuangDianArmorStats插件)
+#   - vault_money: 出售获得金币 (需要Vault插件)
+# ========================================
+
+triggers:
+  
+  # ========================================
+  # 神圣天使系列触发器 (GuangDianArmorStats技能)
+  # ========================================
+
+  # 老神圣天使剑2 - 雷霆审判 (右键触发)
+  雷霆审判:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "雷霆审判"
+    actions:
+      - "message:&a触发 &6雷霆审判 &a! 对目标进行雷劈!"
+      - "sound:ENTITY_LIGHTNING_BOLT_THUNDER:1.0:1.0"
+      - "rpg_skill:雷霆审判"
+    cooldown: 15
+
+  # 老神圣天使剑3 - 终结审判 (右键触发)
+  终结审判:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "终结审判"
+    actions:
+      - "message:&a触发 &6终结审判 &a! 对范围内敌人进行雷劈!"
+      - "sound:ENTITY_LIGHTNING_BOLT_THUNDER:1.0:1.0"
+      - "rpg_skill:终结审判"
+    cooldown: 15
+
+  # 神圣天使剑4 - 闪电打击 (右键触发)
+  神圣天使闪电打击:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "神技 &b闪电打击"
+    actions:
+      - "message:&a触发 &6闪电打击 &a! 对前方敌人造成闪电伤害!"
+      - "sound:ENTITY_LIGHTNING_BOLT_THUNDER:1.0:1.0"
+      - "rpg_skill:神圣天使闪电打击"
+    cooldown: 15
+
+  # 神圣天使头盔3 - 炽炎天使 (被攻击时触发)
+  炽炎天使:
+    enabled: true
+    trigger-type: on_hit
+    lore-keyword: "炽炎天使"
+    actions:
+      - "message:&6炽炎天使降临! &e敌人被圣火灼烧!"
+      - "sound:ENTITY_BLAZE_SHOOT:1.0:1.0"
+      - "rpg_skill:炽炎天使"
+    cooldown: 10
+  
+  # ========================================
+  # 塔克币出售系统 (右键出售获得金币)
+  # ========================================
+  破旧的塔克币:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "破旧的塔克币"
+    actions:
+      - "vault_money:100"
+    cooldown: 0
+
+  普通的塔克币:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "普通的塔克币"
+    actions:
+      - "vault_money:500"
+    cooldown: 0
+
+  精致的塔克币:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "精致的塔克币"
+    actions:
+      - "vault_money:1000"
+    cooldown: 0
+
+  闪耀的塔克币:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "闪耀的塔克币"
+    actions:
+      - "vault_money:5000"
+    cooldown: 0
+
+  # ========================================
+  # 消耗品类触发器
+  # ========================================
+  经验药水:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "经验药水"
+    actions:
+      - "message:&a你获得了 &e100 &a经验值"
+      - "console:xp give %player_name% 100"
+      - "sound:ENTITY_PLAYER_LEVELUP:1.0:1.0"
+      - "take:1"
+    cooldown: 0
+
+  生命药水:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "生命药水"
+    actions:
+      - "message:&a你恢复了 &c20 &a生命值"
+      - "effect:HEAL:1:1"
+      - "sound:ENTITY_GENERIC_DRINK:1.0:1.0"
+      - "take:1"
+    cooldown: 0
+
+  # ========================================
+  # 技能类触发器
+  # ========================================
+  闪电技能:
+    enabled: true
+    trigger-type: left_click
+    lore-keyword: "闪电技能"
+    actions:
+      - "message:&b召唤闪电!"
+      - "console:summon lightning_bolt ~ ~ ~"
+      - "sound:ENTITY_LIGHTNING_BOLT_THUNDER:1.0:1.0"
+      - "damage:1"
+    cooldown: 10
+
+  治疗技能:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "治疗技能"
+    actions:
+      - "message:&a使用治疗技能"
+      - "effect:REGENERATION:2:5"
+      - "effect:ABSORPTION:1:10"
+      - "sound:ENTITY_PLAYER_LEVELUP:1.0:1.5"
+    cooldown: 30
+
+  # ========================================
+  # RPG技能联动触发器 (需要GuangDianArmorStats插件)
+  # ========================================
+  RPG闪电打击:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "主动技能: 闪电打击"
+    actions:
+      - "rpg_skill:闪电打击"
+    cooldown: 0  # 冷却由RPG系统管理
+
+  RPG狂暴闪电:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "主动技能: 狂暴闪电"
+    actions:
+      - "rpg_skill:狂暴闪电"
+    cooldown: 0
+
+  RPG雷神之怒:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "主动技能: 雷神之怒"
+    actions:
+      - "rpg_skill:雷神之怒"
+    cooldown: 0
+
+  # ========================================
+  # 特殊类触发器
+  # ========================================
+  新手礼包:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "新手礼包"
+    actions:
+      - "message:&e恭喜你打开了新手宝藏包!"
+      - "console:mi give MATERIAL 新手木镐 1 %player_name%"
+      - "console:mi give MATERIAL 新手的斧 1 %player_name%"
+      - "console:money give %player_name% 1000"
+      - "sound:ENTITY_FIREWORK_ROCKET_LAUNCH:1.0:1.0"
+      - "take:1"
+    cooldown: 0
+    one-time: true
+
+# ========================================
+# 消息设置
+# ========================================
+messages:
+  no-permission: "&c你没有权限执行此操作!"
+  cooldown: "&c该物品还在冷却中，剩余时间: &e%time%秒"
+  trigger-success: "&a触发成功!"
+  trigger-failed: "&c触发失败!"
+  config-reloaded: "&a配置已重新加载"
+  money-received: "&a你获得了 &e%amount% &a金币!"
+
+# ========================================
+# 高级设置
+# ========================================
+advanced:
+  # 是否检查权限
+  check-permission: false
+
+  # 是否记录触发日志
+  log-triggers: false
+
+  # 冷却时间格式
+  cooldown-format: "#.##"

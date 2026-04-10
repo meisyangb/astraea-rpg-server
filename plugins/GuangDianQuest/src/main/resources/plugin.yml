@@ -1,0 +1,41 @@
+name: GuangDianQuest
+version: 1.0.0
+main: cn.guangdian.quest.GuangDianQuest
+api-version: '1.21'
+author: Gumin
+description: 光点RPG任务系统 - 支持主线/支线/每日/成就任务、任务线、奖励系统
+website: www.guangdianrpg.com
+load: POSTWORLD
+
+depend:
+  - RPGCore
+
+softdepend:
+  - PlaceholderAPI
+  - LuckPerms
+  - GuangDianPoints
+  - GuangDianArmorStats
+  - MythicMobs
+
+commands:
+  quest:
+    description: 任务命令
+    usage: /quest <list|accept|abandon|complete|info|daily> [参数]
+    aliases: [rw, task]
+    permission: guangdian.quest.use
+  guangdianquest:
+    description: 任务管理命令
+    usage: /guangdianquest reload
+    aliases: [gdq]
+    permission: guangdian.quest.admin
+
+permissions:
+  guangdian.quest.use:
+    description: 使用任务系统权限
+    default: true
+  guangdian.quest.admin:
+    description: 任务管理权限
+    default: op
+  guangdian.quest.daily:
+    description: 每日任务权限
+    default: true

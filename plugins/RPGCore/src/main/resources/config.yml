@@ -1,0 +1,65 @@
+# RPGCore 核心配置
+
+# ==================== 数据库配置 ====================
+database:
+  # 是否启用数据库
+  enabled: true
+  
+  # JDBC 连接 URL
+  url: "jdbc:mysql://localhost:3306/mc_rpg?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8&allowPublicKeyRetrieval=true"
+  
+  # 数据库用户名
+  username: "root"
+  
+  # 数据库密码
+  password: "123456"
+  
+  # 最大连接数（所有插件共享）
+  max-pool-size: 20
+
+# ==================== 异步执行器配置 ====================
+async:
+  # 异步线程池大小
+  # 建议设置为 CPU 核心数的 2-4 倍
+  thread-pool-size: 4
+
+# ==================== 缓存配置 ====================
+cache:
+  # 缓存模式
+  # - lightweight: 轻量模式，适用于中小型服务器（在线 < 50，缓存 < 1000）
+  # - high_performance: 高性能模式，适用于大型服务器（在线 > 100，缓存 > 1000）
+  # 
+  # 选择建议：
+  # | 在线玩家数      | 推荐模式           |
+  # |----------------|-------------------|
+  # | < 50           | lightweight       |
+  # | 50-100         | lightweight       |
+  # | > 100          | high_performance  |
+  mode: lightweight
+  
+  # 缓存最大容量
+  max-size: 2000
+  
+  # 默认缓存过期时间（分钟）
+  default-ttl-minutes: 30
+
+# ==================== 并发控制配置 ====================
+lock:
+  # 锁获取超时时间（毫秒）
+  timeout-ms: 3000
+
+# ==================== 监控配置 ====================
+monitor:
+  # 是否启用性能监控
+  enabled: true
+  
+  # 监控数据保留时间（分钟）
+  retention-minutes: 60
+
+# ==================== 调试配置 ====================
+debug:
+  # 是否启用调试模式
+  enabled: false
+  
+  # 是否记录详细日志
+  verbose: false

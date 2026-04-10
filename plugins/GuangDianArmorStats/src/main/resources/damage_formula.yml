@@ -1,0 +1,128 @@
+# ========================================
+# 伤害公式配置文件
+# ========================================
+# 支持的表达式变量:
+# {base_damage}      - 基础伤害
+# {weapon_damage}    - 武器伤害
+# {strength}         - 力量属性
+# {crit_chance}      - 暴击率
+# {crit_damage}      - 暴击伤害
+# {defense}          - 防御力
+# {armor_percent}    - 护甲百分比
+# {armor_pen}        - 护甲穿透
+# {defense_pen}      - 防御穿透
+# {damage_reduction} - 伤害减免
+# {element_damage}   - 元素伤害
+# {element_resist}   - 元素抗性
+# {level}            - 等级
+# {health_percent}   - 当前生命百分比
+# {max_health}       - 最大生命值
+# ========================================
+
+formulas:
+  # ==================== 物理伤害公式 ====================
+  physical:
+    # 基础伤害计算
+    base: "{weapon_damage} * (1 + {strength} * 0.01)"
+    
+    # 暴击伤害
+    critical: "{base_damage} * (1 + {crit_damage} * 0.01)"
+    
+    # 防御减免
+    defense_reduction: "100 / (100 + {defense} * (1 - {defense_pen}))"
+    
+    # 护甲减免
+    armor_reduction: "1 - {armor_percent} * (1 - {armor_pen}) * 0.01"
+    
+    # 最终伤害
+    final: "{base_damage} * {defense_reduction} * {armor_reduction}"
+    
+    # 最小伤害
+    min_damage: 1.0
+    
+    # 最大减免比例
+    max_reduction: 0.95
+
+  # ==================== 魔法伤害公式 ====================
+  magical:
+    base: "{weapon_damage} * (1 + {intelligence} * 0.02)"
+    critical: "{base_damage} * (1 + {crit_damage} * 0.005)"
+    defense_reduction: "100 / (100 + {magic_resist} * 0.5)"
+    final: "{base_damage} * {defense_reduction}"
+    min_damage: 1.0
+    max_reduction: 0.90
+
+  # ==================== 真实伤害公式 ====================
+  true_damage:
+    # 真实伤害无视防御
+    base: "{weapon_damage}"
+    final: "{base_damage}"
+    min_damage: 0.1
+    max_reduction: 0.0
+
+  # ==================== 百分比伤害公式 ====================
+  percent_damage:
+    # 基于目标最大生命值
+    base: "{target_max_health} * {percent} * 0.01"
+    # 上限
+    max_damage: 10000
+    min_damage: 1.0
+
+  # ==================== 元素伤害公式 ====================
+  elemental:
+    # 元素伤害基础
+    base: "{element_damage}"
+    
+    # 元素抗性减免
+    resistance: "1 - {element_resist} * 0.01"
+    
+    # 最终元素伤害
+    final: "{element_damage} * {resistance}"
+    
+    # 抗性上限
+    max_resistance: 75
+
+# ==================== BOSS伤害公式 ====================
+boss:
+  # BOSS攻击公式
+  attack:
+    base: "{min_attack} + random({min_attack}, {max_attack})"
+    multiplier: "{base_damage} * {damage_multiplier}"
+    critical: "{base_damage} * (1 + {crit_damage} * 0.01)"
+    
+  # BOSS防御公式
+  defense:
+    armor_reduction: "1 - {armor_percent} * 0.01"
+    defense_reduction: "{defense} / ({defense} + 15000)"
+    damage_reduction: "1 - {damage_reduction} * 0.01"
+    final: "{incoming_damage} * {armor_reduction} * {defense_reduction} * {damage_reduction}"
+    
+  # BOSS穿透公式
+  penetration:
+    armor: "{target_armor} * (1 - {armor_pen} * 0.01)"
+    defense: "{target_defense} * (1 - {defense_pen} * 0.01)"
+
+# ==================== PVP平衡调整 ====================
+pvp:
+  # PVP伤害系数
+  damage_multiplier: 0.8
+  
+  # PVP暴击伤害上限
+  max_crit_damage: 200
+  
+  # PVP穿透上限
+  max_penetration: 50
+
+# ==================== 全局设置 ====================
+global:
+  # 是否启用公式系统
+  enabled: true
+  
+  # 是否使用缓存
+  use_cache: true
+  
+  # 公式计算精度（小数位数）
+  precision: 2
+  
+  # 调试模式
+  debug: false

@@ -1,0 +1,29 @@
+settings:
+  language: zh_cn
+  debug: false
+  auto-save-interval: 900
+  visibility-distance: 20
+  update-interval-ticks: 10
+  spawn-delay-on-join-ms: 300
+
+defaults:
+  background-transparent: true
+  background-color: '#00000000'
+  text-shadow: false
+  see-through: false
+  billboard: center
+
+messages:
+  prefix: '&b[全息] &f'
+  hologram-created: '&a全息显示 {name} 已创建！'
+  hologram-deleted: '&c全息显示 {name} 已删除！'
+  hologram-not-found: '&c全息显示 {name} 不存在！'
+  hologram-already-exists: '&c全息显示 {name} 已存在！'
+  line-added: '&a已添加第 {line} 行！'
+  line-removed: '&c已移除第 {line} 行！'
+  line-set: '&a已设置第 {line} 行内容！'
+  hologram-moved: '&a全息显示 {name} 已移动到新位置！'
+  hologram-list: '&6全息显示列表 ({count}):'
+  no-permission: '&c你没有权限执行此操作！'
+  player-only: '&c此命令只能由玩家执行！'
+  reloaded: '&a配置已重新加载！'

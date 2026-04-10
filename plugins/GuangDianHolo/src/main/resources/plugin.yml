@@ -1,0 +1,34 @@
+name: GuangDianHolo
+version: '1.0.0'
+main: cn.guangdian.holo.GuangDianHolo
+api-version: '1.21'
+description: 光点全息显示插件 - 替代FancyHolograms
+author: GuangDian
+
+depend:
+  - RPGCore
+softdepend:
+  - PlaceholderAPI
+
+commands:
+  gholo:
+    description: 全息显示管理主命令
+    usage: /gholo <create|delete|move|lines|list|reload> [args]
+    permission: guangdian.holo.admin
+
+permissions:
+  guangdian.holo.admin:
+    description: 管理员权限
+    default: op
+  guangdian.holo.create:
+    description: 创建权限
+    default: op
+  guangdian.holo.delete:
+    description: 删除权限
+    default: op
+  guangdian.holo.edit:
+    description: 编辑权限
+    default: op
+  guangdian.holo.tp:
+    description: 传送权限
+    default: op

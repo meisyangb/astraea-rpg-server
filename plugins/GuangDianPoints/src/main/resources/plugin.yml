@@ -1,0 +1,25 @@
+name: GuangDianPoints
+version: 1.0.0
+main: cn.guangdian.points.GuangDianPoints
+api-version: '1.21'
+author: Gumin
+description: 光点RPG点卷系统
+
+# 软依赖 - RPGCore 服务框架
+softdepend:
+  - RPGCore
+  - PlaceholderAPI
+
+commands:
+  points:
+    description: 点卷系统命令
+    usage: /points [balance|pay|give|take|set|top|help]
+    aliases: [point, pts]
+
+permissions:
+  guangdian.points.use:
+    description: 使用点卷系统基本功能
+    default: true
+  guangdian.points.admin:
+    description: 管理员权限
+    default: op

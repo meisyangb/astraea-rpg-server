@@ -1,0 +1,95 @@
+{
+  "version": "1.0.0",
+  "lastCheck": "2026-04-10T12:30:00Z",
+  "checkInterval": "session-end",
+  "assets": {
+    "skills": {
+      "minecraft-rpg-architect": {
+        "currentVersion": "2.1.0",
+        "currentDate": "2026-04-10",
+        "latestVersion": "2.1.0",
+        "latestDate": "2026-04-10",
+        "status": "up-to-date",
+        "changes": [
+          "更新违规扫描结果: 52处 Bukkit.getScheduler() 待修复",
+          "更新 MIGRATION STATUS: 24个插件架构评估完成",
+          "添加知识库导航链接"
+        ],
+        "actionRequired": false
+      },
+      "code-reviewer": {
+        "currentVersion": "1.0.0",
+        "currentDate": "2026-04-10",
+        "latestVersion": "1.0.0",
+        "latestDate": "2026-04-10",
+        "status": "up-to-date",
+        "actionRequired": false
+      },
+      "performance-tuner": {
+        "currentVersion": "1.0.0",
+        "currentDate": "2026-04-10",
+        "latestVersion": "1.0.0",
+        "latestDate": "2026-04-10",
+        "status": "up-to-date",
+        "actionRequired": false
+      },
+      "ui-designer": {
+        "currentVersion": "1.0.0",
+        "currentDate": "2026-04-10",
+        "latestVersion": "1.0.0",
+        "latestDate": "2026-04-10",
+        "status": "up-to-date",
+        "actionRequired": false
+      },
+      "skill-selector": {
+        "currentVersion": "1.0.0",
+        "currentDate": "2026-04-10",
+        "latestVersion": "1.0.0",
+        "latestDate": "2026-04-10",
+        "status": "up-to-date",
+        "actionRequired": false
+      }
+    },
+    "rules": {
+      "kaifa.md": {
+        "currentVersion": "2026-04-10",
+        "latestVersion": "2026-04-10",
+        "status": "up-to-date",
+        "lastChange": "添加知识库导航",
+        "actionRequired": false
+      }
+    },
+    "knowledge": {
+      "memory": {
+        "total": 1,
+        "outdated": 0,
+        "pendingUpdate": 0
+      },
+      "logs": {
+        "total": 1,
+        "outdated": 0,
+        "pendingUpdate": 0
+      }
+    }
+  },
+  "syncStatus": {
+    "codeToDoc": {
+      "status": "synced",
+      "lastSync": "2026-04-10T12:30:00Z",
+      "pendingItems": []
+    },
+    "docToIndex": {
+      "status": "synced",
+      "lastSync": "2026-04-10T12:30:00Z",
+      "pendingItems": []
+    }
+  },
+  "recommendations": [
+    {
+      "priority": "low",
+      "action": "创建模式文档",
+      "reason": "丰富知识库内容",
+      "estimatedTime": "10分钟"
+    }
+  ]
+}

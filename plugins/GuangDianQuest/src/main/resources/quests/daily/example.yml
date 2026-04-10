@@ -1,0 +1,20 @@
+# ========================================
+# 每日任务模板
+# ========================================
+id: daily_kill
+name: "每日狩猎"
+type: DAILY
+description:
+  - "&7击杀一些怪物，保卫村庄！"
+
+objectives:
+  - type: KILL
+    target: ZOMBIE
+    amount: 10
+    description: "击杀僵尸"
+
+daily_weight: 10
+
+rewards:
+  points: 30
+  experience: 10

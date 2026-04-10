@@ -1,0 +1,49 @@
+name: RPGCore
+version: 1.0.0
+main: cn.guangdian.rpgcore.RPGCore
+api-version: '1.21'
+description: 光点RPG服务器核心框架
+author: GuangDian
+website: https://guangdian.cn
+
+# Paper插件库依赖
+libraries:
+  - com.zaxxer:HikariCP:5.1.0
+  - org.slf4j:slf4j-api:2.0.9
+  - org.slf4j:slf4j-simple:2.0.9
+
+# 软依赖 - 可选的外部插件
+softdepend:
+  - PlaceholderAPI
+  - LuckPerms
+  - Vault
+
+# 提供的服务API
+provides:
+  - cn.guangdian.rpgcore.api.ServiceRegistry
+  - cn.guangdian.rpgcore.api.EventBus
+  - cn.guangdian.rpgcore.api.CacheProvider
+  - cn.guangdian.rpgcore.api.AsyncExecutor
+
+# 加载顺序 - 在其他插件之前加载
+load: STARTUP
+
+# 权限定义
+permissions:
+  rpgcore.admin:
+    description: RPGCore 管理员权限
+    default: op
+  rpgcore.reload:
+    description: 重载 RPGCore 配置
+    default: op
+  rpgcore.info:
+    description: 查看 RPGCore 信息
+    default: op
+
+# 命令定义
+commands:
+  rpgcore:
+    description: RPGCore 核心命令
+    usage: /<command> [reload|info|stats]
+    permission: rpgcore.admin
+    aliases: [rgc]

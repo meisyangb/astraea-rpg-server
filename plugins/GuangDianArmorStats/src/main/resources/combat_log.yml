@@ -1,0 +1,39 @@
+# ========================================
+# 战斗日志配置
+# ========================================
+# 控制战斗信息的显示
+# ========================================
+
+# 是否启用战斗日志
+enabled: true
+
+# 显示类型开关
+show_pve: true
+show_pvp: true
+show_crit: true
+show_dodge: true
+show_parry: true
+show_lifesteal: true
+show_status: true
+show_skill: true
+
+# 消息冷却时间 (毫秒)
+# 防止刷屏
+message_cooldown: 500
+
+# 消息格式
+# 占位符: %attacker%, %target%, %damage%, %defender%, %amount%, %skill%, %player%
+format:
+  damage: '&c[战斗] &e%attacker% &f对 &e%target% &f造成了 &c%damage% &f伤害'
+  crit: '&c[战斗] &e%attacker% &f对 &e%target% &f造成了 &4&l%damage% &c&l暴击&f伤害!'
+  pvp_damage: '&c[PVP] &e%attacker% &f对 &e%target% &f造成了 &c%damage% &f伤害'
+  pvp_crit: '&c[PVP] &e%attacker% &f对 &e%target% &f造成了 &4&l%damage% &c&l暴击&f伤害!'
+  dodge: '&b[闪避] &e%defender% &f闪避了攻击!'
+  parry: '&e[招架] &e%defender% &f招架了攻击!'
+  reflect: '&c[反弹] &e%defender% &f反弹了 &c%damage% &f伤害!'
+  lifesteal: '&c[吸血] &e%player% &f恢复了 &c%amount% &f生命值!'
+  poison: '&a[中毒] &e%attacker% &f使 &e%target% &f中毒!'
+  freeze: '&b[冰冻] &e%attacker% &f冻结了 &e%target%&f!'
+  blind: '&8[致盲] &e%attacker% &f致盲了 &e%target%&f!'
+  skill_damage: '&d[技能] &e%skill% &f对 &e%target% &f造成了 &c%damage% &f伤害!'
+  skill_heal: '&a[治疗] &e%skill% &f恢复了 &c%amount% &f生命值!'

@@ -1,0 +1,20 @@
+name: GuangDianArmorStats
+version: 1.0.0
+main: cn.guangdian.armorstats.GuangDianArmorStats
+author: GuangDian
+description: RPG装备属性与宝石镶嵌插件
+api-version: 1.21
+softdepend:
+  - RPGCore
+  - PlaceholderAPI
+  - MythicMobs
+
+commands:
+  armorstats:
+    description: 查看或重载装备属性
+    usage: /<command> [view/reload]
+    aliases:
+      - stats
+  gem:
+    description: 打开宝石镶嵌界面
+    usage: /<command>

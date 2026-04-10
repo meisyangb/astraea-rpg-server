@@ -1,0 +1,11 @@
+name: GuangDianGift
+main: cn.guangdian.gift.GuangDianGift
+version: 1.0.0
+author: GuangDian
+api-version: 1.21
+depend:
+  - RPGCore
+commands:
+  gift:
+    description: 礼包命令
+    usage: /gift <礼包名称> [玩家]

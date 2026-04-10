@@ -1,0 +1,244 @@
+# ========================================
+# 光点RPG菜单插件配置文件
+# GuangDianMenu Configuration
+# ========================================
+# 作者: Gumin
+# QQ: 2271257344
+# 版本: 1.0.0
+# ========================================
+
+# ========================================
+# 基础设置
+# ========================================
+enabled: true
+
+# 默认菜单
+default-menu: "main"
+
+# ========================================
+# 菜单配置
+# ========================================
+# 
+# 支持的占位符:
+# PlaceholderAPI: %xxx% (需要安装对应扩展)
+# 内置占位符:
+#   %player% / %player_name% - 玩家名
+#   %player_displayname% - 玩家显示名
+#   %player_level% - 玩家等级
+#   %player_health% - 当前生命值
+#   %player_max_health% - 最大生命值
+#   %player_food% - 饱食度
+#   %player_exp% - 经验百分比
+#   %player_ping% - 延迟
+#   %player_world% / %world% - 当前世界
+#   %online% / %server_online% - 在线人数
+#   %max_players% / %server_max_players% - 最大玩家数
+# LuckPerms: %luckperms_prefix%, %luckperms_suffix%, %luckperms_primary_group_name%
+# Vault: %vault_eco_balance%, %vault_eco_balance_formatted%
+#
+# 动作类型:
+#   menu:菜单名 - 打开其他菜单
+#   command:命令 - 以玩家身份执行命令
+#   console:命令 - 以控制台身份执行命令
+#   message:消息 - 发送消息给玩家
+#   close - 关闭菜单
+# ========================================
+
+menus:
+  # 主菜单
+  main:
+    title: "&6&l光点RPG &7- &e主菜单"
+    size: 54
+    items:
+      # 服务器信息
+      server-info:
+        slot: 13
+        material: NETHER_STAR
+        name: "&6&l服务器信息"
+        lore:
+          - "&7─────────────────"
+          - "&e&l服务器: &a光点RPG"
+          - "&e&l在线: &a%server_online%&7/&a%server_max_players%"
+          - "&e&lTPS: &a%server_tps_1%"
+          - "&e&l内存: &a%server_ram_used%MB"
+          - "&7─────────────────"
+      
+      # 玩家信息
+      player-info:
+        slot: 22
+        material: PLAYER_HEAD
+        skull: "%player_name%"
+        name: "&e&l玩家信息"
+        lore:
+          - "&7─────────────────"
+          - "&e&l昵称: &a%player_name%"
+          - "&e&l称号: %luckperms_prefix%"
+          - "&e&l等级: &bLv.%player_level%"
+          - "&e&l生命: &c%player_health%/%player_max_health%❤"
+          - "&e&l饱食: &6%player_food%🍖"
+          - "&e&l金币: &6%vault_eco_balance_formatted%"
+          - "&7─────────────────"
+      
+      # 世界传送
+      world-teleport:
+        slot: 31
+        material: COMPASS
+        name: "&b&l世界传送"
+        lore:
+          - "&7─────────────────"
+          - "&e点击打开世界传送菜单"
+          - "&7─────────────────"
+        action: "menu:worlds"
+      
+      # 服务器商店
+      shop:
+        slot: 40
+        material: EMERALD
+        name: "&a&l服务器商店"
+        lore:
+          - "&7─────────────────"
+          - "&e点击打开商店"
+          - "&7─────────────────"
+        action: "command:shop"
+      
+      # 玩家设置
+      settings:
+        slot: 49
+        material: REDSTONE_TORCH
+        name: "&c&l玩家设置"
+        lore:
+          - "&7─────────────────"
+          - "&e点击打开设置菜单"
+          - "&7─────────────────"
+        action: "menu:settings"
+      
+      # 填充边框
+      border:
+        slots: [0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,44,45,46,47,48,50,51,52,53]
+        material: GRAY_STAINED_GLASS_PANE
+        name: " "
+  
+  # 世界传送菜单
+  worlds:
+    title: "&b&l世界传送"
+    size: 27
+    items:
+      main-world:
+        slot: 11
+        material: GRASS_BLOCK
+        name: "&a&l主世界"
+        lore:
+          - "&7─────────────────"
+          - "&e点击传送到主世界"
+          - "&7─────────────────"
+        action: "command:mvtp world"
+      
+      nether:
+        slot: 13
+        material: NETHERRACK
+        name: "&c&l下界"
+        lore:
+          - "&7─────────────────"
+          - "&e点击传送到下界"
+          - "&7─────────────────"
+        action: "command:mvtp world_nether"
+      
+      end:
+        slot: 15
+        material: END_STONE
+        name: "&d&l末地"
+        lore:
+          - "&7─────────────────"
+          - "&e点击传送到末地"
+          - "&7─────────────────"
+        action: "command:mvtp world_the_end"
+      
+      spawn:
+        slot: 22
+        material: BEACON
+        name: "&6&l出生点大厅"
+        lore:
+          - "&7─────────────────"
+          - "&e点击传送到出生点大厅"
+          - "&7─────────────────"
+        action: "command:mvtp spawn22"
+      
+      back:
+        slot: 26
+        material: ARROW
+        name: "&7&l返回"
+        lore:
+          - "&e点击返回主菜单"
+        action: "menu:main"
+      
+      border:
+        slots: [0,1,2,3,4,5,6,7,8,9,17,18,19,20,21,23,24,25]
+        material: LIGHT_BLUE_STAINED_GLASS_PANE
+        name: " "
+  
+  # 设置菜单
+  settings:
+    title: "&c&l玩家设置"
+    size: 27
+    items:
+      toggle-scoreboard:
+        slot: 11
+        material: BOOK
+        name: "&b&l侧边栏设置"
+        lore:
+          - "&7─────────────────"
+          - "&e点击切换侧边栏显示"
+          - "&7─────────────────"
+        action: "command:toggleboard"
+      
+      toggle-bossbar:
+        slot: 13
+        material: DRAGON_HEAD
+        name: "&d&lBossBar设置"
+        lore:
+          - "&7─────────────────"
+          - "&e点击切换BossBar显示"
+          - "&7─────────────────"
+        action: "command:bossbartoggle"
+      
+      player-stats:
+        slot: 15
+        material: DIAMOND
+        name: "&a&l玩家统计"
+        lore:
+          - "&7─────────────────"
+          - "&e查看详细玩家统计"
+          - "&7─────────────────"
+        action: "command:stats"
+      
+      back:
+        slot: 26
+        material: ARROW
+        name: "&7&l返回"
+        lore:
+          - "&e点击返回主菜单"
+        action: "menu:main"
+      
+      border:
+        slots: [0,1,2,3,4,5,6,7,8,9,17,18,19,20,21,23,24,25]
+        material: RED_STAINED_GLASS_PANE
+        name: " "
+
+# ========================================
+# 消息设置
+# ========================================
+messages:
+  no-permission: "&c您没有权限执行此操作!"
+  config-reloaded: "&a菜单配置已重新加载!"
+  menu-not-found: "&c菜单不存在!"
+  unknown-action: "&c未知的操作类型!"
+  click-sound: "BLOCK_NOTE_BLOCK_PLING"
+  click-volume: 1.0
+  click-pitch: 1.0
+
+# ========================================
+# 高级设置
+# ========================================
+advanced:
+  debug: false
+  update-check: true

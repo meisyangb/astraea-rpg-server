@@ -1,0 +1,65 @@
+// ========================================
+// RPGCore - 核心框架
+// ========================================
+// 此插件是其他所有插件的基础依赖
+// 必须首先构建
+// ========================================
+
+plugins {
+    id 'java'
+    id 'io.github.goooler.shadow' version '8.1.8'
+}
+
+// 继承根级配置
+
+dependencies {
+    // Paper API
+    compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+    
+    // HikariCP - 数据库连接池 (需要 shade)
+    implementation 'com.zaxxer:HikariCP:5.1.0'
+    implementation 'org.slf4j:slf4j-simple:2.0.9'
+    
+    // 外部服务依赖 (compileOnly)
+    compileOnly files('libs/PlaceholderAPI.jar')
+    compileOnly 'net.luckperms:api:5.4'
+    compileOnly('com.github.MilkBowl:VaultAPI:1.7') {
+        exclude group: 'org.bukkit', module: 'bukkit'
+    }
+    
+    // 测试依赖 - 需要Paper API和Mockito
+    testImplementation 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testImplementation 'org.junit.platform:junit-platform-launcher:1.10.0'
+    testImplementation 'org.mockito:mockito-core:5.5.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.5.0'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true
+    }
+    jvmArgs = [
+        '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
+        '--add-opens', 'java.base/java.util=ALL-UNNAMED'
+    ]
+}
+
+jar {
+    archiveBaseName.set('RPGCore')
+}
+
+// Shadow 配置 - 重定位依赖包避免冲突
+shadowJar {
+    relocate 'com.zaxxer.hikari', 'cn.guangdian.rpgcore.shaded.hikari'
+    relocate 'org.slf4j', 'cn.guangdian.rpgcore.shaded.slf4j'
+    minimize()
+}
+
+// 生成源码 JAR
+task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier.set('sources')
+    from sourceSets.main.allSource
+}

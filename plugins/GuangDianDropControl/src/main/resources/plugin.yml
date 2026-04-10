@@ -1,0 +1,27 @@
+name: GuangDianDropControl
+version: 1.0.0
+author: Gumin
+main: cn.guangdian.dropcontrol.GuangDianDropControl
+description: 光点物品丢弃控制插件
+api-version: '1.21'
+
+# 插件依赖
+softdepend:
+  - RPGCore
+
+commands:
+  gddrop:
+    description: 物品丢弃控制命令
+    usage: /<command> <toggle|status> (玩家) 或 <enable|disable|player|reload> (管理员)
+    permission: gddrop.use
+
+permissions:
+  gddrop.admin:
+    description: 管理员权限
+    default: op
+  gddrop.use:
+    description: 玩家使用丢弃控制权限
+    default: true
+  gddrop.bypass:
+    description: 绕过丢弃限制
+    default: op

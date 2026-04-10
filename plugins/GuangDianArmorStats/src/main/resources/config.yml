@@ -1,0 +1,123 @@
+# ========================================
+# 光点装备属性插件主配置
+# GuangDianArmorStats Main Configuration
+# ========================================
+# 作者: Gumin
+# 版本: 1.0.0
+# 
+# 详细配置请查看对应的配置文件:
+#   - attributes.yml   属性解析配置
+#   - gems.yml         宝石系统配置
+#   - skills.yml       技能配置
+#   - damage.yml       伤害计算配置
+#   - regen.yml        生命恢复配置
+#   - messages.yml     消息配置
+#   - combat_log.yml   战斗日志配置
+# ========================================
+
+# 调试模式
+debug: false
+
+# ========================================
+# 调试日志配置
+# ========================================
+debug_logging:
+  # 是否启用调试日志
+  enabled: false
+  # 是否输出到控制台
+  log_to_console: true
+  # 是否输出到文件 (文件位于 plugins/GuangDianArmorStats/debug_logs/)
+  log_to_file: true
+  # 是否记录线程信息 (主线程/异步线程)
+  log_thread_info: true
+  # 是否记录调用栈 (仅TRACE级别)
+  log_stack_trace: false
+  # 过滤玩家 (只记录指定玩家的日志，留空=记录所有)
+  filter_players: []
+
+# ========================================
+# 伤害计算调试日志
+# ========================================
+# 用于调试伤害计算流程，生产环境建议关闭
+damage_debug:
+  # 是否启用伤害计算调试日志
+  enabled: true
+  # 拦截器日志开关
+  interceptors:
+    attack: true      # 攻击拦截器日志
+    crit: true        # 暴击拦截器日志
+    defense: true     # 防御拦截器日志
+    boss_stats: true  # BOSS属性拦截器日志
+  # 显示详细计算过程
+  show_calculation_steps: true
+
+# ========================================
+# BOSS 公告配置
+# ========================================
+# 注意: MythicMobs 已支持通过 Skills 自己处理 BOSS 公告
+# 建议: 在 MythicMobs 怪物配置中使用 ~onSpawn, ~onDeath, ~onDamaged 触发公告
+# 示例:
+#   - 'message{msg="&c&l[BOSS] &fBOSS已刷新"} @PlayersInRadius{r=50} ~onSpawn'
+#   - sendtitle{title="&c&lBOSS战";subtitle="&fBOSS已刷新"} @PlayersInRadius{r=50} ~onSpawn
+boss_announce:
+  # 是否启用 BOSS 公告 (建议禁用，使用 MythicMobs 技能处理)
+  enabled: false
+  # 公告范围（格）
+  radius: 50
+
+# 血量显示配置
+health_display:
+  enable_scale: true
+  max_rows: 2
+
+# BossBar配置
+bossbar:
+  enabled: true
+  update_interval: 20
+  format: '&c❤ &f%current%&7/&f%max%'
+  hide_when_full: true
+
+# 闪避配置 (兼容旧版)
+dodge:
+  enabled: true
+
+# 暴击抵抗配置
+crit_resist:
+  enabled: true
+  damage_reduction: 0.01
+
+# ========================================
+# 性能优化配置 (Phase One Optimization)
+# ========================================
+
+# 异步保存配置
+optimization:
+  async_save:
+    # 是否启用异步保存
+    enabled: true
+    # 异步线程池大小 (建议2-4)
+    thread_pool_size: 2
+    # 保存超时时间 (秒)
+    save_timeout: 30
+  
+  # 装备缓存配置
+  equipment_cache:
+    # 是否启用装备缓存
+    enabled: true
+    # 最大缓存大小
+    max_size: 1000
+    # 服务器启动时预热缓存
+    warmup_on_startup: true
+  
+  # BossBar优化配置
+  bossbar_optimizer:
+    # 是否启用BossBar优化
+    enabled: true
+    # 最小血量变化阈值 (0.5 = 半颗心)
+    min_health_change: 0.5
+    # 战斗状态持续时间 (毫秒)
+    combat_duration: 5000
+    # 战斗中更新间隔 (毫秒)
+    combat_update_interval: 100
+    # 非战斗更新间隔 (毫秒)
+    normal_update_interval: 1000

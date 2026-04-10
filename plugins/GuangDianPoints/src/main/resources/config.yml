@@ -1,0 +1,32 @@
+settings:
+  default-balance: 0
+  auto-save-interval-minutes: 5
+
+# 性能优化配置
+optimization:
+  # 事务日志配置
+  transaction-log:
+    enabled: true
+    file: "transactions.log"
+    retention-days: 30
+
+  # 并发控制配置
+  concurrency:
+    enabled: true
+    lock-timeout-ms: 3000
+    lock-timeout-message: "&c操作繁忙，请稍后重试"
+
+  # 异步保存配置
+  async-save:
+    enabled: true
+
+messages:
+  balance-display: "&e你当前有 &6%balance% &e点卷"
+  insufficient-funds: "&c点卷不足!"
+  player-not-found: "&c玩家不在线!"
+  give-success: "&a已给予 %player% %amount% 点卷!"
+  receive-points: "&e你收到了 &6%amount% &e点卷!"
+  pay-success: "&a已转账 %amount% 点卷给 %player%!"
+  receive-transfer: "&e你收到了 %player% 转账的 &6%amount% &e点卷!"
+  lock-timeout: "&c操作繁忙，请稍后重试"
+  transfer-failed: "&c转账失败，请重试"

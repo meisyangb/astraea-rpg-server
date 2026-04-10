@@ -1,0 +1,109 @@
+# ========================================
+# 光点聊天插件配置文件
+# GuangDianChat Configuration
+# ========================================
+# 作者: Gumin
+# QQ: 2271257344
+# 版本: 2.0.0
+# ========================================
+
+# ========================================
+# 基础设置
+# ========================================
+enabled: true
+
+# ========================================
+# 聊天格式
+# ========================================
+# 可用占位符:
+# %player_name% - 玩家名称
+# %player_world% - 当前世界
+# %player_level% - 玩家等级
+# %player_health% - 玩家生命值
+# %player_max_health% - 玩家最大生命值
+# %player_ping% - 玩家延迟
+# %luckperms_prefix% - LuckPerms前缀
+# %luckperms_suffix% - LuckPerms后缀
+# %luckperms_primary_group_name% - 主权限组名称
+# %gdguild_name% - 工会名称
+# %gdguild_in_guild% - 是否在工会
+# %gdmarriage_partner% - 配偶名称
+# %gdcombat_in_combat% - 是否在战斗
+# %gdpoints_points% - 点券数量
+# %message% - 聊天消息内容
+
+# 默认聊天格式
+default-format: "&8[&b%player_world%&8] &7冒险者 &f%player_name%&f: &7%message%"
+
+# 权限组专属格式
+group-formats:
+  owner: "&8[&b%player_world%&8] &6⚜ &e服主 &6%player_name%&f: &e%message%"
+  admin: "&8[&b%player_world%&8] &c⚡ &4管理员 &c%player_name%&f: &c%message%"
+  gm: "&8[&b%player_world%&8] &b☆ &fGM &b%player_name%&f: &b%message%"
+  svip: "&8[&b%player_world%&8] &d♦ &5SVIP &d%player_name%&f: &d%message%"
+  vip: "&8[&b%player_world%&8] &e★ &6VIP &e%player_name%&f: &e%message%"
+  mvp: "&8[&b%player_world%&8] &e♦ &eMVP &e%player_name%&f: &f%message%"
+  default: "&8[&b%player_world%&8] &7冒险者 &f%player_name%&f: &7%message%"
+
+# ========================================
+# 世界别名设置
+# ========================================
+world-aliases:
+  world: "主世界"
+  world_nether: "下界"
+  world_the_end: "末地"
+  spawn: "新手村"
+  pvp: "PVP"
+  dungeon: "副本"
+
+# ========================================
+# 聊天设置
+# ========================================
+settings:
+  # 允许玩家使用颜色代码
+  allow-colors: true
+  color-permission: "guangdian.chat.color"
+
+  # 允许玩家使用格式代码
+  allow-formatting: true
+  format-permission: "guangdian.chat.format"
+
+  # 聊天范围 (0=全局)
+  chat-range: 0
+
+  # 欢迎消息
+  show-welcome-message: true
+  welcome-message: "&a&m─────────────────────────────────────"
+  welcome-message-2: "&6✦ &e欢迎来到 &6光点RPG &e世界!"
+  welcome-message-3: "&7冒险者 &a%player_name% &7加入了游戏"
+  welcome-message-4: "&a&m─────────────────────────────────────"
+
+  # 离开消息
+  show-quit-message: true
+  quit-message: "&c&m─────────────────────────────────────"
+  quit-message-2: "&e%player_name% &7离开了游戏"
+  quit-message-3: "&c&m─────────────────────────────────────"
+
+# ========================================
+# 高级设置
+# ========================================
+advanced:
+  debug: false
+  placeholder-refresh-interval: 1000
+  check-updates: true
+  enable-metrics: true
+
+# ========================================
+# 消息设置
+# ========================================
+messages:
+  no-permission: "&c✗ &f您没有权限执行此操作!"
+  config-reloaded: "&a✓ &f聊天配置已重新加载!"
+  plugin-info:
+    - "&6&m────────────────────────────────"
+    - "&e光点RPG &7聊天系统"
+    - "&f"
+    - "&e版本: &f2.0.0"
+    - "&e作者: &fGumin"
+    - "&e状态: &a✓ 已启用"
+    - "&6&m────────────────────────────────"

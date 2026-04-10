@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "minecraft-server": {
+      "command": "node",
+      "args": [
+        "E:\\原创RPG服务端\\server\\plugins\\GuangDianMCP\\mcp-server\\dist\\index.js"
+      ],
+      "env": {
+        "MCP_URL": "http://127.0.0.1:8080",
+        "MCP_TOKEN": "wangzherongyao"
+      }
+    }
+  }
+}

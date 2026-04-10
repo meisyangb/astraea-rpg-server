@@ -1,0 +1,41 @@
+name: GuangDianMarriage
+version: 1.0.0
+main: cn.guangdian.marriage.GuangDianMarriage
+api-version: '1.21'
+author: GuangDian
+description: 结婚系统插件
+
+# 插件依赖 (通过PlaceholderAPI获取其他插件数据)
+softdepend:
+  - PlaceholderAPI
+  - RPGCore
+
+commands:
+  marriage:
+    description: 结婚主命令
+    usage: /marriage <propose|accept|deny|divorce|info|list|tp|gift|chat>
+    aliases: [m, marry]
+  marriageadmin:
+    description: 结婚管理命令
+    usage: /marriageadmin <reload|force>
+    permission: guangdian.marriage.admin
+
+permissions:
+  guangdian.marriage.propose:
+    description: 求婚权限
+    default: true
+  guangdian.marriage.divorce:
+    description: 离婚权限
+    default: true
+  guangdian.marriage.tp:
+    description: 传送权限
+    default: true
+  guangdian.marriage.gift:
+    description: 送礼权限
+    default: true
+  guangdian.marriage.chat:
+    description: 私聊权限
+    default: true
+  guangdian.marriage.admin:
+    description: 管理权限
+    default: op

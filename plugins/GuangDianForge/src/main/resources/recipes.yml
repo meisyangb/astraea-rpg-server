@@ -1,0 +1,88 @@
+# ─── 锻造图纸配置 ──
+# 
+# 本插件只支持锻造 MythicMobs 物品！
+#
+# 材料格式说明:
+#   MythicMobs物品: "mm:物品ID" 或 "mythicmobs:物品ID"
+#
+# 结果格式说明:
+#   mythicmobs-item: MythicMobs物品ID（必须配置）
+#
+# 图纸配置说明:
+#   blueprint.display: 图纸显示名称
+#   blueprint.lore: 图纸描述（可选，不配置会自动生成）
+#   blueprint.is-book: 是否显示为书本（默认true）
+#
+# 自动生成的图纸 lore 格式:
+#   ═══════════════════════
+#   【图纸】xxx
+#   ═══════════════════════
+#   所需材料:
+#   ◆ 材料名 x数量
+#   锻造等级要求: N级
+#   成功率: xx%
+#   ═══════════════════════
+#   右键使用学习此图纸
+#   ═══════════════════════
+
+recipes:
+  # ─── 示例图纸 ───
+  
+  # 尤里斯圣剑（使用MythicMobs物品作为材料和结果）
+  yulis_sword:
+    name: "&c&l尤里斯圣剑"
+    required-forge-level: 10
+    ingredients:
+      mm:杀戮圣石I: 1
+      mm:尤里斯魔眼: 1
+      mm:尤里斯之心: 1
+    result:
+      mythicmobs-item: "尤里斯圣剑成品"
+    base-success-rate: 0.3
+    blueprint:
+      display: "&c&l【图纸】尤里斯圣剑"
+      is-book: true
+      # lore 不配置会自动生成，包含材料需求、等级要求、右键学习提示
+
+  # 魔法护身符
+  magic_amulet:
+    name: "&b魔法护身符"
+    required-forge-level: 5
+    ingredients:
+      mm:魔法精华: 3
+      mm:神秘宝石: 1
+    result:
+      mythicmobs-item: "魔法护身符成品"
+    base-success-rate: 0.5
+
+  # 暗影匕首
+  shadow_dagger:
+    name: "&8暗影匕首"
+    required-forge-level: 8
+    ingredients:
+      mm:暗影精华: 2
+      mm:陨铁碎片: 3
+    result:
+      mythicmobs-item: "暗影匕首成品"
+    base-success-rate: 0.35
+    blueprint:
+      display: "&8&l【图纸】暗影匕首"
+      lore:
+        - "&8&m═══════════════════════"
+        - "&8&l       暗影匕首"
+        - "&8&m═══════════════════════"
+        - ""
+        - "&7&l「 传说记载 」"
+        - "&8这把匕首由暗影精华锻造而成"
+        - "&8锋利无比，能穿透任何护甲"
+        - "&8是刺客的首选武器"
+        - ""
+        - "&7&l「 所需材料 」"
+        - "&d◆ 暗影精华 x2"
+        - "&d◆ 陨铁碎片 x3"
+        - ""
+        - "&8&m═══════════════════════"
+        - "&6&l    锻造等级要求: 8级"
+        - "&8&m═══════════════════════"
+        - "&a右键使用学习此图纸"
+      is-book: true

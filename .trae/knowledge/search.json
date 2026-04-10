@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-04-10T12:00:00Z",
+  "index": {
+    "BukkitRunnable": ["mem-fix-scheduler-migration", "log-2026-04-10-scheduler-migration"],
+    "Bukkit.getScheduler": ["mem-fix-scheduler-migration", "log-2026-04-10-scheduler-migration"],
+    "SyncScheduler": ["mem-fix-scheduler-migration", "log-2026-04-10-scheduler-migration"],
+    "scheduler": ["mem-fix-scheduler-migration", "log-2026-04-10-scheduler-migration"],
+    "RPGCore": ["mem-fix-scheduler-migration", "log-2026-04-10-scheduler-migration"],
+    "迁移": ["mem-fix-scheduler-migration", "log-2026-04-10-scheduler-migration"],
+    "migration": ["mem-fix-scheduler-migration", "log-2026-04-10-scheduler-migration"],
+    "调度器": ["mem-fix-scheduler-migration", "log-2026-04-10-scheduler-migration"],
+    "任务": ["mem-fix-scheduler-migration"],
+    "cancelAllTasks": ["mem-fix-scheduler-migration"],
+    "runSyncLater": ["mem-fix-scheduler-migration"],
+    "runSyncRepeating": ["mem-fix-scheduler-migration"],
+    "GuangDianName": ["log-2026-04-10-scheduler-migration"],
+    "GuangDianArmorStats": ["log-2026-04-10-scheduler-migration"],
+    "插件修复": ["log-2026-04-10-scheduler-migration"]
+  }
+}

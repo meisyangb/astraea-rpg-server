@@ -1,0 +1,49 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-04-10T12:00:00Z",
+  "totalDocuments": 5,
+  "categories": {
+    "docs": { "count": 1, "lastUpdated": "2026-04-10" },
+    "logs": { "count": 1, "lastUpdated": "2026-04-10" },
+    "memory": { "count": 1, "lastUpdated": "2026-04-10" }
+  },
+  "documents": [
+    {
+      "id": "knowledge-index",
+      "type": "index",
+      "category": "meta",
+      "title": "知识管理系统索引",
+      "path": "INDEX.md",
+      "tags": ["index", "knowledge", "management"],
+      "created": "2026-04-10",
+      "updated": "2026-04-10",
+      "version": "1.0.0"
+    },
+    {
+      "id": "log-2026-04-10-scheduler-migration",
+      "type": "log",
+      "category": "migration",
+      "subcategory": "scheduler",
+      "title": "调度器迁移日志 - 17个插件批量迁移",
+      "path": "logs/categories/migration/2026-04-10-scheduler-migration.md",
+      "tags": ["migration", "scheduler", "bukkitrunnable", "syncscheduler", "rpgcore"],
+      "created": "2026-04-10",
+      "updated": "2026-04-10",
+      "affectedPlugins": 17,
+      "totalViolations": 47,
+      "status": "completed"
+    },
+    {
+      "id": "mem-fix-scheduler-migration",
+      "type": "memory",
+      "category": "fixes",
+      "title": "调度器迁移修复方案",
+      "path": "memory/fixes/scheduler-migration.md",
+      "tags": ["fix", "scheduler", "migration", "bukkitrunnable", "syncscheduler", "pattern"],
+      "created": "2026-04-10",
+      "updated": "2026-04-10",
+      "version": "1.0.0",
+      "status": "published"
+    }
+  ]
+}

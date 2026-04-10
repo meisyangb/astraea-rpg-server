@@ -1,0 +1,212 @@
+# ========================================
+# 光点聊天插件配置文件
+# GuangDianChat Configuration
+# ========================================
+# 作者: Gumin
+# QQ: 2271257344
+# 版本: 1.0.0
+# ========================================
+
+# ========================================
+# 基础设置
+# ========================================
+
+# 是否启用聊天格式功能
+# 设为 false 将禁用所有聊天格式处理
+enabled: true
+
+# ========================================
+# 默认聊天格式
+# ========================================
+# 当玩家不属于任何权限组时使用的格式
+# 
+# 可用占位符:
+# %player_name% - 玩家名称
+# %player_displayname% - 玩家显示名(可能包含称号)
+# %player_world% - 当前世界(使用世界别名)
+# %player_level% - 玩家等级
+# %player_exp% - 玩家经验值
+# %player_health% - 玩家生命值
+# %player_max_health% - 玩家最大生命值
+# %player_food_level% - 玩家饥饿值
+# %player_x% / %player_y% / %player_z% - 玩家坐标
+# %player_ping% - 玩家延迟
+# %player_gamemode% - 游戏模式
+# %player_ip% - 玩家IP地址
+# %luckperms_prefix% - LuckPerms前缀
+# %luckperms_suffix% - LuckPerms后缀
+# %luckperms_primary_group_name% - 主权限组名称
+# %server_online% - 在线玩家数
+# %server_max_players% - 最大玩家数
+# %server_tps% - 服务器TPS
+# %vault_eco_balance% - 经济余额
+# %vault_eco_balance_formatted% - 格式化的经济余额
+# %message% - 聊天消息内容
+#
+# 颜色代码:
+# &0-9, &a-f - 颜色代码
+# &k - 随机字符(魔法效果)
+# &l - 粗体
+# &m - 删除线
+# &n - 下划线
+# &o - 斜体
+# &r - 重置
+# ========================================
+
+default-format: "&7[&b%player_world%&7] &7&l[&f&l玩家&7&l]&r &eLv.%player_level% &f%player_name%&7: &f%message%"
+
+# ========================================
+# 权限组专属格式
+# ========================================
+# 根据玩家的LuckPerms权限组显示不同的聊天格式
+# 权限组名称区分大小写，必须与LuckPerms中的名称完全一致
+#
+# 格式说明:
+# owner - 服主权限组
+# admin - 管理员权限组
+# moderator - 版主权限组
+# helper - 助手权限组
+# builder - 建筑师权限组
+# vip - VIP权限组
+# default - 默认权限组
+# ========================================
+
+group-formats:
+  # 服主 - 金色，最高权限
+  owner: "&7[&b%player_world%&7] &6&l[&e&l服主&6&l]&r &eLv.%player_level% &6%player_name%&7: &f%message%"
+  
+  # 管理员 - 红色，管理权限
+  admin: "&7[&b%player_world%&7] &c&l[&4&l管理员&c&l]&r &eLv.%player_level% &c%player_name%&7: &f%message%"
+  
+  # 版主 - 深蓝色，版务权限
+  moderator: "&7[&b%player_world%&7] &9&l[&1&l版主&9&l]&r &eLv.%player_level% &9%player_name%&7: &f%message%"
+  
+  # 助手 - 绿色，辅助权限
+  helper: "&7[&b%player_world%&7] &a&l[&2&l助手&a&l]&r &eLv.%player_level% &a%player_name%&7: &f%message%"
+  
+  # 建筑师 - 紫色，建筑权限
+  builder: "&7[&b%player_world%&7] &d&l[&5&l建筑师&d&l]&r &eLv.%player_level% &d%player_name%&7: &f%message%"
+  
+  # VIP - 黄色，VIP特权
+  vip: "&7[&b%player_world%&7] &e&l[&6&lVIP&e&l]&r &eLv.%player_level% &e%player_name%&7: &f%message%"
+  
+  # 默认玩家 - 白色
+  default: "&7[&b%player_world%&7] &7&l[&f&l玩家&7&l]&r &eLv.%player_level% &f%player_name%&7: &f%message%"
+
+# ========================================
+# 世界别名设置
+# ========================================
+# 将世界名称转换为更友好的显示名称
+# 格式: 世界名称: 显示名称
+# ========================================
+
+world-aliases:
+  world: "主世界"
+  world_nether: "下界"
+  world_the_end: "末地"
+  # 添加更多世界别名示例:
+  # spawn: "出生点"
+  # survival: "生存世界"
+  # creative: "创造世界"
+  # pvp: "PVP竞技场"
+
+# ========================================
+# 聊天设置
+# ========================================
+
+settings:
+  # 是否允许玩家在聊天中使用颜色代码
+  # 需要对应权限才能使用
+  allow-colors: true
+  
+  # 使用颜色代码所需的权限节点
+  # 默认只有OP可以使用
+  color-permission: "guangdian.chat.color"
+  
+  # 是否允许玩家在聊天中使用格式代码(&l, &m, &n, &o)
+  allow-formatting: true
+  
+  # 使用格式代码所需的权限节点
+  format-permission: "guangdian.chat.format"
+  
+  # 是否允许魔法字符(&k)
+  allow-magic: true
+  
+  # 使用魔法字符所需的权限节点
+  magic-permission: "guangdian.chat.magic"
+  
+  # 聊天范围设置
+  # 0 = 全局聊天(所有玩家都能看到)
+  # 大于0 = 本地聊天范围(只有指定距离内的玩家能看到)
+  chat-range: 0
+  
+  # 是否在玩家加入时显示欢迎消息
+  show-welcome-message: true
+  
+  # 欢迎消息内容
+  welcome-message: "&e欢迎 &a%player_name% &e来到光点RPG服务器!"
+  
+  # 是否在玩家退出时显示离开消息
+  show-quit-message: true
+  
+  # 离开消息内容
+  quit-message: "&c%player_name% &e离开了服务器"
+
+# ========================================
+# 高级设置
+# ========================================
+
+advanced:
+  # 是否启用调试模式
+  # 开启后会在控制台输出详细的调试信息
+  debug: false
+  
+  # 占位符刷新间隔(毫秒)
+  # 某些占位符可能需要定期刷新
+  placeholder-refresh-interval: 1000
+  
+  # 是否检查更新
+  check-updates: true
+  
+  # 是否启用 bStats 统计
+  enable-metrics: true
+
+# ========================================
+# 消息设置
+# ========================================
+
+messages:
+  # 无权限提示
+  no-permission: "&c您没有权限执行此操作!"
+  
+  # 配置重载成功
+  config-reloaded: "&a配置已重新加载!"
+  
+  # 插件信息
+  plugin-info:
+    - "&e===== 光点聊天插件 ====="
+    - "&a版本: &f%version%"
+    - "&a作者: &fGumin"
+    - "&aQQ: &f2271257344"
+    - "&a状态: &f已启用"
+
+# ========================================
+# 格式示例
+# ========================================
+# 以下是一些常用的聊天格式示例，您可以复制使用:
+#
+# 简洁格式:
+# %luckperms_prefix% %player_name%&7: &f%message%
+#
+# 带世界格式:
+# &7[&b%player_world%&7] %luckperms_prefix% %player_name%&7: &f%message%
+#
+# 带等级格式:
+# &7[&b%player_world%&7] &eLv.%player_level% %luckperms_prefix% %player_name%&7: &f%message%
+#
+# 完整信息格式:
+# &7[&b%player_world%&7] &c%player_health%❤ &7| &eLv.%player_level% %luckperms_prefix% %player_name%&7: &f%message%
+#
+# 经济信息格式:
+# &7[&b%player_world%&7] &6%vault_eco_balance_formatted%金币 %luckperms_prefix% %player_name%&7: &f%message%
+# ========================================

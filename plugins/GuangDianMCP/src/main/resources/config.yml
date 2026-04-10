@@ -1,0 +1,92 @@
+# ========================================
+# GuangDianMCP 配置文件
+# ========================================
+# MCP服务器配置 - 允许AI通过MCP协议管理服务器
+# ========================================
+
+# MCP服务器设置
+server:
+  # HTTP服务器端口
+  port: 8080
+  # 绑定地址 (0.0.0.0 表示所有接口)
+  host: "127.0.0.1"
+  # 是否启用
+  enabled: true
+
+# 安全设置
+security:
+  # 认证Token (请修改为安全的随机字符串)
+  # 可以使用 /gmcp token generate 生成新Token
+  tokens:
+    - "your-secure-token-here-change-me"
+  # 是否启用IP白名单
+  ip-whitelist-enabled: false
+  # IP白名单 (仅当 ip-whitelist-enabled 为 true 时生效)
+  ip-whitelist:
+    - "127.0.0.1"
+    - "::1"
+  # 请求超时时间(毫秒)
+  request-timeout: 30000
+
+# 功能开关
+features:
+  # 允许执行服务器命令
+  allow-commands: true
+  # 允许读取配置文件
+  allow-config-read: true
+  # 允许修改配置文件
+  allow-config-write: false
+  # 允许玩家管理
+  allow-player-management: true
+  # 允许世界管理
+  allow-world-management: true
+  # 允许插件管理
+  allow-plugin-management: true
+  # 允许读取日志
+  allow-log-read: true
+
+# 日志设置
+logging:
+  # 是否记录MCP请求
+  log-requests: true
+  # 是否记录敏感操作
+  log-sensitive-operations: true
+  # 日志保留天数
+  retention-days: 7
+
+# MCP工具配置
+tools:
+  # 服务器信息工具
+  server-info:
+    enabled: true
+    description: "获取服务器运行状态和信息"
+  
+  # 玩家管理工具
+  player-management:
+    enabled: true
+    description: "管理在线玩家(踢出、封禁、传送等)"
+  
+  # 命令执行工具
+  command-executor:
+    enabled: true
+    description: "执行服务器命令"
+  
+  # 世界管理工具
+  world-management:
+    enabled: true
+    description: "管理世界(加载、卸载、传送等)"
+  
+  # 插件管理工具
+  plugin-management:
+    enabled: true
+    description: "管理插件(启用、禁用、重载等)"
+  
+  # 配置读取工具
+  config-reader:
+    enabled: true
+    description: "读取服务器配置文件"
+  
+  # 日志读取工具
+  log-reader:
+    enabled: true
+    description: "读取服务器日志"

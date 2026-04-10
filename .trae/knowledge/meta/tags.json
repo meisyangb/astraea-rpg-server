@@ -1,0 +1,78 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-04-10T12:00:00Z",
+  "tags": {
+    "skill": { 
+      "name": "skill", 
+      "color": "#4CAF50", 
+      "count": 5,
+      "description": "AI skill related"
+    },
+    "rpg": { 
+      "name": "RPG", 
+      "color": "#2196F3", 
+      "count": 8,
+      "description": "RPG system related"
+    },
+    "minecraft": { 
+      "name": "Minecraft", 
+      "color": "#795548", 
+      "count": 10,
+      "description": "Minecraft plugin development"
+    },
+    "performance": { 
+      "name": "Performance", 
+      "color": "#FF9800", 
+      "count": 3,
+      "description": "Performance optimization"
+    },
+    "bugfix": { 
+      "name": "Bugfix", 
+      "color": "#F44336", 
+      "count": 12,
+      "description": "Bug fix records"
+    },
+    "migration": { 
+      "name": "Migration", 
+      "color": "#9C27B0", 
+      "count": 5,
+      "description": "Code migration records"
+    },
+    "pattern": { 
+      "name": "Pattern", 
+      "color": "#607D8B", 
+      "count": 4,
+      "description": "Design patterns and code patterns"
+    },
+    "scheduler": {
+      "name": "Scheduler",
+      "color": "#3F51B5",
+      "count": 3,
+      "description": "Task scheduler related"
+    },
+    "bukkitrunnable": {
+      "name": "BukkitRunnable",
+      "color": "#E91E63",
+      "count": 2,
+      "description": "BukkitRunnable migration"
+    },
+    "syncscheduler": {
+      "name": "SyncScheduler",
+      "color": "#00BCD4",
+      "count": 3,
+      "description": "RPGCore unified scheduler"
+    },
+    "rpgcore": {
+      "name": "RPGCore",
+      "color": "#673AB7",
+      "count": 8,
+      "description": "RPGCore core framework"
+    },
+    "fix": {
+      "name": "Fix",
+      "color": "#8BC34A",
+      "count": 5,
+      "description": "Problem fix solutions"
+    }
+  }
+}

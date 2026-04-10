@@ -1,0 +1,39 @@
+# GuangDianName 配置文件
+# 玩家头顶显示插件 - 血量、称号、工会、婚姻（三行显示）
+#
+# 显示层级：
+# - 第1行：工会（TextDisplay实体骑在玩家头上）
+# - 第2行：称号 + 玩家名 + 婚姻（Team Prefix/Suffix）
+# - 第3行：血量（Below Name）
+
+# ==================== 血量显示 ====================
+# 血量显示名称（显示在玩家名字下方）
+# 支持 & 颜色代码
+display-name: "&c❤"
+
+# ==================== 头顶显示设置 ====================
+title-display:
+  # 默认是否显示称号
+  default-show-title: true
+  # 默认是否显示工会
+  default-show-guild: true
+  # 默认是否显示婚姻
+  default-show-marriage: true
+  
+  # 工会显示格式 (%s 会被替换为工会名)
+  guild-format: "&3[%s&3]"
+  
+  # 是否启用工会TextDisplay显示（第1行）
+  # 使用1.19.4+的text_display实体，性能最优
+  guild-textdisplay-enabled: true
+  
+  # 工会显示高度（格）
+  # 默认2.8，可根据需要调整
+  # 更高：3.0-3.5，更低：2.5-2.7
+  guild-display-height: 2.8
+  
+  # 婚姻显示格式 (%s 会被替换为伴侣名)
+  marriage-format: "&d♥%s"
+
+# ==================== 调试设置 ====================
+debug: false

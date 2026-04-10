@@ -1,0 +1,84 @@
+# GuangDianMobHealth 配置文件
+# 怪物血量显示插件 - 使用TextDisplay实体显示怪物血量条
+
+# ==================== 核心设置 ====================
+enabled: true
+
+# ==================== 显示设置 ====================
+display:
+  # 显示高度 (格) - 相对于怪物头顶
+  height: 2.5
+  
+  # 血量条显示超时 (ticks) - 20 ticks = 1秒
+  # 怪物被攻击后，超过此时间未再次被攻击则隐藏血量条
+  # 建议: 60-200 (3-10秒)
+  timeout: 100
+  
+  # 是否隐藏原版名字显示 (MythicMobs的AlwaysShowName)
+  # true = 隐藏原版名字，用TextDisplay替代
+  # false = 保留原版名字，TextDisplay显示在名字上方
+  hide-vanilla-name: true
+  
+  # 是否隐藏MythicMobs怪物的原版名字
+  hide-mythicmobs-name: true
+  
+  # 血量条格式
+  # 可用占位符:
+  #   {name} - 怪物名称
+  #   {health} - 当前血量
+  #   {max_health} - 最大血量
+  #   {health_bar} - 血量条 [IIIIIIIII]
+  #   {percent} - 血量百分比
+  format: "{name}§r {health_bar}§r §a{health}"
+  
+  # 血量条设置
+  bar:
+    # 血量条长度 (字符数)
+    length: 10
+    
+    # 血量条符号
+    symbol: "|"
+    
+    # 血量条颜色 (按血量百分比分段)
+    # 格式: "百分比范围:颜色代码"
+    colors:
+      - "0-100:&a"   # 绿色（有血量）
+    
+    # 空血量条颜色（失去的血量）
+    empty-color: "&c"
+    
+    # 血量条两端括号
+    bracket-left: "&8["
+    bracket-right: "&8]"
+
+# ==================== 过滤设置 ====================
+filter:
+  # 最小血量 - 只有血量大于此值的怪物才显示
+  # 注意: 原版僵尸只有20血，设置为0显示所有怪物
+  min-health: 0
+  
+  # 排除的实体类型
+  excluded-types:
+    - "PLAYER"
+    - "ARMOR_STAND"
+    - "ITEM_FRAME"
+    - "GLOW_ITEM_FRAME"
+    - "PAINTING"
+    - "ENDER_CRYSTAL"
+    - "MARKER"
+    - "INTERACTION"
+    - "TEXT_DISPLAY"
+    - "BLOCK_DISPLAY"
+    - "ITEM_DISPLAY"
+  
+  # 排除的MythicMobs怪物 (内部名称)
+  excluded-mythicmobs: []
+  
+  # 只显示MythicMobs怪物
+  mythicmobs-only: false
+  
+  # 显示原版怪物
+  show-vanilla: true
+
+# ==================== 调试设置 ====================
+debug: false

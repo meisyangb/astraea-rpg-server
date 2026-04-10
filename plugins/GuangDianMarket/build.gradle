@@ -1,0 +1,21 @@
+// ========================================
+// GuangDianMarket - 市场系统
+// ========================================
+
+plugins {
+    id 'java'
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+    compileOnly project(':plugins:RPGCore')
+    compileOnly project(':plugins:GuangDianPoints')
+    compileOnly files('../GuangDianArmorStats/libs/PlaceholderAPI.jar')
+    compileOnly('com.github.MilkBowl:VaultAPI:1.7') {
+        exclude group: 'org.bukkit', module: 'bukkit'
+    }
+}
+
+jar {
+    archiveBaseName.set('GuangDianMarket')
+}

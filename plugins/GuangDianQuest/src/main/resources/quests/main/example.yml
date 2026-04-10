@@ -1,0 +1,36 @@
+# ========================================
+# 主线任务示例
+# ========================================
+id: main_001
+name: "初来乍到"
+type: MAIN
+description:
+  - "&7欢迎来到光之迷城！"
+  - "&7首先，你需要收集一些基础材料。"
+  - "&7这些材料将帮助你在这里生存。"
+
+objectives:
+  - type: COLLECT
+    target: OAK_LOG
+    amount: 10
+    description: "收集橡木原木"
+  - type: TALK
+    target: village_chief
+    amount: 1
+    description: "返回村长处汇报"
+
+prerequisites: []
+
+rewards:
+  points: 100
+  experience: 50
+  items:
+    - type: vanilla
+      material: DIAMOND
+      amount: 1
+  messages:
+    - "&a&l恭喜完成第一个主线任务！"
+    - "&e你获得了 100 点券！"
+
+questline: main_story
+order: 1

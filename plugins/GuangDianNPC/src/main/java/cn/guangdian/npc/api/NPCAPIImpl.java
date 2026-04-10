@@ -1,0 +1,219 @@
+package cn.guangdian.npc.api;
+
+import cn.guangdian.npc.GuangDianNPC;
+import cn.guangdian.npc.manager.NPCManager;
+import cn.guangdian.npc.model.NPCData;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class NPCAPIImpl implements NPCAPI {
+
+    private final GuangDianNPC plugin;
+    private final NPCManager npcManager;
+
+    public NPCAPIImpl(GuangDianNPC plugin) {
+        this.plugin = plugin;
+        this.npcManager = plugin.getNpcManager();
+    }
+
+    @Override
+    public Optional<NPCData> getNPC(String id) {
+        return Optional.ofNullable(npcManager.getNPC(id));
+    }
+
+    @Override
+    public Collection<NPCData> getAllNPCs() {
+        return npcManager.getAllNPCs();
+    }
+
+    @Override
+    public int getNPCCount() {
+        return npcManager.getNPCCount();
+    }
+
+    @Override
+    public NPCData createNPC(String id, Location location, String menuId) {
+        if (location == null || location.getWorld() == null) {
+            return null;
+        }
+        String lowerId = id.toLowerCase();
+        if (npcManager.getNPC(lowerId) != null) {
+            return null;
+        }
+
+        NPCData npc = new NPCData(lowerId, "&e" + id, location, menuId != null ? menuId : "main");
+        npcManager.getNPCs().put(lowerId, npc);
+        npcManager.spawnNPC(npc);
+        npcManager.save();
+
+        return npc;
+    }
+
+    @Override
+    public boolean removeNPC(String id) {
+        return npcManager.removeNPC(id);
+    }
+
+    @Override
+    public boolean exists(String id) {
+        return npcManager.getNPC(id) != null;
+    }
+
+    @Override
+    public void openMenu(Player player, String menuId) {
+        // 优先使用 GuangDianMenu 插件
+        org.bukkit.plugin.Plugin menuPlugin = Bukkit.getPluginManager().getPlugin("GuangDianMenu");
+        if (menuPlugin != null && menuPlugin.isEnabled()) {
+            try {
+                // 使用命令打开菜单
+                player.performCommand("menu " + menuId);
+                return;
+            } catch (Exception e) {
+                plugin.getLogger().warning("调用 GuangDianMenu 失败: " + e.getMessage());
+            }
+        }
+        
+        // 回退到 NPC 自带的菜单系统
+        NPCManager.MenuDefinition menu = npcManager.getMenu(menuId);
+        if (menu == null) {
+            player.sendMessage(ChatColor.RED + "菜单不存在: " + menuId);
+            return;
+        }
+
+        NPCMenuHolder holder = new NPCMenuHolder(menu.getId());
+        Inventory inventory = Bukkit.createInventory(holder, menu.getSize(), color(menu.getTitle()));
+
+        for (NPCManager.MenuItemDefinition item : menu.getItems()) {
+            if (item.getSlot() < 0 || item.getSlot() >= inventory.getSize()) {
+                continue;
+            }
+            ItemStack stack = new ItemStack(item.getMaterial());
+            ItemMeta meta = stack.getItemMeta();
+            if (meta != null) {
+                meta.displayName(color(item.getName()));
+                meta.lore(item.getLore().stream().map(this::color).collect(Collectors.toList()));
+                stack.setItemMeta(meta);
+            }
+            inventory.setItem(item.getSlot(), stack);
+        }
+
+        player.openInventory(inventory);
+    }
+
+    @Override
+    public void openNPCMenu(Player player, String npcId) {
+        NPCData npc = npcManager.getNPC(npcId);
+        if (npc == null) {
+            player.sendMessage(ChatColor.RED + "NPC 不存在: " + npcId);
+            return;
+        }
+        openMenu(player, npc.getMenuId());
+    }
+
+    @Override
+    public void teleportToNPC(Player player, String npcId) {
+        NPCData npc = npcManager.getNPC(npcId);
+        if (npc == null) {
+            player.sendMessage(ChatColor.RED + "NPC 不存在: " + npcId);
+            return;
+        }
+
+        World world = Bukkit.getWorld(npc.getWorldName());
+        if (world == null) {
+            player.sendMessage(ChatColor.RED + "NPC 所在世界未加载: " + npc.getWorldName());
+            return;
+        }
+
+        Location location = new Location(world, npc.getX(), npc.getY(), npc.getZ(), npc.getYaw(), npc.getPitch());
+        player.teleport(location);
+    }
+
+    @Override
+    public void setNPCEnabled(String id, boolean enabled) {
+        NPCData npc = npcManager.getNPC(id);
+        if (npc == null) {
+            return;
+        }
+        npc.setEnabled(enabled);
+        if (enabled) {
+            npcManager.spawnNPC(npc);
+        } else {
+            npcManager.despawnNPC(npc);
+        }
+        npcManager.save();
+    }
+
+    @Override
+    public void setNPCMenu(String id, String menuId) {
+        NPCData npc = npcManager.getNPC(id);
+        if (npc == null) {
+            return;
+        }
+        npc.setMenuId(menuId);
+        npcManager.save();
+    }
+
+    @Override
+    public void setNPCDisplayName(String id, String displayName) {
+        NPCData npc = npcManager.getNPC(id);
+        if (npc == null) {
+            return;
+        }
+        npc.setDisplayName(displayName);
+        npcManager.respawnNPC(npc);
+        npcManager.save();
+    }
+
+    @Override
+    public void setNPCCommands(String id, List<String> commands) {
+        NPCData npc = npcManager.getNPC(id);
+        if (npc == null) {
+            return;
+        }
+        npc.setCommands(commands);
+        npcManager.save();
+    }
+
+    @Override
+    public void addNPCCommand(String id, String command) {
+        NPCData npc = npcManager.getNPC(id);
+        if (npc == null) {
+            return;
+        }
+        npc.addCommand(command);
+        npcManager.save();
+    }
+
+    private net.kyori.adventure.text.Component color(String text) {
+        return net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand()
+            .deserialize(text == null ? "" : text);
+    }
+
+    public static class NPCMenuHolder implements InventoryHolder {
+        private final String menuId;
+
+        public NPCMenuHolder(String menuId) {
+            this.menuId = menuId;
+        }
+
+        public String getMenuId() {
+            return menuId;
+        }
+
+        @Override
+        public Inventory getInventory() {
+            return null;
+        }
+    }
+}
