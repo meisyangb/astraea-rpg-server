@@ -1,0 +1,18 @@
+settings:
+  update-interval-ticks: 600
+  leaderboard-size: 10
+  cache-expiry-minutes: 5
+
+score-patterns:
+  - "评分"
+  - "战力"
+  - "装备评分"
+
+messages:
+  score-display: "&e你的装备评分: &6%score%"
+  rank-display: "&e你的排名: &6#%rank%"
+  no-score: "&c你没有任何装备评分"
+  leaderboard-header: "&6===== 装备评分排行榜 ====="
+  leaderboard-line: "&e#%rank% &f%player% &7- &6%score%"
+  reload-success: "&a配置已重新加载!"
+  no-permission: "&c没有权限!"

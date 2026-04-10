@@ -1,0 +1,37 @@
+settings:
+  default-balance: 0
+  deposit-interest-rate: 0.5
+  loan-interest-rate: 5.0
+  interest-interval-minutes: 1440
+  max-loan-amount: 1000000
+  min-credit-score-for-loan: 60
+  auto-save-interval-minutes: 5
+
+messages:
+  balance-display: "&e你的银行余额: &6%balance%"
+  deposit-success: "&a成功存入 &e%amount% &a，当前余额: &e%balance%"
+  withdraw-success: "&a成功取出 &e%amount% &a，当前余额: &e%balance%"
+  transfer-success: "&a成功转账 &e%amount% &a给 &e%player%"
+  transfer-received: "&e你收到 &6%player% &e转账的 &6%amount%"
+  insufficient-funds: "&c余额不足！"
+  loan-applied: "&a成功申请贷款 &e%amount% &a，期限 &e%days% &a天"
+  loan-repaid: "&a成功还款 &e%amount%"
+  loan-paid-off: "&a恭喜！你已还清贷款！信用评分 +5"
+  loan-overdue: "&c你的贷款已逾期！信用评分 -10"
+  cannot-loan: "&c信用评分不足或贷款额度已达上限，无法申请贷款！"
+  player-not-found: "&c玩家不在线或不存在！"
+  no-permission: "&c你没有权限执行此操作！"
+  invalid-amount: "&c无效的金额！"
+  help-header: "&6===== 光点银行帮助 ====="
+  help-balance: "&e/bank balance &7- 查看余额"
+  help-deposit: "&e/bank deposit <金额> &7- 存款"
+  help-withdraw: "&e/bank withdraw <金额> &7- 取款"
+  help-transfer: "&e/bank transfer <玩家> <金额> &7- 转账"
+  help-loan: "&e/bank loan <金额> <天数> &7- 申请贷款"
+  help-repay: "&e/bank repay <贷款ID> <金额> &7- 还款"
+  help-history: "&e/bank history [页数] &7- 查看交易记录"
+  help-loans: "&e/bank loans &7- 查看我的贷款"
+  admin-help-set: "&e/bankadmin set <玩家> <金额> &7- 设置余额"
+  admin-help-give: "&e/bankadmin give <玩家> <金额> &7- 给予金额"
+  admin-help-take: "&e/bankadmin take <玩家> <金额> &7- 扣除金额"
+  admin-help-reload: "&e/bankadmin reload &7- 重载配置"

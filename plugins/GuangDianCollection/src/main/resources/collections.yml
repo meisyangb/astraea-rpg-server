@@ -1,0 +1,113 @@
+categories:
+  weapons:
+    name: "§c武器图鉴"
+    description: "收集各类武器"
+    icon: DIAMOND_SWORD
+    slot: 10
+    items:
+      wooden_sword:
+        name: "§f木剑"
+        type: VANILLA
+        material: WOODEN_SWORD
+        hint: "最基础的武器"
+      stone_sword:
+        name: "§7石剑"
+        type: VANILLA
+        material: STONE_SWORD
+        hint: "比木剑更强"
+      iron_sword:
+        name: "§f铁剑"
+        type: VANILLA
+        material: IRON_SWORD
+        hint: "常见的武器"
+      diamond_sword:
+        name: "§b钻石剑"
+        type: VANILLA
+        material: DIAMOND_SWORD
+        hint: "稀有的宝石武器"
+      netherite_sword:
+        name: "§5下界合金剑"
+        type: VANILLA
+        material: NETHERITE_SWORD
+        hint: "最强大的剑"
+      mythic_blade:
+        name: "§d神话之刃"
+        type: MYTHICMOBS
+        mythic-id: "MythicBlade"
+        hint: "传说中的武器"
+
+  armor:
+    name: "§9护甲图鉴"
+    description: "收集各类护甲"
+    icon: DIAMOND_CHESTPLATE
+    slot: 12
+    items:
+      leather_helmet:
+        name: "§6皮革帽子"
+        type: VANILLA
+        material: LEATHER_HELMET
+        hint: "基础防具"
+      iron_chestplate:
+        name: "§f铁胸甲"
+        type: VANILLA
+        material: IRON_CHESTPLATE
+        hint: "常见的护甲"
+      diamond_boots:
+        name: "§b钻石靴子"
+        type: VANILLA
+        material: DIAMOND_BOOTS
+        hint: "闪亮的靴子"
+
+  materials:
+    name: "§e材料图鉴"
+    description: "收集各种材料"
+    icon: CHEST
+    slot: 14
+    items:
+      diamond:
+        name: "§b钻石"
+        type: VANILLA
+        material: DIAMOND
+        hint: "珍贵的宝石"
+      emerald:
+        name: "§a绿宝石"
+        type: VANILLA
+        material: EMERALD
+        hint: "交易货币"
+      nether_star:
+        name: "§e下界之星"
+        type: VANILLA
+        material: NETHER_STAR
+        hint: "Boss掉落"
+
+  mobs:
+    name: "§4怪物图鉴"
+    description: "击杀各类怪物"
+    icon: ZOMBIE_HEAD
+    slot: 16
+    type: MOB_KILL
+    mobs:
+      zombie:
+        name: "§2僵尸"
+        type: VANILLA
+        entity: ZOMBIE
+        target-count: 100
+        hint: "常见的亡灵"
+      skeleton:
+        name: "§7骷髅"
+        type: VANILLA
+        entity: SKELETON
+        target-count: 100
+        hint: "弓箭手亡灵"
+      ender_dragon:
+        name: "§5末影龙"
+        type: VANILLA
+        entity: ENDER_DRAGON
+        target-count: 1
+        hint: "末地的Boss"
+      mythic_boss:
+        name: "§c神话Boss"
+        type: MYTHICMOBS
+        mythic-id: "MythicBoss"
+        target-count: 10
+        hint: "传说中的Boss"

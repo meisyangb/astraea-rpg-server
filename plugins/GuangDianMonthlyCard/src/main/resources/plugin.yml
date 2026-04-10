@@ -1,0 +1,23 @@
+name: GuangDianMonthlyCard
+version: 1.0.0
+main: cn.guangdian.monthlycard.GuangDianMonthlyCard
+api-version: '1.21'
+depend:
+  - RPGCore
+softdepend:
+  - PlaceholderAPI
+  - Vault
+commands:
+  monthlycard:
+    description: 月卡系统命令
+    usage: /monthlycard [info|claim|buy|list|give|remove|extend|reload]
+    aliases: [mc, yueka]
+    permission: guangdian.monthlycard.use
+    permission-message: 你没有权限使用此命令
+permissions:
+  guangdian.monthlycard.use:
+    description: 使用月卡基本命令
+    default: true
+  guangdian.monthlycard.admin:
+    description: 使用月卡管理命令
+    default: op

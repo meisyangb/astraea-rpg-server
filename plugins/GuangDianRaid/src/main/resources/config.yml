@@ -1,0 +1,24 @@
+# GuangDianRaid 主配置文件
+# 搜打撤副本系统
+
+# 调试模式
+debug: false
+
+# 默认设置
+default:
+  # 最大复活次数
+  max_revives: 3
+  # 撤离倒计时显示范围
+  extraction_display_range: 50
+
+# 消息配置
+messages:
+  prefix: "§6[副本] §r"
+  no_permission: "§c你没有权限执行此操作"
+  raid_not_found: "§c副本不存在"
+  already_in_raid: "§c你已在副本中"
+  not_in_raid: "§c你不在副本中"
+  player_joined: "§a%s 加入了副本"
+  player_left: "§e%s 离开了副本"
+  raid_complete: "§a副本完成！"
+  raid_failed: "§c副本失败"

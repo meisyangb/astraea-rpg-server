@@ -1,0 +1,162 @@
+# 经验触发器配置文件
+# Astraea RPG - GuangDianBattlePass
+# 支持自定义经验获取规则
+
+triggers:
+  # ========== MythicMobs 怪物击杀 ==========
+  kill_boss_skeleton_king:
+    id: "kill_boss_skeleton_king"
+    type: KILL_MYTHICMOB
+    target: "SkeletonKing"
+    exp: 500
+    cooldown: 0
+    max-daily: -1
+    enabled: true
+  
+  kill_elite_zombie:
+    id: "kill_elite_zombie"
+    type: KILL_MYTHICMOB
+    targets:
+      - "EliteZombie"
+      - "EliteSkeleton"
+      - "EliteSpider"
+    exp: 100
+    cooldown: 0
+    max-daily: 50
+    enabled: true
+  
+  # ========== 原版怪物击杀 ==========
+  kill_ender_dragon:
+    id: "kill_ender_dragon"
+    type: KILL_MOB_TYPE
+    target: "ENDER_DRAGON"
+    exp: 1000
+    cooldown: 0
+    max-daily: 1
+    enabled: true
+  
+  kill_wither:
+    id: "kill_wither"
+    type: KILL_MOB_TYPE
+    target: "WITHER"
+    exp: 800
+    cooldown: 0
+    max-daily: 1
+    enabled: true
+  
+  kill_elder_guardian:
+    id: "kill_elder_guardian"
+    type: KILL_MOB_TYPE
+    target: "ELDER_GUARDIAN"
+    exp: 500
+    cooldown: 0
+    max-daily: 3
+    enabled: true
+  
+  kill_warden:
+    id: "kill_warden"
+    type: KILL_MOB_TYPE
+    target: "WARDEN"
+    exp: 1500
+    cooldown: 0
+    max-daily: 1
+    enabled: true
+  
+  # ========== MythicMobs 物品获取 ==========
+  obtain_legendary_sword:
+    id: "obtain_legendary_sword"
+    type: OBTAIN_MYTHIC_ITEM
+    targets:
+      - "LegendarySword"
+      - "LegendaryBow"
+      - "LegendaryArmor"
+    exp: 200
+    cooldown: 60
+    max-daily: 10
+    enabled: true
+  
+  # ========== 原版物品获取 ==========
+  obtain_diamond:
+    id: "obtain_diamond"
+    type: OBTAIN_ITEM
+    target: "DIAMOND"
+    exp: 5
+    cooldown: 0
+    max-daily: 100
+    enabled: true
+  
+  obtain_netherite_ingot:
+    id: "obtain_netherite_ingot"
+    type: OBTAIN_ITEM
+    target: "NETHERITE_INGOT"
+    exp: 20
+    cooldown: 0
+    max-daily: 50
+    enabled: true
+  
+  obtain_ancient_debris:
+    id: "obtain_ancient_debris"
+    type: OBTAIN_ITEM
+    target: "ANCIENT_DEBRIS"
+    exp: 30
+    cooldown: 0
+    max-daily: 30
+    enabled: true
+  
+  obtain_enchanted_golden_apple:
+    id: "obtain_enchanted_golden_apple"
+    type: OBTAIN_ITEM
+    target: "ENCHANTED_GOLDEN_APPLE"
+    exp: 50
+    cooldown: 0
+    max-daily: 10
+    enabled: true
+  
+  # ========== 稀有物品获取 ==========
+  obtain_elytra:
+    id: "obtain_elytra"
+    type: OBTAIN_ITEM
+    target: "ELYTRA"
+    exp: 100
+    cooldown: 0
+    max-daily: 5
+    enabled: true
+  
+  obtain_trident:
+    id: "obtain_trident"
+    type: OBTAIN_ITEM
+    target: "TRIDENT"
+    exp: 80
+    cooldown: 0
+    max-daily: 5
+    enabled: true
+  
+  obtain_totem:
+    id: "obtain_totem"
+    type: OBTAIN_ITEM
+    target: "TOTEM_OF_UNDYING"
+    exp: 150
+    cooldown: 0
+    max-daily: 3
+    enabled: true
+
+# ========== 配置说明 ==========
+# type: 触发器类型
+#   - KILL_MYTHICMOB: 击杀MythicMobs自定义怪物
+#   - KILL_MOB_TYPE: 击杀原版怪物（按类型）
+#   - OBTAIN_MYTHIC_ITEM: 获取MythicMobs自定义物品
+#   - OBTAIN_ITEM: 获取原版物品
+#   - CRAFT_ITEM: 合成物品
+#   - ENCHANT_ITEM: 附魔物品
+#   - COMPLETE_DUNGEON: 完成副本
+#   - COMPLETE_QUEST: 完成任务
+#   - FISHING: 钓鱼
+#   - CUSTOM: 自定义触发器
+#
+# target: 单个目标（怪物类型或物品类型）
+# targets: 多个目标列表（满足任一即可）
+#
+# exp: 经验奖励
+# cooldown: 冷却时间（秒），0表示无冷却
+# max-daily: 每日最大触发次数，-1表示无限制
+# enabled: 是否启用

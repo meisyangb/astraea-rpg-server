@@ -1,0 +1,46 @@
+# GuangDianSoulBind 灵魂绑定配置
+# ================================
+
+# 绑定设置
+binding:
+  # 拾取时自动绑定
+  auto-bind-on-pickup: true
+  # 仅对MythicMobs物品生效
+  mythic-mobs-only: true
+  # 指定需要绑定的MythicMobs物品ID列表（为空则绑定所有MythicMobs物品）
+  mythic-item-ids: []
+  # 示例:
+  # mythic-item-ids:
+  #   - "传说之剑"
+  #   - "神圣护甲"
+
+# 保护设置
+protection:
+  # 阻止丢弃绑定物品
+  prevent-drop: true
+  # 阻止放入容器
+  prevent-container: true
+  # 阻止交易
+  prevent-trade: true
+  # 死亡时保留绑定物品
+  keep-on-death: true
+
+# 消息设置
+messages:
+  bind-success: "&a物品已绑定到你的灵魂！"
+  already-bound: "&c该物品已被绑定！"
+  not-bound: "&c该物品未绑定！"
+  bound-by-other: "&c该物品已被其他玩家绑定！"
+  cannot-drop: "&c绑定物品无法丢弃！"
+  cannot-trade: "&c绑定物品无法交易！"
+  cannot-container: "&c绑定物品无法放入容器！"
+  no-permission: "&c你没有权限执行此操作！"
+  not-mythic-item: "&c该物品不是MythicMobs物品！"
+  player-not-found: "&c玩家不存在或未在线！"
+
+# Lore格式
+lore-format:
+  # 绑定信息显示格式（%player% 会被替换为玩家名）
+  format: "&8灵魂绑定：&f%player%"
+  # 绑定信息在Lore中的位置（从底部开始，1=最后一行）
+  position: 1

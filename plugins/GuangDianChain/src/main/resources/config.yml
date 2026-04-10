@@ -1,0 +1,24 @@
+chain:
+  ore:
+    enabled: true
+  tree:
+    enabled: true
+
+limits:
+  default: 32
+  vip: 64
+  premium: 128
+
+durability:
+  base-cost: 1
+  multiplier: 0.1
+
+options:
+  drop-naturally: true
+  particles: true
+
+custom-blocks:
+  - STONE
+  - DEEPSLATE
+  - NETHERRACK
+  - END_STONE

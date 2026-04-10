@@ -1,0 +1,59 @@
+# 奖励配置文件
+# Astraea RPG - GuangDianBattlePass
+
+rewards:
+  # 示例奖励 1
+  example_reward_1:
+    id: "example_reward_1"
+    name: "新手礼包"
+    icon: "CHEST"
+    points: 100
+    exp: 500
+    money: 1000
+    lore:
+      - "&7包含:"
+      - "&e- 100 点券"
+      - "&e- 500 经验"
+      - "&e- 1000 金币"
+  
+  # 示例奖励 2
+  example_reward_2:
+    id: "example_reward_2"
+    name: "进阶礼包"
+    icon: "DIAMOND"
+    points: 500
+    exp: 2000
+    money: 5000
+    lore:
+      - "&7包含:"
+      - "&e- 500 点券"
+      - "&e- 2000 经验"
+      - "&e- 5000 金币"
+  
+  # 示例奖励 3
+  example_reward_3:
+    id: "example_reward_3"
+    name: "高级礼包"
+    icon: "NETHER_STAR"
+    points: 1000
+    exp: 5000
+    money: 10000
+    lore:
+      - "&7包含:"
+      - "&e- 1000 点券"
+      - "&e- 5000 经验"
+      - "&e- 10000 金币"
+  
+  # 示例奖励 4
+  example_reward_4:
+    id: "example_reward_4"
+    name: "传说礼包"
+    icon: "BEACON"
+    points: 2000
+    exp: 10000
+    money: 20000
+    lore:
+      - "&7包含:"
+      - "&e- 2000 点券"
+      - "&e- 10000 经验"
+      - "&e- 20000 金币"

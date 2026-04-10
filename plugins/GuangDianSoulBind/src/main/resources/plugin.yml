@@ -1,0 +1,10 @@
+name: GuangDianSoulBind
+version: 1.0.0
+main: cn.guangdian.soulbind.GuangDianSoulBind
+api-version: '1.21'
+depend:
+  - RPGCore
+softdepend:
+  - MythicMobs
+author: Astraea RPG Team
+description: 灵魂绑定系统 - 物品绑定玩家，防止丢失和交易

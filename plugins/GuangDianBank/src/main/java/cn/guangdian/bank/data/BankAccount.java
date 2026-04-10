@@ -1,5 +1,8 @@
 package cn.guangdian.bank.data;
 
+import cn.guangdian.rpgcore.service.data.Loan;
+import cn.guangdian.rpgcore.service.data.TransactionRecord;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;

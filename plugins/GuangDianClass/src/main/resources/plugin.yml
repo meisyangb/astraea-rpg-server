@@ -1,0 +1,28 @@
+name: GuangDianClass
+version: 1.0.0
+main: cn.guangdian.classsystem.GuangDianClass
+api-version: '1.21'
+author: Astraea RPG Team
+description: Astraea RPG 职业系统 - 阶位与转职
+
+softdepend:
+  - RPGCore
+  - PlaceholderAPI
+
+commands:
+  class:
+    description: 职业系统命令
+    usage: /class [info|choose|advance|reset|help]
+    aliases: [zhiye, job]
+  classadmin:
+    description: 职业管理命令
+    usage: /classadmin [set|addexp|setexp|reload]
+    permission: guangdian.class.admin
+
+permissions:
+  guangdian.class.use:
+    description: 使用职业系统基本功能
+    default: true
+  guangdian.class.admin:
+    description: 管理员权限
+    default: op

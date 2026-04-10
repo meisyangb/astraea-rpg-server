@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    flatDir { dirs 'libs' }
+    mavenCentral()
+    maven { url 'https://repo.papermc.io/repository/maven-public/' }
+    maven { url 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+    compileOnly project(':plugins:RPGCore')
+    compileOnly files('libs/PlaceholderAPI.jar')
+    compileOnly files('libs/LuckPerms.jar')
+    compileOnly files('libs/Vault.jar')
+}
+
+jar {
+    archiveBaseName.set('GuangDianBattlePass')
+    archiveVersion.set('1.0.0')
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}

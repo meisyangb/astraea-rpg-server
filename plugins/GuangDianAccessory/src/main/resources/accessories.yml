@@ -1,0 +1,72 @@
+# GuangDianAccessory 饰品配置
+# 定义所有可用的饰品
+
+accessories:
+  # 徽章示例
+  warrior_badge:
+    name: "战士徽章"
+    slot: BADGE
+    material: DIAMOND
+    rarity: 3
+    description: "勇气的象征，提升战斗能力"
+    attributes:
+      attack: 50.0
+      health: 100.0
+  
+  # 勋章示例
+  guardian_medal:
+    name: "守护勋章"
+    slot: MEDAL
+    material: IRON_INGOT
+    rarity: 2
+    description: "守护者的荣耀，增强防御"
+    attributes:
+      defense: 30.0
+      health: 50.0
+  
+  # 圣物示例
+  ancient_relic:
+    name: "远古圣物"
+    slot: RELIC
+    material: NETHER_STAR
+    rarity: 5
+    description: "传说中的神器，蕴含神秘力量"
+    attributes:
+      attack: 100.0
+      defense: 80.0
+      health: 200.0
+      mana: 150.0
+  
+  # 更多徽章
+  mage_badge:
+    name: "法师徽章"
+    slot: BADGE
+    material: AMETHYST_SHARD
+    rarity: 3
+    description: "智慧的象征，提升魔法能力"
+    attributes:
+      mana: 100.0
+      magic_damage: 50.0
+  
+  # 更多勋章
+  hunter_medal:
+    name: "猎人勋章"
+    slot: MEDAL
+    material: GOLD_INGOT
+    rarity: 2
+    description: "猎人的荣耀，提升敏捷"
+    attributes:
+      attack_speed: 0.2
+      critical_chance: 0.1
+  
+  # 更多圣物
+  dragon_relic:
+    name: "龙族圣物"
+    slot: RELIC
+    material: DRAGON_BREATH
+    rarity: 5
+    description: "龙之力量，无与伦比"
+    attributes:
+      attack: 150.0
+      health: 300.0
+      critical_damage: 0.5

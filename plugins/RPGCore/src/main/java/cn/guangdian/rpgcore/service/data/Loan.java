@@ -1,4 +1,4 @@
-package cn.guangdian.bank.data;
+package cn.guangdian.rpgcore.service.data;
 
 import java.util.UUID;
 

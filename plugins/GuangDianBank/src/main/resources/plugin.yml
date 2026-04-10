@@ -1,0 +1,39 @@
+name: GuangDianBank
+version: 1.0.0
+main: cn.guangdian.bank.GuangDianBank
+api-version: '1.21'
+author: Astraea RPG Team
+description: 光点银行系统 - 支持存取款、借贷、利息等完整银行功能
+depend:
+  - RPGCore
+softdepend:
+  - PlaceholderAPI
+  - Vault
+
+commands:
+  bank:
+    description: 银行主命令
+    usage: /bank <help|balance|deposit|withdraw|transfer|loan|history>
+    aliases: [gdbank]
+  bankadmin:
+    description: 银行管理命令
+    usage: /bankadmin <set|give|take|reload>
+    permission: guangdian.bank.admin
+    aliases: [gdbankadmin]
+
+permissions:
+  guangdian.bank.use:
+    description: 允许使用银行基本功能
+    default: true
+  guangdian.bank.loan:
+    description: 允许申请贷款
+    default: true
+  guangdian.bank.transfer:
+    description: 允许转账
+    default: true
+  guangdian.bank.history:
+    description: 允许查看交易历史
+    default: true
+  guangdian.bank.admin:
+    description: 银行管理权限
+    default: op

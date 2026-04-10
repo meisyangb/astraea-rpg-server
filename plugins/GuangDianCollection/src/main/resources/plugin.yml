@@ -1,0 +1,12 @@
+name: GuangDianCollection
+version: 1.0.0
+main: cn.guangdian.collection.GuangDianCollection
+api-version: '1.21'
+depend:
+  - RPGCore
+softdepend:
+  - PlaceholderAPI
+  - MythicMobs
+  - Vault
+author: Astraea RPG Team
+description: 图鉴收集系统 - 物品收集与击杀统计

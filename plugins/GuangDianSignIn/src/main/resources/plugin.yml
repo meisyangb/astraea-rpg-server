@@ -1,0 +1,8 @@
+name: GuangDianSignIn
+version: 1.0.0
+main: cn.guangdian.signin.GuangDianSignIn
+api-version: '1.21'
+depend: [RPGCore]
+softdepend: [PlaceholderAPI, Vault]
+author: Astraea RPG Team
+description: 签到系统插件

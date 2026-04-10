@@ -1,0 +1,453 @@
+# Astraea RPG 职业定义
+
+classes:
+  novice:
+    name: "新手"
+    tier: 1
+    advancement: 0
+    description: "初入阿斯特瑞亚大陆的冒险者"
+    next-classes:
+      - "warrior"
+      - "mage"
+      - "archer"
+      - "assassin"
+      - "priest"
+    stats:
+      health: 50
+      attack: 5
+      defense: 5
+      mana: 50
+    skills: []
+    
+  warrior:
+    name: "战士"
+    tier: 1
+    advancement: 0
+    description: "近战物理输出，拥有强大的生存能力"
+    next-classes:
+      - "knight"
+    stats:
+      health: 100
+      attack: 15
+      defense: 10
+      mana: 30
+    skills:
+      - "slash"
+      - "shield_bash"
+      
+  knight:
+    name: "骑士"
+    tier: 3
+    advancement: 1
+    description: "一转职业 - 骑乘战斗的勇者"
+    requires-class: "warrior"
+    next-classes:
+      - "paladin"
+    stats:
+      health: 200
+      attack: 25
+      defense: 25
+      mana: 50
+    skills:
+      - "charge"
+      - "mounted_combat"
+      
+  paladin:
+    name: "圣骑士"
+    tier: 6
+    advancement: 2
+    description: "二转职业 - 神圣力量的守护者"
+    requires-class: "knight"
+    next-classes:
+      - "dragon_knight"
+    stats:
+      health: 400
+      attack: 45
+      defense: 50
+      mana: 100
+    skills:
+      - "holy_strike"
+      - "divine_shield"
+      - "healing_aura"
+      
+  dragon_knight:
+    name: "龙骑士"
+    tier: 8
+    advancement: 3
+    description: "三转职业 - 与龙缔结契约的战士"
+    requires-class: "paladin"
+    next-classes:
+      - "divine_dragon_knight"
+    stats:
+      health: 800
+      attack: 80
+      defense: 80
+      mana: 200
+    skills:
+      - "dragon_breath"
+      - "dragon_flight"
+      - "dragon_slash"
+      
+  divine_dragon_knight:
+    name: "神圣龙骑士"
+    tier: 9
+    advancement: 4
+    description: "神级职业 - 超越凡人的龙之化身"
+    requires-class: "dragon_knight"
+    next-classes: []
+    stats:
+      health: 2000
+      attack: 200
+      defense: 150
+      mana: 500
+    skills:
+      - "divine_dragon_form"
+      - "apocalypse_breath"
+      - "eternal_guardian"
+      
+  mage:
+    name: "法师"
+    tier: 1
+    advancement: 0
+    description: "掌控元素之力的施法者"
+    next-classes:
+      - "elementalist"
+    stats:
+      health: 60
+      attack: 20
+      defense: 5
+      mana: 150
+    skills:
+      - "fireball"
+      - "ice_shield"
+      
+  elementalist:
+    name: "元素师"
+    tier: 3
+    advancement: 1
+    description: "一转职业 - 精通元素魔法"
+    requires-class: "mage"
+    next-classes:
+      - "archmage"
+    stats:
+      health: 120
+      attack: 40
+      defense: 10
+      mana: 300
+    skills:
+      - "elemental_fury"
+      - "elemental_shield"
+      
+  archmage:
+    name: "大法师"
+    tier: 6
+    advancement: 2
+    description: "二转职业 - 魔法的大师"
+    requires-class: "elementalist"
+    next-classes:
+      - "sage"
+    stats:
+      health: 250
+      attack: 80
+      defense: 20
+      mana: 600
+    skills:
+      - "meteor"
+      - "time_stop"
+      - "mana_shield"
+      
+  sage:
+    name: "贤者"
+    tier: 8
+    advancement: 3
+    description: "三转职业 - 智慧的化身"
+    requires-class: "archmage"
+    next-classes:
+      - "divine_sage"
+    stats:
+      health: 500
+      attack: 150
+      defense: 40
+      mana: 1200
+    skills:
+      - "arcane_burst"
+      - "dimension_rift"
+      - "wisdom_blessing"
+      
+  divine_sage:
+    name: "神圣贤者"
+    tier: 9
+    advancement: 4
+    description: "神级职业 - 掌握宇宙真理"
+    requires-class: "sage"
+    next-classes: []
+    stats:
+      health: 1200
+      attack: 400
+      defense: 80
+      mana: 3000
+    skills:
+      - "cosmic_annihilation"
+      - "reality_rewrite"
+      - "omniscience"
+      
+  archer:
+    name: "弓箭手"
+    tier: 1
+    advancement: 0
+    description: "远程物理输出，精准致命"
+    next-classes:
+      - "ranger"
+    stats:
+      health: 70
+      attack: 18
+      defense: 8
+      mana: 50
+    skills:
+      - "aimed_shot"
+      - "arrow_rain"
+      
+  ranger:
+    name: "游侠"
+    tier: 3
+    advancement: 1
+    description: "一转职业 - 森林的守护者"
+    requires-class: "archer"
+    next-classes:
+      - "sniper"
+    stats:
+      health: 140
+      attack: 35
+      defense: 15
+      mana: 100
+    skills:
+      - "multi_shot"
+      - "trap"
+      - "nature_bond"
+      
+  sniper:
+    name: "神射手"
+    tier: 6
+    advancement: 2
+    description: "二转职业 - 百发百中的射手"
+    requires-class: "ranger"
+    next-classes:
+      - "demon_hunter"
+    stats:
+      health: 280
+      attack: 70
+      defense: 25
+      mana: 200
+    skills:
+      - "piercing_arrow"
+      - "shadow_shot"
+      - "eagle_eye"
+      
+  demon_hunter:
+    name: "猎魔人"
+    tier: 8
+    advancement: 3
+    description: "三转职业 - 狩猎邪恶的专家"
+    requires-class: "sniper"
+    next-classes:
+      - "divine_demon_hunter"
+    stats:
+      health: 550
+      attack: 140
+      defense: 50
+      mana: 400
+    skills:
+      - "demon_slayer"
+      - "holy_arrow"
+      - "hunters_mark"
+      
+  divine_demon_hunter:
+    name: "神圣猎魔人"
+    tier: 9
+    advancement: 4
+    description: "神级职业 - 诸神的猎手"
+    requires-class: "demon_hunter"
+    next-classes: []
+    stats:
+      health: 1400
+      attack: 350
+      defense: 100
+      mana: 800
+    skills:
+      - "godslayer_arrow"
+      - "celestial_hunt"
+      - "divine_judgment"
+      
+  assassin:
+    name: "刺客"
+    tier: 1
+    advancement: 0
+    description: "暗影中的杀手，一击致命"
+    next-classes:
+      - "shadow_dancer"
+    stats:
+      health: 65
+      attack: 22
+      defense: 6
+      mana: 60
+    skills:
+      - "backstab"
+      - "stealth"
+      
+  shadow_dancer:
+    name: "影舞者"
+    tier: 3
+    advancement: 1
+    description: "一转职业 - 暗影中的舞者"
+    requires-class: "assassin"
+    next-classes:
+      - "shadow_master"
+    stats:
+      health: 130
+      attack: 45
+      defense: 12
+      mana: 120
+    skills:
+      - "shadow_step"
+      - "blade_dance"
+      - "smoke_bomb"
+      
+  shadow_master:
+    name: "暗影大师"
+    tier: 6
+    advancement: 2
+    description: "二转职业 - 暗影的主宰"
+    requires-class: "shadow_dancer"
+    next-classes:
+      - "reaper"
+    stats:
+      health: 260
+      attack: 90
+      defense: 20
+      mana: 250
+    skills:
+      - "shadow_clone"
+      - "darkness_embrace"
+      - "assassinate"
+      
+  reaper:
+    name: "死神"
+    tier: 8
+    advancement: 3
+    description: "三转职业 - 收割灵魂的存在"
+    requires-class: "shadow_master"
+    next-classes:
+      - "divine_reaper"
+    stats:
+      health: 520
+      attack: 180
+      defense: 40
+      mana: 500
+    skills:
+      - "soul_harvest"
+      - "death_mark"
+      - "reaper_scythe"
+      
+  divine_reaper:
+    name: "神圣死神"
+    tier: 9
+    advancement: 4
+    description: "神级职业 - 生死的裁决者"
+    requires-class: "reaper"
+    next-classes: []
+    stats:
+      health: 1300
+      attack: 450
+      defense: 80
+      mana: 1000
+    skills:
+      - "divine_death"
+      - "soul_annihilation"
+      - "final_judgment"
+      
+  priest:
+    name: "牧师"
+    tier: 1
+    advancement: 0
+    description: "神圣之力的使用者，治疗与辅助"
+    next-classes:
+      - "cleric"
+    stats:
+      health: 60
+      attack: 8
+      defense: 8
+      mana: 120
+    skills:
+      - "heal"
+      - "blessing"
+      
+  cleric:
+    name: "祭司"
+    tier: 3
+    advancement: 1
+    description: "一转职业 - 神圣仪式的主持者"
+    requires-class: "priest"
+    next-classes:
+      - "high_priest"
+    stats:
+      health: 120
+      attack: 15
+      defense: 15
+      mana: 250
+    skills:
+      - "group_heal"
+      - "sanctuary"
+      - "divine_light"
+      
+  high_priest:
+    name: "大祭司"
+    tier: 6
+    advancement: 2
+    description: "二转职业 - 神明的代言人"
+    requires-class: "cleric"
+    next-classes:
+      - "saint"
+    stats:
+      health: 240
+      attack: 30
+      defense: 30
+      mana: 500
+    skills:
+      - "resurrection"
+      - "divine_protection"
+      - "holy_nova"
+      
+  saint:
+    name: "圣者"
+    tier: 8
+    advancement: 3
+    description: "三转职业 - 圣洁的化身"
+    requires-class: "high_priest"
+    next-classes:
+      - "divine_saint"
+    stats:
+      health: 480
+      attack: 60
+      defense: 60
+      mana: 1000
+    skills:
+      - "mass_resurrection"
+      - "divine_intervention"
+      - "holy_sanctuary"
+      
+  divine_saint:
+    name: "神圣圣者"
+    tier: 9
+    advancement: 4
+    description: "神级职业 - 诸神的使者"
+    requires-class: "saint"
+    next-classes: []
+    stats:
+      health: 1200
+      attack: 150
+      defense: 120
+      mana: 2000
+    skills:
+      - "divine_miracle"
+      - "eternal_life"
+      - "god_blessing"

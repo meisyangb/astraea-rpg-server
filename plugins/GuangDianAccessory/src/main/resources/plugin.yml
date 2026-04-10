@@ -1,0 +1,46 @@
+name: GuangDianAccessory
+version: 1.0.0
+main: cn.guangdian.accessory.GuangDianAccessory
+api-version: '1.21'
+author: Astraea RPG Team
+description: Astraea RPG 饰品系统 - 支持徽章、勋章、圣物
+
+depend:
+  - RPGCore
+
+softdepend:
+  - PlaceholderAPI
+  - Vault
+
+commands:
+  accessory:
+    description: 饰品系统主命令
+    usage: /accessory [open|give|reload|list|info]
+    aliases: [acc, accessories]
+    permission: gdaccessory.use
+
+permissions:
+  gdaccessory.use:
+    description: 使用饰品系统基础功能
+    default: true
+  gdaccessory.open:
+    description: 打开饰品界面
+    default: true
+  gdaccessory.list:
+    description: 查看饰品列表
+    default: true
+  gdaccessory.info:
+    description: 查看饰品信息
+    default: true
+  gdaccessory.admin:
+    description: 管理员权限
+    default: op
+    children:
+      gdaccessory.give: true
+      gdaccessory.reload: true
+  gdaccessory.give:
+    description: 给予玩家饰品
+    default: op
+  gdaccessory.reload:
+    description: 重载配置
+    default: op

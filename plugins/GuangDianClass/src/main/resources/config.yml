@@ -1,0 +1,99 @@
+# Astraea RPG 职业系统配置
+
+settings:
+  default-class: "novice"
+  max-tier: 9
+  auto-save-interval-minutes: 5
+  
+  exp-sources:
+    monster-kill:
+      enabled: true
+      base-exp: 10
+    quest-complete:
+      enabled: true
+      base-exp: 100
+    block-break:
+      enabled: false
+      base-exp: 1
+
+tier-exp-requirements:
+  1: 0
+  2: 1000
+  3: 5000
+  4: 15000
+  5: 40000
+  6: 100000
+  7: 250000
+  8: 600000
+  9: 1500000
+
+advancement-tiers:
+  first: 3
+  second: 6
+  third: 8
+  divine: 9
+
+advancement-requirements:
+  first:
+    tier: 3
+    exp-multiplier: 1.0
+    items: []
+  second:
+    tier: 6
+    exp-multiplier: 1.5
+    items: []
+  third:
+    tier: 8
+    exp-multiplier: 2.0
+    items: []
+  divine:
+    tier: 9
+    exp-multiplier: 3.0
+    items: []
+    special-quest: "divine_ascension"
+
+attributes:
+  points-per-level: 5
+  points-per-advancement: 20
+  
+  types:
+    strength:
+      health: 0
+      attack: 2.0
+      defense: 0
+      crit-chance: 0
+      crit-damage: 0.5
+      dodge: 0
+      mana: 0
+    vitality:
+      health: 50.0
+      attack: 0
+      defense: 1.0
+      crit-chance: 0
+      crit-damage: 0
+      dodge: 0
+      mana: 0
+    agility:
+      health: 0
+      attack: 0
+      defense: 0
+      crit-chance: 0.2
+      crit-damage: 0
+      dodge: 0.1
+      mana: 0
+    intelligence:
+      health: 0
+      attack: 1.5
+      defense: 0
+      crit-chance: 0
+      crit-damage: 0
+      dodge: 0
+      mana: 20.0
+    luck:
+      health: 0
+      attack: 0
+      defense: 0
+      crit-chance: 0.1
+      crit-damage: 1.0
+      dodge: 0
+      mana: 0

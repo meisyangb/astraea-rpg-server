@@ -1,0 +1,38 @@
+settings:
+  auto-collect: true
+  collect-on-pickup: true
+  collect-on-craft: true
+  collect-on-trade: true
+  notify-player: true
+  notify-sound: ENTITY_PLAYER_LEVELUP
+  notify-volume: 1.0
+  notify-pitch: 1.0
+  save-interval: 300
+
+messages:
+  prefix: "§6[图鉴] §r"
+  collected: "§a成功收集: §e{item} §7(§f{current}§7/§f{total}§7)"
+  completed: "§6恭喜! 你已完成 §e{category} §6的收集!"
+  reward-claimed: "§a已领取奖励: §e{reward}"
+  already-collected: "§7该物品已在图鉴中"
+  reward-available: "§e你有可领取的图鉴奖励! 使用 /collection rewards 查看"
+  no-permission: "§c你没有权限执行此操作"
+  category-complete: "§6分类 §e{category} §6已收集完成!"
+  mob-killed: "§a击杀记录: §e{mob} §7(§f{current}§7/§f{total}§7)"
+
+gui:
+  title: "图鉴收集"
+  size: 54
+  collected-item:
+    material: LIME_STAINED_GLASS_PANE
+    name: "§a{name}"
+    lore:
+      - "§7状态: §a已收集"
+      - "§7收集时间: §f{time}"
+      - "§7数量: §f{count}"
+  uncollected-item:
+    material: GRAY_STAINED_GLASS_PANE
+    name: "§7???"
+    lore:
+      - "§7状态: §c未收集"
+      - "§7提示: §f{hint}"

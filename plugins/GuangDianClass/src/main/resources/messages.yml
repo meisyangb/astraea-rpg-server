@@ -1,0 +1,64 @@
+# Astraea RPG 职业系统消息
+
+messages:
+  prefix: "&6[职业系统] &r"
+  
+  info:
+    header: "&6========== 职业信息 =========="
+    class: "&e职业: &f%class%"
+    tier: "&e阶位: &f%tier%阶"
+    exp: "&e经验: &f%exp%/%max_exp%"
+    total-exp: "&e总经验: &f%total_exp%"
+    advancement: "&e转职: &f%advancement%"
+    next-class: "&e可转职: &f%next_classes%"
+    footer: "&6=============================="
+    
+  advancement:
+    first: "一转"
+    second: "二转"
+    third: "三转"
+    divine: "神级突破"
+    
+  errors:
+    no-permission: "&c你没有权限执行此操作!"
+    player-not-found: "&c玩家不存在或不在线!"
+    class-not-found: "&c职业不存在!"
+    not-enough-exp: "&c经验不足，无法升级!"
+    not-enough-tier: "&c阶位不足，需要 %required_tier% 阶!"
+    already-max-tier: "&c已达最高阶位!"
+    already-max-advancement: "&c已达最高转职等级!"
+    cannot-advance: "&c不满足转职条件!"
+    no-class: "&c你还没有选择职业!"
+    already-has-class: "&c你已经拥有职业!"
+    invalid-class: "&c无效的职业选择!"
+    requirement-not-met: "&c未满足转职要求: %requirement%"
+    
+  success:
+    class-chosen: "&a成功选择职业: %class%!"
+    tier-up: "&a恭喜！阶位提升至 %tier% 阶!"
+    advancement-up: "&d★ 恭喜转职成功！新职业: %class% ★"
+    divine-ascension: "&6★ 神级突破成功！你已成为 %class%！★"
+    exp-added: "&a获得 %amount% 点职业经验!"
+    exp-set: "&a经验已设置为 %amount%!"
+    class-set: "&a职业已设置为 %class%!"
+    reset: "&a职业数据已重置!"
+    config-reloaded: "&a配置已重新加载!"
+    
+  help:
+    header: "&6========== 职业系统帮助 =========="
+    info: "&e/class info [玩家] &7- 查看职业信息"
+    choose: "&e/class choose <职业> &7- 选择职业"
+    advance: "&e/class advance &7- 进行转职"
+    reset: "&e/class reset &7- 重置职业"
+    help: "&e/class help &7- 显示帮助"
+    admin-header: "&6========== 管理员命令 =========="
+    admin-set: "&e/classadmin set <玩家> <职业> &7- 设置职业"
+    admin-addexp: "&e/classadmin addexp <玩家> <数量> &7- 增加经验"
+    admin-setexp: "&e/classadmin setexp <玩家> <数量> &7- 设置经验"
+    admin-reload: "&e/classadmin reload &7- 重载配置"
+    footer: "&6================================"
+    
+  class-list:
+    header: "&6========== 可选职业 =========="
+    format: "&e%id% &7- &f%name% &7%description%"
+    footer: "&6使用 /class choose <职业ID> 选择职业"
