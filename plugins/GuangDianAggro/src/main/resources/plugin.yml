@@ -1,0 +1,12 @@
+name: GuangDianAggro
+version: 1.0.0
+main: cn.guangdian.aggro.GuangDianAggro
+api-version: '1.21'
+depend:
+  - RPGCore
+softdepend:
+  - PlaceholderAPI
+  - MythicMobs
+authors:
+  - Astraea RPG Team
+description: 高级仇恨管理系统

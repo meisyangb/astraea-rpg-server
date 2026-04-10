@@ -1,6 +1,5 @@
 rootProject.name = 'astraea-rpg-server'
 
-// 包含所有插件项目
 include(
     'plugins:RPGCore',
     'plugins:GuangDianArmorStats',
@@ -27,5 +26,6 @@ include(
     'plugins:GuangDianGuild',
     'plugins:GuangDianMarriage',
     'plugins:GuangDianHolo',
-    'plugins:GuangDianTrade'
+    'plugins:GuangDianTrade',
+    'plugins:GuangDianAggro'
 )
