@@ -299,7 +299,7 @@ if (points != null) {  // 总是做null检查
 
 ## 📦 构建命令速查
 
-> **唯一构建方法**: 详见 [BUILD_GUIDE.md](../../../BUILD_GUIDE.md)
+> **唯一构建方法**: 详见 [.trae/docs/reference/BUILD_GUIDE.md](../../../.trae/docs/reference/BUILD_GUIDE.md)
 > 
 > 以下命令必须在项目根目录执行：
 
