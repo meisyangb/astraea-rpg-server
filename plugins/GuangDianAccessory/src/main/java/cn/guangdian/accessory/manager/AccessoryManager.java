@@ -4,13 +4,8 @@ import cn.guangdian.accessory.GuangDianAccessory;
 import cn.guangdian.accessory.model.Accessory;
 import cn.guangdian.accessory.model.AccessorySlot;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -30,20 +25,15 @@ public class AccessoryManager {
     }
     
     public void loadAccessories() {
+        AccessorySlot.clearAllAccessories();
+        
         File accessoriesFile = new File(plugin.getDataFolder(), "accessories.yml");
         if (!accessoriesFile.exists()) {
             plugin.saveResource("accessories.yml", false);
         }
         
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(accessoriesFile);
-        
-        InputStream defaultStream = plugin.getResource("accessories.yml");
-        if (defaultStream != null) {
-            YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(
-                new InputStreamReader(defaultStream, StandardCharsets.UTF_8)
-            );
-            config.setDefaults(defaultConfig);
-        }
+        org.bukkit.configuration.file.YamlConfiguration config = 
+            org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(accessoriesFile);
         
         ConfigurationSection accessoriesSection = config.getConfigurationSection("accessories");
         if (accessoriesSection == null) {
@@ -56,6 +46,9 @@ public class AccessoryManager {
             accessoriesBySlot.get(slot).clear();
         }
         
+        int loadedCount = 0;
+        int failedCount = 0;
+        
         for (String id : accessoriesSection.getKeys(false)) {
             ConfigurationSection accessoryConfig = accessoriesSection.getConfigurationSection(id);
             if (accessoryConfig == null) {
@@ -65,12 +58,18 @@ public class AccessoryManager {
             try {
                 Accessory accessory = Accessory.fromConfig(id, accessoryConfig);
                 registerAccessory(accessory);
+                AccessorySlot.addAccessory(accessory);
+                loadedCount++;
+                
+                plugin.getLogger().info("加载饰品: " + accessory.getName() + 
+                    " [" + accessory.getSlot().name() + "] 关键词: " + accessory.getLoreKeyword());
             } catch (Exception e) {
                 plugin.getLogger().warning("加载饰品 " + id + " 失败: " + e.getMessage());
+                failedCount++;
             }
         }
         
-        plugin.getLogger().info("已加载 " + accessories.size() + " 个饰品");
+        plugin.getLogger().info("饰品加载完成: 成功 " + loadedCount + " 个, 失败 " + failedCount + " 个");
     }
     
     public void registerAccessory(Accessory accessory) {
@@ -80,6 +79,10 @@ public class AccessoryManager {
     
     public Accessory getAccessory(String id) {
         return accessories.get(id);
+    }
+    
+    public Accessory getAccessoryByItem(org.bukkit.inventory.ItemStack item) {
+        return Accessory.fromItem(item);
     }
     
     public Collection<Accessory> getAllAccessories() {

@@ -4,11 +4,11 @@ import cn.guangdian.accessory.api.AccessoryService;
 import cn.guangdian.accessory.command.AccessoryCommand;
 import cn.guangdian.accessory.gui.AccessoryGUI;
 import cn.guangdian.accessory.lifecycle.AccessoryDataHandler;
+import cn.guangdian.accessory.listener.AccessoryStatsListener;
 import cn.guangdian.accessory.manager.AccessoryManager;
 import cn.guangdian.accessory.placeholder.AccessoryPlaceholder;
 import cn.guangdian.accessory.service.AccessoryServiceAdapter;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class GuangDianAccessory extends AbstractRPGPlugin {
     
@@ -17,6 +17,7 @@ public class GuangDianAccessory extends AbstractRPGPlugin {
     private AccessoryGUI accessoryGUI;
     private AccessoryPlaceholder placeholder;
     private AccessoryCommand command;
+    private AccessoryStatsListener statsListener;
     
     @Override
     protected void onPluginEnable() {
@@ -32,6 +33,9 @@ public class GuangDianAccessory extends AbstractRPGPlugin {
         
         accessoryGUI = new AccessoryGUI(this);
         getServer().getPluginManager().registerEvents(accessoryGUI, this);
+        
+        statsListener = new AccessoryStatsListener(this);
+        getServer().getPluginManager().registerEvents(statsListener, this);
         
         placeholder = new AccessoryPlaceholder(this);
         placeholder.register();

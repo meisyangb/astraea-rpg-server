@@ -1,6 +1,5 @@
 package cn.guangdian.signin;
 
-import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.signin.adapter.SignInServiceAdapter;
 import cn.guangdian.signin.api.SignInService;
@@ -8,6 +7,7 @@ import cn.guangdian.signin.command.SignInCommand;
 import cn.guangdian.signin.config.ConfigManager;
 import cn.guangdian.signin.lifecycle.SignInDataHandler;
 import cn.guangdian.signin.placeholder.SignInPlaceholder;
+import org.bukkit.command.PluginCommand;
 
 public class GuangDianSignIn extends AbstractRPGPlugin {
     
@@ -28,27 +28,19 @@ public class GuangDianSignIn extends AbstractRPGPlugin {
         
         serviceAdapter = new SignInServiceAdapter(this);
         
-        if (externalServices != null && externalServices.isPlaceholderAPIEnabled()) {
-            placeholder = new SignInPlaceholder(this);
-            placeholder.register();
-        }
-        
-        SignInCommand command = new SignInCommand(this);
-        getCommand("signin").setExecutor(command);
-        getCommand("signin").setTabCompleter(command);
+        registerCommands();
+        registerPlaceholder();
         
         getLogger().info("签到系统已启动");
     }
     
     @Override
     protected void onPluginDisable() {
-        if (placeholder != null) {
-            if (externalServices != null && externalServices.isPlaceholderAPIEnabled()) {
-                try {
-                    me.clip.placeholderapi.PlaceholderAPI.unregisterExpansion(placeholder);
-                } catch (Exception e) {
-                    getLogger().warning("注销占位符失败: " + e.getMessage());
-                }
+        if (placeholder != null && externalServices != null && externalServices.isPlaceholderAPIEnabled()) {
+            try {
+                me.clip.placeholderapi.PlaceholderAPI.unregisterExpansion(placeholder);
+            } catch (Exception e) {
+                getLogger().warning("注销占位符失败: " + e.getMessage());
             }
         }
         
@@ -66,6 +58,23 @@ public class GuangDianSignIn extends AbstractRPGPlugin {
     @Override
     protected String getPluginName() {
         return "GuangDianSignIn";
+    }
+    
+    private void registerCommands() {
+        PluginCommand cmd = getCommand("signin");
+        if (cmd != null) {
+            SignInCommand command = new SignInCommand(this);
+            cmd.setExecutor(command);
+            cmd.setTabCompleter(command);
+        }
+    }
+    
+    private void registerPlaceholder() {
+        if (externalServices != null && externalServices.isPlaceholderAPIEnabled()) {
+            placeholder = new SignInPlaceholder(this);
+            placeholder.register();
+            getLogger().info("已注册 PlaceholderAPI 占位符");
+        }
     }
     
     public SignInService getSignInService() {

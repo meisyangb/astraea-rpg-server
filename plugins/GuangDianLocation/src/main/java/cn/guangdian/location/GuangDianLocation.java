@@ -451,7 +451,10 @@ public class GuangDianLocation extends AbstractRPGPlugin implements CommandExecu
      * 在主线程执行任务
      */
     private void runSync(Runnable task) {
-        getServer().getScheduler().runTask(this, task);
+        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+        if (rpgCore != null) {
+            rpgCore.getScheduler().runSync(task);
+        }
     }
 
     private String formatLocation(Location loc) {

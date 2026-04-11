@@ -116,10 +116,8 @@ public class GuangDianCleaner extends AbstractRPGPlugin {
      * 异步执行任务（通过服务适配器使用 RPGCore AsyncExecutor）
      */
     public void runAsync(Runnable task) {
-        if (serviceAdapter != null && serviceAdapter.getAsyncExecutor() != null) {
-            serviceAdapter.getAsyncExecutor().execute(task);
-        } else {
-            getServer().getScheduler().runTaskAsynchronously(this, task);
+        if (scheduler != null) {
+            scheduler.runAsync(task);
         }
     }
 
@@ -127,13 +125,17 @@ public class GuangDianCleaner extends AbstractRPGPlugin {
      * 在主线程执行任务
      */
     public void runSync(Runnable task) {
-        getServer().getScheduler().runTask(this, task);
+        if (scheduler != null) {
+            scheduler.runSync(task);
+        }
     }
 
     /**
      * 延迟执行任务
      */
     public void runTaskLater(Runnable task, long ticks) {
-        getServer().getScheduler().runTaskLater(this, task, ticks);
+        if (scheduler != null) {
+            scheduler.runSyncLater(task, ticks);
+        }
     }
 }

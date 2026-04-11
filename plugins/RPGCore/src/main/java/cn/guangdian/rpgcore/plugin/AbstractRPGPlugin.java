@@ -66,6 +66,19 @@ public abstract class AbstractRPGPlugin extends JavaPlugin {
             this.externalServices = core.getExternalServices();
             this.scheduler = core.getScheduler();
             this.exceptionHandler = new cn.guangdian.rpgcore.exception.ExceptionHandlerImpl(this);
+            
+            if (this.externalServices == null) {
+                getLogger().warning("[RPGCore Hook] externalServices is null, attempting direct access...");
+                this.externalServices = core.getExternalServices();
+            }
+            
+            if (this.externalServices != null) {
+                getLogger().info("[RPGCore Hook] Successfully hooked: " + getPluginName());
+                getLogger().info("[RPGCore Hook] ExternalServices status: " + this.externalServices.getExternalServiceStatus());
+            } else {
+                getLogger().severe("[RPGCore Hook] Failed to get ExternalServices!");
+            }
+            
             return true;
         }
         return false;
@@ -95,5 +108,17 @@ public abstract class AbstractRPGPlugin extends JavaPlugin {
     
     protected boolean isSchedulerAvailable() {
         return scheduler != null;
+    }
+    
+    public SyncScheduler getScheduler() {
+        return scheduler;
+    }
+    
+    public ExternalServiceIntegration getExternalServices() {
+        return externalServices;
+    }
+    
+    public RPGCore getRPGCore() {
+        return rpgCore;
     }
 }

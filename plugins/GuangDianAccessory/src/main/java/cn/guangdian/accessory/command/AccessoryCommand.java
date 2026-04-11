@@ -165,19 +165,10 @@ public class AccessoryCommand implements TabExecutor {
         
         sender.sendMessage(Component.text("=== " + accessory.getName() + " ===").color(NamedTextColor.GOLD));
         sender.sendMessage(Component.text("ID: " + accessory.getId()).color(NamedTextColor.YELLOW));
+        sender.sendMessage(Component.text("MythicID: " + accessory.getMythicId()).color(NamedTextColor.YELLOW));
         sender.sendMessage(Component.text("槽位: " + accessory.getSlot().getDisplayName()).color(NamedTextColor.YELLOW));
         sender.sendMessage(Component.text("稀有度: " + accessory.getRarity()).color(NamedTextColor.YELLOW));
-        
-        if (!accessory.getAttributes().isEmpty()) {
-            sender.sendMessage(Component.text("属性:").color(NamedTextColor.YELLOW));
-            accessory.getAttributes().forEach((attr, value) -> {
-                sender.sendMessage(Component.text("  " + attr + ": +" + value).color(NamedTextColor.GREEN));
-            });
-        }
-        
-        if (!accessory.getDescription().isEmpty()) {
-            sender.sendMessage(Component.text("描述: " + accessory.getDescription()).color(NamedTextColor.GRAY));
-        }
+        sender.sendMessage(Component.text("识别关键词: " + accessory.getLoreKeyword()).color(NamedTextColor.GRAY));
         
         return true;
     }

@@ -4,6 +4,8 @@ import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.SyncScheduler;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -44,8 +46,6 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
 
     private static GuangDianBoard instance;
     private FileConfiguration config;
-    private ExternalServiceIntegration externalServices;
-    private RPGCore rpgCore;
     private boolean debug = false;
     
     private final Map<UUID, Boolean> boardToggleState = new ConcurrentHashMap<>();
@@ -94,7 +94,6 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
     
     private long refreshTaskId = -1;
     private long titleAnimationTaskId = -1;
-    private SyncScheduler scheduler;
     
     // RPGCore 服务适配器
     private BoardServiceAdapter serviceAdapter;
@@ -563,11 +562,13 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
         lastRefreshTime.put(playerId, now);
         
         // 延迟1tick执行，确保属性已完全更新
-        getServer().getScheduler().runTaskLater(this, () -> {
-            if (player.isOnline()) {
-                updateBoard(player);
-            }
-        }, 1L);
+        if (scheduler != null) {
+            scheduler.runSyncLater(() -> {
+                if (player.isOnline()) {
+                    updateBoard(player);
+                }
+            }, 1L);
+        }
     }
 
     public boolean shouldShowBoardPublic(Player player) {
@@ -601,10 +602,10 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
         
         if (newState) {
             createBoard(player);
-            player.sendMessage(translateColors(config.getString("messages.board-enabled", "&a侧边栏已启用!")));
+            sendMessage(player, config.getString("messages.board-enabled", "&a侧边栏已启用!"));
         } else {
             removeBoard(player);
-            player.sendMessage(translateColors(config.getString("messages.board-disabled", "&c侧边栏已关闭!")));
+            sendMessage(player, config.getString("messages.board-disabled", "&c侧边栏已关闭!"));
         }
     }
 
@@ -615,6 +616,13 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
         if (debug) {
             getLogger().info("[DEBUG] 原始文本: " + text);
             getLogger().info("[DEBUG] externalServices: " + (externalServices != null ? "已初始化" : "null"));
+        }
+
+        if (externalServices == null && rpgCore != null) {
+            externalServices = rpgCore.getExternalServices();
+            if (externalServices != null) {
+                getLogger().warning("[GuangDianBoard] 重新获取 externalServices 成功");
+            }
         }
 
         text = text.replace("%player%", player.getName());
@@ -769,6 +777,10 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
         return ChatColor.translateAlternateColorCodes('&', text);
     }
 
+    private void sendMessage(org.bukkit.command.CommandSender sender, String text) {
+        sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(text));
+    }
+
     private boolean isPlayerInCombat(Player player) {
         if (player == null) return false;
         if (externalServices == null || !externalServices.isPlaceholderAPIEnabled()) return false;
@@ -805,7 +817,7 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
         
-        getServer().getScheduler().runTaskLater(this, () -> {
+        runTaskLaterSafe(() -> {
             if (player.isOnline()) {
                 updateBoard(player);
             }
@@ -816,7 +828,7 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
     public void onPlayerChangeWorld(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
         
-        getServer().getScheduler().runTaskLater(this, () -> {
+        runTaskLaterSafe(() -> {
             if (player.isOnline()) {
                 updateBoard(player);
             }
@@ -828,11 +840,19 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
         if (!config.getBoolean("advanced.hide-when-sneaking", false)) return;
         
         Player player = event.getPlayer();
-        getServer().getScheduler().runTaskLater(this, () -> {
+        runTaskLaterSafe(() -> {
             if (player.isOnline()) {
                 updateBoard(player);
             }
         }, 1L);
+    }
+    
+    private void runTaskLaterSafe(Runnable task, long delay) {
+        if (scheduler != null) {
+            scheduler.runSyncLater(task, delay);
+        } else {
+            getServer().getScheduler().runTaskLater(this, task, delay);
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

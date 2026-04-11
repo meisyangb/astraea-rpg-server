@@ -185,10 +185,10 @@ public class GuangDianQuest extends AbstractRPGPlugin {
     }
 
     private void hookRPGCore() {
-        var plugin = Bukkit.getPluginManager().getPlugin("RPGCore");
-        if (plugin instanceof RPGCore core) {
-            externalServices = core.getExternalServices();
-            scheduler = core.getScheduler();
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            externalServices = rpgCore.getExternalServices();
+            scheduler = rpgCore.getScheduler();
             getLogger().info("已连接到 RPGCore: " + (externalServices != null ? externalServices.getExternalServiceStatus() : "服务不可用"));
         }
     }
@@ -237,7 +237,7 @@ public class GuangDianQuest extends AbstractRPGPlugin {
     }
 
     public static String color(String text) {
-        return text == null ? "" : ChatColor.translateAlternateColorCodes('&', text);
+        return text == null ? "" : net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().serialize(net.kyori.adventure.text.Component.text(text));
     }
 
     public static GuangDianQuest getInstance() { return instance; }

@@ -68,11 +68,8 @@ public class MythicMobsHook {
         if (item == null || !item.hasItemMeta()) return false;
         
         ItemMeta meta = item.getItemMeta();
-        // 新版本使用 mythicmobs:type，旧版本使用 mythicmobs:item
         NamespacedKey typeKey = new NamespacedKey("mythicmobs", "type");
-        NamespacedKey itemKey = new NamespacedKey("mythicmobs", "item");
-        return meta.getPersistentDataContainer().has(typeKey, PersistentDataType.STRING) ||
-               meta.getPersistentDataContainer().has(itemKey, PersistentDataType.STRING);
+        return meta.getPersistentDataContainer().has(typeKey, PersistentDataType.STRING);
     }
     
     /**
@@ -84,15 +81,8 @@ public class MythicMobsHook {
         if (item == null || !item.hasItemMeta()) return null;
         
         ItemMeta meta = item.getItemMeta();
-        
-        // 优先检查 mythicmobs:type（新版本）
         NamespacedKey typeKey = new NamespacedKey("mythicmobs", "type");
-        String typeId = meta.getPersistentDataContainer().get(typeKey, PersistentDataType.STRING);
-        if (typeId != null) return typeId;
-        
-        // 回退到 mythicmobs:item（旧版本）
-        NamespacedKey itemKey = new NamespacedKey("mythicmobs", "item");
-        return meta.getPersistentDataContainer().get(itemKey, PersistentDataType.STRING);
+        return meta.getPersistentDataContainer().get(typeKey, PersistentDataType.STRING);
     }
     
     /**

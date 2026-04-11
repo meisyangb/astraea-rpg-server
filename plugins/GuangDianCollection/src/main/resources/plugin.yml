@@ -9,4 +9,20 @@ softdepend:
   - MythicMobs
   - Vault
 author: Astraea RPG Team
-description: 图鉴收集系统 - 物品收集与击杀统计
+description: 图鉴收集系统 - 手动提交物品收集
+
+commands:
+  collection:
+    description: 图鉴收集系统主命令
+    usage: /collection [open|stats|help|reload]
+    aliases: [gdcollection, tujian]
+    permission: collection.use
+    permission-message: §c你没有权限使用此命令
+
+permissions:
+  collection.use:
+    description: 允许使用图鉴系统
+    default: true
+  collection.admin:
+    description: 管理员权限
+    default: op

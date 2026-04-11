@@ -404,10 +404,10 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
                 return;
             }
             
-            net.milkbowl.vault.economy.Economy economy = registeredService.getProvider();
-            
-            // 给玩家金币
-            economy.depositPlayer(player, amount);
+            cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+            if (rpgCore != null && rpgCore.getExternalServices() != null && rpgCore.getExternalServices().isVaultEnabled()) {
+                rpgCore.getExternalServices().deposit(player, amount);
+            }
             
             // 消耗物品
             if (item.getAmount() > 1) {

@@ -2,6 +2,7 @@ package cn.guangdian.holo.listener;
 
 import cn.guangdian.holo.GuangDianHolo;
 import cn.guangdian.holo.model.Hologram;
+import cn.guangdian.rpgcore.RPGCore;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,9 +24,7 @@ public class HologramListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-            updateVisibilityForPlayer(player);
-        }, plugin.getConfigManager().getSpawnDelay());
+        runTaskLaterSafe(() -> updateVisibilityForPlayer(player), plugin.getConfigManager().getSpawnDelay());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -44,9 +43,16 @@ public class HologramListener implements Listener {
         Player player = event.getPlayer();
         Location to = event.getTo();
         if (to != null && to.getWorld() != null) {
-            plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-                updateVisibilityForPlayer(player);
-            }, 1L);
+            runTaskLaterSafe(() -> updateVisibilityForPlayer(player), 1L);
+        }
+    }
+    
+    private void runTaskLaterSafe(Runnable task, long delay) {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            rpgCore.getScheduler().runSyncLater(task, delay);
+        } else {
+            plugin.getServer().getScheduler().runTaskLater(plugin, task, delay);
         }
     }
 

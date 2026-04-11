@@ -1,66 +1,98 @@
 package cn.guangdian.accessory.model;
 
-import net.kyori.adventure.text.Component;
+import cn.guangdian.accessory.hook.MythicMobsHook;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.List;
 
 public class Accessory {
     
     private final String id;
+    private final String mythicId;
     private final String name;
     private final AccessorySlot slot;
-    private final ItemStack item;
-    private final Map<String, Double> attributes;
+    private final String loreKeyword;
     private final int rarity;
-    private final String description;
     
-    public Accessory(String id, String name, AccessorySlot slot, ItemStack item, 
-                     Map<String, Double> attributes, int rarity, String description) {
+    public Accessory(String id, String mythicId, String name, AccessorySlot slot, String loreKeyword, int rarity) {
         this.id = id;
+        this.mythicId = mythicId;
         this.name = name;
         this.slot = slot;
-        this.item = item;
-        this.attributes = attributes;
+        this.loreKeyword = loreKeyword;
         this.rarity = rarity;
-        this.description = description;
     }
     
     public static Accessory fromConfig(String id, ConfigurationSection config) {
+        String mythicId = config.getString("mythic-id", id);
         String name = config.getString("name", id);
+        
         String slotName = config.getString("slot", "BADGE").toUpperCase();
         AccessorySlot slot = AccessorySlot.valueOf(slotName);
         
-        ItemStack item = new ItemStack(
-            org.bukkit.Material.valueOf(config.getString("material", "DIAMOND")),
-            1
-        );
-        org.bukkit.inventory.meta.ItemMeta meta = item.getItemMeta();
-        if (meta != null) {
-            meta.displayName(Component.text(name));
-            item.setItemMeta(meta);
-        }
-        
-        Map<String, Double> attributes = new HashMap<>();
-        ConfigurationSection attrSection = config.getConfigurationSection("attributes");
-        if (attrSection != null) {
-            for (String key : attrSection.getKeys(false)) {
-                attributes.put(key, attrSection.getDouble(key));
-            }
+        String loreKeyword = config.getString("lore-keyword", "");
+        if (loreKeyword.isEmpty()) {
+            loreKeyword = name;
         }
         
         int rarity = config.getInt("rarity", 1);
-        String description = config.getString("description", "");
         
-        return new Accessory(id, name, slot, item, attributes, rarity, description);
+        return new Accessory(id, mythicId, name, slot, loreKeyword, rarity);
+    }
+    
+    public static Accessory fromItem(ItemStack item) {
+        if (item == null || !item.hasItemMeta()) {
+            return null;
+        }
+        
+        if (!item.getItemMeta().hasLore()) {
+            return null;
+        }
+        
+        List<String> lore = item.getItemMeta().getLore();
+        if (lore == null) {
+            return null;
+        }
+        
+        String loreText = String.join(" ", lore);
+        String plainText = ChatColor.stripColor(loreText);
+        
+        return AccessorySlot.findAccessoryByLoreKeyword(plainText);
+    }
+    
+    public boolean matchesItem(ItemStack item) {
+        if (item == null || !item.hasItemMeta()) {
+            return false;
+        }
+        
+        if (!item.getItemMeta().hasLore()) {
+            return false;
+        }
+        
+        List<String> lore = item.getItemMeta().getLore();
+        if (lore == null) {
+            return false;
+        }
+        
+        String loreText = String.join(" ", lore);
+        String plainText = ChatColor.stripColor(loreText);
+        
+        return plainText.contains(loreKeyword);
+    }
+    
+    public ItemStack getMythicItem(int amount) {
+        if (!MythicMobsHook.getInstance().isEnabled()) {
+            return null;
+        }
+        return MythicMobsHook.getInstance().getMythicItem(mythicId, amount);
     }
     
     public String getId() { return id; }
+    public String getMythicId() { return mythicId; }
     public String getName() { return name; }
     public AccessorySlot getSlot() { return slot; }
-    public ItemStack getItem() { return item.clone(); }
-    public Map<String, Double> getAttributes() { return new HashMap<>(attributes); }
+    public String getLoreKeyword() { return loreKeyword; }
     public int getRarity() { return rarity; }
-    public String getDescription() { return description; }
 }

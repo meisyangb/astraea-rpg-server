@@ -98,14 +98,16 @@ public class GuangDianMCP extends AbstractRPGPlugin {
             return;
         }
         
-        getServer().getScheduler().runTaskAsynchronously(this, () -> {
-            try {
-                mcpServer.start();
-                getLogger().info("MCP服务器已启动在端口 " + config.getPort());
-            } catch (Exception e) {
-                getLogger().log(Level.SEVERE, "启动MCP服务器失败", e);
-            }
-        });
+        if (scheduler != null) {
+            scheduler.runAsync(() -> {
+                try {
+                    mcpServer.start();
+                    getLogger().info("MCP服务器已启动在端口 " + config.getPort());
+                } catch (Exception e) {
+                    getLogger().log(Level.SEVERE, "启动MCP服务器失败", e);
+                }
+            });
+        }
     }
     
     public void stopMCPServer() {
@@ -128,7 +130,9 @@ public class GuangDianMCP extends AbstractRPGPlugin {
     }
     
     private void startTPSMonitor() {
-        getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
+        if (scheduler == null) return;
+        
+        scheduler.runAsyncRepeating(new Runnable() {
             private double lastTPS = 20.0;
             
             @Override

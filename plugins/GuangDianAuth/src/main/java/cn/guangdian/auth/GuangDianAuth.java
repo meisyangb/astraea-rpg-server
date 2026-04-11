@@ -1,5 +1,6 @@
 package cn.guangdian.auth;
 
+import cn.guangdian.auth.adapter.AuthServiceAdapter;
 import cn.guangdian.auth.command.AuthCommands;
 import cn.guangdian.auth.data.AuthDataManager;
 import cn.guangdian.auth.handler.AuthPacketHandler;
@@ -21,6 +22,7 @@ public class GuangDianAuth extends AbstractRPGPlugin {
     private SessionManager sessionManager;
     private AuthPacketHandler packetHandler;
     private AuthConfig authConfig;
+    private AuthServiceAdapter serviceAdapter;
 
     public static GuangDianAuth getInstance() {
         return instance;
@@ -53,12 +55,18 @@ public class GuangDianAuth extends AbstractRPGPlugin {
         
         getServer().getPluginManager().registerEvents(new AuthListener(this), this);
         
+        serviceAdapter = new AuthServiceAdapter(this);
+        
         getLogger().info("GuangDianAuth 已启动 - 独立登录系统已激活");
         getLogger().info("注册玩家数: " + dataManager.getRegisteredCount());
     }
 
     @Override
     protected void onPluginDisable() {
+        if (serviceAdapter != null) {
+            serviceAdapter.unregister();
+        }
+        
         if (packetHandler != null) {
             packetHandler.unregister();
         }
@@ -108,7 +116,7 @@ public class GuangDianAuth extends AbstractRPGPlugin {
     }
 
     public void kickPlayer(Player player, String reason) {
-        Bukkit.getScheduler().runTaskLater(this, () -> {
+        scheduler.runSyncLater(() -> {
             player.kick(Component.text(reason).color(NamedTextColor.RED));
         }, 10L);
     }

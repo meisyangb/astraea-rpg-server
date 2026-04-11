@@ -8,3 +8,19 @@ softdepend:
   - MythicMobs
 author: Astraea RPG Team
 description: 灵魂绑定系统 - 物品绑定玩家，防止丢失和交易
+
+commands:
+  soulbind:
+    description: 灵魂绑定系统主命令
+    usage: /soulbind [bind|unbind|reload]
+    aliases: [sb, linghunbangding]
+    permission: soulbind.use
+    permission-message: §c你没有权限使用此命令
+
+permissions:
+  soulbind.use:
+    description: 允许使用灵魂绑定系统
+    default: true
+  soulbind.admin:
+    description: 管理员权限
+    default: op

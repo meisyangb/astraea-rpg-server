@@ -75,8 +75,12 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
         
         // 注册 RPGCore 服务适配器
         if (Bukkit.getPluginManager().isPluginEnabled("RPGCore")) {
-            chatServiceAdapter = new cn.guangdian.chat.adapter.ChatServiceAdapter(this);
-            getLogger().info("已集成 RPGCore 服务系统!");
+            RPGCore rpgCore = RPGCore.getInstance();
+            if (rpgCore != null) {
+                this.externalServices = rpgCore.getExternalServices();
+                chatServiceAdapter = new cn.guangdian.chat.adapter.ChatServiceAdapter(this);
+                getLogger().info("已集成 RPGCore 服务系统!");
+            }
         }
 
         getLogger().info("GuangDianChat enabled.");
@@ -246,7 +250,7 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
             if (current == '&' && index + 1 < message.length()) {
                 char code = Character.toLowerCase(message.charAt(index + 1));
                 if (isColorCode(code) && allowColors) {
-                    output.append(ChatColor.COLOR_CHAR).append(code);
+                    output.append(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.SECTION_CHAR).append(code);
                     index++;
                     continue;
                 }
@@ -351,7 +355,7 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
     }
 
     private String color(String input) {
-        return ChatColor.translateAlternateColorCodes('&', input == null ? "" : input);
+        return net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().serialize(net.kyori.adventure.text.Component.text(input == null ? "" : input));
     }
 
     @Override

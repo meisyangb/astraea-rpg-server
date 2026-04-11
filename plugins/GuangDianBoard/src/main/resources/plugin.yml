@@ -15,8 +15,9 @@ description: 光点 RPG 侧边栏计分板插件
 website: www.guangdianrpg.com
 
 # 插件依赖
-softdepend:
+depend:
   - RPGCore
+softdepend:
   - PlaceholderAPI
 
 commands:

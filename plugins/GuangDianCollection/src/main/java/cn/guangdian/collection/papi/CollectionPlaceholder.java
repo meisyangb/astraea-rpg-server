@@ -2,10 +2,8 @@ package cn.guangdian.collection.papi;
 
 import cn.guangdian.collection.GuangDianCollection;
 import cn.guangdian.collection.api.CollectionService;
-import cn.guangdian.collection.model.CollectionCategory;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class CollectionPlaceholder extends PlaceholderExpansion {
@@ -50,13 +48,8 @@ public class CollectionPlaceholder extends PlaceholderExpansion {
             case "totalitems":
                 return String.valueOf(collectionService.getTotalItemsCollected(player.getUniqueId()));
                 
-            case "totalkills":
-                return String.valueOf(collectionService.getTotalKills(player.getUniqueId()));
-                
             case "progress":
                 if (args.length < 2) return "0";
-                CollectionCategory category = collectionService.getCategory(args[1]).orElse(null);
-                if (category == null) return "0";
                 if (player.isOnline()) {
                     return String.valueOf(collectionService.getCategoryProgress(player.getPlayer(), args[1]));
                 }
@@ -68,12 +61,6 @@ public class CollectionPlaceholder extends PlaceholderExpansion {
                     return String.valueOf(collectionService.isCategoryComplete(player.getPlayer(), args[1]));
                 }
                 return "false";
-                
-            case "available":
-                if (player.isOnline()) {
-                    return String.valueOf(collectionService.getAvailableRewards(player.getPlayer()).size());
-                }
-                return "0";
                 
             default:
                 return "";

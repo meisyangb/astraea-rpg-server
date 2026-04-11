@@ -14,7 +14,8 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -527,20 +528,32 @@ public final class GuangDianNPC extends AbstractRPGPlugin implements Listener, C
     }
 
     private void sendHelp(CommandSender sender) {
-        sender.sendMessage(legacy("&6========== NPC 帮助 =========="));
-        sender.sendMessage(legacy("&e/npc create <id> [menu] &7- 创建 NPC"));
-        sender.sendMessage(legacy("&e/npc remove <id> &7- 删除 NPC"));
-        sender.sendMessage(legacy("&e/npc movehere <id> &7- 移动 NPC 到当前位置"));
-        sender.sendMessage(legacy("&e/npc name <id> <名字> &7- 设置 NPC 名字"));
-        sender.sendMessage(legacy("&e/npc menu <id> <menuId> &7- 设置 NPC 菜单"));
-        sender.sendMessage(legacy("&e/npc type <id> <类型> &7- 设置 NPC 类型"));
-        sender.sendMessage(legacy("&e/npc tp <id> &7- 传送到 NPC"));
-        sender.sendMessage(legacy("&e/npc enable <id> <true/false> &7- 启用/禁用 NPC"));
-        sender.sendMessage(legacy("&e/npc list &7- NPC 列表"));
-        sender.sendMessage(legacy("&e/npc reload &7- 重载配置"));
-        sender.sendMessage(legacy("&e/npcmenu <menuId> &7- 直接打开菜单"));
-        sender.sendMessage(legacy("&e/npcmenu npc <npcId> &7- 打开 NPC 的菜单"));
-        sender.sendMessage(legacy("&6=============================="));
+        sender.sendMessage(Component.text("========== NPC 帮助 ==========").color(NamedTextColor.GOLD));
+        sender.sendMessage(Component.text("/npc create <id> [menu]").color(NamedTextColor.YELLOW)
+            .append(Component.text(" - 创建 NPC").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/npc remove <id>").color(NamedTextColor.YELLOW)
+            .append(Component.text(" - 删除 NPC").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/npc movehere <id>").color(NamedTextColor.YELLOW)
+            .append(Component.text(" - 移动 NPC 到当前位置").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/npc name <id> <名字>").color(NamedTextColor.YELLOW)
+            .append(Component.text(" - 设置 NPC 名字").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/npc menu <id> <menuId>").color(NamedTextColor.YELLOW)
+            .append(Component.text(" - 设置 NPC 菜单").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/npc type <id> <类型>").color(NamedTextColor.YELLOW)
+            .append(Component.text(" - 设置 NPC 类型").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/npc tp <id>").color(NamedTextColor.YELLOW)
+            .append(Component.text(" - 传送到 NPC").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/npc enable <id> <true/false>").color(NamedTextColor.YELLOW)
+            .append(Component.text(" - 启用/禁用 NPC").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/npc list").color(NamedTextColor.YELLOW)
+            .append(Component.text(" - NPC 列表").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/npc reload").color(NamedTextColor.YELLOW)
+            .append(Component.text(" - 重载配置").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/npcmenu <menuId>").color(NamedTextColor.YELLOW)
+            .append(Component.text(" - 直接打开菜单").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/npcmenu npc <npcId>").color(NamedTextColor.YELLOW)
+            .append(Component.text(" - 打开 NPC 的菜单").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("==============================").color(NamedTextColor.GOLD));
     }
 
     private Component color(String text) {
@@ -548,6 +561,6 @@ public final class GuangDianNPC extends AbstractRPGPlugin implements Listener, C
     }
 
     private String legacy(String text) {
-        return ChatColor.translateAlternateColorCodes('&', text == null ? "" : text);
+        return text == null ? "" : net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().serialize(net.kyori.adventure.text.Component.text(text));
     }
 }

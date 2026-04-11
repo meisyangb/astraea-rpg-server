@@ -2,6 +2,8 @@ package cn.guangdian.marriage;
 
 import cn.guangdian.marriage.adapter.MarriageServiceAdapter;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -321,7 +323,7 @@ public class GuangDianMarriage extends AbstractRPGPlugin implements Listener, Co
     public String getMsg(String key) {
         String prefix = config.getString("messages.prefix", "&d[结婚] &f");
         String msg = config.getString("messages." + key, "");
-        return ChatColor.translateAlternateColorCodes('&', prefix + msg);
+        return net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().deserialize(prefix + msg).toString();
     }
 
     public String getMsg(String key, String... placeholders) {
@@ -395,11 +397,11 @@ public class GuangDianMarriage extends AbstractRPGPlugin implements Listener, Co
     private boolean handlePropose(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) { sender.sendMessage(getMsg("player-only")); return true; }
         Player p = (Player) sender;
-        if (args.length < 2) { p.sendMessage(ChatColor.RED + "用法: /marriage propose <玩家>"); return true; }
+        if (args.length < 2) { p.sendMessage(Component.text("用法: /marriage propose <玩家>").color(NamedTextColor.RED)); return true; }
         String target = args[1];
         Player targetP = getServer().getPlayer(target);
         if (targetP == null || !targetP.isOnline()) { p.sendMessage(getMsg("target-not-found")); return true; }
-        if (targetP.equals(p)) { p.sendMessage(ChatColor.RED + "你不能和自己结婚!"); return true; }
+        if (targetP.equals(p)) { p.sendMessage(Component.text("你不能和自己结婚!").color(NamedTextColor.RED)); return true; }
         if (isMarried(p.getName())) { p.sendMessage(getMsg("already-married")); return true; }
         if (isMarried(target)) { p.sendMessage(getMsg("target-married")); return true; }
         sendPropose(p.getName(), target);
@@ -416,7 +418,7 @@ public class GuangDianMarriage extends AbstractRPGPlugin implements Listener, Co
         Player proposer = getServer().getPlayer(req.proposer);
         if (proposer == null || !proposer.isOnline()) {
             removeProposeRequest(p.getName());
-            p.sendMessage(ChatColor.RED + "求婚者已离线!"); return true;
+            p.sendMessage(Component.text("求婚者已离线!").color(NamedTextColor.RED)); return true;
         }
         removeProposeRequest(p.getName());
         if (marry(proposer.getName(), p.getName())) {
@@ -461,23 +463,29 @@ public class GuangDianMarriage extends AbstractRPGPlugin implements Listener, Co
         } else if (sender instanceof Player) {
             m = getMarriage(((Player) sender).getName());
         } else {
-            sender.sendMessage(ChatColor.RED + "用法: /marriage info <玩家>"); return true;
+            sender.sendMessage(Component.text("用法: /marriage info <玩家>").color(NamedTextColor.RED)); return true;
         }
         if (m == null) { sender.sendMessage(getMsg("not-married")); return true; }
-        sender.sendMessage(ChatColor.LIGHT_PURPLE + "========== 结婚信息 ==========");
-        sender.sendMessage(ChatColor.YELLOW + "夫妻: " + ChatColor.WHITE + m.player1 + " " + ChatColor.LIGHT_PURPLE + "\u2764" + ChatColor.WHITE + " " + m.player2);
-        sender.sendMessage(ChatColor.YELLOW + "结婚天数: " + ChatColor.WHITE + m.getDaysMarried() + " 天");
-        sender.sendMessage(ChatColor.LIGHT_PURPLE + "================================");
+        sender.sendMessage(Component.text("========== 结婚信息 ==========").color(NamedTextColor.LIGHT_PURPLE));
+        sender.sendMessage(Component.text("夫妻: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(m.player1).color(NamedTextColor.WHITE))
+            .append(Component.text(" ❤ ").color(NamedTextColor.LIGHT_PURPLE))
+            .append(Component.text(m.player2).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("结婚天数: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(m.getDaysMarried() + " 天").color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("================================").color(NamedTextColor.LIGHT_PURPLE));
         return true;
     }
 
     private boolean handleList(CommandSender sender) {
-        sender.sendMessage(ChatColor.LIGHT_PURPLE + "========== 夫妻列表 ==========");
+        sender.sendMessage(Component.text("========== 夫妻列表 ==========").color(NamedTextColor.LIGHT_PURPLE));
         for (Marriage m : getAllMarriages()) {
-            sender.sendMessage(ChatColor.LIGHT_PURPLE + "\u2764 " + ChatColor.WHITE + m.player1 + " - " + m.player2 + " (" + m.getDaysMarried() + "天)");
+            sender.sendMessage(Component.text("❤ ").color(NamedTextColor.LIGHT_PURPLE)
+                .append(Component.text(m.player1 + " - " + m.player2 + " (" + m.getDaysMarried() + "天)").color(NamedTextColor.WHITE)));
         }
-        sender.sendMessage(ChatColor.LIGHT_PURPLE + "总计: " + ChatColor.WHITE + getMarriageCount() + " 对夫妻");
-        sender.sendMessage(ChatColor.LIGHT_PURPLE + "================================");
+        sender.sendMessage(Component.text("总计: ").color(NamedTextColor.LIGHT_PURPLE)
+            .append(Component.text(getMarriageCount() + " 对夫妻").color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("================================").color(NamedTextColor.LIGHT_PURPLE));
         return true;
     }
 
@@ -490,7 +498,7 @@ public class GuangDianMarriage extends AbstractRPGPlugin implements Listener, Co
         }
         String partner = getPartner(p.getName());
         Player partnerP = getServer().getPlayer(partner);
-        if (partnerP == null || !partnerP.isOnline()) { p.sendMessage(ChatColor.RED + "配偶不在线!"); return true; }
+        if (partnerP == null || !partnerP.isOnline()) { p.sendMessage(Component.text("配偶不在线!").color(NamedTextColor.RED)); return true; }
         sendTpRequest(p.getName(), partner);
         p.sendMessage(getMsg("tp-sent"));
         partnerP.sendMessage(getMsg("tp-received", "player", p.getName()));
@@ -508,7 +516,7 @@ public class GuangDianMarriage extends AbstractRPGPlugin implements Listener, Co
             setTpCooldown(requester.getName());
             requester.teleport(p.getLocation());
             requester.sendMessage(getMsg("tp-accepted"));
-            p.sendMessage(ChatColor.GREEN + "配偶已传送到你身边!");
+            p.sendMessage(Component.text("配偶已传送到你身边!").color(NamedTextColor.GREEN));
         }
         return true;
     }
@@ -518,15 +526,15 @@ public class GuangDianMarriage extends AbstractRPGPlugin implements Listener, Co
         Player p = (Player) sender;
         if (!isMarried(p.getName())) { p.sendMessage(getMsg("not-married")); return true; }
         org.bukkit.inventory.ItemStack item = p.getInventory().getItemInMainHand();
-        if (item == null || item.getType() == org.bukkit.Material.AIR) { p.sendMessage(ChatColor.RED + "请手持要送的物品!"); return true; }
+        if (item == null || item.getType() == org.bukkit.Material.AIR) { p.sendMessage(Component.text("请手持要送的物品!").color(NamedTextColor.RED)); return true; }
         String partner = getPartner(p.getName());
         Player partnerP = getServer().getPlayer(partner);
-        if (partnerP == null || !partnerP.isOnline()) { p.sendMessage(ChatColor.RED + "配偶不在线!"); return true; }
+        if (partnerP == null || !partnerP.isOnline()) { p.sendMessage(Component.text("配偶不在线!").color(NamedTextColor.RED)); return true; }
         org.bukkit.inventory.ItemStack gift = item.clone();
         item.setAmount(0);
         java.util.HashMap<Integer, org.bukkit.inventory.ItemStack> leftover = partnerP.getInventory().addItem(gift);
         if (!leftover.isEmpty()) {
-            p.sendMessage(ChatColor.RED + "配偶背包已满!");
+            p.sendMessage(Component.text("配偶背包已满!").color(NamedTextColor.RED));
             p.getInventory().addItem(gift);
             return true;
         }
@@ -539,12 +547,14 @@ public class GuangDianMarriage extends AbstractRPGPlugin implements Listener, Co
         if (!(sender instanceof Player)) { sender.sendMessage(getMsg("player-only")); return true; }
         Player p = (Player) sender;
         if (!isMarried(p.getName())) { p.sendMessage(getMsg("not-married")); return true; }
-        if (args.length < 2) { p.sendMessage(ChatColor.RED + "用法: /marriage chat <消息>"); return true; }
+        if (args.length < 2) { p.sendMessage(Component.text("用法: /marriage chat <消息>").color(NamedTextColor.RED)); return true; }
         String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         String partner = getPartner(p.getName());
         Player partnerP = getServer().getPlayer(partner);
         String chatPrefix = config.getString("messages.chat-prefix", "&d[夫妻] &f");
-        String formatted = ChatColor.translateAlternateColorCodes('&', chatPrefix + ChatColor.YELLOW + p.getName() + ": " + ChatColor.WHITE + msg);
+        String formatted = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().deserialize(chatPrefix).toString() + 
+            net.kyori.adventure.text.format.NamedTextColor.YELLOW + p.getName() + ": " + 
+            net.kyori.adventure.text.format.NamedTextColor.WHITE + msg;
         p.sendMessage(formatted);
         if (partnerP != null && partnerP.isOnline()) partnerP.sendMessage(formatted);
         return true;
@@ -554,10 +564,10 @@ public class GuangDianMarriage extends AbstractRPGPlugin implements Listener, Co
         if (!(sender instanceof Player)) { sender.sendMessage(getMsg("player-only")); return true; }
         Player p = (Player) sender;
         if (!isMarried(p.getName())) { p.sendMessage(getMsg("not-married")); return true; }
-        if (args.length < 2) { p.sendMessage(ChatColor.RED + "用法: /marriage nickname <昵称>"); return true; }
+        if (args.length < 2) { p.sendMessage(Component.text("用法: /marriage nickname <昵称>").color(NamedTextColor.RED)); return true; }
         Marriage m = getMarriage(p.getName());
         if (m != null) m.setNickname(p.getName(), args[1]);
-        p.sendMessage(ChatColor.GREEN + "已设置你对配偶的昵称为: " + ChatColor.YELLOW + args[1]);
+        p.sendMessage(net.kyori.adventure.text.Component.text("已设置你对配偶的昵称为: " + args[1], net.kyori.adventure.text.format.NamedTextColor.GREEN));
         return true;
     }
 
@@ -568,34 +578,34 @@ public class GuangDianMarriage extends AbstractRPGPlugin implements Listener, Co
                 reloadConfig();
                 config = getConfig();
                 loadMarriages();
-                sender.sendMessage(ChatColor.GREEN + "配置已重新加载!");
+                sender.sendMessage(net.kyori.adventure.text.Component.text("配置已重新加载!", net.kyori.adventure.text.format.NamedTextColor.GREEN));
                 return true;
             case "force":
-                if (args.length < 3) { sender.sendMessage(ChatColor.RED + "用法: /marriageadmin force <玩家1> <玩家2>"); return true; }
-                if (isMarried(args[1]) || isMarried(args[2])) { sender.sendMessage(ChatColor.RED + "其中一方已结婚!"); return true; }
+                if (args.length < 3) { sender.sendMessage(net.kyori.adventure.text.Component.text("用法: /marriageadmin force <玩家1> <玩家2>", net.kyori.adventure.text.format.NamedTextColor.RED)); return true; }
+                if (isMarried(args[1]) || isMarried(args[2])) { sender.sendMessage(net.kyori.adventure.text.Component.text("其中一方已结婚!", net.kyori.adventure.text.format.NamedTextColor.RED)); return true; }
                 marry(args[1], args[2]);
-                sender.sendMessage(ChatColor.GREEN + "已强制让 " + args[1] + " 和 " + args[2] + " 结婚!");
+                sender.sendMessage(net.kyori.adventure.text.Component.text("已强制让 " + args[1] + " 和 " + args[2] + " 结婚!", net.kyori.adventure.text.format.NamedTextColor.GREEN));
                 return true;
             default:
-                sender.sendMessage(ChatColor.RED + "用法: /marriageadmin <reload|force>");
+                sender.sendMessage(net.kyori.adventure.text.Component.text("用法: /marriageadmin <reload|force>", net.kyori.adventure.text.format.NamedTextColor.RED));
                 return true;
         }
     }
 
     private void sendHelp(CommandSender sender) {
-        sender.sendMessage(ChatColor.LIGHT_PURPLE + "========== 结婚帮助 ==========");
-        sender.sendMessage(ChatColor.YELLOW + "/marriage propose <玩家> " + ChatColor.GRAY + "- 求婚");
-        sender.sendMessage(ChatColor.YELLOW + "/marriage accept " + ChatColor.GRAY + "- 接受求婚");
-        sender.sendMessage(ChatColor.YELLOW + "/marriage deny " + ChatColor.GRAY + "- 拒绝求婚");
-        sender.sendMessage(ChatColor.YELLOW + "/marriage divorce " + ChatColor.GRAY + "- 离婚");
-        sender.sendMessage(ChatColor.YELLOW + "/marriage info [玩家] " + ChatColor.GRAY + "- 查看信息");
-        sender.sendMessage(ChatColor.YELLOW + "/marriage list " + ChatColor.GRAY + "- 夫妻列表");
-        sender.sendMessage(ChatColor.YELLOW + "/marriage tp " + ChatColor.GRAY + "- 传送到配偶");
-        sender.sendMessage(ChatColor.YELLOW + "/marriage tpaccept " + ChatColor.GRAY + "- 接受传送");
-        sender.sendMessage(ChatColor.YELLOW + "/marriage gift " + ChatColor.GRAY + "- 送礼物");
-        sender.sendMessage(ChatColor.YELLOW + "/marriage chat <消息> " + ChatColor.GRAY + "- 夫妻私聊");
-        sender.sendMessage(ChatColor.YELLOW + "/marriage nickname <昵称> " + ChatColor.GRAY + "- 设置昵称");
-        sender.sendMessage(ChatColor.LIGHT_PURPLE + "================================");
+        sender.sendMessage(net.kyori.adventure.text.Component.text("========== 结婚帮助 ==========", net.kyori.adventure.text.format.NamedTextColor.LIGHT_PURPLE));
+        sender.sendMessage(net.kyori.adventure.text.Component.text("/marriage propose <玩家> ", net.kyori.adventure.text.format.NamedTextColor.YELLOW).append(net.kyori.adventure.text.Component.text("- 求婚", net.kyori.adventure.text.format.NamedTextColor.GRAY)));
+        sender.sendMessage(net.kyori.adventure.text.Component.text("/marriage accept ", net.kyori.adventure.text.format.NamedTextColor.YELLOW).append(net.kyori.adventure.text.Component.text("- 接受求婚", net.kyori.adventure.text.format.NamedTextColor.GRAY)));
+        sender.sendMessage(net.kyori.adventure.text.Component.text("/marriage deny ", net.kyori.adventure.text.format.NamedTextColor.YELLOW).append(net.kyori.adventure.text.Component.text("- 拒绝求婚", net.kyori.adventure.text.format.NamedTextColor.GRAY)));
+        sender.sendMessage(net.kyori.adventure.text.Component.text("/marriage divorce ", net.kyori.adventure.text.format.NamedTextColor.YELLOW).append(net.kyori.adventure.text.Component.text("- 离婚", net.kyori.adventure.text.format.NamedTextColor.GRAY)));
+        sender.sendMessage(net.kyori.adventure.text.Component.text("/marriage info [玩家] ", net.kyori.adventure.text.format.NamedTextColor.YELLOW).append(net.kyori.adventure.text.Component.text("- 查看信息", net.kyori.adventure.text.format.NamedTextColor.GRAY)));
+        sender.sendMessage(net.kyori.adventure.text.Component.text("/marriage list ", net.kyori.adventure.text.format.NamedTextColor.YELLOW).append(net.kyori.adventure.text.Component.text("- 夫妻列表", net.kyori.adventure.text.format.NamedTextColor.GRAY)));
+        sender.sendMessage(net.kyori.adventure.text.Component.text("/marriage tp ", net.kyori.adventure.text.format.NamedTextColor.YELLOW).append(net.kyori.adventure.text.Component.text("- 传送到配偶", net.kyori.adventure.text.format.NamedTextColor.GRAY)));
+        sender.sendMessage(net.kyori.adventure.text.Component.text("/marriage tpaccept ", net.kyori.adventure.text.format.NamedTextColor.YELLOW).append(net.kyori.adventure.text.Component.text("- 接受传送", net.kyori.adventure.text.format.NamedTextColor.GRAY)));
+        sender.sendMessage(net.kyori.adventure.text.Component.text("/marriage gift ", net.kyori.adventure.text.format.NamedTextColor.YELLOW).append(net.kyori.adventure.text.Component.text("- 送礼物", net.kyori.adventure.text.format.NamedTextColor.GRAY)));
+        sender.sendMessage(net.kyori.adventure.text.Component.text("/marriage chat <消息> ", net.kyori.adventure.text.format.NamedTextColor.YELLOW).append(net.kyori.adventure.text.Component.text("- 夫妻私聊", net.kyori.adventure.text.format.NamedTextColor.GRAY)));
+        sender.sendMessage(net.kyori.adventure.text.Component.text("/marriage nickname <昵称> ", net.kyori.adventure.text.format.NamedTextColor.YELLOW).append(net.kyori.adventure.text.Component.text("- 设置昵称", net.kyori.adventure.text.format.NamedTextColor.GRAY)));
+        sender.sendMessage(net.kyori.adventure.text.Component.text("================================", net.kyori.adventure.text.format.NamedTextColor.LIGHT_PURPLE));
     }
 
     @Override
@@ -623,7 +633,7 @@ public class GuangDianMarriage extends AbstractRPGPlugin implements Listener, Co
         if (partner != null) {
             Player partnerP = getServer().getPlayer(partner);
             if (partnerP != null && partnerP.isOnline()) {
-                partnerP.sendMessage(ChatColor.LIGHT_PURPLE + "[结婚] " + ChatColor.YELLOW + p.getName() + " " + ChatColor.LIGHT_PURPLE + "\u2764" + ChatColor.GREEN + " 上线了!");
+                partnerP.sendMessage(net.kyori.adventure.text.Component.text("[结婚] " + p.getName() + " ❤ 上线了!", net.kyori.adventure.text.format.NamedTextColor.LIGHT_PURPLE));
             }
         }
     }
@@ -635,7 +645,7 @@ public class GuangDianMarriage extends AbstractRPGPlugin implements Listener, Co
         if (partner != null) {
             Player partnerP = getServer().getPlayer(partner);
             if (partnerP != null && partnerP.isOnline()) {
-                partnerP.sendMessage(ChatColor.LIGHT_PURPLE + "[结婚] " + ChatColor.YELLOW + p.getName() + " 下线了...");
+                partnerP.sendMessage(net.kyori.adventure.text.Component.text("[结婚] " + p.getName() + " 下线了...", net.kyori.adventure.text.format.NamedTextColor.LIGHT_PURPLE));
             }
         }
     }

@@ -48,22 +48,15 @@ public class MythicMobsHook {
 
         ItemMeta meta = item.getItemMeta();
         NamespacedKey typeKey = new NamespacedKey("mythicmobs", "type");
-        NamespacedKey itemKey = new NamespacedKey("mythicmobs", "item");
-        return meta.getPersistentDataContainer().has(typeKey, PersistentDataType.STRING) ||
-               meta.getPersistentDataContainer().has(itemKey, PersistentDataType.STRING);
+        return meta.getPersistentDataContainer().has(typeKey, PersistentDataType.STRING);
     }
 
     public String getMythicItemId(ItemStack item) {
         if (item == null || !item.hasItemMeta()) return null;
 
         ItemMeta meta = item.getItemMeta();
-
         NamespacedKey typeKey = new NamespacedKey("mythicmobs", "type");
-        String typeId = meta.getPersistentDataContainer().get(typeKey, PersistentDataType.STRING);
-        if (typeId != null) return typeId;
-
-        NamespacedKey itemKey = new NamespacedKey("mythicmobs", "item");
-        return meta.getPersistentDataContainer().get(itemKey, PersistentDataType.STRING);
+        return meta.getPersistentDataContainer().get(typeKey, PersistentDataType.STRING);
     }
 
     public boolean isMythicItem(ItemStack item, String itemId) {

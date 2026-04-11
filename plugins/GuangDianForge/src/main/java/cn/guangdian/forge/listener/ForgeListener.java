@@ -6,6 +6,7 @@ import cn.guangdian.forge.gui.RecipeSelectGUI;
 import cn.guangdian.forge.model.ForgeRecipe;
 import cn.guangdian.forge.model.PlayerForgeData;
 import cn.guangdian.forge.util.ForgeUtil;
+import cn.guangdian.rpgcore.RPGCore;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
@@ -102,7 +103,7 @@ public class ForgeListener implements Listener {
             if (forgeGUI.isMaterialSlot(rawSlot)) {
                 event.setCancelled(false);
                 // 延迟刷新
-                plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+                runTaskLaterSafe(() -> {
                     if (player.isOnline()) {
                         forgeGUI.updateSuccessRate();
                     }
@@ -157,7 +158,7 @@ public class ForgeListener implements Listener {
                     
                     event.setCancelled(false);
                     // 延迟刷新
-                    plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+                    runTaskLaterSafe(() -> {
                         if (player.isOnline()) {
                             forgeGUI.updateSuccessRate();
                         }
@@ -168,6 +169,15 @@ public class ForgeListener implements Listener {
             
             // 普通点击背包 - 允许操作
             event.setCancelled(false);
+        }
+    }
+    
+    private void runTaskLaterSafe(Runnable task, long delay) {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            rpgCore.getScheduler().runSyncLater(task, delay);
+        } else {
+            plugin.getServer().getScheduler().runTaskLater(plugin, task, delay);
         }
     }
 

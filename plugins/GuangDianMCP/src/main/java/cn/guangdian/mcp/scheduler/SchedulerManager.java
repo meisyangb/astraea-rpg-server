@@ -1,6 +1,8 @@
 package cn.guangdian.mcp.scheduler;
 
 import cn.guangdian.mcp.GuangDianMCP;
+import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.api.SyncScheduler;
 import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -23,22 +25,27 @@ public class SchedulerManager {
     private final GuangDianMCP plugin;
     private final Map<String, ScheduledTask> tasks = new ConcurrentHashMap<>();
     private boolean enabled = true;
-    private int taskId = -1;
+    private long taskId = -1;
+    private SyncScheduler scheduler;
     
     public SchedulerManager(GuangDianMCP plugin) {
         this.plugin = plugin;
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            this.scheduler = rpgCore.getScheduler();
+        }
     }
     
     public void start() {
-        if (!enabled) return;
+        if (!enabled || scheduler == null) return;
         
-        taskId = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this::tick, 20L, 20L).getTaskId();
+        taskId = scheduler.runAsyncRepeating(this::tick, 20L, 20L);
         plugin.getLogger().info("定时任务管理器已启动，当前任务数: " + tasks.size());
     }
     
     public void stop() {
-        if (taskId != -1) {
-            Bukkit.getScheduler().cancelTask(taskId);
+        if (scheduler != null && taskId != -1) {
+            scheduler.cancelTask(taskId);
             taskId = -1;
         }
         tasks.clear();
@@ -62,7 +69,8 @@ public class SchedulerManager {
     }
     
     private void executeTask(ScheduledTask task) {
-        Bukkit.getScheduler().runTask(plugin, () -> {
+        if (scheduler == null) return;
+        scheduler.runSyncLater(() -> {
             try {
                 switch (task.getType()) {
                     case "restart" -> executeRestart(task);
@@ -77,7 +85,7 @@ public class SchedulerManager {
             } catch (Exception e) {
                 plugin.getLogger().severe("执行定时任务失败: " + task.getName() + " - " + e.getMessage());
             }
-        });
+        }, 0L);
     }
     
     private void executeRestart(ScheduledTask task) {
@@ -86,9 +94,11 @@ public class SchedulerManager {
             Bukkit.broadcastMessage(warningMessage);
         }
         
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            Bukkit.spigot().restart();
-        }, task.getWarningSeconds() * 20L);
+        if (scheduler != null) {
+            scheduler.runSyncLater(() -> {
+                Bukkit.spigot().restart();
+            }, task.getWarningSeconds() * 20L);
+        }
     }
     
     private void executeBackup(ScheduledTask task) {

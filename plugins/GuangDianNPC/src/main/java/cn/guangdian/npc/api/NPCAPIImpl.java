@@ -3,6 +3,8 @@ package cn.guangdian.npc.api;
 import cn.guangdian.npc.GuangDianNPC;
 import cn.guangdian.npc.manager.NPCManager;
 import cn.guangdian.npc.model.NPCData;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -87,7 +89,7 @@ public class NPCAPIImpl implements NPCAPI {
         // 回退到 NPC 自带的菜单系统
         NPCManager.MenuDefinition menu = npcManager.getMenu(menuId);
         if (menu == null) {
-            player.sendMessage(ChatColor.RED + "菜单不存在: " + menuId);
+            player.sendMessage(Component.text("菜单不存在: " + menuId).color(NamedTextColor.RED));
             return;
         }
 
@@ -115,7 +117,7 @@ public class NPCAPIImpl implements NPCAPI {
     public void openNPCMenu(Player player, String npcId) {
         NPCData npc = npcManager.getNPC(npcId);
         if (npc == null) {
-            player.sendMessage(ChatColor.RED + "NPC 不存在: " + npcId);
+            player.sendMessage(net.kyori.adventure.text.Component.text("NPC 不存在: " + npcId, net.kyori.adventure.text.format.NamedTextColor.RED));
             return;
         }
         openMenu(player, npc.getMenuId());
@@ -131,7 +133,7 @@ public class NPCAPIImpl implements NPCAPI {
 
         World world = Bukkit.getWorld(npc.getWorldName());
         if (world == null) {
-            player.sendMessage(ChatColor.RED + "NPC 所在世界未加载: " + npc.getWorldName());
+            player.sendMessage(net.kyori.adventure.text.Component.text("NPC 所在世界未加载: " + npc.getWorldName(), net.kyori.adventure.text.format.NamedTextColor.RED));
             return;
         }
 

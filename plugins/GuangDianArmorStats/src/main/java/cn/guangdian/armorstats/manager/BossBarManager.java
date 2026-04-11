@@ -117,7 +117,8 @@ public class BossBarManager {
         String title = format
             .replace("%current%", String.format("%.0f", currentHealth))
             .replace("%max%", String.format("%.0f", maxHealth));
-        bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', title));
+        bossBar.setTitle(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().serialize(
+            net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().deserialize(title)));
 
         double progress = maxHealth > 0 ? currentHealth / maxHealth : 0;
         progress = Math.max(0.0, Math.min(1.0, progress));

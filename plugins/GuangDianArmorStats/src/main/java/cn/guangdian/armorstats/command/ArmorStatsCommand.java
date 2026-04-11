@@ -7,6 +7,8 @@ import cn.guangdian.armorstats.manager.StatsManager;
 import cn.guangdian.armorstats.parser.LoreParser;
 import cn.guangdian.armorstats.skill.Skill;
 import cn.guangdian.armorstats.skill.SkillManager;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -44,7 +46,7 @@ public class ArmorStatsCommand implements CommandExecutor {
                     if (target != null) {
                         showPlayerStats(sender, target, true);
                     } else {
-                        sender.sendMessage(ChatColor.RED + "玩家不存在或离线!");
+                        sender.sendMessage(Component.text("玩家不存在或离线!").color(NamedTextColor.RED));
                     }
                 } else {
                     showPlayerStats(sender, player, true);
@@ -55,61 +57,60 @@ public class ArmorStatsCommand implements CommandExecutor {
                     if (target != null) {
                         showPlayerStats(sender, target, true);
                     } else {
-                        sender.sendMessage(ChatColor.RED + "玩家不存在!");
+                        sender.sendMessage(Component.text("玩家不存在!").color(NamedTextColor.RED));
                     }
                 } else {
-                    sender.sendMessage(ChatColor.RED + "用法: /armorstats view <玩家>");
+                    sender.sendMessage(Component.text("用法: /armorstats view <玩家>").color(NamedTextColor.RED));
                 }
             }
         } else if (args[0].equalsIgnoreCase("reload")) {
             if (sender.hasPermission("armorstats.admin")) {
                 plugin.reloadAllConfigs();
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    plugin.getConfig().getString("messages.stats_reloaded", "&aConfig reloaded!")));
-                sender.sendMessage(ChatColor.GREEN + "在线玩家同步数: " + Bukkit.getOnlinePlayers().size());
+                sender.sendMessage(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().deserialize(plugin.getConfig().getString("messages.stats_reloaded", "&aConfig reloaded!")));
+                sender.sendMessage(Component.text("在线玩家同步数: " + Bukkit.getOnlinePlayers().size()).color(NamedTextColor.GREEN));
             } else {
-                sender.sendMessage(ChatColor.RED + "没有权限!");
+                sender.sendMessage(Component.text("没有权限!").color(NamedTextColor.RED));
             }
         } else if (args[0].equalsIgnoreCase("refresh")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
                 statsManager.refreshPlayerStats(player);
-                sender.sendMessage(ChatColor.GREEN + "属性已刷新!");
+                sender.sendMessage(Component.text("属性已刷新!").color(NamedTextColor.GREEN));
             }
         } else if (args[0].equalsIgnoreCase("reset")) {
             if (args.length >= 2 && sender.hasPermission("armorstats.admin")) {
                 Player target = plugin.getServer().getPlayer(args[1]);
                 if (target != null) {
                     statsManager.resetPlayer(target);
-                    sender.sendMessage(ChatColor.GREEN + "已重置 " + target.getName() + " 的RPG属性");
-                    target.sendMessage(ChatColor.YELLOW + "你的RPG属性已被管理员重置。");
+                    sender.sendMessage(Component.text("已重置 " + target.getName() + " 的RPG属性").color(NamedTextColor.GREEN));
+                    target.sendMessage(Component.text("你的RPG属性已被管理员重置。").color(NamedTextColor.YELLOW));
                 } else {
-                    sender.sendMessage(ChatColor.RED + "玩家不存在或离线!");
+                    sender.sendMessage(Component.text("玩家不存在或离线!").color(NamedTextColor.RED));
                 }
             } else if (sender instanceof Player) {
                 Player player = (Player) sender;
                 statsManager.resetPlayer(player);
-                sender.sendMessage(ChatColor.GREEN + "你的RPG属性已重置。");
+                sender.sendMessage(Component.text("你的RPG属性已重置。").color(NamedTextColor.GREEN));
             } else {
-                sender.sendMessage(ChatColor.RED + "用法: /armorstats reset <玩家>");
+                sender.sendMessage(Component.text("用法: /armorstats reset <玩家>").color(NamedTextColor.RED));
             }
         } else if (args[0].equalsIgnoreCase("clearall")) {
             if (!sender.hasPermission("armorstats.admin")) {
-                sender.sendMessage(ChatColor.RED + "没有权限!");
-                return true;
-            }
-            if (args.length >= 2) {
-                Player target = plugin.getServer().getPlayer(args[1]);
-                if (target != null) {
-                    forceClearAllAttributes(target);
-                    sender.sendMessage(ChatColor.GREEN + "已强制清除 " + target.getName() + " 的所有属性");
-                    target.sendMessage(ChatColor.YELLOW + "你的属性已被管理员强制清除。");
-                } else {
-                    sender.sendMessage(ChatColor.RED + "玩家不存在或离线!");
-                }
+            sender.sendMessage(Component.text("没有权限!").color(NamedTextColor.RED));
+            return true;
+        }
+        if (args.length >= 2) {
+            Player target = plugin.getServer().getPlayer(args[1]);
+            if (target != null) {
+                forceClearAllAttributes(target);
+                sender.sendMessage(Component.text("已强制清除 " + target.getName() + " 的所有属性").color(NamedTextColor.GREEN));
+                target.sendMessage(Component.text("你的属性已被管理员强制清除。").color(NamedTextColor.YELLOW));
             } else {
-                sender.sendMessage(ChatColor.RED + "用法: /armorstats clearall <玩家>");
+                sender.sendMessage(Component.text("玩家不存在或离线!").color(NamedTextColor.RED));
             }
+        } else {
+            sender.sendMessage(Component.text("用法: /armorstats clearall <玩家>").color(NamedTextColor.RED));
+        }
         } else if (args[0].equalsIgnoreCase("debug")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
@@ -117,7 +118,7 @@ public class ArmorStatsCommand implements CommandExecutor {
             }
         } else if (args[0].equalsIgnoreCase("skill")) {
             if (!(sender instanceof Player)) {
-                sender.sendMessage(ChatColor.RED + "只有玩家可以使用此命令!");
+                sender.sendMessage(Component.text("只有玩家可以使用此命令!").color(NamedTextColor.RED));
                 return true;
             }
             Player player = (Player) sender;
@@ -128,7 +129,7 @@ public class ArmorStatsCommand implements CommandExecutor {
             String skillName = args[1];
             boolean triggered = skillManager.triggerActiveSkill(player, skillName);
             if (!triggered) {
-                player.sendMessage(ChatColor.RED + "技能 " + skillName + " 不存在或冷却中!");
+                player.sendMessage(Component.text("技能 " + skillName + " 不存在或冷却中!").color(NamedTextColor.RED));
             }
         } else if (args[0].equalsIgnoreCase("help")) {
             showHelp(sender);
@@ -140,14 +141,21 @@ public class ArmorStatsCommand implements CommandExecutor {
     }
 
     private void showHelp(CommandSender sender) {
-        sender.sendMessage(ChatColor.GOLD + "=== 装备属性指令 ===");
-        sender.sendMessage(ChatColor.YELLOW + "/armorstats view [玩家]" + ChatColor.GRAY + " - 查看属性");
-        sender.sendMessage(ChatColor.YELLOW + "/armorstats refresh" + ChatColor.GRAY + " - 刷新属性");
-        sender.sendMessage(ChatColor.YELLOW + "/armorstats reset [玩家]" + ChatColor.GRAY + " - 重置RPG属性");
-        sender.sendMessage(ChatColor.YELLOW + "/armorstats clearall <玩家>" + ChatColor.GRAY + " - 强制清除所有属性");
-        sender.sendMessage(ChatColor.YELLOW + "/armorstats skill" + ChatColor.GRAY + " - 查看技能");
-        sender.sendMessage(ChatColor.YELLOW + "/armorstats reload" + ChatColor.GRAY + " - 重载配置");
-        sender.sendMessage(ChatColor.YELLOW + "/armorstats debug" + ChatColor.GRAY + " - 调试信息");
+        sender.sendMessage(Component.text("=== 装备属性指令 ===").color(NamedTextColor.GOLD));
+        sender.sendMessage(Component.text("/armorstats view [玩家]").color(NamedTextColor.YELLOW)
+            .append(Component.text(" - 查看属性").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/armorstats refresh").color(NamedTextColor.YELLOW)
+            .append(Component.text(" - 刷新属性").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/armorstats reset [玩家]").color(NamedTextColor.YELLOW)
+            .append(Component.text(" - 重置RPG属性").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/armorstats clearall <玩家>").color(NamedTextColor.YELLOW)
+            .append(Component.text(" - 强制清除所有属性").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/armorstats skill").color(NamedTextColor.YELLOW)
+            .append(Component.text(" - 查看技能").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/armorstats reload").color(NamedTextColor.YELLOW)
+            .append(Component.text(" - 重载配置").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/armorstats debug").color(NamedTextColor.YELLOW)
+            .append(Component.text(" - 调试信息").color(NamedTextColor.GRAY)));
     }
 
     private void forceClearAllAttributes(Player player) {
@@ -202,19 +210,19 @@ public class ArmorStatsCommand implements CommandExecutor {
     private void showPlayerSkills(Player player) {
         List<String> skills = statsManager.getPlayerSkills(player);
         if (skills.isEmpty()) {
-            player.sendMessage(ChatColor.YELLOW + "你没有主动技能。");
+            player.sendMessage(Component.text("你没有主动技能。").color(NamedTextColor.YELLOW));
             return;
         }
 
-        player.sendMessage(ChatColor.GOLD + "=== 你的技能 ===");
+        player.sendMessage(Component.text("=== 你的技能 ===").color(NamedTextColor.GOLD));
         for (String skillName : skills) {
             Skill skill = skillManager.getSkill(skillName);
             if (skill != null && skill.isActive()) {
                 long remaining = skillManager.getCooldownRemaining(player.getUniqueId(), skillName);
-                String status = remaining > 0 ?
-                    ChatColor.RED + " (冷却: " + remaining + "秒)" :
-                    ChatColor.GREEN + " (就绪)";
-                player.sendMessage(ChatColor.YELLOW + skillName + status);
+                Component status = remaining > 0 ?
+                    Component.text(" (冷却: " + remaining + "秒)").color(NamedTextColor.RED) :
+                    Component.text(" (就绪)").color(NamedTextColor.GREEN);
+                player.sendMessage(Component.text(skillName).color(NamedTextColor.YELLOW).append(status));
             }
         }
     }
@@ -290,7 +298,7 @@ public class ArmorStatsCommand implements CommandExecutor {
 
         String result = sb.toString();
         plugin.getLogger().info(result);
-        sender.sendMessage(ChatColor.GOLD + "调试信息已发送到控制台!");
+        sender.sendMessage(Component.text("调试信息已发送到控制台!").color(NamedTextColor.GOLD));
     }
 
     private String formatAttrValue(AttributeValue value) {
@@ -309,102 +317,147 @@ public class ArmorStatsCommand implements CommandExecutor {
 
         PlayerStats stats = statsManager.getPlayerStats(target);
 
-        sender.sendMessage(ChatColor.GOLD + "╔══════════════════════════════╗");
+        sender.sendMessage(Component.text("╔══════════════════════════════╗").color(NamedTextColor.GOLD));
         String titleSuffix = " 的角色属性";
         int titleLen = titleSuffix.length();
         int nameLen = target.getName().length();
         int usedLen = Math.min(nameLen + titleLen, 16);
-        sender.sendMessage(ChatColor.GOLD + "║  " + ChatColor.YELLOW + target.getName() + ChatColor.GOLD + titleSuffix.substring(0, usedLen - nameLen) + "              ".substring(0, 16 - usedLen) + "║");
-        sender.sendMessage(ChatColor.GOLD + "╠══════════════════════════════╣");
+        sender.sendMessage(Component.text("║  ").color(NamedTextColor.GOLD)
+            .append(Component.text(target.getName()).color(NamedTextColor.YELLOW))
+            .append(Component.text(titleSuffix.substring(0, usedLen - nameLen) + "              ".substring(0, 16 - usedLen) + "║").color(NamedTextColor.GOLD)));
+        sender.sendMessage(Component.text("╠══════════════════════════════╣").color(NamedTextColor.GOLD));
 
         // 基础属性
-        sender.sendMessage(ChatColor.AQUA + "  【基础属性】");
-        sender.sendMessage(ChatColor.YELLOW + "  最大生命: " + ChatColor.WHITE + (int) (20 + stats.getMaxHealth()));
-        sender.sendMessage(ChatColor.YELLOW + "  攻击力: " + ChatColor.WHITE + (int) (1 + stats.getMinAttack()) + " - " + (int) (1 + stats.getMaxAttack()));
-        sender.sendMessage(ChatColor.YELLOW + "  防御力: " + ChatColor.WHITE + (int) stats.getDefenseMin() + " - " + (int) stats.getDefenseMax());
-        sender.sendMessage(ChatColor.YELLOW + "  PVP攻击: " + ChatColor.WHITE + (int) stats.getPvpMinAttack() + " - " + (int) stats.getPvpMaxAttack());
-        sender.sendMessage(ChatColor.YELLOW + "  PVP防御: " + ChatColor.WHITE + (int) stats.getPvpDefenseMin() + " - " + (int) stats.getPvpDefenseMax());
+        sender.sendMessage(Component.text("  【基础属性】").color(NamedTextColor.AQUA));
+        sender.sendMessage(Component.text("  最大生命: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.valueOf((int) (20 + stats.getMaxHealth()))).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  攻击力: ").color(NamedTextColor.YELLOW)
+            .append(Component.text((int) (1 + stats.getMinAttack()) + " - " + (int) (1 + stats.getMaxAttack())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  防御力: ").color(NamedTextColor.YELLOW)
+            .append(Component.text((int) stats.getDefenseMin() + " - " + (int) stats.getDefenseMax()).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  PVP攻击: ").color(NamedTextColor.YELLOW)
+            .append(Component.text((int) stats.getPvpMinAttack() + " - " + (int) stats.getPvpMaxAttack()).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  PVP防御: ").color(NamedTextColor.YELLOW)
+            .append(Component.text((int) stats.getPvpDefenseMin() + " - " + (int) stats.getPvpDefenseMax()).color(NamedTextColor.WHITE)));
 
-        sender.sendMessage(ChatColor.GOLD + "╠══════════════════════════════╣");
+        sender.sendMessage(Component.text("╠══════════════════════════════╣").color(NamedTextColor.GOLD));
 
         // 攻击属性
-        sender.sendMessage(ChatColor.RED + "  【攻击属性】");
-        sender.sendMessage(ChatColor.YELLOW + "  暴击几率: " + ChatColor.WHITE + String.format("%.1f%%", stats.getCritChancePercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  暴击伤害: " + ChatColor.WHITE + String.format("%.1f%%", 150.0 + stats.getCritDamagePercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  吸血几率: " + ChatColor.WHITE + String.format("%.1f%%", stats.getLifestealPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  吸血倍率: " + ChatColor.WHITE + String.format("%.1f%%", stats.getLifestealMultiplier()));
-        sender.sendMessage(ChatColor.YELLOW + "  中毒几率: " + ChatColor.WHITE + String.format("%.1f%%", stats.getPoisonPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  冰冻几率: " + ChatColor.WHITE + String.format("%.1f%%", stats.getFreezePercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  致盲几率: " + ChatColor.WHITE + String.format("%.1f%%", stats.getBlindPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  燃烧几率: " + ChatColor.WHITE + String.format("%.1f%%", stats.getBurnPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  灼烧几率: " + ChatColor.WHITE + String.format("%.1f%%", stats.getScorchPercent()));
+        sender.sendMessage(Component.text("  【攻击属性】").color(NamedTextColor.RED));
+        sender.sendMessage(Component.text("  暴击几率: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getCritChancePercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  暴击伤害: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", 150.0 + stats.getCritDamagePercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  吸血几率: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getLifestealPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  吸血倍率: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getLifestealMultiplier())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  中毒几率: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getPoisonPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  冰冻几率: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getFreezePercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  致盲几率: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getBlindPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  燃烧几率: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getBurnPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  灼烧几率: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getScorchPercent())).color(NamedTextColor.WHITE)));
 
-        sender.sendMessage(ChatColor.GOLD + "╠══════════════════════════════╣");
+        sender.sendMessage(Component.text("╠══════════════════════════════╣").color(NamedTextColor.GOLD));
 
         // 防御属性
-        sender.sendMessage(ChatColor.GREEN + "  【防御属性】");
-        sender.sendMessage(ChatColor.YELLOW + "  闪避几率: " + ChatColor.WHITE + String.format("%.1f%%", stats.getDodgePercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  招架几率: " + ChatColor.WHITE + String.format("%.1f%%", stats.getParryPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  暴击抵抗: " + ChatColor.WHITE + String.format("%.1f%%", stats.getCritResistPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  暴伤抵抗: " + ChatColor.WHITE + String.format("%.1f%%", stats.getCritDamageResistPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  吸血抵抗: " + ChatColor.WHITE + String.format("%.1f%%", stats.getLifestealResistPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  伤害反弹: " + ChatColor.WHITE + String.format("%.1f%%", stats.getDamageReflectPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  反伤比例: " + ChatColor.WHITE + String.format("%.1f%%", stats.getReflectPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  躲避反伤: " + ChatColor.WHITE + String.format("%.1f%%", stats.getDodgeReflectPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  躲避反弹: " + ChatColor.WHITE + String.format("%.1f%%", stats.getDodgeReflectRatio()));
-        sender.sendMessage(ChatColor.YELLOW + "  击退抗性: " + ChatColor.WHITE + String.format("%.1f%%", stats.getKnockbackResistPercent()));
+        sender.sendMessage(Component.text("  【防御属性】").color(NamedTextColor.GREEN));
+        sender.sendMessage(Component.text("  闪避几率: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getDodgePercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  招架几率: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getParryPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  暴击抵抗: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getCritResistPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  暴伤抵抗: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getCritDamageResistPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  吸血抵抗: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getLifestealResistPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  伤害反弹: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getDamageReflectPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  反伤比例: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getReflectPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  躲避反伤: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getDodgeReflectPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  躲避反弹: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getDodgeReflectRatio())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  击退抗性: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getKnockbackResistPercent())).color(NamedTextColor.WHITE)));
 
-        sender.sendMessage(ChatColor.GOLD + "╠══════════════════════════════╣");
+        sender.sendMessage(Component.text("╠══════════════════════════════╣").color(NamedTextColor.GOLD));
 
         // 护甲与穿透
-        sender.sendMessage(ChatColor.LIGHT_PURPLE + "  【护甲与穿透】");
-        sender.sendMessage(ChatColor.YELLOW + "  护甲值: " + ChatColor.WHITE + String.format("%.1f%%", stats.getArmorPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  护甲强度: " + ChatColor.WHITE + String.format("%.1f%%", stats.getArmorStrength()));
-        sender.sendMessage(ChatColor.YELLOW + "  护甲穿透: " + ChatColor.WHITE + String.format("%.1f%%", stats.getArmorPenetration()));
-        sender.sendMessage(ChatColor.YELLOW + "  防御穿透: " + ChatColor.WHITE + String.format("%.1f%%", stats.getDefensePenetration()));
-        sender.sendMessage(ChatColor.YELLOW + "  额外减伤: " + ChatColor.WHITE + String.format("%.1f%%", stats.getDamageReductionBonus()));
+        sender.sendMessage(Component.text("  【护甲与穿透】").color(NamedTextColor.LIGHT_PURPLE));
+        sender.sendMessage(Component.text("  护甲值: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getArmorPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  护甲强度: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getArmorStrength())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  护甲穿透: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getArmorPenetration())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  防御穿透: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getDefensePenetration())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  额外减伤: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getDamageReductionBonus())).color(NamedTextColor.WHITE)));
 
-        sender.sendMessage(ChatColor.GOLD + "╠══════════════════════════════╣");
+        sender.sendMessage(Component.text("╠══════════════════════════════╣").color(NamedTextColor.GOLD));
 
         // 环境抗性
-        sender.sendMessage(ChatColor.BLUE + "  【环境抗性】");
-        sender.sendMessage(ChatColor.YELLOW + "  火焰抗性: " + ChatColor.WHITE + String.format("%.1f%%", stats.getFireResistPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  摔落抗性: " + ChatColor.WHITE + String.format("%.1f%%", stats.getFallResistPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  溺水抗性: " + ChatColor.WHITE + String.format("%.1f%%", stats.getDrowningResistPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  中毒抗性: " + ChatColor.WHITE + String.format("%.1f%%", stats.getPoisonResistPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  凋零抗性: " + ChatColor.WHITE + String.format("%.1f%%", stats.getWitherResistPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  岩浆抗性: " + ChatColor.WHITE + String.format("%.1f%%", stats.getLavaResistPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  魔法抗性: " + ChatColor.WHITE + String.format("%.1f%%", stats.getMagicResistPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  爆炸抗性: " + ChatColor.WHITE + String.format("%.1f%%", stats.getExplosionResistPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  弹射物抗: " + ChatColor.WHITE + String.format("%.1f%%", stats.getProjectileResistPercent()));
+        sender.sendMessage(Component.text("  【环境抗性】").color(NamedTextColor.BLUE));
+        sender.sendMessage(Component.text("  火焰抗性: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getFireResistPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  摔落抗性: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getFallResistPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  溺水抗性: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getDrowningResistPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  中毒抗性: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getPoisonResistPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  凋零抗性: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getWitherResistPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  岩浆抗性: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getLavaResistPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  魔法抗性: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getMagicResistPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  爆炸抗性: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getExplosionResistPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  弹射物抗: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getProjectileResistPercent())).color(NamedTextColor.WHITE)));
 
-        sender.sendMessage(ChatColor.GOLD + "╠══════════════════════════════╣");
+        sender.sendMessage(Component.text("╠══════════════════════════════╣").color(NamedTextColor.GOLD));
 
         // 回复属性
-        sender.sendMessage(ChatColor.YELLOW + "  【回复属性】");
-        sender.sendMessage(ChatColor.YELLOW + "  每秒回血: " + ChatColor.WHITE + (int) stats.getHealthRegen());
-        sender.sendMessage(ChatColor.YELLOW + "  生命恢复: " + ChatColor.WHITE + String.format("%.1f%%", stats.getHealthRegenPercent()));
+        sender.sendMessage(Component.text("  【回复属性】").color(NamedTextColor.YELLOW));
+        sender.sendMessage(Component.text("  每秒回血: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.valueOf((int) stats.getHealthRegen())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  生命恢复: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getHealthRegenPercent())).color(NamedTextColor.WHITE)));
 
-        sender.sendMessage(ChatColor.GOLD + "╠══════════════════════════════╣");
+        sender.sendMessage(Component.text("╠══════════════════════════════╣").color(NamedTextColor.GOLD));
 
         // 其他属性
-        sender.sendMessage(ChatColor.WHITE + "  【其他属性】");
-        sender.sendMessage(ChatColor.YELLOW + "  移动速度: " + ChatColor.WHITE + String.format("%.1f%%", stats.getMoveSpeedPercent()));
-        sender.sendMessage(ChatColor.YELLOW + "  经验加成: " + ChatColor.WHITE + String.format("%.1f%%", stats.getExpBonusPercent()));
+        sender.sendMessage(Component.text("  【其他属性】").color(NamedTextColor.WHITE));
+        sender.sendMessage(Component.text("  移动速度: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getMoveSpeedPercent())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("  经验加成: ").color(NamedTextColor.YELLOW)
+            .append(Component.text(String.format("%.1f%%", stats.getExpBonusPercent())).color(NamedTextColor.WHITE)));
 
         List<String> skills = statsManager.getPlayerSkills(target);
         if (!skills.isEmpty()) {
-            sender.sendMessage(ChatColor.GOLD + "╠══════════════════════════════╣");
-            sender.sendMessage(ChatColor.GOLD + "  【技能列表】");
+            sender.sendMessage(Component.text("╠══════════════════════════════╣").color(NamedTextColor.GOLD));
+            sender.sendMessage(Component.text("  【技能列表】").color(NamedTextColor.GOLD));
             for (String skillName : skills) {
                 Skill skill = skillManager.getSkill(skillName);
                 if (skill != null) {
                     String type = skill.isPassive() ? "被动" : "主动";
-                    sender.sendMessage(ChatColor.YELLOW + "  " + skillName + ChatColor.GRAY + " (" + type + ")");
+                    sender.sendMessage(Component.text("  " + skillName).color(NamedTextColor.YELLOW)
+                        .append(Component.text(" (" + type + ")").color(NamedTextColor.GRAY)));
                 }
             }
         }
 
-        sender.sendMessage(ChatColor.GOLD + "╚══════════════════════════════╝");
+        sender.sendMessage(Component.text("╚══════════════════════════════╝").color(NamedTextColor.GOLD));
     }
 }

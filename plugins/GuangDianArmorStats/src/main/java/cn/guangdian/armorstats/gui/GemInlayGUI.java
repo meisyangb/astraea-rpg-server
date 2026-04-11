@@ -63,7 +63,7 @@ public class GemInlayGUI implements InventoryHolder {
 
     public GemInlayGUI(Player player) {
         this.player = player;
-        this.inventory = Bukkit.createInventory(this, INVENTORY_SIZE, ChatColor.GOLD + "宝石镶嵌");
+        this.inventory = Bukkit.createInventory(this, INVENTORY_SIZE, net.kyori.adventure.text.Component.text("宝石镶嵌", net.kyori.adventure.text.format.NamedTextColor.GOLD));
         refreshInventory();
     }
 
@@ -144,13 +144,13 @@ public class GemInlayGUI implements InventoryHolder {
 
     private void placeEquipment(Inventory sourceInventory, int sourceSlot, ItemStack sourceItem) {
         if (!sourceItem.hasItemMeta()) {
-            player.sendMessage(ChatColor.RED + "该物品不能镶嵌宝石");
+            player.sendMessage(net.kyori.adventure.text.Component.text("该物品不能镶嵌宝石", net.kyori.adventure.text.format.NamedTextColor.RED));
             return;
         }
 
         List<String> sockets = GemParser.parseSocketGems(sourceItem);
         if (sockets.isEmpty()) {
-            player.sendMessage(ChatColor.RED + "该装备没有可用的宝石孔");
+            player.sendMessage(net.kyori.adventure.text.Component.text("该装备没有可用的宝石孔", net.kyori.adventure.text.format.NamedTextColor.RED));
             return;
         }
 
@@ -173,28 +173,28 @@ public class GemInlayGUI implements InventoryHolder {
             if (g != null) existingCount++;
         }
         if (existingCount > 0) {
-            player.sendMessage(ChatColor.GREEN + "已放入装备，已有 " + existingCount + " 颗宝石镶嵌");
+            player.sendMessage(net.kyori.adventure.text.Component.text("已放入装备，已有 " + existingCount + " 颗宝石镶嵌", net.kyori.adventure.text.format.NamedTextColor.GREEN));
         } else {
-            player.sendMessage(ChatColor.GREEN + "已放入装备，请继续放入匹配的宝石");
+            player.sendMessage(net.kyori.adventure.text.Component.text("已放入装备，请继续放入匹配的宝石", net.kyori.adventure.text.format.NamedTextColor.GREEN));
         }
     }
 
     private void placeGem(Inventory sourceInventory, int sourceSlot, ItemStack sourceItem) {
         if (!GemParser.isGem(sourceItem)) {
-            player.sendMessage(ChatColor.RED + "请放入有效的宝石");
+            player.sendMessage(net.kyori.adventure.text.Component.text("请放入有效的宝石", net.kyori.adventure.text.format.NamedTextColor.RED));
             return;
         }
 
         String gemType = GemParser.getGemType(sourceItem);
         int targetSlot = findAvailableGemSlot(gemType);
         if (targetSlot < 0) {
-            player.sendMessage(ChatColor.RED + "没有可用的匹配宝石孔，该槽位已镶嵌或类型不匹配");
+            player.sendMessage(net.kyori.adventure.text.Component.text("没有可用的匹配宝石孔，该槽位已镶嵌或类型不匹配", net.kyori.adventure.text.format.NamedTextColor.RED));
             return;
         }
 
         insertedGems[targetSlot] = takeSingleItem(sourceInventory, sourceSlot, sourceItem);
         refreshInventory();
-        player.sendMessage(ChatColor.GREEN + "已放入 " + gemType);
+        player.sendMessage(net.kyori.adventure.text.Component.text("已放入 " + gemType, net.kyori.adventure.text.format.NamedTextColor.GREEN));
     }
 
     private int findAvailableGemSlot(String gemType) {
@@ -253,7 +253,7 @@ public class GemInlayGUI implements InventoryHolder {
 
     private void confirmInlay() {
         if (equipmentItem == null) {
-            player.sendMessage(ChatColor.RED + "请先放入装备");
+            player.sendMessage(net.kyori.adventure.text.Component.text("请先放入装备", net.kyori.adventure.text.format.NamedTextColor.RED));
             return;
         }
 
@@ -265,7 +265,7 @@ public class GemInlayGUI implements InventoryHolder {
         Map<String, AttributeValue> totalAttrs = collectAllGemAttributes(allGems);
 
         if (totalAttrs.isEmpty()) {
-            player.sendMessage(ChatColor.RED + "请至少放入一颗宝石");
+            player.sendMessage(net.kyori.adventure.text.Component.text("请至少放入一颗宝石", net.kyori.adventure.text.format.NamedTextColor.RED));
             return;
         }
 
@@ -275,7 +275,7 @@ public class GemInlayGUI implements InventoryHolder {
         giveOrDrop(finalItem);
         clearSession();
         finalized = true;
-        player.sendMessage(ChatColor.GREEN + "宝石镶嵌成功");
+        player.sendMessage(net.kyori.adventure.text.Component.text("宝石镶嵌成功", net.kyori.adventure.text.format.NamedTextColor.GREEN));
         player.closeInventory();
 
         // 触发宝石镶嵌事件（同步触发，让缓存系统响应）
@@ -296,7 +296,7 @@ public class GemInlayGUI implements InventoryHolder {
     private void cancelSession() {
         returnSessionItems();
         finalized = true;
-        player.sendMessage(ChatColor.YELLOW + "已取消镶嵌并返还所有物品");
+        player.sendMessage(net.kyori.adventure.text.Component.text("已取消镶嵌并返还所有物品", net.kyori.adventure.text.format.NamedTextColor.YELLOW));
         player.closeInventory();
     }
 
@@ -316,20 +316,20 @@ public class GemInlayGUI implements InventoryHolder {
 
     private void reworkInlay() {
         if (equipmentItem == null) {
-            player.sendMessage(ChatColor.RED + "请先放入装备");
+            player.sendMessage(net.kyori.adventure.text.Component.text("请先放入装备", net.kyori.adventure.text.format.NamedTextColor.RED));
             return;
         }
 
         ReworkSettings settings = loadReworkSettings();
         if (!settings.enabled) {
-            player.sendMessage(ChatColor.RED + "当前已关闭拆卸镶嵌功能");
+            player.sendMessage(net.kyori.adventure.text.Component.text("当前已关闭拆卸镶嵌功能", net.kyori.adventure.text.format.NamedTextColor.RED));
             return;
         }
 
         List<ItemStack> storedGems = GemParser.getStoredInlaidGems(equipmentItem);
         List<ItemStack> pendingGems = collectCurrentGems();
         if (storedGems.isEmpty() && pendingGems.isEmpty()) {
-            player.sendMessage(ChatColor.RED + "该装备没有可拆卸的镶嵌宝石");
+            player.sendMessage(net.kyori.adventure.text.Component.text("该装备没有可拆卸的镶嵌宝石", net.kyori.adventure.text.format.NamedTextColor.RED));
             return;
         }
 
@@ -365,11 +365,11 @@ public class GemInlayGUI implements InventoryHolder {
             Bukkit.getPluginManager().callEvent(reworkEvent);
             
             if (success) {
-                player.sendMessage(ChatColor.GREEN + "拆卸成功，已返还全部宝石");
+                player.sendMessage(net.kyori.adventure.text.Component.text("拆卸成功，已返还全部宝石", net.kyori.adventure.text.format.NamedTextColor.GREEN));
             } else if (protectedByInsurance) {
-                player.sendMessage(ChatColor.GOLD + "拆卸失败，但保险符生效，已返还全部宝石");
+                player.sendMessage(net.kyori.adventure.text.Component.text("拆卸失败，但保险符生效，已返还全部宝石", net.kyori.adventure.text.format.NamedTextColor.GOLD));
             } else {
-                player.sendMessage(ChatColor.YELLOW + "拆卸失败，但本次未损失宝石");
+                player.sendMessage(net.kyori.adventure.text.Component.text("拆卸失败，但本次未损失宝石", net.kyori.adventure.text.format.NamedTextColor.YELLOW));
             }
             return;
         }
@@ -391,14 +391,14 @@ public class GemInlayGUI implements InventoryHolder {
             equipmentItem = GemParser.clearInlay(equipmentItem);
             Arrays.fill(insertedGems, null);
             refreshInventory();
-            player.sendMessage(ChatColor.RED + "拆卸失败，损毁1颗宝石，其余已返还");
+            player.sendMessage(net.kyori.adventure.text.Component.text("拆卸失败，损毁1颗宝石，其余已返还", net.kyori.adventure.text.format.NamedTextColor.RED));
             return;
         }
 
         equipmentItem = GemParser.clearInlay(equipmentItem);
         Arrays.fill(insertedGems, null);
         refreshInventory();
-        player.sendMessage(ChatColor.RED + "拆卸失败，宝石全部损毁");
+        player.sendMessage(net.kyori.adventure.text.Component.text("拆卸失败，宝石全部损毁", net.kyori.adventure.text.format.NamedTextColor.RED));
     }
 
     /**
@@ -525,7 +525,8 @@ public class GemInlayGUI implements InventoryHolder {
                     List<String> lore = meta.hasLore() && meta.getLore() != null
                             ? new ArrayList<>(meta.getLore())
                             : new ArrayList<>();
-                    lore.add(0, ChatColor.GRAY + "--- 已镶嵌 ---");
+                    lore.add(0, net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(
+                        net.kyori.adventure.text.Component.text("--- 已镶嵌 ---", net.kyori.adventure.text.format.NamedTextColor.GRAY)));
                     meta.setLore(lore);
                     display.setItemMeta(meta);
                 }
@@ -678,18 +679,18 @@ public class GemInlayGUI implements InventoryHolder {
 
     private boolean canAffordRework(ReworkSettings settings) {
         if (player.getLevel() < settings.expLevels) {
-            player.sendMessage(ChatColor.RED + "等级不足，需要 " + settings.expLevels + " 级");
+            player.sendMessage(net.kyori.adventure.text.Component.text("等级不足，需要 " + settings.expLevels + " 级", net.kyori.adventure.text.format.NamedTextColor.RED));
             return false;
         }
         if (settings.costAmount > 0) {
             // 检查MythicMobs物品或原版材料
             if (settings.costMythicMobsItem != null) {
                 if (!hasEnoughMythicMobsItem(settings.costMythicMobsItem, settings.costAmount)) {
-                    player.sendMessage(ChatColor.RED + "材料不足，需要 " + settings.costAmount + "x " + settings.costMythicMobsItem);
+                    player.sendMessage(net.kyori.adventure.text.Component.text("材料不足，需要 " + settings.costAmount + "x " + settings.costMythicMobsItem, net.kyori.adventure.text.format.NamedTextColor.RED));
                     return false;
                 }
             } else if (settings.costItem != null && !hasEnoughMaterial(settings.costItem, settings.costAmount)) {
-                player.sendMessage(ChatColor.RED + "材料不足，需要 " + settings.costAmount + "x " + settings.costItem.name());
+                player.sendMessage(net.kyori.adventure.text.Component.text("材料不足，需要 " + settings.costAmount + "x " + settings.costItem.name(), net.kyori.adventure.text.format.NamedTextColor.RED));
                 return false;
             }
         }
@@ -814,11 +815,11 @@ public class GemInlayGUI implements InventoryHolder {
     private ItemStack createPlaceholder(Material material, String name, String... lore) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
+        meta.setDisplayName(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().deserialize(name).toString());
         if (lore != null && lore.length > 0) {
             List<String> translatedLore = new ArrayList<>();
             for (String line : lore) {
-                translatedLore.add(ChatColor.translateAlternateColorCodes('&', line));
+                translatedLore.add(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().deserialize(line).toString());
             }
             meta.setLore(translatedLore);
         }

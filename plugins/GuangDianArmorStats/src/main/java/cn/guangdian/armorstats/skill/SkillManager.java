@@ -135,7 +135,7 @@ public class SkillManager {
                 .getString("messages.skill_cooldown", "&c技能 %skill% 冷却中,剩余 %time% 秒!")
                 .replace("%skill%", skill.getName())
                 .replace("%time%", String.valueOf(remaining));
-            attacker.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+            attacker.sendMessage(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().deserialize(message));
             return false;
         }
 
@@ -221,7 +221,7 @@ public class SkillManager {
         String message = GuangDianArmorStats.getInstance().getConfig()
             .getString("messages.skill_triggered", "&c技能 %skill% 触发!")
             .replace("%skill%", skill.getName());
-        attacker.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        attacker.sendMessage(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().deserialize(message));
     }
 
     private void applyStatusEffects(LivingEntity target, Skill skill) {

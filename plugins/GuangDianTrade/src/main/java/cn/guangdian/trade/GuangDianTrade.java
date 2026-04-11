@@ -91,7 +91,7 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
         requestTimeout = Math.max(10, Math.min(300, getConfig().getInt("settings.request-timeout", 30)));
         confirmCountdown = Math.max(1, Math.min(60, getConfig().getInt("settings.confirm-countdown", 3)));
         requestCooldownTime = Math.max(0, Math.min(60, getConfig().getInt("settings.request-cooldown", 5)));
-        prefix = ChatColor.translateAlternateColorCodes('&', getConfig().getString("settings.prefix", "§6[§e交易§6] "));
+        prefix = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().serialize(net.kyori.adventure.text.Component.text(getConfig().getString("settings.prefix", "§6[§e交易§6] ")));
     }
 
     private String getMessage(String key, String... replacements) {
@@ -118,7 +118,7 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
         for (int i = 0; i < replacements.length - 1; i += 2) {
             msg = msg.replace("%" + replacements[i] + "%", replacements[i + 1]);
         }
-        return ChatColor.translateAlternateColorCodes('&', msg);
+        return net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().serialize(net.kyori.adventure.text.Component.text(msg));
     }
 
     @EventHandler(priority = EventPriority.HIGH)

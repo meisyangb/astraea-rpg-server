@@ -12,6 +12,7 @@ public class SessionManager {
     private final GuangDianAuth plugin;
     private final Map<UUID, Session> sessions = new ConcurrentHashMap<>();
     private final Map<UUID, Integer> loginAttempts = new ConcurrentHashMap<>();
+    private final Map<UUID, Long> loginTimeoutTasks = new ConcurrentHashMap<>();
 
     public SessionManager(GuangDianAuth plugin) {
         this.plugin = plugin;
@@ -25,9 +26,35 @@ public class SessionManager {
             System.currentTimeMillis()
         );
         sessions.put(player.getUniqueId(), session);
+        
+        startLoginTimeout(player);
+    }
+
+    private void startLoginTimeout(Player player) {
+        int timeoutSeconds = plugin.getAuthConfig().getLoginTimeout();
+        if (timeoutSeconds <= 0) return;
+        
+        long taskId = plugin.getScheduler().runSyncLater(() -> {
+            Session session = sessions.get(player.getUniqueId());
+            if (session != null && !session.isLoggedIn()) {
+                plugin.kickPlayer(player, "登录超时，请重新连接");
+                plugin.getLogger().info("玩家 " + player.getName() + " 登录超时被踢出");
+            }
+            loginTimeoutTasks.remove(player.getUniqueId());
+        }, timeoutSeconds * 20L);
+        
+        loginTimeoutTasks.put(player.getUniqueId(), taskId);
+    }
+
+    public void cancelLoginTimeout(UUID playerId) {
+        Long taskId = loginTimeoutTasks.remove(playerId);
+        if (taskId != null) {
+            plugin.getScheduler().cancelTask(taskId);
+        }
     }
 
     public void removeSession(UUID playerId) {
+        cancelLoginTimeout(playerId);
         sessions.remove(playerId);
         loginAttempts.remove(playerId);
     }
@@ -51,6 +78,7 @@ public class SessionManager {
             if (loggedIn) {
                 session.setLoginTime(System.currentTimeMillis());
                 loginAttempts.remove(playerId);
+                cancelLoginTimeout(playerId);
             }
         }
     }

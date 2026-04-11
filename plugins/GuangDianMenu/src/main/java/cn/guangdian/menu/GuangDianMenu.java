@@ -58,8 +58,6 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
     private org.bukkit.scoreboard.Objective starterKitObjective;
     private final Map<UUID, String> playerMenus = new HashMap<>();
 
-    private ExternalServiceIntegration externalServices;
-    private SyncScheduler scheduler;
     private NamespacedKey menuItemKey;
     private MenuServiceAdapter serviceAdapter;
 
@@ -100,9 +98,6 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
             serviceAdapter = null;
-        }
-        if (scheduler != null) {
-            scheduler.cancelAllTasks();
         }
     }
     
@@ -427,7 +422,9 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
             boolean hasTrigger = false;
             if (lore != null) {
                 for (String loreLine : lore) {
-                    if (ChatColor.stripColor(loreLine).contains(ChatColor.stripColor(loreTrigger))) {
+                    String plainLoreLine = loreLine.replace("§", "");
+                    String plainLoreTrigger = loreTrigger.replace("§", "");
+                    if (plainLoreLine.contains(plainLoreTrigger)) {
                         hasTrigger = true;
                         break;
                     }
@@ -438,7 +435,7 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
             }
         }
 
-        String plainName = ChatColor.stripColor(displayName);
+        String plainName = displayName.replace("§", "");
         if (plainName.contains("菜单") || plainName.contains("Menu") || plainName.contains("menu")) {
             return config.getString("default-menu", "main");
         }
@@ -699,7 +696,7 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
     }
 
     private String color(String text) {
-        return text == null ? "" : ChatColor.translateAlternateColorCodes('&', text);
+        return text == null ? "" : net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().serialize(net.kyori.adventure.text.Component.text(text));
     }
 
     @Override

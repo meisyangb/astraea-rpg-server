@@ -3,17 +3,21 @@ package cn.guangdian.armorstats.adapter;
 import cn.guangdian.armorstats.GuangDianArmorStats;
 import cn.guangdian.armorstats.skill.SkillManager;
 import cn.guangdian.armorstats.manager.StatsManager;
+import cn.guangdian.armorstats.data.AttributeValue;
 import cn.guangdian.armorstats.data.PlayerStats;
+import cn.guangdian.armorstats.parser.LoreParser;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
 import cn.guangdian.rpgcore.event.events.PlayerStatsChangedEvent;
 import cn.guangdian.rpgcore.monitor.OperationTimer;
 import cn.guangdian.rpgcore.monitor.PerformanceMonitor;
+import cn.guangdian.rpgcore.service.api.AttributeParseService;
 import cn.guangdian.rpgcore.service.api.SkillService;
 import cn.guangdian.rpgcore.service.api.StatsService;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -28,7 +32,7 @@ import java.util.logging.Logger;
  * @author GuangDian
  * @since 1.0.0
  */
-public class ArmorStatsServiceAdapter implements StatsService, SkillService {
+public class ArmorStatsServiceAdapter implements StatsService, SkillService, AttributeParseService {
 
     private final GuangDianArmorStats plugin;
     private final boolean useRPGCore;
@@ -50,7 +54,8 @@ public class ArmorStatsServiceAdapter implements StatsService, SkillService {
                 
                 registry.registerService(StatsService.class, this);
                 registry.registerService(SkillService.class, this);
-                logger.info("已注册到 RPGCore: StatsService, SkillService");
+                registry.registerService(AttributeParseService.class, this);
+                logger.info("已注册到 RPGCore: StatsService, SkillService, AttributeParseService");
             } catch (Exception e) {
                 logger.warning("注册到 RPGCore 失败: " + e.getMessage());
             }
@@ -422,6 +427,62 @@ public class ArmorStatsServiceAdapter implements StatsService, SkillService {
         return true;
     }
 
+    // ==================== AttributeParseService 实现 ====================
+
+    @Override
+    public Map<String, Object> parseItemAttributes(ItemStack item) {
+        Map<String, Object> result = new HashMap<>();
+        Map<String, AttributeValue> attrs = LoreParser.parse(item);
+        
+        for (Map.Entry<String, AttributeValue> entry : attrs.entrySet()) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+        
+        return result;
+    }
+
+    @Override
+    public Object createEmptyAttributes() {
+        StatsManager statsManager = plugin.getStatsManager();
+        if (statsManager != null) {
+            return statsManager.createEmptyStats();
+        }
+        return new PlayerStats();
+    }
+
+    @Override
+    public void addAttribute(Object container, String attributeName, Object value) {
+        if (container instanceof PlayerStats && value instanceof AttributeValue) {
+            PlayerStats stats = (PlayerStats) container;
+            AttributeValue attrValue = (AttributeValue) value;
+            Map<String, AttributeValue> map = new HashMap<>();
+            map.put(attributeName, attrValue);
+            stats.addStats(map);
+        }
+    }
+
+    @Override
+    public void mergeAttributes(Object container, Map<String, Object> attributes) {
+        if (container instanceof PlayerStats) {
+            PlayerStats stats = (PlayerStats) container;
+            Map<String, AttributeValue> attrs = new HashMap<>();
+            for (Map.Entry<String, Object> entry : attributes.entrySet()) {
+                if (entry.getValue() instanceof AttributeValue) {
+                    attrs.put(entry.getKey(), (AttributeValue) entry.getValue());
+                }
+            }
+            stats.addStats(attrs);
+        }
+    }
+
+    @Override
+    public void setExternalAccessoryStats(Player player, Object accessoryAttributes) {
+        StatsManager statsManager = plugin.getStatsManager();
+        if (statsManager != null && accessoryAttributes instanceof PlayerStats) {
+            statsManager.setExternalAccessoryStats(player, (PlayerStats) accessoryAttributes);
+        }
+    }
+
     /**
      * 注销服务
      */
@@ -431,7 +492,8 @@ public class ArmorStatsServiceAdapter implements StatsService, SkillService {
                 ServiceRegistry registry = RPGCore.getInstance().getServiceRegistry();
                 registry.unregisterService(StatsService.class);
                 registry.unregisterService(SkillService.class);
-                plugin.getLogger().info("已从 RPGCore 注销: StatsService, SkillService");
+                registry.unregisterService(AttributeParseService.class);
+                plugin.getLogger().info("已从 RPGCore 注销: StatsService, SkillService, AttributeParseService");
             } catch (Exception e) {
                 plugin.getLogger().warning("从 RPGCore 注销失败: " + e.getMessage());
             }

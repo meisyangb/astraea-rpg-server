@@ -1,72 +1,93 @@
 # GuangDianAccessory 饰品配置
-# 定义所有可用的饰品
+# 使用 MythicMobs 物品 + Lore 关键词识别
+#
+# 配置格式:
+#   mythic-id: MythicMobs 物品ID（必填）
+#   slot: 槽位 (BADGE/MEDAL/RELIC)
+#   lore-keyword: Lore 中必须包含的关键词（用于识别，可选）
+#   rarity: 稀有度 (1-5)
+
+#   name: 饰品显示名称（可选）
 
 accessories:
-  # 徽章示例
+  # ==================== 徽章 ====================
+  starter_badge:
+    mythic-id: "StarterBadge"
+    slot: BADGE
+    lore-keyword: "新手徽章"
+    rarity: 1
+
   warrior_badge:
-    name: "战士徽章"
+    mythic-id: "WarriorBadge"
     slot: BADGE
-    material: DIAMOND
+    lore-keyword: "战士徽章"
     rarity: 3
-    description: "勇气的象征，提升战斗能力"
-    attributes:
-      attack: 50.0
-      health: 100.0
-  
-  # 勋章示例
-  guardian_medal:
-    name: "守护勋章"
-    slot: MEDAL
-    material: IRON_INGOT
-    rarity: 2
-    description: "守护者的荣耀，增强防御"
-    attributes:
-      defense: 30.0
-      health: 50.0
-  
-  # 圣物示例
-  ancient_relic:
-    name: "远古圣物"
-    slot: RELIC
-    material: NETHER_STAR
-    rarity: 5
-    description: "传说中的神器，蕴含神秘力量"
-    attributes:
-      attack: 100.0
-      defense: 80.0
-      health: 200.0
-      mana: 150.0
-  
-  # 更多徽章
+
   mage_badge:
-    name: "法师徽章"
+    mythic-id: "MageBadge"
     slot: BADGE
-    material: AMETHYST_SHARD
+    lore-keyword: "法师徽章"
     rarity: 3
-    description: "智慧的象征，提升魔法能力"
-    attributes:
-      mana: 100.0
-      magic_damage: 50.0
-  
-  # 更多勋章
-  hunter_medal:
-    name: "猎人勋章"
+
+  hunter_badge:
+    mythic-id: "HunterBadge"
+    slot: BADGE
+    lore-keyword: "猎人徽章"
+    rarity: 3
+
+  guardian_badge:
+    mythic-id: "GuardianBadge"
+    slot: BADGE
+    lore-keyword: "守护者徽章"
+    rarity: 3
+
+  # ==================== 勋章 ====================
+  warrior_medal:
+    mythic-id: "WarriorMedal"
     slot: MEDAL
-    material: GOLD_INGOT
-    rarity: 2
-    description: "猎人的荣耀，提升敏捷"
-    attributes:
-      attack_speed: 0.2
-      critical_chance: 0.1
-  
-  # 更多圣物
-  dragon_relic:
-    name: "龙族圣物"
-    slot: RELIC
-    material: DRAGON_BREATH
+    lore-keyword: "战神勋章"
+    rarity: 4
+
+  guardian_medal:
+    mythic-id: "GuardianMedal"
+    slot: MEDAL
+    lore-keyword: "守护勋章"
+    rarity: 4
+
+  hunter_medal:
+    mythic-id: "HunterMedal"
+    slot: MEDAL
+    lore-keyword: "猎人勋章"
+    rarity: 4
+  saint_medal:
+    mythic-id: "SaintMedal"
+    slot: MEDAL
+    lore-keyword: "圣者勋章"
+    rarity: 4
+  vip_medal:
+    mythic-id: "VIPMedal"
+    slot: MEDAL
+    lore-keyword: "VIP勋章"
     rarity: 5
-    description: "龙之力量，无与伦比"
-    attributes:
-      attack: 150.0
-      health: 300.0
-      critical_damage: 0.5
+
+  # ==================== 圣物 ====================
+  ancient_relic:
+    mythic-id: "AncientRelic"
+    slot: RELIC
+    lore-keyword: "远古圣物"
+    rarity: 5
+  dragon_relic:
+    mythic-id: "DragonRelic"
+    slot: RELIC
+    lore-keyword: "龙族圣物"
+    rarity: 5
+  angel_relic:
+    mythic-id: "AngelRelic"
+    slot: RELIC
+    lore-keyword: "天使圣物"
+    rarity: 5
+  demon_lord_relic:
+    mythic-id: "DemonLordRelic"
+    slot: RELIC
+    lore-keyword: "魔王圣物"
+    rarity: 5

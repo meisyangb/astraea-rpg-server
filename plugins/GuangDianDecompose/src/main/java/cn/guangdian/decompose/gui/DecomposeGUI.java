@@ -24,10 +24,12 @@ public class DecomposeGUI implements InventoryHolder {
     private final Map<UUID, ItemStack> pendingItems;
     private final Map<UUID, List<ItemStack>> previewRewards;
 
+    private static final int GUI_SIZE = 36;
     private static final int INPUT_SLOT = 13;
-    private static final int PREVIEW_START_SLOT = 28;
-    private static final int DECOMPOSE_BUTTON_SLOT = 49;
-    private static final int CLOSE_BUTTON_SLOT = 53;
+    private static final int PREVIEW_START_SLOT = 19;
+    private static final int PREVIEW_END_SLOT = 25;
+    private static final int DECOMPOSE_BUTTON_SLOT = 31;
+    private static final int CLOSE_BUTTON_SLOT = 35;
 
     public DecomposeGUI(GuangDianDecompose plugin) {
         this.plugin = plugin;
@@ -37,7 +39,7 @@ public class DecomposeGUI implements InventoryHolder {
 
     public void open(Player player) {
         String title = plugin.getConfig().getString("gui-title", "&8装备分解");
-        Inventory gui = Bukkit.createInventory(this, 54, Component.text(title.replace("&", "§")));
+        Inventory gui = Bukkit.createInventory(this, GUI_SIZE, Component.text(title.replace("&", "§")));
 
         fillBackground(gui);
         setupDecomposeButton(gui);
@@ -48,7 +50,7 @@ public class DecomposeGUI implements InventoryHolder {
 
     private void fillBackground(Inventory gui) {
         ItemStack glass = createItem(Material.GRAY_STAINED_GLASS_PANE, " ");
-        for (int i = 0; i < 54; i++) {
+        for (int i = 0; i < GUI_SIZE; i++) {
             if (i != INPUT_SLOT && !isPreviewSlot(i) && i != DECOMPOSE_BUTTON_SLOT && i != CLOSE_BUTTON_SLOT) {
                 gui.setItem(i, glass);
             }
@@ -60,7 +62,7 @@ public class DecomposeGUI implements InventoryHolder {
     }
 
     private boolean isPreviewSlot(int slot) {
-        return slot >= PREVIEW_START_SLOT && slot < PREVIEW_START_SLOT + 9;
+        return slot >= PREVIEW_START_SLOT && slot <= PREVIEW_END_SLOT;
     }
 
     private void setupDecomposeButton(Inventory gui) {
@@ -102,7 +104,7 @@ public class DecomposeGUI implements InventoryHolder {
 
         int slot = PREVIEW_START_SLOT;
         for (DecomposeRule.MaterialReward material : rule.getMaterials()) {
-            if (slot >= PREVIEW_START_SLOT + 9) break;
+            if (slot > PREVIEW_END_SLOT) break;
 
             ItemStack previewItem = createRewardPreview(material);
             if (previewItem != null) {
@@ -135,7 +137,7 @@ public class DecomposeGUI implements InventoryHolder {
 
     private void setPreviewError(Inventory gui, String error) {
         ItemStack errorItem = createItem(Material.RED_STAINED_GLASS_PANE, error);
-        gui.setItem(PREVIEW_START_SLOT + 4, errorItem);
+        gui.setItem(PREVIEW_START_SLOT + 3, errorItem);
 
         ItemStack button = createItem(Material.BARRIER, "&c无法分解", error);
         gui.setItem(DECOMPOSE_BUTTON_SLOT, button);
@@ -143,7 +145,7 @@ public class DecomposeGUI implements InventoryHolder {
 
     private void clearPreview(Player player, Inventory gui) {
         pendingItems.remove(player.getUniqueId());
-        for (int i = PREVIEW_START_SLOT; i < PREVIEW_START_SLOT + 9; i++) {
+        for (int i = PREVIEW_START_SLOT; i <= PREVIEW_END_SLOT; i++) {
             gui.setItem(i, null);
         }
         setupDecomposeButton(gui);
@@ -177,6 +179,10 @@ public class DecomposeGUI implements InventoryHolder {
 
     public boolean isInputSlot(int slot) {
         return slot == INPUT_SLOT;
+    }
+
+    public int getInputSlot() {
+        return INPUT_SLOT;
     }
 
     private ItemStack createItem(Material material, String name, String... lore) {

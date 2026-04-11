@@ -2,22 +2,24 @@ package cn.guangdian.collection.service;
 
 import cn.guangdian.collection.GuangDianCollection;
 import cn.guangdian.collection.api.CollectionService;
-import cn.guangdian.collection.model.CollectionCategory;
-import cn.guangdian.collection.model.CollectionEntry;
-import cn.guangdian.collection.model.CollectionReward;
-import cn.guangdian.collection.model.PlayerCollectionData;
+import cn.guangdian.collection.model.*;
 import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.api.SyncScheduler;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.service.api.PointsService;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,11 +29,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CollectionServiceImpl implements CollectionService {
     
     private final GuangDianCollection plugin;
+    private final Map<String, CollectionSet> sets = new ConcurrentHashMap<>();
     private final Map<String, CollectionCategory> categories = new ConcurrentHashMap<>();
-    private final Map<String, CollectionReward> rewards = new ConcurrentHashMap<>();
     private final Map<UUID, PlayerCollectionData> playerDataCache = new ConcurrentHashMap<>();
     
     private File playerDataFolder;
+    
+    private static final NamespacedKey MYTHIC_TYPE_KEY = new NamespacedKey("mythicmobs", "type");
+    private static final NamespacedKey MYTHIC_OLD_KEY = new NamespacedKey("mythicmobs", "item");
     
     public CollectionServiceImpl(GuangDianCollection plugin) {
         this.plugin = plugin;
@@ -44,60 +49,91 @@ public class CollectionServiceImpl implements CollectionService {
     
     private void loadData() {
         loadCollections();
-        loadRewards();
     }
     
     private void loadCollections() {
+        sets.clear();
         categories.clear();
+        
         File collectionsFile = new File(plugin.getDataFolder(), "collections.yml");
         if (!collectionsFile.exists()) {
             plugin.saveResource("collections.yml", false);
         }
         
         FileConfiguration config = YamlConfiguration.loadConfiguration(collectionsFile);
-        ConfigurationSection categoriesSection = config.getConfigurationSection("categories");
-        if (categoriesSection == null) return;
         
-        for (String categoryId : categoriesSection.getKeys(false)) {
-            ConfigurationSection categorySection = categoriesSection.getConfigurationSection(categoryId);
-            if (categorySection == null) continue;
-            
-            CollectionCategory category = new CollectionCategory(categoryId);
-            category.setName(categorySection.getString("name", categoryId));
-            category.setDescription(categorySection.getString("description", ""));
-            
-            String iconStr = categorySection.getString("icon", "CHEST");
-            try {
-                category.setIcon(org.bukkit.Material.valueOf(iconStr.toUpperCase()));
-            } catch (IllegalArgumentException e) {
-                category.setIcon(org.bukkit.Material.CHEST);
+        ConfigurationSection setsSection = config.getConfigurationSection("sets");
+        if (setsSection != null) {
+            for (String setId : setsSection.getKeys(false)) {
+                ConfigurationSection setSection = setsSection.getConfigurationSection(setId);
+                if (setSection == null) continue;
+                
+                CollectionSet set = new CollectionSet(setId);
+                set.setName(setSection.getString("name", setId));
+                set.setDescription(setSection.getString("description", ""));
+                
+                String iconStr = setSection.getString("icon", "CHEST");
+                try {
+                    set.setIcon(Material.valueOf(iconStr.toUpperCase()));
+                } catch (IllegalArgumentException e) {
+                    set.setIcon(Material.CHEST);
+                }
+                
+                set.setSlot(setSection.getInt("slot", 0));
+                set.setCategoryIds(setSection.getStringList("categories"));
+                
+                sets.put(setId, set);
             }
-            
-            category.setSlot(categorySection.getInt("slot", 0));
-            
-            String typeStr = categorySection.getString("type", "ITEM_COLLECT");
-            category.setType(CollectionCategory.CategoryType.valueOf(typeStr));
-            
-            if (category.getType() == CollectionCategory.CategoryType.MOB_KILL) {
-                loadMobs(category, categorySection);
-            } else {
-                loadItems(category, categorySection);
+        }
+        
+        ConfigurationSection categoriesSection = config.getConfigurationSection("categories");
+        if (categoriesSection != null) {
+            for (String categoryId : categoriesSection.getKeys(false)) {
+                ConfigurationSection catSection = categoriesSection.getConfigurationSection(categoryId);
+                if (catSection == null) continue;
+                
+                CollectionCategory category = new CollectionCategory(categoryId);
+                category.setName(catSection.getString("name", categoryId));
+                category.setDescription(catSection.getString("description", ""));
+                
+                String iconStr = catSection.getString("icon", "CHEST");
+                try {
+                    category.setIcon(Material.valueOf(iconStr.toUpperCase()));
+                } catch (IllegalArgumentException e) {
+                    category.setIcon(Material.CHEST);
+                }
+                
+                category.setSlot(catSection.getInt("slot", 0));
+                
+                String typeStr = catSection.getString("type", "ITEM_COLLECT");
+                category.setType(CollectionCategory.CategoryType.valueOf(typeStr));
+                
+                loadEntries(category, catSection);
+                
+                categories.put(categoryId, category);
             }
-            
-            categories.put(categoryId, category);
+        }
+        
+        for (CollectionSet set : sets.values()) {
+            for (String categoryId : set.getCategoryIds()) {
+                CollectionCategory category = categories.get(categoryId);
+                if (category != null) {
+                    category.setSetId(set.getId());
+                }
+            }
         }
     }
     
-    private void loadItems(CollectionCategory category, ConfigurationSection section) {
-        ConfigurationSection itemsSection = section.getConfigurationSection("items");
-        if (itemsSection == null) return;
+    private void loadEntries(CollectionCategory category, ConfigurationSection section) {
+        ConfigurationSection entriesSection = section.getConfigurationSection("entries");
+        if (entriesSection == null) return;
         
-        for (String entryId : itemsSection.getKeys(false)) {
-            ConfigurationSection itemSection = itemsSection.getConfigurationSection(entryId);
-            if (itemSection == null) continue;
+        for (String entryId : entriesSection.getKeys(false)) {
+            ConfigurationSection entrySection = entriesSection.getConfigurationSection(entryId);
+            if (entrySection == null) continue;
             
             String fullId = category.getId() + "." + entryId;
-            String typeStr = itemSection.getString("type", "VANILLA");
+            String typeStr = entrySection.getString("type", "VANILLA");
             
             CollectionEntry.EntryType entryType = typeStr.equals("MYTHICMOBS") 
                 ? CollectionEntry.EntryType.MYTHICMOBS_ITEM 
@@ -106,110 +142,46 @@ public class CollectionServiceImpl implements CollectionService {
             CollectionEntry entry = new CollectionEntry(
                 fullId, 
                 category.getId(),
-                itemSection.getString("name", entryId),
+                entrySection.getString("name", entryId),
                 entryType,
-                itemSection.getString("hint", "")
+                entrySection.getString("hint", "")
             );
+            
+            entry.setSlot(entrySection.getInt("slot", 0));
             
             if (entryType == CollectionEntry.EntryType.VANILLA_ITEM) {
-                String materialStr = itemSection.getString("material", "STONE");
+                String materialStr = entrySection.getString("material", "STONE");
                 try {
-                    entry.setMaterial(org.bukkit.Material.valueOf(materialStr.toUpperCase()));
+                    entry.setMaterial(Material.valueOf(materialStr.toUpperCase()));
                 } catch (IllegalArgumentException e) {
-                    entry.setMaterial(org.bukkit.Material.STONE);
+                    entry.setMaterial(Material.STONE);
                 }
             } else {
-                entry.setMythicId(itemSection.getString("mythic-id", ""));
+                entry.setMythicId(entrySection.getString("mythic-id", ""));
+            }
+            
+            ConfigurationSection rewardSection = entrySection.getConfigurationSection("reward");
+            if (rewardSection != null) {
+                CollectionEntry.EntryReward reward = new CollectionEntry.EntryReward();
+                reward.setMoney(rewardSection.getDouble("money", 0));
+                reward.setPoints(rewardSection.getLong("points", 0));
+                reward.setCommands(rewardSection.getStringList("commands"));
+                reward.setMessages(rewardSection.getStringList("messages"));
+                entry.setReward(reward);
             }
             
             category.addEntry(entry);
         }
     }
     
-    private void loadMobs(CollectionCategory category, ConfigurationSection section) {
-        ConfigurationSection mobsSection = section.getConfigurationSection("mobs");
-        if (mobsSection == null) return;
-        
-        for (String entryId : mobsSection.getKeys(false)) {
-            ConfigurationSection mobSection = mobsSection.getConfigurationSection(entryId);
-            if (mobSection == null) continue;
-            
-            String fullId = category.getId() + "." + entryId;
-            String typeStr = mobSection.getString("type", "VANILLA");
-            
-            CollectionEntry.EntryType entryType = typeStr.equals("MYTHICMOBS") 
-                ? CollectionEntry.EntryType.MYTHICMOBS_MOB 
-                : CollectionEntry.EntryType.VANILLA_MOB;
-            
-            CollectionEntry entry = new CollectionEntry(
-                fullId,
-                category.getId(),
-                mobSection.getString("name", entryId),
-                entryType,
-                mobSection.getString("hint", "")
-            );
-            
-            entry.setTargetCount(mobSection.getInt("target-count", 1));
-            
-            if (entryType == CollectionEntry.EntryType.VANILLA_MOB) {
-                String entityStr = mobSection.getString("entity", "ZOMBIE");
-                try {
-                    entry.setEntityType(org.bukkit.entity.EntityType.valueOf(entityStr.toUpperCase()));
-                } catch (IllegalArgumentException e) {
-                    entry.setEntityType(org.bukkit.entity.EntityType.ZOMBIE);
-                }
-            } else {
-                entry.setMythicId(mobSection.getString("mythic-id", ""));
-            }
-            
-            category.addEntry(entry);
-        }
+    @Override
+    public Map<String, CollectionSet> getSets() {
+        return Collections.unmodifiableMap(sets);
     }
     
-    private void loadRewards() {
-        rewards.clear();
-        File rewardsFile = new File(plugin.getDataFolder(), "rewards.yml");
-        if (!rewardsFile.exists()) {
-            plugin.saveResource("rewards.yml", false);
-        }
-        
-        FileConfiguration config = YamlConfiguration.loadConfiguration(rewardsFile);
-        ConfigurationSection rewardsSection = config.getConfigurationSection("rewards");
-        if (rewardsSection == null) return;
-        
-        for (String rewardId : rewardsSection.getKeys(false)) {
-            ConfigurationSection rewardSection = rewardsSection.getConfigurationSection(rewardId);
-            if (rewardSection == null) continue;
-            
-            CollectionReward reward = new CollectionReward(rewardId);
-            reward.setName(rewardSection.getString("name", rewardId));
-            reward.setDescription(rewardSection.getString("description", ""));
-            reward.setMoney(rewardSection.getDouble("rewards.money", 0));
-            reward.setPoints(rewardSection.getLong("rewards.points", 0));
-            
-            List<String> commands = rewardSection.getStringList("rewards.commands");
-            for (String cmd : commands) {
-                reward.addCommand(cmd);
-            }
-            
-            List<String> messages = rewardSection.getStringList("rewards.messages");
-            for (String msg : messages) {
-                reward.addMessage(msg);
-            }
-            
-            ConfigurationSection conditionSection = rewardSection.getConfigurationSection("condition");
-            if (conditionSection != null) {
-                CollectionReward.RewardCondition condition = new CollectionReward.RewardCondition();
-                String typeStr = conditionSection.getString("type", "CATEGORY_COMPLETE");
-                condition.setType(CollectionReward.RewardCondition.ConditionType.valueOf(typeStr));
-                condition.setCategory(conditionSection.getString("category", ""));
-                condition.setEntryId(conditionSection.getString("entry-id", ""));
-                condition.setCount(conditionSection.getInt("count", 1));
-                reward.setCondition(condition);
-            }
-            
-            rewards.put(rewardId, reward);
-        }
+    @Override
+    public Optional<CollectionSet> getSet(String setId) {
+        return Optional.ofNullable(sets.get(setId));
     }
     
     @Override
@@ -220,16 +192,6 @@ public class CollectionServiceImpl implements CollectionService {
     @Override
     public Optional<CollectionCategory> getCategory(String categoryId) {
         return Optional.ofNullable(categories.get(categoryId));
-    }
-    
-    @Override
-    public Map<String, CollectionReward> getRewards() {
-        return Collections.unmodifiableMap(rewards);
-    }
-    
-    @Override
-    public Optional<CollectionReward> getReward(String rewardId) {
-        return Optional.ofNullable(rewards.get(rewardId));
     }
     
     @Override
@@ -257,77 +219,110 @@ public class CollectionServiceImpl implements CollectionService {
             String[] parts = entry.split(":");
             if (parts.length >= 2) {
                 data.getCollectedItems().put(parts[0], 
-                    new cn.guangdian.collection.model.CollectedEntry(parts[0], Long.parseLong(parts[1])));
+                    new CollectedEntry(parts[0], Long.parseLong(parts[1])));
             }
         }
         
-        ConfigurationSection killsSection = config.getConfigurationSection("killRecords");
-        if (killsSection != null) {
-            for (String entryId : killsSection.getKeys(false)) {
-                cn.guangdian.collection.model.KillRecord record = 
-                    new cn.guangdian.collection.model.KillRecord(entryId);
-                record.setKillCount(killsSection.getInt(entryId, 0));
-                data.getKillRecords().put(entryId, record);
-            }
-        }
-        
-        data.getClaimedRewards().addAll(config.getStringList("claimedRewards"));
         data.setDirty(false);
         
         return data;
     }
     
     @Override
-    public boolean collectItem(Player player, String categoryId, String entryId) {
-        CollectionCategory category = categories.get(categoryId);
-        if (category == null) return false;
+    public boolean submitItem(Player player, CollectionEntry entry, ItemStack item) {
+        if (item == null || item.getType() == Material.AIR) return false;
         
-        CollectionEntry entry = category.getEntry(entryId);
-        if (entry == null) return false;
-        
-        return collectItem(player, entry);
-    }
-    
-    @Override
-    public boolean collectItem(Player player, CollectionEntry entry) {
         PlayerCollectionData data = getPlayerData(player);
         
         if (data.hasCollected(entry.getId())) {
+            player.sendMessage(net.kyori.adventure.text.Component.text(plugin.getConfigManager().getPrefix() + "该物品已收集！", net.kyori.adventure.text.format.NamedTextColor.RED));
             return false;
         }
         
-        boolean collected = data.collectItem(entry.getId());
-        
-        if (collected && plugin.getConfigManager().isNotifyPlayer()) {
-            notifyPlayer(player, entry);
-            checkAndNotifyRewards(player);
+        if (!matchesEntry(entry, item)) {
+            player.sendMessage(net.kyori.adventure.text.Component.text(plugin.getConfigManager().getPrefix() + "物品不匹配！需要: " + entry.getName(), net.kyori.adventure.text.format.NamedTextColor.RED));
+            return false;
         }
         
-        return collected;
+        item.setAmount(item.getAmount() - 1);
+        
+        data.collectItem(entry.getId());
+        
+        if (entry.getReward() != null) {
+            giveReward(player, entry.getReward());
+        }
+        
+        notifyPlayer(player, entry);
+        
+        return true;
     }
     
     @Override
-    public int addKill(Player player, String categoryId, String entryId) {
-        CollectionCategory category = categories.get(categoryId);
-        if (category == null) return 0;
+    public boolean matchesEntry(CollectionEntry entry, ItemStack item) {
+        if (item == null || item.getType() == Material.AIR) return false;
         
-        CollectionEntry entry = category.getEntry(entryId);
-        if (entry == null) return 0;
-        
-        return addKill(player, entry);
+        switch (entry.getType()) {
+            case VANILLA_ITEM:
+                return matchesVanillaItem(entry, item);
+            case MYTHICMOBS_ITEM:
+                return matchesMythicMobsItem(entry, item);
+            default:
+                return false;
+        }
     }
     
-    @Override
-    public int addKill(Player player, CollectionEntry entry) {
-        PlayerCollectionData data = getPlayerData(player);
-        int newCount = data.addKill(entry.getId());
+    private boolean matchesVanillaItem(CollectionEntry entry, ItemStack item) {
+        if (entry.getMaterial() == null) return false;
+        return entry.getMaterial() == item.getType();
+    }
+    
+    private boolean matchesMythicMobsItem(CollectionEntry entry, ItemStack item) {
+        if (entry.getMythicId() == null || entry.getMythicId().isEmpty()) return false;
         
-        if (newCount == entry.getTargetCount() && plugin.getConfigManager().isNotifyPlayer()) {
-            notifyKillTargetMet(player, entry, newCount);
-            checkAndNotifyRewards(player);
+        String mythicId = getMythicMobsId(item);
+        if (mythicId == null) return false;
+        
+        return mythicId.equals(entry.getMythicId());
+    }
+    
+    private String getMythicMobsId(ItemStack item) {
+        if (item == null || !item.hasItemMeta()) return null;
+        
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        
+        String typeId = pdc.get(MYTHIC_TYPE_KEY, PersistentDataType.STRING);
+        if (typeId != null) return typeId;
+        
+        return pdc.get(MYTHIC_OLD_KEY, PersistentDataType.STRING);
+    }
+    
+    private void giveReward(Player player, CollectionEntry.EntryReward reward) {
+        RPGCore rpgCore = RPGCore.getInstance();
+        
+        if (reward.getMoney() > 0 && rpgCore != null) {
+            ExternalServiceIntegration externalServices = rpgCore.getExternalServices();
+            if (externalServices != null && externalServices.isVaultEnabled()) {
+                externalServices.deposit(player, reward.getMoney());
+            }
         }
         
-        return newCount;
+        if (reward.getPoints() > 0 && rpgCore != null) {
+            cn.guangdian.rpgcore.api.ServiceRegistry registry = rpgCore.getServiceRegistry();
+            PointsService pointsService = registry.getService(PointsService.class);
+            if (pointsService != null) {
+                pointsService.addBalance(player.getUniqueId(), reward.getPoints(), "图鉴收集奖励");
+            }
+        }
+        
+        for (String cmd : reward.getCommands()) {
+            String parsedCmd = cmd.replace("{player}", player.getName());
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parsedCmd);
+        }
+        
+        for (String msg : reward.getMessages()) {
+            player.sendMessage(Component.text(msg.replace("{player}", player.getName())));
+        }
     }
     
     private void notifyPlayer(Player player, CollectionEntry entry) {
@@ -343,7 +338,7 @@ public class CollectionServiceImpl implements CollectionService {
         player.sendMessage(Component.text(plugin.getConfigManager().getPrefix() + message));
         
         try {
-            org.bukkit.NamespacedKey soundKey = org.bukkit.NamespacedKey.minecraft(
+            NamespacedKey soundKey = NamespacedKey.minecraft(
                 plugin.getConfigManager().getNotifySound().toLowerCase().replace("minecraft:", ""));
             Sound sound = org.bukkit.Registry.SOUNDS.get(soundKey);
             if (sound != null) {
@@ -358,23 +353,6 @@ public class CollectionServiceImpl implements CollectionService {
                 .replace("{category}", category.getName());
             player.sendMessage(Component.text(plugin.getConfigManager().getPrefix() + completeMsg)
                 .color(NamedTextColor.GOLD));
-        }
-    }
-    
-    private void notifyKillTargetMet(Player player, CollectionEntry entry, int count) {
-        String message = plugin.getConfigManager().getMessage("mob-killed")
-            .replace("{mob}", entry.getName())
-            .replace("{current}", String.valueOf(count))
-            .replace("{total}", String.valueOf(entry.getTargetCount()));
-        
-        player.sendMessage(Component.text(plugin.getConfigManager().getPrefix() + message));
-    }
-    
-    private void checkAndNotifyRewards(Player player) {
-        List<CollectionReward> available = getAvailableRewards(player);
-        if (!available.isEmpty()) {
-            String message = plugin.getConfigManager().getMessage("reward-available");
-            player.sendMessage(Component.text(plugin.getConfigManager().getPrefix() + message));
         }
     }
     
@@ -395,104 +373,8 @@ public class CollectionServiceImpl implements CollectionService {
     }
     
     @Override
-    public List<CollectionReward> getAvailableRewards(Player player) {
-        List<CollectionReward> available = new ArrayList<>();
-        PlayerCollectionData data = getPlayerData(player);
-        
-        for (CollectionReward reward : rewards.values()) {
-            if (data.hasClaimedReward(reward.getId())) continue;
-            if (checkRewardCondition(player, reward)) {
-                available.add(reward);
-            }
-        }
-        
-        return available;
-    }
-    
-    private boolean checkRewardCondition(Player player, CollectionReward reward) {
-        CollectionReward.RewardCondition condition = reward.getCondition();
-        if (condition == null) return false;
-        
-        PlayerCollectionData data = getPlayerData(player);
-        
-        switch (condition.getType()) {
-            case CATEGORY_COMPLETE:
-                return isCategoryComplete(player, condition.getCategory());
-            case ITEM_COUNT:
-                return data.getTotalItemsCollected() >= condition.getCount();
-            case KILL_COUNT:
-                return data.getTotalKills() >= condition.getCount();
-            case ITEM_COLLECT:
-                return data.hasCollected(condition.getEntryId());
-            case KILL_TARGET:
-                CollectionCategory category = categories.get(condition.getCategory());
-                if (category != null) {
-                    CollectionEntry entry = category.getEntry(condition.getEntryId());
-                    if (entry != null) {
-                        return data.isKillTargetMet(entry.getId(), entry.getTargetCount());
-                    }
-                }
-                return false;
-            default:
-                return false;
-        }
-    }
-    
-    @Override
-    public boolean claimReward(Player player, String rewardId) {
-        CollectionReward reward = rewards.get(rewardId);
-        if (reward == null) return false;
-        
-        PlayerCollectionData data = getPlayerData(player);
-        if (data.hasClaimedReward(rewardId)) return false;
-        if (!checkRewardCondition(player, reward)) return false;
-        
-        data.claimReward(rewardId);
-        giveReward(player, reward);
-        
-        return true;
-    }
-    
-    private void giveReward(Player player, CollectionReward reward) {
-        RPGCore rpgCore = RPGCore.getInstance();
-        
-        if (reward.getMoney() > 0 && rpgCore != null) {
-            ExternalServiceIntegration externalServices = rpgCore.getExternalServices();
-            if (externalServices != null && externalServices.isVaultEnabled()) {
-                externalServices.deposit(player, reward.getMoney());
-            }
-        }
-        
-        if (reward.getPoints() > 0 && rpgCore != null) {
-            cn.guangdian.rpgcore.api.ServiceRegistry registry = rpgCore.getServiceRegistry();
-            PointsService pointsService = registry.getService(PointsService.class);
-            if (pointsService != null) {
-                pointsService.addBalance(player.getUniqueId(), reward.getPoints(), "图鉴奖励: " + reward.getName());
-            }
-        }
-        
-        for (String cmd : reward.getCommands()) {
-            String parsedCmd = cmd.replace("{player}", player.getName());
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parsedCmd);
-        }
-        
-        for (String msg : reward.getMessages()) {
-            player.sendMessage(Component.text(msg.replace("{player}", player.getName())));
-        }
-        
-        String message = plugin.getConfigManager().getMessage("reward-claimed")
-            .replace("{reward}", reward.getName());
-        player.sendMessage(Component.text(plugin.getConfigManager().getPrefix() + message));
-    }
-    
-    @Override
     public int getTotalItemsCollected(UUID playerId) {
         return getPlayerData(playerId).getTotalItemsCollected();
-    }
-    
-    @Override
-    public int getTotalKills(UUID playerId) {
-        return getPlayerData(playerId).getTotalKills();
     }
     
     @Override
@@ -504,16 +386,10 @@ public class CollectionServiceImpl implements CollectionService {
         FileConfiguration config = new YamlConfiguration();
         
         List<String> collectedItems = new ArrayList<>();
-        for (cn.guangdian.collection.model.CollectedEntry entry : data.getCollectedItems().values()) {
+        for (CollectedEntry entry : data.getCollectedItems().values()) {
             collectedItems.add(entry.getEntryId() + ":" + entry.getCollectedAt());
         }
         config.set("collectedItems", collectedItems);
-        
-        for (cn.guangdian.collection.model.KillRecord record : data.getKillRecords().values()) {
-            config.set("killRecords." + record.getEntryId(), record.getKillCount());
-        }
-        
-        config.set("claimedRewards", data.getClaimedRewards());
         
         try {
             config.save(file);

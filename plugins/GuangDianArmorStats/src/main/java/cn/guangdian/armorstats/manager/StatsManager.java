@@ -1122,6 +1122,43 @@ public class StatsManager {
         // 移除登录加载标记
         loadedPlayers.remove(uuid);
     }
+    
+    /**
+     * 设置外部配饰属性（由 GuangDianAccessory 调用）
+     * 用于支持独立的配饰槽位系统
+     * 
+     * @param player 玩家
+     * @param accessoryStats 配饰属性
+     */
+    public void setExternalAccessoryStats(Player player, PlayerStats accessoryStats) {
+        UUID uuid = player.getUniqueId();
+        
+        try {
+            lockManager.executeWithLock(uuid, () -> {
+                double savedHealth = player.getHealth();
+                double savedMaxHealth = player.getAttribute(Attribute.MAX_HEALTH).getValue();
+                
+                if (accessoryStats != null) {
+                    accessoryStatsCache.put(uuid, accessoryStats);
+                } else {
+                    accessoryStatsCache.remove(uuid);
+                }
+                
+                PlayerStats stats = mergeStats(uuid);
+                applyMaxHealth(player, stats, savedHealth, savedMaxHealth);
+                applyMoveSpeed(player, stats);
+            });
+        } catch (LockTimeoutException e) {
+            plugin.getLogger().warning("设置外部配饰属性超时: " + player.getName());
+        }
+    }
+    
+    /**
+     * 获取空的 PlayerStats 对象（用于外部插件构建属性）
+     */
+    public PlayerStats createEmptyStats() {
+        return new PlayerStats();
+    }
 
     public double calculateDamageReduction(double defense) {
         if (defenseDivisor <= 0) return 0;

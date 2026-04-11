@@ -1,113 +1,256 @@
-categories:
+sets:
   weapons:
-    name: "§c武器图鉴"
-    description: "收集各类武器"
+    name: "§c武器图鉴集"
+    description: "收集各类武器装备"
     icon: DIAMOND_SWORD
     slot: 10
-    items:
+    categories:
+      - swords
+      - axes
+      
+  armor:
+    name: "§9护甲图鉴集"
+    description: "收集各类护甲装备"
+    icon: DIAMOND_CHESTPLATE
+    slot: 12
+    categories:
+      - helmets
+      - chestplates
+      
+  materials:
+    name: "§e材料图鉴集"
+    description: "收集各种珍稀材料"
+    icon: CHEST
+    slot: 14
+    categories:
+      - gems
+      - rare_materials
+
+categories:
+  swords:
+    name: "§c剑类武器"
+    description: "收集各类剑"
+    icon: DIAMOND_SWORD
+    slot: 10
+    type: ITEM_COLLECT
+    entries:
       wooden_sword:
         name: "§f木剑"
         type: VANILLA
         material: WOODEN_SWORD
+        slot: 0
         hint: "最基础的武器"
+        reward:
+          money: 100
+          points: 10
+          messages:
+            - "§a恭喜收集到第一把剑！"
+            
       stone_sword:
         name: "§7石剑"
         type: VANILLA
         material: STONE_SWORD
+        slot: 1
         hint: "比木剑更强"
+        reward:
+          money: 200
+          points: 20
+          
       iron_sword:
         name: "§f铁剑"
         type: VANILLA
         material: IRON_SWORD
+        slot: 2
         hint: "常见的武器"
+        reward:
+          money: 500
+          points: 50
+          
       diamond_sword:
         name: "§b钻石剑"
         type: VANILLA
         material: DIAMOND_SWORD
+        slot: 3
         hint: "稀有的宝石武器"
+        reward:
+          money: 2000
+          points: 200
+          commands:
+            - "give {player} experience_bottle 5"
+            
       netherite_sword:
         name: "§5下界合金剑"
         type: VANILLA
         material: NETHERITE_SWORD
+        slot: 4
         hint: "最强大的剑"
+        reward:
+          money: 10000
+          points: 1000
+          commands:
+            - "give {player} diamond 10"
+          messages:
+            - "§6恭喜收集到最强大的剑！"
+            
       mythic_blade:
         name: "§d神话之刃"
         type: MYTHICMOBS
         mythic-id: "MythicBlade"
+        slot: 5
         hint: "传说中的武器"
-
-  armor:
-    name: "§9护甲图鉴"
-    description: "收集各类护甲"
-    icon: DIAMOND_CHESTPLATE
-    slot: 12
-    items:
+        reward:
+          money: 50000
+          points: 5000
+          commands:
+            - "give {player} nether_star 5"
+          messages:
+            - "§d恭喜收集到传说中的神话之刃！"
+            
+  axes:
+    name: "§c斧类武器"
+    description: "收集各类斧"
+    icon: DIAMOND_AXE
+    slot: 11
+    type: ITEM_COLLECT
+    entries:
+      wooden_axe:
+        name: "§f木斧"
+        type: VANILLA
+        material: WOODEN_AXE
+        slot: 0
+        hint: "基础工具"
+        reward:
+          money: 100
+          points: 10
+          
+      diamond_axe:
+        name: "§b钻石斧"
+        type: VANILLA
+        material: DIAMOND_AXE
+        slot: 1
+        hint: "强力工具"
+        reward:
+          money: 2000
+          points: 200
+          
+  helmets:
+    name: "§9头盔类"
+    description: "收集各类头盔"
+    icon: DIAMOND_HELMET
+    slot: 10
+    type: ITEM_COLLECT
+    entries:
       leather_helmet:
         name: "§6皮革帽子"
         type: VANILLA
         material: LEATHER_HELMET
+        slot: 0
         hint: "基础防具"
+        reward:
+          money: 100
+          points: 10
+          
+      diamond_helmet:
+        name: "§b钻石头盔"
+        type: VANILLA
+        material: DIAMOND_HELMET
+        slot: 1
+        hint: "强力防具"
+        reward:
+          money: 3000
+          points: 300
+          
+  chestplates:
+    name: "§9胸甲类"
+    description: "收集各类胸甲"
+    icon: DIAMOND_CHESTPLATE
+    slot: 11
+    type: ITEM_COLLECT
+    entries:
       iron_chestplate:
         name: "§f铁胸甲"
         type: VANILLA
         material: IRON_CHESTPLATE
+        slot: 0
         hint: "常见的护甲"
-      diamond_boots:
-        name: "§b钻石靴子"
+        reward:
+          money: 1000
+          points: 100
+          
+      diamond_chestplate:
+        name: "§b钻石胸甲"
         type: VANILLA
-        material: DIAMOND_BOOTS
-        hint: "闪亮的靴子"
-
-  materials:
-    name: "§e材料图鉴"
-    description: "收集各种材料"
-    icon: CHEST
-    slot: 14
-    items:
+        material: DIAMOND_CHESTPLATE
+        slot: 1
+        hint: "强力护甲"
+        reward:
+          money: 5000
+          points: 500
+          
+  gems:
+    name: "§e宝石类"
+    description: "收集珍稀宝石"
+    icon: DIAMOND
+    slot: 10
+    type: ITEM_COLLECT
+    entries:
       diamond:
         name: "§b钻石"
         type: VANILLA
         material: DIAMOND
+        slot: 0
         hint: "珍贵的宝石"
+        reward:
+          money: 500
+          points: 50
+          
       emerald:
         name: "§a绿宝石"
         type: VANILLA
         material: EMERALD
+        slot: 1
         hint: "交易货币"
+        reward:
+          money: 600
+          points: 60
+          
       nether_star:
         name: "§e下界之星"
         type: VANILLA
         material: NETHER_STAR
+        slot: 2
         hint: "Boss掉落"
-
-  mobs:
-    name: "§4怪物图鉴"
-    description: "击杀各类怪物"
-    icon: ZOMBIE_HEAD
-    slot: 16
-    type: MOB_KILL
-    mobs:
-      zombie:
-        name: "§2僵尸"
+        reward:
+          money: 5000
+          points: 500
+          commands:
+            - "give {player} experience_bottle 10"
+          messages:
+            - "§e恭喜收集到稀有的下界之星！"
+          
+  rare_materials:
+    name: "§e稀有材料"
+    description: "收集稀有材料"
+    icon: NETHERITE_INGOT
+    slot: 11
+    type: ITEM_COLLECT
+    entries:
+      netherite_ingot:
+        name: "§5下界合金锭"
         type: VANILLA
-        entity: ZOMBIE
-        target-count: 100
-        hint: "常见的亡灵"
-      skeleton:
-        name: "§7骷髅"
+        material: NETHERITE_INGOT
+        slot: 0
+        hint: "最珍贵的材料"
+        reward:
+          money: 10000
+          points: 1000
+          
+      ancient_debris:
+        name: "§7远古残骸"
         type: VANILLA
-        entity: SKELETON
-        target-count: 100
-        hint: "弓箭手亡灵"
-      ender_dragon:
-        name: "§5末影龙"
-        type: VANILLA
-        entity: ENDER_DRAGON
-        target-count: 1
-        hint: "末地的Boss"
-      mythic_boss:
-        name: "§c神话Boss"
-        type: MYTHICMOBS
-        mythic-id: "MythicBoss"
-        target-count: 10
-        hint: "传说中的Boss"
+        material: ANCIENT_DEBRIS
+        slot: 1
+        hint: "下界的宝藏"
+        reward:
+          money: 8000
+          points: 800

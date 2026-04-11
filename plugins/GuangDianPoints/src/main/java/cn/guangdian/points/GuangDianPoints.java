@@ -269,13 +269,19 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
     private void startTasks() {
         long saveInterval = config.getLong("settings.auto-save-interval-minutes", 5) * 60 * 20L;
 
-        getServer().getScheduler().runTaskTimer(this, this::saveData, saveInterval, saveInterval);
+        if (scheduler != null) {
+            scheduler.runSyncRepeating(this::saveData, saveInterval, saveInterval);
+        } else {
+            getServer().getScheduler().runTaskTimer(this, this::saveData, saveInterval, saveInterval);
+        }
 
         if (transactionLogger != null) {
             long retentionDays = config.getLong("optimization.transaction-log.retention-days", 30);
-            cn.guangdian.rpgcore.integration.UnifiedScheduler.runAsyncTimer(this, () -> {
-                transactionLogger.cleanupOldLogs(retentionDays);
-            }, 20L * 60 * 60 * 24, 20L * 60 * 60 * 24);
+            if (scheduler != null) {
+                scheduler.runAsyncRepeating(() -> {
+                    transactionLogger.cleanupOldLogs(retentionDays);
+                }, 20L * 60 * 60 * 24, 20L * 60 * 60 * 24);
+            }
         }
     }
 

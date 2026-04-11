@@ -11,6 +11,8 @@ import org.bukkit.Bukkit;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import net.luckperms.api.context.ImmutableContextSet;
 
 public class LuckPermsHook {
     private final String worldName;
@@ -45,18 +47,18 @@ public class LuckPermsHook {
     }
 
     private void setup() {
-        if (Bukkit.getPluginManager().getPlugin("RPGCore") == null) {
-            return;
-        }
-
         try {
             RPGCore rpgCore = RPGCore.getInstance();
+            if (rpgCore == null) {
+                return;
+            }
             ExternalServiceIntegration externalServices = rpgCore.getExternalServices();
             if (externalServices != null) {
                 luckPerms = externalServices.getLuckPerms().orElse(null);
                 enabled = luckPerms != null;
             }
         } catch (Exception e) {
+            Bukkit.getLogger().warning("[洞府] LuckPerms 初始化失败: " + e.getMessage());
         }
     }
 
@@ -104,16 +106,28 @@ public class LuckPermsHook {
             Group defaultGroup = luckPerms.getGroupManager().getGroup("default");
             if (defaultGroup == null) return false;
 
-            for (var entry : defaultGroup.data().toMap().entrySet()) {
-                var nodeList = entry.getValue();
-                for (Node node : nodeList) {
-                    if (node.getContexts().contains("world", worldName)) {
-                        return true;
+            for (String permission : CAVE_WORLD_PERMISSIONS) {
+                boolean hasPermission = false;
+                for (Map.Entry<ImmutableContextSet, Collection<Node>> entry : defaultGroup.data().toMap().entrySet()) {
+                    Collection<Node> nodeList = entry.getValue();
+                    for (Node node : nodeList) {
+                        if (node instanceof PermissionNode && node.getContexts().contains("world", worldName)) {
+                            PermissionNode permNode = (PermissionNode) node;
+                            if (permNode.getPermission().equals(permission) && permNode.getValue()) {
+                                hasPermission = true;
+                                break;
+                            }
+                        }
                     }
+                    if (hasPermission) break;
+                }
+                if (!hasPermission) {
+                    return false;
                 }
             }
-            return false;
+            return true;
         } catch (Exception e) {
+            Bukkit.getLogger().warning("[洞府] 检查权限配置失败: " + e.getMessage());
             return false;
         }
     }

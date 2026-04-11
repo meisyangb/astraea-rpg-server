@@ -1,7 +1,7 @@
 package cn.guangdian.rpgcore.service.api;
 
-import cn.guangdian.bank.data.Loan;
-import cn.guangdian.bank.data.TransactionRecord;
+import cn.guangdian.rpgcore.service.data.Loan;
+import cn.guangdian.rpgcore.service.data.TransactionRecord;
 
 import java.util.List;
 import java.util.Optional;

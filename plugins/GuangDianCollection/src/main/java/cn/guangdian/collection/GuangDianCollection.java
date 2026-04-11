@@ -4,8 +4,7 @@ import cn.guangdian.collection.api.CollectionService;
 import cn.guangdian.collection.command.CollectionCommand;
 import cn.guangdian.collection.config.ConfigManager;
 import cn.guangdian.collection.data.CollectionDataHandler;
-import cn.guangdian.collection.listener.ItemCollectListener;
-import cn.guangdian.collection.listener.MobKillListener;
+import cn.guangdian.collection.gui.CollectionGUIListener;
 import cn.guangdian.collection.papi.CollectionPlaceholder;
 import cn.guangdian.collection.service.CollectionServiceImpl;
 import cn.guangdian.rpgcore.RPGCore;
@@ -18,13 +17,13 @@ public class GuangDianCollection extends AbstractRPGPlugin {
     private CollectionService collectionService;
     private CollectionDataHandler dataHandler;
     private CollectionPlaceholder placeholder;
+    private CollectionGUIListener guiListener;
     private long autoSaveTaskId = -1;
     
     @Override
     protected void onPluginEnable() {
         saveDefaultConfig();
         saveResource("collections.yml", false);
-        saveResource("rewards.yml", false);
         
         configManager = new ConfigManager(this);
         collectionService = new CollectionServiceImpl(this);
@@ -55,7 +54,6 @@ public class GuangDianCollection extends AbstractRPGPlugin {
         }
         
         if (placeholder != null) {
-            org.bukkit.Bukkit.getPluginManager().getPlugin("PlaceholderAPI");
             me.clip.placeholderapi.PlaceholderAPI.unregisterExpansion(placeholder);
         }
         
@@ -68,16 +66,14 @@ public class GuangDianCollection extends AbstractRPGPlugin {
     }
     
     private void registerListeners() {
-        getServer().getPluginManager().registerEvents(
-            new ItemCollectListener(this, collectionService), this);
-        getServer().getPluginManager().registerEvents(
-            new MobKillListener(this, collectionService), this);
+        guiListener = new CollectionGUIListener(this, collectionService);
+        getServer().getPluginManager().registerEvents(guiListener, this);
     }
     
     private void registerCommands() {
         PluginCommand cmd = getCommand("collection");
         if (cmd != null) {
-            CollectionCommand command = new CollectionCommand(this, collectionService);
+            CollectionCommand command = new CollectionCommand(this, collectionService, guiListener);
             cmd.setExecutor(command);
             cmd.setTabCompleter(command);
         }
@@ -106,5 +102,9 @@ public class GuangDianCollection extends AbstractRPGPlugin {
     
     public CollectionService getCollectionService() {
         return collectionService;
+    }
+    
+    public CollectionGUIListener getGuiListener() {
+        return guiListener;
     }
 }

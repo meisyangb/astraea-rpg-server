@@ -4,9 +4,9 @@ import cn.guangdian.armorstats.GuangDianArmorStats;
 import cn.guangdian.armorstats.data.PlayerStats;
 import cn.guangdian.armorstats.manager.BossBarManager;
 import cn.guangdian.armorstats.manager.StatsManager;
+import cn.guangdian.rpgcore.RPGCore;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Map;
 import java.util.Set;
@@ -34,7 +34,7 @@ public class RegenTask implements Runnable {
     private final Map<UUID, Long> lastDamageTimes = new ConcurrentHashMap<>();
     private final Set<UUID> playersWithRegen = ConcurrentHashMap.newKeySet();
     private final Map<UUID, Double> lastHealthValues = new ConcurrentHashMap<>();
-    private BukkitTask task;
+    private long taskId = -1;
     private long intervalTicks;
     private boolean combatRegenEnabled;
     private double combatMultiplier;
@@ -57,13 +57,23 @@ public class RegenTask implements Runnable {
 
     public void start() {
         stop();
-        task = plugin.getServer().getScheduler().runTaskTimer(plugin, this, intervalTicks, intervalTicks);
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            taskId = rpgCore.getScheduler().runSyncRepeating(this, intervalTicks, intervalTicks);
+        } else {
+            taskId = plugin.getServer().getScheduler().runTaskTimer(plugin, this, intervalTicks, intervalTicks).getTaskId();
+        }
     }
 
     public void stop() {
-        if (task != null) {
-            task.cancel();
-            task = null;
+        if (taskId != -1) {
+            RPGCore rpgCore = RPGCore.getInstance();
+            if (rpgCore != null) {
+                rpgCore.getScheduler().cancelTask(taskId);
+            } else {
+                plugin.getServer().getScheduler().cancelTask((int) taskId);
+            }
+            taskId = -1;
         }
     }
 

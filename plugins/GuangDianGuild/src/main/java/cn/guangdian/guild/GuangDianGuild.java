@@ -2,6 +2,9 @@ package cn.guangdian.guild;
 
 import cn.guangdian.guild.adapter.GuildServiceAdapter;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,12 +12,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
-import me.clip.placeholderapi.PlaceholderAPI;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,6 +29,7 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
     private Map<String, GuildInvite> pendingInvites;
     
     private GuildServiceAdapter serviceAdapter;
+    private static final LegacyComponentSerializer SERIALIZER = LegacyComponentSerializer.legacyAmpersand();
 
     @Override
     protected void onPluginEnable() {
@@ -47,7 +49,6 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
             getLogger().info("已注册PlaceholderAPI扩展!");
         }
         
-        // 注册 RPGCore 服务适配器
         serviceAdapter = new GuildServiceAdapter(this);
         if (serviceAdapter.isUsingRPGCore()) {
             getLogger().info("已集成 RPGCore 服务系统!");
@@ -252,20 +253,22 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
         return guilds.size();
     }
 
-    public String getMsg(String key) {
+    public Component getMsg(String key) {
         String prefix = config.getString("messages.prefix", "&6[工会] &f");
         String msg = config.getString("messages." + key, "");
-        return ChatColor.translateAlternateColorCodes('&', prefix + msg);
+        return SERIALIZER.deserialize(prefix + msg);
     }
 
-    public String getMsg(String key, String... placeholders) {
-        String msg = getMsg(key);
+    public Component getMsg(String key, String... placeholders) {
+        String prefix = config.getString("messages.prefix", "&6[工会] &f");
+        String msg = config.getString("messages." + key, "");
+        String fullMsg = prefix + msg;
         for (int i = 0; i < placeholders.length; i += 2) {
             if (i + 1 < placeholders.length) {
-                msg = msg.replace("{" + placeholders[i] + "}", placeholders[i + 1]);
+                fullMsg = fullMsg.replace("{" + placeholders[i] + "}", placeholders[i + 1]);
             }
         }
-        return msg;
+        return SERIALIZER.deserialize(fullMsg);
     }
 
     @Override
@@ -302,7 +305,7 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
         if (!(sender instanceof Player)) { sender.sendMessage(getMsg("player-only")); return true; }
         Player p = (Player) sender;
         if (!p.hasPermission("guangdian.guild.create")) { p.sendMessage(getMsg("no-permission")); return true; }
-        if (args.length < 2) { p.sendMessage(ChatColor.RED + "用法: /guild create <名称>"); return true; }
+        if (args.length < 2) { p.sendMessage(Component.text("用法: /guild create <名称>").color(NamedTextColor.RED)); return true; }
         String name = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         int min = config.getInt("settings.min-name-length", 2);
         int max = config.getInt("settings.max-name-length", 10);
@@ -332,12 +335,12 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
     private boolean handleJoin(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) { sender.sendMessage(getMsg("player-only")); return true; }
         Player p = (Player) sender;
-        if (args.length < 2) { p.sendMessage(ChatColor.RED + "用法: /guild join <名称>"); return true; }
+        if (args.length < 2) { p.sendMessage(Component.text("用法: /guild join <名称>").color(NamedTextColor.RED)); return true; }
         String name = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         if (isInGuild(p.getName())) { p.sendMessage(getMsg("already-in-guild")); return true; }
         Guild guild = getGuild(name);
         if (guild == null) { p.sendMessage(getMsg("guild-not-found")); return true; }
-        if (!guild.invites.contains(p.getName())) { p.sendMessage(ChatColor.RED + "你没有被邀请加入这个工会!"); return true; }
+        if (!guild.invites.contains(p.getName())) { p.sendMessage(Component.text("你没有被邀请加入这个工会!").color(NamedTextColor.RED)); return true; }
         if (joinGuild(name, p)) p.sendMessage(getMsg("guild-joined", "guild", name));
         else p.sendMessage(getMsg("max-members-reached"));
         return true;
@@ -357,17 +360,17 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
     private boolean handleInvite(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) { sender.sendMessage(getMsg("player-only")); return true; }
         Player p = (Player) sender;
-        if (args.length < 2) { p.sendMessage(ChatColor.RED + "用法: /guild invite <玩家>"); return true; }
+        if (args.length < 2) { p.sendMessage(Component.text("用法: /guild invite <玩家>").color(NamedTextColor.RED)); return true; }
         String target = args[1];
         Player targetP = getServer().getPlayer(target);
         Guild guild = getPlayerGuild(p.getName());
         if (guild == null) { p.sendMessage(getMsg("not-in-guild")); return true; }
-        if (targetP == null) { p.sendMessage(ChatColor.RED + "玩家不在线!"); return true; }
-        if (isInGuild(target)) { p.sendMessage(ChatColor.RED + "该玩家已在工会中!"); return true; }
+        if (targetP == null) { p.sendMessage(Component.text("玩家不在线!").color(NamedTextColor.RED)); return true; }
+        if (isInGuild(target)) { p.sendMessage(Component.text("该玩家已在工会中!").color(NamedTextColor.RED)); return true; }
         invitePlayer(p.getName(), target);
         p.sendMessage(getMsg("invite-sent", "player", target));
         targetP.sendMessage(getMsg("invite-received", "player", p.getName(), "guild", guild.name));
-        targetP.sendMessage(ChatColor.YELLOW + "输入 /guild accept 接受 或 /guild deny 拒绝");
+        targetP.sendMessage(Component.text("输入 /guild accept 接受 或 /guild deny 拒绝").color(NamedTextColor.YELLOW));
         return true;
     }
 
@@ -377,7 +380,7 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
         GuildInvite invite = getPendingInvite(p.getName());
         if (invite == null || invite.isExpired()) { removePendingInvite(p.getName()); p.sendMessage(getMsg("no-pending-invite")); return true; }
         if (acceptInvite(p.getName())) p.sendMessage(getMsg("invite-accepted"));
-        else p.sendMessage(ChatColor.RED + "加入工会失败!");
+        else p.sendMessage(Component.text("加入工会失败!").color(NamedTextColor.RED));
         return true;
     }
 
@@ -392,20 +395,20 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
     private boolean handleKick(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) { sender.sendMessage(getMsg("player-only")); return true; }
         Player p = (Player) sender;
-        if (args.length < 2) { p.sendMessage(ChatColor.RED + "用法: /guild kick <玩家>"); return true; }
+        if (args.length < 2) { p.sendMessage(Component.text("用法: /guild kick <玩家>").color(NamedTextColor.RED)); return true; }
         String target = args[1];
         if (kickMember(p.getName(), target)) {
             p.sendMessage(getMsg("player-kicked", "player", target));
             Player targetP = getServer().getPlayer(target);
             if (targetP != null) targetP.sendMessage(getMsg("kicked"));
-        } else p.sendMessage(ChatColor.RED + "无法踢出该成员!");
+        } else p.sendMessage(Component.text("无法踢出该成员!").color(NamedTextColor.RED));
         return true;
     }
 
     private boolean handlePromote(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) { sender.sendMessage(getMsg("player-only")); return true; }
         Player p = (Player) sender;
-        if (args.length < 2) { p.sendMessage(ChatColor.RED + "用法: /guild promote <玩家>"); return true; }
+        if (args.length < 2) { p.sendMessage(Component.text("用法: /guild promote <玩家>").color(NamedTextColor.RED)); return true; }
         String target = args[1];
         if (promoteMember(p.getName(), target)) {
             Guild guild = getPlayerGuild(p.getName());
@@ -413,14 +416,14 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
             p.sendMessage(getMsg("player-promoted", "player", target, "rank", targetM.rank.getDisplayName()));
             Player targetP = getServer().getPlayer(target);
             if (targetP != null) targetP.sendMessage(getMsg("promoted", "rank", targetM.rank.getDisplayName()));
-        } else p.sendMessage(ChatColor.RED + "无法晋升该成员!");
+        } else p.sendMessage(Component.text("无法晋升该成员!").color(NamedTextColor.RED));
         return true;
     }
 
     private boolean handleDemote(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) { sender.sendMessage(getMsg("player-only")); return true; }
         Player p = (Player) sender;
-        if (args.length < 2) { p.sendMessage(ChatColor.RED + "用法: /guild demote <玩家>"); return true; }
+        if (args.length < 2) { p.sendMessage(Component.text("用法: /guild demote <玩家>").color(NamedTextColor.RED)); return true; }
         String target = args[1];
         if (demoteMember(p.getName(), target)) {
             Guild guild = getPlayerGuild(p.getName());
@@ -428,7 +431,7 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
             p.sendMessage(getMsg("player-demoted", "player", target, "rank", targetM.rank.getDisplayName()));
             Player targetP = getServer().getPlayer(target);
             if (targetP != null) targetP.sendMessage(getMsg("demoted", "rank", targetM.rank.getDisplayName()));
-        } else p.sendMessage(ChatColor.RED + "无法降职该成员!");
+        } else p.sendMessage(Component.text("无法降职该成员!").color(NamedTextColor.RED));
         return true;
     }
 
@@ -440,26 +443,28 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
         } else if (sender instanceof Player) {
             guild = getPlayerGuild(((Player) sender).getName());
         } else {
-            sender.sendMessage(ChatColor.RED + "用法: /guild info <工会名>"); return true;
+            sender.sendMessage(Component.text("用法: /guild info <工会名>").color(NamedTextColor.RED)); return true;
         }
         if (guild == null) { sender.sendMessage(getMsg("guild-not-found")); return true; }
-        sender.sendMessage(ChatColor.GOLD + "========== 工会信息 ==========");
-        sender.sendMessage(ChatColor.YELLOW + "工会名称: " + ChatColor.WHITE + guild.name);
-        sender.sendMessage(ChatColor.YELLOW + "工会前缀: " + ChatColor.WHITE + (guild.prefix.isEmpty() ? "无" : guild.prefix));
-        sender.sendMessage(ChatColor.YELLOW + "工会描述: " + ChatColor.WHITE + (guild.description.isEmpty() ? "无" : guild.description));
-        sender.sendMessage(ChatColor.YELLOW + "会长: " + ChatColor.WHITE + guild.leader);
-        sender.sendMessage(ChatColor.YELLOW + "成员数量: " + ChatColor.WHITE + guild.members.size());
-        sender.sendMessage(ChatColor.GOLD + "==============================");
+        sender.sendMessage(Component.text("========== 工会信息 ==========").color(NamedTextColor.GOLD));
+        sender.sendMessage(Component.text("工会名称: ").color(NamedTextColor.YELLOW).append(Component.text(guild.name).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("工会前缀: ").color(NamedTextColor.YELLOW).append(Component.text(guild.prefix.isEmpty() ? "无" : guild.prefix).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("工会描述: ").color(NamedTextColor.YELLOW).append(Component.text(guild.description.isEmpty() ? "无" : guild.description).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("会长: ").color(NamedTextColor.YELLOW).append(Component.text(guild.leader).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("成员数量: ").color(NamedTextColor.YELLOW).append(Component.text(String.valueOf(guild.members.size())).color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("==============================").color(NamedTextColor.GOLD));
         return true;
     }
 
     private boolean handleList(CommandSender sender) {
-        sender.sendMessage(ChatColor.GOLD + "========== 工会列表 ==========");
+        sender.sendMessage(Component.text("========== 工会列表 ==========").color(NamedTextColor.GOLD));
         for (Guild guild : getAllGuilds()) {
-            sender.sendMessage(ChatColor.YELLOW + guild.name + ChatColor.GRAY + " - " + ChatColor.WHITE + "成员: " + guild.members.size());
+            sender.sendMessage(Component.text(guild.name).color(NamedTextColor.YELLOW)
+                .append(Component.text(" - 成员: " + guild.members.size()).color(NamedTextColor.GRAY)));
         }
-        sender.sendMessage(ChatColor.GOLD + "总计: " + ChatColor.WHITE + getGuildCount() + " 个工会");
-        sender.sendMessage(ChatColor.GOLD + "==============================");
+        sender.sendMessage(Component.text("总计: ").color(NamedTextColor.GOLD)
+            .append(Component.text(getGuildCount() + " 个工会").color(NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("==============================").color(NamedTextColor.GOLD));
         return true;
     }
 
@@ -468,10 +473,12 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
         Player p = (Player) sender;
         Guild guild = getPlayerGuild(p.getName());
         if (guild == null) { p.sendMessage(getMsg("not-in-guild")); return true; }
-        if (args.length < 2) { p.sendMessage(ChatColor.RED + "用法: /guild chat <消息>"); return true; }
+        if (args.length < 2) { p.sendMessage(Component.text("用法: /guild chat <消息>").color(NamedTextColor.RED)); return true; }
         String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         String chatPrefix = config.getString("settings.chat-prefix", "&7[&6工会&7] ");
-        String formatted = ChatColor.translateAlternateColorCodes('&', chatPrefix + ChatColor.YELLOW + p.getName() + ": " + ChatColor.WHITE + msg);
+        Component formatted = SERIALIZER.deserialize(chatPrefix)
+            .append(Component.text(p.getName() + ": ").color(NamedTextColor.YELLOW))
+            .append(Component.text(msg).color(NamedTextColor.WHITE));
         for (String member : guild.members.keySet()) {
             Player memberP = getServer().getPlayer(member);
             if (memberP != null) memberP.sendMessage(formatted);
@@ -486,7 +493,7 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
         if (guild == null) { p.sendMessage(getMsg("not-in-guild")); return true; }
         GuildMember member = guild.members.get(p.getName());
         if (!member.rank.isAtLeast(GuildRank.VICE_LEADER)) { p.sendMessage(getMsg("no-permission")); return true; }
-        if (args.length < 2) { p.sendMessage(ChatColor.RED + "用法: /guild setprefix <前缀>"); return true; }
+        if (args.length < 2) { p.sendMessage(Component.text("用法: /guild setprefix <前缀>").color(NamedTextColor.RED)); return true; }
         String prefix = args[1];
         setGuildPrefix(guild.name, prefix);
         p.sendMessage(getMsg("prefix-set", "prefix", prefix));
@@ -500,7 +507,7 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
         if (guild == null) { p.sendMessage(getMsg("not-in-guild")); return true; }
         GuildMember member = guild.members.get(p.getName());
         if (!member.rank.isAtLeast(GuildRank.VICE_LEADER)) { p.sendMessage(getMsg("no-permission")); return true; }
-        if (args.length < 2) { p.sendMessage(ChatColor.RED + "用法: /guild setdesc <描述>"); return true; }
+        if (args.length < 2) { p.sendMessage(Component.text("用法: /guild setdesc <描述>").color(NamedTextColor.RED)); return true; }
         String desc = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         setGuildDescription(guild.name, desc);
         p.sendMessage(getMsg("desc-set"));
@@ -514,38 +521,53 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
                 reloadConfig();
                 config = getConfig();
                 loadGuilds();
-                sender.sendMessage(ChatColor.GREEN + "配置已重新加载!");
+                sender.sendMessage(Component.text("配置已重新加载!").color(NamedTextColor.GREEN));
                 return true;
             case "delete":
-                if (args.length < 2) { sender.sendMessage(ChatColor.RED + "用法: /guildadmin delete <工会名>"); return true; }
+                if (args.length < 2) { sender.sendMessage(Component.text("用法: /guildadmin delete <工会名>").color(NamedTextColor.RED)); return true; }
                 String name = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-                if (disbandGuild(name)) sender.sendMessage(ChatColor.GREEN + "工会已删除: " + name);
+                if (disbandGuild(name)) sender.sendMessage(Component.text("工会已删除: " + name).color(NamedTextColor.GREEN));
                 else sender.sendMessage(getMsg("guild-not-found"));
                 return true;
             default:
-                sender.sendMessage(ChatColor.RED + "用法: /guildadmin <reload|delete>");
+                sender.sendMessage(Component.text("用法: /guildadmin <reload|delete>").color(NamedTextColor.RED));
                 return true;
         }
     }
 
     private void sendHelp(CommandSender sender) {
-        sender.sendMessage(ChatColor.GOLD + "========== 工会帮助 ==========");
-        sender.sendMessage(ChatColor.YELLOW + "/guild create <名称> " + ChatColor.GRAY + "- 创建工会");
-        sender.sendMessage(ChatColor.YELLOW + "/guild disband " + ChatColor.GRAY + "- 解散工会");
-        sender.sendMessage(ChatColor.YELLOW + "/guild invite <玩家> " + ChatColor.GRAY + "- 邀请玩家");
-        sender.sendMessage(ChatColor.YELLOW + "/guild accept " + ChatColor.GRAY + "- 接受邀请");
-        sender.sendMessage(ChatColor.YELLOW + "/guild deny " + ChatColor.GRAY + "- 拒绝邀请");
-        sender.sendMessage(ChatColor.YELLOW + "/guild join <工会> " + ChatColor.GRAY + "- 加入工会");
-        sender.sendMessage(ChatColor.YELLOW + "/guild leave " + ChatColor.GRAY + "- 离开工会");
-        sender.sendMessage(ChatColor.YELLOW + "/guild kick <玩家> " + ChatColor.GRAY + "- 踢出成员");
-        sender.sendMessage(ChatColor.YELLOW + "/guild promote <玩家> " + ChatColor.GRAY + "- 晋升成员");
-        sender.sendMessage(ChatColor.YELLOW + "/guild demote <玩家> " + ChatColor.GRAY + "- 降职成员");
-        sender.sendMessage(ChatColor.YELLOW + "/guild info [工会] " + ChatColor.GRAY + "- 查看信息");
-        sender.sendMessage(ChatColor.YELLOW + "/guild list " + ChatColor.GRAY + "- 工会列表");
-        sender.sendMessage(ChatColor.YELLOW + "/guild chat <消息> " + ChatColor.GRAY + "- 工会聊天");
-        sender.sendMessage(ChatColor.YELLOW + "/guild setprefix <前缀> " + ChatColor.GRAY + "- 设置前缀");
-        sender.sendMessage(ChatColor.YELLOW + "/guild setdesc <描述> " + ChatColor.GRAY + "- 设置描述");
-        sender.sendMessage(ChatColor.GOLD + "==============================");
+        sender.sendMessage(Component.text("========== 工会帮助 ==========").color(NamedTextColor.GOLD));
+        sender.sendMessage(Component.text("/guild create <名称> ").color(NamedTextColor.YELLOW)
+            .append(Component.text("- 创建工会").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/guild disband ").color(NamedTextColor.YELLOW)
+            .append(Component.text("- 解散工会").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/guild invite <玩家> ").color(NamedTextColor.YELLOW)
+            .append(Component.text("- 邀请玩家").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/guild accept ").color(NamedTextColor.YELLOW)
+            .append(Component.text("- 接受邀请").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/guild deny ").color(NamedTextColor.YELLOW)
+            .append(Component.text("- 拒绝邀请").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/guild join <工会> ").color(NamedTextColor.YELLOW)
+            .append(Component.text("- 加入工会").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/guild leave ").color(NamedTextColor.YELLOW)
+            .append(Component.text("- 离开工会").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/guild kick <玩家> ").color(NamedTextColor.YELLOW)
+            .append(Component.text("- 踢出成员").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/guild promote <玩家> ").color(NamedTextColor.YELLOW)
+            .append(Component.text("- 晋升成员").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/guild demote <玩家> ").color(NamedTextColor.YELLOW)
+            .append(Component.text("- 降职成员").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/guild info [工会] ").color(NamedTextColor.YELLOW)
+            .append(Component.text("- 查看信息").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/guild list ").color(NamedTextColor.YELLOW)
+            .append(Component.text("- 工会列表").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/guild chat <消息> ").color(NamedTextColor.YELLOW)
+            .append(Component.text("- 工会聊天").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/guild setprefix <前缀> ").color(NamedTextColor.YELLOW)
+            .append(Component.text("- 设置前缀").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/guild setdesc <描述> ").color(NamedTextColor.YELLOW)
+            .append(Component.text("- 设置描述").color(NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("==============================").color(NamedTextColor.GOLD));
     }
 
     @Override
@@ -576,7 +598,8 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
             for (String member : guild.members.keySet()) {
                 Player m = getServer().getPlayer(member);
                 if (m != null && !m.equals(p)) {
-                    m.sendMessage(ChatColor.GREEN + "[工会] " + ChatColor.YELLOW + p.getName() + " 上线了!");
+                    m.sendMessage(Component.text("[工会] ").color(NamedTextColor.GREEN)
+                        .append(Component.text(p.getName() + " 上线了!").color(NamedTextColor.YELLOW)));
                 }
             }
         }
@@ -590,7 +613,8 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
             for (String member : guild.members.keySet()) {
                 Player m = getServer().getPlayer(member);
                 if (m != null && !m.equals(p)) {
-                    m.sendMessage(ChatColor.RED + "[工会] " + ChatColor.YELLOW + p.getName() + " 下线了...");
+                    m.sendMessage(Component.text("[工会] ").color(NamedTextColor.RED)
+                        .append(Component.text(p.getName() + " 下线了...").color(NamedTextColor.YELLOW)));
                 }
             }
         }

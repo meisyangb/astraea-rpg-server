@@ -59,8 +59,8 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
     private Economy economy; // Vault经济系统
     private MarketServiceAdapter serviceAdapter;
     private MarketDataHandler dataHandler;
-    private BukkitTask autoSaveTask;
-    private BukkitTask expireCheckTask;
+    private long autoSaveTaskId = -1;
+    private long expireCheckTaskId = -1;
     private boolean pointsEnabled; // 点券是否启用
     private boolean economyEnabled; // 经济是否启用
 
@@ -94,13 +94,13 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
     @Override
     protected void onPluginDisable() {
         // 取消定时任务
-        if (autoSaveTask != null) {
-            autoSaveTask.cancel();
-            autoSaveTask = null;
+        if (autoSaveTaskId != -1 && scheduler != null) {
+            scheduler.cancelTask(autoSaveTaskId);
+            autoSaveTaskId = -1;
         }
-        if (expireCheckTask != null) {
-            expireCheckTask.cancel();
-            expireCheckTask = null;
+        if (expireCheckTaskId != -1 && scheduler != null) {
+            scheduler.cancelTask(expireCheckTaskId);
+            expireCheckTaskId = -1;
         }
 
         // 取消所有任务
@@ -181,19 +181,37 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
     }
 
     private void startTasks() {
-        autoSaveTask = getServer().getScheduler().runTaskTimer(this, this::saveData, 6000L, 6000L);
+        if (scheduler != null) {
+            autoSaveTaskId = scheduler.runSyncRepeating(this::saveData, 6000L, 6000L);
 
-        expireCheckTask = getServer().getScheduler().runTaskTimer(this, () -> {
-            long now = System.currentTimeMillis();
-            globalMarket.removeIf(item -> {
-                if (item.isExpired()) {
-                    returnExpiredItem(item);
-                    playerListings.getOrDefault(item.seller, new ArrayList<>()).remove(item);
-                    return true;
-                }
-                return false;
-            });
-        }, 12000L, 12000L);
+            expireCheckTaskId = scheduler.runSyncRepeating(() -> {
+                long now = System.currentTimeMillis();
+                globalMarket.removeIf(item -> {
+                    if (item.isExpired()) {
+                        returnExpiredItem(item);
+                        playerListings.getOrDefault(item.seller, new ArrayList<>()).remove(item);
+                        return true;
+                    }
+                    return false;
+                });
+            }, 12000L, 12000L);
+        } else {
+            cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+            if (rpgCore != null) {
+                rpgCore.getScheduler().runSyncRepeating(this::saveData, 6000L, 6000L);
+                rpgCore.getScheduler().runSyncRepeating(() -> {
+                    long now = System.currentTimeMillis();
+                    globalMarket.removeIf(item -> {
+                        if (item.isExpired()) {
+                        returnExpiredItem(item);
+                        playerListings.getOrDefault(item.seller, new ArrayList<>()).remove(item);
+                        return true;
+                    }
+                    return false;
+                });
+            }, 12000L, 12000L);
+            }
+        }
     }
 
     public static GuangDianMarket getInstance() {
@@ -467,10 +485,11 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
      * 扣除经济
      */
     private boolean removeEconomyBalance(UUID uuid, double amount) {
-        if (economy != null && economyEnabled) {
+        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+        if (rpgCore != null && rpgCore.getExternalServices() != null && rpgCore.getExternalServices().isVaultEnabled()) {
             Player player = Bukkit.getPlayer(uuid);
             if (player != null) {
-                return economy.withdrawPlayer(player, amount).transactionSuccess();
+                return rpgCore.getExternalServices().withdraw(player, amount);
             }
         }
         return false;
@@ -489,10 +508,11 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
      * 增加经济
      */
     private void addEconomyBalance(UUID uuid, double amount) {
-        if (economy != null && economyEnabled) {
+        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+        if (rpgCore != null && rpgCore.getExternalServices() != null && rpgCore.getExternalServices().isVaultEnabled()) {
             Player player = Bukkit.getPlayer(uuid);
             if (player != null) {
-                economy.depositPlayer(player, amount);
+                rpgCore.getExternalServices().deposit(player, amount);
             }
         }
     }

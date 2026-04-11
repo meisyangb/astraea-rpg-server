@@ -72,11 +72,6 @@ public class AuthCommands implements CommandExecutor, TabExecutor {
             return true;
         }
 
-        if (!dataManager.isRegistered(playerName)) {
-            player.sendMessage(Component.text("你还没有注册，请使用 /register <密码> <确认密码>").color(NamedTextColor.RED));
-            return true;
-        }
-
         if (sessionManager.hasExceededMaxAttempts(player.getUniqueId())) {
             player.sendMessage(Component.text("登录尝试次数过多，请稍后再试").color(NamedTextColor.RED));
             return true;
@@ -84,21 +79,34 @@ public class AuthCommands implements CommandExecutor, TabExecutor {
 
         String password = String.join(" ", args);
 
-        if (dataManager.checkPassword(playerName, password)) {
-            sessionManager.setLoggedIn(player.getUniqueId(), true);
-            dataManager.updateLastLogin(playerName, player.getAddress().getAddress().getHostAddress());
-            
-            player.sendMessage(Component.text("✓ 登录成功！欢迎来到阿斯特瑞亚").color(NamedTextColor.GREEN));
-            plugin.getPacketHandler().notifyLoggedIn(player);
-            plugin.getLogger().info("玩家 " + playerName + " 登录成功");
-        } else {
-            sessionManager.addLoginAttempt(player.getUniqueId());
-            player.sendMessage(Component.text("✗ 密码错误").color(NamedTextColor.RED));
-            
-            if (plugin.getAuthConfig().isKickOnWrongPassword()) {
-                plugin.kickPlayer(player, "密码错误");
+        dataManager.isRegisteredAsync(playerName).thenAccept(registered -> {
+            if (!registered) {
+                plugin.getScheduler().runSyncLater(() -> {
+                    player.sendMessage(Component.text("你还没有注册，请使用 /register <密码> <确认密码>").color(NamedTextColor.RED));
+                }, 0L);
+                return;
             }
-        }
+
+            dataManager.checkPasswordAsync(playerName, password).thenAccept(valid -> {
+                plugin.getScheduler().runSyncLater(() -> {
+                    if (valid) {
+                        sessionManager.setLoggedIn(player.getUniqueId(), true);
+                        dataManager.updateLastLogin(playerName, player.getAddress().getAddress().getHostAddress());
+                        
+                        player.sendMessage(Component.text("✓ 登录成功！欢迎来到阿斯特瑞亚").color(NamedTextColor.GREEN));
+                        plugin.getPacketHandler().notifyLoggedIn(player);
+                        plugin.getLogger().info("玩家 " + playerName + " 登录成功");
+                    } else {
+                        sessionManager.addLoginAttempt(player.getUniqueId());
+                        player.sendMessage(Component.text("✗ 密码错误").color(NamedTextColor.RED));
+                        
+                        if (plugin.getAuthConfig().isKickOnWrongPassword()) {
+                            plugin.kickPlayer(player, "密码错误");
+                        }
+                    }
+                }, 0L);
+            });
+        });
 
         return true;
     }
@@ -112,11 +120,6 @@ public class AuthCommands implements CommandExecutor, TabExecutor {
         AuthDataManager dataManager = plugin.getDataManager();
         SessionManager sessionManager = plugin.getSessionManager();
         String playerName = player.getName();
-
-        if (dataManager.isRegistered(playerName)) {
-            player.sendMessage(Component.text("你已经注册过了，请使用 /login <密码> 登录").color(NamedTextColor.YELLOW));
-            return true;
-        }
 
         String password = args[0];
         String confirm = args[1];
@@ -139,17 +142,28 @@ public class AuthCommands implements CommandExecutor, TabExecutor {
             return true;
         }
 
-        String ip = player.getAddress().getAddress().getHostAddress();
-        dataManager.register(playerName, player.getUniqueId(), password, ip);
+        dataManager.isRegisteredAsync(playerName).thenAccept(registered -> {
+            if (registered) {
+                plugin.getScheduler().runSyncLater(() -> {
+                    player.sendMessage(Component.text("你已经注册过了，请使用 /login <密码> 登录").color(NamedTextColor.YELLOW));
+                }, 0L);
+                return;
+            }
 
-        player.sendMessage(Component.text("✓ 注册成功！").color(NamedTextColor.GREEN));
-        plugin.getLogger().info("玩家 " + playerName + " 注册成功");
+            String ip = player.getAddress().getAddress().getHostAddress();
+            dataManager.registerAsync(playerName, player.getUniqueId(), password, ip).thenRun(() -> {
+                plugin.getScheduler().runSyncLater(() -> {
+                    player.sendMessage(Component.text("✓ 注册成功！").color(NamedTextColor.GREEN));
+                    plugin.getLogger().info("玩家 " + playerName + " 注册成功");
 
-        if (plugin.getAuthConfig().isForceLoginAfterRegister()) {
-            sessionManager.setLoggedIn(player.getUniqueId(), true);
-            player.sendMessage(Component.text("✓ 已自动登录").color(NamedTextColor.GREEN));
-            plugin.getPacketHandler().notifyLoggedIn(player);
-        }
+                    if (plugin.getAuthConfig().isForceLoginAfterRegister()) {
+                        sessionManager.setLoggedIn(player.getUniqueId(), true);
+                        player.sendMessage(Component.text("✓ 已自动登录").color(NamedTextColor.GREEN));
+                        plugin.getPacketHandler().notifyLoggedIn(player);
+                    }
+                }, 0L);
+            });
+        });
 
         return true;
     }

@@ -1,10 +1,10 @@
 package cn.guangdian.auth.listener;
 
 import cn.guangdian.auth.GuangDianAuth;
+import cn.guangdian.auth.handler.SessionManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,10 +12,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 
 import java.time.Duration;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class AuthListener implements Listener {
 
     private final GuangDianAuth plugin;
+    private final Map<UUID, Long> reminderTasks = new ConcurrentHashMap<>();
 
     public AuthListener(GuangDianAuth plugin) {
         this.plugin = plugin;
@@ -28,16 +32,61 @@ public class AuthListener implements Listener {
         plugin.getSessionManager().createSession(player);
         
         if (!plugin.isLoggedIn(player)) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                showLoginPrompt(player);
+            if (plugin.isRegistered(player.getName())) {
                 plugin.getPacketHandler().notifyNeedLogin(player);
+            } else {
+                plugin.getPacketHandler().notifyNeedRegister(player);
+            }
+            
+            plugin.getScheduler().runSyncLater(() -> {
+                showLoginPrompt(player);
             }, 20L);
+            
+            startLoginReminder(player);
+        }
+    }
+
+    private void startLoginReminder(Player player) {
+        int timeout = plugin.getAuthConfig().getLoginTimeout();
+        if (timeout <= 0) return;
+        
+        long taskId = plugin.getScheduler().runSyncRepeating(() -> {
+            SessionManager.Session session = plugin.getSessionManager().getSession(player.getUniqueId());
+            if (session == null || session.isLoggedIn()) {
+                cancelReminder(player.getUniqueId());
+                return;
+            }
+            
+            long joinTime = session.getJoinTime();
+            long elapsed = (System.currentTimeMillis() - joinTime) / 1000;
+            long remaining = timeout - elapsed;
+            
+            if (remaining <= 0) {
+                cancelReminder(player.getUniqueId());
+                return;
+            }
+            
+            if (remaining <= 30 || remaining % 30 == 0) {
+                player.sendActionBar(
+                    Component.text("请在 " + remaining + " 秒内登录").color(NamedTextColor.YELLOW)
+                );
+            }
+        }, 20L, 20L);
+        
+        reminderTasks.put(player.getUniqueId(), taskId);
+    }
+
+    private void cancelReminder(UUID playerId) {
+        Long taskId = reminderTasks.remove(playerId);
+        if (taskId != null) {
+            plugin.getScheduler().cancelTask(taskId);
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
+        cancelReminder(player.getUniqueId());
         plugin.getSessionManager().removeSession(player.getUniqueId());
     }
 

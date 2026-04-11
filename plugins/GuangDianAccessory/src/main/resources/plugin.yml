@@ -7,9 +7,11 @@ description: Astraea RPG 饰品系统 - 支持徽章、勋章、圣物
 
 depend:
   - RPGCore
+  - GuangDianArmorStats
 
 softdepend:
   - PlaceholderAPI
+  - MythicMobs
   - Vault
 
 commands:

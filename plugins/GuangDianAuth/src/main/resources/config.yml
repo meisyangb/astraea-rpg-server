@@ -1,0 +1,52 @@
+# GuangDianAuth 配置文件
+# Astraea RPG 登录系统
+
+# ==================== 密码设置 ====================
+password:
+  # 最小密码长度
+  min-length: 6
+  # 最大密码长度
+  max-length: 32
+
+# ==================== 会话设置 ====================
+session:
+  # 会话超时时间（分钟）
+  # 玩家登录后，在此时间内重新连接无需再次登录
+  timeout-minutes: 43200
+
+# ==================== 登录设置 ====================
+login:
+  # 登录超时时间（秒）
+  # 玩家加入后必须在此时间内完成登录
+  timeout-seconds: 120
+  # 最大登录尝试次数
+  max-attempts: 5
+  # 密码错误是否踢出
+  kick-on-wrong-password: false
+
+# ==================== 注册设置 ====================
+register:
+  # 注册后是否自动登录
+  force-login-after: true
+
+# ==================== 限制设置 ====================
+restrictions:
+  # 登录前是否允许移动
+  allow-movement: false
+  # 登录前是否允许聊天
+  allow-chat: false
+
+# ==================== 消息设置 ====================
+messages:
+  # 登录成功消息
+  login-success: "&a✓ 登录成功！欢迎来到阿斯特瑞亚"
+  # 注册成功消息
+  register-success: "&a✓ 注册成功！"
+  # 密码错误消息
+  wrong-password: "&c✗ 密码错误"
+  # 登录超时消息
+  login-timeout: "&c登录超时，请重新连接"
+  # 未注册提示
+  not-registered: "&e请使用 /register <密码> <确认密码> 注册"
+  # 已注册提示
+  already-registered: "&e请使用 /login <密码> 登录"

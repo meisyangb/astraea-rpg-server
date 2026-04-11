@@ -3,11 +3,11 @@ package cn.guangdian.decompose.listener;
 import cn.guangdian.decompose.GuangDianDecompose;
 import cn.guangdian.decompose.gui.DecomposeGUI;
 import cn.guangdian.decompose.manager.DecomposeManager;
-import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -30,17 +30,19 @@ public class DecomposeListener implements Listener {
         InventoryHolder holder = event.getInventory().getHolder();
         if (!(holder instanceof DecomposeGUI)) return;
 
-        event.setCancelled(true);
-
         int slot = event.getRawSlot();
         DecomposeGUI gui = plugin.getDecomposeGUI();
+        int inputSlot = gui.getInputSlot();
 
         if (gui.isCloseButton(slot)) {
+            event.setCancelled(true);
+            returnItemsToPlayer(player, event.getInventory(), inputSlot);
             player.closeInventory();
             return;
         }
 
         if (gui.isDecomposeButton(slot)) {
+            event.setCancelled(true);
             DecomposeManager.DecomposeResult result = gui.handleDecompose(player, event.getInventory());
             if (result.isSuccess()) {
                 updateGuiAfterDecompose(player, event.getInventory());
@@ -49,41 +51,96 @@ public class DecomposeListener implements Listener {
         }
 
         if (gui.isInputSlot(slot)) {
-            handleInputSlotClick(player, event);
+            handleInputSlotClick(player, event, inputSlot);
+            return;
         }
-    }
 
-    private void handleInputSlotClick(Player player, InventoryClickEvent event) {
-        Inventory clickedInv = event.getClickedInventory();
-        if (clickedInv == null) return;
+        if (slot >= 0 && slot < event.getInventory().getSize()) {
+            event.setCancelled(true);
+            return;
+        }
 
-        if (clickedInv.equals(player.getOpenInventory().getTopInventory())) {
-            ItemStack cursor = event.getCursor();
-            if (cursor != null && !cursor.getType().isAir()) {
-                ItemStack currentItem = event.getInventory().getItem(13);
-                if (currentItem != null && !currentItem.getType().isAir()) {
-                    player.getInventory().addItem(currentItem);
+        InventoryAction action = event.getAction();
+        if (action == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+            ItemStack movedItem = event.getCurrentItem();
+            if (movedItem != null && !movedItem.getType().isAir()) {
+                ItemStack currentInput = event.getInventory().getItem(inputSlot);
+                if (currentInput != null && !currentInput.getType().isAir()) {
+                    return;
                 }
-                event.getInventory().setItem(13, cursor.clone());
-                event.setCursor(null);
-                plugin.getDecomposeGUI().handleInput(player, event.getInventory(), cursor);
+                event.setCancelled(true);
+                event.getInventory().setItem(inputSlot, movedItem.clone());
+                event.setCurrentItem(null);
+                plugin.getDecomposeGUI().handleInput(player, event.getInventory(), movedItem);
             } else {
-                ItemStack currentItem = event.getInventory().getItem(13);
-                if (currentItem != null && !currentItem.getType().isAir()) {
-                    player.getInventory().addItem(currentItem);
-                    event.getInventory().setItem(13, null);
-                    plugin.getDecomposeGUI().handleInput(player, event.getInventory(), null);
-                }
+                event.setCancelled(true);
             }
         }
     }
 
+    private void handleInputSlotClick(Player player, InventoryClickEvent event, int inputSlot) {
+        Inventory clickedInv = event.getClickedInventory();
+        if (clickedInv == null) return;
+
+        InventoryAction action = event.getAction();
+        Inventory topInv = event.getInventory();
+        ItemStack cursor = event.getCursor();
+        ItemStack currentInput = topInv.getItem(inputSlot);
+
+        if (action == InventoryAction.PLACE_ALL || 
+            action == InventoryAction.PLACE_ONE || 
+            action == InventoryAction.PLACE_SOME ||
+            action == InventoryAction.SWAP_WITH_CURSOR) {
+            
+            if (cursor != null && !cursor.getType().isAir()) {
+                event.setCancelled(true);
+                
+                if (currentInput != null && !currentInput.getType().isAir()) {
+                    player.getInventory().addItem(currentInput);
+                }
+                
+                topInv.setItem(inputSlot, cursor.clone());
+                event.setCursor(null);
+                plugin.getDecomposeGUI().handleInput(player, topInv, cursor);
+            }
+        } else if (action == InventoryAction.PICKUP_ALL || 
+                   action == InventoryAction.PICKUP_SOME ||
+                   action == InventoryAction.PICKUP_HALF) {
+            
+            if (currentInput != null && !currentInput.getType().isAir()) {
+                event.setCancelled(true);
+                player.getInventory().addItem(currentInput);
+                topInv.setItem(inputSlot, null);
+                plugin.getDecomposeGUI().handleInput(player, topInv, null);
+            }
+        } else if (action == InventoryAction.DROP_ALL_SLOT ||
+                   action == InventoryAction.DROP_ONE_SLOT) {
+            event.setCancelled(true);
+            if (currentInput != null && !currentInput.getType().isAir()) {
+                player.getInventory().addItem(currentInput);
+                topInv.setItem(inputSlot, null);
+                plugin.getDecomposeGUI().handleInput(player, topInv, null);
+            }
+        } else {
+            event.setCancelled(true);
+        }
+    }
+
     private void updateGuiAfterDecompose(Player player, Inventory gui) {
-        ItemStack remaining = gui.getItem(13);
+        int inputSlot = plugin.getDecomposeGUI().getInputSlot();
+        ItemStack remaining = gui.getItem(inputSlot);
         if (remaining == null || remaining.getType().isAir()) {
             plugin.getDecomposeGUI().handleInput(player, gui, null);
         } else {
             plugin.getDecomposeGUI().handleInput(player, gui, remaining);
+        }
+    }
+
+    private void returnItemsToPlayer(Player player, Inventory gui, int inputSlot) {
+        ItemStack inputItem = gui.getItem(inputSlot);
+        if (inputItem != null && !inputItem.getType().isAir()) {
+            player.getInventory().addItem(inputItem);
+            gui.setItem(inputSlot, null);
         }
     }
 
@@ -99,9 +156,11 @@ public class DecomposeListener implements Listener {
         if (!(event.getPlayer() instanceof Player player)) return;
 
         if (event.getInventory().getHolder() instanceof DecomposeGUI) {
-            ItemStack inputItem = event.getInventory().getItem(13);
+            int inputSlot = plugin.getDecomposeGUI().getInputSlot();
+            ItemStack inputItem = event.getInventory().getItem(inputSlot);
             if (inputItem != null && !inputItem.getType().isAir()) {
                 player.getInventory().addItem(inputItem);
+                event.getInventory().setItem(inputSlot, null);
             }
         }
     }
