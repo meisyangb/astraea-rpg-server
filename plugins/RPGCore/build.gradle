@@ -41,6 +41,13 @@ dependencies {
 
     // Cron调度器 - Cron4J
     implementation 'it.sauronsoftware.cron4j:cron4j:2.2.5'
+
+    // 单元测试
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
+    testImplementation 'org.mockito:mockito-core:5.8.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.8.0'
+    testImplementation 'org.assertj:assertj-core:3.24.2'
 }
 
 // 项目配置
@@ -57,14 +64,14 @@ compileJava {
     options.compilerArgs += ['-parameters']
 }
 
-// 完全禁用测试
 test {
-    enabled = false
+    useJUnitPlatform()
+    enabled = true
 }
 
-// 禁用测试编译
+// 启用测试编译
 compileTestJava {
-    enabled = false
+    enabled = true
 }
 
 // 普通 JAR 配置
