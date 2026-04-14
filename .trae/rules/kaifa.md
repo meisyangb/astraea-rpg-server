@@ -1,10 +1,15 @@
----
-alwaysApply: true
----
-
 # Astraea RPG 任务分类系统
 
 > 本文件是任务分类和路由中心，每次对话都会读取
+> **版本: 1.1.0 | 更新: 2026-04-14**
+
+---
+
+## ⚠️ 基本原则
+
+1. **不可随意回滚** - 每次提交必须有明确的理由和测试
+2. **脚本采用 CMD 执行** - 禁止使用 PowerShell 执行构建脚本
+3. **先构建验证后提交** - 禁止未验证就提交
 
 ---
 
@@ -27,20 +32,22 @@ alwaysApply: true
 
 ## 🚀 快速路由
 
-### 1. 构建任务
-```powershell
-# 唯一构建命令
-cd e:\原创RPG服务端
-$env:JAVA_HOME="e:\原创RPG服务端\tools\jdk-21.0.10+7"
-& "D:\gradle\gradle-9.4.0\bin\gradle.bat" build --no-configuration-cache -x test
+### 1. 构建任务 (CMD)
+
+```cmd
+cd /d e:\原创RPG服务端
+set JAVA_HOME=e:\原创RPG服务端\tools\jdk-21.0.10+7
+D:\gradle\gradle-9.4.0\bin\gradle.bat build --no-configuration-cache -x test
 ```
+
 详见: [.trae/docs/reference/BUILD_GUIDE.md](.trae/docs/reference/BUILD_GUIDE.md)
 
 ### 2. 开发任务
 1. 激活技能: `minecraft-rpg-architect`
 2. 阅读禁止模式: [.trae/rules/FORBIDDEN_PATTERNS.md](.trae/rules/FORBIDDEN_PATTERNS.md)
 3. 使用代码模板: [.trae/rules/CODE_TEMPLATES.md](.trae/rules/CODE_TEMPLATES.md)
-4. 执行构建验证
+4. 执行构建验证 (CMD)
+5. 提交到仓库
 
 ### 3. 修复任务
 1. 激活技能: `minecraft-rpg-architect`
@@ -74,7 +81,7 @@ $env:JAVA_HOME="e:\原创RPG服务端\tools\jdk-21.0.10+7"
 ### 参考文档
 | 文档 | 用途 |
 |------|------|
-| [.trae/docs/reference/BUILD_GUIDE.md](.trae/docs/reference/BUILD_GUIDE.md) | 唯一构建方法 |
+| [.trae/docs/reference/BUILD_GUIDE.md](.trae/docs/reference/BUILD_GUIDE.md) | 唯一构建方法 (CMD) |
 | [.trae/docs/reference/VERSION_CONTROL.md](.trae/docs/reference/VERSION_CONTROL.md) | 版本控制规范 |
 | [.trae/docs/reference/RELEASE_CHECKLIST.md](.trae/docs/reference/RELEASE_CHECKLIST.md) | 发布检查清单 |
 | [.trae/docs/CHANGELOG.md](.trae/docs/CHANGELOG.md) | 更新日志 |
@@ -106,11 +113,13 @@ $env:JAVA_HOME="e:\原创RPG服务端\tools\jdk-21.0.10+7"
     ↓
 路由到对应处理方式
     ↓
-激活技能 / 执行命令
+激活技能 / 执行命令 (CMD)
     ↓
 验证结果
     ↓
 更新文档/知识库
+    ↓
+提交到仓库
     ↓
 完成
 ```
@@ -126,6 +135,27 @@ $env:JAVA_HOME="e:\原创RPG服务端\tools\jdk-21.0.10+7"
 | Gradle | 9.4.0 (`D:\gradle\gradle-9.4.0`) |
 | 项目根目录 | `e:\原创RPG服务端` |
 | 插件数量 | 24个 GuangDian* + RPGCore |
+| Adventure | 4.26.1 |
+| Caffeine | 3.1.8 |
+
+---
+
+## 📋 Git 提交规范
+
+### 提交前缀
+- `feat:` - 新功能
+- `fix:` - Bug修复
+- `docs:` - 文档更新
+- `refactor:` - 重构
+- `perf:` - 性能优化
+- `chore:` - 构建/工具
+
+### 提交检查清单
+- [ ] 已执行构建验证 (CMD)
+- [ ] 无编译错误
+- [ ] 无禁止模式违规
+- [ ] 更新 CHANGELOG.md
+- [ ] 标签版本正确
 
 ---
 
