@@ -1,34 +1,53 @@
 package cn.guangdian.rpgcore;
 
 import cn.guangdian.rpgcore.api.AsyncExecutor;
+import cn.guangdian.rpgcore.api.AuditLog;
 import cn.guangdian.rpgcore.api.CacheProvider;
 import cn.guangdian.rpgcore.api.ConfigManager;
+import cn.guangdian.rpgcore.api.ConfigMigrator;
+import cn.guangdian.rpgcore.api.CronScheduler;
+import cn.guangdian.rpgcore.api.DataExporter;
 import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ExceptionHandler;
+import cn.guangdian.rpgcore.api.GameLogger;
+import cn.guangdian.rpgcore.api.HttpClient;
 import cn.guangdian.rpgcore.api.PluginLifecycleManager;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
 import cn.guangdian.rpgcore.api.SyncScheduler;
+import cn.guangdian.rpgcore.audit.AuditLogImpl;
 import cn.guangdian.rpgcore.async.AsyncExecutorImpl;
 import cn.guangdian.rpgcore.cache.TTLCacheManager;
 import cn.guangdian.rpgcore.cache.TTLCacheManager.Mode;
+import cn.guangdian.rpgcore.config.ConfigMigratorImpl;
 import cn.guangdian.rpgcore.concurrency.PlayerLockManager;
 import cn.guangdian.rpgcore.config.ConfigManagerImpl;
+import cn.guangdian.rpgcore.cron.CronSchedulerImpl;
 import cn.guangdian.rpgcore.database.CoreDatabase;
+import cn.guangdian.rpgcore.display.AdventureBossBarService;
 import cn.guangdian.rpgcore.display.DisplayService;
 import cn.guangdian.rpgcore.display.DisplayServiceImpl;
+import cn.guangdian.rpgcore.display.TextDisplayServiceImpl;
 import cn.guangdian.rpgcore.event.SimpleEventBus;
 import cn.guangdian.rpgcore.exception.ExceptionHandlerImpl;
+import cn.guangdian.rpgcore.export.DataExporterImpl;
+import cn.guangdian.rpgcore.http.HttpClientImpl;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegrationImpl;
 import cn.guangdian.rpgcore.lifecycle.PlayerLifecycleManager;
+import cn.guangdian.rpgcore.logging.AsyncLogger;
+import cn.guangdian.rpgcore.message.MiniMessageService;
+import cn.guangdian.rpgcore.message.MessageServiceImpl;
 import cn.guangdian.rpgcore.module.RPGModule;
 import cn.guangdian.rpgcore.monitor.PerformanceMonitor;
 import cn.guangdian.rpgcore.monitor.PerformanceReport;
+import cn.guangdian.rpgcore.ratelimit.RateLimiterImpl;
 import cn.guangdian.rpgcore.scheduler.UnifiedSchedulerImpl;
 import cn.guangdian.rpgcore.service.ServiceScanner;
 import cn.guangdian.rpgcore.service.SimpleServiceRegistry;
+import cn.guangdian.rpgcore.service.api.MessageService;
+import cn.guangdian.rpgcore.service.api.TextDisplayService;
 import cn.guangdian.rpgcore.storage.UnifiedDataManager;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -67,11 +86,21 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
     private ServiceScanner serviceScanner;
     private ExternalServiceIntegration externalServices;
     private SyncScheduler scheduler;
-    private cn.guangdian.rpgcore.lifecycle.PlayerLifecycleManager lifecycleManager;
-    private cn.guangdian.rpgcore.display.DisplayService displayService;
-    private cn.guangdian.rpgcore.storage.UnifiedDataManager dataManager;
+    private PlayerLifecycleManager lifecycleManager;
+    private DisplayService displayService;
+    private UnifiedDataManager dataManager;
     private ConfigManager configManager;
     private ExceptionHandler exceptionHandler;
+    private HttpClient httpClient;
+    private HttpClient.RateLimiter rateLimiter;
+    private CronScheduler cronScheduler;
+    private ConfigMigrator configMigrator;
+    private AuditLog auditLog;
+    private DataExporter dataExporter;
+    private MessageService messageService;
+    private TextDisplayService textDisplayService;
+    private GameLogger gameLogger;
+    private MiniMessageService miniMessageService;
 
     private int asyncThreadPoolSize;
     private int cacheMaxSize;
@@ -104,7 +133,6 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
     @Override
     public void onDisable() {
         if (asyncExecutor != null) {
-            getLogger().info("Waiting for async tasks to complete...");
             asyncExecutor.awaitTermination(30, TimeUnit.SECONDS);
             asyncExecutor.shutdown();
         }
@@ -121,19 +149,24 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         if (lockManager != null) {
             lockManager.releaseAllLocks();
         }
-        
         if (externalServices instanceof ExternalServiceIntegrationImpl esi) {
             esi.shutdown();
         }
-        
         if (scheduler instanceof UnifiedSchedulerImpl usi) {
             usi.shutdown();
         }
-        
+        if (httpClient instanceof HttpClientImpl hci) {
+            hci.shutdown();
+        }
+        if (textDisplayService instanceof TextDisplayServiceImpl tdsi) {
+            tdsi.shutdown();
+        }
+
+        AdventureBossBarService.getInstance().shutdown();
+
         if (lifecycleManager != null) {
             lifecycleManager.unregister();
         }
-        
         if (configManager instanceof ConfigManagerImpl cmi) {
             cmi.saveAll();
         }
@@ -185,27 +218,57 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
 
         serviceScanner = new ServiceScanner(this);
         getLogger().info("ServiceScanner initialized");
-        
+
         externalServices = new ExternalServiceIntegrationImpl(this);
         getLogger().info("ExternalServices: " + externalServices.getExternalServiceStatus());
-        
+
         scheduler = new UnifiedSchedulerImpl(this);
         getLogger().info("UnifiedScheduler initialized");
-        
+
         lifecycleManager = new PlayerLifecycleManager(this);
         getLogger().info("PlayerLifecycleManager initialized");
-        
+
         displayService = new DisplayServiceImpl(this);
         getLogger().info("DisplayService initialized");
-        
+
         dataManager = new UnifiedDataManager(this);
         getLogger().info("UnifiedDataManager initialized");
-        
+
         configManager = new ConfigManagerImpl(this);
         getLogger().info("ConfigManager initialized");
-        
+
         exceptionHandler = new ExceptionHandlerImpl(this);
         getLogger().info("ExceptionHandler initialized");
+
+        httpClient = new HttpClientImpl(this);
+        getLogger().info("HttpClient initialized");
+
+        rateLimiter = new RateLimiterImpl(this);
+        getLogger().info("RateLimiter initialized");
+
+        cronScheduler = new CronSchedulerImpl(this);
+        getLogger().info("CronScheduler initialized");
+
+        configMigrator = new ConfigMigratorImpl(this);
+        getLogger().info("ConfigMigrator initialized");
+
+        auditLog = new AuditLogImpl(this);
+        getLogger().info("AuditLog initialized");
+
+        dataExporter = new DataExporterImpl(this);
+        getLogger().info("DataExporter initialized");
+
+        miniMessageService = MiniMessageService.getInstance();
+        getLogger().info("MiniMessageService initialized");
+
+        messageService = new MessageServiceImpl();
+        getLogger().info("MessageService initialized");
+
+        textDisplayService = new TextDisplayServiceImpl(this);
+        getLogger().info("TextDisplayService initialized");
+
+        gameLogger = new AsyncLogger();
+        getLogger().info("GameLogger (AsyncLogger) initialized");
     }
 
     private void initDatabase() {
@@ -278,12 +341,12 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
             case "stats" -> sendStats(sender);
             case "reload" -> {
                 if (!sender.hasPermission("rpgcore.reload")) {
-                    sender.sendMessage(ChatColor.RED + "没有权限!");
+                    sender.sendMessage(miniMessageService.red("没有权限!"));
                     return true;
                 }
                 reloadConfig();
                 loadConfiguration();
-                sender.sendMessage(ChatColor.GREEN + "配置已重新加载!");
+                sender.sendMessage(miniMessageService.green("配置已重新加载!"));
             }
             case "help" -> sendHelp(sender);
             default -> sendHelp(sender);
@@ -309,38 +372,38 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
     }
 
     private void sendHelp(CommandSender sender) {
-        sender.sendMessage(ChatColor.GOLD + "========== RPGCore 帮助 ==========");
-        sender.sendMessage(ChatColor.YELLOW + "/rpgcore info " + ChatColor.GRAY + "- 查看信息");
-        sender.sendMessage(ChatColor.YELLOW + "/rpgcore stats " + ChatColor.GRAY + "- 查看统计");
+        sender.sendMessage(miniMessageService.gold("========== RPGCore 帮助 =========="));
+        sender.sendMessage(miniMessageService.colorize("<yellow>/rpgcore info <gray>- 查看信息"));
+        sender.sendMessage(miniMessageService.colorize("<yellow>/rpgcore stats <gray>- 查看统计"));
         if (sender.hasPermission("rpgcore.reload")) {
-            sender.sendMessage(ChatColor.YELLOW + "/rpgcore reload " + ChatColor.GRAY + "- 重载配置");
+            sender.sendMessage(miniMessageService.colorize("<yellow>/rpgcore reload <gray>- 重载配置"));
         }
-        sender.sendMessage(ChatColor.YELLOW + "/rpgcore help " + ChatColor.GRAY + "- 显示帮助");
-        sender.sendMessage(ChatColor.GOLD + "==================================");
+        sender.sendMessage(miniMessageService.colorize("<yellow>/rpgcore help <gray>- 显示帮助"));
+        sender.sendMessage(miniMessageService.gold("=================================="));
     }
 
     private void sendInfo(CommandSender sender) {
-        sender.sendMessage(ChatColor.GOLD + "========== RPGCore 信息 ==========");
-        sender.sendMessage(ChatColor.YELLOW + "版本: " + ChatColor.WHITE + getDescription().getVersion());
-        sender.sendMessage(ChatColor.YELLOW + "数据库: " + ChatColor.WHITE + (databaseEnabled ? "启用" : "禁用"));
-        sender.sendMessage(ChatColor.YELLOW + "异步线程: " + ChatColor.WHITE + asyncThreadPoolSize);
-        sender.sendMessage(ChatColor.YELLOW + "缓存模式: " + ChatColor.WHITE + cacheMode);
-        sender.sendMessage(ChatColor.YELLOW + "缓存容量: " + ChatColor.WHITE + cacheMaxSize);
-        sender.sendMessage(ChatColor.YELLOW + "缓存TTL: " + ChatColor.WHITE + cacheDefaultTTL.toMinutes() + "分钟");
-        sender.sendMessage(ChatColor.YELLOW + "锁超时: " + ChatColor.WHITE + lockTimeoutMs + "毫秒");
-        sender.sendMessage(ChatColor.GOLD + "==================================");
+        sender.sendMessage(miniMessageService.gold("========== RPGCore 信息 =========="));
+        sender.sendMessage(miniMessageService.colorize("<yellow>版本: <white>" + getDescription().getVersion()));
+        sender.sendMessage(miniMessageService.colorize("<yellow>数据库: <white>" + (databaseEnabled ? "启用" : "禁用")));
+        sender.sendMessage(miniMessageService.colorize("<yellow>异步线程: <white>" + asyncThreadPoolSize));
+        sender.sendMessage(miniMessageService.colorize("<yellow>缓存模式: <white>" + cacheMode));
+        sender.sendMessage(miniMessageService.colorize("<yellow>缓存容量: <white>" + cacheMaxSize));
+        sender.sendMessage(miniMessageService.colorize("<yellow>缓存TTL: <white>" + cacheDefaultTTL.toMinutes() + "分钟"));
+        sender.sendMessage(miniMessageService.colorize("<yellow>锁超时: <white>" + lockTimeoutMs + "毫秒"));
+        sender.sendMessage(miniMessageService.gold("=================================="));
     }
 
     private void sendStats(CommandSender sender) {
-        sender.sendMessage(ChatColor.GOLD + "========== RPGCore 统计 ==========");
-        sender.sendMessage(ChatColor.YELLOW + "缓存统计: " + ChatColor.WHITE + cacheProvider.getStats());
-        sender.sendMessage(ChatColor.YELLOW + "锁统计: " + ChatColor.WHITE + lockManager.getStats());
-        sender.sendMessage(ChatColor.YELLOW + "服务数量: " + ChatColor.WHITE + serviceRegistry.getServiceCount());
-        sender.sendMessage(ChatColor.YELLOW + "待处理任务: " + ChatColor.WHITE + asyncExecutor.getPendingTaskCount());
+        sender.sendMessage(miniMessageService.gold("========== RPGCore 统计 =========="));
+        sender.sendMessage(miniMessageService.colorize("<yellow>缓存统计: <white>" + cacheProvider.getStats()));
+        sender.sendMessage(miniMessageService.colorize("<yellow>锁统计: <white>" + lockManager.getStats()));
+        sender.sendMessage(miniMessageService.colorize("<yellow>服务数量: <white>" + serviceRegistry.getServiceCount()));
+        sender.sendMessage(miniMessageService.colorize("<yellow>待处理任务: <white>" + asyncExecutor.getPendingTaskCount()));
         if (CoreDatabase.isEnabled()) {
-            sender.sendMessage(ChatColor.YELLOW + "数据库连接池: " + ChatColor.WHITE + CoreDatabase.getPoolStatus());
+            sender.sendMessage(miniMessageService.colorize("<yellow>数据库连接池: <white>" + CoreDatabase.getPoolStatus()));
         }
-        sender.sendMessage(ChatColor.GOLD + "==================================");
+        sender.sendMessage(miniMessageService.gold("=================================="));
     }
 
     public static RPGCore getInstance() {
@@ -387,20 +450,60 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         return lifecycleManager;
     }
     
-    public cn.guangdian.rpgcore.display.DisplayService getDisplayService() {
+    public DisplayService getDisplayService() {
         return displayService;
     }
-    
-    public cn.guangdian.rpgcore.storage.UnifiedDataManager getDataManager() {
+
+    public UnifiedDataManager getDataManager() {
         return dataManager;
     }
-    
+
     public ConfigManager getConfigManager() {
         return configManager;
     }
-    
+
     public ExceptionHandler getExceptionHandler() {
         return exceptionHandler;
+    }
+
+    public HttpClient getHttpClient() {
+        return httpClient;
+    }
+
+    public HttpClient.RateLimiter getRateLimiter() {
+        return rateLimiter;
+    }
+
+    public CronScheduler getCronScheduler() {
+        return cronScheduler;
+    }
+
+    public ConfigMigrator getConfigMigrator() {
+        return configMigrator;
+    }
+
+    public AuditLog getAuditLog() {
+        return auditLog;
+    }
+
+    public DataExporter getDataExporter() {
+        return dataExporter;
+    }
+
+    public MessageService getMessageService() {
+        return messageService;
+    }
+
+    public TextDisplayService getTextDisplayService() {
+        return textDisplayService;
+    }
+
+    public GameLogger getGameLogger() {
+        return gameLogger;
+    }
+
+    public MiniMessageService getMiniMessageService() {
+        return miniMessageService;
     }
 
     public boolean isDatabaseEnabled() {

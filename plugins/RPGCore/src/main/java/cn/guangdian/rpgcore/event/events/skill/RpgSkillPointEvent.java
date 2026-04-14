@@ -1,5 +1,6 @@
 package cn.guangdian.rpgcore.event.events.skill;
 
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -10,9 +11,9 @@ import java.util.UUID;
 
 /**
  * 技能点变化事件
- * 
+ *
  * <p>当玩家的技能点发生变化时触发。</p>
- * 
+ *
  * <h3>使用示例：</h3>
  * <pre>{@code
  * @EventHandler
@@ -20,13 +21,14 @@ import java.util.UUID;
  *     Player player = event.getPlayer();
  *     int oldPoints = event.getOldPoints();
  *     int newPoints = event.getNewPoints();
- *     
+ *
  *     // 显示技能点变化
- *     player.sendMessage("§a技能点: " + oldPoints + " → " + newPoints);
- *     
+ *     MiniMessageService mm = MiniMessageService.getInstance();
+ *     player.sendMessage(mm.green("技能点: " + oldPoints + " → " + newPoints));
+ *
  *     // 广播技能点成就
  *     if (newPoints >= 100) {
- *         Bukkit.broadcastMessage("§6" + player.getName() + " 达到了 100 技能点!");
+ *         Bukkit.broadcastMessage(mm.gold(player.getName() + " 达到了 100 技能点!"));
  *     }
  * }
  * }</pre>

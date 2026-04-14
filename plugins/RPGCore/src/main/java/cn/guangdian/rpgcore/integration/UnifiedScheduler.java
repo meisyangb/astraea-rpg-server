@@ -65,7 +65,7 @@ public final class UnifiedScheduler {
         if (executor != null) {
             executor.execute(task);
         } else {
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, task);
+            Bukkit.getAsyncScheduler().runNow(plugin, scheduledTask -> task.run());
         }
     }
 
@@ -98,12 +98,9 @@ public final class UnifiedScheduler {
     public static void runAsyncLater(Plugin plugin, Runnable task, long delay) {
         AsyncExecutor executor = getAsyncExecutor();
         if (executor != null) {
-            // RPGCore AsyncExecutor 没有延迟方法，使用 Bukkit 调度器包装
-            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
-                executor.execute(task);
-            }, delay);
+            Bukkit.getAsyncScheduler().runDelayed(plugin, scheduledTask -> executor.execute(task), delay * 50, java.util.concurrent.TimeUnit.MILLISECONDS);
         } else {
-            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, task, delay);
+            Bukkit.getAsyncScheduler().runDelayed(plugin, scheduledTask -> task.run(), delay * 50, java.util.concurrent.TimeUnit.MILLISECONDS);
         }
     }
 
@@ -118,12 +115,9 @@ public final class UnifiedScheduler {
     public static void runAsyncTimer(Plugin plugin, Runnable task, long delay, long period) {
         AsyncExecutor executor = getAsyncExecutor();
         if (executor != null) {
-            // 使用 RPGCore AsyncExecutor 执行
-            Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
-                executor.execute(task);
-            }, delay, period);
+            Bukkit.getAsyncScheduler().runAtFixedRate(plugin, scheduledTask -> executor.execute(task), delay * 50, period * 50, java.util.concurrent.TimeUnit.MILLISECONDS);
         } else {
-            Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, task, delay, period);
+            Bukkit.getAsyncScheduler().runAtFixedRate(plugin, scheduledTask -> task.run(), delay * 50, period * 50, java.util.concurrent.TimeUnit.MILLISECONDS);
         }
     }
 

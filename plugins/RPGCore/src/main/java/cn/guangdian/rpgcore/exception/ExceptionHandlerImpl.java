@@ -1,6 +1,9 @@
 package cn.guangdian.rpgcore.exception;
 
+import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.ExceptionHandler;
+import cn.guangdian.rpgcore.message.MiniMessageService;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -78,7 +81,8 @@ public class ExceptionHandlerImpl implements ExceptionHandler {
         logger.log(level, message.toString(), throwable);
         
         if (player != null && player.isOnline()) {
-            player.sendMessage("§c发生错误: " + throwable.getMessage());
+            MiniMessageService mm = MiniMessageService.getInstance();
+            player.sendMessage(mm.red("发生错误: " + throwable.getMessage()));
         }
     }
     

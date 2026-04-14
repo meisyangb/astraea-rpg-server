@@ -7,6 +7,58 @@
 
 ---
 
+## [1.1.0] - 2026-04-14
+
+### 🆕 Added
+- **MiniMessage 颜色服务**: 添加 `MiniMessageService` 支持 Adventure MiniMessage 格式
+- **Caffeine 缓存**: 添加 `CaffeineCacheProvider` 业界最佳缓存实现
+- **AsyncLogger 日志服务**: 添加 `AsyncLogger` 异步日志框架
+- **HTTP 客户端**: 添加 `HttpClientImpl` OkHttp 4.12.0 HTTP 客户端
+- **Cron 调度器**: 添加 `CronSchedulerImpl` cron4j 2.2.5 定时任务支持
+- **审计日志**: 添加 `AuditLog` 接口和 `AuditLogImpl` 实现
+- **数据导出**: 添加 `DataExporter` 接口和 `DataExporterImpl` 实现
+- **配置迁移**: 添加 `ConfigMigrator` 接口和 `ConfigMigratorImpl` 实现
+- **文本显示服务**: 添加 `TextDisplayService` 和 `TextDisplayServiceImpl`
+- **BossBar 服务**: 添加 `AdventureBossBarService` Adventure API 实现
+- **游戏日志**: 添加 `GameLogger` 接口
+- **速率限制器**: 添加 `HttpClient.RateLimiter` 接口和 `RateLimiterImpl` 实现
+
+### 🔄 Changed
+- **调度器升级**: 异步任务全面迁移到 Paper 1.21+ `AsyncScheduler`
+- **RPGCore.java 重构**: 添加完整服务初始化和 getter 方法
+- **ExceptionHandlerImpl**: 迁移到 MiniMessage 颜色服务
+- **RpgSkillPointEvent**: 更新文档注释使用 MiniMessage
+- **依赖版本**:
+  - `HikariCP`: 5.0.1 → 5.1.0
+  - `OkHttp`: 4.11.0 → 4.12.0
+  - `SLF4J`: 2.0.7 → 2.0.9
+  - `Gson`: 2.10.1 (不变)
+  - `Cron4J`: 2.2.2 → 2.2.5
+
+### 🐛 Fixed
+- **UnifiedSchedulerImpl**: 异步调度器迁移到 `Bukkit.getAsyncScheduler()`
+- **UnifiedDataManager**: 异步保存使用 `AsyncScheduler.runNow()`
+- **CronSchedulerImpl**: 移除不存在的 `CronExpression` 类调用
+- **HttpClientImpl**: `shutdown()` 方法添加异常处理
+- **GuangDianArmorStats**: 添加 `--add-modules jdk.incubator.vector` 编译参数
+
+### ⚠️ Deprecated
+- `Bukkit.getScheduler()` 同步调度器 (Paper 1.21.6 无替代方案，必须使用)
+- `LuckPermsProvider.get()` (已有 null 检查)
+- `PlaceholderAPI.setPlaceholders()` (已有 null 检查)
+
+### 🔒 Security
+- 所有外部服务调用添加 null 检查
+- 资源关闭使用 try-finally 模式
+
+### 📚 Documentation
+- 添加 `.trae/docs/reference/CHATCOLOR_MIGRATION_GUIDE.md`
+- 更新 `.trae/rules/FORBIDDEN_PATTERNS.md`
+- 更新 `.trae/rules/CODE_TEMPLATES.md`
+- 添加 `.trae/docs/FIXES/` 修复记录目录
+
+---
+
 ## [1.0.0] - 2026-04-10
 
 ### 🆕 Added

@@ -65,7 +65,7 @@ public class UnifiedDataManager {
         };
         
         if (async) {
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, saveTask);
+            Bukkit.getAsyncScheduler().runNow(plugin, scheduledTask -> saveTask.run());
         } else {
             saveTask.run();
         }
