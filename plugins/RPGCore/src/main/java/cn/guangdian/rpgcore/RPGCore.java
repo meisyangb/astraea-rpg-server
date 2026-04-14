@@ -44,8 +44,11 @@ import cn.guangdian.rpgcore.ratelimit.RateLimiterImpl;
 import cn.guangdian.rpgcore.scheduler.UnifiedSchedulerImpl;
 import cn.guangdian.rpgcore.service.ServiceScanner;
 import cn.guangdian.rpgcore.service.SimpleServiceRegistry;
+import cn.guangdian.rpgcore.entity.EntityService;
+import cn.guangdian.rpgcore.server.ServerService;
 import cn.guangdian.rpgcore.service.api.MessageService;
 import cn.guangdian.rpgcore.service.api.TextDisplayService;
+import cn.guangdian.rpgcore.sound.SoundService;
 import cn.guangdian.rpgcore.storage.UnifiedDataManager;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
@@ -504,6 +507,30 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
 
     public MiniMessageService getMiniMessageService() {
         return miniMessageService;
+    }
+
+    /**
+     * 获取音效服务
+     * @return SoundService 实例
+     */
+    public SoundService getSoundService() {
+        return SoundService.getInstance();
+    }
+
+    /**
+     * 获取服务器服务
+     * @return ServerService 实例
+     */
+    public ServerService getServerService() {
+        return ServerService.getInstance(this);
+    }
+
+    /**
+     * 获取实体服务
+     * @return EntityService 实例
+     */
+    public EntityService getEntityService() {
+        return EntityService.getInstance();
     }
 
     public boolean isDatabaseEnabled() {

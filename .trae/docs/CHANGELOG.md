@@ -7,6 +7,36 @@
 
 ---
 
+## [1.2.0] - 2026-04-14
+
+### 🆕 Added
+- **SoundService 音效服务**: 封装 Paper 1.21.6 弃用的 `Sound.valueOf()` 和 `Sound.key()` API
+  - 支持 20+ 常用音效别名（CLICK, SUCCESS, ERROR, COIN, TELEPORT, SPELL 等）
+  - 提供 `playSound()`, `broadcastSound()`, `stopSound()` 等方法
+  - 位置: `cn.guangdian.rpgcore.sound.SoundService`
+- **ServerService 服务器服务**: 封装 `Bukkit.spigot().restart()` 弃用 API
+  - 提供 `restart()`, `shutdown()` 服务器控制方法
+  - 提供 TPS 监控、内存监控、运行时间查询
+  - 位置: `cn.guangdian.rpgcore.server.ServerService`
+- **EntityService 实体服务**: 封装 `setCollisionCancelled()` 弃用 API
+  - 提供实体碰撞控制、安全传送、距离计算
+  - 提供实体属性管理（无敌、静默、发光、可见性）
+  - 位置: `cn.guangdian.rpgcore.entity.EntityService`
+- **RPGCore 服务导出**: 添加 `getSoundService()`, `getServerService()`, `getEntityService()` 方法
+
+### 📚 Documentation
+- 添加 `.trae/docs/reference/RPGCORE_SERVICES.md` 核心服务使用指南
+- 更新 `.trae/rules/kaifa.md` 工作流文档（v1.2.0）
+- 更新 `.trae/skills/minecraft-rpg-architect/SKILL.md` 技能文档（v2.3.0）
+- 添加 RPGCore 服务使用示例和迁移指南
+
+### 🔄 Changed
+- **版本更新**: 
+  - `kaifa.md`: 1.1.0 → 1.2.0
+  - `minecraft-rpg-architect/SKILL.md`: 2.2.0 → 2.3.0
+
+---
+
 ## [1.1.0] - 2026-04-14
 
 ### 🆕 Added
@@ -128,4 +158,4 @@
 
 ---
 
-*最后更新: 2026-04-10*
+*最后更新: 2026-04-14*

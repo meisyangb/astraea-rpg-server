@@ -1,8 +1,14 @@
 ---
 name: minecraft-rpg-architect
-version: 2.2.0
+version: 2.3.0
 updated: 2026-04-14
 changelog:
+  - version: 2.3.0
+    date: 2026-04-14
+    changes:
+      - "新增 RPGCore 核心服务：SoundService, ServerService, EntityService"
+      - "添加 Paper 1.21.6 弃用 API 的封装方案"
+      - "更新文档链接：添加 RPGCORE_SERVICES.md"
   - version: 2.2.0
     date: 2026-04-14
     changes:
@@ -30,7 +36,7 @@ description: >
   当用户请求：开发插件、配置系统、设计装备、编写MythicMobs配置、优化性能时触发。
 ---
 
-# Astraea RPG 阿斯特瑞亚 — 架构师规范手册 v2.2
+# Astraea RPG 阿斯特瑞亚 — 架构师规范手册 v2.3
 
 > **AI使用说明**: 每次生成代码前，必须对照 FORBIDDEN PATTERNS 检查清单执行自我审查。
 > 任何与禁止模式匹配的代码，必须主动拒绝并给出正确替代方案。
@@ -360,6 +366,76 @@ plugins/{插件名}/build/libs/{插件名}-1.0.0.jar
 ### API版本检查
 - [ ] 无 `ArmorStand` 用于显示目的
 - [ ] MythicMobs物品检测使用 `mythicmobs:type`
+
+### RPGCore 服务检查
+- [ ] 音效使用 `SoundService` 而非 `Sound.valueOf()`
+- [ ] 服务器重启使用 `ServerService` 而非 `Bukkit.spigot().restart()`
+- [ ] 实体碰撞使用 `EntityService` 而非 `setCollisionCancelled()`
+
+---
+
+## 📦 RPGCore 核心服务 (v1.2.0+)
+
+RPGCore 提供了封装 Paper 1.21.6 弃用 API 的核心服务：
+
+### SoundService - 音效服务
+```java
+// 获取服务
+SoundService soundService = RPGCore.getInstance().getSoundService();
+
+// 播放音效（解决 Sound.valueOf() 弃用）
+soundService.playSound(player, "SUCCESS", 1.0f, 1.0f);
+soundService.playSound(location, "CLICK", 0.5f, 1.2f);
+soundService.broadcastSound("LEVEL_UP", 1.0f, 1.0f);
+
+// 停止音效
+soundService.stopSound(player, "MUSIC");
+soundService.stopAllSounds(player);
+```
+
+**支持的别名**: `CLICK`, `SUCCESS`, `ERROR`, `PICKUP`, `HIT`, `COIN`, `TELEPORT`, `SPELL` 等
+
+### ServerService - 服务器服务
+```java
+// 获取服务
+ServerService serverService = RPGCore.getInstance().getServerService();
+
+// 重启服务器（解决 Bukkit.spigot().restart() 弃用）
+serverService.restart();
+
+// 关闭服务器
+serverService.shutdown();
+
+// TPS 监控
+String tps1m = serverService.getFormattedTPS(0);
+
+// 内存监控
+ServerService.MemoryInfo memory = serverService.getMemoryInfo();
+long usedMB = memory.getUsedMemoryMB();
+```
+
+### EntityService - 实体服务
+```java
+// 获取服务
+EntityService entityService = RPGCore.getInstance().getEntityService();
+
+// 设置碰撞状态（解决 setCollisionCancelled() 弃用）
+entityService.setCollisionCancelled(entity, true);
+
+// 处理载具碰撞
+@EventHandler
+public void onCollision(VehicleEntityCollisionEvent event) {
+    entityService.handleVehicleCollision(event, true);
+}
+
+// 安全传送
+boolean success = entityService.teleportSafely(entity, location);
+
+// 距离计算
+boolean inRange = entityService.isInRange(entity1, entity2, 10.0);
+```
+
+**详细文档**: [.trae/docs/reference/RPGCORE_SERVICES.md](../../docs/reference/RPGCORE_SERVICES.md)
 
 ---
 

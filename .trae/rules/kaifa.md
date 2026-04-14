@@ -1,7 +1,7 @@
 # Astraea RPG 任务分类系统
 
 > 本文件是任务分类和路由中心，每次对话都会读取
-> **版本: 1.1.0 | 更新: 2026-04-14**
+> **版本: 1.2.0 | 更新: 2026-04-14**
 
 ---
 
@@ -82,6 +82,7 @@ D:\gradle\gradle-9.4.0\bin\gradle.bat build --no-configuration-cache -x test
 | 文档 | 用途 |
 |------|------|
 | [.trae/docs/reference/BUILD_GUIDE.md](.trae/docs/reference/BUILD_GUIDE.md) | 唯一构建方法 (CMD) |
+| [.trae/docs/reference/RPGCORE_SERVICES.md](.trae/docs/reference/RPGCORE_SERVICES.md) | RPGCore 核心服务使用指南 |
 | [.trae/docs/reference/VERSION_CONTROL.md](.trae/docs/reference/VERSION_CONTROL.md) | 版本控制规范 |
 | [.trae/docs/reference/RELEASE_CHECKLIST.md](.trae/docs/reference/RELEASE_CHECKLIST.md) | 发布检查清单 |
 | [.trae/docs/CHANGELOG.md](.trae/docs/CHANGELOG.md) | 更新日志 |
