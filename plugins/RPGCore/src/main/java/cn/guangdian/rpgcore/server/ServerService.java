@@ -2,6 +2,7 @@ package cn.guangdian.rpgcore.server;
 
 import cn.guangdian.rpgcore.RPGCore;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -46,7 +47,7 @@ public final class ServerService {
         
         // 通知所有玩家
         for (Player player : Bukkit.getOnlinePlayers()) {
-            player.sendMessage(Component.text("§c服务器将在 5 秒后重启，请做好准备！"));
+            player.sendMessage(Component.text("服务器将在 5 秒后重启，请做好准备！", NamedTextColor.RED));
         }
         
         // 延迟重启

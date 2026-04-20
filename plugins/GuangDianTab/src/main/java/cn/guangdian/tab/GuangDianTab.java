@@ -21,8 +21,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.ArrayList;
@@ -617,17 +617,12 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener, TabComp
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onMove(PlayerMoveEvent event) {
-        if (event.getTo() == null) {
-            return;
-        }
-        if (!event.getFrom().getWorld().equals(event.getTo().getWorld())) {
-            Player player = event.getPlayer();
-            scheduler.runSyncLater(() -> {
-                updatePlayerTab(player);
-                updateHeaderFooter(player);
-            }, 1L);
-        }
+    public void onWorldChange(PlayerChangedWorldEvent event) {
+        Player player = event.getPlayer();
+        scheduler.runSyncLater(() -> {
+            updatePlayerTab(player);
+            updateHeaderFooter(player);
+        }, 1L);
     }
 
     @Override

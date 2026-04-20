@@ -5,6 +5,7 @@ import cn.guangdian.monthlycard.api.MonthlyCardService;
 import cn.guangdian.monthlycard.command.MonthlyCardCommand;
 import cn.guangdian.monthlycard.data.MonthlyCardData;
 import cn.guangdian.monthlycard.data.MonthlyCardType;
+import cn.guangdian.monthlycard.gui.MonthlyCardGUI;
 import cn.guangdian.monthlycard.lifecycle.MonthlyCardDataHandler;
 import cn.guangdian.monthlycard.manager.MonthlyCardManager;
 import cn.guangdian.monthlycard.placeholder.MonthlyCardPlaceholder;
@@ -17,13 +18,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class GuangDianMonthlyCard extends AbstractRPGPlugin {
-    
+
     private static GuangDianMonthlyCard instance;
-    
+
     private MonthlyCardManager cardManager;
     private MonthlyCardServiceAdapter serviceAdapter;
     private MonthlyCardDataHandler dataHandler;
     private MonthlyCardPlaceholder placeholder;
+    private MonthlyCardGUI monthlyCardGUI;
     private long checkTaskId;
     
     @Override
@@ -34,11 +36,14 @@ public class GuangDianMonthlyCard extends AbstractRPGPlugin {
         
         cardManager = new MonthlyCardManager(this);
         cardManager.loadCardTypes();
-        
+
+        monthlyCardGUI = new MonthlyCardGUI(this);
+
         registerCommands();
         registerLifecycle();
         registerPlaceholder();
         registerService();
+        registerListeners();
         startTasks();
         
         getLogger().info("光点月卡插件已启用! 版本: " + getDescription().getVersion());
@@ -106,6 +111,13 @@ public class GuangDianMonthlyCard extends AbstractRPGPlugin {
             getLogger().info("已集成 RPGCore 服务系统!");
         }
     }
+
+    private void registerListeners() {
+        if (monthlyCardGUI != null) {
+            getServer().getPluginManager().registerEvents(monthlyCardGUI, this);
+            getLogger().info("已注册 GUI 事件监听器!");
+        }
+    }
     
     private void startTasks() {
         if (scheduler != null) {
@@ -157,5 +169,9 @@ public class GuangDianMonthlyCard extends AbstractRPGPlugin {
     
     public boolean claimDailyReward(UUID playerId) {
         return cardManager.claimDailyReward(playerId);
+    }
+
+    public MonthlyCardGUI getMonthlyCardGUI() {
+        return monthlyCardGUI;
     }
 }

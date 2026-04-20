@@ -978,9 +978,14 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        playerBoards.remove(player.getUniqueId());
-        boardToggleState.remove(player.getUniqueId());
-        boardCache.remove(player.getUniqueId());
+        UUID uuid = player.getUniqueId();
+        playerBoards.remove(uuid);
+        boardToggleState.remove(uuid);
+        boardCache.remove(uuid);
+        lastRefreshTime.remove(uuid);
+        lastBoardEntries.remove(uuid);
+        lineHashCache.remove(uuid);
+        dirtyPlayers.remove(uuid);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

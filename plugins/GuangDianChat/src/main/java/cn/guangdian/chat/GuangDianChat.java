@@ -5,8 +5,10 @@ import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.chat.adapter.ChatServiceAdapter;
+import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -18,7 +20,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -180,13 +181,13 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onChat(AsyncPlayerChatEvent event) {
+    public void onChat(AsyncChatEvent event) {
         if (!config.getBoolean("enabled", true)) {
             return;
         }
 
         Player player = event.getPlayer();
-        String rawMessage = event.getMessage();
+        String rawMessage = PlainTextComponentSerializer.plainText().serialize(event.message());
         boolean global = isGlobalMessage(rawMessage);
         String message = stripGlobalPrefix(rawMessage);
 
@@ -214,28 +215,28 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
             int range = config.getInt("settings.chat-range", 0);
             if (range > 0) {
                 double rangeSquared = (double) range * range;
-                event.getRecipients().clear();
+                event.viewers().clear();
                 List<Player> worldPlayers = player.getWorld().getPlayers();
                 for (Player recipient : worldPlayers) {
                     if (recipient.getLocation().distanceSquared(player.getLocation()) <= rangeSquared) {
-                        event.getRecipients().add(recipient);
+                        event.viewers().add(recipient);
                     }
                 }
-                if (!event.getRecipients().contains(player)) {
-                    event.getRecipients().add(player);
+                if (!event.viewers().contains(player)) {
+                    event.viewers().add(player);
                 }
             }
         }
 
-        event.setMessage(decoratedMessage);
+        event.message(Component.text(decoratedMessage));
         
-        // 使用 MiniMessage 发送格式化的消息，而不是使用 setFormat
         event.setCancelled(true);
         Component chatComponent = miniMessage.colorize(format);
-        for (Player recipient : event.getRecipients()) {
-            recipient.sendMessage(chatComponent);
+        for (Player recipient : player.getWorld().getPlayers()) {
+            if (event.viewers().contains(recipient)) {
+                recipient.sendMessage(chatComponent);
+            }
         }
-        // 同时发送给控制台
         Bukkit.getConsoleSender().sendMessage(chatComponent);
     }
 

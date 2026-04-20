@@ -197,10 +197,7 @@ public final class GUIBuilder {
         items.forEach(gui::setItem);
 
         // 设置点击处理器
-        clickHandlers.forEach((slot, handler) -> {
-            // 通过反射或重新设计来设置 clickHandlers
-            // 这里简化处理，实际使用时需要在 GUI 类中暴露方法
-        });
+        clickHandlers.forEach(gui::setClickHandler);
 
         // 填充空槽位
         if (fillerItem != null) {

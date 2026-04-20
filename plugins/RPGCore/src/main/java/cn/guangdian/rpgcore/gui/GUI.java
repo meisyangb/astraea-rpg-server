@@ -108,6 +108,14 @@ public final class GUI {
         if (updateOnOpen && openHandler != null) {
             openHandler.accept(player);
         }
+
+        // 注册到 GUIListener
+        GUIManager guiManager = GUIManager.getInstance();
+        if (guiManager.isInitialized()) {
+            GUIListener listener = (GUIListener) guiManager.getListener();
+            listener.registerPlayerGUI(player, this);
+        }
+
         player.openInventory(inventory);
     }
 
@@ -134,6 +142,15 @@ public final class GUI {
         if (handler != null) {
             event.setCancelled(true); // 默认取消点击
             handler.accept(event);
+        }
+    }
+
+    /**
+     * 设置点击处理器
+     */
+    public void setClickHandler(int slot, @Nullable Consumer<InventoryClickEvent> handler) {
+        if (handler != null) {
+            clickHandlers.put(slot, handler);
         }
     }
 

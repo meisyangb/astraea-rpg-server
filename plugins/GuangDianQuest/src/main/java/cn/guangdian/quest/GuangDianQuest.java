@@ -2,6 +2,7 @@ package cn.guangdian.quest;
 
 import cn.guangdian.quest.adapter.QuestServiceAdapter;
 import cn.guangdian.quest.command.QuestCommand;
+import cn.guangdian.quest.integration.PluginIntegration;
 import cn.guangdian.quest.lifecycle.QuestDataHandler;
 import cn.guangdian.quest.listener.QuestEventListener;
 import cn.guangdian.quest.manager.DailyQuestManager;
@@ -34,6 +35,7 @@ public class GuangDianQuest extends AbstractRPGPlugin {
     private QuestLineManager questLineManager;
     private QuestServiceAdapter serviceAdapter;
     private QuestDataHandler dataHandler;
+    private PluginIntegration pluginIntegration;
 
     // RPGCore 服务引用
     private MiniMessageService miniMessage;
@@ -70,6 +72,9 @@ public class GuangDianQuest extends AbstractRPGPlugin {
         registerPlaceholderAPI();
 
         serviceAdapter = new QuestServiceAdapter(this);
+
+        // 初始化插件集成 (GuangDianMobs, RPGItems)
+        pluginIntegration = new PluginIntegration(this);
 
         startAutoSave();
 
@@ -310,6 +315,7 @@ public class GuangDianQuest extends AbstractRPGPlugin {
     public QuestLineManager getQuestLineManager() { return questLineManager; }
     public QuestServiceAdapter getServiceAdapter() { return serviceAdapter; }
     public ExternalServiceIntegration getExternalServices() { return externalServices; }
+    public PluginIntegration getPluginIntegration() { return pluginIntegration; }
     public int getMaxActiveQuests() { return maxActiveQuests; }
     public int getDailyQuestLimit() { return dailyQuestLimit; }
     public int getAutoSaveInterval() { return autoSaveInterval; }

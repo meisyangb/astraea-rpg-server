@@ -584,20 +584,28 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
         }
 
         try {
-            var skillManagerMethod = rpgPlugin.getClass().getMethod("getSkillManager");
-            var skillManager = skillManagerMethod.invoke(rpgPlugin);
+            var getSkillIntegrationMethod = rpgPlugin.getClass().getMethod("getSkillIntegration");
+            var skillIntegration = getSkillIntegrationMethod.invoke(rpgPlugin);
 
-            if (skillManager == null) {
+            if (skillIntegration == null) {
                 player.sendMessage(translateColors("<red>技能系统未初始化!</red>"));
                 return;
             }
 
-            var triggerMethod = skillManager.getClass().getMethod("triggerActiveSkill", Player.class, String.class);
-            var result = (Boolean) triggerMethod.invoke(skillManager, player, skillName);
+            var isEnabledMethod = skillIntegration.getClass().getMethod("isEnabled");
+            boolean isEnabled = (Boolean) isEnabledMethod.invoke(skillIntegration);
+            
+            if (!isEnabled) {
+                player.sendMessage(translateColors("<red>技能系统未启用，请检查RPGSkill插件!</red>"));
+                logWarning("SkillIntegration 未启用，RPGSkill 插件可能未加载");
+                return;
+            }
+
+            var executeSkillMethod = skillIntegration.getClass().getMethod("executeSkill", Player.class, String.class);
+            var result = (Boolean) executeSkillMethod.invoke(skillIntegration, player, skillName);
 
             if (result) {
                 logDebug("玩家 " + player.getName() + " 触发技能: " + skillName);
-                // 使用 RPGCore SoundService
                 if (soundService != null) {
                     soundService.playSound(player, "minecraft:entity.player.levelup", 0.5f, 1.2f);
                 }

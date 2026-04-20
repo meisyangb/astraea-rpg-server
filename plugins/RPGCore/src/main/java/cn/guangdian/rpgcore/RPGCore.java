@@ -160,8 +160,8 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
     @Override
     public void onDisable() {
         if (asyncExecutor != null) {
-            asyncExecutor.awaitTermination(30, TimeUnit.SECONDS);
             asyncExecutor.shutdown();
+            asyncExecutor.awaitTermination(30, TimeUnit.SECONDS);
         }
 
         if (eventBus instanceof SimpleEventBus seb) {
@@ -253,7 +253,8 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         getLogger().info("UnifiedScheduler initialized");
 
         lifecycleManager = new PlayerLifecycleManager(this);
-        getLogger().info("PlayerLifecycleManager initialized");
+        lifecycleManager.register();
+        getLogger().info("PlayerLifecycleManager initialized and registered");
 
         displayService = new DisplayServiceImpl(this);
         getLogger().info("DisplayService initialized");
@@ -657,12 +658,12 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         }
         
         String moduleId = module.getModuleId();
-        if (modules.containsKey(moduleId)) {
+        RPGModule existing = modules.putIfAbsent(moduleId, module);
+        if (existing != null) {
             getLogger().warning("Module " + moduleId + " already registered, skipping");
             return;
         }
         
-        modules.put(moduleId, module);
         module.load();
         module.enable();
         

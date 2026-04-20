@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 public final class MiniMessageService {
 
-    private static MiniMessageService instance;
+    private static volatile MiniMessageService instance;
 
     private final MiniMessage miniMessage;
     private final LegacyComponentSerializer legacySerializer;

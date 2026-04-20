@@ -15,8 +15,9 @@ import java.util.Optional;
 public class SkillIntegration {
 
     private final GuangDianArmorStats plugin;
-    private Object skillAPI;  // 使用 Object 避免直接依赖 RPGSkill
+    private Object skillAPI;
     private boolean enabled = false;
+    private boolean initialized = false;
 
     public SkillIntegration(GuangDianArmorStats plugin) {
         this.plugin = plugin;
@@ -40,8 +41,13 @@ public class SkillIntegration {
             return;
         }
 
-        // 通过服务注册表获取 RPGSkillAPI（解耦方式）
-        // 使用反射获取服务，避免直接依赖 RPGSkill 类
+        tryInitialize(serviceRegistry);
+    }
+
+    /**
+     * 尝试初始化技能集成
+     */
+    private void tryInitialize(ServiceRegistry serviceRegistry) {
         try {
             Optional<?> apiOpt = serviceRegistry.getOptionalService(
                 Class.forName("cn.guangdian.rpgskill.api.RPGSkillAPI")
@@ -49,19 +55,41 @@ public class SkillIntegration {
             if (apiOpt.isPresent()) {
                 this.skillAPI = apiOpt.get();
                 this.enabled = true;
+                this.initialized = true;
                 plugin.getLogger().info("RPGSkill 集成已启用（通过 ServiceRegistry）- 装备技能将由 RPGSkill 统一管理");
             } else {
-                plugin.getLogger().info("RPGSkill 服务未注册，装备技能功能不可用");
+                this.initialized = false;
+                plugin.getLogger().info("RPGSkill 服务未注册，将在稍后重试初始化");
             }
         } catch (ClassNotFoundException e) {
+            this.initialized = true;
             plugin.getLogger().info("RPGSkillAPI 类不存在，装备技能功能不可用");
         }
+    }
+
+    /**
+     * 尝试重新初始化（延迟初始化）
+     * <p>当 RPGSkill 插件后加载时调用</p>
+     */
+    public void tryReinitialize() {
+        if (enabled) return;
+        
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore == null) return;
+        
+        ServiceRegistry serviceRegistry = rpgCore.getServiceRegistry();
+        if (serviceRegistry == null) return;
+        
+        tryInitialize(serviceRegistry);
     }
 
     /**
      * 检查集成是否可用
      */
     public boolean isEnabled() {
+        if (!enabled && !initialized) {
+            tryReinitialize();
+        }
         return enabled && skillAPI != null;
     }
 
@@ -78,7 +106,6 @@ public class SkillIntegration {
             return false;
         }
 
-        // 使用反射调用 RPGSkillAPI 的方法
         try {
             java.lang.reflect.Method getSkillMethod = skillAPI.getClass().getMethod("getSkill", String.class);
             Optional<?> skillOpt = (Optional<?>) getSkillMethod.invoke(skillAPI, skillId);
@@ -88,12 +115,10 @@ public class SkillIntegration {
                 return false;
             }
 
-            // 检查玩家是否在线
             if (!player.isOnline()) {
                 return false;
             }
 
-            // 创建技能上下文并执行
             Object skill = skillOpt.get();
             Class<?> skillContextClass = Class.forName("cn.guangdian.rpgskill.skill.SkillContext");
             java.lang.reflect.Method builderMethod = skillContextClass.getMethod("builder", Player.class);
@@ -104,7 +129,6 @@ public class SkillIntegration {
             java.lang.reflect.Method executeMethod = skillAPI.getClass().getMethod("executeSkill", String.class, skillContextClass);
             Object result = executeMethod.invoke(skillAPI, skillId, context);
 
-            // 检查结果是否成功
             java.lang.reflect.Method isSuccessMethod = result.getClass().getMethod("isSuccess");
             return (boolean) isSuccessMethod.invoke(result);
 
@@ -137,9 +161,9 @@ public class SkillIntegration {
 
         try {
             java.lang.reflect.Method getCooldownMethod = skillAPI.getClass().getMethod(
-                "getCooldownRemaining", java.util.UUID.class, String.class
+                "getCooldownRemaining", String.class, String.class
             );
-            return (long) getCooldownMethod.invoke(skillAPI, player.getUniqueId(), skillId);
+            return (long) getCooldownMethod.invoke(skillAPI, player.getUniqueId().toString(), skillId);
         } catch (Exception e) {
             return 0;
         }
@@ -153,9 +177,9 @@ public class SkillIntegration {
 
         try {
             java.lang.reflect.Method isOnCooldownMethod = skillAPI.getClass().getMethod(
-                "isOnCooldown", java.util.UUID.class, String.class
+                "isOnCooldown", String.class, String.class
             );
-            return (boolean) isOnCooldownMethod.invoke(skillAPI, player.getUniqueId(), skillId);
+            return (boolean) isOnCooldownMethod.invoke(skillAPI, player.getUniqueId().toString(), skillId);
         } catch (Exception e) {
             return false;
         }

@@ -1,23 +1,264 @@
-# GuangDianItemLabel 配置文件
-# 物品掉落标签系统
+# GuangDianItemLabel 配置文件 v2.0
+# 物品掉落标签系统 - 参考成熟RPG服务器设计
+# 支持品质等级、物品过滤、动态样式
 
-# 标签更新间隔 (tick)
-update-interval: 20
+# ==================== 核心设置 ====================
+settings:
+  # 标签更新间隔 (tick) - 20 tick = 1秒
+  update-interval: 20
 
-# 标签显示设置
-label:
-  # 标签在物品上方的偏移量 (Y轴)
-  offset-y: 0.3
-
-  # 标签缩放比例
-  scale: 0.8
+  # 最大同时显示的标签数量 (性能保护)
+  max-labels-per-player: 50
 
   # 标签可见范围 (方块)
-  view-range: 20
+  view-range: 24
 
-  # 是否显示物品数量
-  show-amount: true
+  # 显示模式: IMMEDIATE(立即显示), SETTLED(静止后显示), PROXIMITY(接近时显示)
+  display-mode: PROXIMITY
+
+  # 接近显示距离 (方块) - 当 display-mode 为 PROXIMITY 时生效
+  proximity-distance: 16.0
+
+  # 标签是否跟随物品移动
+  follow-item: true
 
   # 物品静止检测 tick 数 (物品需要在地上静止多少tick后才显示标签)
-  # 20 tick = 1秒
-  settle-ticks: 5
+  # 仅当 display-mode 为 SETTLED 时生效
+  settle-ticks: 2
+
+# ==================== 显示设置 ====================
+display:
+  # 标签在物品上方的偏移量 (Y轴)
+  offset-y: 0.35
+
+  # 标签缩放比例
+  scale: 0.9
+
+  # 是否显示阴影
+  shadowed: true
+
+  # 是否透视显示 (透过方块可见)
+  see-through: false
+
+  # 标签对齐方式: LEFT, CENTER, RIGHT
+  alignment: CENTER
+
+  # 背景透明度 (0-255, 0=完全透明)
+  background-opacity: 0
+
+# ==================== 物品过滤 ====================
+# 控制哪些物品显示标签
+filter:
+  # 过滤模式: WHITELIST(白名单), BLACKLIST(黑名单), ALL(全部), NONE(不显示)
+  mode: ALL
+
+  # 白名单物品 (当mode为WHITELIST时生效)
+  whitelist:
+    - "DIAMOND"
+    - "NETHERITE_INGOT"
+    - "EMERALD"
+
+  # 黑名单物品 (当mode为BLACKLIST时生效)
+  blacklist:
+    - "DIRT"
+    - "COBBLESTONE"
+    - "STONE"
+    - "GRASS_BLOCK"
+
+  # 最低物品价值才显示标签 (需要Vault经济系统)
+  min-value: 0.0
+
+  # 是否显示有附魔的物品
+  show-enchanted: true
+
+  # 是否显示自定义名称的物品
+  show-renamed: true
+
+# ==================== 品质等级系统 ====================
+# 定义不同品质等级的显示样式
+rarity-levels:
+  # 普通 (白色)
+  common:
+    priority: 1
+    color: "<white>"
+    glow-color: "WHITE"
+    prefix: ""
+    suffix: ""
+    show-particles: false
+
+  # 优质 (绿色)
+  uncommon:
+    priority: 2
+    color: "<green>"
+    glow-color: "GREEN"
+    prefix: "<green>✦ "
+    suffix: ""
+    show-particles: false
+
+  # 稀有 (蓝色)
+  rare:
+    priority: 3
+    color: "<blue>"
+    glow-color: "BLUE"
+    prefix: "<blue>✦✦ "
+    suffix: " <blue>✦✦"
+    show-particles: false
+
+  # 史诗 (紫色)
+  epic:
+    priority: 4
+    color: "<light_purple>"
+    glow-color: "PURPLE"
+    prefix: "<light_purple>✦✦✦ "
+    suffix: " <light_purple>✦✦✦"
+    show-particles: true
+    particle-type: "WITCH"
+
+  # 传说 (金色)
+  legendary:
+    priority: 5
+    color: "<gold>"
+    glow-color: "YELLOW"
+    prefix: "<gold>✦✦✦✦ "
+    suffix: " <gold>✦✦✦✦"
+    show-particles: true
+    particle-type: "TOTEM"
+
+  # 神话 (红色)
+  mythic:
+    priority: 6
+    color: "<red>"
+    glow-color: "RED"
+    prefix: "<red>✦✦✦✦✦ "
+    suffix: " <red>✦✦✦✦✦"
+    show-particles: true
+    particle-type: "DRAGON_BREATH"
+
+# ==================== 物品品质映射 ====================
+# 将物品映射到对应的品质等级
+item-rarity-mapping:
+  # 普通物品
+  common:
+    materials:
+      - "DIRT"
+      - "COBBLESTONE"
+      - "STONE"
+      - "GRASS_BLOCK"
+      - "OAK_LOG"
+      - "SAND"
+      - "GRAVEL"
+      - "STICK"
+      - "FLINT"
+
+  # 优质物品
+  uncommon:
+    materials:
+      - "IRON_INGOT"
+      - "IRON_ORE"
+      - "COAL"
+      - "COPPER_INGOT"
+      - "REDSTONE"
+      - "LAPIS_LAZULI"
+
+  # 稀有物品
+  rare:
+    materials:
+      - "DIAMOND"
+      - "DIAMOND_ORE"
+      - "EMERALD"
+      - "EMERALD_ORE"
+      - "GOLD_INGOT"
+      - "GOLD_ORE"
+      - "AMETHYST_SHARD"
+
+  # 史诗物品
+  epic:
+    materials:
+      - "NETHERITE_SCRAP"
+      - "ANCIENT_DEBRIS"
+      - "ECHO_SHARD"
+      - "HEART_OF_THE_SEA"
+      - "NETHER_STAR"
+
+  # 传说物品
+  legendary:
+    materials:
+      - "NETHERITE_INGOT"
+      - "NETHERITE_BLOCK"
+      - "DRAGON_EGG"
+      - "ENCHANTED_GOLDEN_APPLE"
+
+  # 附魔物品默认品质
+  enchanted-default: rare
+
+# ==================== MythicMobs 支持 ====================
+mythicmobs:
+  # 是否启用MythicMobs物品检测
+  enabled: true
+
+  # MythicMobs物品品质映射 (按物品ID前缀或内部等级)
+  rarity-by-level:
+    # MythicMobs物品内部等级范围映射到品质
+    1-10: uncommon
+    11-25: rare
+    26-50: epic
+    51-100: legendary
+    100+: mythic
+
+# ==================== 标签格式 ====================
+# 支持MiniMessage格式
+# 占位符: {name} = 物品名称, {amount} = 数量, {rarity} = 品质名称
+label-format:
+  # 单行格式
+  single-line: "{rarity_prefix}{name}{rarity_suffix} <gray>x{amount}"
+
+  # 多行格式 (设置为null或空字符串禁用)
+  multi-line: null
+  # multi-line: |
+  #   {rarity_prefix}{name}{rarity_suffix}
+  #   <gray>数量: x{amount}
+
+  # 物品数量显示设置
+  amount:
+    # 是否显示数量
+    enabled: true
+    # 数量颜色
+    color: "<gray>"
+    # 数量格式
+    format: "x{amount}"
+    # 当数量为1时是否隐藏
+    hide-when-single: true
+
+# ==================== 特殊效果 ====================
+effects:
+  # 物品发光效果
+  glow:
+    enabled: true
+    # 发光颜色跟随品质
+    follow-rarity: true
+    # 默认发光颜色
+    default-color: "WHITE"
+
+  # 粒子效果 (仅高品质物品)
+  particles:
+    enabled: true
+    # 粒子显示间隔 (tick)
+    interval: 20
+    # 粒子数量
+    count: 3
+
+# ==================== 性能优化 ====================
+performance:
+  # 批量更新标签 (减少实体更新频率)
+  batch-update: true
+  # 批量大小
+  batch-size: 10
+
+  # 视距裁剪 (只更新玩家附近的标签)
+  culling:
+    enabled: true
+    # 裁剪距离 (方块)
+    distance: 48
+
+  # 标签缓存时间 (tick, 0表示不缓存)
+  cache-duration: 0

@@ -5,6 +5,10 @@ import cn.guangdian.classsystem.api.ClassService;
 import cn.guangdian.classsystem.command.ClassCommand;
 import cn.guangdian.classsystem.data.ClassDataHandler;
 import cn.guangdian.classsystem.gui.ClassAttributeGUI;
+import cn.guangdian.classsystem.gui.ClassMainGUI;
+import cn.guangdian.classsystem.gui.ClassSelectionGUI;
+import cn.guangdian.classsystem.gui.ClassAdvanceGUI;
+import cn.guangdian.classsystem.gui.ClassInfoGUI;
 import cn.guangdian.classsystem.manager.AttributeManager;
 import cn.guangdian.classsystem.manager.ClassManager;
 import cn.guangdian.classsystem.manager.ExpManager;
@@ -26,7 +30,11 @@ public class GuangDianClass extends AbstractRPGPlugin {
     private ClassServiceAdapter serviceAdapter;
     private ClassPlaceholder placeholder;
     private ClassAttributeGUI attributeGUI;
-    
+    private ClassMainGUI mainGUI;
+    private ClassSelectionGUI selectionGUI;
+    private ClassAdvanceGUI advanceGUI;
+    private ClassInfoGUI infoGUI;
+
     private String defaultClassId;
     
     @Override
@@ -49,7 +57,11 @@ public class GuangDianClass extends AbstractRPGPlugin {
         serviceAdapter = new ClassServiceAdapter(this, classManager, expManager, dataHandler);
         
         attributeGUI = new ClassAttributeGUI(this, serviceAdapter);
-        
+        mainGUI = new ClassMainGUI(this, serviceAdapter);
+        selectionGUI = new ClassSelectionGUI(this, serviceAdapter, classManager);
+        advanceGUI = new ClassAdvanceGUI(this, serviceAdapter, classManager);
+        infoGUI = new ClassInfoGUI(this, serviceAdapter, classManager);
+
         registerCommands();
         
         registerPlaceholder();
@@ -137,6 +149,22 @@ public class GuangDianClass extends AbstractRPGPlugin {
         }
     }
     
+    public void openMainGUI(Player player) {
+        mainGUI.open(player);
+    }
+
+    public void openClassSelectionGUI(Player player) {
+        selectionGUI.open(player);
+    }
+
+    public void openClassAdvanceGUI(Player player) {
+        advanceGUI.open(player);
+    }
+
+    public void openClassInfoGUI(Player player) {
+        infoGUI.open(player);
+    }
+
     public void openAttributeGUI(Player player) {
         attributeGUI.open(player);
     }

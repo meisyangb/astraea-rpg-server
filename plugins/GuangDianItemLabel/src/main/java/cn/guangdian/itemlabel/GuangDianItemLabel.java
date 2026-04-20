@@ -1,7 +1,5 @@
 package cn.guangdian.itemlabel;
 
-import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.api.SyncScheduler;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import org.bukkit.Bukkit;
@@ -25,10 +23,11 @@ public class GuangDianItemLabel extends AbstractRPGPlugin {
 
         Bukkit.getPluginManager().registerEvents(itemLabelListener, this);
 
-        long updateInterval = getConfig().getLong("update-interval", 20L);
+        long updateInterval = getConfig().getLong("settings.update-interval", 20L);
         scheduler.runSyncRepeating(itemLabelManager::updateLabels, updateInterval, updateInterval);
 
-        getLogger().info(getPluginName() + " 已启动 - 物品标签系统已激活");
+        getLogger().info(getPluginName() + " 已启动 - 物品标签系统 v2.0 已激活");
+        getLogger().info("品质等级系统: " + itemLabelManager.getRarityLevelCount() + " 个等级");
     }
 
     @Override

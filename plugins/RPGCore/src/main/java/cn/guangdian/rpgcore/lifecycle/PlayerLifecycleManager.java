@@ -1,6 +1,7 @@
 package cn.guangdian.rpgcore.lifecycle;
 
 import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.api.SyncScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -8,7 +9,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,7 +21,7 @@ public class PlayerLifecycleManager implements Listener {
     private final List<PlayerDataHandler> handlers = new ArrayList<>();
     private final Map<UUID, Long> loadTimes = new ConcurrentHashMap<>();
     private final Map<UUID, Long> saveTimes = new ConcurrentHashMap<>();
-    private BukkitTask autoSaveTask;
+    private long autoSaveTask = -1;
     private long autoSaveInterval = 5 * 60 * 20L;
     
     public PlayerLifecycleManager(RPGCore plugin) {
@@ -127,21 +127,30 @@ public class PlayerLifecycleManager implements Listener {
     }
     
     private void startAutoSave() {
-        if (autoSaveTask != null) {
-            autoSaveTask.cancel();
+        if (autoSaveTask >= 0) {
+            SyncScheduler scheduler = RPGCore.getInstance().getScheduler();
+            if (scheduler != null) {
+                scheduler.cancelTask(autoSaveTask);
+            }
         }
         
-        autoSaveTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-            saveAllPlayers(true);
-        }, autoSaveInterval, autoSaveInterval);
+        SyncScheduler scheduler = RPGCore.getInstance().getScheduler();
+        if (scheduler != null) {
+            autoSaveTask = scheduler.runSyncRepeating(() -> {
+                saveAllPlayers(true);
+            }, autoSaveInterval, autoSaveInterval);
+        }
         
         logger.info("自动保存任务已启动 (间隔: " + (autoSaveInterval / 20 / 60) + "分钟)");
     }
     
     private void stopAutoSave() {
-        if (autoSaveTask != null) {
-            autoSaveTask.cancel();
-            autoSaveTask = null;
+        if (autoSaveTask >= 0) {
+            SyncScheduler scheduler = RPGCore.getInstance().getScheduler();
+            if (scheduler != null) {
+                scheduler.cancelTask(autoSaveTask);
+            }
+            autoSaveTask = -1;
         }
     }
     

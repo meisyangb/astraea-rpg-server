@@ -53,12 +53,17 @@ public class ClassCommand implements CommandExecutor, TabCompleter {
     
     private boolean handleClassCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            sendHelp(sender);
+            // 无参数时打开GUI主界面
+            if (!(sender instanceof Player player)) {
+                sendHelp(sender);
+                return true;
+            }
+            plugin.openMainGUI(player);
             return true;
         }
-        
+
         String subCommand = args[0].toLowerCase();
-        
+
         return switch (subCommand) {
             case "info" -> handleInfo(sender, args);
             case "choose" -> handleChoose(sender, args);
@@ -66,6 +71,14 @@ public class ClassCommand implements CommandExecutor, TabCompleter {
             case "reset" -> handleReset(sender, args);
             case "list" -> handleList(sender, args);
             case "attr", "attribute" -> handleAttribute(sender, args);
+            case "gui" -> {
+                if (sender instanceof Player player) {
+                    plugin.openMainGUI(player);
+                } else {
+                    sender.sendMessage(Component.text("只有玩家可以使用此命令！").color(NamedTextColor.RED));
+                }
+                yield true;
+            }
             case "help" -> {
                 sendHelp(sender);
                 yield true;
@@ -525,6 +538,8 @@ public class ClassCommand implements CommandExecutor, TabCompleter {
     
     private void sendHelp(CommandSender sender) {
         sender.sendMessage(Component.text("========== 职业系统帮助 ==========").color(NamedTextColor.GOLD));
+        sender.sendMessage(Component.text("/class - 打开职业系统GUI").color(NamedTextColor.YELLOW));
+        sender.sendMessage(Component.text("/class gui - 打开职业系统GUI").color(NamedTextColor.YELLOW));
         sender.sendMessage(Component.text("/class info [玩家] - 查看职业信息").color(NamedTextColor.YELLOW));
         sender.sendMessage(Component.text("/class choose <职业> - 选择职业").color(NamedTextColor.YELLOW));
         sender.sendMessage(Component.text("/class advance - 进行转职").color(NamedTextColor.YELLOW));
@@ -559,7 +574,7 @@ public class ClassCommand implements CommandExecutor, TabCompleter {
         
         if (command.getName().equalsIgnoreCase("class")) {
             if (args.length == 1) {
-                completions.addAll(Arrays.asList("info", "choose", "advance", "list", "reset", "attr", "help"));
+                completions.addAll(Arrays.asList("gui", "info", "choose", "advance", "list", "reset", "attr", "help"));
             } else if (args.length == 2) {
                 if (args[0].equalsIgnoreCase("choose") || args[0].equalsIgnoreCase("advance")) {
                     completions.addAll(classManager.getAllClasses().stream()
