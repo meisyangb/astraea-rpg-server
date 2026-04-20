@@ -1,20 +1,30 @@
-﻿enabled: true
+# ========================================
+# 光点菜单插件配置文件
+# GuangDianMenu Configuration
+# RPGCore MiniMessage 和 SoundService 格式支持
+# ========================================
+# 作者: Gumin
+# QQ: 2271257344
+# 版本: 1.1.0
+# ========================================
+
+enabled: true
 
 default-menu: "main"
 
 right-click:
   enabled: true
-  lore-trigger: "&e右键打开主菜单"
+  lore-trigger: "<yellow>右键打开主菜单"
 
 menu-item:
   enabled: true
   menu: "main"
   material: CLOCK
-  name: "&6&l主菜单"
+  name: "<gold><bold>主菜单"
   lore:
-    - "&e右键打开主菜单"
-    - "&7打开服务器功能导航"
-    - "&8光点传奇专属物品"
+    - "<yellow>右键打开主菜单"
+    - "<gray>打开服务器功能导航"
+    - "<dark_gray>光点传奇专属物品"
   unbreakable: true
   glowing: true
   auto-give-on-join: true
@@ -23,162 +33,162 @@ menu-item:
 
 menus:
   main:
-    title: "&6&l光点传奇 &8┃ &e功能菜单"
+    title: "<gold><bold>光点传奇 <dark_gray>┃ <yellow>功能菜单"
     size: 54
     items:
       server-info:
         slot: 4
         material: NETHER_STAR
-        name: "&6&l服务器信息"
+        name: "<gold><bold>服务器信息"
         lore:
-          - "&8&m--------------------"
-          - "&7服务器: &6光点传奇"
-          - "&7当前世界: &e%player_world%"
-          - "&7在线人数: &a%server_online%&7/&a%server_max_players%"
-          - "&7当前延迟: &b%player_ping%ms"
-          - "&8&m--------------------"
-          - "&e点击查看在线提示"
-        action: "message:&6服务器在线人数: &e%server_online%&7/&e%server_max_players%"
+          - "<dark_gray><strikethrough>--------------------"
+          - "<gray>服务器: <gold>光点传奇"
+          - "<gray>当前世界: <yellow>%player_world%"
+          - "<gray>在线人数: <green>%server_online%<gray>/<green>%server_max_players%"
+          - "<gray>当前延迟: <aqua>%player_ping%ms"
+          - "<dark_gray><strikethrough>--------------------"
+          - "<yellow>点击查看在线提示"
+        action: "message:<gold>服务器在线人数: <yellow>%server_online%<gray>/<yellow>%server_max_players%"
 
       player-info:
         slot: 13
         material: PLAYER_HEAD
         skull: "%player_name%"
-        name: "&e&l角色信息"
+        name: "<yellow><bold>角色信息"
         lore:
-          - "&8&m--------------------"
-          - "&7昵称: &f%player_name%"
-          - "&7称号: %luckperms_prefix%"
-          - "&7等级: &bLv.%player_level%"
-          - "&7血量: &c%player_health%&7/&c%player_max_health%"
-          - "&7金币: &6%vault_eco_balance_formatted%"
-          - "&7点券: &e%gdpoints_points%"
-          - "&7工会: &3%gdguild_name%"
-          - "&7婚姻: &d%gdmarriage_partner%"
-          - "&8&m--------------------"
+          - "<dark_gray><strikethrough>--------------------"
+          - "<gray>昵称: <white>%player_name%"
+          - "<gray>称号: %luckperms_prefix%"
+          - "<gray>等级: <aqua>Lv.%player_level%"
+          - "<gray>血量: <red>%player_health%<gray>/<red>%player_max_health%"
+          - "<gray>金币: <gold>%vault_eco_balance_formatted%"
+          - "<gray>点券: <yellow>%gdpoints_points%"
+          - "<gray>工会: <dark_aqua>%gdguild_name%"
+          - "<gray>婚姻: <light_purple>%gdmarriage_partner%"
+          - "<dark_gray><strikethrough>--------------------"
 
       market:
         slot: 20
         material: EMERALD
-        name: "&a&l全球市场"
+        name: "<green><bold>全球市场"
         lore:
-          - "&7浏览玩家寄售与交易"
-          - "&e点击打开市场"
+          - "<gray>浏览玩家寄售与交易"
+          - "<yellow>点击打开市场"
         action: "command:market"
 
       guild:
         slot: 21
         material: BLUE_BANNER
-        name: "&3&l工会系统"
+        name: "<dark_aqua><bold>工会系统"
         lore:
-          - "&7创建、查看或管理工会"
-          - "&e点击打开工会命令"
+          - "<gray>创建、查看或管理工会"
+          - "<yellow>点击打开工会命令"
         action: "command:guild"
 
       marriage:
         slot: 22
         material: ROSE_BUSH
-        name: "&d&l婚姻系统"
+        name: "<light_purple><bold>婚姻系统"
         lore:
-          - "&7求婚、传送、查看婚姻状态"
-          - "&e点击打开婚姻命令"
+          - "<gray>求婚、传送、查看婚姻状态"
+          - "<yellow>点击打开婚姻命令"
         action: "command:marriage"
 
       trade:
         slot: 23
         material: TOTEM_OF_UNDYING
-        name: "&b&l交易系统"
+        name: "<aqua><bold>交易系统"
         lore:
-          - "&7与附近玩家进行安全交易"
-          - "&e点击查看交易帮助"
+          - "<gray>与附近玩家进行安全交易"
+          - "<yellow>点击查看交易帮助"
         action: "command:trade help"
 
       rpg-stats:
         slot: 24
         material: DIAMOND_SWORD
-        name: "&c&l角色属性"
+        name: "<red><bold>角色属性"
         lore:
-          - "&7查看当前 RPG 属性面板"
-          - "&e点击查看属性"
+          - "<gray>查看当前 RPG 属性面板"
+          - "<yellow>点击查看属性"
         action: "command:armorstats view"
 
       cave:
         slot: 25
         material: ENDER_CHEST
-        name: "&d&l我的洞府"
+        name: "<light_purple><bold>我的洞府"
         lore:
-          - "&7进入你的专属洞府空间"
-          - "&7可升级、邀请成员共建"
-          - "&e点击打开洞府菜单"
+          - "<gray>进入你的专属洞府空间"
+          - "<gray>可升级、邀请成员共建"
+          - "<yellow>点击打开洞府菜单"
         action: "menu:cave"
 
       # 第二行功能按钮 - 装备强化系统
       forge:
         slot: 28
         material: BLAST_FURNACE
-        name: "&c&l装备锻造"
+        name: "<red><bold>装备锻造"
         lore:
-          - "&7打开锻造界面"
-          - "&7合成强力装备，解锁图纸"
-          - "&e点击进入锻造"
+          - "<gray>打开锻造界面"
+          - "<gray>合成强力装备，解锁图纸"
+          - "<yellow>点击进入锻造"
         action: "command:forge"
 
       gem:
         slot: 29
         material: AMETHYST_SHARD
-        name: "&5&l宝石镶嵌"
+        name: "<dark_purple><bold>宝石镶嵌"
         lore:
-          - "&7打开宝石镶嵌界面"
-          - "&7镶嵌宝石提升属性"
-          - "&e点击进入"
+          - "<gray>打开宝石镶嵌界面"
+          - "<gray>镶嵌宝石提升属性"
+          - "<yellow>点击进入"
         action: "command:gem"
 
       enhance:
         slot: 30
         material: ANVIL
-        name: "&6&l装备强化"
+        name: "<gold><bold>装备强化"
         lore:
-          - "&7打开装备强化界面"
-          - "&7强化装备提升战斗力"
-          - "&e点击进入"
+          - "<gray>打开装备强化界面"
+          - "<gray>强化装备提升战斗力"
+          - "<yellow>点击进入"
         action: "command:enhance"
 
       points:
         slot: 31
         material: SUNFLOWER
-        name: "&e&l点券中心"
+        name: "<yellow><bold>点券中心"
         lore:
-          - "&7查看当前点券余额"
-          - "&7点券: &e%gdpoints_points%"
-          - "&e点击打开点券命令"
+          - "<gray>查看当前点券余额"
+          - "<gray>点券: <yellow>%gdpoints_points%"
+          - "<yellow>点击打开点券命令"
         action: "command:points"
 
       worlds:
         slot: 32
         material: COMPASS
-        name: "&b&l世界传送"
+        name: "<aqua><bold>世界传送"
         lore:
-          - "&7传送到主世界、地狱、末地"
-          - "&7快速返回主城或洞府"
-          - "&e点击打开世界菜单"
+          - "<gray>传送到主世界、地狱、末地"
+          - "<gray>快速返回主城或洞府"
+          - "<yellow>点击打开世界菜单"
         action: "menu:worlds"
 
       settings:
         slot: 33
         material: REDSTONE_TORCH
-        name: "&c&l个人设置"
+        name: "<red><bold>个人设置"
         lore:
-          - "&7打开常用设置与快捷入口"
-          - "&7侧边栏、个人信息等"
-          - "&e点击打开设置"
+          - "<gray>打开常用设置与快捷入口"
+          - "<gray>侧边栏、个人信息等"
+          - "<yellow>点击打开设置"
         action: "menu:settings"
 
       close:
         slot: 49
         material: BARRIER
-        name: "&4&l关闭菜单"
+        name: "<dark_red><bold>关闭菜单"
         lore:
-          - "&7关闭当前界面"
+          - "<gray>关闭当前界面"
         action: "close"
 
       border:
@@ -187,64 +197,64 @@ menus:
         name: " "
 
   worlds:
-    title: "&b&l世界传送"
+    title: "<aqua><bold>世界传送"
     size: 27
     items:
       main-world:
         slot: 11
         material: GRASS_BLOCK
-        name: "&a&l主世界"
+        name: "<green><bold>主世界"
         lore:
-          - "&7传送到主世界"
-          - "&7资源丰富，适合探索"
-          - "&e点击传送"
+          - "<gray>传送到主世界"
+          - "<gray>资源丰富，适合探索"
+          - "<yellow>点击传送"
         action: "command:gworldtp world"
 
       nether:
         slot: 13
         material: NETHERRACK
-        name: "&c&l地狱"
+        name: "<red><bold>地狱"
         lore:
-          - "&7传送到地狱世界"
-          - "&7获取特殊材料的危险之地"
-          - "&e点击传送"
+          - "<gray>传送到地狱世界"
+          - "<gray>获取特殊材料的危险之地"
+          - "<yellow>点击传送"
         action: "command:gworldtp world_nether"
 
       end:
         slot: 15
         material: END_STONE
-        name: "&d&l末地"
+        name: "<light_purple><bold>末地"
         lore:
-          - "&7传送到末地世界"
-          - "&7挑战末影龙，获取稀有装备"
-          - "&e点击传送"
+          - "<gray>传送到末地世界"
+          - "<gray>挑战末影龙，获取稀有装备"
+          - "<yellow>点击传送"
         action: "command:gworldtp world_the_end"
 
       spawn:
         slot: 22
         material: BEACON
-        name: "&6&l主城大厅"
+        name: "<gold><bold>主城大厅"
         lore:
-          - "&7传送回主城大厅"
-          - "&7安全区域，交易社交中心"
-          - "&e点击传送"
+          - "<gray>传送回主城大厅"
+          - "<gray>安全区域，交易社交中心"
+          - "<yellow>点击传送"
         action: "command:gspawn"
 
       cave-home:
         slot: 21
         material: ENDER_CHEST
-        name: "&d&l回到洞府"
+        name: "<light_purple><bold>回到洞府"
         lore:
-          - "&7返回你的专属洞府空间"
-          - "&e点击传送"
+          - "<gray>返回你的专属洞府空间"
+          - "<yellow>点击传送"
         action: "command:cave home"
 
       back:
         slot: 26
         material: ARROW
-        name: "&7&l返回主菜单"
+        name: "<gray><bold>返回主菜单"
         lore:
-          - "&e点击返回"
+          - "<yellow>点击返回"
         action: "menu:main"
 
       border:
@@ -253,61 +263,61 @@ menus:
         name: " "
 
   settings:
-    title: "&c&l个人设置"
+    title: "<red><bold>个人设置"
     size: 27
     items:
       toggle-scoreboard:
         slot: 11
         material: BOOK
-        name: "&b&l侧边栏开关"
+        name: "<aqua><bold>侧边栏开关"
         lore:
-          - "&7切换传奇风格侧边栏"
-          - "&e点击切换"
+          - "<gray>切换传奇风格侧边栏"
+          - "<yellow>点击切换"
         action: "command:toggleboard"
 
       display-settings:
         slot: 13
         material: NAME_TAG
-        name: "&6&l头顶显示设置"
+        name: "<gold><bold>头顶显示设置"
         lore:
-          - "&7自定义头顶显示内容"
-          - "&7称号、公会、婚姻等"
-          - "&e点击打开设置"
+          - "<gray>自定义头顶显示内容"
+          - "<gray>称号、公会、婚姻等"
+          - "<yellow>点击打开设置"
         action: "menu:display-settings"
 
       point-balance:
         slot: 15
         material: GOLD_NUGGET
-        name: "&e&l点券余额"
+        name: "<yellow><bold>点券余额"
         lore:
-          - "&7当前点券: &e%gdpoints_points%"
-          - "&e点击查看点券命令"
+          - "<gray>当前点券: <yellow>%gdpoints_points%"
+          - "<yellow>点击查看点券命令"
         action: "command:points"
 
       guild-info:
         slot: 22
         material: WRITABLE_BOOK
-        name: "&3&l工会信息"
+        name: "<dark_aqua><bold>工会信息"
         lore:
-          - "&7快速查看工会详情"
-          - "&e点击查看"
+          - "<gray>快速查看工会详情"
+          - "<yellow>点击查看"
         action: "command:guild info"
 
       marriage-info:
         slot: 24
         material: PINK_DYE
-        name: "&d&l婚姻信息"
+        name: "<light_purple><bold>婚姻信息"
         lore:
-          - "&7快速查看婚姻状态"
-          - "&e点击查看"
+          - "<gray>快速查看婚姻状态"
+          - "<yellow>点击查看"
         action: "command:marriage info"
 
       back:
         slot: 26
         material: ARROW
-        name: "&7&l返回主菜单"
+        name: "<gray><bold>返回主菜单"
         lore:
-          - "&e点击返回"
+          - "<yellow>点击返回"
         action: "menu:main"
 
       border:
@@ -316,45 +326,45 @@ menus:
         name: " "
 
   display-settings:
-    title: "&6&l头顶显示设置"
+    title: "<gold><bold>头顶显示设置"
     size: 27
     items:
       toggle-title:
         slot: 11
         material: GOLD_INGOT
-        name: "&e&l称号显示"
+        name: "<yellow><bold>称号显示"
         lore:
-          - "&7控制头顶是否显示称号"
-          - "&7状态: &f%gdname_show_title%"
-          - "&e点击切换"
+          - "<gray>控制头顶是否显示称号"
+          - "<gray>状态: <white>%gdname_show_title%"
+          - "<yellow>点击切换"
         action: "command:gdnametoggle title"
 
       toggle-guild:
         slot: 13
         material: BLUE_BANNER
-        name: "&b&l公会显示"
+        name: "<aqua><bold>公会显示"
         lore:
-          - "&7控制头顶是否显示公会"
-          - "&7状态: &f%gdname_show_guild%"
-          - "&e点击切换"
+          - "<gray>控制头顶是否显示公会"
+          - "<gray>状态: <white>%gdname_show_guild%"
+          - "<yellow>点击切换"
         action: "command:gdnametoggle guild"
 
       toggle-marriage:
         slot: 15
         material: ROSE_BUSH
-        name: "&d&l婚姻显示"
+        name: "<light_purple><bold>婚姻显示"
         lore:
-          - "&7控制头顶是否显示婚姻"
-          - "&7状态: &f%gdname_show_marriage%"
-          - "&e点击切换"
+          - "<gray>控制头顶是否显示婚姻"
+          - "<gray>状态: <white>%gdname_show_marriage%"
+          - "<yellow>点击切换"
         action: "command:gdnametoggle marriage"
 
       back:
         slot: 26
         material: ARROW
-        name: "&7&l返回设置"
+        name: "<gray><bold>返回设置"
         lore:
-          - "&e点击返回"
+          - "<yellow>点击返回"
         action: "menu:settings"
 
       border:
@@ -363,89 +373,89 @@ menus:
         name: " "
 
   cave:
-    title: "&d&l我的洞府"
+    title: "<light_purple><bold>我的洞府"
     size: 27
     items:
       cave-home:
         slot: 11
         material: ENDER_CHEST
-        name: "&d&l回到洞府"
+        name: "<light_purple><bold>回到洞府"
         lore:
-          - "&7传送回你的专属洞府空间"
-          - "&e点击传送"
+          - "<gray>传送回你的专属洞府空间"
+          - "<yellow>点击传送"
         action: "command:cave home"
 
       cave-create:
         slot: 12
         material: OAK_DOOR
-        name: "&a&l创建洞府"
+        name: "<green><bold>创建洞府"
         lore:
-          - "&7创建属于你的专属洞府"
-          - "&e点击创建"
+          - "<gray>创建属于你的专属洞府"
+          - "<yellow>点击创建"
         action: "command:cave create"
 
       cave-info:
         slot: 13
         material: BOOK
-        name: "&b&l洞府信息"
+        name: "<aqua><bold>洞府信息"
         lore:
-          - "&7查看洞府详情与等级"
-          - "&e点击查看"
+          - "<gray>查看洞府详情与等级"
+          - "<yellow>点击查看"
         action: "command:cave info"
 
       cave-upgrade:
         slot: 14
         material: EXPERIENCE_BOTTLE
-        name: "&6&l升级洞府"
+        name: "<gold><bold>升级洞府"
         lore:
-          - "&7升级洞府扩大空间"
-          - "&e点击升级"
+          - "<gray>升级洞府扩大空间"
+          - "<yellow>点击升级"
         action: "command:cave upgrade"
 
       cave-members:
         slot: 15
         material: PLAYER_HEAD
         skull: "Steve"
-        name: "&3&l成员管理"
+        name: "<dark_aqua><bold>成员管理"
         lore:
-          - "&7查看洞府成员列表"
-          - "&e点击查看"
+          - "<gray>查看洞府成员列表"
+          - "<yellow>点击查看"
         action: "command:cave members"
 
       cave-invite:
         slot: 21
         material: NAME_TAG
-        name: "&e&l邀请成员"
+        name: "<yellow><bold>邀请成员"
         lore:
-          - "&7邀请玩家加入你的洞府"
-          - "&e输入: /cave invite <玩家>"
-        action: "message:&e请使用命令: &6/cave invite <玩家名>"
+          - "<gray>邀请玩家加入你的洞府"
+          - "<yellow>输入: /cave invite <玩家>"
+        action: "message:<yellow>请使用命令: <gold>/cave invite <玩家名>"
 
       cave-visit:
         slot: 22
         material: COMPASS
-        name: "&b&l访问他人洞府"
+        name: "<aqua><bold>访问他人洞府"
         lore:
-          - "&7访问其他玩家的洞府"
-          - "&e输入: /cave visit <玩家>"
-        action: "message:&e请使用命令: &6/cave visit <玩家名>"
+          - "<gray>访问其他玩家的洞府"
+          - "<yellow>输入: /cave visit <玩家>"
+        action: "message:<yellow>请使用命令: <gold>/cave visit <玩家名>"
 
       cave-leave:
         slot: 23
         material: OAK_SIGN
-        name: "&c&l离开洞府"
+        name: "<red><bold>离开洞府"
         lore:
-          - "&7离开当前洞府"
-          - "&c注意: 退出后将失去权限"
-          - "&e点击离开"
+          - "<gray>离开当前洞府"
+          - "<red>注意: 退出后将失去权限"
+          - "<yellow>点击离开"
         action: "command:cave leave"
 
       back:
         slot: 26
         material: ARROW
-        name: "&7&l返回主菜单"
+        name: "<gray><bold>返回主菜单"
         lore:
-          - "&e点击返回"
+          - "<yellow>点击返回"
         action: "menu:main"
 
       border:
@@ -453,12 +463,16 @@ menus:
         material: PURPLE_STAINED_GLASS_PANE
         name: " "
 
+# ========================================
+# 消息设置 - MiniMessage 格式
+# ========================================
 messages:
-  no-permission: "&c你没有权限执行此操作!"
-  config-reloaded: "&a菜单配置已重载!"
-  menu-not-found: "&c菜单不存在!"
-  unknown-action: "&c未知的菜单动作类型!"
-  click-sound: "BLOCK_NOTE_BLOCK_PLING"
+  no-permission: "<red>你没有权限执行此操作!"
+  config-reloaded: "<green>菜单配置已重载!"
+  menu-not-found: "<red>菜单不存在!"
+  unknown-action: "<red>未知的菜单动作类型!"
+  # 点击音效 - Paper 1.21+ 格式
+  click-sound: "minecraft:block.note_block.pling"
   click-volume: 1.0
   click-pitch: 1.0
 

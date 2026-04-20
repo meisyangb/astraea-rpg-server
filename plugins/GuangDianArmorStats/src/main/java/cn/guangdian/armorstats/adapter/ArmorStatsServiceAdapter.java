@@ -18,6 +18,7 @@ import cn.guangdian.rpgcore.service.api.StatsService;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -65,12 +66,10 @@ public class ArmorStatsServiceAdapter implements StatsService, SkillService, Att
     // ==================== StatsService 实现 ====================
 
     @Override
-    public Object getPlayerStats(UUID playerId) {
-        StatsManager statsManager = plugin.getStatsManager();
-        Player player = Bukkit.getPlayer(playerId);
-        if (statsManager != null && player != null) {
-            return statsManager.getPlayerStats(player);
-        }
+    @Nullable
+    public cn.guangdian.rpgcore.service.api.data.PlayerStats getPlayerStats(UUID playerId) {
+        // 返回 null 表示此模块不直接提供 RPGCore PlayerStats 实现
+        // 实际属性通过 getTotalAttack, getTotalDefense 等方法提供
         return null;
     }
 

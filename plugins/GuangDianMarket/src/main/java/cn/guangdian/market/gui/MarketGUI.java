@@ -3,8 +3,9 @@ package cn.guangdian.market.gui;
 import cn.guangdian.market.GuangDianMarket;
 import cn.guangdian.market.GuangDianMarket.CurrencyType;
 import cn.guangdian.market.GuangDianMarket.MarketItem;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -174,7 +175,7 @@ public class MarketGUI implements InventoryHolder {
     public MarketGUI(GuangDianMarket plugin, Player player) {
         this.plugin = plugin;
         this.player = player;
-        this.inventory = Bukkit.createInventory(this, SIZE, ChatColor.GOLD + "全球市场");
+        this.inventory = Bukkit.createInventory(this, SIZE, MiniMessage.miniMessage().deserialize("<gold>全球市场"));
         refreshItems();
     }
     
@@ -265,7 +266,7 @@ public class MarketGUI implements InventoryHolder {
     }
     
     private void fillBackground() {
-        ItemStack glass = createItem(Material.GRAY_STAINED_GLASS_PANE, " ");
+        ItemStack glass = createItemComponent(Material.GRAY_STAINED_GLASS_PANE, " ");
         for (int i = 0; i < 9; i++) {
             inventory.setItem(i + 9, glass);
             inventory.setItem(i + 18, glass);
@@ -280,16 +281,16 @@ public class MarketGUI implements InventoryHolder {
             Category cat = categories[i];
             ItemStack item = new ItemStack(cat.getIcon());
             ItemMeta meta = item.getItemMeta();
-            
-            String prefix = cat == currentCategory ? ChatColor.GREEN + "✓ " : ChatColor.GRAY + "";
-            meta.setDisplayName(prefix + cat.getDisplayName());
-            
+
+            String prefix = cat == currentCategory ? "<green>✓ " : "<gray>";
+            meta.displayName(MiniMessage.miniMessage().deserialize(prefix + cat.getDisplayName()));
+
             if (cat == currentCategory) {
-                List<String> lore = new ArrayList<>();
-                lore.add(ChatColor.YELLOW + "当前选中");
-                meta.setLore(lore);
+                List<Component> lore = new ArrayList<>();
+                lore.add(MiniMessage.miniMessage().deserialize("<yellow>当前选中"));
+                meta.lore(lore);
             }
-            
+
             item.setItemMeta(meta);
             inventory.setItem(CATEGORY_SLOTS[i], item);
         }
@@ -311,62 +312,62 @@ public class MarketGUI implements InventoryHolder {
     private void setNavigationBar() {
         int itemsPerPage = ITEM_SLOTS.length;
         int totalPages = Math.max(1, (int) Math.ceil((double) filteredItems.size() / itemsPerPage));
-        
+
         // 搜索按钮
-        inventory.setItem(SEARCH_SLOT, createItem(Material.OAK_SIGN, 
-            ChatColor.YELLOW + "搜索", 
-            ChatColor.GRAY + "当前: " + (searchQuery.isEmpty() ? "无" : searchQuery),
+        inventory.setItem(SEARCH_SLOT, createItemComponent(Material.OAK_SIGN,
+            "<yellow>搜索",
+            "<gray>当前: " + (searchQuery.isEmpty() ? "无" : searchQuery),
             "",
-            ChatColor.AQUA + "点击输入搜索词"));
-        
+            "<aqua>点击输入搜索词"));
+
         // 排序按钮
-        inventory.setItem(SORT_SLOT, createItem(currentSort.getIcon(),
-            ChatColor.YELLOW + "排序: " + ChatColor.WHITE + currentSort.getDisplayName(),
+        inventory.setItem(SORT_SLOT, createItemComponent(currentSort.getIcon(),
+            "<yellow>排序: <white>" + currentSort.getDisplayName(),
             "",
-            ChatColor.AQUA + "点击切换排序方式"));
-        
+            "<aqua>点击切换排序方式"));
+
         // 货币筛选按钮
-        inventory.setItem(FILTER_CURRENCY_SLOT, createItem(currentCurrencyFilter.getIcon(),
-            ChatColor.YELLOW + "货币: " + ChatColor.WHITE + currentCurrencyFilter.getDisplayName(),
+        inventory.setItem(FILTER_CURRENCY_SLOT, createItemComponent(currentCurrencyFilter.getIcon(),
+            "<yellow>货币: <white>" + currentCurrencyFilter.getDisplayName(),
             "",
-            ChatColor.AQUA + "点击切换货币筛选"));
-        
+            "<aqua>点击切换货币筛选"));
+
         // 上一页
         if (currentPage > 1) {
-            inventory.setItem(PREV_PAGE_SLOT, createItem(Material.ARROW, ChatColor.GREEN + "上一页"));
+            inventory.setItem(PREV_PAGE_SLOT, createItemComponent(Material.ARROW, "<green>上一页"));
         }
-        
+
         // 页码信息
-        String pageInfo = ChatColor.GOLD + "第 " + ChatColor.WHITE + currentPage + 
-                         ChatColor.GOLD + "/" + ChatColor.WHITE + totalPages + ChatColor.GOLD + " 页";
-        inventory.setItem(PAGE_INFO_SLOT, createItem(Material.BOOK, pageInfo,
-            ChatColor.GRAY + "共 " + filteredItems.size() + " 件商品"));
-        
+        String pageInfo = "<gold>第 <white>" + currentPage +
+                         "<gold>/<white>" + totalPages + "<gold> 页";
+        inventory.setItem(PAGE_INFO_SLOT, createItemComponent(Material.BOOK, pageInfo,
+            "<gray>共 " + filteredItems.size() + " 件商品"));
+
         // 下一页
         if (currentPage < totalPages) {
-            inventory.setItem(NEXT_PAGE_SLOT, createItem(Material.ARROW, ChatColor.GREEN + "下一页"));
+            inventory.setItem(NEXT_PAGE_SLOT, createItemComponent(Material.ARROW, "<green>下一页"));
         }
-        
+
         // 我的上架
         int myCount = plugin.getPlayerListings().getOrDefault(player.getUniqueId(), new ArrayList<>()).size();
-        inventory.setItem(MY_LISTINGS_SLOT, createItem(Material.CHEST,
-            ChatColor.GOLD + "我的上架",
-            ChatColor.GRAY + "当前上架: " + myCount + " 件"));
-        
+        inventory.setItem(MY_LISTINGS_SLOT, createItemComponent(Material.CHEST,
+            "<gold>我的上架",
+            "<gray>当前上架: " + myCount + " 件"));
+
         // 余额显示
         String pointsBalance = plugin.formatNumber(plugin.getPointsBalance(player.getUniqueId()));
-        String economyBalance = plugin.getEconomy() != null 
+        String economyBalance = plugin.getEconomy() != null
             ? plugin.getEconomy().format(plugin.getEconomyBalance(player.getUniqueId()))
             : "0";
-        inventory.setItem(BALANCE_SLOT, createItem(Material.GOLD_INGOT,
-            ChatColor.GOLD + "余额",
-            ChatColor.YELLOW + "点券: " + ChatColor.WHITE + pointsBalance,
-            ChatColor.YELLOW + "金币: " + ChatColor.WHITE + economyBalance));
-        
+        inventory.setItem(BALANCE_SLOT, createItemComponent(Material.GOLD_INGOT,
+            "<gold>余额",
+            "<yellow>点券: <white>" + pointsBalance,
+            "<yellow>金币: <white>" + economyBalance));
+
         // 刷新按钮
-        inventory.setItem(REFRESH_SLOT, createItem(Material.CLOCK,
-            ChatColor.YELLOW + "刷新",
-            ChatColor.GRAY + "点击刷新列表"));
+        inventory.setItem(REFRESH_SLOT, createItemComponent(Material.CLOCK,
+            "<yellow>刷新",
+            "<gray>点击刷新列表"));
     }
     
     private ItemStack createItem(Material material, String name, String... lore) {
@@ -375,6 +376,25 @@ public class MarketGUI implements InventoryHolder {
         meta.setDisplayName(name);
         if (lore.length > 0) {
             meta.setLore(Arrays.asList(lore));
+        }
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    private ItemStack createItemComponent(Material material, String name, String... lore) {
+        ItemStack item = new ItemStack(material);
+        ItemMeta meta = item.getItemMeta();
+        meta.displayName(MiniMessage.miniMessage().deserialize(name));
+        if (lore.length > 0) {
+            List<Component> loreComponents = new ArrayList<>();
+            for (String line : lore) {
+                if (!line.isEmpty()) {
+                    loreComponents.add(MiniMessage.miniMessage().deserialize(line));
+                } else {
+                    loreComponents.add(Component.empty());
+                }
+            }
+            meta.lore(loreComponents);
         }
         item.setItemMeta(meta);
         return item;
@@ -411,7 +431,7 @@ public class MarketGUI implements InventoryHolder {
             case SEARCH_SLOT:
                 // 搜索功能需要通过聊天输入
                 player.closeInventory();
-                player.sendMessage(ChatColor.YELLOW + "请在聊天中输入搜索关键词，输入 'cancel' 取消");
+                player.sendMessage(MiniMessage.miniMessage().deserialize("<yellow>请在聊天中输入搜索关键词，输入 'cancel' 取消"));
                 plugin.setSearchMode(player, true);
                 return;
                 
@@ -447,7 +467,7 @@ public class MarketGUI implements InventoryHolder {
                 
             case REFRESH_SLOT:
                 refreshItems();
-                player.sendMessage(ChatColor.GREEN + "已刷新市场列表");
+                player.sendMessage(MiniMessage.miniMessage().deserialize("<green>已刷新市场列表"));
                 return;
         }
     }

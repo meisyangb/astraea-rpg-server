@@ -1,0 +1,21 @@
+name: RPGSkill
+version: 1.0.0
+main: cn.guangdian.rpgskill.RPGSkill
+author: GuangDian
+description: RPG技能系统 - 独立的技能管理服务
+api-version: '1.21'
+depend:
+  - RPGCore
+
+commands:
+  rpgskill:
+    description: RPGSkill 管理命令
+    usage: /rpgskill <reload|list|info|cooldown|clearcooldown>
+    permission: rpgskill.admin
+    aliases:
+      - rsk
+
+permissions:
+  rpgskill.admin:
+    description: RPGSkill 管理员权限
+    default: op

@@ -6,7 +6,10 @@ import cn.guangdian.bank.listener.BankListener;
 import cn.guangdian.bank.manager.InterestManager;
 import cn.guangdian.bank.manager.LoanManager;
 import cn.guangdian.bank.placeholder.BankPlaceholder;
+import me.clip.placeholderapi.PlaceholderAPI;
 import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.api.GameLogger;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -20,21 +23,37 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
 
+/**
+ * GuangDianBank - 光点银行系统插件
+ *
+ * <p>本插件已优化集成 RPGCore 服务：</p>
+ * <ul>
+ *   <li>日志系统 - 使用 RPGCore GameLogger（带降级兼容）</li>
+ *   <li>消息发送 - 使用 RPGCore MiniMessageService（带降级兼容）</li>
+ * </ul>
+ *
+ * <p>当 RPGCore 不可用时，自动降级到 Bukkit 原生实现。</p>
+ *
+ * @author GuangDian
+ * @version 1.1.0
+ * @since 1.0.0
+ * @see OPTIMIZATION.md 优化详情
+ */
 public class GuangDianBank extends AbstractRPGPlugin {
 
     private static GuangDianBank instance;
-    
+
     private final Map<UUID, BankAccount> accounts = new ConcurrentHashMap<>();
-    
+
     private BankServiceAdapter serviceAdapter;
     private InterestManager interestManager;
     private LoanManager loanManager;
-    
+    private BankPlaceholder bankPlaceholder;
+
     private File dataFile;
     private YamlConfiguration data;
-    
+
     private long defaultBalance;
     private double depositInterestRate;
     private double loanInterestRate;
@@ -42,10 +61,17 @@ public class GuangDianBank extends AbstractRPGPlugin {
     private long maxLoanAmount;
     private int minCreditScoreForLoan;
 
+    // RPGCore 服务
+    private GameLogger gameLogger;
+    private MiniMessageService miniMessage;
+
     @Override
     protected void onPluginEnable() {
         instance = this;
-        
+
+        // 初始化 RPGCore 服务
+        initRPGCoreServices();
+
         saveDefaultConfig();
         loadConfiguration();
         loadData();
@@ -54,43 +80,114 @@ public class GuangDianBank extends AbstractRPGPlugin {
         registerListeners();
         registerPlaceholders();
         startTasks();
-        
-        getLogger().info(getPluginName() + " 已启动");
-        getLogger().info("存款利率: " + depositInterestRate + "%");
-        getLogger().info("贷款利率: " + loanInterestRate + "%");
+
+        logInfo(getPluginName() + " 已启动");
+        logInfo("存款利率: " + depositInterestRate + "%");
+        logInfo("贷款利率: " + loanInterestRate + "%");
+    }
+
+    /**
+     * 初始化 RPGCore 服务
+     */
+    private void initRPGCoreServices() {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            this.gameLogger = rpgCore.getGameLogger();
+            this.miniMessage = rpgCore.getMiniMessageService();
+        } else {
+            // 降级：使用 Bukkit 原生
+            getLogger().warning("RPGCore 不可用，使用备用日志和消息服务");
+        }
     }
 
     @Override
     protected void onPluginDisable() {
+        // 取消所有调度任务
+        cancelAllTasks();
+
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
         }
-        
+
         if (interestManager != null) {
             interestManager.shutdown();
         }
-        
+
         if (loanManager != null) {
             loanManager.shutdown();
         }
-        
-        saveData();
-        
-        if (scheduler != null) {
-            scheduler.cancelAllTasks();
+
+        if (bankPlaceholder != null) {
+            PlaceholderAPI.unregisterExpansion(bankPlaceholder);
         }
-        
-        getLogger().info(getPluginName() + " 已关闭");
+
+        saveData();
+
+        logInfo(getPluginName() + " 已关闭");
     }
 
     @Override
     protected String getPluginName() {
         return "GuangDianBank";
     }
-    
+
+    // ==================== RPGCore 服务访问 ====================
+
+    public GameLogger getGameLogger() {
+        return gameLogger;
+    }
+
+    public MiniMessageService getMiniMessage() {
+        return miniMessage;
+    }
+
+    /**
+     * 检查是否使用 RPGCore 服务
+     */
+    public boolean isUsingRPGCore() {
+        return gameLogger != null;
+    }
+
+    // ==================== 日志快捷方法 ====================
+
+    public void logInfo(String message) {
+        if (gameLogger != null) {
+            gameLogger.info(message);
+        } else {
+            getLogger().info(message);
+        }
+    }
+
+    public void logWarning(String message) {
+        if (gameLogger != null) {
+            gameLogger.warning(message);
+        } else {
+            getLogger().warning(message);
+        }
+    }
+
+    public void logSevere(String message) {
+        if (gameLogger != null) {
+            gameLogger.severe(message);
+        } else {
+            getLogger().severe(message);
+        }
+    }
+
+    public void logSevere(String message, Throwable throwable) {
+        if (gameLogger != null) {
+            gameLogger.severe(message, throwable);
+        } else {
+            getLogger().severe(message + " - " + throwable.getMessage());
+            throwable.printStackTrace();
+        }
+    }
+
+    // ==================== 配置加载 ====================
+
     private void loadConfiguration() {
         FileConfiguration config = getConfig();
-        
+
         defaultBalance = config.getLong("settings.default-balance", 0);
         depositInterestRate = config.getDouble("settings.deposit-interest-rate", 0.5);
         loanInterestRate = config.getDouble("settings.loan-interest-rate", 5.0);
@@ -98,7 +195,7 @@ public class GuangDianBank extends AbstractRPGPlugin {
         maxLoanAmount = config.getLong("settings.max-loan-amount", 1000000);
         minCreditScoreForLoan = config.getInt("settings.min-credit-score-for-loan", 60);
     }
-    
+
     private void loadData() {
         dataFile = new File(getDataFolder(), "data.yml");
         if (!dataFile.exists()) {
@@ -106,108 +203,111 @@ public class GuangDianBank extends AbstractRPGPlugin {
             try {
                 dataFile.createNewFile();
             } catch (IOException e) {
-                getLogger().severe("无法创建数据文件: " + e.getMessage());
+                logSevere("无法创建数据文件", e);
             }
         }
         data = YamlConfiguration.loadConfiguration(dataFile);
-        
+
         loadAccounts();
     }
-    
+
     private void loadAccounts() {
         if (!data.contains("accounts")) return;
-        
+
         for (String key : data.getConfigurationSection("accounts").getKeys(false)) {
             try {
                 UUID playerId = UUID.fromString(key);
                 BankAccount account = new BankAccount(playerId);
-                
+
                 String path = "accounts." + key + ".";
                 account.setBalance(data.getLong(path + "balance", 0));
                 account.setCreditScore(data.getInt(path + "credit-score", 100));
                 account.setLastInterestTime(data.getLong(path + "last-interest", System.currentTimeMillis()));
-                
+
                 accounts.put(playerId, account);
             } catch (Exception e) {
-                getLogger().warning("加载账户失败: " + key + " - " + e.getMessage());
+                logWarning("加载账户失败: " + key + " - " + e.getMessage());
             }
         }
     }
-    
+
     private void saveData() {
         data.set("accounts", null);
-        
+
         for (Map.Entry<UUID, BankAccount> entry : accounts.entrySet()) {
             String path = "accounts." + entry.getKey().toString() + ".";
             BankAccount account = entry.getValue();
-            
+
             data.set(path + "balance", account.getBalance());
             data.set(path + "credit-score", account.getCreditScore());
             data.set(path + "last-interest", account.getLastInterestTime());
         }
-        
+
         try {
             data.save(dataFile);
         } catch (IOException e) {
-            getLogger().severe("保存数据失败: " + e.getMessage());
+            logSevere("保存数据失败", e);
         }
     }
-    
+
     private void initializeManagers() {
         interestManager = new InterestManager(this);
         loanManager = new LoanManager(this);
-        
-        getLogger().info("利息管理器已初始化");
-        getLogger().info("贷款管理器已初始化");
+
+        logInfo("利息管理器已初始化");
+        logInfo("贷款管理器已初始化");
     }
-    
+
     private void registerServices() {
         serviceAdapter = new BankServiceAdapter(this);
-        
+
         if (serviceAdapter.isUsingRPGCore()) {
-            getLogger().info("已注册到 RPGCore 服务系统");
+            logInfo("已注册到 RPGCore 服务系统");
         }
     }
-    
+
     private void registerListeners() {
         if (rpgCore != null) {
             BankListener listener = new BankListener(this);
             listener.register();
-            getLogger().info("已注册到 RPGCore PlayerLifecycleManager");
+            logInfo("已注册到 RPGCore PlayerLifecycleManager");
         } else {
-            getLogger().warning("RPGCore 未启用，使用传统事件监听");
+            logWarning("RPGCore 未启用，使用传统事件监听");
         }
     }
-    
+
     private void registerPlaceholders() {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new BankPlaceholder(this).register();
-            getLogger().info("已注册 PlaceholderAPI 扩展");
+            bankPlaceholder = new BankPlaceholder(this);
+            bankPlaceholder.register();
+            logInfo("已注册 PlaceholderAPI 扩展");
         }
     }
-    
+
     private void startTasks() {
         if (interestInterval > 0) {
             long taskId = scheduler.runSyncRepeating(() -> {
                 interestManager.processAllInterest();
             }, interestInterval, interestInterval);
-            getLogger().info("利息结算任务已启动，任务ID: " + taskId);
+            logInfo("利息结算任务已启动，任务ID: " + taskId);
         }
-        
+
         long saveTaskId = scheduler.runSyncRepeating(() -> {
             saveData();
         }, 6000L, 6000L);
-        getLogger().info("自动保存任务已启动，任务ID: " + saveTaskId);
+        logInfo("自动保存任务已启动，任务ID: " + saveTaskId);
     }
-    
+
+    // ==================== 业务方法 ====================
+
     public static GuangDianBank getInstance() {
         return instance;
     }
-    
+
     public Map<UUID, BankAccount> getAccounts() {
         return accounts;
     }
-    
+
     public BankAccount getAccount(UUID playerId) {
         return accounts.computeIfAbsent(playerId, id -> {
             BankAccount account = new BankAccount(id);
@@ -215,47 +315,63 @@ public class GuangDianBank extends AbstractRPGPlugin {
             return account;
         });
     }
-    
+
     public boolean hasAccount(UUID playerId) {
         return accounts.containsKey(playerId);
     }
-    
+
+    // ==================== 消息发送（使用 MiniMessage）====================
+
     public void sendMessage(Player player, String message) {
-        player.sendMessage(Component.text(message).color(NamedTextColor.YELLOW));
+        if (miniMessage != null) {
+            player.sendMessage(miniMessage.yellow(message));
+        } else {
+            player.sendMessage(Component.text(message).color(NamedTextColor.YELLOW));
+        }
     }
-    
+
     public void sendError(Player player, String message) {
-        player.sendMessage(Component.text(message).color(NamedTextColor.RED));
+        if (miniMessage != null) {
+            player.sendMessage(miniMessage.red(message));
+        } else {
+            player.sendMessage(Component.text(message).color(NamedTextColor.RED));
+        }
     }
-    
+
     public void sendSuccess(Player player, String message) {
-        player.sendMessage(Component.text(message).color(NamedTextColor.GREEN));
+        if (miniMessage != null) {
+            player.sendMessage(miniMessage.green(message));
+        } else {
+            player.sendMessage(Component.text(message).color(NamedTextColor.GREEN));
+        }
     }
-    
+
+    // ==================== 配置访问器 ====================
+
     public long getDefaultBalance() {
         return defaultBalance;
     }
-    
+
     public double getDepositInterestRate() {
         return depositInterestRate;
     }
-    
+
     public double getLoanInterestRate() {
         return loanInterestRate;
     }
-    
+
     public long getMaxLoanAmount() {
         return maxLoanAmount;
     }
-    
+
     public int getMinCreditScoreForLoan() {
         return minCreditScoreForLoan;
     }
-    
+
     public InterestManager getInterestManager() {
         return interestManager;
     }
-    
+
     public LoanManager getLoanManager() {
         return loanManager;
     }

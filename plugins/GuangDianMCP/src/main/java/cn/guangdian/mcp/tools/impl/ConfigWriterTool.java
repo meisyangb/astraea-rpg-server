@@ -1,6 +1,7 @@
 package cn.guangdian.mcp.tools.impl;
 
 import cn.guangdian.mcp.GuangDianMCP;
+import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.mcp.config.MCPConfig;
 import cn.guangdian.mcp.tools.MCPTool;
 import com.google.gson.JsonArray;
@@ -172,26 +173,16 @@ public class ConfigWriterTool implements MCPTool {
     }
     
     private ToolResult setYamlProperty(File file, String key, String value) {
-        CompletableFuture<ToolResult> future = new CompletableFuture<>();
-        
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-            try {
-                org.bukkit.configuration.file.YamlConfiguration yaml = 
-                    org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(file);
-                
-                Object parsedValue = parseValue(value);
-                yaml.set(key, parsedValue);
-                yaml.save(file);
-                
-                future.complete(ToolResult.success("已设置 " + file.getName() + ": " + key + "=" + value));
-            } catch (Exception e) {
-                future.complete(ToolResult.error("写入失败: " + e.getMessage()));
-            }
-        });
-        
         try {
-            return future.get();
-        } catch (InterruptedException | ExecutionException e) {
+            org.bukkit.configuration.file.YamlConfiguration yaml = 
+                org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(file);
+            
+            Object parsedValue = parseValue(value);
+            yaml.set(key, parsedValue);
+            yaml.save(file);
+            
+            return ToolResult.success("已设置 " + file.getName() + ": " + key + "=" + value);
+        } catch (Exception e) {
             return ToolResult.error("写入失败: " + e.getMessage());
         }
     }

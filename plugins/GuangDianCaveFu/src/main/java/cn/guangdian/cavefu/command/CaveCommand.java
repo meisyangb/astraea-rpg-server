@@ -8,7 +8,7 @@ import cn.guangdian.cavefu.cave.CaveMember;
 import cn.guangdian.cavefu.config.ConfigManager;
 import cn.guangdian.cavefu.permission.PermissionType;
 import cn.guangdian.cavefu.upgrade.UpgradeManager;
-import org.bukkit.ChatColor;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -29,18 +29,27 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
     private final CaveManager caveManager;
     private final ConfigManager configManager;
     private final UpgradeManager upgradeManager;
+    private final MiniMessageService miniMessage;
 
     public CaveCommand(GuangDianCaveFu plugin) {
         this.plugin = plugin;
         this.caveManager = plugin.getCaveManager();
         this.configManager = plugin.getConfigManager();
         this.upgradeManager = plugin.getUpgradeManager();
+        this.miniMessage = plugin.getMiniMessageService();
+    }
+
+    /**
+     * 使用 MiniMessage 发送消息
+     */
+    private void sendMessage(CommandSender sender, String text) {
+        sender.sendMessage(miniMessage.colorize(text));
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "此命令只能由玩家执行！");
+            sendMessage(sender, "<red>此命令只能由玩家执行！");
             return true;
         }
 
@@ -75,20 +84,20 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
     }
 
     private void sendHelp(Player player) {
-        player.sendMessage(ChatColor.GOLD + "========== 洞府帮助 ==========");
-        player.sendMessage(ChatColor.YELLOW + "/cave create " + ChatColor.GRAY + "- 创建洞府");
-        player.sendMessage(ChatColor.YELLOW + "/cave home " + ChatColor.GRAY + "- 回到洞府");
-        player.sendMessage(ChatColor.YELLOW + "/cave world " + ChatColor.GRAY + "- 传送到洞府世界");
-        player.sendMessage(ChatColor.YELLOW + "/cave sethome " + ChatColor.GRAY + "- 设置传送点");
-        player.sendMessage(ChatColor.YELLOW + "/cave info " + ChatColor.GRAY + "- 查看洞府信息");
-        player.sendMessage(ChatColor.YELLOW + "/cave upgrade " + ChatColor.GRAY + "- 升级洞府");
-        player.sendMessage(ChatColor.YELLOW + "/cave invite <玩家> " + ChatColor.GRAY + "- 邀请成员");
-        player.sendMessage(ChatColor.YELLOW + "/cave kick <玩家> " + ChatColor.GRAY + "- 移除成员");
-        player.sendMessage(ChatColor.YELLOW + "/cave members " + ChatColor.GRAY + "- 查看成员");
-        player.sendMessage(ChatColor.YELLOW + "/cave leave " + ChatColor.GRAY + "- 离开洞府");
-        player.sendMessage(ChatColor.YELLOW + "/cave transfer <玩家> " + ChatColor.GRAY + "- 转让洞主");
-        player.sendMessage(ChatColor.YELLOW + "/cave visit <玩家> " + ChatColor.GRAY + "- 访问洞府");
-        player.sendMessage(ChatColor.GOLD + "==============================");
+        sendMessage(player, "<gold>========== 洞府帮助 ==========");
+        sendMessage(player, "<yellow>/cave create <gray>- 创建洞府");
+        sendMessage(player, "<yellow>/cave home <gray>- 回到洞府");
+        sendMessage(player, "<yellow>/cave world <gray>- 传送到洞府世界");
+        sendMessage(player, "<yellow>/cave sethome <gray>- 设置传送点");
+        sendMessage(player, "<yellow>/cave info <gray>- 查看洞府信息");
+        sendMessage(player, "<yellow>/cave upgrade <gray>- 升级洞府");
+        sendMessage(player, "<yellow>/cave invite <玩家> <gray>- 邀请成员");
+        sendMessage(player, "<yellow>/cave kick <玩家> <gray>- 移除成员");
+        sendMessage(player, "<yellow>/cave members <gray>- 查看成员");
+        sendMessage(player, "<yellow>/cave leave <gray>- 离开洞府");
+        sendMessage(player, "<yellow>/cave transfer <玩家> <gray>- 转让洞主");
+        sendMessage(player, "<yellow>/cave visit <玩家> <gray>- 访问洞府");
+        sendMessage(player, "<gold>==============================");
     }
 
     private void handleCreate(Player player) {
@@ -137,7 +146,7 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
 
         org.bukkit.Location spawnLoc = plugin.getWorldManager().getWorldSpawnLocation();
         if (spawnLoc == null) {
-            player.sendMessage(ChatColor.RED + "洞府世界未加载！");
+            sendMessage(player, "<red>洞府世界未加载！");
             return;
         }
 
@@ -193,12 +202,12 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
 
         CaveLevel level = configManager.getLevel(cave.getLevel());
 
-        player.sendMessage(ChatColor.GOLD + "========== 洞府信息 ==========");
-        player.sendMessage(ChatColor.YELLOW + "洞主: " + ChatColor.WHITE + cave.getOwnerName());
-        player.sendMessage(ChatColor.YELLOW + "等级: " + ChatColor.WHITE + (level != null ? level.getName() : cave.getLevel()));
-        player.sendMessage(ChatColor.YELLOW + "大小: " + ChatColor.WHITE + (level != null ? level.getSize() + "x" + level.getSize() : "未知"));
-        player.sendMessage(ChatColor.YELLOW + "成员: " + ChatColor.WHITE + cave.getMembers().size() + "/" + configManager.getMaxMembers());
-        player.sendMessage(ChatColor.GOLD + "==============================");
+        sendMessage(player, "<gold>========== 洞府信息 ==========");
+        sendMessage(player, "<yellow>洞主: <white>" + cave.getOwnerName());
+        sendMessage(player, "<yellow>等级: <white>" + (level != null ? level.getName() : cave.getLevel()));
+        sendMessage(player, "<yellow>大小: <white>" + (level != null ? level.getSize() + "x" + level.getSize() : "未知"));
+        sendMessage(player, "<yellow>成员: <white>" + cave.getMembers().size() + "/" + configManager.getMaxMembers());
+        sendMessage(player, "<gold>==============================");
     }
 
     private void handleUpgrade(Player player) {
@@ -239,7 +248,7 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length < 2) {
-            player.sendMessage(ChatColor.RED + "用法: /cave invite <玩家>");
+            sendMessage(player, "<red>用法: /cave invite <玩家>");
             return;
         }
 
@@ -265,7 +274,7 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
             player.sendMessage(configManager.getMessage("invite-sent", "player", target.getName()));
             target.sendMessage(configManager.getMessage("invite-received", "player", player.getName()));
         } else {
-            player.sendMessage(ChatColor.RED + "邀请失败！");
+            sendMessage(player, "<red>邀请失败！");
         }
     }
 
@@ -285,7 +294,7 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length < 2) {
-            player.sendMessage(ChatColor.RED + "用法: /cave kick <玩家>");
+            sendMessage(player, "<red>用法: /cave kick <玩家>");
             return;
         }
 
@@ -312,7 +321,7 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
         }
 
         if (caveManager.kickMember(player, targetUuid)) {
-            player.sendMessage(ChatColor.GREEN + "已移除成员: " + targetName);
+            sendMessage(player, "<green>已移除成员: " + targetName);
             Player target = plugin.getServer().getPlayer(targetUuid);
             if (target != null) {
                 target.sendMessage(configManager.getMessage("member-kicked"));
@@ -332,13 +341,13 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
             return;
         }
 
-        player.sendMessage(ChatColor.GOLD + "========== 洞府成员 ==========");
+        sendMessage(player, "<gold>========== 洞府成员 ==========");
         for (CaveMember member : cave.getMembers().values()) {
-            String prefix = member.getPermission() == PermissionType.OWNER ? ChatColor.RED + "[洞主]" :
-                ChatColor.GREEN + "[成员]";
-            player.sendMessage(prefix + " " + ChatColor.WHITE + member.getName());
+            String prefix = member.getPermission() == PermissionType.OWNER ? "<red>[洞主]" :
+                "<green>[成员]";
+            sendMessage(player, prefix + " <white>" + member.getName());
         }
-        player.sendMessage(ChatColor.GOLD + "==============================");
+        sendMessage(player, "<gold>==============================");
     }
 
     private void handleLeave(Player player) {
@@ -354,12 +363,12 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
         }
 
         if (cave.getOwnerUuid().equals(player.getUniqueId())) {
-            player.sendMessage(ChatColor.RED + "洞主不能直接离开，请先转让洞主或解散洞府！");
+            sendMessage(player, "<red>洞主不能直接离开，请先转让洞主或解散洞府！");
             return;
         }
 
         if (caveManager.leaveCave(player.getUniqueId())) {
-            player.sendMessage(ChatColor.GREEN + "你已离开洞府！");
+            sendMessage(player, "<green>你已离开洞府！");
         }
     }
 
@@ -370,7 +379,7 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length < 2) {
-            player.sendMessage(ChatColor.RED + "用法: /cave transfer <玩家>");
+            sendMessage(player, "<red>用法: /cave transfer <玩家>");
             return;
         }
 
@@ -383,9 +392,9 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
 
         if (caveManager.transferOwner(player, target)) {
             player.sendMessage(configManager.getMessage("transfer-success", "player", target.getName()));
-            target.sendMessage(ChatColor.GREEN + "你已成为新的洞主！");
+            sendMessage(target, "<green>你已成为新的洞主！");
         } else {
-            player.sendMessage(ChatColor.RED + "转让失败！");
+            sendMessage(player, "<red>转让失败！");
         }
     }
 
@@ -396,7 +405,7 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length < 2) {
-            player.sendMessage(ChatColor.RED + "用法: /cave visit <玩家>");
+            sendMessage(player, "<red>用法: /cave visit <玩家>");
             return;
         }
 

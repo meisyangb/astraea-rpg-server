@@ -2,9 +2,9 @@ package cn.guangdian.armorstats.parser;
 
 import cn.guangdian.armorstats.GuangDianArmorStats;
 import cn.guangdian.armorstats.data.AttributeValue;
+import cn.guangdian.rpgcore.util.TextStripper;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.ChatColor;
 
 import java.util.*;
 import java.util.function.Function;
@@ -28,8 +28,8 @@ public class LoreParser {
     private static final Map<String, Pattern> ATTRIBUTE_PATTERNS = new HashMap<>();
     private static boolean initialized = false;
 
-    private static final Pattern COLOR_CODE_PATTERN = Pattern.compile("(?:&[0-9a-fk-or])*");
-    private static final Pattern ATTRIBUTE_LINE_PATTERN = Pattern.compile("&8([^:]+):\\s*(?:&[0-9a-fk-or])*([\\d.]+%|[\\d]+-[\\d]+|[\\d]+)");
+    private static final Pattern COLOR_CODE_PATTERN = Pattern.compile("(?:<[a-z_]+>)*");
+    private static final Pattern ATTRIBUTE_LINE_PATTERN = Pattern.compile("<dark_gray>([^:]+):\\s*(?:<[a-z_]+>)*([\\d.]+%|[\\d]+-[\\d]+|[\\d]+)");
 
     private static final Map<String, Pattern> DIRECT_PATTERNS = new LinkedHashMap<>();  // 性能优化: 使用LinkedHashMap保持顺序
     private static final Map<String, Pattern> SKILL_PATTERNS = new HashMap<>();
@@ -169,8 +169,8 @@ public class LoreParser {
         ATTRIBUTE_PATTERNS.clear();
         for (Map.Entry<String, String> entry : configPatterns.entrySet()) {
             String patternStr = entry.getValue();
-            // 去除颜色代码，使其与 DIRECT_PATTERNS 保持一致（匹配去除颜色后的文本）
-            patternStr = stripColor(ChatColor.translateAlternateColorCodes('&', patternStr));
+            // 去除颜色代码（支持传统 & 和 MiniMessage 标签），使其与 DIRECT_PATTERNS 保持一致（匹配去除颜色后的文本）
+            patternStr = TextStripper.stripAll(patternStr);
             ATTRIBUTE_PATTERNS.put(entry.getKey(), Pattern.compile(patternStr));
         }
         initialized = true;
@@ -203,7 +203,7 @@ public class LoreParser {
 
         for (String line : lore) {
             if (mightContainAttributeFast(line)) {
-                String strippedLine = stripColorFast(line);
+                String strippedLine = TextStripper.stripAll(line);
                 Matcher matcher = COMBINED_ATTRIBUTE_PATTERN.matcher(strippedLine);
                 if (matcher.find()) {
                     return true;
@@ -239,13 +239,10 @@ public class LoreParser {
                 continue;
             }
 
-            // 快速颜色剥离（避免正则开销）
-            String strippedLine = stripColorFast(line);
+            // 快速颜色剥离（支持传统 & 和 MiniMessage 标签）
+            String strippedLine = TextStripper.stripAll(line);
 
-            // 跳过"已镶嵌"和"可镶嵌"行，这些行的属性已由GemParser处理
-            if (strippedLine.contains("已镶嵌") || strippedLine.contains("可镶嵌")) {
-                continue;
-            }
+
 
             // 使用合并正则单次匹配
             Matcher matcher = COMBINED_ATTRIBUTE_PATTERN.matcher(strippedLine);
@@ -347,27 +344,6 @@ public class LoreParser {
     }
     
     /**
-     * 高性能颜色剥离
-     * 字符级处理，避免正则开销
-     */
-    private static String stripColorFast(String input) {
-        if (input == null) return null;
-        
-        int len = input.length();
-        StringBuilder sb = new StringBuilder(len);
-        
-        for (int i = 0; i < len; i++) {
-            char c = input.charAt(i);
-            if (c == '&' || c == '§') {
-                i++;  // 跳过颜色代码
-            } else {
-                sb.append(c);
-            }
-        }
-        return sb.toString();
-    }
-
-    /**
      * 性能优化: 快速判断行是否可能包含属性
      * 通过关键词匹配避免对每行都进行正则匹配
      *
@@ -391,14 +367,13 @@ public class LoreParser {
         return false;
     }
 
-    private static String stripColor(String input) {
-        if (input == null) return null;
-        return input.replaceAll("[&§][0-9a-fk-or]", "");
-    }
-
+    /**
+     * 剥离颜色代码（兼容旧方法，已废弃）
+     * @deprecated 使用 {@link TextStripper#stripAll(String)} 替代
+     */
+    @Deprecated(since = "2.0.0", forRemoval = false)
     public static String stripColorStatic(String input) {
-        if (input == null) return null;
-        return input.replaceAll("[&§][0-9a-fk-or]", "");
+        return TextStripper.stripAll(input);
     }
 
     public static int getPatternCount() {
@@ -471,7 +446,7 @@ public class LoreParser {
         }
 
         for (String line : lore) {
-            String strippedLine = stripColor(line);
+            String strippedLine = TextStripper.stripAll(line);
 
             for (Map.Entry<String, Pattern> entry : SKILL_PATTERNS.entrySet()) {
                 Pattern pattern = entry.getValue();

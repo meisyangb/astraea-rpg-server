@@ -4,17 +4,50 @@ import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.ExceptionHandler;
 import cn.guangdian.rpgcore.api.SyncScheduler;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
+import cn.guangdian.rpgcore.message.MiniMessageService;
+import cn.guangdian.rpgcore.sound.SoundService;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * 抽象插件基类
  * 
- * 提供统一的：
- * - RPGCore 服务集成
- * - 生命周期管理
- * - 异常处理
- * - 调度器访问
+ * <p>提供统一的：</p>
+ * <ul>
+ *   <li>RPGCore 服务集成</li>
+ *   <li>生命周期管理</li>
+ *   <li>异常处理</li>
+ *   <li>调度器访问</li>
+ *   <li>通用服务初始化 (MiniMessage, SoundService等)</li>
+ * </ul>
+ * 
+ * <h3>使用示例:</h3>
+ * <pre>{@code
+ * public class MyPlugin extends AbstractRPGPlugin {
+ *     private MiniMessageService miniMessage;
+ *     private SoundService soundService;
+ *     
+ *     @Override
+ *     protected void onPluginEnable() {
+ *         // 自动初始化通用服务
+ *         initCommonServices();
+ *         
+ *         // 插件特定逻辑
+ *         getLogger().info("MyPlugin enabled!");
+ *     }
+ *     
+ *     @Override
+ *     protected void onPluginDisable() {
+ *         // 清理资源
+ *     }
+ *     
+ *     @Override
+ *     protected String getPluginName() {
+ *         return "MyPlugin";
+ *     }
+ * }
+ * }</pre>
  */
 public abstract class AbstractRPGPlugin extends JavaPlugin {
     
@@ -22,6 +55,11 @@ public abstract class AbstractRPGPlugin extends JavaPlugin {
     protected ExternalServiceIntegration externalServices;
     protected SyncScheduler scheduler;
     protected ExceptionHandler exceptionHandler;
+    
+    // 常用服务 - 由 initCommonServices() 自动初始化
+    protected MiniMessageService miniMessageService;
+    protected MiniMessage miniMessageParser;
+    protected SoundService soundService;
     
     private boolean initialized = false;
     
@@ -84,6 +122,50 @@ public abstract class AbstractRPGPlugin extends JavaPlugin {
         return false;
     }
     
+    /**
+     * 初始化通用服务 (MiniMessage, SoundService等)
+     * 
+     * <p>此方法会自动从 RPGCore 获取常用服务，如果 RPGCore 不可用则使用降级方案。</p>
+     * <p>建议在 {@link #onPluginEnable()} 的开头调用此方法。</p>
+     */
+    protected void initCommonServices() {
+        // 初始化 MiniMessage 服务
+        if (rpgCore != null) {
+            miniMessageService = rpgCore.getMiniMessageService();
+            soundService = rpgCore.getSoundService();
+        }
+        
+        // 降级方案
+        if (miniMessageService == null) {
+            miniMessageService = MiniMessageService.getInstance();
+        }
+        if (miniMessageParser == null && miniMessageService != null) {
+            miniMessageParser = miniMessageService.getMiniMessage();
+        }
+        if (soundService == null) {
+            soundService = SoundService.getInstance();
+        }
+        
+        getLogger().info("通用服务已初始化: MiniMessage=" + (miniMessageService != null) + 
+                        ", SoundService=" + (soundService != null));
+    }
+    
+    /**
+     * 安全地取消所有调度任务
+     * 
+     * <p>在插件禁用时调用，确保所有任务被正确取消。</p>
+     */
+    protected void cancelAllTasks() {
+        if (scheduler != null) {
+            try {
+                scheduler.cancelAllTasks();
+                getLogger().fine("所有调度任务已取消");
+            } catch (Exception e) {
+                getLogger().warning("取消任务时发生错误: " + e.getMessage());
+            }
+        }
+    }
+    
     protected abstract void onPluginEnable();
     
     protected abstract void onPluginDisable();
@@ -120,5 +202,29 @@ public abstract class AbstractRPGPlugin extends JavaPlugin {
     
     public RPGCore getRPGCore() {
         return rpgCore;
+    }
+    
+    /**
+     * 获取 MiniMessage 服务
+     * @return MiniMessageService 实例
+     */
+    public MiniMessageService getMiniMessageService() {
+        return miniMessageService;
+    }
+    
+    /**
+     * 获取 MiniMessage 解析器
+     * @return MiniMessage 实例
+     */
+    public MiniMessage getMiniMessageParser() {
+        return miniMessageParser;
+    }
+    
+    /**
+     * 获取音效服务
+     * @return SoundService 实例
+     */
+    public SoundService getSoundService() {
+        return soundService;
     }
 }

@@ -110,13 +110,10 @@ public class EquipmentCacheManager {
         
         // 使用LoreParser解析装备
         Map<String, AttributeValue> attrs = LoreParser.parse(item);
-        
-        // 修复: 正确合并宝石属性到attrs，避免覆盖
-        Map<String, AttributeValue> socketAttrs = cn.guangdian.armorstats.parser.GemParser.parseSocketGemsFromLore(item);
-        for (Map.Entry<String, AttributeValue> entry : socketAttrs.entrySet()) {
-            attrs.merge(entry.getKey(), entry.getValue(), AttributeValue::merge);
-        }
-        
+
+        // 注意: 宝石属性解析已迁移到 GuangDianSocket 插件
+        // 装备属性不再包含宝石属性，由 GuangDianSocket 在镶嵌时直接写入装备Lore
+
         // 添加合并后的所有属性
         stats.addStats(attrs);
         

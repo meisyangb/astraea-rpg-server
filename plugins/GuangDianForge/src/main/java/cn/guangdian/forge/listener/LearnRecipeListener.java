@@ -5,7 +5,7 @@ import cn.guangdian.forge.model.ForgeRecipe;
 import cn.guangdian.forge.model.PlayerForgeData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -26,9 +26,11 @@ import java.util.List;
  */
 public class LearnRecipeListener implements Listener {
     private final GuangDianForge plugin;
+    private final MiniMessage miniMessage;
 
     public LearnRecipeListener(GuangDianForge plugin) {
         this.plugin = plugin;
+        this.miniMessage = plugin.getMiniMessageParser();
     }
 
     @EventHandler
@@ -74,10 +76,10 @@ public class LearnRecipeListener implements Listener {
         // 学习图纸
         data.learnRecipe(recipeId);
         item.setAmount(item.getAmount() - 1);
-        
-        // 使用 LegacyComponentSerializer 解析颜色代码
+
+        // 使用 MiniMessage 解析颜色代码
         String displayName = recipe.getBlueprintDisplay();
-        Component displayComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(displayName);
+        Component displayComponent = miniMessage.deserialize(displayName);
         player.sendMessage(Component.text("成功学会图纸: ", NamedTextColor.GREEN).append(displayComponent));
         plugin.getPlayerDataManager().save(data);
     }
@@ -90,28 +92,31 @@ public class LearnRecipeListener implements Listener {
         // 检查是否配置为书本形式
         boolean isBook = recipe.isBlueprintBook();
         Material material = isBook ? Material.WRITTEN_BOOK : Material.PAPER;
-        
+
         ItemStack item = new ItemStack(material);
-        
+
         // 获取 lore（如果配置中没有，会自动生成）
         List<String> loreLines = recipe.getBlueprintLore();
-        
+
         ItemMeta meta = item.getItemMeta();
-        
+
+        // 获取 MiniMessage 实例
+        MiniMessage miniMessage = plugin.getMiniMessageParser();
+
         // 设置物品显示名称
         String displayName = recipe.getBlueprintDisplay();
-        meta.displayName(LegacyComponentSerializer.legacyAmpersand().deserialize(displayName));
-        
+        meta.displayName(miniMessage.deserialize(displayName));
+
         // 设置物品 lore（自动生成的完整描述）
         List<Component> lore = new ArrayList<>();
         for (String line : loreLines) {
-            lore.add(LegacyComponentSerializer.legacyAmpersand().deserialize(line));
+            lore.add(miniMessage.deserialize(line));
         }
         meta.lore(lore);
-        
+
         // 如果是书本，设置必要的书本属性（但不设置书页内容）
         if (isBook && meta instanceof BookMeta bookMeta) {
-            bookMeta.title(LegacyComponentSerializer.legacyAmpersand().deserialize(displayName));
+            bookMeta.title(miniMessage.deserialize(displayName));
             bookMeta.author(Component.text("锻造大师", NamedTextColor.DARK_PURPLE));
         }
         

@@ -11,6 +11,7 @@ import cn.guangdian.rpgcore.service.api.GuildService;
 import cn.guangdian.rpgcore.util.OfflinePlayerCache;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -80,16 +81,19 @@ public class GuildServiceAdapter implements GuildService {
     }
 
     @Override
-    public Object getGuild(String name) {
-        return plugin.getGuild(name);
+    @Nullable
+    public cn.guangdian.rpgcore.service.api.data.Guild getGuild(String name) {
+        // 返回 null 表示此模块不直接提供 RPGCore Guild 实现
+        // 实际公会数据通过其他方法提供
+        return null;
     }
 
     @Override
-    public Object getPlayerGuild(UUID playerId) {
-        // 使用离线玩家缓存，避免频繁查询
-        String name = OfflinePlayerCache.getPlayerName(playerId);
-        if (name == null) return null;
-        return plugin.getPlayerGuild(name);
+    @Nullable
+    public cn.guangdian.rpgcore.service.api.data.Guild getPlayerGuild(UUID playerId) {
+        // 返回 null 表示此模块不直接提供 RPGCore Guild 实现
+        // 实际公会数据通过其他方法提供
+        return null;
     }
 
     @Override

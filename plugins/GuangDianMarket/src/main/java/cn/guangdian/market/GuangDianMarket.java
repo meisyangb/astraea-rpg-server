@@ -4,12 +4,13 @@ import cn.guangdian.market.adapter.MarketServiceAdapter;
 import cn.guangdian.market.gui.MarketGUI;
 import cn.guangdian.market.lifecycle.MarketDataHandler;
 import cn.guangdian.market.placeholder.MarketPlaceholder;
+import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
+import cn.guangdian.rpgcore.sound.SoundService;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -63,6 +64,10 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
     private long expireCheckTaskId = -1;
     private boolean pointsEnabled; // 点券是否启用
     private boolean economyEnabled; // 经济是否启用
+    
+    // RPGCore 服务引用
+    private SoundService soundService;
+    private MiniMessageService miniMessage;
 
     @Override
     protected void onPluginEnable() {
@@ -70,6 +75,10 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
 
         saveDefaultConfig();
         config = getConfig();
+        
+        // 初始化 RPGCore 服务
+        initRPGCoreServices();
+        
         loadData();
         loadSettings();
         registerEvents();
@@ -164,6 +173,28 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
             data.save(dataFile);
         } catch (IOException e) {
             getLogger().severe("保存数据失败: " + e.getMessage());
+        }
+    }
+
+    private void initRPGCoreServices() {
+        // 获取 RPGCore 服务
+        if (getServer().getPluginManager().isPluginEnabled("RPGCore")) {
+            try {
+                RPGCore rpgCore = RPGCore.getInstance();
+                soundService = rpgCore.getSoundService();
+                miniMessage = rpgCore.getMiniMessageService();
+                getLogger().info("使用 RPGCore 服务 (SoundService, MiniMessageService)");
+            } catch (Exception e) {
+                getLogger().warning("无法获取 RPGCore 服务: " + e.getMessage());
+            }
+        }
+
+        // 如果 RPGCore 服务不可用，使用本地降级
+        if (soundService == null) {
+            soundService = SoundService.getInstance();
+        }
+        if (miniMessage == null) {
+            miniMessage = MiniMessageService.getInstance();
         }
     }
 
@@ -601,12 +632,12 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
         List<MarketItem> listings = playerListings.getOrDefault(uuid, new ArrayList<>());
         
         if (listings.size() >= maxListingsPerPlayer) {
-            player.sendMessage(colorize(config.getString("messages.max-listings-reached", "&c你已达到最大上架数量!")));
+            player.sendMessage(colorize(config.getString("messages.max-listings-reached", "<red>你已达到最大上架数量!")));
             return false;
         }
         
         if (price <= 0) {
-            player.sendMessage(colorize(config.getString("messages.invalid-price", "&c无效的价格!")));
+            player.sendMessage(colorize(config.getString("messages.invalid-price", "<red>无效的价格!")));
             return false;
         }
         
@@ -628,7 +659,7 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
         
         player.getInventory().removeItem(item);
         
-        player.sendMessage(colorize(config.getString("messages.item-listed", "&a成功上架物品! 价格: %price% %currency%"))
+        player.sendMessage(colorize(config.getString("messages.item-listed", "<green>成功上架物品! 价格: %price% %currency%"))
             .replace("%price%", formatCurrency(currencyType, price))
             .replace("%currency%", currencyName));
         playSound(player, "listing-success");
@@ -637,7 +668,7 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
 
     public boolean purchaseItem(Player buyer, MarketItem item) {
         if (item.seller.equals(buyer.getUniqueId())) {
-            buyer.sendMessage(colorize(config.getString("messages.cannot-buy-own", "&c不能购买自己的物品!")));
+            buyer.sendMessage(colorize(config.getString("messages.cannot-buy-own", "<red>不能购买自己的物品!")));
             return false;
         }
         
@@ -648,7 +679,7 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
         String currencyName = getCurrencyName(currencyType);
         
         if (!hasEnoughCurrency(buyer.getUniqueId(), currencyType, totalCost)) {
-            buyer.sendMessage(colorize(config.getString("messages.insufficient-funds", "&c%currency%不足!"))
+            buyer.sendMessage(colorize(config.getString("messages.insufficient-funds", "<red>%currency%不足!"))
                 .replace("%currency%", currencyName));
             playSound(buyer, "purchase-fail");
             return false;
@@ -669,12 +700,12 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
         
         Player seller = Bukkit.getPlayer(item.seller);
         if (seller != null && seller.isOnline()) {
-            seller.sendMessage(colorize(config.getString("messages.item-sold", "&a你的物品已售出! 获得 %price% %currency%"))
+            seller.sendMessage(colorize(config.getString("messages.item-sold", "<green>你的物品已售出! 获得 %price% %currency%"))
                 .replace("%price%", formatCurrency(currencyType, price))
                 .replace("%currency%", currencyName));
         }
         
-        buyer.sendMessage(colorize(config.getString("messages.purchase-success", "&a购买成功! 花费 %price% %currency%"))
+        buyer.sendMessage(colorize(config.getString("messages.purchase-success", "<green>购买成功! 花费 %price% %currency%"))
             .replace("%price%", formatCurrency(currencyType, totalCost))
             .replace("%currency%", currencyName));
         playSound(buyer, "purchase-success");
@@ -684,7 +715,7 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
 
     public void cancelListing(Player player, MarketItem item) {
         if (!item.seller.equals(player.getUniqueId())) {
-            player.sendMessage(colorize(config.getString("messages.not-your-item", "&c这不是你的物品!")));
+            player.sendMessage(colorize(config.getString("messages.not-your-item", "<red>这不是你的物品!")));
             return;
         }
         
@@ -698,7 +729,7 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
             }
         }
         
-        player.sendMessage(colorize(config.getString("messages.listing-cancelled", "&a已取消上架!")));
+        player.sendMessage(colorize(config.getString("messages.listing-cancelled", "<green>已取消上架!")));
     }
 
     private void returnExpiredItem(MarketItem item) {
@@ -710,7 +741,7 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
                     player.getWorld().dropItemNaturally(player.getLocation(), drop);
                 }
             }
-            player.sendMessage(colorize(config.getString("messages.item-expired", "&c你的物品已过期并已返还!")));
+            player.sendMessage(colorize(config.getString("messages.item-expired", "<red>你的物品已过期并已返还!")));
         } else {
             offlineReturns.computeIfAbsent(item.seller, k -> new ArrayList<>()).add(item.item.clone());
         }
@@ -729,7 +760,7 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
                     }
                 }
             }
-            player.sendMessage(colorize(config.getString("messages.offline-returns", "&e你有 %count% 个过期物品已返还!"))
+            player.sendMessage(colorize(config.getString("messages.offline-returns", "<yellow>你有 %count% 个过期物品已返还!"))
                 .replace("%count%", String.valueOf(returns.size())));
         }
     }
@@ -782,7 +813,7 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
     public void openMyListingsGUI(Player player) {
         List<MarketItem> listings = playerListings.getOrDefault(player.getUniqueId(), new ArrayList<>());
         
-        String title = colorize(config.getString("gui.my-listings-title", "&6我的上架"));
+        String title = colorize(config.getString("gui.my-listings-title", "<gold>我的上架"));
         Inventory inv = Bukkit.createInventory(null, 54, title);
         
         for (int i = 0; i < Math.min(listings.size(), 45); i++) {
@@ -804,15 +835,15 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
         
         List<String> lore = meta.hasLore() ? new ArrayList<>(meta.getLore()) : new ArrayList<>();
         lore.add("");
-        lore.add(colorize("&e价格: &6%price% %currency%")
+        lore.add(colorize("<yellow>价格: <gold>%price% %currency%")
             .replace("%price%", priceStr)
             .replace("%currency%", currencyName));
-        lore.add(colorize(config.getString("gui.seller-display", "&7卖家: &f%seller%")
+        lore.add(colorize(config.getString("gui.seller-display", "<gray>卖家: <white>%seller%")
             .replace("%seller%", item.sellerName)));
-        lore.add(colorize(config.getString("gui.time-remaining", "&7剩余时间: &f%time%")
+        lore.add(colorize(config.getString("gui.time-remaining", "<gray>剩余时间: <white>%time%")
             .replace("%time%", formatTime(item.expireTime - System.currentTimeMillis()))));
         lore.add("");
-        lore.add(colorize(config.getString("gui.click-to-buy", "&a点击购买")));
+        lore.add(colorize(config.getString("gui.click-to-buy", "<green>点击购买")));
         
         meta.setLore(lore);
         display.setItemMeta(meta);
@@ -829,13 +860,13 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
         
         List<String> lore = meta.hasLore() ? new ArrayList<>(meta.getLore()) : new ArrayList<>();
         lore.add("");
-        lore.add(colorize("&e价格: &6%price% %currency%")
+        lore.add(colorize("<yellow>价格: <gold>%price% %currency%")
             .replace("%price%", priceStr)
             .replace("%currency%", currencyName));
-        lore.add(colorize(config.getString("gui.time-remaining", "&7剩余时间: &f%time%")
+        lore.add(colorize(config.getString("gui.time-remaining", "<gray>剩余时间: <white>%time%")
             .replace("%time%", formatTime(item.expireTime - System.currentTimeMillis()))));
         lore.add("");
-        lore.add(colorize(config.getString("gui.click-to-cancel", "&c点击下架")));
+        lore.add(colorize(config.getString("gui.click-to-cancel", "<red>点击下架")));
         
         meta.setLore(lore);
         display.setItemMeta(meta);
@@ -875,13 +906,8 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
 
     private void playSound(Player player, String soundKey) {
         String soundName = config.getString("sounds." + soundKey, "");
-        if (!soundName.isEmpty()) {
-            try {
-                player.playSound(player.getLocation(), Sound.valueOf(soundName), 1.0f, 1.0f);
-            } catch (IllegalArgumentException e) {
-                // 工业级优化: 音效名称无效时记录警告
-                getLogger().fine("Invalid sound name: " + soundName + " for key: " + soundKey);
-            }
+        if (!soundName.isEmpty() && soundService != null) {
+            soundService.playSound(player, soundName, 1.0f, 1.0f);
         }
     }
 
@@ -906,7 +932,7 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
         if (rpgCore != null) {
             rpgCore.getScheduler().runSyncLater(() -> {
                 if (message.equalsIgnoreCase("cancel")) {
-                    player.sendMessage(colorize("&e已取消搜索"));
+                    player.sendMessage(colorize("<yellow>已取消搜索"));
                     setSearchMode(player, false);
                     openMarketGUI(player, 1);
                     return;
@@ -917,7 +943,7 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
                     gui.setSearchQuery(message);
                     gui.refreshItems();
                     player.openInventory(gui.getInventory());
-                    player.sendMessage(colorize("&a搜索: &f" + message));
+                    player.sendMessage(colorize("<green>搜索: <white>" + message));
                 }
                 setSearchMode(player, false);
             }, 1L);
@@ -959,14 +985,14 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(colorize("&c只有玩家可以使用此命令!"));
+            sender.sendMessage(colorize("<red>只有玩家可以使用此命令!"));
             return true;
         }
         
         Player player = (Player) sender;
         
         if (!player.hasPermission("guangdian.market.use")) {
-            player.sendMessage(colorize(config.getString("messages.no-permission", "&c你没有权限使用市场!")));
+            player.sendMessage(colorize(config.getString("messages.no-permission", "<red>你没有权限使用市场!")));
             return true;
         }
         
@@ -992,15 +1018,15 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
 
     private boolean handleSellCommand(Player player, String[] args) {
         if (args.length < 2) {
-            player.sendMessage(colorize("&c用法: /market sell <价格> [货币类型]"));
-            player.sendMessage(colorize("&7货币类型: points(点券) / eco(金币)"));
-            player.sendMessage(colorize("&7默认使用点券"));
+            player.sendMessage(colorize("<red>用法: /market sell <价格> [货币类型]"));
+            player.sendMessage(colorize("<gray>货币类型: points(点券) / eco(金币)"));
+            player.sendMessage(colorize("<gray>默认使用点券"));
             return true;
         }
         
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item == null || item.getType() == Material.AIR) {
-            player.sendMessage(colorize(config.getString("messages.no-item-in-hand", "&c请手持要出售的物品!")));
+            player.sendMessage(colorize(config.getString("messages.no-item-in-hand", "<red>请手持要出售的物品!")));
             return true;
         }
         
@@ -1013,13 +1039,13 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
                 String typeArg = args[2].toLowerCase();
                 if (typeArg.equals("eco") || typeArg.equals("economy") || typeArg.equals("金币") || typeArg.equals("金")) {
                     if (!economyEnabled) {
-                        player.sendMessage(colorize("&c经济系统未启用，无法使用金币上架!"));
+                        player.sendMessage(colorize("<red>经济系统未启用，无法使用金币上架!"));
                         return true;
                     }
                     currencyType = CurrencyType.ECONOMY;
                 } else if (typeArg.equals("points") || typeArg.equals("point") || typeArg.equals("点券") || typeArg.equals("点")) {
                     if (!pointsEnabled) {
-                        player.sendMessage(colorize("&c点券系统未启用，无法使用点券上架!"));
+                        player.sendMessage(colorize("<red>点券系统未启用，无法使用点券上架!"));
                         return true;
                     }
                     currencyType = CurrencyType.POINTS;
@@ -1028,7 +1054,7 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
                 // 默认使用点券
                 if (!pointsEnabled && economyEnabled) {
                     currencyType = CurrencyType.ECONOMY;
-                    player.sendMessage(colorize("&e点券系统未启用，自动使用金币作为货币"));
+                    player.sendMessage(colorize("<yellow>点券系统未启用，自动使用金币作为货币"));
                 }
             }
             
@@ -1036,18 +1062,18 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
                 // 消息已在listItem中发送
             }
         } catch (NumberFormatException e) {
-            player.sendMessage(colorize("&c无效的价格!"));
+            player.sendMessage(colorize("<red>无效的价格!"));
         }
         
         return true;
     }
 
     private void sendHelp(Player player) {
-        player.sendMessage(colorize("&6===== 全球市场帮助 ====="));
-        player.sendMessage(colorize("&e/market &7- 打开市场"));
-        player.sendMessage(colorize("&e/market sell <价格> [货币] &7- 上架手持物品"));
-        player.sendMessage(colorize("&e/market my &7- 查看我的上架"));
-        player.sendMessage(colorize("&7货币: points(点券) / eco(金币)"));
+        player.sendMessage(colorize("<gold>===== 全球市场帮助 ====="));
+        player.sendMessage(colorize("<yellow>/market <gray>- 打开市场"));
+        player.sendMessage(colorize("<yellow>/market sell <价格> [货币] <gray>- 上架手持物品"));
+        player.sendMessage(colorize("<yellow>/market my <gray>- 查看我的上架"));
+        player.sendMessage(colorize("<gray>货币: points(点券) / eco(金币)"));
     }
 
     private long parseAmount(String str) throws NumberFormatException {
@@ -1074,8 +1100,40 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
         return searchModePlayers;
     }
 
+    /**
+     * 使用 MiniMessage 解析颜色代码
+     */
     public String colorize(String text) {
-        return ChatColor.translateAlternateColorCodes('&', text != null ? text : "");
+        if (text == null) return "";
+        // 将 & 颜色代码转换为 MiniMessage 格式
+        return text
+            .replace("<black>", "<black>").replace("<dark_blue>", "<dark_blue>")
+            .replace("<dark_green>", "<dark_green>").replace("<dark_aqua>", "<dark_aqua>")
+            .replace("<dark_red>", "<dark_red>").replace("<dark_purple>", "<dark_purple>")
+            .replace("<gold>", "<gold>").replace("<gray>", "<gray>")
+            .replace("<dark_gray>", "<dark_gray>").replace("<blue>", "<blue>")
+            .replace("<green>", "<green>").replace("<aqua>", "<aqua>")
+            .replace("<red>", "<red>").replace("<light_purple>", "<light_purple>")
+            .replace("<yellow>", "<yellow>").replace("<white>", "<white>")
+            .replace("<obfuscated>", "<obfuscated>").replace("<bold>", "<bold>")
+            .replace("<strikethrough>", "<strikethrough>").replace("<underlined>", "<underlined>")
+            .replace("<italic>", "<italic>").replace("<reset>", "<reset>");
+    }
+
+    /**
+     * 获取 SoundService
+     * @return SoundService 实例（可能为本地降级实现）
+     */
+    public SoundService getSoundService() {
+        return soundService;
+    }
+
+    /**
+     * 获取 MiniMessageService
+     * @return MiniMessageService 实例（可能为本地降级实现）
+     */
+    public MiniMessageService getMiniMessageService() {
+        return miniMessage;
     }
 
     @Override

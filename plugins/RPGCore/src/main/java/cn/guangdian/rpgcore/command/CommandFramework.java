@@ -1,183 +1,252 @@
 package cn.guangdian.rpgcore.command;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.message.UnifiedMessageService;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiConsumer;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.logging.Logger;
 
 /**
- * 统一命令框架
- * 
- * <p>提供所有GuangDian插件的统一命令注册和处理机制。</p>
- * <p>支持子命令、权限检查、自动补全。</p>
- * 
- * @author GuangDian
- * @since 1.0.0
+ * 命令框架 - RPGCore 核心框架 (注解驱动版本)
+ *
+ * <p>提供注解驱动的命令系统，支持子命令、权限检查、参数自动解析。</p>
+ *
+ * <h2>使用示例:</h2>
+ * <pre>{@code
+ * @CommandInfo(name="points", description="点数管理", permission="guangdian.points.use")
+ * public class PointsCommand extends BaseCommand {
+ *
+ *     @SubCommand(name="give", permission="guangdian.points.admin")
+ *     @Description("给予玩家点数")
+ *     public void give(CommandContext ctx) {
+ *         Player target = ctx.getPlayerArg(0);
+ *         long amount = ctx.getLongArg(1);
+ *         // 业务逻辑...
+ *     }
+ *
+ *     @SubCommand(name="balance")
+ *     @Description("查看余额")
+ *     public void balance(CommandContext ctx) {
+ *         Player player = ctx.getSender().asPlayer();
+ *         // 业务逻辑...
+ *     }
+ * }
+ *
+ * // 注册命令
+ * CommandFramework framework = CommandFramework.getInstance();
+ * framework.registerCommand(new PointsCommand());
+ * }</pre>
+ *
+ * @author Astraea RPG Team
+ * @since 1.1.0
  */
-public class CommandFramework implements TabExecutor {
+public final class CommandFramework implements CommandExecutor, TabCompleter {
 
-    private final JavaPlugin plugin;
-    private final String commandName;
-    private final Map<String, SubCommand> subCommands = new HashMap<>();
-    private String noPermissionMessage = "§c你没有权限执行此命令！";
-    private String playerOnlyMessage = "§c只有玩家可以执行此命令！";
-    private String unknownCommandMessage = "§c未知的子命令！";
+    private static CommandFramework instance;
 
-    public CommandFramework(JavaPlugin plugin, String commandName) {
-        this.plugin = plugin;
-        this.commandName = commandName;
+    private final Map<String, BaseCommand> commands;
+    private final Logger logger;
+    private final UnifiedMessageService msg;
+
+    private CommandFramework() {
+        this.commands = new HashMap<>();
+        RPGCore rpgCore = RPGCore.getInstance();
+        this.logger = rpgCore != null ? rpgCore.getLogger() : Logger.getLogger("CommandFramework");
+        this.msg = UnifiedMessageService.getInstance();
+    }
+
+    public static synchronized CommandFramework getInstance() {
+        if (instance == null) {
+            instance = new CommandFramework();
+        }
+        return instance;
     }
 
     /**
-     * 注册子命令
+     * 注册命令
      */
-    public CommandFramework register(SubCommand subCommand) {
-        subCommands.put(subCommand.getName().toLowerCase(), subCommand);
-        for (String alias : subCommand.getAliases()) {
-            subCommands.put(alias.toLowerCase(), subCommand);
+    public void registerCommand(@NotNull BaseCommand command) {
+        CommandInfo info = command.getClass().getAnnotation(CommandInfo.class);
+        if (info == null) {
+            logger.severe("[CommandFramework] 命令类缺少 @CommandInfo 注解: " + command.getClass().getName());
+            return;
         }
-        return this;
+
+        String commandName = info.name().toLowerCase();
+        commands.put(commandName, command);
+
+        // 注册到 Bukkit (Paper 1.21.6 兼容)
+        org.bukkit.plugin.Plugin plugin = RPGCore.getInstance();
+        if (plugin != null) {
+            org.bukkit.command.PluginCommand bukkitCommand = plugin.getServer().getPluginCommand(commandName);
+            if (bukkitCommand != null) {
+                bukkitCommand.setExecutor(this);
+                bukkitCommand.setTabCompleter(this);
+                logger.info("[CommandFramework] 已注册命令: /" + commandName);
+            } else {
+                logger.warning("[CommandFramework] 未在 plugin.yml 中找到命令: " + commandName);
+            }
+        }
     }
 
     /**
-     * 注册到插件
+     * 注销命令
      */
-    public void registerToPlugin() {
-        org.bukkit.command.PluginCommand command = plugin.getCommand(commandName);
-        if (command != null) {
-            command.setExecutor(this);
-            command.setTabCompleter(this);
-        } else {
-            plugin.getLogger().warning("命令 " + commandName + " 未在 plugin.yml 中注册！");
-        }
+    public void unregisterCommand(@NotNull String commandName) {
+        commands.remove(commandName.toLowerCase());
+    }
+
+    /**
+     * 获取所有已注册的命令
+     */
+    public @NotNull Set<String> getRegisteredCommands() {
+        return Collections.unmodifiableSet(commands.keySet());
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        String commandName = command.getName().toLowerCase();
+        BaseCommand baseCommand = commands.get(commandName);
+
+        if (baseCommand == null) {
+            msg.sendMessage(sender, "<red>未知命令!");
+            return true;
+        }
+
+        // 检查主命令权限
+        CommandInfo info = baseCommand.getClass().getAnnotation(CommandInfo.class);
+        if (info != null && !info.permission().isEmpty()) {
+            if (!sender.hasPermission(info.permission())) {
+                msg.sendMessage(sender, "<red>没有权限执行此命令!");
+                return true;
+            }
+        }
+
+        // 检查是否仅玩家可用
+        if (info != null && info.playerOnly() && !(sender instanceof Player)) {
+            msg.sendMessage(sender, "<red>此命令只能由玩家执行!");
+            return true;
+        }
+
+        // 如果没有参数，显示帮助
         if (args.length == 0) {
-            sendHelp(sender);
+            baseCommand.showHelp(sender);
             return true;
         }
 
         String subCommandName = args[0].toLowerCase();
-        SubCommand subCommand = subCommands.get(subCommandName);
+        String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
 
-        if (subCommand == null) {
-            sender.sendMessage(Component.text(unknownCommandMessage, NamedTextColor.RED));
+        // 查找子命令
+        Method subCommandMethod = baseCommand.getSubCommandMethod(subCommandName);
+        if (subCommandMethod == null) {
+            msg.sendMessage(sender, "<red>未知子命令: " + subCommandName);
+            baseCommand.showHelp(sender);
             return true;
         }
 
-        // 权限检查
-        if (subCommand.getPermission() != null && !sender.hasPermission(subCommand.getPermission())) {
-            sender.sendMessage(Component.text(noPermissionMessage, NamedTextColor.RED));
+        // 检查子命令权限
+        SubCommand subCmdAnnotation = subCommandMethod.getAnnotation(SubCommand.class);
+        if (subCmdAnnotation != null && !subCmdAnnotation.permission().isEmpty()) {
+            if (!sender.hasPermission(subCmdAnnotation.permission())) {
+                msg.sendMessage(sender, "<red>没有权限执行此子命令!");
+                return true;
+            }
+        }
+
+        // 检查是否仅玩家可用
+        if (subCmdAnnotation != null && subCmdAnnotation.playerOnly() && !(sender instanceof Player)) {
+            msg.sendMessage(sender, "<red>此子命令只能由玩家执行!");
             return true;
         }
 
-        // 玩家检查
-        if (subCommand.isPlayerOnly() && !(sender instanceof Player)) {
-            sender.sendMessage(Component.text(playerOnlyMessage, NamedTextColor.RED));
-            return true;
+        // 检查参数数量
+        if (subCmdAnnotation != null) {
+            if (subArgs.length < subCmdAnnotation.minArgs()) {
+                msg.sendMessage(sender, "<red>参数不足! 需要至少 " + subCmdAnnotation.minArgs() + " 个参数");
+                return true;
+            }
+            if (subCmdAnnotation.maxArgs() != -1 && subArgs.length > subCmdAnnotation.maxArgs()) {
+                msg.sendMessage(sender, "<red>参数过多! 最多允许 " + subCmdAnnotation.maxArgs() + " 个参数");
+                return true;
+            }
         }
+
+        // 构建命令上下文
+        CommandContext context = new CommandContext(sender, subArgs);
 
         // 执行子命令
-        String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
-        subCommand.execute(sender, subArgs);
+        try {
+            subCommandMethod.invoke(baseCommand, context);
+        } catch (CommandException e) {
+            msg.sendMessage(sender, "<red>" + e.getMessage());
+        } catch (Exception e) {
+            logger.severe("[CommandFramework] 执行命令失败: /" + commandName + " " + subCommandName);
+            e.printStackTrace();
+            msg.sendMessage(sender, "<red>命令执行失败: " + e.getCause().getMessage());
+        }
+
         return true;
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        List<String> completions = new ArrayList<>();
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        String commandName = command.getName().toLowerCase();
+        BaseCommand baseCommand = commands.get(commandName);
 
+        if (baseCommand == null) {
+            return Collections.emptyList();
+        }
+
+        // 第一级参数：子命令名称
         if (args.length == 1) {
-            // 补全子命令名称
             String partial = args[0].toLowerCase();
-            for (Map.Entry<String, SubCommand> entry : subCommands.entrySet()) {
-                if (entry.getKey().startsWith(partial)) {
-                    SubCommand sub = entry.getValue();
-                    // 过滤掉没有权限的命令
-                    if (sub.getPermission() == null || sender.hasPermission(sub.getPermission())) {
-                        // 只添加主名称，不添加别名
-                        if (entry.getKey().equals(sub.getName().toLowerCase())) {
-                            completions.add(sub.getName());
-                        }
+            List<String> completions = new ArrayList<>();
+
+            for (Method method : baseCommand.getSubCommandMethods()) {
+                SubCommand subCmd = method.getAnnotation(SubCommand.class);
+                if (subCmd != null) {
+                    // 检查权限
+                    if (!subCmd.permission().isEmpty() && !sender.hasPermission(subCmd.permission())) {
+                        continue;
+                    }
+
+                    String subName = subCmd.name().toLowerCase();
+                    if (subName.startsWith(partial)) {
+                        completions.add(subName);
                     }
                 }
             }
-        } else if (args.length > 1) {
-            // 子命令的补全
-            SubCommand subCommand = subCommands.get(args[0].toLowerCase());
-            if (subCommand != null) {
-                String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
-                List<String> subCompletions = subCommand.tabComplete(sender, subArgs);
-                if (subCompletions != null) {
-                    completions.addAll(subCompletions);
+
+            Collections.sort(completions);
+            return completions;
+        }
+
+        // 更深层的参数：调用子命令的 tab complete 方法
+        if (args.length > 1) {
+            String subCommandName = args[0].toLowerCase();
+            Method subCommandMethod = baseCommand.getSubCommandMethod(subCommandName);
+
+            if (subCommandMethod != null) {
+                try {
+                    String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
+                    CommandContext context = new CommandContext(sender, subArgs);
+                    return baseCommand.onTabComplete(subCommandMethod, context);
+                } catch (Exception e) {
+                    logger.warning("[CommandFramework] TabComplete 失败: " + e.getMessage());
                 }
             }
         }
 
-        return completions;
-    }
-
-    /**
-     * 发送帮助信息
-     */
-    private void sendHelp(CommandSender sender) {
-        sender.sendMessage(Component.text("=== " + plugin.getName() + " 帮助 ===", NamedTextColor.GOLD));
-        
-        for (SubCommand subCommand : subCommands.values()) {
-            // 避免重复显示（别名和主名称）
-            if (subCommands.get(subCommand.getName().toLowerCase()) == subCommand) {
-                if (subCommand.getPermission() == null || sender.hasPermission(subCommand.getPermission())) {
-                    sender.sendMessage(Component.text()
-                        .append(Component.text("/" + commandName + " " + subCommand.getName(), NamedTextColor.YELLOW))
-                        .append(Component.text(" - " + subCommand.getDescription(), NamedTextColor.GRAY))
-                    );
-                }
-            }
-        }
-    }
-
-    // ========== Setters ==========
-
-    public CommandFramework setNoPermissionMessage(String message) {
-        this.noPermissionMessage = message;
-        return this;
-    }
-
-    public CommandFramework setPlayerOnlyMessage(String message) {
-        this.playerOnlyMessage = message;
-        return this;
-    }
-
-    public CommandFramework setUnknownCommandMessage(String message) {
-        this.unknownCommandMessage = message;
-        return this;
-    }
-
-    // ========== Builder方法 ==========
-
-    /**
-     * 快速创建简单子命令
-     */
-    public CommandFramework registerSimple(String name, String permission, String description, 
-                                            BiConsumer<CommandSender, String[]> executor) {
-        register(new SubCommand(name, permission, description) {
-            @Override
-            public void execute(CommandSender sender, String[] args) {
-                executor.accept(sender, args);
-            }
-        });
-        return this;
+        return Collections.emptyList();
     }
 }

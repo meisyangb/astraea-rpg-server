@@ -2,7 +2,10 @@ rootProject.name = 'astraea-rpg-server'
 
 include(
     'plugins:RPGCore',
+    'plugins:RPGSkill',
+    'plugins:RPGItems',
     'plugins:GuangDianArmorStats',
+    'plugins:GuangDianSocket',
     'plugins:GuangDianPoints',
     'plugins:GuangDianName',
     'plugins:GuangDianBoard',
@@ -39,5 +42,7 @@ include(
     'plugins:GuangDianGearScore',
     'plugins:GuangDianCollection',
     'plugins:GuangDianClass',
-    'plugins:GuangDianAuth'
+    'plugins:GuangDianAuth',
+    'plugins:GuangDianMobs',
+    'plugins:GuangDianItemLabel'
 )

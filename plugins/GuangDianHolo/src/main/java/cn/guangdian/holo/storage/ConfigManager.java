@@ -70,7 +70,7 @@ public class ConfigManager {
     }
 
     public String getPrefix() {
-        return config.getString("messages.prefix", "&b[全息] &f");
+        return config.getString("messages.prefix", "<aqua>[全息] <white>");
     }
 
     public String getLanguage() {

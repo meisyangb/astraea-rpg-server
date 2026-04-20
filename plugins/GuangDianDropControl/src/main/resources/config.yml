@@ -1,4 +1,4 @@
-# ========================================
+﻿# ========================================
 # GuangDianDropControl Configuration
 # ========================================
 # Author: Gumin
@@ -21,14 +21,14 @@ settings:
 # 消息设置
 # ========================================
 messages:
-  no-permission: "&c你没有权限执行此操作!"
-  drop-disabled: "&c物品丢弃已禁用!"
-  drop-enabled: "&a物品丢弃已启用!"
-  player-enabled: "&a已允许 %player% 丢弃物品"
-  player-disabled: "&c已禁止 %player% 丢弃物品"
-  reload: "&a配置已重新加载!"
-  usage: "&e用法: /gddrop <enable|disable|player|reload|status> [玩家]"
-  status: "&e当前全局丢弃状态: %status%"
+  no-permission: "<red>你没有权限执行此操作!"
+  drop-disabled: "<red>物品丢弃已禁用!"
+  drop-enabled: "<green>物品丢弃已启用!"
+  player-enabled: "<green>已允许 %player% 丢弃物品"
+  player-disabled: "<red>已禁止 %player% 丢弃物品"
+  reload: "<green>配置已重新加载!"
+  usage: "<yellow>用法: /gddrop <enable|disable|player|reload|status> [玩家]"
+  status: "<yellow>当前全局丢弃状态: %status%"
 
 # ========================================
 # 权限说明

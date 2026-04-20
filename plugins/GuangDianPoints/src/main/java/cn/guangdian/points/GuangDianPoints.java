@@ -5,6 +5,7 @@ import cn.guangdian.points.lifecycle.PointsDataHandler;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.concurrency.LockTimeoutException;
 import cn.guangdian.rpgcore.concurrency.PlayerLockManager;
+import cn.guangdian.rpgcore.message.UnifiedMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.points.monitor.OperationTimer;
 import cn.guangdian.points.monitor.PerformanceMonitor;
@@ -12,8 +13,8 @@ import cn.guangdian.points.monitor.PerformanceReport;
 import cn.guangdian.points.placeholder.PointsPlaceholder;
 import cn.guangdian.points.transaction.TransactionLogger;
 import cn.guangdian.points.transaction.UnfinishedTransaction;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -35,6 +36,38 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
+/**
+ * 光点点卷插件主类
+ * 
+ * <p>基于 RPGCore 微服务架构的点卷管理系统，支持：</p>
+ * <ul>
+ *   <li>玩家点卷余额管理</li>
+ *   <li>点卷转账与交易</li>
+ *   <li>事务日志记录</li>
+ *   <li>并发安全控制</li>
+ *   <li>PlaceholderAPI 支持</li>
+ * </ul>
+ * 
+ * <h3>版本历史：</h3>
+ * <ul>
+ *   <li><b>2026-04-14</b> - v1.1.0: 迁移到 MiniMessage，使用 RPGCore 消息服务</li>
+ *   <li><b>2025-04</b> - v1.0.0: 初始版本发布</li>
+ * </ul>
+ * 
+ * <h3>技术栈：</h3>
+ * <ul>
+ *   <li>Paper 1.21.6</li>
+ *   <li>RPGCore 微服务架构</li>
+ *   <li>Adventure MiniMessage API</li>
+ *   <li>ConcurrentHashMap 线程安全</li>
+ * </ul>
+ * 
+ * @author Gumin
+ * @version 1.1.0
+ * @since 2025-04
+ * @see AbstractRPGPlugin
+ * @see MiniMessageService
+ */
 public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabCompleter {
 
     private static GuangDianPoints instance;
@@ -50,10 +83,13 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
     private TransactionLogger transactionLogger;
     private PlayerLockManager lockManager;
     private PerformanceMonitor performanceMonitor;
-    
+
     // RPGCore 适配器
     private PointsServiceAdapter serviceAdapter;
     private PointsDataHandler dataHandler;
+
+    // UnifiedMessageService 用于消息颜色处理
+    private UnifiedMessageService msg;
 
     // 配置选项
     private boolean transactionLogEnabled;
@@ -62,9 +98,32 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
     private long lockTimeoutMs;
     private String lockTimeoutMessage;
 
+    /**
+     * 插件启用时调用
+     * 
+     * <p>初始化流程：</p>
+     * <ol>
+     *   <li>初始化 MiniMessage 服务（用于消息颜色处理）</li>
+     *   <li>加载配置文件</li>
+     *   <li>加载玩家数据</li>
+     *   <li>初始化优化组件（事务日志、锁管理器、性能监控）</li>
+     *   <li>恢复未完成的事务</li>
+     *   <li>注册事件监听器</li>
+     *   <li>启动定时任务</li>
+     *   <li>注册 RPGCore 服务</li>
+     * </ol>
+     * 
+     * @since 1.0.0
+     * @see MiniMessageService#getInstance()
+     * @see #loadData()
+     * @see #registerAPI()
+     */
     @Override
     protected void onPluginEnable() {
         instance = this;
+
+        // 初始化 UnifiedMessageService 用于消息颜色处理
+        msg = UnifiedMessageService.getInstance();
 
         saveDefaultConfig();
         config = getConfig();
@@ -168,8 +227,8 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
         concurrencyEnabled = concurrencyConfig != null && concurrencyConfig.getBoolean("enabled", true);
         lockTimeoutMs = concurrencyConfig != null ? concurrencyConfig.getLong("lock-timeout-ms", 3000) : 3000;
         lockTimeoutMessage = concurrencyConfig != null ?
-            concurrencyConfig.getString("lock-timeout-message", "&c操作繁忙，请稍后重试") :
-            "&c操作繁忙，请稍后重试";
+            concurrencyConfig.getString("lock-timeout-message", "<red>操作繁忙，请稍后重试") :
+            "<red>操作繁忙，请稍后重试";
 
         // 异步保存配置
         ConfigurationSection asyncConfig = optConfig.getConfigurationSection("async-save");
@@ -271,8 +330,6 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
 
         if (scheduler != null) {
             scheduler.runSyncRepeating(this::saveData, saveInterval, saveInterval);
-        } else {
-            getServer().getScheduler().runTaskTimer(this, this::saveData, saveInterval, saveInterval);
         }
 
         if (transactionLogger != null) {
@@ -630,66 +687,68 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
     private boolean handleBalanceCommand(CommandSender sender, String[] args) {
         if (args.length < 2) {
             if (!(sender instanceof Player)) {
-                sender.sendMessage(colorize("&c只有玩家可以使用此命令!"));
+                sender.sendMessage(msg.colorize("<red>只有玩家可以使用此命令!"));
                 return true;
             }
             Player player = (Player) sender;
             long balance = getBalance(player.getUniqueId());
-            player.sendMessage(colorize(config.getString("messages.balance-display", "&e你当前有 &6%balance% &e点卷"))
-                .replace("%balance%", formatNumber(balance)));
+            String balanceMsg = config.getString("messages.balance-display", "<yellow>你当前有 <gold>%balance% <yellow>点卷")
+                .replace("%balance%", formatNumber(balance));
+            player.sendMessage(msg.colorize(balanceMsg));
             return true;
         }
 
         if (!sender.hasPermission("guangdian.points.admin")) {
-            sender.sendMessage(colorize("&c没有权限!"));
+            sender.sendMessage(msg.colorize("<red>没有权限!"));
             return true;
         }
 
         Player target = Bukkit.getPlayer(args[1]);
         if (target == null) {
-            sender.sendMessage(colorize(config.getString("messages.player-not-found", "&c玩家不在线!")));
+            sender.sendMessage(msg.colorize(config.getString("messages.player-not-found", "<red>玩家不在线!")));
             return true;
         }
 
         long balance = getBalance(target.getUniqueId());
-        sender.sendMessage(colorize("&e" + target.getName() + " 当前有 &6" + formatNumber(balance) + " &e点卷"));
+        sender.sendMessage(msg.colorize("<yellow>" + target.getName() + " 当前有 <gold>" + formatNumber(balance) + " <yellow>点卷"));
         return true;
     }
 
     private boolean handleGiveCommand(CommandSender sender, String[] args) {
         if (!sender.hasPermission("guangdian.points.admin")) {
-            sender.sendMessage(colorize("&c没有权限!"));
+            sender.sendMessage(msg.colorize("<red>没有权限!"));
             return true;
         }
 
         if (args.length < 3) {
-            sender.sendMessage(colorize("&c用法: /points give <玩家> <数量>"));
+            sender.sendMessage(msg.colorize("<red>用法: /points give <玩家> <数量>"));
             return true;
         }
 
         Player target = Bukkit.getPlayer(args[1]);
         if (target == null) {
-            sender.sendMessage(colorize(config.getString("messages.player-not-found", "&c玩家不在线!")));
+            sender.sendMessage(msg.colorize(config.getString("messages.player-not-found", "<red>玩家不在线!")));
             return true;
         }
 
         try {
             long amount = parseAmount(args[2]);
             if (amount <= 0) {
-                sender.sendMessage(colorize("&c数量必须大于0!"));
+                sender.sendMessage(msg.colorize("<red>数量必须大于0!"));
                 return true;
             }
 
             UUID adminUuid = sender instanceof Player ? ((Player) sender).getUniqueId() : null;
             adminGive(target.getUniqueId(), amount, adminUuid);
 
-            sender.sendMessage(colorize(config.getString("messages.give-success", "&a已给予 %player% %amount% 点卷!"))
-                .replace("%player%", target.getName())
-                .replace("%amount%", formatNumber(amount)));
-            target.sendMessage(colorize(config.getString("messages.receive-points", "&e你收到了 &6%amount% &e点卷!"))
-                .replace("%amount%", formatNumber(amount)));
+            String giveMsg = config.getString("messages.give-success", "<green>已给予 %player% %amount% 点卷!")
+                .replace("%player%", target.getName()).replace("%amount%", formatNumber(amount));
+            sender.sendMessage(msg.colorize(giveMsg));
+            String receiveMsg = config.getString("messages.receive-points", "<yellow>你收到了 <gold>%amount% <yellow>点卷!")
+                .replace("%amount%", formatNumber(amount));
+            target.sendMessage(msg.colorize(receiveMsg));
         } catch (NumberFormatException e) {
-            sender.sendMessage(colorize("&c无效的数量!"));
+            sender.sendMessage(msg.colorize("<red>无效的数量!"));
         }
 
         return true;
@@ -697,37 +756,37 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
 
     private boolean handleTakeCommand(CommandSender sender, String[] args) {
         if (!sender.hasPermission("guangdian.points.admin")) {
-            sender.sendMessage(colorize("&c没有权限!"));
+            sender.sendMessage(msg.colorize("<red>没有权限!"));
             return true;
         }
 
         if (args.length < 3) {
-            sender.sendMessage(colorize("&c用法: /points take <玩家> <数量>"));
+            sender.sendMessage(msg.colorize("<red>用法: /points take <玩家> <数量>"));
             return true;
         }
 
         Player target = Bukkit.getPlayer(args[1]);
         if (target == null) {
-            sender.sendMessage(colorize(config.getString("messages.player-not-found", "&c玩家不在线!")));
+            sender.sendMessage(msg.colorize(config.getString("messages.player-not-found", "<red>玩家不在线!")));
             return true;
         }
 
         try {
             long amount = parseAmount(args[2]);
             if (amount <= 0) {
-                sender.sendMessage(colorize("&c数量必须大于0!"));
+                sender.sendMessage(msg.colorize("<red>数量必须大于0!"));
                 return true;
             }
 
             UUID adminUuid = sender instanceof Player ? ((Player) sender).getUniqueId() : null;
             if (adminTake(target.getUniqueId(), amount, adminUuid)) {
-                sender.sendMessage(colorize("&a已扣除 " + target.getName() + " " + formatNumber(amount) + " 点卷!"));
-                target.sendMessage(colorize("&c你被扣除了 " + formatNumber(amount) + " 点卷!"));
+                sender.sendMessage(msg.colorize("<green>已扣除 " + target.getName() + " " + formatNumber(amount) + " 点卷!"));
+                target.sendMessage(msg.colorize("<red>你被扣除了 " + formatNumber(amount) + " 点卷!"));
             } else {
-                sender.sendMessage(colorize(config.getString("messages.insufficient-funds", "&c玩家点卷不足!")));
+                sender.sendMessage(msg.colorize(config.getString("messages.insufficient-funds", "<red>玩家点卷不足!")));
             }
         } catch (NumberFormatException e) {
-            sender.sendMessage(colorize("&c无效的数量!"));
+            sender.sendMessage(msg.colorize("<red>无效的数量!"));
         }
 
         return true;
@@ -735,28 +794,28 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
 
     private boolean handleSetCommand(CommandSender sender, String[] args) {
         if (!sender.hasPermission("guangdian.points.admin")) {
-            sender.sendMessage(colorize("&c没有权限!"));
+            sender.sendMessage(msg.colorize("<red>没有权限!"));
             return true;
         }
 
         if (args.length < 3) {
-            sender.sendMessage(colorize("&c用法: /points set <玩家> <数量>"));
+            sender.sendMessage(msg.colorize("<red>用法: /points set <玩家> <数量>"));
             return true;
         }
 
         Player target = Bukkit.getPlayer(args[1]);
         if (target == null) {
-            sender.sendMessage(colorize(config.getString("messages.player-not-found", "&c玩家不在线!")));
+            sender.sendMessage(msg.colorize(config.getString("messages.player-not-found", "<red>玩家不在线!")));
             return true;
         }
 
         try {
             long amount = parseAmount(args[2]);
             setBalance(target.getUniqueId(), amount, "管理员设置");
-            sender.sendMessage(colorize("&a已设置 " + target.getName() + " 的点卷为 " + formatNumber(amount) + "!"));
-            target.sendMessage(colorize("&e你的点卷已被设置为 &6" + formatNumber(amount) + "&e!"));
+            sender.sendMessage(msg.colorize("<green>已设置 " + target.getName() + " 的点卷为 " + formatNumber(amount) + "!"));
+            target.sendMessage(msg.colorize("<yellow>你的点卷已被设置为 <gold>" + formatNumber(amount) + "<yellow>!"));
         } catch (NumberFormatException e) {
-            sender.sendMessage(colorize("&c无效的数量!"));
+            sender.sendMessage(msg.colorize("<red>无效的数量!"));
         }
 
         return true;
@@ -764,12 +823,12 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
 
     private boolean handlePayCommand(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(colorize("&c只有玩家可以使用此命令!"));
+            sender.sendMessage(msg.colorize("<red>只有玩家可以使用此命令!"));
             return true;
         }
 
         if (args.length < 3) {
-            sender.sendMessage(colorize("&c用法: /points pay <玩家> <数量>"));
+            sender.sendMessage(msg.colorize("<red>用法: /points pay <玩家> <数量>"));
             return true;
         }
 
@@ -777,34 +836,34 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
         Player target = Bukkit.getPlayer(args[1]);
 
         if (target == null) {
-            player.sendMessage(colorize(config.getString("messages.player-not-found", "&c玩家不在线!")));
+            player.sendMessage(msg.colorize(config.getString("messages.player-not-found", "<red>玩家不在线!")));
             return true;
         }
 
         if (target.equals(player)) {
-            player.sendMessage(colorize("&c不能给自己转账!"));
+            player.sendMessage(msg.colorize("<red>不能给自己转账!"));
             return true;
         }
 
         try {
             long amount = parseAmount(args[2]);
             if (amount <= 0) {
-                player.sendMessage(colorize("&c数量必须大于0!"));
+                player.sendMessage(msg.colorize("<red>数量必须大于0!"));
                 return true;
             }
 
             if (transferBalance(player.getUniqueId(), target.getUniqueId(), amount)) {
-                player.sendMessage(colorize(config.getString("messages.pay-success", "&a已转账 %amount% 点卷给 %player%!"))
-                    .replace("%amount%", formatNumber(amount))
-                    .replace("%player%", target.getName()));
-                target.sendMessage(colorize(config.getString("messages.receive-transfer", "&e你收到了 %player% 转账的 &6%amount% &e点卷!"))
-                    .replace("%player%", player.getName())
-                    .replace("%amount%", formatNumber(amount)));
+                String payMsg = config.getString("messages.pay-success", "<green>已转账 %amount% 点卷给 %player%!")
+                    .replace("%amount%", formatNumber(amount)).replace("%player%", target.getName());
+                player.sendMessage(msg.colorize(payMsg));
+                String receiveMsg = config.getString("messages.receive-transfer", "<yellow>你收到了 %player% 转账的 <gold>%amount% <yellow>点卷!")
+                    .replace("%player%", player.getName()).replace("%amount%", formatNumber(amount));
+                target.sendMessage(msg.colorize(receiveMsg));
             } else {
-                player.sendMessage(colorize(config.getString("messages.insufficient-funds", "&c点卷不足!")));
+                player.sendMessage(msg.colorize(config.getString("messages.insufficient-funds", "<red>点卷不足!")));
             }
         } catch (NumberFormatException e) {
-            player.sendMessage(colorize("&c无效的数量!"));
+            player.sendMessage(msg.colorize("<red>无效的数量!"));
         }
 
         return true;
@@ -814,21 +873,21 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
         List<Map.Entry<UUID, Long>> sorted = new ArrayList<>(balances.entrySet());
         sorted.sort((a, b) -> Long.compare(b.getValue(), a.getValue()));
 
-        sender.sendMessage(colorize("&6===== 点卷排行榜 ====="));
+        sender.sendMessage(msg.colorize("<gold>===== 点卷排行榜 ====="));
         int count = Math.min(10, sorted.size());
         for (int i = 0; i < count; i++) {
             Map.Entry<UUID, Long> entry = sorted.get(i);
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(entry.getKey());
             String name = offlinePlayer.getName();
             if (name == null) name = entry.getKey().toString().substring(0, 8);
-            sender.sendMessage(colorize("&e" + (i + 1) + ". &f" + name + " &7- &6" + formatNumber(entry.getValue())));
+            sender.sendMessage(msg.colorize("<yellow>" + (i + 1) + ". <white>" + name + " <gray>- <gold>" + formatNumber(entry.getValue())));
         }
         return true;
     }
 
     private boolean handleReloadCommand(CommandSender sender) {
         if (!sender.hasPermission("guangdian.points.admin")) {
-            sender.sendMessage(colorize("&c没有权限!"));
+            sender.sendMessage(msg.colorize("<red>没有权限!"));
             return true;
         }
 
@@ -836,7 +895,7 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
         config = getConfig();
         loadSettings();
 
-        sender.sendMessage(colorize("&a配置已重新加载!"));
+        sender.sendMessage(msg.colorize("<green>配置已重新加载!"));
         return true;
     }
 
@@ -845,12 +904,12 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
      */
     private boolean handlePerfmonCommand(CommandSender sender, String[] args) {
         if (!sender.hasPermission("guangdian.points.admin")) {
-            sender.sendMessage(colorize("&c没有权限!"));
+            sender.sendMessage(msg.colorize("<red>没有权限!"));
             return true;
         }
 
         if (performanceMonitor == null) {
-            sender.sendMessage(colorize("&c性能监控未启用!"));
+            sender.sendMessage(msg.colorize("<red>性能监控未启用!"));
             return true;
         }
 
@@ -858,10 +917,10 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
 
         switch (subCommand) {
             case "status":
-                sender.sendMessage(colorize("&6===== 性能监控状态 ====="));
-                sender.sendMessage(colorize(performanceMonitor.getSummary()));
+                sender.sendMessage(msg.colorize("<gold>===== 性能监控状态 ====="));
+                sender.sendMessage(msg.colorize(performanceMonitor.getSummary()));
                 if (lockManager != null) {
-                    sender.sendMessage(colorize("&e" + lockManager.getStats().toFormattedString()));
+                    sender.sendMessage(msg.colorize("<yellow>" + lockManager.getStats().toFormattedString()));
                 }
                 return true;
 
@@ -869,7 +928,7 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
                 PerformanceReport report = performanceMonitor.generateReport();
                 String[] lines = report.toFormattedString().split("\n");
                 for (String line : lines) {
-                    sender.sendMessage(colorize("&f" + line));
+                    sender.sendMessage(msg.colorize("<white>" + line));
                 }
                 return true;
 
@@ -878,36 +937,36 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
                 if (lockManager != null) {
                     lockManager.getStats().reset();
                 }
-                sender.sendMessage(colorize("&a性能统计已重置!"));
+                sender.sendMessage(msg.colorize("<green>性能统计已重置!"));
                 return true;
 
             case "enable":
                 performanceMonitor.enable();
-                sender.sendMessage(colorize("&a性能监控已启用!"));
+                sender.sendMessage(msg.colorize("<green>性能监控已启用!"));
                 return true;
 
             case "disable":
                 performanceMonitor.disable();
-                sender.sendMessage(colorize("&c性能监控已禁用!"));
+                sender.sendMessage(msg.colorize("<red>性能监控已禁用!"));
                 return true;
 
             default:
-                sender.sendMessage(colorize("&c用法: /points perfmon [status|report|reset|enable|disable]"));
+                sender.sendMessage(msg.colorize("<red>用法: /points perfmon [status|report|reset|enable|disable]"));
                 return true;
         }
     }
 
     private void sendHelp(CommandSender sender) {
-        sender.sendMessage(colorize("&6===== 点卷系统帮助 ====="));
-        sender.sendMessage(colorize("&e/points &7- 查看余额"));
-        sender.sendMessage(colorize("&e/points pay <玩家> <数量> &7- 转账"));
-        sender.sendMessage(colorize("&e/points top &7- 排行榜"));
+        sender.sendMessage(msg.colorize("<gold>===== 点卷系统帮助 ====="));
+        sender.sendMessage(msg.colorize("<yellow>/points <gray>- 查看余额"));
+        sender.sendMessage(msg.colorize("<yellow>/points pay <玩家> <数量> <gray>- 转账"));
+        sender.sendMessage(msg.colorize("<yellow>/points top <gray>- 排行榜"));
         if (sender.hasPermission("guangdian.points.admin")) {
-            sender.sendMessage(colorize("&e/points give <玩家> <数量> &7- 给予点券"));
-            sender.sendMessage(colorize("&e/points take <玩家> <数量> &7- 扣除点券"));
-            sender.sendMessage(colorize("&e/points set <玩家> <数量> &7- 设置点券"));
-            sender.sendMessage(colorize("&e/points reload &7- 重载配置"));
-            sender.sendMessage(colorize("&e/points perfmon [status|report|reset] &7- 性能监控"));
+            sender.sendMessage(msg.colorize("<yellow>/points give <玩家> <数量> <gray>- 给予点券"));
+            sender.sendMessage(msg.colorize("<yellow>/points take <玩家> <数量> <gray>- 扣除点券"));
+            sender.sendMessage(msg.colorize("<yellow>/points set <玩家> <数量> <gray>- 设置点券"));
+            sender.sendMessage(msg.colorize("<yellow>/points reload <gray>- 重载配置"));
+            sender.sendMessage(msg.colorize("<yellow>/points perfmon [status|report|reset] <gray>- 性能监控"));
         }
     }
 
@@ -930,10 +989,6 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
             return String.format("%.2f万", num / 10000.0);
         }
         return String.format("%,d", num);
-    }
-
-    private String colorize(String text) {
-        return ChatColor.translateAlternateColorCodes('&', text != null ? text : "");
     }
 
     @Override

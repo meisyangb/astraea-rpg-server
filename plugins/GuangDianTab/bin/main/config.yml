@@ -1,4 +1,4 @@
-# ========================================
+﻿# ========================================
 # 光点Tab列表插件配置文件
 # GuangDianTab Configuration
 # ========================================
@@ -26,25 +26,25 @@ header:
   enabled: true
   refresh-interval: 1000
   lines:
-    - "&6&l━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    - "<gold><bold>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     - ""
-    - "&6&l★ &e&l光点RPG &6&l★"
-    - "&7一个充满冒险的世界"
+    - "<gold><bold>★ <yellow><bold>光点RPG <gold><bold>★"
+    - "<gray>一个充满冒险的世界"
     - ""
-    - "&e&l服务器信息: &a%server_online%&7/&a%server_max_players% &e在线"
+    - "<yellow><bold>服务器信息: <green>%server_online%<gray>/<green>%server_max_players% <yellow>在线"
 
 footer:
   enabled: true
   refresh-interval: 1000
   lines:
     - ""
-    - "&e&l服务器TPS: &a%server_tps_1%"
-    - "&e&l你的延迟: &a%player_ping%ms"
+    - "<yellow><bold>服务器TPS: <green>%server_tps_1%"
+    - "<yellow><bold>你的延迟: <green>%player_ping%ms"
     - ""
-    - "&7官网: &bwww.guangdianrpg.com"
-    - "&7QQ群: &a123456789"
+    - "<gray>官网: <aqua>www.guangdianrpg.com"
+    - "<gray>QQ群: <green>123456789"
     - ""
-    - "&6&l━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    - "<gold><bold>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 # ========================================
 # Tab列表格式
@@ -63,13 +63,13 @@ footer:
 
 # 默认格式 (无权限组的玩家)
 default-format:
-  prefix: "&7[玩家] "
-  name: "&f%player_name%"
+  prefix: "<gray>[玩家] "
+  name: "<white>%player_name%"
   suffix: ""
   ping:
-    low: "&a"      # ping < 50
-    medium: "&e"   # 50 <= ping < 150
-    high: "&c"     # ping >= 150
+    low: "<green>"      # ping < 50
+    medium: "<yellow>"   # 50 <= ping < 150
+    high: "<red>"     # ping >= 150
 
 # ========================================
 # 权限组格式
@@ -79,33 +79,33 @@ default-format:
 # ========================================
 group-formats:
   admin:
-    prefix: "&c[管理员] "
-    name: "&c%player_name%"
-    suffix: " &7[&c%player_ping%ms&7]"
+    prefix: "<red>[管理员] "
+    name: "<red>%player_name%"
+    suffix: " <gray>[<red>%player_ping%ms<gray>]"
     weight: 100
     
   owner:
-    prefix: "&6[服主] "
-    name: "&6%player_name%"
-    suffix: " &7[&6%player_ping%ms&7]"
+    prefix: "<gold>[服主] "
+    name: "<gold>%player_name%"
+    suffix: " <gray>[<gold>%player_ping%ms<gray>]"
     weight: 200
     
   vip:
-    prefix: "&b[VIP] "
-    name: "&b%player_name%"
-    suffix: " &7[&b%player_ping%ms&7]"
+    prefix: "<aqua>[VIP] "
+    name: "<aqua>%player_name%"
+    suffix: " <gray>[<aqua>%player_ping%ms<gray>]"
     weight: 50
     
   svip:
-    prefix: "&d[SVIP] "
-    name: "&d%player_name%"
-    suffix: " &7[&d%player_ping%ms&7]"
+    prefix: "<light_purple>[SVIP] "
+    name: "<light_purple>%player_name%"
+    suffix: " <gray>[<light_purple>%player_ping%ms<gray>]"
     weight: 60
     
   mvp:
-    prefix: "&e[MVP] "
-    name: "&e%player_name%"
-    suffix: " &7[&e%player_ping%ms&7]"
+    prefix: "<yellow>[MVP] "
+    name: "<yellow>%player_name%"
+    suffix: " <gray>[<yellow>%player_ping%ms<gray>]"
     weight: 70
 
 # ========================================
@@ -130,14 +130,14 @@ nametag:
 # 消息设置
 # ========================================
 messages:
-  no-permission: "&c您没有权限执行此操作!"
-  config-reloaded: "&aTab列表配置已重新加载!"
-  info-header: "&6===== 光点Tab列表插件信息 ====="
-  info-version: "&e版本: &f"
-  info-author: "&e作者: &fGumin"
-  info-qq: "&eQQ: &f2271257344"
-  info-status: "&e状态: &a已启用"
-  info-refresh: "&e刷新间隔: &f"
+  no-permission: "<red>您没有权限执行此操作!"
+  config-reloaded: "<green>Tab列表配置已重新加载!"
+  info-header: "<gold>===== 光点Tab列表插件信息 ====="
+  info-version: "<yellow>版本: <white>"
+  info-author: "<yellow>作者: <white>Gumin"
+  info-qq: "<yellow>QQ: <white>2271257344"
+  info-status: "<yellow>状态: <green>已启用"
+  info-refresh: "<yellow>刷新间隔: <white>"
 
 # ========================================
 # 高级设置
@@ -154,10 +154,10 @@ advanced:
   # AFK玩家标记
   afk:
     enabled: true
-    format: "&7[AFK] "
+    format: "<gray>[AFK] "
     
   # 玩家加入/退出提示
   join-quit:
     enabled: true
-    join: "&a+ &e%player_name% &7加入了游戏"
-    quit: "&c- &e%player_name% &7离开了游戏"
+    join: "<green>+ <yellow>%player_name% <gray>加入了游戏"
+    quit: "<red>- <yellow>%player_name% <gray>离开了游戏"

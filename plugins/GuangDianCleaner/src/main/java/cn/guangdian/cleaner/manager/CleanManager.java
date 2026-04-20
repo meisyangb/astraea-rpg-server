@@ -3,6 +3,7 @@ package cn.guangdian.cleaner.manager;
 import cn.guangdian.cleaner.GuangDianCleaner;
 import cn.guangdian.cleaner.config.ConfigManager;
 import cn.guangdian.rpgcore.RPGCore;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -96,9 +97,11 @@ public class CleanManager {
      * 广播预警消息
      */
     private void broadcastWarning(int seconds) {
-        String message = configManager.getMessagePrefix() +
-                configManager.getMessageWarning().replace("%time%", String.valueOf(seconds));
-        Bukkit.broadcastMessage(message);
+        Component message = configManager.getFormattedMessage(
+            configManager.getMessagePrefix() + configManager.getMessageWarning(),
+            "%time%", String.valueOf(seconds)
+        );
+        Bukkit.broadcast(message);
     }
 
     /**
@@ -132,9 +135,11 @@ public class CleanManager {
         configManager.addCleanStats(items, currentCleanEntities.get());
 
         if (broadcast && items > 0) {
-            String message = configManager.getMessagePrefix() +
-                    configManager.getMessageCleaned().replace("%count%", String.valueOf(items));
-            Bukkit.broadcastMessage(message);
+            Component message = configManager.getFormattedMessage(
+                configManager.getMessagePrefix() + configManager.getMessageCleaned(),
+                "%count%", String.valueOf(items)
+            );
+            Bukkit.broadcast(message);
         }
 
         isCleaning = false;

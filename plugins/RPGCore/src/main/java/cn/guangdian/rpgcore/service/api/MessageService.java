@@ -7,6 +7,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.UUID;
+import java.util.function.Predicate;
+
 public interface MessageService {
 
     void send(CommandSender sender, String message);
@@ -36,4 +40,20 @@ public interface MessageService {
     Component colorize(String text, @Nullable String hoverText, @Nullable String clickAction, @Nullable String clickValue);
 
     String replacePlaceholders(String text, String... keyValues);
+
+    // ==================== 扩展方法 (从 UnifiedMessageService 迁移) ====================
+
+    boolean sendMessage(UUID playerId, String message);
+
+    void sendMessage(Collection<? extends Player> players, String message);
+
+    void broadcastFiltered(String message, Predicate<Player> filter);
+
+    void sendActionBar(Player player, String message);
+
+    void sendActionBar(Collection<? extends Player> players, String message);
+
+    void showTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut);
+
+    void showTitle(Collection<? extends Player> players, String title, String subtitle, int fadeIn, int stay, int fadeOut);
 }

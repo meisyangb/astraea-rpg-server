@@ -96,7 +96,14 @@ public class SchedulerManager {
         
         if (scheduler != null) {
             scheduler.runSyncLater(() -> {
-                Bukkit.spigot().restart();
+                // 使用 RPGCore ServerService 重启服务器
+                cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+                if (rpgCore != null) {
+                    rpgCore.getServerService().restart();
+                } else {
+                    // 降级方案：使用 Bukkit 关闭并依赖外部重启脚本
+                    Bukkit.shutdown();
+                }
             }, task.getWarningSeconds() * 20L);
         }
     }

@@ -30,7 +30,7 @@ public class MarketDataHandler extends AbstractPlayerDataHandler {
                     }
                 }
             }
-            player.sendMessage(plugin.colorize(plugin.getConfig().getString("messages.offline-returns", "&e你有 %count% 个过期物品已返还!"))
+            player.sendMessage(plugin.colorize(plugin.getConfig().getString("messages.offline-returns", "<yellow>你有 %count% 个过期物品已返还!"))
                 .replace("%count%", String.valueOf(returns.size())));
         }
     }

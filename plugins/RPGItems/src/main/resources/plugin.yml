@@ -1,0 +1,23 @@
+name: RPGItems
+version: 1.0.0
+main: cn.guangdian.rpgitems.RPGItems
+author: GuangDian
+description: RPG物品系统 - 支持MiniMessage和技能绑定
+api-version: '1.21'
+depend:
+  - RPGCore
+softdepend:
+  - RPGSkill
+
+commands:
+  rpgitem:
+    description: RPGItems 管理命令
+    usage: /rpgitem <give|reload|list|info>
+    permission: rpgitems.admin
+    aliases:
+      - rpgi
+
+permissions:
+  rpgitems.admin:
+    description: RPGItems 管理员权限
+    default: op

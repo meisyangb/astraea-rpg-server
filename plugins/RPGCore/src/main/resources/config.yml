@@ -1,4 +1,4 @@
-# RPGCore 核心配置
+﻿# RPGCore 核心配置
 
 # ==================== 数据库配置 ====================
 database:
@@ -6,7 +6,7 @@ database:
   enabled: true
   
   # JDBC 连接 URL
-  url: "jdbc:mysql://localhost:3306/mc_rpg?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8&allowPublicKeyRetrieval=true"
+  url: "jdbc:mysql://localhost:3306/mc_rpg?useSSL=false&serverTimezone=Asia/Shanghai<red>haracterEncoding=utf8<green>llowPublicKeyRetrieval=true"
   
   # 数据库用户名
   username: "root"

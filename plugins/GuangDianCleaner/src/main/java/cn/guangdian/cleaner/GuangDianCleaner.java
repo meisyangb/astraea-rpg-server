@@ -5,8 +5,25 @@ import cn.guangdian.cleaner.command.CleanerCommand;
 import cn.guangdian.cleaner.config.ConfigManager;
 import cn.guangdian.cleaner.listener.DropListener;
 import cn.guangdian.cleaner.manager.CleanManager;
+import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.api.GameLogger;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 
+/**
+ * 光点扫地娘插件 - GuangDianCleaner
+ *
+ * <p>RPGCore 服务集成:
+ * <ul>
+ *   <li>GameLogger: 使用 RPGCore 统一日志服务</li>
+ *   <li>SyncScheduler: 使用 RPGCore 同步任务调度器</li>
+ * </ul>
+ *
+ * <p>优先级模式: 优先使用 RPGCore 服务，不可用则降级到本地实现
+ *
+ * @author Gumin
+ * @QQ 2271257344
+ * @version 1.0.0
+ */
 public class GuangDianCleaner extends AbstractRPGPlugin {
 
     private static GuangDianCleaner instance;
@@ -15,9 +32,15 @@ public class GuangDianCleaner extends AbstractRPGPlugin {
     private CleanManager cleanManager;
     private CleanerServiceAdapter serviceAdapter;
 
+    // RPGCore 日志服务
+    private GameLogger gameLogger;
+
     @Override
     protected void onPluginEnable() {
         instance = this;
+
+        // 初始化 RPGCore 服务
+        initRPGCoreServices();
 
         // 初始化配置管理器
         configManager = new ConfigManager(this);
@@ -29,8 +52,8 @@ public class GuangDianCleaner extends AbstractRPGPlugin {
         // 注册 RPGCore 服务适配器（替代 ThreadPoolManager）
         serviceAdapter = new CleanerServiceAdapter(this, cleanManager);
         if (serviceAdapter.isUsingRPGCore()) {
-            getLogger().info("已集成 RPGCore 服务系统!");
-            getLogger().info("使用统一 AsyncExecutor 替代本地线程池");
+            logInfo("已集成 RPGCore 服务系统!");
+            logInfo("使用统一 AsyncExecutor 替代本地线程池");
         }
 
         // 注册命令
@@ -42,12 +65,64 @@ public class GuangDianCleaner extends AbstractRPGPlugin {
         // 启动定时清理任务
         cleanManager.startAutoCleanTask();
 
-        getLogger().info("========================================");
-        getLogger().info("  光点扫地娘插件已启用!");
-        getLogger().info("  版本: " + getDescription().getVersion());
-        getLogger().info("  作者: Gumin | QQ: 2271257344");
-        getLogger().info("  自动清理间隔: " + configManager.getAutoCleanInterval() + "秒");
-        getLogger().info("========================================");
+        logInfo("========================================");
+        logInfo("  光点扫地娘插件已启用!");
+        logInfo("  版本: " + getDescription().getVersion());
+        logInfo("  作者: Gumin | QQ: 2271257344");
+        logInfo("  自动清理间隔: " + configManager.getAutoCleanInterval() + "秒");
+        logInfo("========================================");
+    }
+
+    /**
+     * 初始化 RPGCore 核心服务
+     * 优先使用 RPGCore 统一服务，本地实现作为降级方案
+     */
+    private void initRPGCoreServices() {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            gameLogger = rpgCore.getGameLogger();
+            if (gameLogger != null) {
+                logInfo("已连接到 RPGCore GameLogger");
+            }
+        }
+        if (gameLogger == null) {
+            logInfo("使用 Bukkit Logger（降级）");
+        }
+    }
+
+    /**
+     * 日志辅助方法 - 优先使用 RPGCore GameLogger
+     */
+    public void logInfo(String message) {
+        if (gameLogger != null) {
+            gameLogger.info(message);
+        } else {
+            getLogger().info(message);
+        }
+    }
+
+    public void logWarning(String message) {
+        if (gameLogger != null) {
+            gameLogger.warning(message);
+        } else {
+            getLogger().warning(message);
+        }
+    }
+
+    public void logSevere(String message) {
+        if (gameLogger != null) {
+            gameLogger.severe(message);
+        } else {
+            getLogger().severe(message);
+        }
+    }
+
+    public void logDebug(String message) {
+        if (gameLogger != null) {
+            gameLogger.debug(message);
+        } else {
+            getLogger().info("[DEBUG] " + message);
+        }
     }
 
     @Override
@@ -60,7 +135,7 @@ public class GuangDianCleaner extends AbstractRPGPlugin {
             serviceAdapter.unregister();
         }
 
-        getLogger().info("光点扫地娘插件已禁用!");
+        logInfo("光点扫地娘插件已禁用!");
     }
 
     @Override

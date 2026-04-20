@@ -58,7 +58,7 @@ public class GuangDianRaid extends AbstractRPGPlugin {
 
         if (isExternalServicesAvailable()) {
             placeholder = new RaidPlaceholder(this);
-            placeholder.register();
+            placeholder.registerExpansion();
         }
 
         getLogger().info("搜打撤副本系统已启动");
@@ -66,20 +66,19 @@ public class GuangDianRaid extends AbstractRPGPlugin {
 
     @Override
     protected void onPluginDisable() {
+        // 取消所有调度任务
+        cancelAllTasks();
+        
         if (instanceManager != null) {
             instanceManager.shutdownAll();
         }
 
         if (placeholder != null) {
-            placeholder.unregister();
+            placeholder.unregisterExpansion();
         }
 
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
-        }
-
-        if (scheduler != null) {
-            scheduler.cancelAllTasks();
         }
 
         getLogger().info("搜打撤副本系统已关闭");

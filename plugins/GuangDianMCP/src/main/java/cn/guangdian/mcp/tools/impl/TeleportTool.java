@@ -1,6 +1,7 @@
 package cn.guangdian.mcp.tools.impl;
 
 import cn.guangdian.mcp.GuangDianMCP;
+import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.mcp.tools.MCPTool;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -110,7 +111,7 @@ public class TeleportTool implements MCPTool {
             return ToolResult.error("目标玩家不在线: " + targetName);
         }
         
-        plugin.getServer().getScheduler().runTask(plugin, () -> {
+        RPGCore.getInstance().getScheduler().runSync(() -> {
             player.teleport(target);
         });
         
@@ -125,7 +126,7 @@ public class TeleportTool implements MCPTool {
         
         Location location = new Location(world, x, y, z);
         
-        plugin.getServer().getScheduler().runTask(plugin, () -> {
+        RPGCore.getInstance().getScheduler().runSync(() -> {
             player.teleport(location);
         });
         

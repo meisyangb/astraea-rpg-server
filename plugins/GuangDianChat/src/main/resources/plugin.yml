@@ -1,4 +1,4 @@
-# ========================================
+﻿# ========================================
 # 光点聊天插件 - GuangDianChat
 # ========================================
 # 作者：Gumin
@@ -45,7 +45,7 @@ permissions:
     description: 格式权限 - 可以在聊天中使用格式代码 (粗体、斜体等)
     default: op
   guangdian.chat.magic:
-    description: 魔法字符权限 - 可以使用&k 魔法字符
+    description: 魔法字符权限 - 可以使用<obfuscated> 魔法字符
     default: op
   guangdian.chat.url:
     description: URL 权限 - 聊天中可以发送链接

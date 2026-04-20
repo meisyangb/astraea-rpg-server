@@ -4,7 +4,6 @@ import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.SyncScheduler;
 import cn.guangdian.rpgcore.service.api.GuildService;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
@@ -25,7 +24,7 @@ public class TextDisplayManager {
     private SyncScheduler scheduler;
     
     private boolean enabled = true;
-    private String guildFormat = "&3[%s&3]";
+    private String guildFormat = "<dark_aqua>[%s<dark_aqua>]";
     public float displayHeight = 2.8f;
     private boolean debug = false;
     private boolean defaultShowGuild = true;
@@ -45,7 +44,7 @@ public class TextDisplayManager {
     
     public void loadSettings() {
         enabled = plugin.getConfig().getBoolean("title-display.guild-textdisplay-enabled", true);
-        guildFormat = plugin.getConfig().getString("title-display.guild-format", "&3[%s&3]");
+        guildFormat = plugin.getConfig().getString("title-display.guild-format", "<dark_aqua>[%s<dark_aqua>]");
         displayHeight = (float) plugin.getConfig().getDouble("title-display.guild-display-height", 2.8);
         defaultShowGuild = plugin.getConfig().getBoolean("title-display.default-show-guild", true);
     }
@@ -102,7 +101,9 @@ public class TextDisplayManager {
         
         TextDisplay textDisplay = player.getWorld().spawn(player.getLocation(), TextDisplay.class);
         
-        textDisplay.setText(translateColors(String.format(guildFormat, guildName)));
+        textDisplay.text(plugin instanceof GuangDianName gdn ? 
+            gdn.getMiniMessageService().colorize(String.format(guildFormat, guildName)) :
+            net.kyori.adventure.text.Component.text(String.format(guildFormat, guildName)));
         textDisplay.setVisibleByDefault(true);
         textDisplay.setBillboard(org.bukkit.entity.Display.Billboard.CENTER);
         textDisplay.setBackgroundColor(org.bukkit.Color.fromARGB(0, 0, 0, 0));
@@ -167,7 +168,9 @@ public class TextDisplayManager {
         }
         
         if (!guildName.equals(lastGuild)) {
-            textDisplay.setText(translateColors(String.format(guildFormat, guildName)));
+            textDisplay.text(plugin instanceof GuangDianName gdn ? 
+                gdn.getMiniMessageService().colorize(String.format(guildFormat, guildName)) :
+                net.kyori.adventure.text.Component.text(String.format(guildFormat, guildName)));
             lastGuildName.put(playerId, guildName);
             log("[更新] " + player.getName() + " 工会: " + guildName);
         }
@@ -273,7 +276,8 @@ public class TextDisplayManager {
     
     private String translateColors(String text) {
         if (text == null) return "";
-        return ChatColor.translateAlternateColorCodes('&', text);
+        // 返回原始字符串，由调用方使用 MiniMessageService 解析
+        return text;
     }
     
     private void log(String message) {

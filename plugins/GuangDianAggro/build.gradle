@@ -6,14 +6,44 @@ repositories {
     flatDir {
         dirs 'libs'
     }
+    mavenCentral()
+    maven { url = 'https://repo.papermc.io/repository/maven-public/' }
 }
 
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
     compileOnly project(':plugins:RPGCore')
     compileOnly files('../GuangDianArmorStats/libs/PlaceholderAPI.jar')
+
+    // 单元测试
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
+    testImplementation 'org.junit.platform:junit-platform-launcher:1.10.1'
+    testImplementation 'org.mockito:mockito-core:5.8.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.8.0'
+    testImplementation 'org.assertj:assertj-core:3.24.2'
+    testImplementation project(':plugins:RPGCore')
 }
 
 jar {
     archiveBaseName.set('GuangDianAggro')
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+}
+
+// 启用测试编译
+compileTestJava {
+    enabled = true
+}
+
+test {
+    useJUnitPlatform()
+    enabled = true
 }

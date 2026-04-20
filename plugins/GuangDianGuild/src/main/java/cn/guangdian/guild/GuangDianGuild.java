@@ -1,10 +1,10 @@
 package cn.guangdian.guild;
 
 import cn.guangdian.guild.adapter.GuildServiceAdapter;
+import cn.guangdian.rpgcore.message.UnifiedMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,6 +21,38 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+/**
+ * 光点公会插件主类
+ *
+ * <p>基于 RPGCore 微服务架构的公会管理系统，支持：</p>
+ * <ul>
+ *   <li>公会创建与管理</li>
+ *   <li>成员邀请与权限控制</li>
+ *   <li>公会聊天频道</li>
+ *   <li>公会数据持久化</li>
+ *   <li>PlaceholderAPI 支持</li>
+ * </ul>
+ *
+ * <h3>版本历史：</h3>
+ * <ul>
+ *   <li><b>2026-04-14</b> - v1.1.0: 迁移到 MiniMessage，使用 RPGCore 消息服务</li>
+ *   <li><b>2025-04</b> - v1.0.0: 初始版本发布</li>
+ * </ul>
+ *
+ * <h3>技术栈：</h3>
+ * <ul>
+ *   <li>Paper 1.21.6</li>
+ *   <li>RPGCore 微服务架构</li>
+ *   <li>Adventure MiniMessage API</li>
+ *   <li>ConcurrentHashMap 线程安全</li>
+ * </ul>
+ *
+ * @author GuangDian
+ * @version 1.1.0
+ * @since 2025-04
+ * @see AbstractRPGPlugin
+ * @see MiniMessageService
+ */
 public class GuangDianGuild extends AbstractRPGPlugin implements Listener, CommandExecutor, TabCompleter {
     private static GuangDianGuild instance;
     private FileConfiguration config;
@@ -29,11 +61,33 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
     private Map<String, GuildInvite> pendingInvites;
     
     private GuildServiceAdapter serviceAdapter;
-    private static final LegacyComponentSerializer SERIALIZER = LegacyComponentSerializer.legacyAmpersand();
+    private UnifiedMessageService msg;
 
+    /**
+     * 插件启用时调用
+     *
+     * <p>初始化流程：</p>
+     * <ol>
+     *   <li>初始化 MiniMessage 服务（用于消息颜色处理）</li>
+     *   <li>初始化公会数据存储</li>
+     *   <li>加载公会数据</li>
+     *   <li>注册命令处理器</li>
+     *   <li>注册事件监听器</li>
+     *   <li>注册 PlaceholderAPI 扩展</li>
+     *   <li>注册 RPGCore 服务</li>
+     * </ol>
+     *
+     * @since 1.0.0
+     * @see MiniMessageService#getInstance()
+     * @see #loadGuilds()
+     */
     @Override
     protected void onPluginEnable() {
         instance = this;
+
+        // 初始化 UnifiedMessageService 用于消息颜色处理
+        msg = UnifiedMessageService.getInstance();
+
         guilds = new ConcurrentHashMap<>();
         playerGuilds = new ConcurrentHashMap<>();
         pendingInvites = new ConcurrentHashMap<>();
@@ -59,6 +113,9 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
 
     @Override
     protected void onPluginDisable() {
+        // 取消所有调度任务
+        cancelAllTasks();
+        
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
         }
@@ -253,22 +310,61 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
         return guilds.size();
     }
 
+    /**
+     * 获取消息组件（带前缀）
+     *
+     * <p>从配置中读取消息，并添加前缀，然后使用 MiniMessage 解析颜色代码。</p>
+     *
+     * <p>示例：</p>
+     * <pre>{@code
+     * // 配置: messages.prefix: "<gold>[工会] <white>"
+     * // 配置: messages.no-guild: "<red>你还没有加入公会!"
+     * player.sendMessage(getMsg("no-guild"));
+     * // 输出: [工会] 你还没有加入公会!（带颜色）
+     * }</pre>
+     *
+     * @param key 消息配置键（不包含 messages. 前缀）
+     * @return 解析后的 Adventure Component
+     * @since 1.0.0
+     * @see #colorize(String)
+     * @see MiniMessage#miniMessage()
+     */
     public Component getMsg(String key) {
-        String prefix = config.getString("messages.prefix", "&6[工会] &f");
-        String msg = config.getString("messages." + key, "");
-        return SERIALIZER.deserialize(prefix + msg);
+        String prefix = config.getString("messages.prefix", "<gold>[工会] <white>");
+        String message = config.getString("messages." + key, "");
+        return this.msg.colorize(prefix + message);
     }
 
+    /**
+     * 获取消息组件（带前缀和占位符替换）
+     *
+     * <p>从配置中读取消息，替换占位符，添加前缀，然后使用 MiniMessage 解析颜色代码。</p>
+     *
+     * <p>示例：</p>
+     * <pre>{@code
+     * // 配置: messages.prefix: "<gold>[工会] <white>"
+     * // 配置: messages.join-success: "<green>你已成功加入 {guild} 公会!"
+     * player.sendMessage(getMsg("join-success", "guild", "勇者联盟"));
+     * // 输出: [工会] 你已成功加入 勇者联盟 公会!（带颜色）
+     * }</pre>
+     *
+     * @param key 消息配置键（不包含 messages. 前缀）
+     * @param placeholders 占位符键值对（格式: key1, value1, key2, value2...）
+     * @return 解析后的 Adventure Component
+     * @since 1.0.0
+     * @see #colorize(String)
+     * @see MiniMessage#miniMessage()
+     */
     public Component getMsg(String key, String... placeholders) {
-        String prefix = config.getString("messages.prefix", "&6[工会] &f");
-        String msg = config.getString("messages." + key, "");
-        String fullMsg = prefix + msg;
+        String prefix = config.getString("messages.prefix", "<gold>[工会] <white>");
+        String message = config.getString("messages." + key, "");
+        String fullMsg = prefix + message;
         for (int i = 0; i < placeholders.length; i += 2) {
             if (i + 1 < placeholders.length) {
                 fullMsg = fullMsg.replace("{" + placeholders[i] + "}", placeholders[i + 1]);
             }
         }
-        return SERIALIZER.deserialize(fullMsg);
+        return this.msg.colorize(fullMsg);
     }
 
     @Override
@@ -474,11 +570,11 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
         Guild guild = getPlayerGuild(p.getName());
         if (guild == null) { p.sendMessage(getMsg("not-in-guild")); return true; }
         if (args.length < 2) { p.sendMessage(Component.text("用法: /guild chat <消息>").color(NamedTextColor.RED)); return true; }
-        String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-        String chatPrefix = config.getString("settings.chat-prefix", "&7[&6工会&7] ");
-        Component formatted = SERIALIZER.deserialize(chatPrefix)
+        String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+        String chatPrefix = config.getString("settings.chat-prefix", "<gray>[<gold>工会<gray>] ");
+        Component formatted = this.msg.colorize(chatPrefix)
             .append(Component.text(p.getName() + ": ").color(NamedTextColor.YELLOW))
-            .append(Component.text(msg).color(NamedTextColor.WHITE));
+            .append(Component.text(message).color(NamedTextColor.WHITE));
         for (String member : guild.members.keySet()) {
             Player memberP = getServer().getPlayer(member);
             if (memberP != null) memberP.sendMessage(formatted);

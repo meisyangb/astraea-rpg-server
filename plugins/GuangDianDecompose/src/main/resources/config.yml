@@ -1,23 +1,24 @@
 # ─── 装备分解系统配置 ───
+# RPGCore MiniMessage 和 SoundService 格式支持
 
 # 调试模式
 debug: false
 
-# 分解界面标题
-gui-title: "&8装备分解"
+# 分解界面标题 - MiniMessage 格式
+gui-title: "<dark_gray>装备分解"
 
-# 分解音效
+# 分解音效 - Paper 1.21+ 格式 (命名空间:路径)
 sounds:
-  success: "BLOCK_ANVIL_USE"
-  fail: "ENTITY_ITEM_BREAK"
+  success: "minecraft:block.anvil.use"
+  fail: "minecraft:entity.item.break"
 
-# 分解消息
+# 分解消息 - MiniMessage 格式
 messages:
-  success: "&a分解成功！获得材料: &f{materials}"
-  no-permission: "&c你没有权限使用分解功能！"
-  not-mythic-item: "&c此物品无法分解！"
-  no-decompose-rule: "&c该装备没有配置分解规则！"
-  inventory-full: "&c背包已满，无法获得分解材料！"
+  success: "<green>分解成功！获得材料: <white>{materials}"
+  no-permission: "<red>你没有权限使用分解功能！"
+  not-mythic-item: "<red>此物品无法分解！"
+  no-decompose-rule: "<red>该装备没有配置分解规则！"
+  inventory-full: "<red>背包已满，无法获得分解材料！"
 
 # 分解规则配置文件
 rules-file: "rules.yml"

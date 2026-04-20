@@ -321,7 +321,7 @@ public class GuangDianMarriage extends AbstractRPGPlugin implements Listener, Co
     }
 
     public String getMsg(String key) {
-        String prefix = config.getString("messages.prefix", "&d[结婚] &f");
+        String prefix = config.getString("messages.prefix", "<light_purple>[结婚] <white>");
         String msg = config.getString("messages." + key, "");
         return net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().deserialize(prefix + msg).toString();
     }
@@ -551,7 +551,7 @@ public class GuangDianMarriage extends AbstractRPGPlugin implements Listener, Co
         String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         String partner = getPartner(p.getName());
         Player partnerP = getServer().getPlayer(partner);
-        String chatPrefix = config.getString("messages.chat-prefix", "&d[夫妻] &f");
+        String chatPrefix = config.getString("messages.chat-prefix", "<light_purple>[夫妻] <white>");
         String formatted = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().deserialize(chatPrefix).toString() + 
             net.kyori.adventure.text.format.NamedTextColor.YELLOW + p.getName() + ": " + 
             net.kyori.adventure.text.format.NamedTextColor.WHITE + msg;

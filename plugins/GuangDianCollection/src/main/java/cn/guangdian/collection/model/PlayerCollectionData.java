@@ -3,11 +3,12 @@ package cn.guangdian.collection.model;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerCollectionData {
     
     private final UUID playerId;
-    private final Map<String, CollectedEntry> collectedItems = new HashMap<>();
+    private final Map<String, CollectedEntry> collectedItems = new ConcurrentHashMap<>();
     
     private int totalItemsCollected = 0;
     private boolean dirty = false;

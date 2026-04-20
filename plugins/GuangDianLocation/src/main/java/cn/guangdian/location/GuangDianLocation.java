@@ -6,13 +6,13 @@ import cn.guangdian.location.service.LocationStorageService;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
 import cn.guangdian.rpgcore.database.CoreDatabase;
+import cn.guangdian.rpgcore.message.UnifiedMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.rpgcore.service.api.LocationService;
-import org.bukkit.ChatColor;
+import cn.guangdian.rpgcore.sound.SoundService;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
-import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -32,6 +32,10 @@ public class GuangDianLocation extends AbstractRPGPlugin implements CommandExecu
     private LocationStorageService storageService;
     private LocationServiceAdapter serviceAdapter;
     private AsyncExecutor asyncExecutor;
+
+    // RPGCore 服务引用
+    private SoundService soundService;
+    private UnifiedMessageService msg;
 
     private int maxLocationsPerPlayer;
     private boolean selectionParticleEnabled;
@@ -105,14 +109,25 @@ public class GuangDianLocation extends AbstractRPGPlugin implements CommandExecu
     }
 
     private void initServices() {
-        // 获取 RPGCore 异步执行器
+        // 获取 RPGCore 服务
         if (getServer().getPluginManager().isPluginEnabled("RPGCore")) {
             try {
-                asyncExecutor = RPGCore.getInstance().getAsyncExecutor();
-                getLogger().info("使用 RPGCore AsyncExecutor");
+                RPGCore rpgCore = RPGCore.getInstance();
+                asyncExecutor = rpgCore.getAsyncExecutor();
+                soundService = rpgCore.getSoundService();
+                msg = UnifiedMessageService.getInstance();
+                getLogger().info("使用 RPGCore 服务 (AsyncExecutor, SoundService, UnifiedMessageService)");
             } catch (Exception e) {
-                getLogger().warning("无法获取 RPGCore AsyncExecutor: " + e.getMessage());
+                getLogger().warning("无法获取 RPGCore 服务: " + e.getMessage());
             }
+        }
+
+        // 如果 RPGCore 服务不可用，使用本地降级
+        if (soundService == null) {
+            soundService = SoundService.getInstance();
+        }
+        if (msg == null) {
+            msg = UnifiedMessageService.getInstance();
         }
 
         // 创建存储服务
@@ -155,7 +170,7 @@ public class GuangDianLocation extends AbstractRPGPlugin implements CommandExecu
 
         // 检查权限
         if (!player.hasPermission("guangdian.location.use")) {
-            player.sendMessage(colorize("&c你没有权限使用坐标选择功能!"));
+            player.sendMessage(msg.colorize("<red>你没有权限使用坐标选择功能!</red>"));
             return;
         }
 
@@ -163,8 +178,8 @@ public class GuangDianLocation extends AbstractRPGPlugin implements CommandExecu
         CompletableFuture<Integer> countFuture = storageService.getLocationCountAsync(playerId);
         countFuture.thenAccept(count -> {
             if (count >= maxLocationsPerPlayer) {
-                runSync(() -> player.sendMessage(colorize(
-                    "&c你已经保存了 &e" + count + " &c个坐标点，达到上限 &e" + maxLocationsPerPlayer + "&c!")));
+                runSync(() -> player.sendMessage(msg.colorize(
+                    "<red>你已经保存了 <yellow>" + count + " <red>个坐标点，达到上限 <yellow>" + maxLocationsPerPlayer + "<red>!")));
                 return;
             }
 
@@ -172,7 +187,7 @@ public class GuangDianLocation extends AbstractRPGPlugin implements CommandExecu
             CompletableFuture<Boolean> existsFuture = storageService.hasLocationAsync(playerId, name);
             existsFuture.thenAccept(exists -> {
                 if (exists) {
-                    runSync(() -> player.sendMessage(colorize("&c坐标点 &e" + name + " &c已存在!")));
+                    runSync(() -> player.sendMessage(msg.colorize("<red>坐标点 <yellow>" + name + " <red>已存在!")));
                     return;
                 }
 
@@ -182,14 +197,14 @@ public class GuangDianLocation extends AbstractRPGPlugin implements CommandExecu
                     if (success) {
                         runSync(() -> {
                             // 发送成功提示
-                            player.sendMessage(colorize("&a成功保存坐标点 &e" + name + "&a!"));
-                            player.sendMessage(colorize("&7位置: &f" + formatLocation(location)));
+                            player.sendMessage(msg.colorize("<green>成功保存坐标点 <yellow>" + name + "<green>!"));
+                            player.sendMessage(msg.colorize("<gray>位置: <white>" + formatLocation(location)));
 
                             // 显示粒子效果
                             playSelectionEffect(player, location);
                         });
                     } else {
-                        runSync(() -> player.sendMessage(colorize("&c保存坐标点失败，请稍后重试!")));
+                        runSync(() -> player.sendMessage(msg.colorize("<red>保存坐标点失败，请稍后重试!")));
                     }
                 });
             });
@@ -213,21 +228,16 @@ public class GuangDianLocation extends AbstractRPGPlugin implements CommandExecu
             }
         }
 
-        // 音效
-        if (selectionSoundEnabled) {
-            try {
-                Sound sound = Sound.valueOf(selectionSoundType);
-                player.playSound(location, sound, 1.0f, 1.5f);
-            } catch (Exception e) {
-                getLogger().warning("无效的音效类型: " + selectionSoundType);
-            }
+        // 音效 - 使用 RPGCore SoundService
+        if (selectionSoundEnabled && soundService != null) {
+            soundService.playSound(player, selectionSoundType, 1.0f, 1.5f);
         }
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(colorize("&c只有玩家可以使用此命令!"));
+            sender.sendMessage(msg.colorize("<red>只有玩家可以使用此命令!"));
             return true;
         }
 
@@ -262,49 +272,49 @@ public class GuangDianLocation extends AbstractRPGPlugin implements CommandExecu
                     storageService.listLocationsAsync(playerId);
                 listFuture.thenAccept(locations -> runSync(() -> {
                     if (locations.isEmpty()) {
-                        player.sendMessage(colorize("&e你还没有保存任何坐标点。"));
-                        player.sendMessage(colorize("&7使用木锄头右键选点并输入名称来保存坐标。"));
+                        player.sendMessage(msg.colorize("<yellow>你还没有保存任何坐标点。"));
+                        player.sendMessage(msg.colorize("<gray>使用木锄头右键选点并输入名称来保存坐标。"));
                     } else {
-                        player.sendMessage(colorize("&6===== 你的坐标点列表 ====="));
+                        player.sendMessage(msg.colorize("<gold>===== 你的坐标点列表 ====="));
                         for (LocationService.SavedLocationInfo info : locations) {
-                            player.sendMessage(colorize("&e" + info.toDisplayString()));
+                            player.sendMessage(msg.colorize("<yellow>" + info.toDisplayString()));
                         }
-                        player.sendMessage(colorize("&7共 &e" + locations.size() + " &7个坐标点"));
+                        player.sendMessage(msg.colorize("<gray>共 <yellow>" + locations.size() + " <gray>个坐标点"));
                     }
                 }));
                 return true;
 
             case "delete":
                 if (args.length < 2) {
-                    player.sendMessage(colorize("&c用法: /location delete <名称>"));
+                    player.sendMessage(msg.colorize("<red>用法: /location delete <名称>"));
                     return true;
                 }
                 String deleteName = args[1];
                 CompletableFuture<Boolean> deleteFuture = storageService.deleteLocationAsync(playerId, deleteName);
                 deleteFuture.thenAccept(success -> runSync(() -> {
                     if (success) {
-                        player.sendMessage(colorize("&a已删除坐标点 &e" + deleteName + "&a!"));
+                        player.sendMessage(msg.colorize("<green>已删除坐标点 <yellow>" + deleteName + "<green>!"));
                     } else {
-                        player.sendMessage(colorize("&c坐标点 &e" + deleteName + " &c不存在!"));
+                        player.sendMessage(msg.colorize("<red>坐标点 <yellow>" + deleteName + " <red>不存在!"));
                     }
                 }));
                 return true;
 
             case "clear":
                 if (!player.hasPermission("guangdian.location.admin")) {
-                    player.sendMessage(colorize("&c没有权限!"));
+                    player.sendMessage(msg.colorize("<red>没有权限!"));
                     return true;
                 }
                 CompletableFuture<Integer> clearFuture = CompletableFuture.supplyAsync(
                     () -> storageService.clearLocations(playerId));
                 clearFuture.thenAccept(count -> runSync(() -> {
-                    player.sendMessage(colorize("&a已清空所有坐标点，共 &e" + count + " &a个。"));
+                    player.sendMessage(msg.colorize("<green>已清空所有坐标点，共 <yellow>" + count + " <green>个。"));
                 }));
                 return true;
 
             case "info":
                 if (args.length < 2) {
-                    player.sendMessage(colorize("&c用法: /location info <名称>"));
+                    player.sendMessage(msg.colorize("<red>用法: /location info <名称>"));
                     return true;
                 }
                 String infoName = args[1];
@@ -312,12 +322,12 @@ public class GuangDianLocation extends AbstractRPGPlugin implements CommandExecu
                 infoFuture.thenAccept(locOpt -> runSync(() -> {
                     if (locOpt.isPresent()) {
                         Location loc = locOpt.get();
-                        player.sendMessage(colorize("&6===== 坐标点信息: &e" + infoName + "&6 ====="));
-                        player.sendMessage(colorize("&7世界: &f" + (loc.getWorld() != null ? loc.getWorld().getName() : "未知")));
-                        player.sendMessage(colorize("&7坐标: &fX=" + loc.getBlockX() + ", Y=" + loc.getBlockY() + ", Z=" + loc.getBlockZ()));
-                        player.sendMessage(colorize("&7精确: &f" + formatLocation(loc)));
+                        player.sendMessage(msg.colorize("<gold>===== 坐标点信息: <yellow>" + infoName + "<gold> ====="));
+                        player.sendMessage(msg.colorize("<gray>世界: <white>" + (loc.getWorld() != null ? loc.getWorld().getName() : "未知")));
+                        player.sendMessage(msg.colorize("<gray>坐标: <white>X=" + loc.getBlockX() + ", Y=" + loc.getBlockY() + ", Z=" + loc.getBlockZ()));
+                        player.sendMessage(msg.colorize("<gray>精确: <white>" + formatLocation(loc)));
                     } else {
-                        player.sendMessage(colorize("&c坐标点 &e" + infoName + " &c不存在!"));
+                        player.sendMessage(msg.colorize("<red>坐标点 <yellow>" + infoName + " <red>不存在!"));
                     }
                 }));
                 return true;
@@ -334,7 +344,7 @@ public class GuangDianLocation extends AbstractRPGPlugin implements CommandExecu
 
     private boolean handleSetWarpCommand(Player player, String[] args) {
         if (args.length < 1) {
-            player.sendMessage(colorize("&c用法: /setwarp <名称>"));
+            player.sendMessage(msg.colorize("<red>用法: /setwarp <名称>"));
             return true;
         }
 
@@ -347,12 +357,12 @@ public class GuangDianLocation extends AbstractRPGPlugin implements CommandExecu
 
     private boolean handleWarpCommand(Player player, String[] args) {
         if (!player.hasPermission("guangdian.location.teleport")) {
-            player.sendMessage(colorize("&c你没有权限传送!"));
+            player.sendMessage(msg.colorize("<red>你没有权限传送!"));
             return true;
         }
 
         if (args.length < 1) {
-            player.sendMessage(colorize("&c用法: /warp <名称>"));
+            player.sendMessage(msg.colorize("<red>用法: /warp <名称>"));
             return true;
         }
 
@@ -365,30 +375,30 @@ public class GuangDianLocation extends AbstractRPGPlugin implements CommandExecu
                 Location loc = locOpt.get();
                 World world = loc.getWorld();
                 if (world == null) {
-                    player.sendMessage(colorize("&c坐标点所在世界不存在或未加载!"));
+                    player.sendMessage(msg.colorize("<red>坐标点所在世界不存在或未加载!"));
                     return;
                 }
                 player.teleport(loc);
-                player.sendMessage(colorize("&a已传送到坐标点 &e" + name + "&a!"));
-                player.sendMessage(colorize("&7位置: &f" + formatLocation(loc)));
+                player.sendMessage(msg.colorize("<green>已传送到坐标点 <yellow>" + name + "<green>!"));
+                player.sendMessage(msg.colorize("<gray>位置: <white>" + formatLocation(loc)));
             } else {
-                player.sendMessage(colorize("&c坐标点 &e" + name + " &c不存在!"));
-                player.sendMessage(colorize("&7使用 &e/location list &7查看所有坐标点"));
+                player.sendMessage(msg.colorize("<red>坐标点 <yellow>" + name + " <red>不存在!"));
+                player.sendMessage(msg.colorize("<gray>使用 <yellow>/location list <gray>查看所有坐标点"));
             }
         }));
         return true;
     }
 
     private void sendLocationHelp(Player player) {
-        player.sendMessage(colorize("&6===== 坐标点系统帮助 ====="));
-        player.sendMessage(colorize("&e木锄头右键 + 输入名称 &7- 选择并保存坐标"));
-        player.sendMessage(colorize("&e/setwarp <名称> &7- 保存当前位置"));
-        player.sendMessage(colorize("&e/warp <名称> &7- 传送到坐标点"));
-        player.sendMessage(colorize("&e/location list &7- 列出所有坐标"));
-        player.sendMessage(colorize("&e/location info <名称> &7- 查看坐标详情"));
-        player.sendMessage(colorize("&e/location delete <名称> &7- 删除坐标"));
+        player.sendMessage(msg.colorize("<gold>===== 坐标点系统帮助 ====="));
+        player.sendMessage(msg.colorize("<yellow>木锄头右键 + 输入名称 <gray>- 选择并保存坐标"));
+        player.sendMessage(msg.colorize("<yellow>/setwarp <名称> <gray>- 保存当前位置"));
+        player.sendMessage(msg.colorize("<yellow>/warp <名称> <gray>- 传送到坐标点"));
+        player.sendMessage(msg.colorize("<yellow>/location list <gray>- 列出所有坐标"));
+        player.sendMessage(msg.colorize("<yellow>/location info <名称> <gray>- 查看坐标详情"));
+        player.sendMessage(msg.colorize("<yellow>/location delete <名称> <gray>- 删除坐标"));
         if (player.hasPermission("guangdian.location.admin")) {
-            player.sendMessage(colorize("&e/location clear &7- 清空所有坐标"));
+            player.sendMessage(msg.colorize("<yellow>/location clear <gray>- 清空所有坐标"));
         }
     }
 
@@ -465,8 +475,18 @@ public class GuangDianLocation extends AbstractRPGPlugin implements CommandExecu
             loc.getPitch(), loc.getYaw());
     }
 
-    private String colorize(String text) {
-        return ChatColor.translateAlternateColorCodes('&', text != null ? text : "");
+    /**
+     * 发送 MiniMessage 格式的消息给玩家
+     */
+    private void sendMessage(Player player, String text) {
+        player.sendMessage(msg.colorize(text));
+    }
+
+    /**
+     * 发送 MiniMessage 格式的消息给 CommandSender
+     */
+    private void sendMessage(CommandSender sender, String text) {
+        sender.sendMessage(msg.colorize(text));
     }
 
     public static GuangDianLocation getInstance() {
@@ -483,5 +503,21 @@ public class GuangDianLocation extends AbstractRPGPlugin implements CommandExecu
 
     public int getMaxLocationsPerPlayer() {
         return maxLocationsPerPlayer;
+    }
+
+    /**
+     * 获取 SoundService
+     * @return SoundService 实例（可能为本地降级实现）
+     */
+    public SoundService getSoundService() {
+        return soundService;
+    }
+
+    /**
+     * 获取 UnifiedMessageService (兼容旧 API)
+     * @return UnifiedMessageService 实例
+     */
+    public UnifiedMessageService getUnifiedMessageService() {
+        return msg;
     }
 }

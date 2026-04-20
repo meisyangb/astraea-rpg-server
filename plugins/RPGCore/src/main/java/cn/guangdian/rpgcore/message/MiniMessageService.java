@@ -21,7 +21,7 @@ public final class MiniMessageService {
     private MiniMessageService() {
         this.miniMessage = MiniMessage.miniMessage();
         this.legacySerializer = LegacyComponentSerializer.legacyAmpersand();
-        this.legacySectionSerializer = LegacyComponentSerializer.legacyAmpersand();
+        this.legacySectionSerializer = LegacyComponentSerializer.legacySection();
     }
 
     public static MiniMessageService getInstance() {
@@ -74,17 +74,8 @@ public final class MiniMessageService {
         if (text == null || text.isEmpty()) {
             return Component.empty();
         }
-        if (text.contains("<") && text.contains(">")) {
-            try {
-                return miniMessage.deserialize(text);
-            } catch (Exception e) {
-                return legacySerializer.deserialize(text);
-            }
-        }
-        if (text.contains("&") || text.contains("§")) {
-            return legacySerializer.deserialize(text);
-        }
-        return Component.text(text);
+        // 只使用官方 MiniMessage 方式解析，不再兼容 & 格式
+        return miniMessage.deserialize(text);
     }
 
     public @NotNull Component colorizeWithDefaults(@NotNull String text, @NotNull Component defaultColor) {

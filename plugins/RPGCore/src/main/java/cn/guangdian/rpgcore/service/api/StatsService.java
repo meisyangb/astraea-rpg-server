@@ -1,15 +1,17 @@
 package cn.guangdian.rpgcore.service.api;
 
+import cn.guangdian.rpgcore.service.api.data.PlayerStats;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 /**
  * RPG属性服务接口
- * 
+ *
  * <p>提供玩家RPG属性的管理功能。</p>
- * 
+ *
  * @author GuangDian
  * @since 1.0.0
  */
@@ -17,11 +19,11 @@ public interface StatsService {
 
     /**
      * 获取玩家属性数据
-     * 
+     *
      * @param playerId 玩家UUID
-     * @return 玩家属性数据（具体类型由实现定义）
+     * @return 玩家属性数据，如果不存在返回 null
      */
-    Object getPlayerStats(UUID playerId);
+    @Nullable PlayerStats getPlayerStats(UUID playerId);
 
     /**
      * 刷新玩家属性

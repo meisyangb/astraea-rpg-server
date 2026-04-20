@@ -211,7 +211,7 @@ public class GuangDianGearScore extends AbstractRPGPlugin implements Listener, T
 
     private boolean handleScoreCommand(CommandSender sender) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(colorize("&c只有玩家可以使用此命令!"));
+            sender.sendMessage(colorize("<red>只有玩家可以使用此命令!"));
             return true;
         }
 
@@ -221,19 +221,19 @@ public class GuangDianGearScore extends AbstractRPGPlugin implements Listener, T
 
         FileConfiguration config = getConfig();
         if (score > 0) {
-            player.sendMessage(colorize(config.getString("messages.score-display", "&e你的装备评分: &6%score%")
+            player.sendMessage(colorize(config.getString("messages.score-display", "<yellow>你的装备评分: <gold>%score%")
                 .replace("%score%", formatNumber(score))));
-            player.sendMessage(colorize(config.getString("messages.rank-display", "&e你的排名: &6#%rank%")
+            player.sendMessage(colorize(config.getString("messages.rank-display", "<yellow>你的排名: <gold>#%rank%")
                 .replace("%rank%", String.valueOf(rank))));
         } else {
-            player.sendMessage(colorize(config.getString("messages.no-score", "&c你没有任何装备评分")));
+            player.sendMessage(colorize(config.getString("messages.no-score", "<red>你没有任何装备评分")));
         }
         return true;
     }
 
     private boolean handleTopCommand(CommandSender sender) {
         FileConfiguration config = getConfig();
-        sender.sendMessage(colorize(config.getString("messages.leaderboard-header", "&6===== 装备评分排行榜 =====")));
+        sender.sendMessage(colorize(config.getString("messages.leaderboard-header", "<gold>===== 装备评分排行榜 =====")));
 
         List<Map.Entry<UUID, Long>> top = getTopPlayers(leaderboardSize);
         for (int i = 0; i < top.size(); i++) {
@@ -241,7 +241,7 @@ public class GuangDianGearScore extends AbstractRPGPlugin implements Listener, T
             OfflinePlayer player = Bukkit.getOfflinePlayer(entry.getKey());
             String name = player.getName() != null ? player.getName() : "未知";
             
-            sender.sendMessage(colorize(config.getString("messages.leaderboard-line", "&e#%rank% &f%player% &7- &6%score%")
+            sender.sendMessage(colorize(config.getString("messages.leaderboard-line", "<yellow>#%rank% <white>%player% <gray>- <gold>%score%")
                 .replace("%rank%", String.valueOf(i + 1))
                 .replace("%player%", name)
                 .replace("%score%", formatNumber(entry.getValue()))));
@@ -251,22 +251,22 @@ public class GuangDianGearScore extends AbstractRPGPlugin implements Listener, T
 
     private boolean handleReloadCommand(CommandSender sender) {
         if (!sender.hasPermission("guangdian.gearscore.admin")) {
-            sender.sendMessage(colorize(getConfig().getString("messages.no-permission", "&c没有权限!")));
+            sender.sendMessage(colorize(getConfig().getString("messages.no-permission", "<red>没有权限!")));
             return true;
         }
 
         reloadConfig();
         loadConfig();
-        sender.sendMessage(colorize(getConfig().getString("messages.reload-success", "&a配置已重新加载!")));
+        sender.sendMessage(colorize(getConfig().getString("messages.reload-success", "<green>配置已重新加载!")));
         return true;
     }
 
     private void sendHelp(CommandSender sender) {
-        sender.sendMessage(colorize("&6===== 装备评分系统帮助 ====="));
-        sender.sendMessage(colorize("&e/gearscore &7- 查看你的装备评分"));
-        sender.sendMessage(colorize("&e/gearscore top &7- 查看排行榜"));
+        sender.sendMessage(colorize("<gold>===== 装备评分系统帮助 ====="));
+        sender.sendMessage(colorize("<yellow>/gearscore <gray>- 查看你的装备评分"));
+        sender.sendMessage(colorize("<yellow>/gearscore top <gray>- 查看排行榜"));
         if (sender.hasPermission("guangdian.gearscore.admin")) {
-            sender.sendMessage(colorize("&e/gearscore reload &7- 重载配置"));
+            sender.sendMessage(colorize("<yellow>/gearscore reload <gray>- 重载配置"));
         }
     }
 

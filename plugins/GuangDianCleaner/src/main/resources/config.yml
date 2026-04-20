@@ -52,15 +52,15 @@ protection:
   # 玩家掉落物品保护时间（秒）
   player-drops-time: 60
 
-# 消息配置（支持颜色代码 &）
+# 消息配置（支持 MiniMessage 格式 <color>）
 messages:
-  prefix: "&6[扫地娘] &r"
-  warning: "&e地面物品将在 &c%time% &e秒后清理!"
-  cleaned: "&a已清理 &e%count% &a个掉落物!"
-  no-permission: "&c你没有权限执行此操作!"
-  reload: "&a配置已重新加载!"
-  status: "&e扫地娘状态: %status%"
-  stats: "&e本次清理: &a%items%&e个物品, 累计清理: &a%total%&e个物品"
+  prefix: "<gold>[扫地娘] <reset>"
+  warning: "<yellow>地面物品将在 <red>%time% <yellow>秒后清理!"
+  cleaned: "<green>已清理 <yellow>%count% <green>个掉落物!"
+  no-permission: "<red>你没有权限执行此操作!"
+  reload: "<green>配置已重新加载!"
+  status: "<yellow>扫地娘状态: %status%"
+  stats: "<yellow>本次清理: <green>%items%<yellow>个物品, 累计清理: <green>%total%<yellow>个物品"
 
 # 统计数据（请勿手动修改）
 stats:

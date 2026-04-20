@@ -4,6 +4,7 @@ import cn.guangdian.npc.GuangDianNPC;
 import cn.guangdian.npc.model.NPCData;
 import cn.guangdian.npc.model.NPCType;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -103,7 +104,7 @@ public class NPCManager {
             }
             MenuDefinition menu = new MenuDefinition(
                 menuId.toLowerCase(),
-                menuSection.getString("title", "&8NPC"),
+                menuSection.getString("title", "<dark_gray>NPC"),
                 menuSection.getInt("size", 27)
             );
 
@@ -117,7 +118,7 @@ public class NPCManager {
                     menu.items.add(new MenuItemDefinition(
                         itemSection.getInt("slot", 0),
                         parseMaterial(itemSection.getString("material", "STONE")),
-                        itemSection.getString("name", "&fItem"),
+                        itemSection.getString("name", "<white>Item"),
                         itemSection.getStringList("lore"),
                         itemSection.getString("action", "")
                     ));
@@ -206,7 +207,7 @@ public class NPCManager {
         }
 
         Location loc = creator.getLocation();
-        NPCData npc = new NPCData(lowerId, "&e" + id, loc, menuId != null ? menuId.toLowerCase() : "main");
+        NPCData npc = new NPCData(lowerId, "<yellow>" + id, loc, menuId != null ? menuId.toLowerCase() : "main");
         npcs.put(lowerId, npc);
         spawnNPC(npc);
         save();
@@ -249,8 +250,8 @@ public class NPCManager {
             
             String fullDisplayName = npc.getFullDisplayName();
             entity.setCustomNameVisible(true);
-            entity.customName(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
-                .legacyAmpersand().deserialize(fullDisplayName));
+            // 使用 MiniMessage 解析颜色格式
+            entity.customName(MiniMessage.miniMessage().deserialize(fullDisplayName));
             
             entity.setVillagerType(Villager.Type.PLAINS);
             entity.setProfession(Villager.Profession.NONE);

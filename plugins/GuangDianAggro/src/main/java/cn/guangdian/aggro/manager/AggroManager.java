@@ -12,6 +12,14 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 仇恨管理器
+ *
+ * <p>已优化：使用 RPGCore SyncScheduler 进行任务调度</p>
+ *
+ * @author GuangDian
+ * @since 1.0.0
+ */
 public class AggroManager implements AggroService {
 
     private final GuangDianAggro plugin;
@@ -51,23 +59,33 @@ public class AggroManager implements AggroService {
         mythicMobsOnly = config.getBoolean("mythicmobs.only", false);
 
         startDecayTask();
+
+        plugin.logInfo("仇恨系统配置已加载");
+        plugin.logInfo("衰减间隔: " + decayInterval + "秒");
+        plugin.logInfo("MythicMobs 专属模式: " + (mythicMobsOnly ? "开启" : "关闭"));
     }
 
     private void startDecayTask() {
         RPGCore rpgCore = plugin.getRPGCore();
-        if (rpgCore == null || rpgCore.getScheduler() == null) return;
+        if (rpgCore == null || rpgCore.getScheduler() == null) {
+            plugin.logWarning("RPGCore 调度器不可用，仇恨衰减任务未启动");
+            return;
+        }
 
         decayTaskId = rpgCore.getScheduler().runSyncRepeating(() -> {
             if (!enabled) return;
 
             long now = System.currentTimeMillis();
+            int decayedCount = 0;
+            int clearedCount = 0;
+
             for (Map.Entry<UUID, Map<UUID, AggroEntry>> entry : aggroTable.entrySet()) {
                 UUID entityId = entry.getKey();
                 Map<UUID, AggroEntry> targets = entry.getValue();
 
                 double decayRate = decayRates.getOrDefault(entityId, defaultDecayRate);
 
-                targets.entrySet().removeIf(targetEntry -> {
+                boolean removed = targets.entrySet().removeIf(targetEntry -> {
                     AggroEntry aggroEntry = targetEntry.getValue();
                     long elapsed = now - aggroEntry.lastUpdate;
 
@@ -83,12 +101,23 @@ public class AggroManager implements AggroService {
                     return false;
                 });
 
+                if (removed) {
+                    decayedCount++;
+                }
+
                 if (targets.isEmpty()) {
                     aggroTable.remove(entityId);
                     decayRates.remove(entityId);
+                    clearedCount++;
                 }
             }
+
+            if (decayedCount > 0 || clearedCount > 0) {
+                plugin.logDebug("仇恨衰减: " + decayedCount + " 个目标衰减, " + clearedCount + " 个实体清空");
+            }
         }, decayInterval * 20L, decayInterval * 20L);
+
+        plugin.logInfo("仇恨衰减任务已启动，任务ID: " + decayTaskId);
     }
 
     @Override
@@ -217,6 +246,8 @@ public class AggroManager implements AggroService {
 
         addAggro(entity, from, -transferAmount);
         addAggro(entity, to, transferAmount);
+
+        plugin.logDebug("仇恨转移: " + from.getName() + " -> " + to.getName() + " (" + percentage + "%)");
     }
 
     @Override
@@ -276,6 +307,8 @@ public class AggroManager implements AggroService {
 
         clearAggro(entity);
         setAggro(entity, target, 10000);
+
+        plugin.logDebug("强制目标: " + entity.getType() + " -> " + target.getName());
     }
 
     @Override
@@ -286,6 +319,7 @@ public class AggroManager implements AggroService {
     public void clearAll() {
         aggroTable.clear();
         decayRates.clear();
+        plugin.logInfo("所有仇恨数据已清空");
     }
 
     public void onEntityDamageByPlayer(LivingEntity entity, Player player, double damage) {
@@ -330,6 +364,7 @@ public class AggroManager implements AggroService {
             RPGCore rpgCore = plugin.getRPGCore();
             if (rpgCore != null && rpgCore.getScheduler() != null) {
                 rpgCore.getScheduler().cancelTask(decayTaskId);
+                plugin.logInfo("仇恨衰减任务已停止");
             }
             decayTaskId = -1;
         }
@@ -341,6 +376,7 @@ public class AggroManager implements AggroService {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+        plugin.logInfo("仇恨系统已" + (enabled ? "启用" : "禁用"));
     }
 
     private static class AggroEntry {

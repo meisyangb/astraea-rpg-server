@@ -7,6 +7,7 @@ import cn.guangdian.quest.model.QuestReward;
 import cn.guangdian.quest.model.QuestType;
 import cn.guangdian.quest.repository.PlayerQuestRepository;
 import cn.guangdian.quest.repository.QuestRepository;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -128,8 +129,8 @@ public class QuestManager {
         if (broadcast) {
             Player player = Bukkit.getPlayer(playerId);
             if (player != null) {
-                String msg = GuangDianQuest.color("&e&l[公告] &a玩家 &f" + player.getName()
-                    + " &a完成了 " + quest.getType().getPrefix() + " " + quest.getName() + "&a！");
+                Component msg = GuangDianQuest.color("<yellow><bold>[公告] <green>玩家 <white>" + player.getName()
+                    + " <green>完成了 " + quest.getType().getPrefix() + " " + quest.getName() + "<green>！");
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     p.sendMessage(msg);
                 }

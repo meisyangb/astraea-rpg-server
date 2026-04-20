@@ -45,7 +45,7 @@ public class SoulBindCommand implements CommandExecutor, TabCompleter {
             case "info" -> handleInfo(sender);
             case "reload" -> handleReload(sender);
             case "help" -> sendHelp(sender);
-            default -> sendMessage(sender, "&c未知的子命令！使用 /soulbind help 查看帮助");
+            default -> sendMessage(sender, "<red>未知的子命令！使用 /soulbind help 查看帮助");
         }
 
         return true;
@@ -53,7 +53,7 @@ public class SoulBindCommand implements CommandExecutor, TabCompleter {
 
     private void handleBind(CommandSender sender, String[] args) {
         if (!(sender instanceof Player player)) {
-            sendMessage(sender, "&c该命令只能由玩家执行！");
+            sendMessage(sender, "<red>该命令只能由玩家执行！");
             return;
         }
 
@@ -73,7 +73,7 @@ public class SoulBindCommand implements CommandExecutor, TabCompleter {
 
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item.getType() == Material.AIR) {
-            sendMessage(sender, "&c请手持需要绑定的物品！");
+            sendMessage(sender, "<red>请手持需要绑定的物品！");
             return;
         }
 
@@ -94,7 +94,7 @@ public class SoulBindCommand implements CommandExecutor, TabCompleter {
 
     private void handleUnbind(CommandSender sender, String[] args) {
         if (!(sender instanceof Player player)) {
-            sendMessage(sender, "&c该命令只能由玩家执行！");
+            sendMessage(sender, "<red>该命令只能由玩家执行！");
             return;
         }
 
@@ -105,7 +105,7 @@ public class SoulBindCommand implements CommandExecutor, TabCompleter {
 
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item.getType() == Material.AIR) {
-            sendMessage(sender, "&c请手持需要解绑的物品！");
+            sendMessage(sender, "<red>请手持需要解绑的物品！");
             return;
         }
 
@@ -115,33 +115,33 @@ public class SoulBindCommand implements CommandExecutor, TabCompleter {
         }
 
         if (service.unbindItem(item)) {
-            sendMessage(sender, "&a物品已成功解绑！");
+            sendMessage(sender, "<green>物品已成功解绑！");
         }
     }
 
     private void handleInfo(CommandSender sender) {
         if (!(sender instanceof Player player)) {
-            sendMessage(sender, "&c该命令只能由玩家执行！");
+            sendMessage(sender, "<red>该命令只能由玩家执行！");
             return;
         }
 
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item.getType() == Material.AIR) {
-            sendMessage(sender, "&c请手持需要查看的物品！");
+            sendMessage(sender, "<red>请手持需要查看的物品！");
             return;
         }
 
-        sendMessage(sender, "&e========== 物品绑定信息 ==========");
-        sendMessage(sender, "&e是否为MythicMobs物品: &f" + (service.isMythicMobsItem(item) ? "是" : "否"));
+        sendMessage(sender, "<yellow>========== 物品绑定信息 ==========");
+        sendMessage(sender, "<yellow>是否为MythicMobs物品: <white>" + (service.isMythicMobsItem(item) ? "是" : "否"));
 
         if (service.isBound(item)) {
             String boundName = service.getBoundPlayerName(item);
-            sendMessage(sender, "&e绑定状态: &a已绑定");
-            sendMessage(sender, "&e绑定玩家: &f" + boundName);
+            sendMessage(sender, "<yellow>绑定状态: <green>已绑定");
+            sendMessage(sender, "<yellow>绑定玩家: <white>" + boundName);
         } else {
-            sendMessage(sender, "&e绑定状态: &c未绑定");
+            sendMessage(sender, "<yellow>绑定状态: <red>未绑定");
         }
-        sendMessage(sender, "&e================================");
+        sendMessage(sender, "<yellow>================================");
     }
 
     private void handleReload(CommandSender sender) {
@@ -151,17 +151,17 @@ public class SoulBindCommand implements CommandExecutor, TabCompleter {
         }
 
         config.reloadConfig();
-        sendMessage(sender, "&a配置文件已重新加载！");
+        sendMessage(sender, "<green>配置文件已重新加载！");
     }
 
     private void sendHelp(CommandSender sender) {
-        sendMessage(sender, "&e========== 灵魂绑定帮助 ==========");
-        sendMessage(sender, "&e/soulbind bind [玩家] &7- 绑定手持物品");
-        sendMessage(sender, "&e/soulbind unbind &7- 解绑手持物品(管理员)");
-        sendMessage(sender, "&e/soulbind info &7- 查看物品绑定信息");
-        sendMessage(sender, "&e/soulbind reload &7- 重载配置(管理员)");
-        sendMessage(sender, "&e/soulbind help &7- 显示此帮助");
-        sendMessage(sender, "&e================================");
+        sendMessage(sender, "<yellow>========== 灵魂绑定帮助 ==========");
+        sendMessage(sender, "<yellow>/soulbind bind [玩家] <gray>- 绑定手持物品");
+        sendMessage(sender, "<yellow>/soulbind unbind <gray>- 解绑手持物品(管理员)");
+        sendMessage(sender, "<yellow>/soulbind info <gray>- 查看物品绑定信息");
+        sendMessage(sender, "<yellow>/soulbind reload <gray>- 重载配置(管理员)");
+        sendMessage(sender, "<yellow>/soulbind help <gray>- 显示此帮助");
+        sendMessage(sender, "<yellow>================================");
     }
 
     private void sendMessage(CommandSender sender, String message) {

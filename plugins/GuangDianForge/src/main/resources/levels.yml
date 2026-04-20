@@ -1,4 +1,4 @@
-# GuangDianForge 等级配置
+﻿# GuangDianForge 等级配置
 # 锻造等级系统设置
 
 levels:
@@ -26,11 +26,11 @@ levels:
     10:
       commands:
         - "give %player% diamond 5"
-      message: "&a达到10级! 获得5颗钻石!"
+      message: "<green>达到10级! 获得5颗钻石!"
     50:
       commands:
         - "give %player% netherite_ingot 1"
-      message: "&6达到50级! 获得下界合金锭!"
+      message: "<gold>达到50级! 获得下界合金锭!"
 
 # 成功率加成设置
 success-bonus:

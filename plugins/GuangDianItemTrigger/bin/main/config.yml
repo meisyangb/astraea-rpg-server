@@ -1,4 +1,4 @@
-# ========================================
+﻿# ========================================
 # 光点物品触发插件配置文件
 # GuangDianItemTrigger Configuration
 # ========================================
@@ -52,7 +52,7 @@ triggers:
     trigger-type: right_click
     lore-keyword: "菜单"
     actions:
-      - "message:&e正在打开菜单..."
+      - "message:<yellow>正在打开菜单..."
       - "menu:main"
       - "sound:BLOCK_NOTE_BLOCK_PLING:1.0:1.0"
     cooldown: 0
@@ -89,7 +89,7 @@ triggers:
     trigger-type: right_click
     lore-keyword: "回城卷轴"
     actions:
-      - "message:&e正在传送回出生点..."
+      - "message:<yellow>正在传送回出生点..."
       - "console:mvtp %player_name% spawn22"
       - "sound:ENTITY_ENDERMAN_TELEPORT:1.0:1.0"
       - "take:1"
@@ -100,7 +100,7 @@ triggers:
     trigger-type: right_click
     lore-keyword: "随机传送"
     actions:
-      - "message:&e正在随机传送..."
+      - "message:<yellow>正在随机传送..."
       - "command:randomtp"
       - "sound:ENTITY_ENDERMAN_TELEPORT:1.0:0.5"
     cooldown: 60
@@ -113,7 +113,7 @@ triggers:
     trigger-type: right_click
     lore-keyword: "经验药水"
     actions:
-      - "message:&a你获得了 &e100 &a经验值!"
+      - "message:<green>你获得了 <yellow>100 <green>经验值!"
       - "console:xp give %player_name% 100"
       - "sound:ENTITY_PLAYER_LEVELUP:1.0:1.0"
       - "take:1"
@@ -124,7 +124,7 @@ triggers:
     trigger-type: right_click
     lore-keyword: "生命药水"
     actions:
-      - "message:&a你恢复了 &c20 &a生命值!"
+      - "message:<green>你恢复了 <red>20 <green>生命值!"
       - "effect:HEAL:1:1"
       - "sound:ENTITY_GENERIC_DRINK:1.0:1.0"
       - "take:1"
@@ -138,7 +138,7 @@ triggers:
     trigger-type: left_click
     lore-keyword: "闪电技能"
     actions:
-      - "message:&b召唤闪电!"
+      - "message:<aqua>召唤闪电!"
       - "console:summon lightning_bolt ~ ~ ~"
       - "sound:ENTITY_LIGHTNING_BOLT_THUNDER:1.0:1.0"
       - "damage:1"
@@ -149,7 +149,7 @@ triggers:
     trigger-type: right_click
     lore-keyword: "治疗技能"
     actions:
-      - "message:&a使用治疗技能!"
+      - "message:<green>使用治疗技能!"
       - "effect:REGENERATION:2:5"
       - "effect:ABSORPTION:1:10"
       - "sound:ENTITY_PLAYER_LEVELUP:1.0:1.5"
@@ -163,7 +163,7 @@ triggers:
     trigger-type: right_click
     lore-keyword: "新手礼包"
     actions:
-      - "message:&e恭喜你打开了新手礼包!"
+      - "message:<yellow>恭喜你打开了新手礼包!"
       - "console:mi give MATERIAL 新手木剑 1 %player_name%"
       - "console:mi give MATERIAL 新手皮甲 1 %player_name%"
       - "console:money give %player_name% 1000"
@@ -176,12 +176,12 @@ triggers:
 # 消息设置
 # ========================================
 messages:
-  no-permission: "&c你没有权限执行此操作!"
-  cooldown: "&c该物品还在冷却中，剩余时间: &e%time%秒"
-  skill-cooldown: "&c技能冷却中，剩余时间: &e%time%秒"
-  trigger-success: "&a触发成功!"
-  trigger-failed: "&c触发失败!"
-  config-reloaded: "&a配置已重新加载!"
+  no-permission: "<red>你没有权限执行此操作!"
+  cooldown: "<red>该物品还在冷却中，剩余时间: <yellow>%time%秒"
+  skill-cooldown: "<red>技能冷却中，剩余时间: <yellow>%time%秒"
+  trigger-success: "<green>触发成功!"
+  trigger-failed: "<red>触发失败!"
+  config-reloaded: "<green>配置已重新加载!"
 
 # ========================================
 # 高级设置

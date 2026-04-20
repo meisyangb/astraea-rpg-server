@@ -1,6 +1,7 @@
-﻿# ========================================
+# ========================================
 # 光点物品触发插件配置文件
 # GuangDianItemTrigger Configuration
+# RPGCore MiniMessage 和 SoundService 格式支持
 # ========================================
 # 作者: Gumin
 # QQ: 2271257344
@@ -16,7 +17,7 @@ enabled: true
 debug: false
 
 # ========================================
-# 触发器配置
+# 触发器配置 - 使用 MiniMessage 格式
 # ========================================
 # 通过物品描述(Lore)中的关键字触发动作
 #
@@ -33,9 +34,9 @@ debug: false
 # 动作类型:
 #   - command: 执行命令 (玩家身份)
 #   - console: 执行命令 (控制台身份)
-#   - message: 发送消息
+#   - message: 发送消息 (MiniMessage 格式)
 #   - menu: 打开菜单 (需要GuangDianMenu插件)
-#   - sound: 播放声音
+#   - sound: 播放声音 (Paper 1.21+ 格式: minecraft:entity.lightning_bolt.thunder)
 #   - effect: 添加药水效果
 #   - teleport: 传送到指定位置
 #   - give: 给予物品
@@ -47,7 +48,7 @@ debug: false
 # ========================================
 
 triggers:
-  
+
   # ========================================
   # 神圣天使系列触发器 (GuangDianArmorStats技能)
   # ========================================
@@ -58,8 +59,8 @@ triggers:
     trigger-type: right_click
     lore-keyword: "雷霆审判"
     actions:
-      - "message:&a触发 &6雷霆审判 &a! 对目标进行雷劈!"
-      - "sound:ENTITY_LIGHTNING_BOLT_THUNDER:1.0:1.0"
+      - "message:<green>触发 <gold>雷霆审判 <green>! 对目标进行雷劈!"
+      - "sound:minecraft:entity.lightning_bolt.thunder:1.0:1.0"
       - "rpg_skill:雷霆审判"
     cooldown: 15
 
@@ -69,8 +70,8 @@ triggers:
     trigger-type: right_click
     lore-keyword: "终结审判"
     actions:
-      - "message:&a触发 &6终结审判 &a! 对范围内敌人进行雷劈!"
-      - "sound:ENTITY_LIGHTNING_BOLT_THUNDER:1.0:1.0"
+      - "message:<green>触发 <gold>终结审判 <green>! 对范围内敌人进行雷劈!"
+      - "sound:minecraft:entity.lightning_bolt.thunder:1.0:1.0"
       - "rpg_skill:终结审判"
     cooldown: 15
 
@@ -78,10 +79,10 @@ triggers:
   神圣天使闪电打击:
     enabled: true
     trigger-type: right_click
-    lore-keyword: "神技 &b闪电打击"
+    lore-keyword: "神技 <aqua>闪电打击"
     actions:
-      - "message:&a触发 &6闪电打击 &a! 对前方敌人造成闪电伤害!"
-      - "sound:ENTITY_LIGHTNING_BOLT_THUNDER:1.0:1.0"
+      - "message:<green>触发 <gold>闪电打击 <green>! 对前方敌人造成闪电伤害!"
+      - "sound:minecraft:entity.lightning_bolt.thunder:1.0:1.0"
       - "rpg_skill:神圣天使闪电打击"
     cooldown: 15
 
@@ -91,11 +92,11 @@ triggers:
     trigger-type: on_hit
     lore-keyword: "炽炎天使"
     actions:
-      - "message:&6炽炎天使降临! &e敌人被圣火灼烧!"
-      - "sound:ENTITY_BLAZE_SHOOT:1.0:1.0"
+      - "message:<gold>炽炎天使降临! <yellow>敌人被圣火灼烧!"
+      - "sound:minecraft:entity.blaze.shoot:1.0:1.0"
       - "rpg_skill:炽炎天使"
     cooldown: 10
-  
+
   # ========================================
   # 塔克币出售系统 (右键出售获得金币)
   # ========================================
@@ -139,9 +140,9 @@ triggers:
     trigger-type: right_click
     lore-keyword: "经验药水"
     actions:
-      - "message:&a你获得了 &e100 &a经验值"
+      - "message:<green>你获得了 <yellow>100 <green>经验值"
       - "console:xp give %player_name% 100"
-      - "sound:ENTITY_PLAYER_LEVELUP:1.0:1.0"
+      - "sound:minecraft:entity.player.levelup:1.0:1.0"
       - "take:1"
     cooldown: 0
 
@@ -150,9 +151,9 @@ triggers:
     trigger-type: right_click
     lore-keyword: "生命药水"
     actions:
-      - "message:&a你恢复了 &c20 &a生命值"
+      - "message:<green>你恢复了 <red>20 <green>生命值"
       - "effect:HEAL:1:1"
-      - "sound:ENTITY_GENERIC_DRINK:1.0:1.0"
+      - "sound:minecraft:entity.generic.drink:1.0:1.0"
       - "take:1"
     cooldown: 0
 
@@ -164,9 +165,9 @@ triggers:
     trigger-type: left_click
     lore-keyword: "闪电技能"
     actions:
-      - "message:&b召唤闪电!"
+      - "message:<aqua>召唤闪电!"
       - "console:summon lightning_bolt ~ ~ ~"
-      - "sound:ENTITY_LIGHTNING_BOLT_THUNDER:1.0:1.0"
+      - "sound:minecraft:entity.lightning_bolt.thunder:1.0:1.0"
       - "damage:1"
     cooldown: 10
 
@@ -175,10 +176,10 @@ triggers:
     trigger-type: right_click
     lore-keyword: "治疗技能"
     actions:
-      - "message:&a使用治疗技能"
+      - "message:<green>使用治疗技能"
       - "effect:REGENERATION:2:5"
       - "effect:ABSORPTION:1:10"
-      - "sound:ENTITY_PLAYER_LEVELUP:1.0:1.5"
+      - "sound:minecraft:entity.player.levelup:1.0:1.5"
     cooldown: 30
 
   # ========================================
@@ -216,25 +217,25 @@ triggers:
     trigger-type: right_click
     lore-keyword: "新手礼包"
     actions:
-      - "message:&e恭喜你打开了新手宝藏包!"
+      - "message:<yellow>恭喜你打开了新手宝藏包!"
       - "console:mi give MATERIAL 新手木镐 1 %player_name%"
       - "console:mi give MATERIAL 新手的斧 1 %player_name%"
       - "console:money give %player_name% 1000"
-      - "sound:ENTITY_FIREWORK_ROCKET_LAUNCH:1.0:1.0"
+      - "sound:minecraft:entity.firework_rocket.launch:1.0:1.0"
       - "take:1"
     cooldown: 0
     one-time: true
 
 # ========================================
-# 消息设置
+# 消息设置 - MiniMessage 格式
 # ========================================
 messages:
-  no-permission: "&c你没有权限执行此操作!"
-  cooldown: "&c该物品还在冷却中，剩余时间: &e%time%秒"
-  trigger-success: "&a触发成功!"
-  trigger-failed: "&c触发失败!"
-  config-reloaded: "&a配置已重新加载"
-  money-received: "&a你获得了 &e%amount% &a金币!"
+  no-permission: "<red>你没有权限执行此操作!"
+  cooldown: "<red>该物品还在冷却中，剩余时间: <yellow>%time%<red>秒"
+  trigger-success: "<green>触发成功!"
+  trigger-failed: "<red>触发失败!"
+  config-reloaded: "<green>配置已重新加载"
+  money-received: "<green>你获得了 <yellow>%amount% <green>金币!"
 
 # ========================================
 # 高级设置
@@ -248,3 +249,6 @@ advanced:
 
   # 冷却时间格式
   cooldown-format: "#.##"
+
+  # 冷却消息冷却时间(秒)
+  cooldown-message-cooldown: 5

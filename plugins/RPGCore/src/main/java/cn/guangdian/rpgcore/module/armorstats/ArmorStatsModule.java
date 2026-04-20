@@ -5,12 +5,14 @@ import cn.guangdian.rpgcore.api.AsyncExecutor;
 import cn.guangdian.rpgcore.module.RPGModule;
 import cn.guangdian.rpgcore.service.api.SkillService;
 import cn.guangdian.rpgcore.service.api.StatsService;
+import cn.guangdian.rpgcore.service.api.data.PlayerStats;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -116,8 +118,11 @@ public class ArmorStatsModule extends RPGModule implements StatsService, SkillSe
     // ==================== StatsService 实现 ====================
 
     @Override
-    public Object getPlayerStats(UUID playerId) {
-        return playerStatsCache.get(playerId);
+    @Nullable
+    public PlayerStats getPlayerStats(UUID playerId) {
+        // 返回 null 表示此模块不直接提供 PlayerStats 实现
+        // 实际属性通过 getTotalAttack, getTotalDefense 等方法提供
+        return null;
     }
 
     @Override

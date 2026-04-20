@@ -1,7 +1,7 @@
 package cn.guangdian.name;
 
+import cn.guangdian.rpgcore.util.ColorUtil;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,13 +56,13 @@ public class NamePlaceholder extends PlaceholderExpansion {
 
         switch (params.toLowerCase()) {
             case "show_title":
-                return ChatColor.translateAlternateColorCodes('&', 
+                return ColorUtil.legacyColorize(
                         titleDisplay.getShowTitleStatus(player));
             case "show_guild":
-                return ChatColor.translateAlternateColorCodes('&', 
+                return ColorUtil.legacyColorize(
                         titleDisplay.getShowGuildStatus(player));
             case "show_marriage":
-                return ChatColor.translateAlternateColorCodes('&', 
+                return ColorUtil.legacyColorize(
                         titleDisplay.getShowMarriageStatus(player));
             default:
                 return null;

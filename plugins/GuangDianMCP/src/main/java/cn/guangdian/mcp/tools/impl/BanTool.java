@@ -1,6 +1,7 @@
 package cn.guangdian.mcp.tools.impl;
 
 import cn.guangdian.mcp.GuangDianMCP;
+import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.mcp.tools.MCPTool;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

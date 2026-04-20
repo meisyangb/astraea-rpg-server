@@ -1,5 +1,15 @@
 # GuangDianAuth 配置文件
 # Astraea RPG 登录系统
+# 
+# 颜色格式说明（MiniMessage）：
+# <green> - 绿色（成功消息）
+# <red> - 红色（错误消息）
+# <yellow> - 黄色（警告/提示消息）
+# <gold> - 金色（高亮内容）
+# <aqua> - 青色（信息消息）
+# <white> - 白色（普通文本）
+# <bold> - 粗体
+# <reset> - 重置格式
 
 # ==================== 密码设置 ====================
 password:
@@ -39,14 +49,42 @@ restrictions:
 # ==================== 消息设置 ====================
 messages:
   # 登录成功消息
-  login-success: "&a✓ 登录成功！欢迎来到阿斯特瑞亚"
+  login-success: "<green>✓ 登录成功！欢迎来到阿斯特瑞亚</green>"
   # 注册成功消息
-  register-success: "&a✓ 注册成功！"
+  register-success: "<green>✓ 注册成功！</green>"
   # 密码错误消息
-  wrong-password: "&c✗ 密码错误"
+  wrong-password: "<red>✗ 密码错误</red>"
   # 登录超时消息
-  login-timeout: "&c登录超时，请重新连接"
+  login-timeout: "<red>登录超时，请重新连接</red>"
   # 未注册提示
-  not-registered: "&e请使用 /register <密码> <确认密码> 注册"
+  not-registered: "<yellow>请使用 <white>/register <密码> <确认密码></white> 注册</yellow>"
   # 已注册提示
-  already-registered: "&e请使用 /login <密码> 登录"
+  already-registered: "<yellow>请使用 <white>/login <密码></white> 登录</yellow>"
+  # 需要登录提示
+  need-login: "<red>请先登录！</red>"
+  # 需要注册提示
+  need-register: "<red>请先注册！</red>"
+  # 密码长度不足
+  password-too-short: "<red>密码长度至少需要 <gold>%min%</gold> 个字符</red>"
+  # 密码长度过长
+  password-too-long: "<red>密码长度不能超过 <gold>%max%</gold> 个字符</red>"
+  # 密码不匹配
+  password-not-match: "<red>两次输入的密码不一致</red>"
+  # 登录尝试过多
+  too-many-attempts: "<red>登录尝试次数过多，请 <gold>%minutes%</gold> 分钟后重试</red>"
+  # 会话保持登录
+  session-continued: "<green>✓ 会话继续，已自动登录</green>"
+  # 登出成功
+  logout-success: "<green>✓ 已成功登出</green>"
+  # 密码修改成功
+  password-changed: "<green>✓ 密码修改成功</green>"
+  # 账号注销成功
+  account-deleted: "<green>✓ 账号已成功注销</green>"
+  # 没有权限
+  no-permission: "<red>你没有权限执行此操作</red>"
+  # 命令用法错误
+  usage-error: "<red>用法错误！</red>"
+  # 玩家不在线
+  player-offline: "<red>该玩家不在线</red>"
+  # 配置重载成功
+  config-reloaded: "<green>✓ 配置已重载</green>"

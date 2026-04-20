@@ -1,9 +1,12 @@
 package cn.guangdian.raid.model;
 
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.time.Duration;
 import java.util.*;
 
 public class RaidTeam {
@@ -81,8 +84,21 @@ public class RaidTeam {
     }
 
     public void broadcastTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+        MiniMessageService miniMessage = MiniMessageService.getInstance();
+
+        Component titleComp = miniMessage.colorize(title);
+        Component subtitleComp = miniMessage.colorize(subtitle);
+
+        Title.Times times = Title.Times.times(
+            Duration.ofMillis((long) fadeIn * 50),
+            Duration.ofMillis((long) stay * 50),
+            Duration.ofMillis((long) fadeOut * 50)
+        );
+
+        Title titleObj = Title.title(titleComp, subtitleComp, times);
+
         for (Player player : getOnlinePlayers()) {
-            player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
+            player.showTitle(titleObj);
         }
     }
 

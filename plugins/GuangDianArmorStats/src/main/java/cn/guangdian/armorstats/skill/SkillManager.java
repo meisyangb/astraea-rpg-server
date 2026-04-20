@@ -4,10 +4,11 @@ import cn.guangdian.armorstats.GuangDianArmorStats;
 import cn.guangdian.armorstats.data.PlayerStats;
 import cn.guangdian.armorstats.manager.CombatLogManager;
 import cn.guangdian.armorstats.manager.StatsManager;
-import org.bukkit.ChatColor;
+import cn.guangdian.rpgcore.sound.SoundService;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
@@ -22,6 +23,13 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * 技能管理器
+ * 
+ * RPGCore 服务集成:
+ * - SoundService: 使用 RPGCore 统一音效服务，本地实现作为降级
+ * - MiniMessage: 使用 RPGCore 统一消息服务，本地实现作为降级
+ */
 public class SkillManager {
 
     // 技能伤害标记key
@@ -32,9 +40,17 @@ public class SkillManager {
     private final Map<String, Skill> skills = new HashMap<>();
     private final Map<UUID, Map<String, Long>> playerCooldowns = new ConcurrentHashMap<>();
     private CombatLogManager combatLogManager;
+    
+    // RPGCore 服务引用
+    private final SoundService soundService;
+    private final MiniMessage miniMessage;
 
     public SkillManager(StatsManager statsManager) {
         this.statsManager = statsManager;
+        // 获取 RPGCore 服务，优先使用统一服务，本地实现作为降级
+        GuangDianArmorStats plugin = GuangDianArmorStats.getInstance();
+        this.soundService = plugin.getSoundService();
+        this.miniMessage = plugin.getMiniMessage().getMiniMessage();
         loadSkills();
     }
 
@@ -132,10 +148,10 @@ public class SkillManager {
         if (isOnCooldown(attacker.getUniqueId(), skillName)) {
             long remaining = getCooldownRemaining(attacker.getUniqueId(), skillName);
             String message = GuangDianArmorStats.getInstance().getConfig()
-                .getString("messages.skill_cooldown", "&c技能 %skill% 冷却中,剩余 %time% 秒!")
+                .getString("messages.skill_cooldown", "<red>技能 %skill% 冷却中,剩余 %time% 秒!")
                 .replace("%skill%", skill.getName())
                 .replace("%time%", String.valueOf(remaining));
-            attacker.sendMessage(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().deserialize(message));
+            attacker.sendMessage(miniMessage.deserialize(message));
             return false;
         }
 
@@ -175,8 +191,8 @@ public class SkillManager {
                     Location targetLoc = target.getLocation();
                     // 召唤视觉闪电效果
                     target.getWorld().strikeLightningEffect(targetLoc);
-                    // 播放雷声
-                    target.getWorld().playSound(targetLoc, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1.0f, 1.0f);
+                    // 播放雷声 - 使用 RPGCore SoundService
+                    soundService.playSound(targetLoc, "ENTITY_LIGHTNING_BOLT_THUNDER", 1.0f, 1.0f);
                 }
 
                 // 设置技能伤害标记
@@ -219,9 +235,9 @@ public class SkillManager {
         }
 
         String message = GuangDianArmorStats.getInstance().getConfig()
-            .getString("messages.skill_triggered", "&c技能 %skill% 触发!")
+            .getString("messages.skill_triggered", "<red>技能 %skill% 触发!")
             .replace("%skill%", skill.getName());
-        attacker.sendMessage(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().deserialize(message));
+        attacker.sendMessage(miniMessage.deserialize(message));
     }
 
     private void applyStatusEffects(LivingEntity target, Skill skill) {
@@ -261,7 +277,8 @@ public class SkillManager {
         }
         
         Location loc = target.getLocation();
-        target.getWorld().playSound(loc, Sound.ENTITY_WITHER_HURT, 1.0f, 1.0f);
+        // 使用 RPGCore SoundService
+        soundService.playSound(loc, "ENTITY_WITHER_HURT", 1.0f, 1.0f);
     }
 
     private void applyDotDamage(Player attacker, LivingEntity target, Skill skill, double baseDamage) {
@@ -291,7 +308,8 @@ public class SkillManager {
                     combatLogManager.logSkillDamage(attacker, skill.getName() + "(DOT)", target, damagePerTick);
                 }
                 
-                target.getWorld().playSound(target.getLocation(), Sound.ENTITY_WITHER_HURT, 0.5f, 1.0f);
+                // 使用 RPGCore SoundService
+                soundService.playSound(target.getLocation(), "ENTITY_WITHER_HURT", 0.5f, 1.0f);
             }
             
             ticksElapsed[0] += 2;
@@ -340,31 +358,31 @@ public class SkillManager {
         switch (effect) {
             case "fire":
                 attacker.getWorld().spawnParticle(Particle.FLAME, loc, 50, 2, 1, 2, 0.1);
-                attacker.getWorld().playSound(loc, Sound.ENTITY_BLAZE_SHOOT, 1.0f, 1.0f);
+                soundService.playSound(loc, "ENTITY_BLAZE_SHOOT", 1.0f, 1.0f);
                 break;
             case "lightning":
                 attacker.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, loc, 100, 3, 2, 3, 0.2);
-                attacker.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1.0f, 1.0f);
+                soundService.playSound(loc, "ENTITY_LIGHTNING_BOLT_THUNDER", 1.0f, 1.0f);
                 break;
             case "ice":
                 attacker.getWorld().spawnParticle(Particle.SNOWFLAKE, loc, 50, 2, 1, 2, 0.1);
-                attacker.getWorld().playSound(loc, Sound.BLOCK_GLASS_BREAK, 1.0f, 1.0f);
+                soundService.playSound(loc, "BLOCK_GLASS_BREAK", 1.0f, 1.0f);
                 break;
             case "poison":
                 attacker.getWorld().spawnParticle(Particle.DAMAGE_INDICATOR, loc, 30, 2, 1, 2, 0.1);
-                attacker.getWorld().playSound(loc, Sound.ENTITY_SPIDER_AMBIENT, 1.0f, 1.0f);
+                soundService.playSound(loc, "ENTITY_SPIDER_AMBIENT", 1.0f, 1.0f);
                 break;
             case "heal":
                 attacker.getWorld().spawnParticle(Particle.HEART, loc.add(0, 2, 0), 20, 1, 1, 1, 0.1);
-                attacker.getWorld().playSound(loc, Sound.BLOCK_BEACON_POWER_SELECT, 1.0f, 1.0f);
+                soundService.playSound(loc, "BLOCK_BEACON_POWER_SELECT", 1.0f, 1.0f);
                 break;
             case "explosion":
                 attacker.getWorld().spawnParticle(Particle.EXPLOSION, loc, 10, 2, 1, 2, 0.1);
-                attacker.getWorld().playSound(loc, Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f);
+                soundService.playSound(loc, "ENTITY_GENERIC_EXPLODE", 1.0f, 1.0f);
                 break;
             case "magic":
                 attacker.getWorld().spawnParticle(Particle.ENCHANT, loc, 50, 2, 1, 2, 0.1);
-                attacker.getWorld().playSound(loc, Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1.0f, 1.0f);
+                soundService.playSound(loc, "BLOCK_ENCHANTMENT_TABLE_USE", 1.0f, 1.0f);
                 break;
             default:
                 attacker.getWorld().spawnParticle(Particle.FLAME, loc, 20, 2, 1, 2);

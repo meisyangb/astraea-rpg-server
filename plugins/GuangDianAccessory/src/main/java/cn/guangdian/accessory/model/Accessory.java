@@ -1,20 +1,31 @@
 package cn.guangdian.accessory.model;
 
 import cn.guangdian.accessory.hook.MythicMobsHook;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class Accessory {
-    
+
+    // 用于移除颜色代码的正则表达式
+    private static final Pattern COLOR_PATTERN = Pattern.compile("[§&][0-9a-fk-orA-FK-OR]");
+
     private final String id;
     private final String mythicId;
     private final String name;
     private final AccessorySlot slot;
     private final String loreKeyword;
     private final int rarity;
+
+    /**
+     * 移除字符串中的颜色代码（替代 ChatColor.stripColor）
+     */
+    private static String stripColor(String text) {
+        if (text == null) return "";
+        return COLOR_PATTERN.matcher(text).replaceAll("");
+    }
     
     public Accessory(String id, String mythicId, String name, AccessorySlot slot, String loreKeyword, int rarity) {
         this.id = id;
@@ -57,28 +68,28 @@ public class Accessory {
         }
         
         String loreText = String.join(" ", lore);
-        String plainText = ChatColor.stripColor(loreText);
-        
+        String plainText = stripColor(loreText);
+
         return AccessorySlot.findAccessoryByLoreKeyword(plainText);
     }
-    
+
     public boolean matchesItem(ItemStack item) {
         if (item == null || !item.hasItemMeta()) {
             return false;
         }
-        
+
         if (!item.getItemMeta().hasLore()) {
             return false;
         }
-        
+
         List<String> lore = item.getItemMeta().getLore();
         if (lore == null) {
             return false;
         }
-        
+
         String loreText = String.join(" ", lore);
-        String plainText = ChatColor.stripColor(loreText);
-        
+        String plainText = stripColor(loreText);
+
         return plainText.contains(loreKeyword);
     }
     

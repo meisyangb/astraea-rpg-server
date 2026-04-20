@@ -1,139 +1,55 @@
 package cn.guangdian.rpgcore.command;
 
-import org.bukkit.command.CommandSender;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * 子命令抽象类
- * 
- * <p>所有GuangDian插件的子命令都应继承此类。</p>
- * 
- * @author GuangDian
- * @since 1.0.0
+ * 子命令注解
+ *
+ * <p>用于标注子命令方法。</p>
+ *
+ * <h2>使用示例:</h2>
+ * <pre>{@code
+ * @SubCommand(name="give", permission="guangdian.points.admin")
+ * @Description("给予玩家点数")
+ * public void give(CommandContext ctx) {
+ *     Player target = ctx.getPlayerArg(0);
+ *     long amount = ctx.getLongArg(1);
+ *     // 业务逻辑...
+ * }
+ * }</pre>
+ *
+ * @author Astraea RPG Team
+ * @since 1.1.0
  */
-public abstract class SubCommand {
-
-    private final String name;
-    private final String permission;
-    private final String description;
-    private final List<String> aliases;
-    private final boolean playerOnly;
-
-    public SubCommand(String name, String permission, String description) {
-        this(name, permission, description, new ArrayList<>(), false);
-    }
-
-    public SubCommand(String name, String permission, String description, List<String> aliases, boolean playerOnly) {
-        this.name = name;
-        this.permission = permission;
-        this.description = description;
-        this.aliases = aliases;
-        this.playerOnly = playerOnly;
-    }
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface SubCommand {
 
     /**
-     * 执行命令
-     * 
-     * @param sender 命令发送者
-     * @param args 命令参数（已移除子命令名称）
+     * 子命令名称
      */
-    public abstract void execute(CommandSender sender, String[] args);
+    String name();
 
     /**
-     * Tab补全
-     * 
-     * @param sender 命令发送者
-     * @param args 当前参数
-     * @return 补全列表
+     * 权限节点 (留空表示无权限要求)
      */
-    public List<String> tabComplete(CommandSender sender, String[] args) {
-        return new ArrayList<>();
-    }
-
-    // ========== Getters ==========
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPermission() {
-        return permission;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public List<String> getAliases() {
-        return aliases;
-    }
-
-    public boolean isPlayerOnly() {
-        return playerOnly;
-    }
-
-    // ========== Builder方法 ==========
+    String permission() default "";
 
     /**
-     * 创建Builder
+     * 是否仅玩家可用
      */
-    public static Builder builder(String name) {
-        return new Builder(name);
-    }
+    boolean playerOnly() default false;
 
     /**
-     * Builder类
+     * 最小参数数量
      */
-    public static class Builder {
-        private final String name;
-        private String permission;
-        private String description = "";
-        private List<String> aliases = new ArrayList<>();
-        private boolean playerOnly = false;
-        private java.util.function.BiConsumer<CommandSender, String[]> executor;
+    int minArgs() default 0;
 
-        public Builder(String name) {
-            this.name = name;
-        }
-
-        public Builder permission(String permission) {
-            this.permission = permission;
-            return this;
-        }
-
-        public Builder description(String description) {
-            this.description = description;
-            return this;
-        }
-
-        public Builder aliases(String... aliases) {
-            this.aliases = Arrays.asList(aliases);
-            return this;
-        }
-
-        public Builder playerOnly() {
-            this.playerOnly = true;
-            return this;
-        }
-
-        public Builder executor(java.util.function.BiConsumer<CommandSender, String[]> executor) {
-            this.executor = executor;
-            return this;
-        }
-
-        public SubCommand build() {
-            if (executor == null) {
-                throw new IllegalStateException("Executor must be set!");
-            }
-            return new SubCommand(name, permission, description, aliases, playerOnly) {
-                @Override
-                public void execute(CommandSender sender, String[] args) {
-                    executor.accept(sender, args);
-                }
-            };
-        }
-    }
+    /**
+     * 最大参数数量 (-1 表示无限制)
+     */
+    int maxArgs() default -1;
 }

@@ -1,7 +1,10 @@
 package cn.guangdian.cleaner.config;
 
 import cn.guangdian.cleaner.GuangDianCleaner;
-import org.bukkit.ChatColor;
+import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.message.MiniMessageService;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -99,14 +102,14 @@ public class ConfigManager {
         protectPlayerDrops = config.getBoolean("protection.player-drops", true);
         protectPlayerDropsTime = config.getInt("protection.player-drops-time", 60);
 
-        // 消息配置
-        messagePrefix = color(config.getString("messages.prefix", "&6[扫地娘] &r"));
-        messageWarning = color(config.getString("messages.warning", "&e地面物品将在 &c%time% &e秒后清理!"));
-        messageCleaned = color(config.getString("messages.cleaned", "&a已清理 &e%count% &a个掉落物!"));
-        messageNoPermission = color(config.getString("messages.no-permission", "&c你没有权限执行此操作!"));
-        messageReload = color(config.getString("messages.reload", "&a配置已重新加载!"));
-        messageStatus = color(config.getString("messages.status", "&e扫地娘状态: %status%"));
-        messageStats = color(config.getString("messages.stats", "&e本次清理: &a%items%&e个物品, 累计清理: &a%total%&e个物品"));
+        // 消息配置 - 使用 MiniMessage 格式
+        messagePrefix = config.getString("messages.prefix", "<gold>[扫地娘] <reset>");
+        messageWarning = config.getString("messages.warning", "<yellow>地面物品将在 <red>%time% <yellow>秒后清理!");
+        messageCleaned = config.getString("messages.cleaned", "<green>已清理 <yellow>%count% <green>个掉落物!");
+        messageNoPermission = config.getString("messages.no-permission", "<red>你没有权限执行此操作!");
+        messageReload = config.getString("messages.reload", "<green>配置已重新加载!");
+        messageStatus = config.getString("messages.status", "<yellow>扫地娘状态: %status%");
+        messageStats = config.getString("messages.stats", "<yellow>本次清理: <green>%items%<yellow>个物品, 累计清理: <green>%total%<yellow>个物品");
 
         // 加载统计数据
         totalCleanedItems = config.getLong("stats.total-cleaned-items", 0);
@@ -140,8 +143,32 @@ public class ConfigManager {
         saveStats();
     }
 
-    private String color(String message) {
-        return ChatColor.translateAlternateColorCodes('&', message);
+    /**
+     * 将 MiniMessage 格式的字符串转换为 Component
+     */
+    public Component parseMessage(String message) {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            MiniMessageService miniMessage = rpgCore.getMiniMessageService();
+            if (miniMessage != null) {
+                return miniMessage.parse(message);
+            }
+        }
+        // 降级方案：使用 LegacyComponentSerializer 转换旧的 & 颜色代码
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(message);
+    }
+
+    /**
+     * 获取带占位符替换的消息 Component
+     */
+    public Component getFormattedMessage(String template, String... placeholders) {
+        String message = template;
+        for (int i = 0; i < placeholders.length; i += 2) {
+            if (i + 1 < placeholders.length) {
+                message = message.replace(placeholders[i], placeholders[i + 1]);
+            }
+        }
+        return parseMessage(message);
     }
 
     // Getters

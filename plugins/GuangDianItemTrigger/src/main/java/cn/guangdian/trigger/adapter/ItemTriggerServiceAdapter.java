@@ -3,9 +3,10 @@ package cn.guangdian.trigger.adapter;
 import cn.guangdian.trigger.GuangDianItemTrigger;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.service.api.ItemTriggerService;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -27,11 +28,16 @@ public class ItemTriggerServiceAdapter implements ItemTriggerService {
 
     private final GuangDianItemTrigger plugin;
     private final boolean useRPGCore;
+    private final MiniMessage miniMessage;
 
     public ItemTriggerServiceAdapter(GuangDianItemTrigger plugin) {
         this.plugin = plugin;
         this.useRPGCore = Bukkit.getPluginManager().isPluginEnabled("RPGCore");
-        
+
+        // 获取 MiniMessage 实例
+        MiniMessageService mmService = plugin.getMiniMessage();
+        this.miniMessage = mmService != null ? mmService.getMiniMessage() : MiniMessage.miniMessage();
+
         if (useRPGCore) {
             try {
                 ServiceRegistry registry = RPGCore.getInstance().getServiceRegistry();
@@ -172,8 +178,8 @@ public class ItemTriggerServiceAdapter implements ItemTriggerService {
         if (meta == null) return false;
         
         List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
-        String displayName = meta.hasDisplayName() ? ChatColor.stripColor(meta.getDisplayName()) : "";
-        
+        String displayName = meta.hasDisplayName() ? stripColor(meta.getDisplayName()) : "";
+
         try {
             var triggersField = plugin.getClass().getDeclaredField("triggers");
             triggersField.setAccessible(true);
@@ -187,7 +193,7 @@ public class ItemTriggerServiceAdapter implements ItemTriggerService {
                 if (keyword != null && !keyword.isEmpty()) {
                     // 检查Lore
                     for (String line : lore) {
-                        String stripped = ChatColor.stripColor(line);
+                        String stripped = stripColor(line);
                         if (stripped != null && stripped.toLowerCase().contains(keyword.toLowerCase())) {
                             return true;
                         }
@@ -228,5 +234,21 @@ public class ItemTriggerServiceAdapter implements ItemTriggerService {
 
     public boolean isUsingRPGCore() {
         return useRPGCore;
+    }
+
+    /**
+     * 移除文本中的颜色代码
+     * 支持传统 & 颜色代码和 MiniMessage 格式
+     */
+    private String stripColor(String text) {
+        if (text == null) return "";
+        // 先尝试解析为 Component，然后获取纯文本
+        try {
+            net.kyori.adventure.text.Component component = miniMessage.deserialize(text);
+            return net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(component);
+        } catch (Exception e) {
+            // 如果解析失败，使用传统方式移除 & 颜色代码
+            return text.replaceAll("&[0-9a-fk-or]", "");
+        }
     }
 }

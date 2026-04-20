@@ -2,10 +2,12 @@ package cn.guangdian.chat;
 
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.chat.adapter.ChatServiceAdapter;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -41,6 +43,10 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
     private ExternalServiceIntegration externalServices;
     private ChatServiceAdapter chatServiceAdapter;
 
+    // RPGCore 服务引用 - 优先使用 RPGCore，本地实现作为降级
+    private MiniMessageService miniMessage;
+    private MiniMessage miniMessageParser;
+
     private static class CachedLuckPermsMeta {
         final String prefix;
         final String primaryGroup;
@@ -68,11 +74,15 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
 
         saveDefaultConfig();
         config = getConfig();
+
+        // 初始化 RPGCore 服务（优先使用 RPGCore，本地实现作为降级）
+        initRPGCoreServices();
+
         loadWorldAliases();
         registerEvents();
         registerCommands();
         startLuckPermsCleanupTask();
-        
+
         // 注册 RPGCore 服务适配器
         if (Bukkit.getPluginManager().isPluginEnabled("RPGCore")) {
             RPGCore rpgCore = RPGCore.getInstance();
@@ -84,6 +94,34 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
         }
 
         getLogger().info("GuangDianChat enabled.");
+    }
+
+    /**
+     * 初始化 RPGCore 核心服务
+     * 优先使用 RPGCore 统一服务，本地实现作为降级方案
+     */
+    private void initRPGCoreServices() {
+        if (Bukkit.getPluginManager().isPluginEnabled("RPGCore")) {
+            try {
+                RPGCore rpgCore = RPGCore.getInstance();
+                if (rpgCore != null) {
+                    miniMessage = rpgCore.getMiniMessageService();
+                    if (miniMessage != null) {
+                        miniMessageParser = miniMessage.getMiniMessage();
+                        getLogger().info("已连接到 RPGCore MiniMessageService");
+                    }
+                }
+            } catch (Exception e) {
+                getLogger().warning("连接 RPGCore 服务失败: " + e.getMessage());
+            }
+        }
+
+        // 如果 RPGCore 服务不可用，初始化本地降级服务
+        if (miniMessage == null) {
+            miniMessage = MiniMessageService.getInstance();
+            miniMessageParser = miniMessage.getMiniMessage();
+            getLogger().info("使用本地 MiniMessageService（降级）");
+        }
     }
 
     @Override
@@ -154,7 +192,7 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
 
         if (!player.hasPermission(config.getString("settings.url-permission", "guangdian.chat.url"))
             && URL_PATTERN.matcher(message).find()) {
-            player.sendMessage(color(config.getString("messages.no-url-permission", "&cYou cannot send URLs.")));
+            player.sendMessage(miniMessage.colorize(config.getString("messages.no-url-permission", "<red>You cannot send URLs.")));
             event.setCancelled(true);
             return;
         }
@@ -167,7 +205,7 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
         StringBuilder sb = new StringBuilder(format);
         sb.replace(0, sb.length(), processWithCachedMeta(sb.toString(), player, cachedMeta));
         sb.replace(0, sb.length(), sb.toString()
-            .replace("%channel%", global ? config.getString("settings.global-label", "&6[Global]") : config.getString("settings.local-label", "&7[Local]"))
+            .replace("%channel%", global ? config.getString("settings.global-label", "<gold>[Global]") : config.getString("settings.local-label", "<gray>[Local]"))
             .replace("%message%", decoratedMessage));
 
         format = sb.toString();
@@ -190,7 +228,15 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
         }
 
         event.setMessage(decoratedMessage);
-        event.setFormat(color(format));
+        
+        // 使用 MiniMessage 发送格式化的消息，而不是使用 setFormat
+        event.setCancelled(true);
+        Component chatComponent = miniMessage.colorize(format);
+        for (Player recipient : event.getRecipients()) {
+            recipient.sendMessage(chatComponent);
+        }
+        // 同时发送给控制台
+        Bukkit.getConsoleSender().sendMessage(chatComponent);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -229,7 +275,7 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
     private String resolveFormat(Player player, boolean global) {
         String group = getCachedPrimaryGroup(player);
         String formatPath = "group-formats." + group;
-        String base = config.getString(formatPath, config.getString("default-format", "&7[%channel%] %player_name%: &f%message%"));
+        String base = config.getString(formatPath, config.getString("default-format", "<gray>[%channel%] %player_name%: <white>%message%"));
 
         if (global) {
             return config.getString("settings.global-format", "%channel% " + base);
@@ -237,6 +283,10 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
         return config.getString("settings.local-format", "%channel% " + base);
     }
 
+    /**
+     * 应用聊天格式权限 - 使用 MiniMessage 格式
+     * 将玩家输入的 & 颜色代码转换为 MiniMessage 格式
+     */
     private String applyFormattingPermissions(Player player, String message) {
         boolean allowColors = config.getBoolean("settings.allow-colors", true)
             && player.hasPermission(config.getString("settings.color-permission", "guangdian.chat.color"));
@@ -249,20 +299,54 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
             char current = message.charAt(index);
             if (current == '&' && index + 1 < message.length()) {
                 char code = Character.toLowerCase(message.charAt(index + 1));
-                if (isColorCode(code) && allowColors) {
-                    output.append(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.SECTION_CHAR).append(code);
-                    index++;
-                    continue;
-                }
-                if (isFormatCode(code) && allowFormatting && (code != 'k' || allowMagic)) {
-                    output.append(ChatColor.COLOR_CHAR).append(code);
-                    index++;
-                    continue;
+                String miniMessageTag = getMiniMessageTag(code);
+                if (miniMessageTag != null) {
+                    if (isColorCode(code) && allowColors) {
+                        output.append(miniMessageTag);
+                        index++;
+                        continue;
+                    }
+                    if (isFormatCode(code) && allowFormatting && (code != 'k' || allowMagic)) {
+                        output.append(miniMessageTag);
+                        index++;
+                        continue;
+                    }
                 }
             }
             output.append(current);
         }
         return output.toString();
+    }
+
+    /**
+     * 将传统颜色代码转换为 MiniMessage 标签
+     */
+    private String getMiniMessageTag(char code) {
+        return switch (code) {
+            case '0' -> "<black>";
+            case '1' -> "<dark_blue>";
+            case '2' -> "<dark_green>";
+            case '3' -> "<dark_aqua>";
+            case '4' -> "<dark_red>";
+            case '5' -> "<dark_purple>";
+            case '6' -> "<gold>";
+            case '7' -> "<gray>";
+            case '8' -> "<dark_gray>";
+            case '9' -> "<blue>";
+            case 'a' -> "<green>";
+            case 'b' -> "<aqua>";
+            case 'c' -> "<red>";
+            case 'd' -> "<light_purple>";
+            case 'e' -> "<yellow>";
+            case 'f' -> "<white>";
+            case 'k' -> "<obfuscated>";
+            case 'l' -> "<bold>";
+            case 'm' -> "<strikethrough>";
+            case 'n' -> "<underlined>";
+            case 'o' -> "<italic>";
+            case 'r' -> "<reset>";
+            default -> null;
+        };
     }
 
     private boolean isColorCode(char code) {
@@ -354,8 +438,32 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
         return cached != null ? cached.primaryGroup : "default";
     }
 
+    /**
+     * 使用 MiniMessage 解析颜色代码
+     * 将 & 颜色代码转换为 MiniMessage 格式
+     */
     private String color(String input) {
-        return net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().serialize(net.kyori.adventure.text.Component.text(input == null ? "" : input));
+        if (input == null) return "";
+        // 将传统 & 颜色代码转换为 MiniMessage 格式
+        return input
+            .replace("<black>", "<black>").replace("<dark_blue>", "<dark_blue>")
+            .replace("<dark_green>", "<dark_green>").replace("<dark_aqua>", "<dark_aqua>")
+            .replace("<dark_red>", "<dark_red>").replace("<dark_purple>", "<dark_purple>")
+            .replace("<gold>", "<gold>").replace("<gray>", "<gray>")
+            .replace("<dark_gray>", "<dark_gray>").replace("<blue>", "<blue>")
+            .replace("<green>", "<green>").replace("<aqua>", "<aqua>")
+            .replace("<red>", "<red>").replace("<light_purple>", "<light_purple>")
+            .replace("<yellow>", "<yellow>").replace("<white>", "<white>")
+            .replace("<obfuscated>", "<obfuscated>").replace("<bold>", "<bold>")
+            .replace("<strikethrough>", "<strikethrough>").replace("<underlined>", "<underlined>")
+            .replace("<italic>", "<italic>").replace("<reset>", "<reset>");
+    }
+
+    /**
+     * 发送 MiniMessage 格式的消息给 CommandSender
+     */
+    private void sendMessage(CommandSender sender, String text) {
+        sender.sendMessage(miniMessage.colorize(text));
     }
 
     @Override
@@ -365,34 +473,34 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
         }
 
         if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
-            sender.sendMessage(color("&6/gdchat reload &7Reload config"));
-            sender.sendMessage(color("&6/gdchat info &7Plugin info"));
+            sendMessage(sender, "<gold>/gdchat reload <gray>Reload config");
+            sendMessage(sender, "<gold>/gdchat info <gray>Plugin info");
             return true;
         }
 
         if (args[0].equalsIgnoreCase("reload")) {
             if (!sender.hasPermission("guangdian.chat.admin")) {
-                sender.sendMessage(color(config.getString("messages.no-permission", "&cNo permission.")));
+                sendMessage(sender, config.getString("messages.no-permission", "<red>No permission."));
                 return true;
             }
             reloadConfig();
             config = getConfig();
             loadWorldAliases();
             luckPermsCache.clear();
-            sender.sendMessage(color(config.getString("messages.config-reloaded", "&aGuangDianChat reloaded.")));
+            sendMessage(sender, config.getString("messages.config-reloaded", "<green>GuangDianChat reloaded."));
             return true;
         }
 
         if (args[0].equalsIgnoreCase("info")) {
-            sender.sendMessage(color("&6GuangDianChat &7v" + getDescription().getVersion()));
+            sendMessage(sender, "<gold>GuangDianChat <gray>v" + getDescription().getVersion());
             if (externalServices != null) {
-                sender.sendMessage(color("&eExternal Services: &f" + externalServices.getExternalServiceStatus()));
+                sendMessage(sender, "<yellow>External Services: <white>" + externalServices.getExternalServiceStatus());
             } else {
-                sender.sendMessage(color("&eExternal Services: &cnot connected"));
+                sendMessage(sender, "<yellow>External Services: <red>not connected");
             }
-            sender.sendMessage(color("&eChat range: &f" + config.getInt("settings.chat-range", 0)));
-            sender.sendMessage(color("&eGlobal prefix: &f" + config.getString("settings.global-prefix", "!")));
-            sender.sendMessage(color("&eLuckPerms cache: &f" + luckPermsCache.size() + " entries"));
+            sendMessage(sender, "<yellow>Chat range: <white>" + config.getInt("settings.chat-range", 0));
+            sendMessage(sender, "<yellow>Global prefix: <white>" + config.getString("settings.global-prefix", "!"));
+            sendMessage(sender, "<yellow>LuckPerms cache: <white>" + luckPermsCache.size() + " entries");
             return true;
         }
 

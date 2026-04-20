@@ -7,10 +7,11 @@ import cn.guangdian.armorstats.manager.StatsManager;
 import cn.guangdian.armorstats.parser.LoreParser;
 import cn.guangdian.armorstats.skill.Skill;
 import cn.guangdian.armorstats.skill.SkillManager;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -24,16 +25,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * 装备属性命令处理器
+ *
+ * RPGCore 服务集成:
+ * - MiniMessageService: 使用 RPGCore 统一消息服务进行文本格式化
+ */
 public class ArmorStatsCommand implements CommandExecutor {
 
     private final StatsManager statsManager;
     private final SkillManager skillManager;
     private final GuangDianArmorStats plugin;
+    private final MiniMessage miniMessage;
 
     public ArmorStatsCommand(StatsManager statsManager, SkillManager skillManager, GuangDianArmorStats plugin) {
         this.statsManager = statsManager;
         this.skillManager = skillManager;
         this.plugin = plugin;
+        this.miniMessage = plugin.getMiniMessage().getMiniMessage();
     }
 
     @Override
@@ -66,7 +75,9 @@ public class ArmorStatsCommand implements CommandExecutor {
         } else if (args[0].equalsIgnoreCase("reload")) {
             if (sender.hasPermission("armorstats.admin")) {
                 plugin.reloadAllConfigs();
-                sender.sendMessage(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().deserialize(plugin.getConfig().getString("messages.stats_reloaded", "&aConfig reloaded!")));
+                // 使用 RPGCore MiniMessageService
+                String reloadMessage = plugin.getConfig().getString("messages.stats_reloaded", "<green>Config reloaded!");
+                sender.sendMessage(plugin.getMiniMessage().colorize(reloadMessage));
                 sender.sendMessage(Component.text("在线玩家同步数: " + Bukkit.getOnlinePlayers().size()).color(NamedTextColor.GREEN));
             } else {
                 sender.sendMessage(Component.text("没有权限!").color(NamedTextColor.RED));

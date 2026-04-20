@@ -2,12 +2,13 @@ package cn.guangdian.board;
 
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.SyncScheduler;
+import cn.guangdian.rpgcore.api.GameLogger;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -29,15 +30,26 @@ import org.bukkit.scoreboard.Scoreboard;
 import cn.guangdian.board.adapter.BoardServiceAdapter;
 import cn.guangdian.board.lifecycle.BoardDataHandler;
 import cn.guangdian.board.placeholder.BoardPlaceholder;
+import me.clip.placeholderapi.PlaceholderAPI;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 光点侧边栏插件 - GuangDianBoard
- * 
- * 显示玩家侧边栏计分板，支持PlaceholderAPI和LuckPerms
- * 
+ *
+ * <p>RPGCore 服务集成:
+ * <ul>
+ *   <li>MiniMessageService: 使用 RPGCore 统一消息服务进行文本格式化</li>
+ *   <li>GameLogger: 使用 RPGCore 统一日志服务</li>
+ *   <li>SyncScheduler: 使用 RPGCore 同步任务调度器</li>
+ *   <li>ExternalServiceIntegration: 使用 RPGCore 外部服务集成</li>
+ * </ul>
+ *
+ * <p>优先级模式: 优先使用 RPGCore 服务，不可用则降级到本地实现
+ *
+ * <p>显示玩家侧边栏计分板，支持PlaceholderAPI和LuckPerms
+ *
  * @author Gumin
  * @QQ 2271257344
  * @version 1.0.0
@@ -50,7 +62,7 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
     
     private final Map<UUID, Boolean> boardToggleState = new ConcurrentHashMap<>();
     private final Map<UUID, Scoreboard> playerBoards = new ConcurrentHashMap<>();
-    private final Map<String, String> worldAliases = new HashMap<>();
+    private final Map<String, String> worldAliases = new ConcurrentHashMap<>();
     private final Map<UUID, List<String>> boardCache = new ConcurrentHashMap<>();
     private final Map<UUID, Long> lastRefreshTime = new ConcurrentHashMap<>();
     
@@ -78,7 +90,7 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
     private long eventCooldown = 1000;
     private boolean showStyleSeparator;
     private String styleSeparatorLine;
-    private Set<String> styleSeparatorPositions = new HashSet<>();
+    private Set<String> styleSeparatorPositions = ConcurrentHashMap.newKeySet();
 
     private static final int MAX_SCOREBOARD_ENTRY_LENGTH = 40;
     private static final int UNIQUE_SUFFIX_LENGTH = 4;
@@ -98,6 +110,12 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
     // RPGCore 服务适配器
     private BoardServiceAdapter serviceAdapter;
     private BoardDataHandler dataHandler;
+    private BoardPlaceholder boardPlaceholder;
+
+    // RPGCore 服务引用 - 优先使用 RPGCore，本地实现作为降级
+    private MiniMessageService miniMessage;
+    private MiniMessage miniMessageParser;
+    private GameLogger gameLogger;
 
     private int cachedMaxLines;
     private double[] cachedTps = new double[]{20.0, 20.0, 20.0};
@@ -107,26 +125,96 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
     @Override
     protected void onPluginEnable() {
         instance = this;
-        
+
+        // 初始化 RPGCore 服务（优先使用 RPGCore，本地实现作为降级）
+        initRPGCoreServices();
+
         loadConfig();
         loadWorldAliases();
         registerEvents();
         startTasks();
-        
+
         // 注册 RPGCore 服务适配器
         serviceAdapter = new BoardServiceAdapter(this);
         if (serviceAdapter.isUsingRPGCore()) {
-            getLogger().info("已集成 RPGCore 服务系统!");
+            logInfo("已集成 RPGCore 服务系统!");
         }
 
         if (externalServices != null && externalServices.isPlaceholderAPIEnabled()) {
-            getLogger().info("已连接到 PlaceholderAPI!");
-            new BoardPlaceholder(this).register();
-            getLogger().info("已注册 PlaceholderAPI 扩展!");
+            logInfo("已连接到 PlaceholderAPI!");
+            boardPlaceholder = new BoardPlaceholder(this);
+            boardPlaceholder.register();
+            logInfo("已注册 PlaceholderAPI 扩展!");
         }
 
-        getLogger().info("光点侧边栏插件已启用! 版本: " + getDescription().getVersion());
-        getLogger().info("作者: Gumin | QQ: 2271257344");
+        logInfo("光点侧边栏插件已启用! 版本: " + getDescription().getVersion());
+        logInfo("作者: Gumin | QQ: 2271257344");
+    }
+
+    /**
+     * 初始化 RPGCore 核心服务
+     * 优先使用 RPGCore 统一服务，本地实现作为降级方案
+     */
+    private void initRPGCoreServices() {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            miniMessage = rpgCore.getMiniMessageService();
+            if (miniMessage != null) {
+                miniMessageParser = miniMessage.getMiniMessage();
+                logInfo("已连接到 RPGCore MiniMessageService");
+            }
+            // 初始化 GameLogger
+            gameLogger = rpgCore.getGameLogger();
+            if (gameLogger != null) {
+                logInfo("已连接到 RPGCore GameLogger");
+            }
+        }
+
+        // 如果 RPGCore 服务不可用，初始化本地降级服务
+        if (miniMessage == null) {
+            miniMessage = MiniMessageService.getInstance();
+            miniMessageParser = miniMessage.getMiniMessage();
+            logInfo("使用本地 MiniMessageService（降级）");
+        }
+        if (gameLogger == null) {
+            logInfo("使用 Bukkit Logger（降级）");
+        }
+    }
+
+    /**
+     * 日志辅助方法 - 优先使用 RPGCore GameLogger
+     */
+    public void logInfo(String message) {
+        if (gameLogger != null) {
+            gameLogger.info(message);
+        } else {
+            getLogger().info(message);
+        }
+    }
+
+    public void logWarning(String message) {
+        if (gameLogger != null) {
+            gameLogger.warning(message);
+        } else {
+            getLogger().warning(message);
+        }
+    }
+
+    public void logSevere(String message) {
+        if (gameLogger != null) {
+            gameLogger.severe(message);
+        } else {
+            getLogger().severe(message);
+        }
+    }
+
+    public void logDebug(String message) {
+        if (!debug) return;
+        if (gameLogger != null) {
+            gameLogger.debug(message);
+        } else {
+            getLogger().info("[DEBUG] " + message);
+        }
     }
 
     private boolean shouldShowTopSeparator() {
@@ -171,6 +259,9 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
 
     @Override
     protected void onPluginDisable() {
+        // 取消所有调度任务
+        cancelAllTasks();
+        
         // 注销玩家生命周期处理器
         if (dataHandler != null) {
             dataHandler.unregister();
@@ -181,15 +272,15 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
             serviceAdapter.unregister();
         }
         
-        // 取消所有任务
-        if (scheduler != null) {
-            scheduler.cancelAllTasks();
+        // 注销 PlaceholderAPI 扩展
+        if (boardPlaceholder != null) {
+            PlaceholderAPI.unregisterExpansion(boardPlaceholder);
         }
         
         stopTasks();
         clearAllBoards();
-        
-        getLogger().info("光点侧边栏插件已禁用!");
+
+        logInfo("光点侧边栏插件已禁用!");
     }
     
     @Override
@@ -204,7 +295,7 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
         refreshInterval = config.getLong("refresh-interval", 5000L);
         titleRefreshInterval = config.getLong("title-refresh-interval", 3000L);
         eventCooldown = config.getLong("smart-refresh.event-cooldown", 1000L);
-        defaultTitle = config.getString("title", "&6&l光点RPG");
+        defaultTitle = config.getString("title", "<gold><bold>光点RPG");
         debug = config.getBoolean("advanced.debug", false);
         
         titleAnimationEnabled = config.getBoolean("title-animation.enabled", false);
@@ -254,17 +345,17 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
         if (getServer().getPluginManager().isPluginEnabled("RPGCore")) {
             dataHandler = new BoardDataHandler(this);
             dataHandler.register();
-            getLogger().info("已注册到 RPGCore PlayerLifecycleManager");
+            logInfo("已注册到 RPGCore PlayerLifecycleManager");
         } else {
-            getLogger().warning("RPGCore 未启用，使用传统事件监听");
+            logWarning("RPGCore 未启用，使用传统事件监听");
         }
     }
 
     private void startTasks() {
         stopTasks();
-        
+
         if (scheduler == null) {
-            getLogger().warning("Scheduler not available, using fallback");
+            logWarning("Scheduler not available, using fallback");
             return;
         }
         
@@ -326,9 +417,11 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
         playerBoards.put(player.getUniqueId(), board);
         
         String objectiveName = "guangdianboard";
-        
+
         String title = getCurrentTitle(player);
-        Objective objective = board.registerNewObjective(objectiveName, "dummy", translateColors(title));
+        // 使用 MiniMessage 解析标题为 Component
+        Component titleComponent = translateColorsToComponent(title);
+        Objective objective = board.registerNewObjective(objectiveName, "dummy", titleComponent);
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         
         updateBoardContent(player, objective);
@@ -364,7 +457,8 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
         Objective objective = board.getObjective("guangdianboard");
         if (objective == null) return;
         
-        objective.setDisplayName(translateColors(getCurrentTitle(player)));
+        // 使用 MiniMessage 解析标题为 Component
+        objective.displayName(translateColorsToComponent(getCurrentTitle(player)));
     }
 
     private void updateBoardContent(Player player, Objective objective) {
@@ -406,7 +500,8 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
         for (int i = 0; i < displayLines.size() && i < maxLines; i++) {
             String line = displayLines.get(i);
             if (line.isEmpty()) {
-                line = ChatColor.RESET.toString();
+                // 使用空字符串替代 ChatColor.RESET
+                line = " ";
             }
 
             String entry = appendUniqueSuffix(line, i);
@@ -474,7 +569,8 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
 
     private String appendUniqueSuffix(String line, int index) {
         char suffixChar = SUFFIX_CHAR_POOL[index % SUFFIX_CHAR_POOL.length];
-        return line + ChatColor.RESET + ChatColor.COLOR_CHAR + suffixChar;
+        // 使用 § 字符替代 ChatColor.COLOR_CHAR
+        return line + "§r§" + suffixChar;
     }
 
     private String fixLineLength(String line) {
@@ -602,10 +698,10 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
         
         if (newState) {
             createBoard(player);
-            sendMessage(player, config.getString("messages.board-enabled", "&a侧边栏已启用!"));
+            sendMessage(player, config.getString("messages.board-enabled", "<green>侧边栏已启用!"));
         } else {
             removeBoard(player);
-            sendMessage(player, config.getString("messages.board-disabled", "&c侧边栏已关闭!"));
+            sendMessage(player, config.getString("messages.board-disabled", "<red>侧边栏已关闭!"));
         }
     }
 
@@ -614,14 +710,14 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
         String worldAlias = worldAliases.getOrDefault(world, world);
 
         if (debug) {
-            getLogger().info("[DEBUG] 原始文本: " + text);
-            getLogger().info("[DEBUG] externalServices: " + (externalServices != null ? "已初始化" : "null"));
+            logDebug("原始文本: " + text);
+            logDebug("externalServices: " + (externalServices != null ? "已初始化" : "null"));
         }
 
         if (externalServices == null && rpgCore != null) {
             externalServices = rpgCore.getExternalServices();
             if (externalServices != null) {
-                getLogger().warning("[GuangDianBoard] 重新获取 externalServices 成功");
+                logWarning("[GuangDianBoard] 重新获取 externalServices 成功");
             }
         }
 
@@ -647,7 +743,9 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
             if (externalServices != null) {
                 prefix = externalServices.getPlayerPrefix(player);
             }
-            text = text.replace("%luckperms_prefix%", prefix != null ? prefix : "");
+            // 将 & 颜色代码转换为 MiniMessage 格式
+            prefix = prefix != null ? convertLegacyColorsToMiniMessage(prefix) : "";
+            text = text.replace("%luckperms_prefix%", prefix);
         }
 
         if (text.contains("%luckperms_suffix%")) {
@@ -655,7 +753,9 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
             if (externalServices != null) {
                 suffix = externalServices.getPlayerSuffix(player);
             }
-            text = text.replace("%luckperms_suffix%", suffix != null ? suffix : "");
+            // 将 & 颜色代码转换为 MiniMessage 格式
+            suffix = suffix != null ? convertLegacyColorsToMiniMessage(suffix) : "";
+            text = text.replace("%luckperms_suffix%", suffix);
         }
 
         if (text.contains("%luckperms_primary_group_name%")) {
@@ -670,12 +770,12 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
             String before = text;
             text = externalServices.parsePlaceholders(player, text);
             if (debug && !before.equals(text)) {
-                getLogger().info("[DEBUG] PlaceholderAPI 解析: " + before + " -> " + text);
+                logDebug("PlaceholderAPI 解析: " + before + " -> " + text);
             }
         }
 
         if (debug) {
-            getLogger().info("[DEBUG] 最终文本: " + text);
+            logDebug("最终文本: " + text);
         }
 
         return text;
@@ -772,13 +872,83 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
         }
     }
 
+    private Component translateColorsToComponent(String text) {
+        if (text == null) return Component.empty();
+        // 使用 MiniMessage 直接解析颜色代码
+        return miniMessage.colorize(text);
+    }
+
+    /**
+     * 将 Legacy & 颜色代码转换为 MiniMessage 格式
+     * 例如: <green><bold>称号 -> <green><bold>称号
+     */
+    private String convertLegacyColorsToMiniMessage(String text) {
+        if (text == null || text.isEmpty()) return "";
+
+        StringBuilder result = new StringBuilder();
+        char[] chars = text.toCharArray();
+
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == '&' && i + 1 < chars.length) {
+                char colorCode = Character.toLowerCase(chars[i + 1]);
+                String miniMessageTag = getMiniMessageTag(colorCode);
+                if (miniMessageTag != null) {
+                    result.append(miniMessageTag);
+                    i++; // 跳过颜色代码字符
+                    continue;
+                }
+            }
+            result.append(chars[i]);
+        }
+
+        return result.toString();
+    }
+
+    /**
+     * 获取 MiniMessage 标签
+     */
+    private String getMiniMessageTag(char colorCode) {
+        return switch (colorCode) {
+            case '0' -> "<black>";
+            case '1' -> "<dark_blue>";
+            case '2' -> "<dark_green>";
+            case '3' -> "<dark_aqua>";
+            case '4' -> "<dark_red>";
+            case '5' -> "<dark_purple>";
+            case '6' -> "<gold>";
+            case '7' -> "<gray>";
+            case '8' -> "<dark_gray>";
+            case '9' -> "<blue>";
+            case 'a' -> "<green>";
+            case 'b' -> "<aqua>";
+            case 'c' -> "<red>";
+            case 'd' -> "<light_purple>";
+            case 'e' -> "<yellow>";
+            case 'f' -> "<white>";
+            case 'k' -> "<obfuscated>";
+            case 'l' -> "<bold>";
+            case 'm' -> "<strikethrough>";
+            case 'n' -> "<underlined>";
+            case 'o' -> "<italic>";
+            case 'r' -> "<reset>";
+            default -> null;
+        };
+    }
+
+    /**
+     * 将文本转换为带颜色代码的字符串（用于 Scoreboard entry）
+     * Scoreboard API 需要 legacy 格式的字符串，但我们使用 MiniMessage 进行解析
+     */
     private String translateColors(String text) {
         if (text == null) return "";
-        return ChatColor.translateAlternateColorCodes('&', text);
+        // 使用 MiniMessage 解析，然后序列化为 legacy 格式
+        Component component = miniMessage.colorize(text);
+        return net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(component);
     }
 
     private void sendMessage(org.bukkit.command.CommandSender sender, String text) {
-        sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(text));
+        // 使用 RPGCore MiniMessageService 直接发送 Component
+        sender.sendMessage(miniMessage.colorize(text));
     }
 
     private boolean isPlayerInCombat(Player player) {
@@ -851,7 +1021,7 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
         if (scheduler != null) {
             scheduler.runSyncLater(task, delay);
         } else {
-            getServer().getScheduler().runTaskLater(this, task, delay);
+            getLogger().warning("RPGCore 未启用，无法执行延迟任务");
         }
     }
 
@@ -875,7 +1045,7 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
             
             Player player = (Player) sender;
             if (!player.hasPermission("guangdian.board.toggle")) {
-                player.sendMessage(translateColors(config.getString("messages.no-permission", "&c您没有权限执行此操作!")));
+                player.sendMessage(miniMessage.colorize(config.getString("messages.no-permission", "<red>您没有权限执行此操作!")));
                 return true;
             }
             
@@ -900,7 +1070,7 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
                     sendHelp(sender);
                     return true;
                 default:
-                    sender.sendMessage(translateColors("&c未知的命令! 使用 /gdboard help 查看帮助"));
+                    sender.sendMessage(miniMessage.colorize("<red>未知的命令! 使用 /gdboard help 查看帮助"));
                     return true;
             }
         }
@@ -909,18 +1079,18 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
     }
 
     private void sendHelp(org.bukkit.command.CommandSender sender) {
-        sender.sendMessage(translateColors("&6===== 光点侧边栏插件 ====="));
-        sender.sendMessage(translateColors("&e/gdboard reload &7- 重新加载配置"));
-        sender.sendMessage(translateColors("&e/gdboard toggle &7- 切换侧边栏显示"));
-        sender.sendMessage(translateColors("&e/gdboard info &7- 显示插件信息"));
-        sender.sendMessage(translateColors("&e/gdboard help &7- 显示帮助信息"));
-        sender.sendMessage(translateColors("&e/toggleboard &7- 快速切换侧边栏"));
-        sender.sendMessage(translateColors("&7作者: Gumin | QQ: 2271257344"));
+        sender.sendMessage(miniMessage.colorize("<gold><bold>===== 光点侧边栏插件 ====="));
+        sender.sendMessage(miniMessage.colorize("<yellow>/gdboard reload <gray>- 重新加载配置"));
+        sender.sendMessage(miniMessage.colorize("<yellow>/gdboard toggle <gray>- 切换侧边栏显示"));
+        sender.sendMessage(miniMessage.colorize("<yellow>/gdboard info <gray>- 显示插件信息"));
+        sender.sendMessage(miniMessage.colorize("<yellow>/gdboard help <gray>- 显示帮助信息"));
+        sender.sendMessage(miniMessage.colorize("<yellow>/toggleboard <gray>- 快速切换侧边栏"));
+        sender.sendMessage(miniMessage.colorize("<gray>作者: Gumin | QQ: 2271257344"));
     }
 
     private boolean handleReload(org.bukkit.command.CommandSender sender) {
         if (!sender.hasPermission("guangdian.board.reload")) {
-            sender.sendMessage(translateColors(config.getString("messages.no-permission", "&c您没有权限执行此操作!")));
+            sender.sendMessage(miniMessage.colorize(config.getString("messages.no-permission", "<red>您没有权限执行此操作!")));
             return true;
         }
         
@@ -930,7 +1100,7 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
         loadStyleSettings();
         refreshInterval = config.getLong("refresh-interval", 1000L);
         titleRefreshInterval = config.getLong("title-refresh-interval", 3000L);
-        defaultTitle = config.getString("title", "&6&l光点RPG");
+        defaultTitle = config.getString("title", "<gold><bold>光点RPG");
         titleAnimationEnabled = config.getBoolean("title-animation.enabled", false);
         titleFrames = config.getStringList("title-animation.frames");
         cachedMaxLines = Math.max(1, config.getInt("advanced.max-lines", 15));
@@ -944,7 +1114,7 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
             }
         }
         
-        sender.sendMessage(translateColors(config.getString("messages.config-reloaded", "&a侧边栏配置已重新加载!")));
+        sender.sendMessage(miniMessage.colorize(config.getString("messages.config-reloaded", "<green>侧边栏配置已重新加载!")));
         return true;
     }
 
@@ -956,7 +1126,7 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
         
         Player player = (Player) sender;
         if (!player.hasPermission("guangdian.board.toggle")) {
-            player.sendMessage(translateColors(config.getString("messages.no-permission", "&c您没有权限执行此操作!")));
+            player.sendMessage(miniMessage.colorize(config.getString("messages.no-permission", "<red>您没有权限执行此操作!")));
             return true;
         }
         
@@ -965,14 +1135,14 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
     }
 
     private boolean handleInfo(org.bukkit.command.CommandSender sender) {
-        sender.sendMessage(translateColors("&6===== 光点侧边栏插件信息 ====="));
-        sender.sendMessage(translateColors("&e版本: &f" + getDescription().getVersion()));
-        sender.sendMessage(translateColors("&e作者: &fGumin"));
-        sender.sendMessage(translateColors("&eQQ: &f2271257344"));
-        sender.sendMessage(translateColors("&e状态: &a已启用"));
-        sender.sendMessage(translateColors("&e刷新间隔: &f" + refreshInterval + " ms"));
-        sender.sendMessage(translateColors("&e标题动画: &f" + (titleAnimationEnabled ? "启用" : "禁用")));
-        sender.sendMessage(translateColors("&e外部服务: &f" + (externalServices != null ? externalServices.getExternalServiceStatus() : "&c未初始化")));
+        sender.sendMessage(miniMessage.colorize("<gold><bold>===== 光点侧边栏插件信息 ====="));
+        sender.sendMessage(miniMessage.colorize("<yellow>版本: <white>" + getDescription().getVersion()));
+        sender.sendMessage(miniMessage.colorize("<yellow>作者: <white>Gumin"));
+        sender.sendMessage(miniMessage.colorize("<yellow>QQ: <white>2271257344"));
+        sender.sendMessage(miniMessage.colorize("<yellow>状态: <green>已启用"));
+        sender.sendMessage(miniMessage.colorize("<yellow>刷新间隔: <white>" + refreshInterval + " ms"));
+        sender.sendMessage(miniMessage.colorize("<yellow>标题动画: <white>" + (titleAnimationEnabled ? "启用" : "禁用")));
+        sender.sendMessage(miniMessage.colorize("<yellow>外部服务: <white>" + (externalServices != null ? externalServices.getExternalServiceStatus() : "<red>未初始化")));
         return true;
     }
 

@@ -2,7 +2,7 @@ package cn.guangdian.cavefu.config;
 
 import cn.guangdian.cavefu.GuangDianCaveFu;
 import cn.guangdian.cavefu.cave.CaveLevel;
-import org.bukkit.ChatColor;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -142,9 +142,10 @@ public class ConfigManager {
 
     // 消息
     public String getMessage(String key) {
-        String prefix = config.getString("messages.prefix", "&6[洞府] &f");
+        String prefix = config.getString("messages.prefix", "<gold>[洞府] <white>");
         String msg = config.getString("messages." + key, "");
-        return ChatColor.translateAlternateColorCodes('&', prefix + msg);
+        // 返回原始字符串，由调用方使用 MiniMessageService 解析
+        return prefix + msg;
     }
 
     public String getMessage(String key, String... placeholders) {

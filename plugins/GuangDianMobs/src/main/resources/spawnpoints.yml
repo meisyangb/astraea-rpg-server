@@ -1,0 +1,279 @@
+# GuangDianMobs 刷新点配置
+#
+# 刷新点系统参考 MythicMobs 的 Spawners 和 RandomSpawns
+# 允许在固定位置设置怪物刷新点，支持定时刷新和条件判断
+#
+# 配置说明:
+# - mob: 怪物ID (必需)
+# - level: 怪物等级 (-1 使用模板默认等级)
+# - amount: 每次刷新数量
+# - max-mobs: 最大同时存在数量
+# - cooldown: 刷新冷却时间 (tick, 20 tick = 1秒)
+# - radius: 刷新半径 (在指定范围内随机位置生成)
+# - use-timer: 是否使用定时自动刷新
+# - timer-interval: 定时刷新间隔 (tick)
+# - require-player: 是否需要玩家在附近才刷新
+# - player-range: 玩家检测范围
+# - enabled: 是否启用
+
+spawnpoints:
+  # ============================================
+  # 新手村刷新点
+  # ============================================
+
+  newbie_zombie_spawner:
+    world: world
+    x: 100.0
+    y: 64.0
+    z: 100.0
+    yaw: 0.0
+    pitch: 0.0
+    display-name: "<gray>新手村僵尸刷新点"
+    mob: weak_zombie
+    level: 1
+    amount: 2
+    max-mobs: 6
+    cooldown: 200        # 10秒冷却
+    radius: 10.0
+    use-timer: true
+    timer-interval: 400  # 20秒检查一次
+    require-player: true
+    player-range: 50.0
+    enabled: true
+
+  # ============================================
+  # 精英刷新点
+  # ============================================
+
+  elite_zombie_camp:
+    world: world
+    x: 500.0
+    y: 70.0
+    z: 500.0
+    yaw: 90.0
+    pitch: 0.0
+    display-name: "<green>精英僵尸营地"
+    mob: elite_zombie
+    level: 15
+    amount: 1
+    max-mobs: 3
+    cooldown: 600        # 30秒冷却
+    radius: 15.0
+    use-timer: true
+    timer-interval: 600
+    require-player: true
+    player-range: 60.0
+    enabled: true
+
+  skeletal_knight_tower:
+    world: world
+    x: -300.0
+    y: 80.0
+    z: 200.0
+    yaw: 180.0
+    pitch: 0.0
+    display-name: "<dark_gray>骷髅骑士塔"
+    mob: skeletal_knight
+    level: 18
+    amount: 1
+    max-mobs: 2
+    cooldown: 800
+    radius: 8.0
+    use-timer: true
+    timer-interval: 800
+    require-player: true
+    player-range: 40.0
+    enabled: true
+
+  # ============================================
+  # Boss刷新点
+  # ============================================
+
+  skeleton_king_throne:
+    world: world
+    x: 1000.0
+    y: 50.0
+    z: 1000.0
+    yaw: 0.0
+    pitch: 0.0
+    display-name: "<gold>☠ 骷髅王座 ☠"
+    mob: skeleton_king
+    level: 50
+    amount: 1
+    max-mobs: 1
+    cooldown: 72000      # 1小时冷却 (3600秒)
+    radius: 20.0
+    use-timer: false     # 不自动刷新，需要手动触发或事件触发
+    require-player: true
+    player-range: 100.0
+    enabled: true
+
+  abyss_worm_nest:
+    world: world
+    x: 800.0
+    y: 30.0
+    z: -500.0
+    yaw: 0.0
+    pitch: 0.0
+    display-name: "<dark_red>⚠ 深渊巢穴 ⚠"
+    mob: abyss_worm
+    level: 60
+    amount: 1
+    max-mobs: 1
+    cooldown: 108000     # 1.5小时冷却
+    radius: 25.0
+    use-timer: false
+    require-player: true
+    player-range: 80.0
+    enabled: true
+
+  # ============================================
+  # 元素刷新点
+  # ============================================
+
+  fire_mage_altar:
+    world: world_nether
+    x: 100.0
+    y: 70.0
+    z: 100.0
+    yaw: 0.0
+    pitch: 0.0
+    display-name: "<red>烈焰祭坛"
+    mob: fire_mage
+    level: 35
+    amount: 1
+    max-mobs: 2
+    cooldown: 1000
+    radius: 12.0
+    use-timer: true
+    timer-interval: 1200
+    require-player: true
+    player-range: 50.0
+    enabled: true
+
+  frost_giant_peak:
+    world: world
+    x: -1000.0
+    y: 120.0
+    z: -1000.0
+    yaw: 0.0
+    pitch: 0.0
+    display-name: "<aqua>冰霜之巅"
+    mob: frost_giant
+    level: 40
+    amount: 1
+    max-mobs: 1
+    cooldown: 1200
+    radius: 15.0
+    use-timer: true
+    timer-interval: 1500
+    require-player: true
+    player-range: 70.0
+    enabled: true
+
+  thunder_lord_shrine:
+    world: world
+    x: 0.0
+    y: 100.0
+    z: 0.0
+    yaw: 0.0
+    pitch: 0.0
+    display-name: "<yellow>雷霆神殿"
+    mob: thunder_lord
+    level: 45
+    amount: 1
+    max-mobs: 1
+    cooldown: 36000      # 30分钟冷却
+    radius: 18.0
+    use-timer: false
+    require-player: true
+    player-range: 60.0
+    enabled: true
+
+  # ============================================
+  # 特殊刷新点
+  # ============================================
+
+  angry_sludge_pond:
+    world: world
+    x: 300.0
+    y: 62.0
+    z: -200.0
+    yaw: 0.0
+    pitch: 0.0
+    display-name: "<dark_green>淤泥池塘"
+    mob: angry_sludge
+    level: 22
+    amount: 2
+    max-mobs: 5
+    cooldown: 400
+    radius: 20.0
+    use-timer: true
+    timer-interval: 600
+    require-player: true
+    player-range: 45.0
+    enabled: true
+
+  lava_golem_forges:
+    world: world_nether
+    x: 200.0
+    y: 65.0
+    z: -100.0
+    yaw: 0.0
+    pitch: 0.0
+    display-name: "<gold>熔岩熔炉"
+    mob: lava_golem
+    level: 35
+    amount: 1
+    max-mobs: 3
+    cooldown: 800
+    radius: 15.0
+    use-timer: true
+    timer-interval: 1000
+    require-player: true
+    player-range: 55.0
+    enabled: true
+
+  ghost_cemetery:
+    world: world
+    x: -500.0
+    y: 70.0
+    z: 300.0
+    yaw: 0.0
+    pitch: 0.0
+    display-name: "<white>幽灵墓地"
+    mob: ghost
+    level: 28
+    amount: 2
+    max-mobs: 6
+    cooldown: 500
+    radius: 25.0
+    use-timer: true
+    timer-interval: 800
+    require-player: true
+    player-range: 50.0
+    enabled: true
+
+  # ============================================
+  # 示例: 禁用状态的刷新点
+  # ============================================
+
+  disabled_example:
+    world: world
+    x: 0.0
+    y: 64.0
+    z: 0.0
+    yaw: 0.0
+    pitch: 0.0
+    display-name: "<red>已禁用示例"
+    mob: weak_zombie
+    level: 1
+    amount: 1
+    max-mobs: 1
+    cooldown: 200
+    radius: 5.0
+    use-timer: true
+    timer-interval: 400
+    require-player: true
+    player-range: 30.0
+    enabled: false       # 禁用状态

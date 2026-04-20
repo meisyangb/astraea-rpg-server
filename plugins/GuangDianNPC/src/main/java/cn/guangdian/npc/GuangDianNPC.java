@@ -9,6 +9,8 @@ import cn.guangdian.npc.model.NPCType;
 import cn.guangdian.npc.papi.NPCPlaceholders;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
+import cn.guangdian.rpgcore.entity.EntityService;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
@@ -57,6 +59,10 @@ public final class GuangDianNPC extends AbstractRPGPlugin implements Listener, C
     private NPCServiceAdapter serviceAdapter;
     private NPCPlaceholders placeholders;
 
+    // RPGCore 服务引用
+    private EntityService entityService;
+    private MiniMessageService miniMessage;
+
     private org.bukkit.NamespacedKey npcIdKey;
 
     @Override
@@ -98,6 +104,9 @@ public final class GuangDianNPC extends AbstractRPGPlugin implements Listener, C
 
     @Override
     protected void onPluginDisable() {
+        // 取消所有调度任务
+        cancelAllTasks();
+        
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
         }
@@ -122,6 +131,27 @@ public final class GuangDianNPC extends AbstractRPGPlugin implements Listener, C
 
     private void initRPGCoreIntegration() {
         serviceAdapter = new NPCServiceAdapter(this);
+
+        // 获取 RPGCore 服务
+        if (getServer().getPluginManager().isPluginEnabled("RPGCore")) {
+            try {
+                RPGCore rpgCore = RPGCore.getInstance();
+                entityService = rpgCore.getEntityService();
+                miniMessage = rpgCore.getMiniMessageService();
+                getLogger().info("使用 RPGCore 服务 (EntityService, MiniMessageService)");
+            } catch (Exception e) {
+                getLogger().warning("无法获取 RPGCore 服务: " + e.getMessage());
+            }
+        }
+
+        // 如果 RPGCore 服务不可用，使用本地降级
+        if (entityService == null) {
+            entityService = EntityService.getInstance();
+        }
+        if (miniMessage == null) {
+            miniMessage = MiniMessageService.getInstance();
+        }
+
         if (serviceAdapter.isUsingRPGCore()) {
             getLogger().info("已集成 RPGCore 服务系统!");
         }
@@ -161,6 +191,22 @@ public final class GuangDianNPC extends AbstractRPGPlugin implements Listener, C
 
     public NPCServiceAdapter getServiceAdapter() {
         return serviceAdapter;
+    }
+
+    /**
+     * 获取 EntityService
+     * @return EntityService 实例（可能为本地降级实现）
+     */
+    public EntityService getEntityService() {
+        return entityService;
+    }
+
+    /**
+     * 获取 MiniMessageService
+     * @return MiniMessageService 实例（可能为本地降级实现）
+     */
+    public MiniMessageService getMiniMessageService() {
+        return miniMessage;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -227,7 +273,13 @@ public final class GuangDianNPC extends AbstractRPGPlugin implements Listener, C
     public void onVehicleEntityCollision(org.bukkit.event.vehicle.VehicleEntityCollisionEvent event) {
         if (npcManager.isManagedNPC(event.getEntity())) {
             event.setCancelled(true);
-            event.setCollisionCancelled(true);
+            // 使用 RPGCore EntityService 处理碰撞取消
+            if (entityService != null) {
+                entityService.setCollisionCancelled(event.getEntity(), true);
+            } else {
+                // 降级处理
+                event.setCollisionCancelled(true);
+            }
         }
     }
 
@@ -332,14 +384,14 @@ public final class GuangDianNPC extends AbstractRPGPlugin implements Listener, C
         }
 
         if (!sender.hasPermission("guangdian.npc.admin")) {
-            sender.sendMessage(legacy("&c你没有权限。"));
+            sender.sendMessage(legacy("<red>你没有权限。"));
             return true;
         }
 
         switch (args[0].toLowerCase()) {
             case "create" -> {
                 if (!(sender instanceof Player player) || args.length < 2) {
-                    sender.sendMessage(legacy("&c用法: /npc create <id> [menu]"));
+                    sender.sendMessage(legacy("<red>用法: /npc create <id> [menu]"));
                     return true;
                 }
                 String id = args[1].toLowerCase();
@@ -347,99 +399,99 @@ public final class GuangDianNPC extends AbstractRPGPlugin implements Listener, C
 
                 NPCData npc = npcManager.createNPC(id, player, menuId);
                 if (npc != null) {
-                    sender.sendMessage(legacy("&a已创建 NPC: &e" + id));
+                    sender.sendMessage(legacy("<green>已创建 NPC: <yellow>" + id));
                 } else {
-                    sender.sendMessage(legacy("&cNPC 已存在或创建失败。"));
+                    sender.sendMessage(legacy("<red>NPC 已存在或创建失败。"));
                 }
             }
             case "remove" -> {
                 if (args.length < 2) {
-                    sender.sendMessage(legacy("&c用法: /npc remove <id>"));
+                    sender.sendMessage(legacy("<red>用法: /npc remove <id>"));
                     return true;
                 }
                 if (npcManager.removeNPC(args[1])) {
-                    sender.sendMessage(legacy("&a已删除 NPC: &e" + args[1]));
+                    sender.sendMessage(legacy("<green>已删除 NPC: <yellow>" + args[1]));
                 } else {
-                    sender.sendMessage(legacy("&cNPC 不存在。"));
+                    sender.sendMessage(legacy("<red>NPC 不存在。"));
                 }
             }
             case "movehere" -> {
                 if (!(sender instanceof Player player) || args.length < 2) {
-                    sender.sendMessage(legacy("&c用法: /npc movehere <id>"));
+                    sender.sendMessage(legacy("<red>用法: /npc movehere <id>"));
                     return true;
                 }
                 NPCData npc = npcManager.getNPC(args[1]);
                 if (npc == null) {
-                    sender.sendMessage(legacy("&cNPC 不存在。"));
+                    sender.sendMessage(legacy("<red>NPC 不存在。"));
                     return true;
                 }
                 npc.setLocation(player.getLocation());
                 npcManager.respawnNPC(npc);
                 npcManager.save();
-                sender.sendMessage(legacy("&a已移动 NPC: &e" + npc.getId()));
+                sender.sendMessage(legacy("<green>已移动 NPC: <yellow>" + npc.getId()));
             }
             case "name" -> {
                 if (args.length < 3) {
-                    sender.sendMessage(legacy("&c用法: /npc name <id> <名字>"));
+                    sender.sendMessage(legacy("<red>用法: /npc name <id> <名字>"));
                     return true;
                 }
                 NPCData npc = npcManager.getNPC(args[1]);
                 if (npc == null) {
-                    sender.sendMessage(legacy("&cNPC 不存在。"));
+                    sender.sendMessage(legacy("<red>NPC 不存在。"));
                     return true;
                 }
                 String displayName = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
                 npc.setDisplayName(displayName);
                 npcManager.respawnNPC(npc);
                 npcManager.save();
-                sender.sendMessage(legacy("&a已更新 NPC 名字。"));
+                sender.sendMessage(legacy("<green>已更新 NPC 名字。"));
             }
             case "menu" -> {
                 if (args.length < 3) {
-                    sender.sendMessage(legacy("&c用法: /npc menu <id> <menuId>"));
+                    sender.sendMessage(legacy("<red>用法: /npc menu <id> <menuId>"));
                     return true;
                 }
                 NPCData npc = npcManager.getNPC(args[1]);
                 if (npc == null) {
-                    sender.sendMessage(legacy("&cNPC 不存在。"));
+                    sender.sendMessage(legacy("<red>NPC 不存在。"));
                     return true;
                 }
                 npc.setMenuId(args[2].toLowerCase());
                 npcManager.save();
-                sender.sendMessage(legacy("&a已更新 NPC 菜单为: &e" + npc.getMenuId()));
+                sender.sendMessage(legacy("<green>已更新 NPC 菜单为: <yellow>" + npc.getMenuId()));
             }
             case "type" -> {
                 if (args.length < 3) {
-                    sender.sendMessage(legacy("&c用法: /npc type <id> <类型>"));
-                    sender.sendMessage(legacy("&e可用类型: &fSHOP, QUEST, TELEPORT, BANK, GUILD, TRAINER, REPAIR, IDENTIFY, GENERAL"));
+                    sender.sendMessage(legacy("<red>用法: /npc type <id> <类型>"));
+                    sender.sendMessage(legacy("<yellow>可用类型: <white>SHOP, QUEST, TELEPORT, BANK, GUILD, TRAINER, REPAIR, IDENTIFY, GENERAL"));
                     return true;
                 }
                 NPCData npc = npcManager.getNPC(args[1]);
                 if (npc == null) {
-                    sender.sendMessage(legacy("&cNPC 不存在。"));
+                    sender.sendMessage(legacy("<red>NPC 不存在。"));
                     return true;
                 }
                 NPCType type = NPCType.fromString(args[2]);
                 npc.setType(type);
                 npcManager.respawnNPC(npc);
                 npcManager.save();
-                sender.sendMessage(legacy("&a已更新 NPC 类型为: &e" + type.getDisplayName()));
+                sender.sendMessage(legacy("<green>已更新 NPC 类型为: <yellow>" + type.getDisplayName()));
             }
             case "tp" -> {
                 if (!(sender instanceof Player player) || args.length < 2) {
-                    sender.sendMessage(legacy("&c用法: /npc tp <id>"));
+                    sender.sendMessage(legacy("<red>用法: /npc tp <id>"));
                     return true;
                 }
                 npcAPI.teleportToNPC(player, args[1]);
             }
             case "enable" -> {
                 if (args.length < 3) {
-                    sender.sendMessage(legacy("&c用法: /npc enable <id> <true/false>"));
+                    sender.sendMessage(legacy("<red>用法: /npc enable <id> <true/false>"));
                     return true;
                 }
                 NPCData npc = npcManager.getNPC(args[1]);
                 if (npc == null) {
-                    sender.sendMessage(legacy("&cNPC 不存在。"));
+                    sender.sendMessage(legacy("<red>NPC 不存在。"));
                     return true;
                 }
                 boolean enabled = Boolean.parseBoolean(args[2]);
@@ -450,33 +502,33 @@ public final class GuangDianNPC extends AbstractRPGPlugin implements Listener, C
                     npcManager.despawnNPC(npc);
                 }
                 npcManager.save();
-                sender.sendMessage(legacy("&a已" + (enabled ? "启用" : "禁用") + " NPC: &e" + npc.getId()));
+                sender.sendMessage(legacy("<green>已" + (enabled ? "启用" : "禁用") + " NPC: <yellow>" + npc.getId()));
             }
             case "list" -> {
-                sender.sendMessage(legacy("&6NPC 列表 (&e" + npcManager.getNPCCount() + "&6):"));
+                sender.sendMessage(legacy("<gold>NPC 列表 (<yellow>" + npcManager.getNPCCount() + "<gold>):"));
                 for (NPCData npc : npcManager.getAllNPCs()) {
-                    String status = npc.isEnabled() ? "&a启用" : "&c禁用";
-                    sender.sendMessage(legacy("&e- " + npc.getId() + " &7[" + npc.getWorldName() + " | " + npc.getMenuId() + "] " + status));
+                    String status = npc.isEnabled() ? "<green>启用" : "<red>禁用";
+                    sender.sendMessage(legacy("<yellow>- " + npc.getId() + " <gray>[" + npc.getWorldName() + " | " + npc.getMenuId() + "] " + status));
                 }
             }
             case "reload" -> {
                 npcManager.reload();
-                sender.sendMessage(legacy("&aNPC 配置已重载。"));
+                sender.sendMessage(legacy("<green>NPC 配置已重载。"));
             }
-            default -> sender.sendMessage(legacy("&c未知子命令。"));
+            default -> sender.sendMessage(legacy("<red>未知子命令。"));
         }
         return true;
     }
 
     private boolean handleNPCMenuCommand(CommandSender sender, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(legacy("&c只有玩家可以使用此命令。"));
+            sender.sendMessage(legacy("<red>只有玩家可以使用此命令。"));
             return true;
         }
 
         if (args.length == 0) {
-            sender.sendMessage(legacy("&c用法: /npcmenu <menuId>"));
-            sender.sendMessage(legacy("&c用法: /npcmenu npc <npcId>"));
+            sender.sendMessage(legacy("<red>用法: /npcmenu <menuId>"));
+            sender.sendMessage(legacy("<red>用法: /npcmenu npc <npcId>"));
             return true;
         }
 

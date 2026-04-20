@@ -1,9 +1,14 @@
 package cn.guangdian.trigger;
 
 import cn.guangdian.trigger.adapter.ItemTriggerServiceAdapter;
+import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.api.GameLogger;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
+import cn.guangdian.rpgcore.sound.SoundService;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Registry;
 import org.bukkit.Sound;
@@ -21,7 +26,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -31,16 +35,43 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * GuangDianItemTrigger - 光点物品触发器插件
+ *
+ * <p>本插件已优化集成 RPGCore 服务：</p>
+ * <ul>
+ *   <li>日志系统 - 使用 RPGCore GameLogger（带降级兼容）</li>
+ *   <li>消息发送 - 使用 RPGCore MiniMessageService（带降级兼容）</li>
+ *   <li>音效播放 - 使用 RPGCore SoundService（带降级兼容）</li>
+ *   <li>颜色转换 - 自动将 & 代码转换为 MiniMessage 格式</li>
+ * </ul>
+ *
+ * <p>支持多种触发类型：右键、左键、潜行点击、攻击命中等</p>
+ * <p>支持多种动作类型：命令、消息、菜单、音效、药水效果、RPG技能等</p>
+ *
+ * @author GuangDian
+ * @version 1.1.0
+ * @since 1.0.0
+ * @see OPTIMIZATION.md 优化详情
+ */
 public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener, CommandExecutor, TabExecutor {
 
     private static GuangDianItemTrigger instance;
     private FileConfiguration config;
-    
+
     // RPGCore 服务适配器
     private ItemTriggerServiceAdapter serviceAdapter;
 
-    private final Map<String, TriggerConfig> triggers = new HashMap<>();
-    private final Map<String, List<TriggerConfig>> triggersByType = new HashMap<>();
+    // RPGCore 服务引用
+    private SoundService soundService;
+    private MiniMessageService miniMessage;
+    private MiniMessage miniMessageParser;
+
+    // RPGCore 日志服务
+    private GameLogger gameLogger;
+
+    private final Map<String, TriggerConfig> triggers = new ConcurrentHashMap<>();
+    private final Map<String, List<TriggerConfig>> triggersByType = new ConcurrentHashMap<>();
     private final Map<UUID, Map<String, Long>> cooldowns = new ConcurrentHashMap<>();
     private final Map<UUID, Map<String, Long>> cooldownMessages = new ConcurrentHashMap<>();
     private final Map<UUID, Set<String>> oneTimeUsed = new ConcurrentHashMap<>();
@@ -54,20 +85,57 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
         saveDefaultConfig();
         config = getConfig();
 
+        // 初始化 RPGCore 服务
+        initRPGCoreServices();
+
         preCacheEnums();
         loadTriggers();
-        
+
         serviceAdapter = new ItemTriggerServiceAdapter(this);
 
         getCommand("gdtrigger").setExecutor(this);
         getServer().getPluginManager().registerEvents(this, this);
 
-        getLogger().info("光点物品触发插件已启用! 版本: " + getDescription().getVersion());
-        getLogger().info("作者: Gumin | QQ: 2271257344");
-        getLogger().info("已加载 " + triggers.size() + " 个触发器");
-        
+        logInfo("光点物品触发插件已启用! 版本: " + getDescription().getVersion());
+        logInfo("作者: Gumin | QQ: 2271257344");
+        logInfo("已加载 " + triggers.size() + " 个触发器");
+
         if (Bukkit.getPluginManager().isPluginEnabled("RPGCore")) {
-            getLogger().info("RPGCore 集成模式已启用");
+            logInfo("RPGCore 集成模式已启用");
+        }
+    }
+
+    /**
+     * 初始化 RPGCore 核心服务
+     */
+    private void initRPGCoreServices() {
+        if (Bukkit.getPluginManager().isPluginEnabled("RPGCore")) {
+            try {
+                RPGCore rpgCore = RPGCore.getInstance();
+                if (rpgCore != null) {
+                    soundService = rpgCore.getSoundService();
+                    miniMessage = rpgCore.getMiniMessageService();
+                    gameLogger = rpgCore.getGameLogger();
+                    if (miniMessage != null) {
+                        miniMessageParser = miniMessage.getMiniMessage();
+                    }
+                    logInfo("已连接到 RPGCore 服务 (SoundService, MiniMessageService, GameLogger)");
+                }
+            } catch (Exception e) {
+                logWarning("连接 RPGCore 服务失败: " + e.getMessage());
+            }
+        }
+
+        // 如果 RPGCore 服务不可用，使用本地降级服务
+        if (soundService == null) {
+            soundService = SoundService.getInstance();
+        }
+        if (miniMessage == null) {
+            miniMessage = MiniMessageService.getInstance();
+            miniMessageParser = miniMessage.getMiniMessage();
+        }
+        if (gameLogger == null) {
+            logInfo("使用 Bukkit Logger（降级）");
         }
     }
 
@@ -76,7 +144,7 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
         }
-        
+
         triggers.clear();
         triggersByType.clear();
         cooldowns.clear();
@@ -84,12 +152,66 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
         oneTimeUsed.clear();
         soundCache.clear();
         effectCache.clear();
-        getLogger().info("光点物品触发插件已禁用!");
+        logInfo("光点物品触发插件已禁用!");
     }
 
     @Override
     protected String getPluginName() {
         return "GuangDianItemTrigger";
+    }
+
+    // ==================== RPGCore 服务访问 ====================
+
+    public GameLogger getGameLogger() {
+        return gameLogger;
+    }
+
+    /**
+     * 检查是否使用 RPGCore 日志服务
+     */
+    public boolean isUsingRPGCoreLogger() {
+        return gameLogger != null;
+    }
+
+    // ==================== 日志快捷方法 ====================
+
+    public void logInfo(String message) {
+        if (gameLogger != null) {
+            gameLogger.info(message);
+        } else {
+            getLogger().info(message);
+        }
+    }
+
+    public void logWarning(String message) {
+        if (gameLogger != null) {
+            gameLogger.warning(message);
+        } else {
+            getLogger().warning(message);
+        }
+    }
+
+    public void logSevere(String message) {
+        if (gameLogger != null) {
+            gameLogger.severe(message);
+        } else {
+            getLogger().severe(message);
+        }
+    }
+
+    public void logSevere(String message, Throwable throwable) {
+        if (gameLogger != null) {
+            gameLogger.severe(message, throwable);
+        } else {
+            getLogger().severe(message + " - " + throwable.getMessage());
+            throwable.printStackTrace();
+        }
+    }
+
+    public void logDebug(String message) {
+        if (gameLogger != null) {
+            gameLogger.debug(message);
+        }
     }
 
     /**
@@ -115,7 +237,7 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
 
         ConfigurationSection triggersSection = config.getConfigurationSection("triggers");
         if (triggersSection == null) {
-            getLogger().warning("未找到触发器配置!");
+            logWarning("未找到触发器配置!");
             return;
         }
 
@@ -138,7 +260,7 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
             triggersByType.computeIfAbsent(triggerType.toLowerCase(), k -> new ArrayList<>()).add(triggerConfig);
 
             if (config.getBoolean("debug", false)) {
-                getLogger().info("已加载触发器: " + triggerName + " (关键词: " + loreKeyword + ")");
+                logDebug("已加载触发器: " + triggerName + " (关键词: " + loreKeyword + ")");
             }
         }
     }
@@ -156,8 +278,8 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return;
 
-        // 获取物品名称和Lore
-        String displayName = meta.hasDisplayName() ? ChatColor.stripColor(meta.getDisplayName()) : "";
+        // 获取物品名称和Lore - 使用 MiniMessage 解析
+        String displayName = meta.hasDisplayName() ? stripColor(meta.getDisplayName()) : "";
         List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
 
         String triggerType = getTriggerTypeFromAction(event.getAction(), player.isSneaking());
@@ -167,7 +289,7 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
 
         for (TriggerConfig trigger : relevantTriggers) {
             // 同时检查物品名称和Lore
-            if (containsKeyword(lore, trigger.getLoreKeyword()) || 
+            if (containsKeyword(lore, trigger.getLoreKeyword()) ||
                 displayName.toLowerCase().contains(trigger.getLoreKeyword().toLowerCase())) {
                 if (checkCooldownWithMessage(player, trigger)) {
                     executeTrigger(player, trigger, item);
@@ -201,7 +323,7 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return;
 
-        String displayName = meta.hasDisplayName() ? ChatColor.stripColor(meta.getDisplayName()) : "";
+        String displayName = meta.hasDisplayName() ? stripColor(meta.getDisplayName()) : "";
         List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
 
         List<TriggerConfig> relevantTriggers = triggersByType.get("on_hit");
@@ -241,12 +363,28 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
 
         String lowerKeyword = keyword.toLowerCase();
         for (String line : lore) {
-            String strippedLine = ChatColor.stripColor(line);
+            String strippedLine = stripColor(line);
             if (strippedLine != null && strippedLine.toLowerCase().contains(lowerKeyword)) {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * 移除文本中的颜色代码
+     * 支持传统 & 颜色代码和 MiniMessage 格式
+     */
+    private String stripColor(String text) {
+        if (text == null) return "";
+        // 先尝试解析为 Component，然后获取纯文本
+        try {
+            Component component = miniMessageParser.deserialize(text);
+            return net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(component);
+        } catch (Exception e) {
+            // 如果解析失败，使用传统方式移除 & 颜色代码
+            return text.replaceAll("&[0-9a-fk-or]", "");
+        }
     }
 
     private boolean checkCooldownWithMessage(Player player, TriggerConfig trigger) {
@@ -265,7 +403,7 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
             Long lastMessageTime = lastMessages.get(trigger.getName());
 
             if (lastMessageTime == null || System.currentTimeMillis() - lastMessageTime > messageCooldown) {
-                String message = config.getString("messages.cooldown", "&c该物品还在冷却中，剩余时间: &e%time%秒");
+                String message = config.getString("messages.cooldown", "<red>该物品还在冷却中，剩余时间: <yellow>%time%秒</yellow></red>");
                 message = message.replace("%time%", String.format(config.getString("advanced.cooldown-format", "#.##"), remaining / 1000.0));
                 player.sendMessage(translateColors(message));
                 lastMessages.put(trigger.getName(), System.currentTimeMillis());
@@ -280,7 +418,7 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
         if (trigger.isOneTime()) {
             Set<String> usedTriggers = oneTimeUsed.computeIfAbsent(player.getUniqueId(), k -> ConcurrentHashMap.newKeySet());
             if (usedTriggers.contains(trigger.getName())) {
-                player.sendMessage(translateColors("&c你已经使用过这个物品了!"));
+                player.sendMessage(translateColors("<red>你已经使用过这个物品了!</red>"));
                 return;
             }
         }
@@ -319,21 +457,19 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
             if (Bukkit.getPluginManager().getPlugin("GuangDianMenu") != null) {
                 player.performCommand("menu " + menuName);
             } else {
-                player.sendMessage(translateColors("&c菜单插件未安装!"));
+                player.sendMessage(translateColors("<red>菜单插件未安装!</red>"));
             }
         } else if (action.startsWith("sound:")) {
             String[] parts = action.substring(6).split(":");
-            Sound sound = soundCache.get(parts[0].toLowerCase());
-            if (sound == null) {
-                sound = soundCache.get("block_note_block_bell");
-            }
-            if (sound != null) {
+            String soundName = parts[0].toLowerCase();
+            // 使用 RPGCore SoundService
+            if (soundService != null) {
                 try {
                     float volume = parts.length > 1 ? Float.parseFloat(parts[1]) : 1.0f;
                     float pitch = parts.length > 2 ? Float.parseFloat(parts[2]) : 1.0f;
-                    player.playSound(player.getLocation(), sound, volume, pitch);
+                    soundService.playSound(player, soundName, volume, pitch);
                 } catch (Exception e) {
-                    getLogger().warning("无效的声音参数: " + action);
+                    logWarning("无效的声音参数: " + action);
                 }
             }
         } else if (action.startsWith("effect:")) {
@@ -345,10 +481,10 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
                     int duration = parts.length > 2 ? Integer.parseInt(parts[2]) * 20 : 100;
                     player.addPotionEffect(new PotionEffect(effectType, duration, amplifier));
                 } catch (Exception e) {
-                    getLogger().warning("无效的药水效果参数: " + action);
+                    logWarning("无效的药水效果参数: " + action);
                 }
             } else {
-                getLogger().warning("未知的药水效果: " + parts[0]);
+                logWarning("未知的药水效果: " + parts[0]);
             }
         } else if (action.startsWith("take:")) {
             int amount = Integer.parseInt(action.substring(5));
@@ -367,7 +503,7 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
                 int amount = parts.length > 1 ? Integer.parseInt(parts[1]) : 1;
                 player.getInventory().addItem(new ItemStack(material, amount));
             } catch (Exception e) {
-                getLogger().warning("无效的物品: " + parts[0]);
+                logWarning("无效的物品: " + parts[0]);
             }
         } else if (action.startsWith("rpg_skill:")) {
             // RPG技能联动
@@ -379,7 +515,7 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
                 double amount = Double.parseDouble(action.substring(12).trim());
                 giveVaultMoney(player, amount, item);
             } catch (NumberFormatException e) {
-                getLogger().warning("无效的金币数量: " + action);
+                logWarning("无效的金币数量: " + action);
             }
         }
     }
@@ -391,8 +527,8 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
         // 检查Vault是否存在
         var vaultPlugin = Bukkit.getPluginManager().getPlugin("Vault");
         if (vaultPlugin == null || !vaultPlugin.isEnabled()) {
-            player.sendMessage(translateColors("&c经济系统未安装!"));
-            getLogger().warning("Vault 插件未找到!");
+            player.sendMessage(translateColors("<red>经济系统未安装!</red>"));
+            logWarning("Vault 插件未找到!");
             return;
         }
 
@@ -400,58 +536,59 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
             // 获取Vault Economy
             var registeredService = Bukkit.getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
             if (registeredService == null) {
-                player.sendMessage(translateColors("&c经济系统未初始化!"));
+                player.sendMessage(translateColors("<red>经济系统未初始化!</red>"));
                 return;
             }
-            
+
             cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
             if (rpgCore != null && rpgCore.getExternalServices() != null && rpgCore.getExternalServices().isVaultEnabled()) {
                 rpgCore.getExternalServices().deposit(player, amount);
             }
-            
+
             // 消耗物品
             if (item.getAmount() > 1) {
                 item.setAmount(item.getAmount() - 1);
             } else {
                 player.getInventory().setItemInMainHand(null);
             }
-            
+
             // 发送消息
-            String message = config.getString("messages.money-received", "&a你获得了 &e%amount% &a金币!");
+            String message = config.getString("messages.money-received", "<green>你获得了 <gold>%amount%</gold> 金币!</green>");
             message = message.replace("%amount%", String.format("%.0f", amount));
             player.sendMessage(translateColors(message));
-            
-            // 播放音效
-            player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
-            
-            getLogger().info("玩家 " + player.getName() + " 出售物品获得 " + amount + " 金币");
-            
+
+            // 播放音效 - 使用 RPGCore SoundService
+            if (soundService != null) {
+                soundService.playSound(player, "minecraft:entity.experience_orb.pickup", 1.0f, 1.0f);
+            }
+
+            logInfo("玩家 " + player.getName() + " 出售物品获得 " + amount + " 金币");
+
         } catch (Exception e) {
-            player.sendMessage(translateColors("&c金币获取失败!"));
-            getLogger().severe("Vault金币操作失败: " + e.getMessage());
-            getLogger().log(java.util.logging.Level.SEVERE, "详细异常信息", e);
+            player.sendMessage(translateColors("<red>金币获取失败!</red>"));
+            logSevere("Vault金币操作失败: " + e.getMessage(), e);
         }
     }
 
     private void triggerRPGSkill(Player player, String skillName) {
         if (skillName == null || skillName.isEmpty()) {
-            getLogger().warning("技能名称为空!");
+            logWarning("技能名称为空!");
             return;
         }
 
         var rpgPlugin = Bukkit.getPluginManager().getPlugin("GuangDianArmorStats");
         if (rpgPlugin == null || !rpgPlugin.isEnabled()) {
-            player.sendMessage(translateColors("&cRPG插件未安装或未启用!"));
-            getLogger().warning("GuangDianArmorStats 插件未找到!");
+            player.sendMessage(translateColors("<red>RPG插件未安装或未启用!</red>"));
+            logWarning("GuangDianArmorStats 插件未找到!");
             return;
         }
 
         try {
             var skillManagerMethod = rpgPlugin.getClass().getMethod("getSkillManager");
             var skillManager = skillManagerMethod.invoke(rpgPlugin);
-            
+
             if (skillManager == null) {
-                player.sendMessage(translateColors("&c技能系统未初始化!"));
+                player.sendMessage(translateColors("<red>技能系统未初始化!</red>"));
                 return;
             }
 
@@ -459,14 +596,17 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
             var result = (Boolean) triggerMethod.invoke(skillManager, player, skillName);
 
             if (result) {
-                getLogger().fine("玩家 " + player.getName() + " 触发技能: " + skillName);
-                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.5f, 1.2f);
+                logDebug("玩家 " + player.getName() + " 触发技能: " + skillName);
+                // 使用 RPGCore SoundService
+                if (soundService != null) {
+                    soundService.playSound(player, "minecraft:entity.player.levelup", 0.5f, 1.2f);
+                }
             } else {
-                player.sendMessage(translateColors("&c技能 " + skillName + " 不存在或冷却中!"));
+                player.sendMessage(translateColors("<red>技能 " + skillName + " 不存在或冷却中!</red>"));
             }
         } catch (Exception e) {
-            player.sendMessage(translateColors("&c技能触发失败!"));
-            getLogger().severe("触发RPG技能失败: " + e.getMessage());
+            player.sendMessage(translateColors("<red>技能触发失败!</red>"));
+            logSevere("触发RPG技能失败: " + e.getMessage(), e);
         }
     }
 
@@ -491,9 +631,39 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
         }
     }
 
+    /**
+     * 使用 MiniMessage 解析颜色代码
+     * 将 & 颜色代码转换为 MiniMessage 格式
+     */
     private String translateColors(String text) {
         if (text == null) return "";
-        return ChatColor.translateAlternateColorCodes('&', text);
+        // 将传统 & 颜色代码转换为 MiniMessage 格式
+        return text
+            .replace("<black>", "<black>").replace("<dark_blue>", "<dark_blue>")
+            .replace("<dark_green>", "<dark_green>").replace("<dark_aqua>", "<dark_aqua>")
+            .replace("<dark_red>", "<dark_red>").replace("<dark_purple>", "<dark_purple>")
+            .replace("<gold>", "<gold>").replace("<gray>", "<gray>")
+            .replace("<dark_gray>", "<dark_gray>").replace("<blue>", "<blue>")
+            .replace("<green>", "<green>").replace("<aqua>", "<aqua>")
+            .replace("<red>", "<red>").replace("<light_purple>", "<light_purple>")
+            .replace("<yellow>", "<yellow>").replace("<white>", "<white>")
+            .replace("<obfuscated>", "<obfuscated>").replace("<bold>", "<bold>")
+            .replace("<strikethrough>", "<strikethrough>").replace("<underlined>", "<underlined>")
+            .replace("<italic>", "<italic>").replace("<reset>", "<reset>");
+    }
+
+    /**
+     * 发送 MiniMessage 格式的消息给玩家
+     */
+    private void sendMessage(Player player, String text) {
+        player.sendMessage(miniMessage.colorize(text));
+    }
+
+    /**
+     * 发送 MiniMessage 格式的消息给 CommandSender
+     */
+    private void sendMessage(CommandSender sender, String text) {
+        sender.sendMessage(miniMessage.colorize(text));
     }
 
     @Override
@@ -514,23 +684,23 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
                 sendHelp(sender);
                 return true;
             default:
-                sender.sendMessage(translateColors("&c未知的命令! 使用 /gdtrigger help 查看帮助"));
+                sender.sendMessage(translateColors("<red>未知的命令! 使用 /gdtrigger help 查看帮助</red>"));
                 return true;
         }
     }
 
     private void sendHelp(CommandSender sender) {
-        sender.sendMessage(translateColors("&6===== 光点物品触发插件 ====="));
-        sender.sendMessage(translateColors("&e/gdtrigger reload &7- 重新加载配置"));
-        sender.sendMessage(translateColors("&e/gdtrigger info &7- 显示插件信息"));
-        sender.sendMessage(translateColors("&e/gdtrigger list &7- 列出所有触发器"));
-        sender.sendMessage(translateColors("&e/gdtrigger help &7- 显示帮助信息"));
-        sender.sendMessage(translateColors("&7作者: Gumin | QQ: 2271257344"));
+        sender.sendMessage(translateColors("<gold><bold>===== 光点物品触发插件 =====</bold></gold>"));
+        sender.sendMessage(translateColors("<yellow>/gdtrigger reload</yellow> <gray>- 重新加载配置</gray>"));
+        sender.sendMessage(translateColors("<yellow>/gdtrigger info</yellow> <gray>- 显示插件信息</gray>"));
+        sender.sendMessage(translateColors("<yellow>/gdtrigger list</yellow> <gray>- 列出所有触发器</gray>"));
+        sender.sendMessage(translateColors("<yellow>/gdtrigger help</yellow> <gray>- 显示帮助信息</gray>"));
+        sender.sendMessage(translateColors("<gray>作者: Gumin | QQ: 2271257344</gray>"));
     }
 
     private boolean handleReload(CommandSender sender) {
         if (!sender.hasPermission("guangdian.trigger.reload")) {
-            sender.sendMessage(translateColors(config.getString("messages.no-permission", "&c你没有权限执行此操作!")));
+            sender.sendMessage(translateColors(config.getString("messages.no-permission", "<red>你没有权限执行此操作!</red>")));
             return true;
         }
 
@@ -538,26 +708,26 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
         config = getConfig();
         loadTriggers();
 
-        sender.sendMessage(translateColors(config.getString("messages.config-reloaded", "&a配置已重新加载!")));
+        sender.sendMessage(translateColors(config.getString("messages.config-reloaded", "<green>配置已重新加载!</green>")));
         return true;
     }
 
     private boolean handleInfo(CommandSender sender) {
-        sender.sendMessage(translateColors("&6===== 光点物品触发插件信息 ====="));
-        sender.sendMessage(translateColors("&e版本: &f" + getDescription().getVersion()));
-        sender.sendMessage(translateColors("&e作者: &fGumin"));
-        sender.sendMessage(translateColors("&eQQ: &f2271257344"));
-        sender.sendMessage(translateColors("&e状态: &a已启用"));
-        sender.sendMessage(translateColors("&e已加载触发器: &f" + triggers.size()));
-        sender.sendMessage(translateColors("&e音效缓存: &f" + soundCache.size()));
-        sender.sendMessage(translateColors("&e效果缓存: &f" + effectCache.size()));
+        sender.sendMessage(translateColors("<gold><bold>===== 光点物品触发插件信息 =====</bold></gold>"));
+        sender.sendMessage(translateColors("<yellow>版本:</yellow> <white>" + getDescription().getVersion() + "</white>"));
+        sender.sendMessage(translateColors("<yellow>作者:</yellow> <white>Gumin</white>"));
+        sender.sendMessage(translateColors("<yellow>QQ:</yellow> <white>2271257344</white>"));
+        sender.sendMessage(translateColors("<yellow>状态:</yellow> <green>已启用</green>"));
+        sender.sendMessage(translateColors("<yellow>已加载触发器:</yellow> <white>" + triggers.size() + "</white>"));
+        sender.sendMessage(translateColors("<yellow>音效缓存:</yellow> <white>" + soundCache.size() + "</white>"));
+        sender.sendMessage(translateColors("<yellow>效果缓存:</yellow> <white>" + effectCache.size() + "</white>"));
         return true;
     }
 
     private boolean handleList(CommandSender sender) {
-        sender.sendMessage(translateColors("&6===== 触发器列表 ====="));
+        sender.sendMessage(translateColors("<gold><bold>===== 触发器列表 =====</bold></gold>"));
         for (TriggerConfig trigger : triggers.values()) {
-            sender.sendMessage(translateColors("&e" + trigger.getName() + " &7- 关键词: &f" + trigger.getLoreKeyword()));
+            sender.sendMessage(translateColors("<yellow>" + trigger.getName() + "</yellow> <gray>- 关键词: </gray><white>" + trigger.getLoreKeyword() + "</white>"));
         }
         return true;
     }
@@ -578,6 +748,22 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
 
     public static GuangDianItemTrigger getInstance() {
         return instance;
+    }
+
+    /**
+     * 获取 MiniMessageService
+     * @return MiniMessageService 实例
+     */
+    public MiniMessageService getMiniMessage() {
+        return miniMessage;
+    }
+
+    /**
+     * 获取 SoundService
+     * @return SoundService 实例
+     */
+    public SoundService getSoundService() {
+        return soundService;
     }
 
     private static class TriggerConfig {

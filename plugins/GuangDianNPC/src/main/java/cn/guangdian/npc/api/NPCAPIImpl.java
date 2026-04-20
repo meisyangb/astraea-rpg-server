@@ -3,10 +3,11 @@ package cn.guangdian.npc.api;
 import cn.guangdian.npc.GuangDianNPC;
 import cn.guangdian.npc.manager.NPCManager;
 import cn.guangdian.npc.model.NPCData;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -54,7 +55,7 @@ public class NPCAPIImpl implements NPCAPI {
             return null;
         }
 
-        NPCData npc = new NPCData(lowerId, "&e" + id, location, menuId != null ? menuId : "main");
+        NPCData npc = new NPCData(lowerId, "<yellow>" + id, location, menuId != null ? menuId : "main");
         npcManager.getNPCs().put(lowerId, npc);
         npcManager.spawnNPC(npc);
         npcManager.save();
@@ -127,7 +128,7 @@ public class NPCAPIImpl implements NPCAPI {
     public void teleportToNPC(Player player, String npcId) {
         NPCData npc = npcManager.getNPC(npcId);
         if (npc == null) {
-            player.sendMessage(ChatColor.RED + "NPC 不存在: " + npcId);
+            player.sendMessage(Component.text("NPC 不存在: " + npcId).color(NamedTextColor.RED));
             return;
         }
 
@@ -197,9 +198,30 @@ public class NPCAPIImpl implements NPCAPI {
         npcManager.save();
     }
 
-    private net.kyori.adventure.text.Component color(String text) {
-        return net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand()
-            .deserialize(text == null ? "" : text);
+    /**
+     * 使用 MiniMessage 解析颜色代码
+     */
+    private Component color(String text) {
+        if (text == null) return Component.empty();
+        // 尝试使用 RPGCore MiniMessageService
+        MiniMessageService mm = plugin.getMiniMessageService();
+        if (mm != null) {
+            return mm.colorize(text);
+        }
+        // 降级处理：使用本地 MiniMessage
+        String converted = text
+            .replace("<black>", "<black>").replace("<dark_blue>", "<dark_blue>")
+            .replace("<dark_green>", "<dark_green>").replace("<dark_aqua>", "<dark_aqua>")
+            .replace("<dark_red>", "<dark_red>").replace("<dark_purple>", "<dark_purple>")
+            .replace("<gold>", "<gold>").replace("<gray>", "<gray>")
+            .replace("<dark_gray>", "<dark_gray>").replace("<blue>", "<blue>")
+            .replace("<green>", "<green>").replace("<aqua>", "<aqua>")
+            .replace("<red>", "<red>").replace("<light_purple>", "<light_purple>")
+            .replace("<yellow>", "<yellow>").replace("<white>", "<white>")
+            .replace("<obfuscated>", "<obfuscated>").replace("<bold>", "<bold>")
+            .replace("<strikethrough>", "<strikethrough>").replace("<underlined>", "<underlined>")
+            .replace("<italic>", "<italic>").replace("<reset>", "<reset>");
+        return MiniMessage.miniMessage().deserialize(converted);
     }
 
     public static class NPCMenuHolder implements InventoryHolder {

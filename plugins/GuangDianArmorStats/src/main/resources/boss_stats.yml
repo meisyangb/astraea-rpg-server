@@ -1,4 +1,4 @@
-# ========================================
+﻿# ========================================
 # BOSS属性配置文件 (工业级重构)
 # ========================================
 # 为MythicMobs怪物定义自定义属性
@@ -20,7 +20,7 @@
 bosses:
   # ==================== 塔克要塞 - 普通怪物 ====================
   塔克士兵:
-    display_name: "&7塔克士兵"
+    display_name: "<gray>塔克士兵"
     attack:
       min: 80
       max: 150
@@ -43,7 +43,7 @@ bosses:
       damage: 1.0
 
   塔克兵长:
-    display_name: "&e塔克兵长"
+    display_name: "<yellow>塔克兵长"
     attack:
       min: 200
       max: 350
@@ -66,7 +66,7 @@ bosses:
       damage: 1.0
 
   塔克守护者:
-    display_name: "&b塔克守护者"
+    display_name: "<aqua>塔克守护者"
     attack:
       min: 300
       max: 500
@@ -90,7 +90,7 @@ bosses:
 
   # ==================== 塔克要塞 - BOSS ====================
   尤里斯:
-    display_name: "&c&l【BOSS】尤里斯"
+    display_name: "<red><bold>【BOSS】尤里斯"
     attack:
       min: 1500
       max: 2500
@@ -123,7 +123,7 @@ bosses:
       clone_count: 3
 
   塔克领主:
-    display_name: "&4&l塔克领主"
+    display_name: "<dark_red><bold>塔克领主"
     attack:
       min: 2000
       max: 3500
@@ -156,7 +156,7 @@ bosses:
 
   # ==================== 其他精英怪 ====================
   塔克卫士:
-    display_name: "&c塔克卫士"
+    display_name: "<red>塔克卫士"
     attack:
       min: 500
       max: 800
@@ -179,7 +179,7 @@ bosses:
       damage: 1.0
 
   暗影刺客:
-    display_name: "&8暗影刺客"
+    display_name: "<dark_gray>暗影刺客"
     attack:
       min: 600
       max: 1000
@@ -206,7 +206,7 @@ bosses:
 
   # ==================== 暗黑终焉 - 小怪 ====================
   深渊士兵:
-    display_name: "&5深渊士兵"
+    display_name: "<dark_purple>深渊士兵"
     attack:
       min: 200
       max: 400
@@ -229,7 +229,7 @@ bosses:
       damage: 1.0
 
   深渊刺客:
-    display_name: "&8深渊刺客"
+    display_name: "<dark_gray>深渊刺客"
     attack:
       min: 400
       max: 800
@@ -255,7 +255,7 @@ bosses:
         poison: 100
 
   深渊法师:
-    display_name: "&9深渊法师"
+    display_name: "<blue>深渊法师"
     attack:
       min: 300
       max: 600
@@ -285,7 +285,7 @@ bosses:
 
   # ==================== 暗黑终焉 - BOSS ====================
   深渊守卫:
-    display_name: "&5&l【BOSS】深渊守卫"
+    display_name: "<dark_purple><bold>【BOSS】深渊守卫"
     attack:
       min: 800
       max: 1500
@@ -314,7 +314,7 @@ bosses:
         fire: 50
 
   黑暗之子:
-    display_name: "&b&l【BOSS】黑暗之子"
+    display_name: "<aqua><bold>【BOSS】黑暗之子"
     attack:
       min: 1200
       max: 2000
@@ -347,7 +347,7 @@ bosses:
       revive_count: 1
 
   深渊领主:
-    display_name: "&c&l【BOSS】深渊领主"
+    display_name: "<red><bold>【BOSS】深渊领主"
     attack:
       min: 2000
       max: 3500
@@ -381,7 +381,7 @@ bosses:
       enrage_damage_multiplier: 1.8
 
   暗黑帝王:
-    display_name: "&6&l【BOSS】暗黑帝王"
+    display_name: "<gold><bold>【BOSS】暗黑帝王"
     attack:
       min: 3000
       max: 5000
@@ -416,7 +416,7 @@ bosses:
       teleport_cooldown: 60
 
   终焉之神:
-    display_name: "&4&l【隐藏BOSS】终焉之神"
+    display_name: "<dark_red><bold>【隐藏BOSS】终焉之神"
     attack:
       min: 5000
       max: 10000

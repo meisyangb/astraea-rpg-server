@@ -1,4 +1,4 @@
-# 奖励配置文件
+﻿# 奖励配置文件
 # Astraea RPG - GuangDianBattlePass
 
 rewards:
@@ -11,10 +11,10 @@ rewards:
     exp: 500
     money: 1000
     lore:
-      - "&7包含:"
-      - "&e- 100 点券"
-      - "&e- 500 经验"
-      - "&e- 1000 金币"
+      - "<gray>包含:"
+      - "<yellow>- 100 点券"
+      - "<yellow>- 500 经验"
+      - "<yellow>- 1000 金币"
   
   # 示例奖励 2
   example_reward_2:
@@ -25,10 +25,10 @@ rewards:
     exp: 2000
     money: 5000
     lore:
-      - "&7包含:"
-      - "&e- 500 点券"
-      - "&e- 2000 经验"
-      - "&e- 5000 金币"
+      - "<gray>包含:"
+      - "<yellow>- 500 点券"
+      - "<yellow>- 2000 经验"
+      - "<yellow>- 5000 金币"
   
   # 示例奖励 3
   example_reward_3:
@@ -39,10 +39,10 @@ rewards:
     exp: 5000
     money: 10000
     lore:
-      - "&7包含:"
-      - "&e- 1000 点券"
-      - "&e- 5000 经验"
-      - "&e- 10000 金币"
+      - "<gray>包含:"
+      - "<yellow>- 1000 点券"
+      - "<yellow>- 5000 经验"
+      - "<yellow>- 10000 金币"
   
   # 示例奖励 4
   example_reward_4:
@@ -53,7 +53,7 @@ rewards:
     exp: 10000
     money: 20000
     lore:
-      - "&7包含:"
-      - "&e- 2000 点券"
-      - "&e- 10000 经验"
-      - "&e- 20000 金币"
+      - "<gray>包含:"
+      - "<yellow>- 2000 点券"
+      - "<yellow>- 10000 经验"
+      - "<yellow>- 20000 金币"

@@ -1,0 +1,38 @@
+# GuangDianSocket 配置文件
+# 宝石镶嵌插件
+# 使用 MiniMessage 格式: <color>, <bold>, <reset> 等
+
+# ==================== 宝石孔位匹配模式 ====================
+# 从 Lore 中匹配显式定义的槽位
+# 去除颜色代码后的格式: [可镶嵌红宝石] 或 *[可镶嵌红宝石]
+socket_patterns:
+  # 匹配 [可镶嵌红宝石] 格式，提取宝石类型
+  pattern1: "\\[可镶嵌([^\\]]+)\\]"
+  # 匹配 *[可镶嵌红宝石] 格式（带星号前缀）
+  pattern2: "\\*\\[可镶嵌([^\\]]+)\\]"
+
+# ==================== 宝石类型映射 ====================
+gem_types:
+  red: "红宝石"
+  blue: "蓝宝石"
+  green: "绿宝石"
+  yellow: "黄宝石"
+  purple: "紫宝石"
+  any: "通用"
+
+# ==================== 拆卸设置 ====================
+gem_rework:
+  enabled: true
+  # 消耗物品 (可以是原版材料或 mythicmobs:物品ID)
+  cost_item: "AMETHYST_SHARD"
+  cost_amount: 1
+  exp_levels: 0
+  success_chance: 1.0
+  fail_mode: "destroy_one"  # 可选: keep_all, destroy_one, destroy_all
+
+  # 保险设置
+  insurance:
+    enabled: false
+    item: "TOTEM_OF_UNDYING"
+    amount: 1
+    consume_on_use: true

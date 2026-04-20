@@ -169,7 +169,8 @@ public class WorldManagementTool implements MCPTool {
             return ToolResult.success("世界已加载: " + worldName);
         }
         
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+        // 使用 Paper AsyncScheduler 异步加载世界
+        org.bukkit.Bukkit.getAsyncScheduler().runNow(plugin, scheduledTask -> {
             WorldCreator creator = new WorldCreator(worldName);
             plugin.getServer().createWorld(creator);
         });
@@ -187,20 +188,26 @@ public class WorldManagementTool implements MCPTool {
             return ToolResult.error("无法卸载主世界");
         }
         
-        plugin.getServer().getScheduler().runTask(plugin, () -> {
-            plugin.getServer().unloadWorld(world, true);
-        });
+        // 使用 RPGCore SyncScheduler 同步卸载世界
+        if (plugin.getRPGCoreScheduler() != null) {
+            plugin.getRPGCoreScheduler().runSyncLater(() -> {
+                plugin.getServer().unloadWorld(world, true);
+            }, 0L);
+        }
         
         return ToolResult.success("正在卸载世界: " + worldName);
     }
     
     private ToolResult saveWorld(String worldName) {
         if (worldName == null) {
-            plugin.getServer().getScheduler().runTask(plugin, () -> {
-                for (World w : plugin.getServer().getWorlds()) {
-                    w.save();
-                }
-            });
+            // 使用 RPGCore SyncScheduler 同步保存所有世界
+            if (plugin.getRPGCoreScheduler() != null) {
+                plugin.getRPGCoreScheduler().runSyncLater(() -> {
+                    for (World w : plugin.getServer().getWorlds()) {
+                        w.save();
+                    }
+                }, 0L);
+            }
             return ToolResult.success("正在保存所有世界");
         }
         
@@ -209,9 +216,12 @@ public class WorldManagementTool implements MCPTool {
             return ToolResult.error("世界不存在或未加载: " + worldName);
         }
         
-        plugin.getServer().getScheduler().runTask(plugin, () -> {
-            world.save();
-        });
+        // 使用 RPGCore SyncScheduler 同步保存世界
+        if (plugin.getRPGCoreScheduler() != null) {
+            plugin.getRPGCoreScheduler().runSyncLater(() -> {
+                world.save();
+            }, 0L);
+        }
         
         return ToolResult.success("正在保存世界: " + worldName);
     }
@@ -230,7 +240,8 @@ public class WorldManagementTool implements MCPTool {
         }
         
         final World.Environment finalEnv = env;
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+        // 使用 Paper AsyncScheduler 异步创建世界
+        org.bukkit.Bukkit.getAsyncScheduler().runNow(plugin, scheduledTask -> {
             WorldCreator creator = new WorldCreator(worldName);
             creator.environment(finalEnv);
             creator.type(WorldType.NORMAL);

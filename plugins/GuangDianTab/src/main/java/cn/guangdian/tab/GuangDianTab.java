@@ -3,11 +3,13 @@ package cn.guangdian.tab;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.SyncScheduler;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.tab.adapter.TabServiceAdapter;
 import cn.guangdian.tab.placeholder.TabPlaceholder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -49,6 +51,10 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener, TabComp
     private final ConcurrentHashMap<UUID, PlayerCache> playerCache = new ConcurrentHashMap<>();
     private final AtomicReference<CachedTps> cachedTps = new AtomicReference<>();
 
+    // RPGCore 服务引用
+    private MiniMessageService miniMessage;
+    private final MiniMessage miniMessageParser = MiniMessage.miniMessage();
+
     private FileConfiguration config;
     private GroupFormat defaultFormat;
     private long refreshTicks;
@@ -57,6 +63,10 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener, TabComp
     @Override
     protected void onPluginEnable() {
         instance = this;
+
+        // 初始化 RPGCore 服务
+        initRPGCoreServices();
+
         saveDefaultConfig();
         config = getConfig();
         loadFormats();
@@ -101,6 +111,24 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener, TabComp
     @Override
     protected String getPluginName() {
         return "GuangDianTab";
+    }
+
+    private void initRPGCoreServices() {
+        // 获取 RPGCore 服务
+        if (getServer().getPluginManager().isPluginEnabled("RPGCore")) {
+            try {
+                RPGCore rpgCore = RPGCore.getInstance();
+                miniMessage = rpgCore.getMiniMessageService();
+                getLogger().info("使用 RPGCore MiniMessageService");
+            } catch (Exception e) {
+                getLogger().warning("无法获取 RPGCore MiniMessageService: " + e.getMessage());
+            }
+        }
+
+        // 如果 RPGCore 服务不可用，使用本地降级
+        if (miniMessage == null) {
+            miniMessage = MiniMessageService.getInstance();
+        }
     }
 
     private void registerCommands() {
@@ -154,7 +182,7 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener, TabComp
         ConfigurationSection defaultSection = config.getConfigurationSection("default-format");
         defaultFormat = new GroupFormat(
             "default",
-            defaultSection == null ? "&7" : defaultSection.getString("prefix", "&7"),
+            defaultSection == null ? "<gray>" : defaultSection.getString("prefix", "<gray>"),
             defaultSection == null ? "%player_name%" : defaultSection.getString("name", "%player_name%"),
             defaultSection == null ? "" : defaultSection.getString("suffix", ""),
             defaultSection == null ? 0 : defaultSection.getInt("weight", 0),
@@ -240,13 +268,15 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener, TabComp
 
         GroupFormat format = resolveFormat(player);
         String built = buildTabName(player, format);
-        built = limit(translate(built), 80);
+        // 将 & 转换为 § (legacy 格式)，因为 Bukkit Tab API 需要 legacy 格式
+        String legacyBuilt = translateToLegacy(built);
+        legacyBuilt = limit(legacyBuilt, 80);
 
-        String old = lastNames.put(player.getUniqueId(), built);
-        if (!Objects.equals(old, built)) {
-            player.setPlayerListName(built);
+        String old = lastNames.put(player.getUniqueId(), legacyBuilt);
+        if (!Objects.equals(old, legacyBuilt)) {
+            player.setPlayerListName(legacyBuilt);
             if (config.getBoolean("nametag.enabled", false)) {
-                player.setDisplayName(built);
+                player.setDisplayName(legacyBuilt);
             }
         }
 
@@ -262,17 +292,21 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener, TabComp
 
         if (config.getBoolean("header.enabled", true)) {
             String header = buildMultiline(player, config.getStringList("header.lines"));
-            String old = lastHeaders.put(player.getUniqueId(), header);
-            if (!Objects.equals(old, header)) {
-                player.setPlayerListHeader(translate(header));
+            // 将 & 转换为 § (legacy 格式)
+            String legacyHeader = translateToLegacy(header);
+            String old = lastHeaders.put(player.getUniqueId(), legacyHeader);
+            if (!Objects.equals(old, legacyHeader)) {
+                player.setPlayerListHeader(legacyHeader);
             }
         }
 
         if (config.getBoolean("footer.enabled", true)) {
             String footer = buildMultiline(player, config.getStringList("footer.lines"));
-            String old = lastFooters.put(player.getUniqueId(), footer);
-            if (!Objects.equals(old, footer)) {
-                player.setPlayerListFooter(translate(footer));
+            // 将 & 转换为 § (legacy 格式)
+            String legacyFooter = translateToLegacy(footer);
+            String old = lastFooters.put(player.getUniqueId(), legacyFooter);
+            if (!Objects.equals(old, legacyFooter)) {
+                player.setPlayerListFooter(legacyFooter);
             }
         }
     }
@@ -349,7 +383,7 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener, TabComp
         String spouse = values.length > 4 ? values[4] : "";
 
         if (config.getBoolean("advanced.afk.enabled", true) && (isTruthyValue(afkValue) || isTruthyValue(cmiAfkValue))) {
-            tags.append(config.getString("advanced.afk.format", "&7[AFK] &f"));
+            tags.append(config.getString("advanced.afk.format", "<gray>[AFK] <white>"));
         }
 
         if (config.getBoolean("special-tags.combat.enabled", true) && isTruthyValue(combatValue)) {
@@ -484,8 +518,81 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener, TabComp
         player.setPlayerListFooter(null);
     }
 
-    private String translate(String input) {
-        return ChatColor.translateAlternateColorCodes('&', input == null ? "" : input);
+    /**
+     * 将 MiniMessage 格式转换为 legacy § 格式（用于 setPlayerListName 等 Bukkit Tab API）
+     * Bukkit Tab API 只支持 legacy 颜色代码，不支持 MiniMessage
+     * 使用 RPGCore MiniMessageService.legacyColorize 方法，然后将 & 替换为 §
+     */
+    private String translateToLegacy(String input) {
+        if (input == null || input.isEmpty()) {
+            return "";
+        }
+        
+        // 如果 miniMessage 服务不可用，使用简单的字符替换
+        if (miniMessage == null) {
+            getLogger().warning("MiniMessageService 不可用，使用降级处理");
+            return simpleMiniMessageToLegacy(input);
+        }
+        
+        try {
+            // 使用 RPGCore MiniMessageService 将 MiniMessage 转换为 legacy 格式
+            String result = miniMessage.legacyColorize(input);
+            // 将 & 替换为 §，因为 Bukkit Tab API 需要 § 格式
+            result = result.replace('&', '§');
+            if (config.getBoolean("advanced.debug", false)) {
+                getLogger().info("[Debug] translateToLegacy: '" + input + "' -> '" + result + "'");
+            }
+            return result;
+        } catch (Exception e) {
+            getLogger().warning("MiniMessage 转换失败: " + e.getMessage() + ", 输入: " + input);
+            return simpleMiniMessageToLegacy(input);
+        }
+    }
+    
+    /**
+     * 简单的 MiniMessage 到 legacy 格式转换（降级方案）
+     */
+    private String simpleMiniMessageToLegacy(String input) {
+        return input
+            .replace("<black>", "§0").replace("<dark_blue>", "§1")
+            .replace("<dark_green>", "§2").replace("<dark_aqua>", "§3")
+            .replace("<dark_red>", "§4").replace("<dark_purple>", "§5")
+            .replace("<gold>", "§6").replace("<gray>", "§7")
+            .replace("<dark_gray>", "§8").replace("<blue>", "§9")
+            .replace("<green>", "§a").replace("<aqua>", "§b")
+            .replace("<red>", "§c").replace("<light_purple>", "§d")
+            .replace("<yellow>", "§e").replace("<white>", "§f")
+            .replace("<bold>", "§l").replace("<underlined>", "§n")
+            .replace("<strikethrough>", "§m").replace("<italic>", "§o")
+            .replace("<reset>", "§r");
+    }
+
+    /**
+     * 将 & 颜色代码转换为 MiniMessage 格式
+     */
+    private String translateToMiniMessage(String input) {
+        if (input == null || input.isEmpty()) {
+            return "";
+        }
+        return input
+            .replace("<black>", "<black>").replace("<dark_blue>", "<dark_blue>")
+            .replace("<dark_green>", "<dark_green>").replace("<dark_aqua>", "<dark_aqua>")
+            .replace("<dark_red>", "<dark_red>").replace("<dark_purple>", "<dark_purple>")
+            .replace("<gold>", "<gold>").replace("<gray>", "<gray>")
+            .replace("<dark_gray>", "<dark_gray>").replace("<blue>", "<blue>")
+            .replace("<green>", "<green>").replace("<aqua>", "<aqua>")
+            .replace("<red>", "<red>").replace("<light_purple>", "<light_purple>")
+            .replace("<yellow>", "<yellow>").replace("<white>", "<white>")
+            .replace("<obfuscated>", "<obfuscated>").replace("<bold>", "<bold>")
+            .replace("<strikethrough>", "<strikethrough>").replace("<underlined>", "<underlined>")
+            .replace("<italic>", "<italic>").replace("<reset>", "<reset>");
+    }
+
+    /**
+     * 使用 MiniMessage 解析颜色代码并返回 Component（用于 sendMessage）
+     */
+    private Component translate(String input) {
+        return miniMessageParser.deserialize(translateToMiniMessage(input));
     }
 
     private String limit(String input, int maxLength) {
@@ -541,7 +648,7 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener, TabComp
 
         if (args[0].equalsIgnoreCase("reload")) {
             if (!sender.hasPermission("guangdian.tab.reload")) {
-                sender.sendMessage(translate(config.getString("messages.no-permission", "&cNo permission.")));
+                sender.sendMessage(translate(config.getString("messages.no-permission", "<red>No permission.")));
                 return true;
             }
             reloadConfig();
@@ -558,7 +665,7 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener, TabComp
             startTasks();
             refreshAll();
             updateAllHeadersAndFooters();
-            sender.sendMessage(translate(config.getString("messages.config-reloaded", "&aGuangDianTab reloaded.")));
+            sender.sendMessage(translate(config.getString("messages.config-reloaded", "<green>GuangDianTab reloaded.")));
             return true;
         }
 
@@ -568,9 +675,9 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener, TabComp
         }
 
         if (args[0].equalsIgnoreCase("cache")) {
-            sender.sendMessage(translate("&eCached names: &f" + lastNames.size()));
-            sender.sendMessage(translate("&eCached headers: &f" + lastHeaders.size()));
-            sender.sendMessage(translate("&eCached footers: &f" + lastFooters.size()));
+            sender.sendMessage(translate("<yellow>Cached names: <white>" + lastNames.size()));
+            sender.sendMessage(translate("<yellow>Cached headers: <white>" + lastHeaders.size()));
+            sender.sendMessage(translate("<yellow>Cached footers: <white>" + lastFooters.size()));
             return true;
         }
 
@@ -579,19 +686,19 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener, TabComp
     }
 
     private void sendHelp(CommandSender sender) {
-        sender.sendMessage(translate("&6/gdtab reload &7Reload config"));
-        sender.sendMessage(translate("&6/gdtab info &7Plugin info"));
-        sender.sendMessage(translate("&6/gdtab cache &7Cache info"));
+        sender.sendMessage(translate("<gold>/gdtab reload <gray>Reload config"));
+        sender.sendMessage(translate("<gold>/gdtab info <gray>Plugin info"));
+        sender.sendMessage(translate("<gold>/gdtab cache <gray>Cache info"));
     }
 
     private void sendInfo(CommandSender sender) {
-        sender.sendMessage(translate("&6GuangDianTab &7v" + getDescription().getVersion()));
-        sender.sendMessage(translate("&eRefresh: &f" + (refreshTicks * 50L) + "ms"));
-        sender.sendMessage(translate("&eHeader/Footer: &f" + (headerFooterTicks * 50L) + "ms"));
+        sender.sendMessage(translate("<gold>GuangDianTab <gray>v" + getDescription().getVersion()));
+        sender.sendMessage(translate("<yellow>Refresh: <white>" + (refreshTicks * 50L) + "ms"));
+        sender.sendMessage(translate("<yellow>Header/Footer: <white>" + (headerFooterTicks * 50L) + "ms"));
         if (externalServices != null) {
-            sender.sendMessage(translate("&eExternal Services: &f" + externalServices.getExternalServiceStatus()));
+            sender.sendMessage(translate("<yellow>External Services: <white>" + externalServices.getExternalServiceStatus()));
         } else {
-            sender.sendMessage(translate("&eExternal Services: &cnot connected"));
+            sender.sendMessage(translate("<yellow>External Services: <red>not connected"));
         }
     }
 

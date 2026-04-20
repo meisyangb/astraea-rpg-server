@@ -44,6 +44,6 @@ permissions:
 commands:
   rpgcore:
     description: RPGCore 核心命令
-    usage: /<command> [reload|info|stats]
+    usage: /<command> [reload|info|stats|services|modules|caches|help]
     permission: rpgcore.admin
     aliases: [rgc]

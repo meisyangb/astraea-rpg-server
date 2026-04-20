@@ -1,18 +1,18 @@
-# ========================================
+﻿# ========================================
 # 消息配置
 # ========================================
 # 各种提示消息的自定义
-# 支持颜色代码 (& + 颜色代码)
+# 使用 MiniMessage 格式 (<color> 替代 <red>olor)
 # 支持占位符: %player%, %skill%, %time% 等
 # ========================================
 
-prefix: '&6[装备属性]&r'
-stats_reloaded: '&a属性配置已重载!'
-player_stats: '&e玩家 %player% 的属性:'
-no_permission: '&c你没有权限使用此命令!'
-skill_triggered: '&c技能 %skill% 触发!'
-skill_cooldown: '&c技能 %skill% 冷却中,剩余 %time% 秒!'
-active_skill_ready: '&a技能 %skill% 已就绪!'
-dodge: '&7&l闪避!'
-parry: '&e&l招架!'
-reflect: '&c&l反弹!'
+prefix: '<gold>[装备属性]<reset>'
+stats_reloaded: '<green>属性配置已重载!'
+player_stats: '<yellow>玩家 %player% 的属性:'
+no_permission: '<red>你没有权限使用此命令!'
+skill_triggered: '<red>技能 %skill% 触发!'
+skill_cooldown: '<red>技能 %skill% 冷却中,剩余 %time% 秒!'
+active_skill_ready: '<green>技能 %skill% 已就绪!'
+dodge: '<gray><bold>闪避!'
+parry: '<yellow><bold>招架!'
+reflect: '<red><bold>反弹!'

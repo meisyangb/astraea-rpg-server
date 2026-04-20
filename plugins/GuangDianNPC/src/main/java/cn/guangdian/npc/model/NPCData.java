@@ -33,7 +33,7 @@ public class NPCData {
 
     public NPCData(String id) {
         this.id = id;
-        this.displayName = "&e" + id;
+        this.displayName = "<yellow>" + id;
         this.type = NPCType.GENERAL;
         this.menuId = "main";
         this.commands = new ArrayList<>();
@@ -263,7 +263,7 @@ public class NPCData {
 
     public static NPCData deserialize(String id, ConfigurationSection section) {
         NPCData npc = new NPCData(id);
-        npc.displayName = section.getString("displayName", "&e" + id);
+        npc.displayName = section.getString("displayName", "<yellow>" + id);
         npc.type = NPCType.fromString(section.getString("type", "GENERAL"));
         npc.worldName = section.getString("world", "world");
         npc.x = section.getDouble("x");

@@ -5,7 +5,6 @@ import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.service.api.GuildService;
 import cn.guangdian.rpgcore.service.api.MarriageService;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
@@ -42,7 +41,7 @@ public class TitleDisplay {
     private boolean defaultShowGuild = true;
     private boolean defaultShowMarriage = true;
     
-    private String marriageFormat = "&d♥%s";
+    private String marriageFormat = "<light_purple>♥%s";
     
     private boolean debug = false;
     
@@ -64,7 +63,7 @@ public class TitleDisplay {
         defaultShowTitle = plugin.getConfig().getBoolean("title-display.default-show-title", true);
         defaultShowGuild = plugin.getConfig().getBoolean("title-display.default-show-guild", true);
         defaultShowMarriage = plugin.getConfig().getBoolean("title-display.default-show-marriage", true);
-        marriageFormat = plugin.getConfig().getString("title-display.marriage-format", "&d♥%s");
+        marriageFormat = plugin.getConfig().getString("title-display.marriage-format", "<light_purple>♥%s");
     }
     
     public void setDebug(boolean debug) {
@@ -310,17 +309,17 @@ public class TitleDisplay {
     
     public String getShowTitleStatus(Player player) {
         boolean status = showTitle.getOrDefault(player.getUniqueId(), defaultShowTitle);
-        return status ? "&a开启" : "&c关闭";
+        return status ? "<green>开启" : "<red>关闭";
     }
-    
+
     public String getShowGuildStatus(Player player) {
         boolean status = showGuild.getOrDefault(player.getUniqueId(), defaultShowGuild);
-        return status ? "&a开启" : "&c关闭";
+        return status ? "<green>开启" : "<red>关闭";
     }
-    
+
     public String getShowMarriageStatus(Player player) {
         boolean status = showMarriage.getOrDefault(player.getUniqueId(), defaultShowMarriage);
-        return status ? "&a开启" : "&c关闭";
+        return status ? "<green>开启" : "<red>关闭";
     }
     
     public void cleanupPlayer(Player player) {
@@ -365,7 +364,8 @@ public class TitleDisplay {
     
     private String translateColors(String text) {
         if (text == null) return "";
-        return ChatColor.translateAlternateColorCodes('&', text);
+        // 返回原始字符串，由调用方使用 MiniMessageService 解析
+        return text;
     }
     
     private void log(String message) {

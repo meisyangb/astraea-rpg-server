@@ -1,12 +1,15 @@
 package cn.guangdian.rpgcore.service.api;
 
+import cn.guangdian.rpgcore.service.api.data.Guild;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.UUID;
 
 /**
  * 公会服务接口
- * 
+ *
  * <p>提供公会/工会管理功能。</p>
- * 
+ *
  * @author GuangDian
  * @since 1.0.0
  */
@@ -14,19 +17,19 @@ public interface GuildService {
 
     /**
      * 获取公会
-     * 
+     *
      * @param name 公会名称
-     * @return 公会对象（具体类型由实现定义）
+     * @return 公会对象，如果不存在返回 null
      */
-    Object getGuild(String name);
+    @Nullable Guild getGuild(String name);
 
     /**
      * 获取玩家所在公会
-     * 
+     *
      * @param playerId 玩家UUID
      * @return 公会对象，如果不在公会返回 null
      */
-    Object getPlayerGuild(UUID playerId);
+    @Nullable Guild getPlayerGuild(UUID playerId);
 
     /**
      * 检查玩家是否在公会

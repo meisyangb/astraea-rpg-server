@@ -2,7 +2,6 @@ package cn.guangdian.armorstats.manager;
 
 import cn.guangdian.armorstats.data.AttributeValue;
 import cn.guangdian.armorstats.parser.LoreParser;
-import cn.guangdian.armorstats.parser.GemParser;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -120,20 +119,13 @@ public class SmartAttributeDetector {
     }
 
     /**
-     * 解析装备属性（修复：正确合并宝石属性）
+     * 解析装备属性
      * 
-     * 修复: 使用 merge 方法合并属性，避免宝石属性覆盖装备原有属性
+     * 注意: 宝石属性解析已迁移到 GuangDianSocket 插件
+     * 装备属性不再包含宝石属性，由 GuangDianSocket 在镶嵌时直接写入装备Lore
      */
     private Map<String, AttributeValue> parseAttributes(ItemStack item) {
-        Map<String, AttributeValue> attrs = LoreParser.parse(item);
-        Map<String, AttributeValue> socketAttrs = GemParser.parseSocketGemsFromLore(item);
-        
-        // 修复: 正确合并宝石属性，而不是覆盖
-        for (Map.Entry<String, AttributeValue> entry : socketAttrs.entrySet()) {
-            attrs.merge(entry.getKey(), entry.getValue(), AttributeValue::merge);
-        }
-        
-        return attrs;
+        return LoreParser.parse(item);
     }
 
     private int calculateAttackRelatedWeight(Map<String, AttributeValue> attrs) {

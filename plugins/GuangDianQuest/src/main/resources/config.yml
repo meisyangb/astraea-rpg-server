@@ -1,5 +1,6 @@
-# ========================================
+﻿# ========================================
 # GuangDianQuest 配置文件
+# 使用 MiniMessage 格式 (<color> 替代 <red>olor)
 # ========================================
 
 # 最大同时进行任务数
@@ -19,13 +20,13 @@ auto-save-interval: 300
 
 # 消息配置
 messages:
-  quest-accepted: "&a成功接取任务: &e{quest}"
-  quest-completed: "&a任务完成: &e{quest}"
-  quest-abandoned: "&c已放弃任务: &e{quest}"
-  quest-not-found: "&c任务不存在！"
-  quest-already-active: "&c你已经接取了这个任务！"
-  quest-already-completed: "&c你已经完成了这个任务！"
-  quest-prerequisites-not-met: "&c前置任务未完成！"
-  quest-limit-reached: "&c任务数量已达上限！"
-  daily-limit-reached: "&c今日任务数量已达上限！"
-  quest-level-not-met: "&c等级不足！需要等级: {level}"
+  quest-accepted: "<green>成功接取任务: <yellow>{quest}"
+  quest-completed: "<green>任务完成: <yellow>{quest}"
+  quest-abandoned: "<red>已放弃任务: <yellow>{quest}"
+  quest-not-found: "<red>任务不存在！"
+  quest-already-active: "<red>你已经接取了这个任务！"
+  quest-already-completed: "<red>你已经完成了这个任务！"
+  quest-prerequisites-not-met: "<red>前置任务未完成！"
+  quest-limit-reached: "<red>任务数量已达上限！"
+  daily-limit-reached: "<red>今日任务数量已达上限！"
+  quest-level-not-met: "<red>等级不足！需要等级: {level}"

@@ -2,23 +2,48 @@ package cn.guangdian.auth.data;
 
 import cn.guangdian.auth.GuangDianAuth;
 import cn.guangdian.auth.security.PasswordHasher;
+import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.api.AsyncExecutor;
+import cn.guangdian.rpgcore.api.GameLogger;
 import cn.guangdian.rpgcore.database.CoreDatabase;
-import org.bukkit.entity.Player;
 
 import java.sql.*;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * 认证数据管理器
+ * 
+ * <p>已优化集成 RPGCore 服务：</p>
+ * <ul>
+ *   <li>日志 - 使用 RPGCore GameLogger（降级到 Bukkit Logger）</li>
+ *   <li>异步 - 使用 RPGCore AsyncExecutor（降级到默认线程池）</li>
+ * </ul>
+ * 
+ * @author GuangDian
+ * @since 1.0.0
+ */
 public class AuthDataManager {
 
     private final GuangDianAuth plugin;
     private final PasswordHasher hasher = new PasswordHasher();
     private final String tableName;
+    
+    // RPGCore 服务
+    private GameLogger logger;
+    private AsyncExecutor asyncExecutor;
 
     public AuthDataManager(GuangDianAuth plugin) {
         this.plugin = plugin;
         this.tableName = "gd_auth_players";
+        
+        // 初始化 RPGCore 服务
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            this.logger = rpgCore.getGameLogger();
+            this.asyncExecutor = rpgCore.getAsyncExecutor();
+        }
     }
 
     public void initialize() {
@@ -46,9 +71,9 @@ public class AuthDataManager {
         try (Connection conn = CoreDatabase.getConnection();
              Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
-            plugin.getLogger().info("数据表初始化成功: " + tableName);
+            logInfo("数据表初始化成功: " + tableName);
         } catch (SQLException e) {
-            plugin.getLogger().severe("创建数据表失败: " + e.getMessage());
+            logSevere("创建数据表失败", e);
         }
     }
 
@@ -61,7 +86,7 @@ public class AuthDataManager {
                 return rs.next();
             }
         } catch (SQLException e) {
-            plugin.getLogger().warning("检查注册状态失败: " + e.getMessage());
+            logWarning("检查注册状态失败: " + e.getMessage());
             return false;
         }
     }
@@ -77,7 +102,7 @@ public class AuthDataManager {
                 }
             }
         } catch (SQLException e) {
-            plugin.getLogger().warning("查询玩家数据失败: " + e.getMessage());
+            logWarning("查询玩家数据失败: " + e.getMessage());
         }
         return Optional.empty();
     }
@@ -93,7 +118,7 @@ public class AuthDataManager {
                 }
             }
         } catch (SQLException e) {
-            plugin.getLogger().warning("查询玩家数据失败: " + e.getMessage());
+            logWarning("查询玩家数据失败: " + e.getMessage());
         }
         return Optional.empty();
     }
@@ -120,9 +145,9 @@ public class AuthDataManager {
             stmt.setString(8, ip);
             stmt.executeUpdate();
             
-            plugin.getLogger().info("玩家注册成功: " + playerName);
+            logInfo("玩家注册成功: " + playerName);
         } catch (SQLException e) {
-            plugin.getLogger().severe("注册玩家失败: " + e.getMessage());
+            logSevere("注册玩家失败", e);
         }
     }
 
@@ -144,7 +169,7 @@ public class AuthDataManager {
             stmt.setString(3, playerName.toLowerCase());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            plugin.getLogger().warning("更新登录时间失败: " + e.getMessage());
+            logWarning("更新登录时间失败: " + e.getMessage());
         }
     }
 
@@ -161,7 +186,7 @@ public class AuthDataManager {
             stmt.setString(3, playerName.toLowerCase());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            plugin.getLogger().warning("修改密码失败: " + e.getMessage());
+            logWarning("修改密码失败: " + e.getMessage());
         }
     }
 
@@ -173,7 +198,7 @@ public class AuthDataManager {
             stmt.setString(1, playerName.toLowerCase());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            plugin.getLogger().warning("注销账号失败: " + e.getMessage());
+            logWarning("注销账号失败: " + e.getMessage());
         }
     }
 
@@ -186,7 +211,7 @@ public class AuthDataManager {
                 return rs.getInt(1);
             }
         } catch (SQLException e) {
-            plugin.getLogger().warning("统计玩家数量失败: " + e.getMessage());
+            logWarning("统计玩家数量失败: " + e.getMessage());
         }
         return 0;
     }
@@ -205,15 +230,59 @@ public class AuthDataManager {
         return data;
     }
 
+    // ==================== 异步方法（使用 RPGCore AsyncExecutor）====================
+
     public CompletableFuture<Boolean> isRegisteredAsync(String playerName) {
+        if (asyncExecutor != null) {
+            return asyncExecutor.execute(() -> isRegistered(playerName));
+        }
+        // 降级：使用默认线程池
         return CompletableFuture.supplyAsync(() -> isRegistered(playerName));
     }
 
     public CompletableFuture<Void> registerAsync(String playerName, UUID uuid, String password, String ip) {
+        if (asyncExecutor != null) {
+            return asyncExecutor.execute(() -> {
+                register(playerName, uuid, password, ip);
+                return null;
+            });
+        }
+        // 降级
         return CompletableFuture.runAsync(() -> register(playerName, uuid, password, ip));
     }
 
     public CompletableFuture<Boolean> checkPasswordAsync(String playerName, String password) {
+        if (asyncExecutor != null) {
+            return asyncExecutor.execute(() -> checkPassword(playerName, password));
+        }
+        // 降级
         return CompletableFuture.supplyAsync(() -> checkPassword(playerName, password));
+    }
+    
+    // ==================== 日志快捷方法 ====================
+    
+    private void logInfo(String message) {
+        if (logger != null) {
+            logger.info(message);
+        } else {
+            plugin.getLogger().info(message);
+        }
+    }
+    
+    private void logWarning(String message) {
+        if (logger != null) {
+            logger.warning(message);
+        } else {
+            plugin.getLogger().warning(message);
+        }
+    }
+    
+    private void logSevere(String message, Throwable throwable) {
+        if (logger != null) {
+            logger.severe(message, throwable);
+        } else {
+            plugin.getLogger().severe(message + " - " + throwable.getMessage());
+            throwable.printStackTrace();
+        }
     }
 }

@@ -5,9 +5,9 @@ import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.service.api.ChatService;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -30,6 +30,7 @@ public class ChatServiceAdapter implements ChatService {
     private Logger logger;
     private boolean chatFormattingEnabled = true;
     private ExternalServiceIntegration externalServices;
+    private MiniMessageService miniMessage;
 
     public ChatServiceAdapter(GuangDianChat plugin) {
         this.plugin = plugin;
@@ -43,6 +44,7 @@ public class ChatServiceAdapter implements ChatService {
                 ServiceRegistry registry = rpgCore.getServiceRegistry();
                 this.eventBus = rpgCore.getEventBus();
                 this.externalServices = rpgCore.getExternalServices();
+                this.miniMessage = rpgCore.getMiniMessageService();
 
                 registry.registerService(ChatService.class, this);
                 logger.info("已注册到 RPGCore: ChatService");
@@ -50,6 +52,11 @@ public class ChatServiceAdapter implements ChatService {
             } catch (Exception e) {
                 logger.warning("注册到 RPGCore 失败: " + e.getMessage());
             }
+        }
+
+        // 如果 RPGCore 不可用，使用本地 MiniMessageService
+        if (miniMessage == null) {
+            miniMessage = MiniMessageService.getInstance();
         }
     }
 
@@ -61,7 +68,8 @@ public class ChatServiceAdapter implements ChatService {
         if (prefix == null || prefix.isEmpty()) {
             return Component.empty();
         }
-        return LegacyComponentSerializer.legacySection().deserialize(prefix);
+        // 使用 MiniMessage 解析前缀
+        return miniMessage.colorize(prefix);
     }
 
     @Override
@@ -70,7 +78,8 @@ public class ChatServiceAdapter implements ChatService {
         if (suffix == null || suffix.isEmpty()) {
             return Component.empty();
         }
-        return LegacyComponentSerializer.legacySection().deserialize(suffix);
+        // 使用 MiniMessage 解析后缀
+        return miniMessage.colorize(suffix);
     }
 
     @Override
@@ -118,7 +127,8 @@ public class ChatServiceAdapter implements ChatService {
         if (guildTag == null || guildTag.isEmpty() || guildTag.equals("%guild_tag%")) {
             return null;
         }
-        return LegacyComponentSerializer.legacySection().deserialize(guildTag);
+        // 使用 MiniMessage 解析公会标签
+        return miniMessage.colorize(guildTag);
     }
 
     @Override
@@ -127,7 +137,8 @@ public class ChatServiceAdapter implements ChatService {
         if (title == null || title.isEmpty() || title.equals("%player_title%")) {
             return Component.empty();
         }
-        return LegacyComponentSerializer.legacySection().deserialize(title);
+        // 使用 MiniMessage 解析称号
+        return miniMessage.colorize(title);
     }
 
     @Override
@@ -136,7 +147,8 @@ public class ChatServiceAdapter implements ChatService {
         if (level == null || level.isEmpty() || level.equals("%player_level%")) {
             return Component.text("Lv.1");
         }
-        return LegacyComponentSerializer.legacySection().deserialize("Lv." + level);
+        // 使用 MiniMessage 解析等级
+        return miniMessage.colorize("Lv." + level);
     }
 
     @Override

@@ -1,0 +1,12 @@
+name: GuangDianItemLabel
+version: 1.0.0
+main: cn.guangdian.itemlabel.GuangDianItemLabel
+api-version: '1.21.6'
+author: Astraea RPG Team
+dependencies:
+  - name: RPGCore
+    required: true
+  - name: PlaceholderAPI
+    required: false
+  - name: MythicMobs
+    required: false

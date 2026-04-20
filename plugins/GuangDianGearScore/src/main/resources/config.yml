@@ -1,4 +1,4 @@
-settings:
+﻿settings:
   update-interval-ticks: 600
   leaderboard-size: 10
   cache-expiry-minutes: 5
@@ -9,10 +9,10 @@ score-patterns:
   - "装备评分"
 
 messages:
-  score-display: "&e你的装备评分: &6%score%"
-  rank-display: "&e你的排名: &6#%rank%"
-  no-score: "&c你没有任何装备评分"
-  leaderboard-header: "&6===== 装备评分排行榜 ====="
-  leaderboard-line: "&e#%rank% &f%player% &7- &6%score%"
-  reload-success: "&a配置已重新加载!"
-  no-permission: "&c没有权限!"
+  score-display: "<yellow>你的装备评分: <gold>%score%"
+  rank-display: "<yellow>你的排名: <gold>#%rank%"
+  no-score: "<red>你没有任何装备评分"
+  leaderboard-header: "<gold>===== 装备评分排行榜 ====="
+  leaderboard-line: "<yellow>#%rank% <white>%player% <gray>- <gold>%score%"
+  reload-success: "<green>配置已重新加载!"
+  no-permission: "<red>没有权限!"

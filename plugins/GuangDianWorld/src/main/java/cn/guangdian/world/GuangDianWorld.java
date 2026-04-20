@@ -16,7 +16,6 @@ import cn.guangdian.world.listener.WorldListener;
 import cn.guangdian.world.manager.WorldManager;
 import cn.guangdian.world.papi.WorldPlaceholders;
 import cn.guangdian.world.storage.ConfigManager;
-import me.clip.placeholderapi.PlaceholderAPI;
 
 public final class GuangDianWorld extends AbstractRPGPlugin {
 
@@ -27,7 +26,7 @@ public final class GuangDianWorld extends AbstractRPGPlugin {
     private WorldServiceAdapter serviceAdapter;
     private WorldPlaceholders placeholders;
 
-    private RPGCore rpgCore;
+    // RPGCore 服务 - 通过父类获取
     private AsyncExecutor asyncExecutor;
     private CacheProvider cacheProvider;
     private EventBus eventBus;
@@ -37,11 +36,21 @@ public final class GuangDianWorld extends AbstractRPGPlugin {
     protected void onPluginEnable() {
         instance = this;
 
-        if (!hookRPGCore()) {
+        // 使用父类提供的方法检查 RPGCore 是否可用
+        if (!isRPGCoreAvailable()) {
             getLogger().severe("无法连接到 RPGCore，插件禁用！");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+
+        // 从父类获取 RPGCore 实例和服务
+        RPGCore core = getRPGCore();
+        this.asyncExecutor = core.getAsyncExecutor();
+        this.cacheProvider = core.getCacheProvider();
+        this.eventBus = core.getEventBus();
+        this.serviceRegistry = core.getServiceRegistry();
+
+        getLogger().info("已连接到 RPGCore");
 
         configManager = new ConfigManager(this);
         configManager.load();
@@ -60,7 +69,8 @@ public final class GuangDianWorld extends AbstractRPGPlugin {
 
         getServer().getPluginManager().registerEvents(new WorldListener(this), this);
 
-        hookPlaceholderAPI();
+        // 注册占位符到 RPGCore PlaceholderService
+        registerPlaceholders();
 
         getLogger().info("GuangDianWorld 世界管理插件已启用！");
         getLogger().info("已加载世界数量: " + worldManager.getWorldCount());
@@ -68,12 +78,15 @@ public final class GuangDianWorld extends AbstractRPGPlugin {
 
     @Override
     protected void onPluginDisable() {
+        // 取消所有调度任务
+        cancelAllTasks();
+        
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
         }
         
         if (placeholders != null) {
-            PlaceholderAPI.unregisterExpansion(placeholders);
+            placeholders.unregister();
             placeholders = null;
         }
         
@@ -88,29 +101,9 @@ public final class GuangDianWorld extends AbstractRPGPlugin {
         return "GuangDianWorld";
     }
 
-    private boolean hookRPGCore() {
-        var plugin = getServer().getPluginManager().getPlugin("RPGCore");
-        if (!(plugin instanceof RPGCore core)) {
-            return false;
-        }
-        
-        this.rpgCore = core;
-        this.asyncExecutor = core.getAsyncExecutor();
-        this.cacheProvider = core.getCacheProvider();
-        this.eventBus = core.getEventBus();
-        this.serviceRegistry = core.getServiceRegistry();
-        
-        getLogger().info("已连接到 RPGCore");
-        return true;
-    }
-
-    private void hookPlaceholderAPI() {
-        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            placeholders = new WorldPlaceholders(this);
-            if (placeholders.register()) {
-                getLogger().info("PlaceholderAPI 扩展已注册");
-            }
-        }
+    private void registerPlaceholders() {
+        placeholders = new WorldPlaceholders(this);
+        placeholders.register();
     }
 
     public static GuangDianWorld getInstance() {
@@ -131,10 +124,6 @@ public final class GuangDianWorld extends AbstractRPGPlugin {
 
     public WorldServiceAdapter getServiceAdapter() {
         return serviceAdapter;
-    }
-
-    public RPGCore getRPGCore() {
-        return rpgCore;
     }
 
     public AsyncExecutor getAsyncExecutor() {

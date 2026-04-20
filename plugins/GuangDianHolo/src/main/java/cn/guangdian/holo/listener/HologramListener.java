@@ -52,7 +52,7 @@ public class HologramListener implements Listener {
         if (rpgCore != null) {
             rpgCore.getScheduler().runSyncLater(task, delay);
         } else {
-            plugin.getServer().getScheduler().runTaskLater(plugin, task, delay);
+            plugin.getLogger().warning("RPGCore 未启用，无法执行延迟任务");
         }
     }
 

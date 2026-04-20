@@ -1,4 +1,4 @@
-# ========================================
+﻿# ========================================
 # GuangDianLocation 配置文件
 # ========================================
 
@@ -26,14 +26,14 @@ database:
 
   # 如果不使用 RPGCore 连接池，请配置以下参数
   # 注意：独立连接池暂不支持，请确保 RPGCore 数据库已配置
-  # url: jdbc:mysql://localhost:3306/guangdian_location?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8
+  # url: jdbc:mysql://localhost:3306/guangdian_location?useSSL=false&serverTimezone=Asia/Shanghai<red>haracterEncoding=utf8
   # username: root
   # password: 123456
 
 # 消息配置（可选自定义）
 messages:
-  selection-prompt: "&a请在聊天栏输入坐标名称（30秒内有效）"
-  selection-success: "&a成功保存坐标点 &e{name} &a!"
-  selection-cancelled: "&e已取消本次坐标选择."
-  location-not-found: "&c坐标点 &e{name} &c不存在!"
-  teleport-success: "&a已传送到坐标点 &e{name} &a!"
+  selection-prompt: "<green>请在聊天栏输入坐标名称（30秒内有效）"
+  selection-success: "<green>成功保存坐标点 <yellow>{name} <green>!"
+  selection-cancelled: "<yellow>已取消本次坐标选择."
+  location-not-found: "<red>坐标点 <yellow>{name} <red>不存在!"
+  teleport-success: "<green>已传送到坐标点 <yellow>{name} <green>!"

@@ -1,20 +1,24 @@
 package cn.guangdian.aggro.hook;
 
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
+import java.util.UUID;
 
 public class MythicMobsHook {
 
     private boolean enabled = false;
-    private Object mythicMukkit;
-    private Method getMythicMobInstanceMethod;
+    private Object mythicBukkit;
+    private Method getMobManagerMethod;
+    private Method getActiveMobMethod;
     private Method getMobTypeMethod;
+    private Method setThreatTableMethod;
+    private Method getThreatTableMethod;
+    private Method getThreatMethod;
+    private Method setTargetMethod;
     private Plugin mythicMobsPlugin;
 
     public void init() {
@@ -27,23 +31,38 @@ public class MythicMobsHook {
         this.mythicMobsPlugin = plugin;
 
         try {
+            // 获取 MythicBukkit 实例
             Class<?> mythicBukkitClass = Class.forName("io.lumine.mythic.bukkit.MythicBukkit");
             Method instMethod = mythicBukkitClass.getMethod("inst");
-            mythicMukkit = instMethod.invoke(null);
+            mythicBukkit = instMethod.invoke(null);
 
-            Class<?> mobManagerClass = Class.forName("io.lumine.mythic.bukkit.BukkitMobManager");
-            Method getMobManagerMethod = mythicBukkitClass.getMethod("getMobManager");
-            Object mobManager = getMobManagerMethod.invoke(mythicMukkit);
+            // 获取 MobManager 方法
+            getMobManagerMethod = mythicBukkitClass.getMethod("getMobManager");
+            Object mobManager = getMobManagerMethod.invoke(mythicBukkit);
 
-            getMythicMobInstanceMethod = mobManagerClass.getMethod("getMythicMobInstance", LivingEntity.class);
+            // 获取 getActiveMob(UUID) 方法
+            getActiveMobMethod = mobManager.getClass().getMethod("getActiveMob", UUID.class);
 
+            // 获取 ActiveMob 类和方法
             Class<?> activeMobClass = Class.forName("io.lumine.mythic.core.mobs.ActiveMob");
-            getMobTypeMethod = activeMobClass.getMethod("getMobType");
+            getMobTypeMethod = findMethod(activeMobClass, "getMobType");
+            setThreatTableMethod = findMethod(activeMobClass, "setThreatTableEnabled", boolean.class);
+            getThreatTableMethod = findMethod(activeMobClass, "getThreatTable");
+            setTargetMethod = findMethod(activeMobClass, "setTarget", org.bukkit.entity.LivingEntity.class);
 
             enabled = true;
             Bukkit.getLogger().info("[GuangDianAggro] MythicMobs 集成已启用");
         } catch (Exception e) {
             Bukkit.getLogger().warning("[GuangDianAggro] MythicMobs 集成失败: " + e.getMessage());
+            enabled = false;
+        }
+    }
+
+    private Method findMethod(Class<?> clazz, String methodName, Class<?>... paramTypes) {
+        try {
+            return clazz.getMethod(methodName, paramTypes);
+        } catch (NoSuchMethodException e) {
+            return null;
         }
     }
 
@@ -52,28 +71,42 @@ public class MythicMobsHook {
     }
 
     public boolean isMythicMob(LivingEntity entity) {
-        if (!enabled || entity == null) return false;
+        if (!enabled || entity == null || getActiveMobMethod == null) return false;
 
         try {
-            Object activeMob = getMythicMobInstanceMethod.invoke(
-                mythicMukkit.getClass().getMethod("getMobManager").invoke(mythicMukkit),
-                entity
-            );
-            return activeMob != null;
+            Object mobManager = getMobManagerMethod.invoke(mythicBukkit);
+            Object result = getActiveMobMethod.invoke(mobManager, entity.getUniqueId());
+            if (result instanceof Optional) {
+                return ((Optional<?>) result).isPresent();
+            }
         } catch (Exception e) {
             return false;
         }
+        return false;
+    }
+
+    private Object getActiveMob(LivingEntity entity) {
+        if (!enabled || entity == null || getActiveMobMethod == null) return null;
+
+        try {
+            Object mobManager = getMobManagerMethod.invoke(mythicBukkit);
+            Object result = getActiveMobMethod.invoke(mobManager, entity.getUniqueId());
+            if (result instanceof Optional) {
+                return ((Optional<?>) result).orElse(null);
+            }
+        } catch (Exception e) {
+        }
+        return null;
     }
 
     public String getMythicMobType(LivingEntity entity) {
-        if (!enabled || entity == null) return null;
+        if (!enabled || entity == null || getMobTypeMethod == null) return null;
 
         try {
-            Object mobManager = mythicMukkit.getClass().getMethod("getMobManager").invoke(mythicMukkit);
-            Object activeMob = getMythicMobInstanceMethod.invoke(mobManager, entity);
-
+            Object activeMob = getActiveMob(entity);
             if (activeMob != null) {
-                return (String) getMobTypeMethod.invoke(activeMob);
+                Object mobType = getMobTypeMethod.invoke(activeMob);
+                return mobType != null ? mobType.toString() : null;
             }
         } catch (Exception e) {
         }
@@ -82,15 +115,11 @@ public class MythicMobsHook {
     }
 
     public void setThreatTable(LivingEntity entity, boolean enabled) {
-        if (!this.enabled || entity == null) return;
+        if (!this.enabled || entity == null || setThreatTableMethod == null) return;
 
         try {
-            Object mobManager = mythicMukkit.getClass().getMethod("getMobManager").invoke(mythicMukkit);
-            Object activeMob = getMythicMobInstanceMethod.invoke(mobManager, entity);
-
+            Object activeMob = getActiveMob(entity);
             if (activeMob != null) {
-                Class<?> activeMobClass = activeMob.getClass();
-                Method setThreatTableMethod = activeMobClass.getMethod("setThreatTableEnabled", boolean.class);
                 setThreatTableMethod.invoke(activeMob, enabled);
             }
         } catch (Exception e) {
@@ -98,19 +127,19 @@ public class MythicMobsHook {
     }
 
     public double getMythicMobThreat(LivingEntity entity, org.bukkit.entity.Player player) {
-        if (!enabled || entity == null || player == null) return 0;
+        if (!enabled || entity == null || player == null || getThreatTableMethod == null) return 0;
 
         try {
-            Object mobManager = mythicMukkit.getClass().getMethod("getMobManager").invoke(mythicMukkit);
-            Object activeMob = getMythicMobInstanceMethod.invoke(mobManager, entity);
-
+            Object activeMob = getActiveMob(entity);
             if (activeMob != null) {
-                Class<?> activeMobClass = activeMob.getClass();
-                Method getThreatTableMethod = activeMobClass.getMethod("getThreatTable");
                 Object threatTable = getThreatTableMethod.invoke(activeMob);
 
-                if (threatTable != null) {
-                    Method getThreatMethod = threatTable.getClass().getMethod("getThreat", org.bukkit.entity.Entity.class);
+                if (threatTable != null && getThreatMethod == null) {
+                    // 延迟获取 getThreat 方法
+                    getThreatMethod = findMethod(threatTable.getClass(), "getThreat", org.bukkit.entity.Entity.class);
+                }
+
+                if (threatTable != null && getThreatMethod != null) {
                     Object threat = getThreatMethod.invoke(threatTable, player);
                     if (threat instanceof Number) {
                         return ((Number) threat).doubleValue();
@@ -124,15 +153,11 @@ public class MythicMobsHook {
     }
 
     public void setMythicMobTarget(LivingEntity entity, org.bukkit.entity.Player target) {
-        if (!enabled || entity == null || target == null) return;
+        if (!enabled || entity == null || target == null || setTargetMethod == null) return;
 
         try {
-            Object mobManager = mythicMukkit.getClass().getMethod("getMobManager").invoke(mythicMukkit);
-            Object activeMob = getMythicMobInstanceMethod.invoke(mobManager, entity);
-
+            Object activeMob = getActiveMob(entity);
             if (activeMob != null) {
-                Class<?> activeMobClass = activeMob.getClass();
-                Method setTargetMethod = activeMobClass.getMethod("setTarget", org.bukkit.entity.LivingEntity.class);
                 setTargetMethod.invoke(activeMob, target);
             }
         } catch (Exception e) {

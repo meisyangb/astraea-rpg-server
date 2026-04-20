@@ -38,7 +38,7 @@ public class DecomposeGUI implements InventoryHolder {
     }
 
     public void open(Player player) {
-        String title = plugin.getConfig().getString("gui-title", "&8装备分解");
+        String title = plugin.getConfig().getString("gui-title", "<dark_gray>装备分解");
         Inventory gui = Bukkit.createInventory(this, GUI_SIZE, Component.text(title.replace("&", "§")));
 
         fillBackground(gui);
@@ -56,9 +56,9 @@ public class DecomposeGUI implements InventoryHolder {
             }
         }
 
-        ItemStack inputIndicator = createItem(Material.LIME_STAINED_GLASS_PANE, "&a↓ 放入装备 ↓");
+        ItemStack inputIndicator = createItem(Material.LIME_STAINED_GLASS_PANE, "<green>↓ 放入装备 ↓");
         gui.setItem(4, inputIndicator);
-        gui.setItem(22, createItem(Material.LIME_STAINED_GLASS_PANE, "&a↑ 预览材料 ↑"));
+        gui.setItem(22, createItem(Material.LIME_STAINED_GLASS_PANE, "<green>↑ 预览材料 ↑"));
     }
 
     private boolean isPreviewSlot(int slot) {
@@ -66,14 +66,14 @@ public class DecomposeGUI implements InventoryHolder {
     }
 
     private void setupDecomposeButton(Inventory gui) {
-        ItemStack button = createItem(Material.ANVIL, "&c&l点击分解", 
-                "&7将装备放入中间槽位",
-                "&7点击此按钮进行分解");
+        ItemStack button = createItem(Material.ANVIL, "<red><bold>点击分解", 
+                "<gray>将装备放入中间槽位",
+                "<gray>点击此按钮进行分解");
         gui.setItem(DECOMPOSE_BUTTON_SLOT, button);
     }
 
     private void setupCloseButton(Inventory gui) {
-        ItemStack button = createItem(Material.BARRIER, "&c关闭界面");
+        ItemStack button = createItem(Material.BARRIER, "<red>关闭界面");
         gui.setItem(CLOSE_BUTTON_SLOT, button);
     }
 
@@ -85,13 +85,13 @@ public class DecomposeGUI implements InventoryHolder {
 
         String mythicId = plugin.getMythicMobsHook().getMythicItemId(item);
         if (mythicId == null) {
-            setPreviewError(gui, "&c此物品无法分解!");
+            setPreviewError(gui, "<red>此物品无法分解!");
             return;
         }
 
         DecomposeRule rule = plugin.getRuleManager().getRule(mythicId);
         if (rule == null) {
-            setPreviewError(gui, "&c该装备没有分解规则!");
+            setPreviewError(gui, "<red>该装备没有分解规则!");
             return;
         }
 
@@ -114,10 +114,10 @@ public class DecomposeGUI implements InventoryHolder {
             }
         }
 
-        ItemStack button = createItem(Material.ANVIL, "&a&l点击分解",
-                "&7成功率: &e" + (int)(rule.getChance() * 100) + "%",
+        ItemStack button = createItem(Material.ANVIL, "<green><bold>点击分解",
+                "<gray>成功率: <yellow>" + (int)(rule.getChance() * 100) + "%",
                 "",
-                rule.hasCustomMessage() ? rule.getMessage() : "&7点击进行分解");
+                rule.hasCustomMessage() ? rule.getMessage() : "<gray>点击进行分解");
         gui.setItem(DECOMPOSE_BUTTON_SLOT, button);
     }
 
@@ -139,7 +139,7 @@ public class DecomposeGUI implements InventoryHolder {
         ItemStack errorItem = createItem(Material.RED_STAINED_GLASS_PANE, error);
         gui.setItem(PREVIEW_START_SLOT + 3, errorItem);
 
-        ItemStack button = createItem(Material.BARRIER, "&c无法分解", error);
+        ItemStack button = createItem(Material.BARRIER, "<red>无法分解", error);
         gui.setItem(DECOMPOSE_BUTTON_SLOT, button);
     }
 

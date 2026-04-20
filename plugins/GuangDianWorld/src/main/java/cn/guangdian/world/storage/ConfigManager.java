@@ -67,7 +67,7 @@ public class ConfigManager {
     }
 
     public String getPrefix() {
-        return config.getString("settings.prefix", "&6[世界] &f");
+        return config.getString("settings.prefix", "<gold>[世界] <white>");
     }
 
     public String getLanguage() {

@@ -22,7 +22,7 @@ public class DecomposeCommand implements CommandExecutor {
         }
 
         if (!player.hasPermission("guangdian.decompose.use")) {
-            player.sendMessage(plugin.getConfig().getString("messages.no-permission", "&c你没有权限使用分解功能!").replace("&", "§"));
+            player.sendMessage(plugin.getConfig().getString("messages.no-permission", "<red>你没有权限使用分解功能!").replace("&", "§"));
             return true;
         }
 

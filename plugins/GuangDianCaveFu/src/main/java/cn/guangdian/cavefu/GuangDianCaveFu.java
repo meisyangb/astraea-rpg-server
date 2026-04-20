@@ -11,9 +11,27 @@ import cn.guangdian.cavefu.storage.DataManager;
 import cn.guangdian.cavefu.upgrade.UpgradeManager;
 import cn.guangdian.cavefu.world.CaveWorldManager;
 import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.api.GameLogger;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
+import me.clip.placeholderapi.PlaceholderAPI;
 
+/**
+ * 光点洞府插件 - GuangDianCaveFu
+ *
+ * <p>RPGCore 服务集成:
+ * <ul>
+ *   <li>GameLogger: 使用 RPGCore 统一日志服务</li>
+ *   <li>ExternalServiceIntegration: 使用 RPGCore 外部服务集成</li>
+ * </ul>
+ *
+ * <p>优先级模式: 优先使用 RPGCore 服务，不可用则降级到本地实现
+ *
+ * @author Gumin
+ * @QQ 2271257344
+ * @version 1.0.0
+ */
 public final class GuangDianCaveFu extends AbstractRPGPlugin {
 
     private static GuangDianCaveFu instance;
@@ -27,9 +45,16 @@ public final class GuangDianCaveFu extends AbstractRPGPlugin {
     private CaveServiceAdapter serviceAdapter;
     private ExternalServiceIntegration externalServices;
 
+    // RPGCore 服务
+    private GameLogger gameLogger;
+    private MiniMessageService miniMessage;
+
     @Override
     protected void onPluginEnable() {
         instance = this;
+
+        // 初始化 RPGCore 服务
+        initRPGCoreServices();
 
         // 初始化配置
         configManager = new ConfigManager(this);
@@ -60,7 +85,7 @@ public final class GuangDianCaveFu extends AbstractRPGPlugin {
         if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             placeholderExpansion = new CavePlaceholder(this);
             placeholderExpansion.register();
-            getLogger().info("已注册PlaceholderAPI扩展: gdcave");
+            logInfo("已注册PlaceholderAPI扩展: gdcave");
         }
 
         // 注册RPGCore服务适配器
@@ -71,21 +96,103 @@ public final class GuangDianCaveFu extends AbstractRPGPlugin {
             RPGCore rpgCore = RPGCore.getInstance();
             if (rpgCore != null) {
                 externalServices = rpgCore.getExternalServices();
-                getLogger().info("已连接到 RPGCore 外部服务");
+                logInfo("已连接到 RPGCore 外部服务");
             }
         }
 
-        getLogger().info("GuangDianCaveFu 洞府插件已启用！");
-        getLogger().info("当前洞府数量: " + dataManager.getCaveCount());
+        logInfo("GuangDianCaveFu 洞府插件已启用！");
+        logInfo("当前洞府数量: " + dataManager.getCaveCount());
+    }
+
+    /**
+     * 初始化 RPGCore 核心服务
+     * 优先使用 RPGCore 统一服务，本地实现作为降级方案
+     */
+    private void initRPGCoreServices() {
+        if (getServer().getPluginManager().isPluginEnabled("RPGCore")) {
+            try {
+                RPGCore rpgCore = RPGCore.getInstance();
+                gameLogger = rpgCore.getGameLogger();
+                miniMessage = rpgCore.getMiniMessageService();
+                logInfo("使用 RPGCore GameLogger 和 MiniMessageService 服务");
+            } catch (Exception e) {
+                logWarning("无法获取 RPGCore 服务: " + e.getMessage());
+            }
+        }
+
+        if (gameLogger == null) {
+            gameLogger = new GameLogger() {
+                @Override
+                public void info(String message) { getLogger().info(message); }
+                @Override
+                public void warning(String message) { getLogger().warning(message); }
+                @Override
+                public void severe(String message) { getLogger().severe(message); }
+                @Override
+                public void debug(String message) { getLogger().info("[DEBUG] " + message); }
+                @Override
+                public int getQueueSize() { return 0; }
+                @Override
+                public long getTotalLogged() { return 0; }
+                @Override
+                public long getTotalDropped() { return 0; }
+                @Override
+                public void shutdown() { }
+            };
+        }
+
+        if (miniMessage == null) {
+            miniMessage = MiniMessageService.getInstance();
+        }
+    }
+
+    /**
+     * 日志辅助方法 - 优先使用 RPGCore GameLogger
+     */
+    public void logInfo(String message) {
+        if (gameLogger != null) {
+            gameLogger.info(message);
+        } else {
+            getLogger().info(message);
+        }
+    }
+
+    public void logWarning(String message) {
+        if (gameLogger != null) {
+            gameLogger.warning(message);
+        } else {
+            getLogger().warning(message);
+        }
+    }
+
+    public void logSevere(String message) {
+        if (gameLogger != null) {
+            gameLogger.severe(message);
+        } else {
+            getLogger().severe(message);
+        }
+    }
+
+    public void logDebug(String message) {
+        if (gameLogger != null) {
+            gameLogger.debug(message);
+        } else {
+            getLogger().info("[DEBUG] " + message);
+        }
     }
 
     @Override
     protected void onPluginDisable() {
+        // 取消所有调度任务
+        cancelAllTasks();
+        
         if (dataManager != null) {
             dataManager.saveSyncAndAwait();
         }
 
+        // 注销 PlaceholderAPI 扩展
         if (placeholderExpansion != null) {
+            PlaceholderAPI.unregisterExpansion(placeholderExpansion);
             placeholderExpansion = null;
         }
 
@@ -94,7 +201,7 @@ public final class GuangDianCaveFu extends AbstractRPGPlugin {
             serviceAdapter = null;
         }
 
-        getLogger().info("GuangDianCaveFu 洞府插件已禁用！");
+        logInfo("GuangDianCaveFu 洞府插件已禁用！");
     }
 
     @Override
@@ -130,9 +237,17 @@ public final class GuangDianCaveFu extends AbstractRPGPlugin {
         return externalServices;
     }
 
+    /**
+     * 获取 MiniMessageService
+     * @return MiniMessageService 实例（可能为本地降级实现）
+     */
+    public MiniMessageService getMiniMessageService() {
+        return miniMessage;
+    }
+
     public void reloadAll() {
         configManager.reload();
         dataManager.load();
-        getLogger().info("配置已重新加载！");
+        logInfo("配置已重新加载！");
     }
 }

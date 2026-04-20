@@ -61,7 +61,7 @@ public class RegenTask implements Runnable {
         if (rpgCore != null) {
             taskId = rpgCore.getScheduler().runSyncRepeating(this, intervalTicks, intervalTicks);
         } else {
-            taskId = plugin.getServer().getScheduler().runTaskTimer(plugin, this, intervalTicks, intervalTicks).getTaskId();
+            plugin.getLogger().warning("RPGCore 未启用，无法启动回血任务");
         }
     }
 
@@ -70,8 +70,6 @@ public class RegenTask implements Runnable {
             RPGCore rpgCore = RPGCore.getInstance();
             if (rpgCore != null) {
                 rpgCore.getScheduler().cancelTask(taskId);
-            } else {
-                plugin.getServer().getScheduler().cancelTask((int) taskId);
             }
             taskId = -1;
         }

@@ -14,17 +14,19 @@ import cn.guangdian.armorstats.manager.CombatLogManager;
 import cn.guangdian.armorstats.manager.BossBarManager;
 import cn.guangdian.armorstats.skill.SkillManager;
 import cn.guangdian.armorstats.listener.EventListeners;
-import cn.guangdian.armorstats.listener.GuiListener;
-import cn.guangdian.armorstats.listener.GemInlayCacheListener;
 import cn.guangdian.armorstats.command.ArmorStatsCommand;
-import cn.guangdian.armorstats.command.GemCommand;
 import cn.guangdian.armorstats.placeholder.ArmorStatsPlaceholderExpansion;
 import cn.guangdian.armorstats.storage.AsyncExecutorService;
 import cn.guangdian.armorstats.storage.PlayerDataStorage;
 import cn.guangdian.armorstats.task.RegenTask;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
+import cn.guangdian.rpgcore.api.CacheProvider;
+import cn.guangdian.rpgcore.api.SyncScheduler;
+import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
+import cn.guangdian.rpgcore.sound.SoundService;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -44,11 +46,19 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
     private ArmorStatsPlaceholderExpansion placeholderExpansion;
     private BossAnnouncer bossAnnouncer;
     
-    // 优化组件
-    private AsyncExecutorService asyncExecutor;
-    private cn.guangdian.rpgcore.api.AsyncExecutor rpgCoreAsyncExecutor;
-    private EquipmentCacheManager equipmentCacheManager;
+    // 优化组件 - 优先使用 RPGCore 服务，本地实现作为降级方案
+    private AsyncExecutorService asyncExecutor;  // 本地异步执行器（降级用）
+    private cn.guangdian.rpgcore.api.AsyncExecutor rpgCoreAsyncExecutor;  // RPGCore 统一异步执行器
+    private EquipmentCacheManager equipmentCacheManager;  // 本地装备缓存
     private BossBarOptimizer bossBarOptimizer;
+    
+    // RPGCore 核心服务引用 - 优先使用 RPGCore，本地实现作为降级
+    private RPGCore rpgCore;
+    private SyncScheduler rpgCoreScheduler;
+    private ExternalServiceIntegration externalServices;
+    private MiniMessageService miniMessage;
+    private SoundService soundService;
+    private CacheProvider cacheProvider;
     
     // RPGCore 服务适配器
     private ArmorStatsServiceAdapter serviceAdapter;
@@ -57,6 +67,9 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
     @Override
     protected void onPluginEnable() {
         instance = this;
+
+        // 初始化 RPGCore 核心服务（优先使用 RPGCore，本地实现作为降级）
+        initRPGCoreServices();
 
         // 加载所有配置文件
         configManager = new ConfigManager(this);
@@ -101,7 +114,6 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
         // }
 
         getServer().getPluginManager().registerEvents(new EventListeners(this, statsManager, healthManager, skillManager), this);
-        getServer().getPluginManager().registerEvents(new GuiListener(), this);
         
         // 注册玩家生命周期处理器
         if (getServer().getPluginManager().isPluginEnabled("RPGCore")) {
@@ -112,14 +124,7 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
             getLogger().warning("RPGCore 未启用，使用传统事件监听");
         }
 
-        // 注册宝石镶嵌缓存联动监听器
-        if (equipmentCacheManager != null) {
-            getServer().getPluginManager().registerEvents(new GemInlayCacheListener(this, equipmentCacheManager), this);
-            getLogger().info("宝石镶嵌缓存联动已启用");
-        }
-
         getCommand("armorstats").setExecutor(new ArmorStatsCommand(statsManager, skillManager, this));
-        getCommand("gem").setExecutor(new GemCommand());
 
         bossBarManager.startUpdateTask();
         regenTask.start();
@@ -145,6 +150,39 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
     }
     
     /**
+     * 初始化 RPGCore 核心服务
+     * 优先使用 RPGCore 统一服务，本地实现作为降级方案
+     */
+    private void initRPGCoreServices() {
+        if (Bukkit.getPluginManager().isPluginEnabled("RPGCore")) {
+            try {
+                rpgCore = RPGCore.getInstance();
+                if (rpgCore != null) {
+                    rpgCoreScheduler = rpgCore.getScheduler();
+                    externalServices = rpgCore.getExternalServices();
+                    miniMessage = rpgCore.getMiniMessageService();
+                    soundService = rpgCore.getSoundService();
+                    cacheProvider = rpgCore.getCacheProvider();
+                    rpgCoreAsyncExecutor = rpgCore.getAsyncExecutor();
+                    getLogger().info("已连接到 RPGCore 核心服务");
+                }
+            } catch (Exception e) {
+                getLogger().warning("连接 RPGCore 服务失败: " + e.getMessage());
+            }
+        }
+        
+        // 如果 RPGCore 服务不可用，初始化本地降级服务
+        if (miniMessage == null) {
+            miniMessage = MiniMessageService.getInstance();
+            getLogger().info("使用本地 MiniMessageService（降级）");
+        }
+        if (soundService == null) {
+            soundService = SoundService.getInstance();
+            getLogger().info("使用本地 SoundService（降级）");
+        }
+    }
+
+    /**
      * 初始化优化组件
      * 优先使用 RPGCore 统一服务，仅在不可用时使用本地实现
      */
@@ -161,28 +199,26 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
         boolean asyncEnabled = asyncConfig != null && asyncConfig.getBoolean("enabled", true);
         
         if (asyncEnabled) {
-            boolean rpgCoreAvailable = Bukkit.getPluginManager().isPluginEnabled("RPGCore");
-            if (rpgCoreAvailable) {
-                try {
-                    rpgCoreAsyncExecutor = RPGCore.getInstance().getAsyncExecutor();
-                    getLogger().info("使用 RPGCore 统一 AsyncExecutor（推荐）");
-                } catch (Exception e) {
-                    getLogger().warning("无法获取 RPGCore AsyncExecutor: " + e.getMessage());
-                }
-            }
-            
-            // 仅在 RPGCore 不可用时创建本地实例
-            if (rpgCoreAsyncExecutor == null) {
+            // RPGCore AsyncExecutor 已在 initRPGCoreServices() 中初始化
+            if (rpgCoreAsyncExecutor != null) {
+                getLogger().info("使用 RPGCore 统一 AsyncExecutor（推荐）");
+            } else {
+                // 仅在 RPGCore 不可用时创建本地实例
                 int threadPoolSize = asyncConfig.getInt("thread_pool_size", 2);
                 asyncExecutor = new AsyncExecutorService(this, threadPoolSize);
                 getLogger().info("使用本地 AsyncExecutor (线程池大小: " + threadPoolSize + ")");
             }
         }
         
-        // 初始化装备缓存管理器
+        // 初始化装备缓存管理器 - 优先使用 RPGCore CacheProvider
         ConfigurationSection cacheConfig = optConfig.getConfigurationSection("equipment_cache");
         if (cacheConfig != null && cacheConfig.getBoolean("enabled", true)) {
             int maxSize = cacheConfig.getInt("max_size", 1000);
+            // 如果 RPGCore CacheProvider 可用，使用统一缓存；否则使用本地实现
+            if (cacheProvider != null) {
+                getLogger().info("使用 RPGCore 统一 CacheProvider（推荐）");
+            }
+            // 本地装备缓存管理器仍然需要，用于装备解析逻辑
             equipmentCacheManager = new EquipmentCacheManager(this, maxSize);
             getLogger().info("装备缓存已启用 (最大缓存: " + maxSize + ")");
         }
@@ -209,12 +245,17 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
      * 输出优化组件状态
      */
     private void logOptimizationStatus() {
-        getLogger().info("========== 优化组件状态 ==========");
+        getLogger().info("========== RPGCore 服务集成状态 ==========");
+        getLogger().info("RPGCore 核心: " + (rpgCore != null ? "已连接" : "未连接"));
+        getLogger().info("MiniMessage服务: " + (rpgCore != null && rpgCore.getMiniMessageService() != null ? "RPGCore统一" : "本地降级"));
+        getLogger().info("Sound服务: " + (rpgCore != null && rpgCore.getSoundService() != null ? "RPGCore统一" : "本地降级"));
+        getLogger().info("CacheProvider: " + (cacheProvider != null ? "RPGCore统一" : "本地降级"));
         getLogger().info("异步执行器: " + (rpgCoreAsyncExecutor != null ? "RPGCore统一" : (asyncExecutor != null ? "本地" : "未启用")));
-        getLogger().info("玩家锁管理器: " + (RPGCore.getInstance() != null ? "RPGCore统一" : "本地"));
+        getLogger().info("SyncScheduler: " + (rpgCoreScheduler != null ? "RPGCore统一" : "本地"));
+        getLogger().info("ExternalServices: " + (externalServices != null ? "RPGCore统一" : "未启用"));
         getLogger().info("装备缓存: " + (equipmentCacheManager != null ? "已启用" : "未启用"));
         getLogger().info("BossBar优化: " + (bossBarOptimizer != null ? "已启用" : "未启用"));
-        getLogger().info("==================================");
+        getLogger().info("==========================================");
     }
 
     @Override
@@ -317,6 +358,84 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
 
     public BossAnnouncer getBossAnnouncer() {
         return bossAnnouncer;
+    }
+
+    // ==================== RPGCore 服务访问方法 ====================
+
+    /**
+     * 获取 RPGCore 实例
+     * @return RPGCore 实例，如果未启用则返回 null
+     */
+    public RPGCore getRPGCore() {
+        return rpgCore;
+    }
+
+    /**
+     * 检查是否已连接到 RPGCore
+     * @return true 如果 RPGCore 可用
+     */
+    public boolean isRPGCoreEnabled() {
+        return rpgCore != null;
+    }
+
+    /**
+     * 获取 MiniMessage 服务
+     * 优先使用 RPGCore 统一服务，本地实现作为降级
+     * @return MiniMessageService 实例（不会返回 null）
+     */
+    public MiniMessageService getMiniMessage() {
+        return miniMessage;
+    }
+
+    /**
+     * 获取音效服务
+     * 优先使用 RPGCore 统一服务，本地实现作为降级
+     * @return SoundService 实例（不会返回 null）
+     */
+    public SoundService getSoundService() {
+        return soundService;
+    }
+
+    /**
+     * 获取缓存提供者
+     * 优先使用 RPGCore 统一服务
+     * @return CacheProvider 实例，如果 RPGCore 不可用则返回 null
+     */
+    public CacheProvider getCacheProvider() {
+        return cacheProvider;
+    }
+
+    /**
+     * 获取 RPGCore 调度器
+     * @return SyncScheduler 实例，如果 RPGCore 不可用则返回 null
+     */
+    public SyncScheduler getRPGCoreScheduler() {
+        return rpgCoreScheduler;
+    }
+
+    /**
+     * 获取外部服务集成
+     * @return ExternalServiceIntegration 实例，如果 RPGCore 不可用则返回 null
+     */
+    public ExternalServiceIntegration getExternalServices() {
+        return externalServices;
+    }
+
+    /**
+     * 获取异步执行器
+     * 优先使用 RPGCore 统一服务，本地实现作为降级
+     * @return AsyncExecutor 实例，如果都不可用则返回 null
+     */
+    public cn.guangdian.rpgcore.api.AsyncExecutor getAsyncExecutor() {
+        return rpgCoreAsyncExecutor;
+    }
+
+    /**
+     * 获取本地异步执行器（降级用）
+     * @return AsyncExecutorService 实例，如果 RPGCore 可用则返回 null
+     */
+    public AsyncExecutorService getLocalAsyncExecutor() {
+        return asyncExecutor;
     }
 
     public void reloadAllConfigs() {

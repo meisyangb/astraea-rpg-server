@@ -1,4 +1,4 @@
-# GuangDianSoulBind 灵魂绑定配置
+﻿# GuangDianSoulBind 灵魂绑定配置
 # ================================
 
 # 绑定设置
@@ -27,20 +27,20 @@ protection:
 
 # 消息设置
 messages:
-  bind-success: "&a物品已绑定到你的灵魂！"
-  already-bound: "&c该物品已被绑定！"
-  not-bound: "&c该物品未绑定！"
-  bound-by-other: "&c该物品已被其他玩家绑定！"
-  cannot-drop: "&c绑定物品无法丢弃！"
-  cannot-trade: "&c绑定物品无法交易！"
-  cannot-container: "&c绑定物品无法放入容器！"
-  no-permission: "&c你没有权限执行此操作！"
-  not-mythic-item: "&c该物品不是MythicMobs物品！"
-  player-not-found: "&c玩家不存在或未在线！"
+  bind-success: "<green>物品已绑定到你的灵魂！"
+  already-bound: "<red>该物品已被绑定！"
+  not-bound: "<red>该物品未绑定！"
+  bound-by-other: "<red>该物品已被其他玩家绑定！"
+  cannot-drop: "<red>绑定物品无法丢弃！"
+  cannot-trade: "<red>绑定物品无法交易！"
+  cannot-container: "<red>绑定物品无法放入容器！"
+  no-permission: "<red>你没有权限执行此操作！"
+  not-mythic-item: "<red>该物品不是MythicMobs物品！"
+  player-not-found: "<red>玩家不存在或未在线！"
 
 # Lore格式
 lore-format:
   # 绑定信息显示格式（%player% 会被替换为玩家名）
-  format: "&8灵魂绑定：&f%player%"
+  format: "<dark_gray>灵魂绑定：<white>%player%"
   # 绑定信息在Lore中的位置（从底部开始，1=最后一行）
   position: 1

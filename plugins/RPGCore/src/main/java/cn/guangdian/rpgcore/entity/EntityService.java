@@ -9,6 +9,7 @@ import org.bukkit.util.Vector;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * RPGCore 实体服务
@@ -21,7 +22,7 @@ public final class EntityService {
     private static EntityService instance;
 
     // 碰撞禁用缓存
-    private final Map<UUID, Boolean> collisionDisabled = new HashMap<>();
+    private final Map<UUID, Boolean> collisionDisabled = new ConcurrentHashMap<>();
 
     private EntityService() {}
 

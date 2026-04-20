@@ -1,5 +1,5 @@
 name: GuangDianCleaner
-version: ${project.version}
+version: 1.0.0
 main: cn.guangdian.cleaner.GuangDianCleaner
 author: Gumin
 description: 光点扫地娘 - 高性能地面掉落物清理插件

@@ -4,6 +4,7 @@ import cn.guangdian.quest.GuangDianQuest;
 import cn.guangdian.quest.model.PlayerQuestData;
 import cn.guangdian.quest.model.Quest;
 import cn.guangdian.quest.model.QuestObjective;
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -57,32 +58,32 @@ public class QuestCommand implements CommandExecutor, TabExecutor {
 
         PlayerQuestData data = plugin.getProgressManager().getPlayerData(player.getUniqueId());
 
-        sender.sendMessage(color("&e========== 进行中任务 &7(" + data.getActiveQuestCount() + "/" + plugin.getMaxActiveQuests() + ") &e=========="));
+        sender.sendMessage(color("<yellow>========== 进行中任务 <gray>(" + data.getActiveQuestCount() + "/" + plugin.getMaxActiveQuests() + ") <yellow>=========="));
         for (String questId : data.getActiveQuestIds()) {
             Quest quest = plugin.getQuestManager().getQuest(questId);
             if (quest != null) {
                 int[] progress = data.getProgress(questId);
                 int percent = progress != null ? calculateProgressPercent(progress, quest) : 0;
-                sender.sendMessage(color("&7- " + quest.getFullName() + " &8(" + percent + "%)"));
+                sender.sendMessage(color("<gray>- " + quest.getFullName() + " <dark_gray>(" + percent + "%)"));
                 for (int i = 0; i < quest.getObjectiveCount(); i++) {
                     QuestObjective obj = quest.getObjective(i);
                     int current = (progress != null && i < progress.length) ? progress[i] : 0;
-                    String status = current >= obj.getAmount() ? "&a✔" : "&7○";
-                    sender.sendMessage(color("  " + status + " &f" + obj.getProgressText(current)));
+                    String status = current >= obj.getAmount() ? "<green>✔" : "<gray>○";
+                    sender.sendMessage(color("  " + status + " <white>" + obj.getProgressText(current)));
                 }
             }
         }
 
-        sender.sendMessage(color("&e========== 可接取任务 =========="));
+        sender.sendMessage(color("<yellow>========== 可接取任务 =========="));
         List<String> available = plugin.getQuestManager().getAvailableQuests(player.getUniqueId());
         if (available.isEmpty()) {
-            sender.sendMessage(color("&7暂无可接取的任务"));
+            sender.sendMessage(color("<gray>暂无可接取的任务"));
         } else {
             for (String questId : available) {
                 Quest quest = plugin.getQuestManager().getQuest(questId);
                 if (quest != null) {
-                    String levelReq = quest.getRequiredLevel() > 0 ? " &8[需要Lv." + quest.getRequiredLevel() + "]" : "";
-                    sender.sendMessage(color("&7- " + quest.getFullName() + levelReq));
+                    String levelReq = quest.getRequiredLevel() > 0 ? " <dark_gray>[需要Lv." + quest.getRequiredLevel() + "]" : "";
+                    sender.sendMessage(color("<gray>- " + quest.getFullName() + levelReq));
                 }
             }
         }
@@ -108,7 +109,7 @@ public class QuestCommand implements CommandExecutor, TabExecutor {
         }
 
         if (args.length < 2) {
-            sender.sendMessage(color("&e用法: /quest accept <任务ID>"));
+            sender.sendMessage(color("<yellow>用法: /quest accept <任务ID>"));
             return;
         }
 
@@ -148,7 +149,7 @@ public class QuestCommand implements CommandExecutor, TabExecutor {
         if (plugin.getQuestManager().acceptQuest(player.getUniqueId(), questId)) {
             sender.sendMessage(plugin.getMessage("quest-accepted", "{quest}", quest.getName()));
             for (String line : quest.getDescription()) {
-                sender.sendMessage(color("&7" + line));
+                sender.sendMessage(color("<gray>" + line));
             }
         } else {
             sender.sendMessage(plugin.getMessage("quest-prerequisites-not-met"));
@@ -162,7 +163,7 @@ public class QuestCommand implements CommandExecutor, TabExecutor {
         }
 
         if (args.length < 2) {
-            sender.sendMessage(color("&e用法: /quest abandon <任务ID>"));
+            sender.sendMessage(color("<yellow>用法: /quest abandon <任务ID>"));
             return;
         }
 
@@ -173,7 +174,7 @@ public class QuestCommand implements CommandExecutor, TabExecutor {
             String name = quest != null ? quest.getName() : questId;
             sender.sendMessage(plugin.getMessage("quest-abandoned", "{quest}", name));
         } else {
-            sender.sendMessage(color("&c无法放弃任务！任务未进行中。"));
+            sender.sendMessage(color("<red>无法放弃任务！任务未进行中。"));
         }
     }
 
@@ -184,7 +185,7 @@ public class QuestCommand implements CommandExecutor, TabExecutor {
         }
 
         if (args.length < 2) {
-            sender.sendMessage(color("&e用法: /quest complete <任务ID>"));
+            sender.sendMessage(color("<yellow>用法: /quest complete <任务ID>"));
             return;
         }
 
@@ -195,16 +196,16 @@ public class QuestCommand implements CommandExecutor, TabExecutor {
             String name = quest != null ? quest.getName() : questId;
             sender.sendMessage(plugin.getMessage("quest-completed", "{quest}", name));
             if (quest != null && quest.getReward().hasRewards()) {
-                sender.sendMessage(color("&7奖励: &e" + quest.getReward().getSummary()));
+                sender.sendMessage(color("<gray>奖励: <yellow>" + quest.getReward().getSummary()));
             }
         } else {
-            sender.sendMessage(color("&c无法完成任务！请确保所有目标已完成。"));
+            sender.sendMessage(color("<red>无法完成任务！请确保所有目标已完成。"));
         }
     }
 
     private void handleInfo(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage(color("&e用法: /quest info <任务ID>"));
+            sender.sendMessage(color("<yellow>用法: /quest info <任务ID>"));
             return;
         }
 
@@ -216,45 +217,45 @@ public class QuestCommand implements CommandExecutor, TabExecutor {
             return;
         }
 
-        sender.sendMessage(color("&e========== 任务详情 =========="));
-        sender.sendMessage(color("&7名称: &f" + quest.getFullName()));
-        sender.sendMessage(color("&7类型: &b" + quest.getType().getDisplayName()));
+        sender.sendMessage(color("<yellow>========== 任务详情 =========="));
+        sender.sendMessage(color("<gray>名称: <white>" + quest.getFullName()));
+        sender.sendMessage(color("<gray>类型: <aqua>" + quest.getType().getDisplayName()));
 
         if (quest.getRequiredLevel() > 0) {
-            sender.sendMessage(color("&7等级要求: &cLv." + quest.getRequiredLevel()));
+            sender.sendMessage(color("<gray>等级要求: <red>Lv." + quest.getRequiredLevel()));
         }
 
         if (!quest.getPrerequisites().isEmpty()) {
-            sender.sendMessage(color("&7前置任务: &f" + String.join(", ", quest.getPrerequisites())));
+            sender.sendMessage(color("<gray>前置任务: <white>" + String.join(", ", quest.getPrerequisites())));
         }
 
         for (String line : quest.getDescription()) {
-            sender.sendMessage(color("&f" + line));
+            sender.sendMessage(color("<white>" + line));
         }
 
-        sender.sendMessage(color("&7目标:"));
+        sender.sendMessage(color("<gray>目标:"));
         for (QuestObjective obj : quest.getObjectives()) {
-            sender.sendMessage(color("&8- &f" + obj.getDescription()));
+            sender.sendMessage(color("<dark_gray>- <white>" + obj.getDescription()));
         }
 
         if (quest.getReward().hasRewards()) {
-            sender.sendMessage(color("&7奖励: &e" + quest.getReward().getSummary()));
+            sender.sendMessage(color("<gray>奖励: <yellow>" + quest.getReward().getSummary()));
         }
 
         if (sender instanceof Player player) {
             PlayerQuestData data = plugin.getProgressManager().getPlayerData(player.getUniqueId());
             if (data.isQuestActive(questId)) {
                 int[] progress = data.getProgress(questId);
-                sender.sendMessage(color("&7当前进度:"));
+                sender.sendMessage(color("<gray>当前进度:"));
                 for (int i = 0; i < quest.getObjectiveCount(); i++) {
                     QuestObjective obj = quest.getObjective(i);
                     int current = (progress != null && i < progress.length) ? progress[i] : 0;
-                    sender.sendMessage(color("&8- &f" + obj.getProgressText(current)));
+                    sender.sendMessage(color("<dark_gray>- <white>" + obj.getProgressText(current)));
                 }
             } else if (data.isQuestCompleted(questId)) {
-                sender.sendMessage(color("&a✔ 已完成"));
+                sender.sendMessage(color("<green>✔ 已完成"));
             } else {
-                sender.sendMessage(color("&7状态: &e可接取"));
+                sender.sendMessage(color("<gray>状态: <yellow>可接取"));
             }
         }
     }
@@ -267,16 +268,16 @@ public class QuestCommand implements CommandExecutor, TabExecutor {
 
         PlayerQuestData data = plugin.getProgressManager().getPlayerData(player.getUniqueId());
 
-        sender.sendMessage(color("&e========== 每日任务 =========="));
-        sender.sendMessage(color("&7今日完成: &e" + data.getDailyCompletedCount() + "/" + plugin.getDailyQuestLimit()));
+        sender.sendMessage(color("<yellow>========== 每日任务 =========="));
+        sender.sendMessage(color("<gray>今日完成: <yellow>" + data.getDailyCompletedCount() + "/" + plugin.getDailyQuestLimit()));
 
         List<String> dailyQuests = plugin.getDailyManager().getDailyQuests(player.getUniqueId());
         for (String questId : dailyQuests) {
             Quest quest = plugin.getQuestManager().getQuest(questId);
             if (quest != null) {
-                String status = data.isQuestActive(questId) ? "&a进行中" :
-                    (data.isQuestCompleted(questId) ? "&7已完成" : "&e可接取");
-                sender.sendMessage(color("&7- " + quest.getName() + " " + status));
+                String status = data.isQuestActive(questId) ? "<green>进行中" :
+                    (data.isQuestCompleted(questId) ? "<gray>已完成" : "<yellow>可接取");
+                sender.sendMessage(color("<gray>- " + quest.getName() + " " + status));
             }
         }
     }
@@ -289,21 +290,21 @@ public class QuestCommand implements CommandExecutor, TabExecutor {
 
         PlayerQuestData data = plugin.getProgressManager().getPlayerData(player.getUniqueId());
         if (data.getActiveQuestCount() == 0) {
-            sender.sendMessage(color("&7当前没有进行中的任务"));
+            sender.sendMessage(color("<gray>当前没有进行中的任务"));
             return;
         }
 
-        sender.sendMessage(color("&e========== 任务追踪 =========="));
+        sender.sendMessage(color("<yellow>========== 任务追踪 =========="));
         for (String questId : data.getActiveQuestIds()) {
             Quest quest = plugin.getQuestManager().getQuest(questId);
             if (quest != null) {
                 int[] progress = data.getProgress(questId);
-                sender.sendMessage(color("&6" + quest.getFullName()));
+                sender.sendMessage(color("<gold>" + quest.getFullName()));
                 for (int i = 0; i < quest.getObjectiveCount(); i++) {
                     QuestObjective obj = quest.getObjective(i);
                     int current = (progress != null && i < progress.length) ? progress[i] : 0;
-                    String status = current >= obj.getAmount() ? "&a✔" : "&7○";
-                    sender.sendMessage(color("  " + status + " &f" + obj.getProgressText(current)));
+                    String status = current >= obj.getAmount() ? "<green>✔" : "<gray>○";
+                    sender.sendMessage(color("  " + status + " <white>" + obj.getProgressText(current)));
                 }
             }
         }
@@ -315,52 +316,52 @@ public class QuestCommand implements CommandExecutor, TabExecutor {
             return;
         }
 
-        sender.sendMessage(color("&e========== 任务线 =========="));
+        sender.sendMessage(color("<yellow>========== 任务线 =========="));
         for (cn.guangdian.quest.model.QuestLine line : plugin.getQuestLineManager().getAllQuestLines()) {
             int progress = plugin.getQuestLineManager().getQuestLineProgress(player.getUniqueId(), line.getId());
             int percent = line.getProgressPercent(progress);
-            sender.sendMessage(color("&7- &f" + line.getName() + " &e" + percent + "% &8(" + (progress + 1) + "/" + line.getLength() + ")"));
+            sender.sendMessage(color("<gray>- <white>" + line.getName() + " <yellow>" + percent + "% <dark_gray>(" + (progress + 1) + "/" + line.getLength() + ")"));
         }
     }
 
     private void handleReload(CommandSender sender) {
         if (!sender.hasPermission("guangdian.quest.admin")) {
-            sender.sendMessage(color("&c没有权限！"));
+            sender.sendMessage(color("<red>没有权限！"));
             return;
         }
 
         plugin.reloadConfigs();
-        sender.sendMessage(color("&a配置已重载！"));
+        sender.sendMessage(color("<green>配置已重载！"));
     }
 
     private void handleResetDaily(CommandSender sender) {
         if (!sender.hasPermission("guangdian.quest.admin")) {
-            sender.sendMessage(color("&c没有权限！"));
+            sender.sendMessage(color("<red>没有权限！"));
             return;
         }
 
         if (sender instanceof Player player) {
             plugin.getDailyManager().resetPlayerDaily(player.getUniqueId());
-            sender.sendMessage(color("&a每日任务已重置！"));
+            sender.sendMessage(color("<green>每日任务已重置！"));
         } else {
             plugin.getDailyManager().resetAllDaily();
-            sender.sendMessage(color("&a所有玩家每日任务已重置！"));
+            sender.sendMessage(color("<green>所有玩家每日任务已重置！"));
         }
     }
 
     private void sendHelp(CommandSender sender) {
-        sender.sendMessage(color("&e========== 任务命令帮助 =========="));
-        sender.sendMessage(color("&e/quest list &7- 查看任务列表"));
-        sender.sendMessage(color("&e/quest accept <ID> &7- 接取任务"));
-        sender.sendMessage(color("&e/quest abandon <ID> &7- 放弃任务"));
-        sender.sendMessage(color("&e/quest complete <ID> &7- 完成任务"));
-        sender.sendMessage(color("&e/quest info <ID> &7- 查看任务详情"));
-        sender.sendMessage(color("&e/quest daily &7- 查看每日任务"));
-        sender.sendMessage(color("&e/quest track &7- 追踪任务进度"));
-        sender.sendMessage(color("&e/quest questline &7- 查看任务线"));
+        sender.sendMessage(color("<yellow>========== 任务命令帮助 =========="));
+        sender.sendMessage(color("<yellow>/quest list <gray>- 查看任务列表"));
+        sender.sendMessage(color("<yellow>/quest accept <ID> <gray>- 接取任务"));
+        sender.sendMessage(color("<yellow>/quest abandon <ID> <gray>- 放弃任务"));
+        sender.sendMessage(color("<yellow>/quest complete <ID> <gray>- 完成任务"));
+        sender.sendMessage(color("<yellow>/quest info <ID> <gray>- 查看任务详情"));
+        sender.sendMessage(color("<yellow>/quest daily <gray>- 查看每日任务"));
+        sender.sendMessage(color("<yellow>/quest track <gray>- 追踪任务进度"));
+        sender.sendMessage(color("<yellow>/quest questline <gray>- 查看任务线"));
         if (sender.hasPermission("guangdian.quest.admin")) {
-            sender.sendMessage(color("&e/quest reload &7- 重载配置"));
-            sender.sendMessage(color("&e/quest resetdaily &7- 重置每日任务"));
+            sender.sendMessage(color("<yellow>/quest reload <gray>- 重载配置"));
+            sender.sendMessage(color("<yellow>/quest resetdaily <gray>- 重置每日任务"));
         }
     }
 
@@ -381,7 +382,7 @@ public class QuestCommand implements CommandExecutor, TabExecutor {
         return player.getLevel();
     }
 
-    private String color(String text) {
+    private Component color(String text) {
         return GuangDianQuest.color(text);
     }
 

@@ -10,7 +10,9 @@ import cn.guangdian.decompose.manager.DecomposeManager;
 import cn.guangdian.decompose.manager.RuleManager;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
+import cn.guangdian.rpgcore.sound.SoundService;
 
 import java.io.File;
 
@@ -24,6 +26,10 @@ public class GuangDianDecompose extends AbstractRPGPlugin {
     private DecomposeGUI decomposeGUI;
     private DecomposeServiceAdapter serviceAdapter;
 
+    // RPGCore 服务引用
+    private SoundService soundService;
+    private MiniMessageService miniMessage;
+
     @Override
     protected void onPluginEnable() {
         instance = this;
@@ -32,6 +38,9 @@ public class GuangDianDecompose extends AbstractRPGPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+
+        // 初始化 RPGCore 服务
+        initRPGCoreServices();
 
         saveDefaultConfig();
         saveDefaultRules();
@@ -46,6 +55,25 @@ public class GuangDianDecompose extends AbstractRPGPlugin {
         registerListeners();
 
         getLogger().info("GuangDianDecompose 装备分解系统已启动!");
+    }
+
+    /**
+     * 初始化 RPGCore 核心服务
+     */
+    private void initRPGCoreServices() {
+        if (rpgCore != null) {
+            soundService = rpgCore.getSoundService();
+            miniMessage = rpgCore.getMiniMessageService();
+            getLogger().info("已连接到 RPGCore 服务 (SoundService, MiniMessageService)");
+        }
+
+        // 如果 RPGCore 服务不可用，使用本地降级服务
+        if (soundService == null) {
+            soundService = SoundService.getInstance();
+        }
+        if (miniMessage == null) {
+            miniMessage = MiniMessageService.getInstance();
+        }
     }
 
     @Override
@@ -136,6 +164,22 @@ public class GuangDianDecompose extends AbstractRPGPlugin {
 
     public DecomposeServiceAdapter getServiceAdapter() {
         return serviceAdapter;
+    }
+
+    /**
+     * 获取 RPGCore SoundService
+     * @return SoundService 实例
+     */
+    public SoundService getSoundService() {
+        return soundService;
+    }
+
+    /**
+     * 获取 RPGCore MiniMessageService
+     * @return MiniMessageService 实例
+     */
+    public MiniMessageService getMiniMessage() {
+        return miniMessage;
     }
 
     public boolean isDebug() {

@@ -13,29 +13,29 @@
 settings:
   # 交易请求超时时间(秒)
   request-timeout: 30
-  
+
   # 交易请求冷却时间(秒)
   request-cooldown: 5
-  
-  # 消息前缀
-  prefix: "&6[&e交易&6] "
+
+  # 消息前缀 (MiniMessage 格式)
+  prefix: "<gold>[<yellow>交易<gold>] "
 
 # ========================================
-# 消息设置
+# 消息设置 (MiniMessage 格式)
 # ========================================
 messages:
-  no-permission: "&c你没有权限使用交易功能!"
-  request-sent: "&a已向 &e%player% &a发送交易请求!"
-  request-received: "&e%player% &a想与你交易!"
-  request-timeout: "&c交易请求已超时!"
-  request-denied: "&c已拒绝交易请求!"
-  trade-started: "&a交易已开始!"
-  trade-completed: "&a交易完成!"
-  trade-cancelled: "&c交易已取消!"
-  already-trading: "&c你正在交易中!"
-  target-trading: "&c该玩家正在交易中!"
-  player-offline: "&c玩家不在线!"
-  no-pending-request: "&c没有待处理的交易请求!"
+  no-permission: "<red>你没有权限使用交易功能!"
+  request-sent: "<green>已向 <yellow>%player% <green>发送交易请求!"
+  request-received: "<yellow>%player% <green>想与你交易!"
+  request-timeout: "<red>交易请求已超时!"
+  request-denied: "<red>已拒绝交易请求!"
+  trade-started: "<green>交易已开始!"
+  trade-completed: "<green>交易完成!"
+  trade-cancelled: "<red>交易已取消!"
+  already-trading: "<red>你正在交易中!"
+  target-trading: "<red>该玩家正在交易中!"
+  player-offline: "<red>玩家不在线!"
+  no-pending-request: "<red>没有待处理的交易请求!"
 
 # ========================================
 # 高级设置

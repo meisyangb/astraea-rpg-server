@@ -2,9 +2,12 @@ package cn.guangdian.trade;
 
 import cn.guangdian.trade.adapter.TradeServiceAdapter;
 import cn.guangdian.trade.placeholder.TradePlaceholder;
+import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.api.GameLogger;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -23,24 +26,46 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 光点交易插件 - GuangDianTrade
+ *
+ * <p>RPGCore 服务集成:
+ * <ul>
+ *   <li>GameLogger: 使用 RPGCore 统一日志服务</li>
+ *   <li>SyncScheduler: 使用 RPGCore 同步任务调度器</li>
+ * </ul>
+ *
+ * <p>优先级模式: 优先使用 RPGCore 服务，不可用则降级到本地实现
+ *
+ * @author Gumin
+ * @QQ 2271257344
+ * @version 1.0.0
+ */
 public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
 
     private static GuangDianTrade instance;
-    
+
     private final Map<UUID, TradeSession> activeTrades = new ConcurrentHashMap<>();
     private final Map<UUID, TradeRequest> pendingRequests = new ConcurrentHashMap<>();
     private final Map<UUID, Long> requestCooldowns = new ConcurrentHashMap<>();
     private final Object tradeLock = new Object();
-    
+
     private int requestTimeout = 30;
     private int confirmCountdown = 3;
     private int requestCooldownTime = 5;
-    private String prefix = "§6[§e交易§6] ";
     private TradeServiceAdapter serviceAdapter;
+
+    // RPGCore 服务
+    private GameLogger gameLogger;
+    private MiniMessageService miniMessage;
     
     @Override
     protected void onPluginEnable() {
         instance = this;
+
+        // 初始化 RPGCore 服务
+        initRPGCoreServices();
+
         saveDefaultConfig();
         loadConfig();
         getServer().getPluginManager().registerEvents(this, this);
@@ -51,11 +76,72 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
         // 注册PlaceholderAPI扩展
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new TradePlaceholder(this).register();
-            getLogger().info("已注册PlaceholderAPI扩展!");
+            logInfo("已注册PlaceholderAPI扩展!");
         }
 
-        getLogger().info("光点交易插件已启用! 版本: " + getDescription().getVersion());
-        getLogger().info("作者: Gumin | QQ: 2271257344");
+        logInfo("光点交易插件已启用! 版本: " + getDescription().getVersion());
+        logInfo("作者: Gumin | QQ: 2271257344");
+    }
+
+    /**
+     * 初始化 RPGCore 核心服务
+     * 优先使用 RPGCore 统一服务，本地实现作为降级方案
+     */
+    private void initRPGCoreServices() {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            gameLogger = rpgCore.getGameLogger();
+            miniMessage = rpgCore.getMiniMessageService();
+            if (gameLogger != null) {
+                logInfo("已连接到 RPGCore GameLogger");
+            }
+            if (miniMessage != null) {
+                logInfo("已连接到 RPGCore MiniMessageService");
+            }
+        }
+        // 降级方案
+        if (gameLogger == null) {
+            logInfo("使用 Bukkit Logger（降级）");
+        }
+        if (miniMessage == null) {
+            miniMessage = MiniMessageService.getInstance();
+            logInfo("使用本地 MiniMessageService（降级）");
+        }
+    }
+
+    /**
+     * 日志辅助方法 - 优先使用 RPGCore GameLogger
+     */
+    public void logInfo(String message) {
+        if (gameLogger != null) {
+            gameLogger.info(message);
+        } else {
+            getLogger().info(message);
+        }
+    }
+
+    public void logWarning(String message) {
+        if (gameLogger != null) {
+            gameLogger.warning(message);
+        } else {
+            getLogger().warning(message);
+        }
+    }
+
+    public void logSevere(String message) {
+        if (gameLogger != null) {
+            gameLogger.severe(message);
+        } else {
+            getLogger().severe(message);
+        }
+    }
+
+    public void logDebug(String message) {
+        if (gameLogger != null) {
+            gameLogger.debug(message);
+        } else {
+            getLogger().info("[DEBUG] " + message);
+        }
     }
 
     @Override
@@ -79,7 +165,7 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
         if (scheduler != null) {
             scheduler.cancelAllTasks();
         }
-        getLogger().info("光点交易插件已禁用!");
+        logInfo("光点交易插件已禁用!");
     }
     
     @Override
@@ -91,34 +177,43 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
         requestTimeout = Math.max(10, Math.min(300, getConfig().getInt("settings.request-timeout", 30)));
         confirmCountdown = Math.max(1, Math.min(60, getConfig().getInt("settings.confirm-countdown", 3)));
         requestCooldownTime = Math.max(0, Math.min(60, getConfig().getInt("settings.request-cooldown", 5)));
-        prefix = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().serialize(net.kyori.adventure.text.Component.text(getConfig().getString("settings.prefix", "§6[§e交易§6] ")));
     }
 
-    private String getMessage(String key, String... replacements) {
+    /**
+     * 获取消息前缀
+     */
+    private Component getPrefix() {
+        return miniMessage.parse("<gold>[<yellow>交易<gold>] ");
+    }
+
+    /**
+     * 获取消息 Component
+     */
+    private Component getMessage(String key, String... replacements) {
         String msg = getConfig().getString("messages." + key, "");
         if (msg.isEmpty()) {
             switch (key) {
-                case "no-permission": msg = "&c你没有权限使用交易功能!"; break;
-                case "request-sent": msg = "&a已向 &e%player% &a发送交易请求!"; break;
-                case "request-received": msg = "&e%player% &a想与你交易!"; break;
-                case "request-timeout": msg = "&c交易请求已超时!"; break;
-                case "request-denied": msg = "&c已拒绝交易请求!"; break;
-                case "trade-started": msg = "&a交易开始!"; break;
-                case "trade-completed": msg = "&a交易完成!"; break;
-                case "trade-cancelled": msg = "&c交易已取消!"; break;
-                case "already-trading": msg = "&c你已经在交易中!"; break;
-                case "target-trading": msg = "&c该玩家正在交易中!"; break;
-                case "player-confirmed": msg = "&e%player% &a已确认交易!"; break;
-                case "you-confirmed": msg = "&a你已确认交易!"; break;
-                case "countdown": msg = "&e交易将在 &c%time% &e秒后完成!"; break;
-                case "cooldown": msg = "&c请等待 %time% 秒后再发起交易请求!"; break;
+                case "no-permission": msg = "<red>你没有权限使用交易功能!"; break;
+                case "request-sent": msg = "<green>已向 <yellow>%player% <green>发送交易请求!"; break;
+                case "request-received": msg = "<yellow>%player% <green>想与你交易!"; break;
+                case "request-timeout": msg = "<red>交易请求已超时!"; break;
+                case "request-denied": msg = "<red>已拒绝交易请求!"; break;
+                case "trade-started": msg = "<green>交易开始!"; break;
+                case "trade-completed": msg = "<green>交易完成!"; break;
+                case "trade-cancelled": msg = "<red>交易已取消!"; break;
+                case "already-trading": msg = "<red>你已经在交易中!"; break;
+                case "target-trading": msg = "<red>该玩家正在交易中!"; break;
+                case "player-confirmed": msg = "<yellow>%player% <green>已确认交易!"; break;
+                case "you-confirmed": msg = "<green>你已确认交易!"; break;
+                case "countdown": msg = "<yellow>交易将在 <red>%time% <yellow>秒后完成!"; break;
+                case "cooldown": msg = "<red>请等待 %time% 秒后再发起交易请求!"; break;
                 default: msg = ""; break;
             }
         }
         for (int i = 0; i < replacements.length - 1; i += 2) {
             msg = msg.replace("%" + replacements[i] + "%", replacements[i + 1]);
         }
-        return net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().serialize(net.kyori.adventure.text.Component.text(msg));
+        return miniMessage.parse(msg);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -134,36 +229,36 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
         if (player.getUniqueId().equals(target.getUniqueId())) return;
         
         if (!player.hasPermission("guangdian.trade.use")) {
-            player.sendMessage(prefix + getMessage("no-permission"));
+            player.sendMessage(getPrefix().append(getMessage("no-permission")));
             return;
         }
-        
+
         if (!target.hasPermission("guangdian.trade.use")) {
-            player.sendMessage(prefix + "§c该玩家无法进行交易!");
+            player.sendMessage(getPrefix().append(miniMessage.red("该玩家无法进行交易!")));
             return;
         }
-        
+
         if (isInTrade(player)) {
-            player.sendMessage(prefix + getMessage("already-trading"));
+            player.sendMessage(getPrefix().append(getMessage("already-trading")));
             return;
         }
-        
+
         if (isInTrade(target)) {
-            player.sendMessage(prefix + getMessage("target-trading"));
+            player.sendMessage(getPrefix().append(getMessage("target-trading")));
             return;
         }
-        
+
         long now = System.currentTimeMillis() / 1000;
         Long lastRequest = requestCooldowns.get(player.getUniqueId());
         if (lastRequest != null && (now - lastRequest) < requestCooldownTime) {
             int remaining = (int) (requestCooldownTime - (now - lastRequest));
-            player.sendMessage(prefix + getMessage("cooldown", "time", String.valueOf(remaining)));
+            player.sendMessage(getPrefix().append(getMessage("cooldown", "time", String.valueOf(remaining))));
             return;
         }
-        
+
         TradeRequest existing = pendingRequests.get(player.getUniqueId());
         if (existing != null && existing.getTarget().equals(target.getUniqueId())) {
-            player.sendMessage(prefix + "§c你已经向该玩家发送了交易请求!");
+            player.sendMessage(getPrefix().append(miniMessage.red("你已经向该玩家发送了交易请求!")));
             return;
         }
         
@@ -197,24 +292,24 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
             taskId = rpgCore.getScheduler().runSyncLater(() -> {
                 TradeRequest req = pendingRequests.remove(sender.getUniqueId());
                 if (req != null) {
-                    sender.sendMessage(prefix + getMessage("request-timeout"));
+                    sender.sendMessage(getPrefix().append(getMessage("request-timeout")));
                     if (target.isOnline()) {
-                        target.sendMessage(prefix + getMessage("request-timeout"));
+                        target.sendMessage(getPrefix().append(getMessage("request-timeout")));
                     }
                 }
             }, requestTimeout * 20L);
         }
-        
+
         TradeRequest request = new TradeRequest(sender.getUniqueId(), target.getUniqueId(), taskId);
         pendingRequests.put(sender.getUniqueId(), request);
         requestCooldowns.put(sender.getUniqueId(), System.currentTimeMillis() / 1000);
-        
-        sender.sendMessage(prefix + getMessage("request-sent", "player", target.getName()));
-        sender.sendMessage(prefix + "§7蹲下右键对方可接受交易");
-        
-        target.sendMessage(prefix + getMessage("request-received", "player", sender.getName()));
-        target.sendMessage(prefix + "§7蹲下右键对方接受交易");
-        target.sendMessage(prefix + "§7或等待 §c" + requestTimeout + " §7秒自动拒绝");
+
+        sender.sendMessage(getPrefix().append(getMessage("request-sent", "player", target.getName())));
+        sender.sendMessage(getPrefix().append(miniMessage.gray("蹲下右键对方可接受交易")));
+
+        target.sendMessage(getPrefix().append(getMessage("request-received", "player", sender.getName())));
+        target.sendMessage(getPrefix().append(miniMessage.gray("蹲下右键对方接受交易")));
+        target.sendMessage(getPrefix().append(miniMessage.gray("或等待 ")).append(miniMessage.red(String.valueOf(requestTimeout))).append(miniMessage.gray(" 秒自动拒绝")));
         
         target.playSound(target.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
     }
@@ -222,24 +317,24 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
     private void startTrade(Player player1, Player player2) {
         synchronized (tradeLock) {
             if (isInTrade(player1) || isInTrade(player2)) {
-                player1.sendMessage(prefix + "§c交易失败，对方正在交易中!");
-                player2.sendMessage(prefix + "§c交易失败，对方正在交易中!");
+                player1.sendMessage(getPrefix().append(miniMessage.red("交易失败，对方正在交易中!")));
+                player2.sendMessage(getPrefix().append(miniMessage.red("交易失败，对方正在交易中!")));
                 return;
             }
-            
+
             TradeSession session = new TradeSession(player1.getUniqueId(), player2.getUniqueId());
             activeTrades.put(player1.getUniqueId(), session);
             activeTrades.put(player2.getUniqueId(), session);
         }
-        
+
         TradeSession session = getTradeSession(player1);
         initializeTradeGUI(session);
-        
+
         player1.openInventory(session.getInventory());
         player2.openInventory(session.getInventory());
-        
-        player1.sendMessage(prefix + getMessage("trade-started"));
-        player2.sendMessage(prefix + getMessage("trade-started"));
+
+        player1.sendMessage(getPrefix().append(getMessage("trade-started")));
+        player2.sendMessage(getPrefix().append(getMessage("trade-started")));
         
         player1.playSound(player1.getLocation(), Sound.BLOCK_CHEST_OPEN, 1.0f, 1.0f);
         player2.playSound(player2.getLocation(), Sound.BLOCK_CHEST_OPEN, 1.0f, 1.0f);
@@ -271,26 +366,26 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
             Inventory inv = session.getInventory();
             
             if (session.isBothConfirmed()) {
-                ItemStack divider = createGlass(Material.GREEN_STAINED_GLASS_PANE, "§a交易即将完成");
+                ItemStack divider = createGlass(Material.GREEN_STAINED_GLASS_PANE, miniMessageToLegacy("<green>交易即将完成"));
                 for (int i = 4; i < 54; i += 9) {
                     inv.setItem(i, divider);
                 }
                 return;
             }
-            
+
             Material currentColor = session.getCurrentBreathingColor();
             String displayName;
-            
+
             // 根据确认状态选择显示名称
             boolean p1Confirmed = session.isConfirmed(session.getPlayer1());
             boolean p2Confirmed = session.isConfirmed(session.getPlayer2());
-            
+
             if (p1Confirmed || p2Confirmed) {
-                displayName = "§e等待对方确认...";
+                displayName = miniMessageToLegacy("<yellow>等待对方确认...");
             } else {
-                displayName = "§7交易进行中...";
+                displayName = miniMessageToLegacy("<gray>交易进行中...");
             }
-            
+
             ItemStack divider = createGlass(currentColor, displayName);
             for (int i = 4; i < 54; i += 9) {
                 inv.setItem(i, divider);
@@ -334,21 +429,21 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
             inv.setItem(slot, null);
         }
         
-        ItemStack divider = createGlass(Material.BLACK_STAINED_GLASS_PANE, "§8分隔线");
+        ItemStack divider = createGlass(Material.BLACK_STAINED_GLASS_PANE, " ");
         for (int i = 4; i < 54; i += 9) {
             inv.setItem(i, divider);
         }
-        
-        ItemStack confirmBtn = createItem(Material.LIME_WOOL, "§a§l确认交易", 
-            Arrays.asList("§7点击确认交易", "§7双方确认后 " + confirmCountdown + " 秒完成"));
+
+        ItemStack confirmBtn = createItem(Material.LIME_WOOL, "<green><bold>确认交易",
+            Arrays.asList("<gray>点击确认交易", "<gray>双方确认后 " + confirmCountdown + " 秒完成"));
         inv.setItem(48, confirmBtn);
-        
-        ItemStack cancelBtn = createItem(Material.RED_WOOL, "§c§l取消交易", 
-            Arrays.asList("§7点击取消交易"));
+
+        ItemStack cancelBtn = createItem(Material.RED_WOOL, "<red><bold>取消交易",
+            Arrays.asList("<gray>点击取消交易"));
         inv.setItem(50, cancelBtn);
-        
-        ItemStack statusBtn = createItem(Material.ORANGE_WOOL, "§e交易状态", 
-            Arrays.asList("§7等待双方放入物品", "§7并点击确认按钮"));
+
+        ItemStack statusBtn = createItem(Material.ORANGE_WOOL, "<yellow>交易状态",
+            Arrays.asList("<gray>等待双方放入物品", "<gray>并点击确认按钮"));
         inv.setItem(49, statusBtn);
     }
 
@@ -416,20 +511,20 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
 
     private void handleConfirm(Player player, TradeSession session) {
         if (session.isCountingDown()) {
-            player.sendMessage(prefix + "§c交易正在进行中!");
+            player.sendMessage(getPrefix().append(miniMessage.red("交易正在进行中!")));
             return;
         }
-        
+
         session.setConfirmed(player, true);
         updateStatus(session);
-        
+
         Player other = session.getPlayer1().equals(player) ? session.getPlayer2() : session.getPlayer1();
-        other.sendMessage(prefix + getMessage("player-confirmed", "player", player.getName()));
+        other.sendMessage(getPrefix().append(getMessage("player-confirmed", "player", player.getName())));
         other.playSound(other.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.2f);
-        
-        player.sendMessage(prefix + getMessage("you-confirmed"));
+
+        player.sendMessage(getPrefix().append(getMessage("you-confirmed")));
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
-        
+
         if (session.isBothConfirmed()) {
             startCountdown(session);
         }
@@ -451,13 +546,13 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
                 stopBreathingAnimation(session);
                 completeTrade(session);
             } else {
-                String msg = getMessage("countdown", "time", String.valueOf(countdown));
-                session.getPlayer1().sendMessage(prefix + msg);
-                session.getPlayer2().sendMessage(prefix + msg);
-                
+                Component msg = getMessage("countdown", "time", String.valueOf(countdown));
+                session.getPlayer1().sendMessage(getPrefix().append(msg));
+                session.getPlayer2().sendMessage(getPrefix().append(msg));
+
                 session.getPlayer1().playSound(session.getPlayer1().getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1.0f, 1.0f);
                 session.getPlayer2().playSound(session.getPlayer2().getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1.0f, 1.0f);
-                
+
                 session.setCountdown(countdown - 1);
                 updateStatus(session);
             }
@@ -468,30 +563,30 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
 
     private void updateStatus(TradeSession session) {
         Inventory inv = session.getInventory();
-        
+
         boolean p1Confirmed = session.isConfirmed(session.getPlayer1());
         boolean p2Confirmed = session.isConfirmed(session.getPlayer2());
-        
-        Material statusColor = session.isBothConfirmed() ? Material.GREEN_WOOL : 
+
+        Material statusColor = session.isBothConfirmed() ? Material.GREEN_WOOL :
             (p1Confirmed || p2Confirmed ? Material.YELLOW_WOOL : Material.ORANGE_WOOL);
-        
+
         List<String> lore = new ArrayList<>();
-        lore.add("§7" + session.getPlayer1().getName() + ": " + (p1Confirmed ? "§a已确认" : "§c未确认"));
-        lore.add("§7" + session.getPlayer2().getName() + ": " + (p2Confirmed ? "§a已确认" : "§c未确认"));
-        
+        lore.add("<gray>" + session.getPlayer1().getName() + ": " + (p1Confirmed ? "<green>已确认" : "<red>未确认"));
+        lore.add("<gray>" + session.getPlayer2().getName() + ": " + (p2Confirmed ? "<green>已确认" : "<red>未确认"));
+
         if (session.isCountingDown()) {
             lore.add("");
-            lore.add("§e交易倒计时: §c" + session.getCountdown() + " §e秒");
+            lore.add("<yellow>交易倒计时: <red>" + session.getCountdown() + " <yellow>秒");
         } else if (session.isBothConfirmed()) {
             lore.add("");
-            lore.add("§a双方已确认!");
+            lore.add("<green>双方已确认!");
         }
-        
-        ItemStack statusBtn = createItem(statusColor, "§e交易状态", lore);
+
+        ItemStack statusBtn = createItem(statusColor, "<yellow>交易状态", lore);
         inv.setItem(49, statusBtn);
-        
+
         Material dividerColor = session.isBothConfirmed() ? Material.GREEN_STAINED_GLASS_PANE : Material.BLACK_STAINED_GLASS_PANE;
-        ItemStack divider = createGlass(dividerColor, session.isBothConfirmed() ? "§a交易即将完成" : "§8分隔线");
+        ItemStack divider = createGlass(dividerColor, session.isBothConfirmed() ? miniMessageToLegacy("<green>交易即将完成") : " ");
         for (int i = 4; i < 54; i += 9) {
             inv.setItem(i, divider);
         }
@@ -568,7 +663,7 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
         Player player2 = Bukkit.getPlayer(player2Id);
         
         if (player1 == null || player2 == null) {
-            getLogger().warning("交易完成时玩家不在线，取消交易");
+            logWarning("交易完成时玩家不在线，取消交易");
             cancelTrade(session);
             return;
         }
@@ -616,13 +711,13 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
                 }
             }
         } catch (Exception e) {
-            getLogger().severe("交易完成时发生错误: " + e.getMessage());
+            logSevere("交易完成时发生错误: " + e.getMessage());
             getLogger().log(java.util.logging.Level.SEVERE, "详细异常信息", e);
         }
         
-        player1.sendMessage(prefix + getMessage("trade-completed"));
-        player2.sendMessage(prefix + getMessage("trade-completed"));
-        
+        player1.sendMessage(getPrefix().append(getMessage("trade-completed")));
+        player2.sendMessage(getPrefix().append(getMessage("trade-completed")));
+
         player1.playSound(player1.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
         player2.playSound(player2.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
     }
@@ -675,7 +770,7 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
                 }
             }
         } catch (Exception e) {
-            getLogger().severe("取消交易时发生错误: " + e.getMessage());
+            logSevere("取消交易时发生错误: " + e.getMessage());
             getLogger().log(java.util.logging.Level.SEVERE, "详细异常信息", e);
         }
         
@@ -684,9 +779,9 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
 
         if (player1 != null && player1.isOnline()) player1.closeInventory();
         if (player2 != null && player2.isOnline()) player2.closeInventory();
-        
-        if (player1 != null && player1.isOnline()) player1.sendMessage(prefix + getMessage("trade-cancelled"));
-        if (player2 != null && player2.isOnline()) player2.sendMessage(prefix + getMessage("trade-cancelled"));
+
+        if (player1 != null && player1.isOnline()) player1.sendMessage(getPrefix().append(getMessage("trade-cancelled")));
+        if (player2 != null && player2.isOnline()) player2.sendMessage(getPrefix().append(getMessage("trade-cancelled")));
     }
 
     private boolean isInTrade(Player player) {
@@ -711,17 +806,37 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
-            meta.setDisplayName(name);
-            meta.setLore(lore);
+            // 将 MiniMessage 格式转换为 legacy 格式
+            String legacyName = miniMessageToLegacy(name);
+            meta.setDisplayName(legacyName);
+            if (lore != null) {
+                List<String> legacyLore = lore.stream()
+                    .map(this::miniMessageToLegacy)
+                    .collect(java.util.stream.Collectors.toList());
+                meta.setLore(legacyLore);
+            }
             item.setItemMeta(meta);
         }
         return item;
     }
 
+    /**
+     * 将 MiniMessage 格式转换为 legacy 格式（用于 ItemMeta）
+     */
+    private String miniMessageToLegacy(String text) {
+        if (text == null || text.isEmpty()) return "";
+        try {
+            Component component = miniMessage.parse(text);
+            return net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(component);
+        } catch (Exception e) {
+            return text;
+        }
+    }
+
     @Override
     public boolean onCommand(org.bukkit.command.CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("§c只有玩家可以使用此命令!");
+            sender.sendMessage(miniMessage.red("只有玩家可以使用此命令!"));
             return true;
         }
         
@@ -732,17 +847,17 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
             if (session != null) {
                 cancelTrade(session);
             } else {
-                player.sendMessage(prefix + "§c你没有正在进行的交易!");
+                player.sendMessage(getPrefix().append(miniMessage.red("你没有正在进行的交易!")));
             }
             return true;
         }
-        
-        player.sendMessage("§6===== 光点交易系统 =====");
-        player.sendMessage("§e蹲下 + 右键玩家 §7- 发送交易请求");
-        player.sendMessage("§e对方蹲下 + 右键你 §7- 接受交易请求");
-        player.sendMessage("§e点击确认按钮 §7- 确认交易");
-        player.sendMessage("§e/trade cancel §7- 取消交易");
-        player.sendMessage("§7双方确认后等待 " + confirmCountdown + " 秒完成交易");
+
+        player.sendMessage(miniMessage.gold("===== 光点交易系统 ====="));
+        player.sendMessage(miniMessage.yellow("蹲下 + 右键玩家 ").append(miniMessage.gray("- 发送交易请求")));
+        player.sendMessage(miniMessage.yellow("对方蹲下 + 右键你 ").append(miniMessage.gray("- 接受交易请求")));
+        player.sendMessage(miniMessage.yellow("点击确认按钮 ").append(miniMessage.gray("- 确认交易")));
+        player.sendMessage(miniMessage.yellow("/trade cancel ").append(miniMessage.gray("- 取消交易")));
+        player.sendMessage(miniMessage.gray("双方确认后等待 " + confirmCountdown + " 秒完成交易"));
         return true;
     }
 
@@ -868,7 +983,9 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
         public TradeSession(UUID player1Id, UUID player2Id) {
             this.player1Id = player1Id;
             this.player2Id = player2Id;
-            this.inventory = Bukkit.createInventory(null, 54, "§6§l交易界面");
+            this.inventory = Bukkit.createInventory(null, 54, net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(
+                net.kyori.adventure.text.Component.text("交易界面").color(net.kyori.adventure.text.format.NamedTextColor.GOLD).decorate(net.kyori.adventure.text.format.TextDecoration.BOLD)
+            ));
         }
 
         public UUID getPlayer1Id() { return player1Id; }

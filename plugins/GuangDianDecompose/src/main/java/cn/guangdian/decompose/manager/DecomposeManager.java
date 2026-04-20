@@ -2,8 +2,8 @@ package cn.guangdian.decompose.manager;
 
 import cn.guangdian.decompose.GuangDianDecompose;
 import cn.guangdian.decompose.model.DecomposeRule;
+import cn.guangdian.rpgcore.sound.SoundService;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -114,11 +114,10 @@ public class DecomposeManager {
         String soundName = plugin.getConfig().getString("sounds." + soundType, "");
         if (soundName.isEmpty()) return;
 
-        try {
-            Sound sound = Sound.valueOf(soundName);
-            player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
-        } catch (IllegalArgumentException e) {
-            player.playSound(player.getLocation(), soundName, 1.0f, 1.0f);
+        // 使用 RPGCore SoundService
+        SoundService soundService = plugin.getSoundService();
+        if (soundService != null) {
+            soundService.playSound(player, soundName, 1.0f, 1.0f);
         }
     }
 

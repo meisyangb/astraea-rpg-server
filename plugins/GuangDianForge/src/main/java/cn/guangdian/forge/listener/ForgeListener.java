@@ -177,7 +177,7 @@ public class ForgeListener implements Listener {
         if (rpgCore != null) {
             rpgCore.getScheduler().runSyncLater(task, delay);
         } else {
-            plugin.getServer().getScheduler().runTaskLater(plugin, task, delay);
+            plugin.getLogger().warning("RPGCore 未启用，无法执行延迟任务");
         }
     }
 
@@ -205,7 +205,7 @@ public class ForgeListener implements Listener {
                 int have = gui.getMaterialCount(req.getKey());
                 if (have < req.getValue()) {
                     String displayName = recipe.getIngredientDisplayName(req.getKey());
-                    String cleanName = displayName.replace("§d", "").replace("§e", "");
+                    String cleanName = displayName.replaceAll("§[0-9a-fk-or]", "").replaceAll("&[0-9a-fk-or]", "").replaceAll("<[^>]+>", "");
                     player.sendMessage(Component.text("缺少: " + cleanName + " x" + (req.getValue() - have), NamedTextColor.YELLOW));
                 }
             }

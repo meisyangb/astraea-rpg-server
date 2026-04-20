@@ -5,7 +5,6 @@ import cn.guangdian.armorstats.data.AttributeValue;
 import cn.guangdian.armorstats.data.PlayerStats;
 import cn.guangdian.armorstats.debug.DebugLogManager;
 import cn.guangdian.armorstats.parser.LoreParser;
-import cn.guangdian.armorstats.parser.GemParser;
 import cn.guangdian.armorstats.parser.SkillParser;
 import cn.guangdian.armorstats.storage.AsyncExecutorService;
 import cn.guangdian.armorstats.storage.PlayerDataStorage;
@@ -76,8 +75,6 @@ public class StatsManager {
     private AsyncExecutor asyncExecutor;
     
     private Map<String, String> attributePatterns;
-    private Map<String, String> gemPatterns;
-    private String gemSocketPattern;
     private double defenseDivisor;
     private double maxDamageReduction;
     private double minDamage;
@@ -168,21 +165,6 @@ public class StatsManager {
                 }
                 LoreParser.initializePatterns(attributePatterns);
             }
-        }
-
-        var gemsConfig = configManager.getGems();
-        if (gemsConfig != null) {
-            ConfigurationSection gemSection = gemsConfig.getConfigurationSection("gems");
-            if (gemSection != null) {
-                gemPatterns = new ConcurrentHashMap<>();
-                for (String key : gemSection.getKeys(false)) {
-                    gemPatterns.put(key, gemSection.getString(key, ""));
-                }
-            }
-            gemSocketPattern = gemsConfig.getString("gem_socket", "可镶嵌<([^>]+)>");
-            Map<String, String> socketMap = new HashMap<>();
-            socketMap.put("socket", gemSocketPattern);
-            GemParser.initialize(socketMap, gemPatterns);
         }
 
         var damageConfig = configManager.getDamage();
@@ -781,12 +763,10 @@ public class StatsManager {
     /**
      * 添加物品属性到统计对象
      * 改为 public 以便其他管理器使用
-     * 
+     *
      * 优化特性:
      * - 使用装备缓存避免重复解析Lore
      * - 缓存未启用时降级到直接解析
-     * 
-     * 修复: 正确合并宝石属性，避免覆盖装备属性
      */
     public void addItemAttributes(PlayerStats stats, List<String> skills, ItemStack item) {
         String itemDesc = item != null ? item.getType().name() : "NULL";
@@ -824,20 +804,6 @@ public class StatsManager {
         DebugLogManager.log(null, DebugLogManager.Level.TRACE, 
             DebugLogManager.Operation.PARSE_LORE, "Lore解析: " + attrs.size() + "个属性", parseDetails);
         
-        // 修复: 正确合并宝石属性到attrs，避免覆盖装备属性
-        Map<String, AttributeValue> socketAttrs = GemParser.parseSocketGemsFromLore(item);
-        if (!socketAttrs.isEmpty()) {
-            // 调试日志：宝石解析
-            Map<String, Object> gemDetails = new LinkedHashMap<>();
-            gemDetails.put("gemAttrCount", socketAttrs.size());
-            DebugLogManager.log(null, DebugLogManager.Level.TRACE, 
-                DebugLogManager.Operation.PARSE_GEM, "宝石解析: " + socketAttrs.size() + "个属性", gemDetails);
-            
-            for (Map.Entry<String, AttributeValue> entry : socketAttrs.entrySet()) {
-                attrs.merge(entry.getKey(), entry.getValue(), AttributeValue::merge);
-            }
-        }
-        
         // 添加合并后的所有属性
         stats.addStats(attrs);
 
@@ -860,19 +826,25 @@ public class StatsManager {
     }
 
     /**
-     * 检查物品是否是武器
-     * 识别方式（满足任一即可）：
-     * 1. 材质在配置的武器材质列表中
-     * 2. Lore第一行包含配置的首行关键词
-     * 3. Lore任意行包含配置的关键词
+     * 通用的装备类型识别方法
+     *
+     * @param item 待检查的物品
+     * @param materials 该装备类型允许的材质集合
+     * @param firstLineKeywords 该装备类型的首行关键词列表
+     * @param loreKeywords 该装备类型的Lore关键词列表
+     * @return 如果物品匹配任一识别条件则返回true
      */
-    public boolean isWeaponItem(ItemStack item) {
+    private boolean isEquipmentItem(ItemStack item,
+                                    Set<Material> materials,
+                                    List<String> firstLineKeywords,
+                                    List<String> loreKeywords) {
+        // 空值检查
         if (item == null || item.getType() == Material.AIR) {
             return false;
         }
 
         // 检查材质
-        if (!weaponMaterials.isEmpty() && weaponMaterials.contains(item.getType())) {
+        if (!materials.isEmpty() && materials.contains(item.getType())) {
             return true;
         }
 
@@ -890,9 +862,9 @@ public class StatsManager {
         }
 
         // 检查第一行关键词
-        if (!weaponFirstLineKeywords.isEmpty() && !lore.isEmpty()) {
+        if (!firstLineKeywords.isEmpty() && !lore.isEmpty()) {
             String firstLine = stripColor(lore.get(0));
-            for (String keyword : weaponFirstLineKeywords) {
+            for (String keyword : firstLineKeywords) {
                 if (firstLine.contains(keyword)) {
                     return true;
                 }
@@ -902,7 +874,7 @@ public class StatsManager {
         // 检查所有行关键词
         for (String line : lore) {
             String stripped = stripColor(line);
-            for (String keyword : weaponLoreKeywords) {
+            for (String keyword : loreKeywords) {
                 if (stripped.contains(keyword)) {
                     return true;
                 }
@@ -913,6 +885,17 @@ public class StatsManager {
     }
 
     /**
+     * 检查物品是否是武器
+     * 识别方式（满足任一即可）：
+     * 1. 材质在配置的武器材质列表中
+     * 2. Lore第一行包含配置的首行关键词
+     * 3. Lore任意行包含配置的关键词
+     */
+    public boolean isWeaponItem(ItemStack item) {
+        return isEquipmentItem(item, weaponMaterials, weaponFirstLineKeywords, weaponLoreKeywords);
+    }
+
+    /**
      * 检查物品是否是防具
      * 识别方式（满足任一即可）：
      * 1. 材质在配置的防具材质列表中
@@ -920,49 +903,7 @@ public class StatsManager {
      * 3. Lore任意行包含配置的关键词
      */
     public boolean isArmorItem(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR) {
-            return false;
-        }
-
-        // 检查材质
-        if (!armorMaterials.isEmpty() && armorMaterials.contains(item.getType())) {
-            return true;
-        }
-
-        // 检查Lore
-        if (!item.hasItemMeta()) {
-            return false;
-        }
-        ItemMeta meta = item.getItemMeta();
-        if (meta == null || !meta.hasLore()) {
-            return false;
-        }
-        List<String> lore = meta.getLore();
-        if (lore == null || lore.isEmpty()) {
-            return false;
-        }
-
-        // 检查第一行关键词
-        if (!armorFirstLineKeywords.isEmpty() && !lore.isEmpty()) {
-            String firstLine = stripColor(lore.get(0));
-            for (String keyword : armorFirstLineKeywords) {
-                if (firstLine.contains(keyword)) {
-                    return true;
-                }
-            }
-        }
-
-        // 检查所有行关键词
-        for (String line : lore) {
-            String stripped = stripColor(line);
-            for (String keyword : armorLoreKeywords) {
-                if (stripped.contains(keyword)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return isEquipmentItem(item, armorMaterials, armorFirstLineKeywords, armorLoreKeywords);
     }
 
     /**

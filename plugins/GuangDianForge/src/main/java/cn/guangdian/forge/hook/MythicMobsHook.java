@@ -220,17 +220,17 @@ public class MythicMobsHook {
      */
     public String getItemDisplayName(String configStr) {
         if (configStr == null) return "未知";
-        
+
         String lowerStr = configStr.toLowerCase();
-        
+
         if (lowerStr.startsWith("mythicmobs:") || lowerStr.startsWith("mm:")) {
             String itemId = configStr.substring(configStr.indexOf(':') + 1);
-            return "§d" + itemId + " §7(MythicMobs)";
+            return "<light_purple>" + itemId + " <gray>(MythicMobs)";
         } else if (lowerStr.startsWith("vanilla:") || lowerStr.startsWith("minecraft:")) {
             String materialName = configStr.substring(configStr.indexOf(':') + 1);
-            return "§e" + materialName + " §7(原版)";
+            return "<yellow>" + materialName + " <gray>(原版)";
         } else {
-            return "§e" + configStr;
+            return "<yellow>" + configStr;
         }
     }
 }

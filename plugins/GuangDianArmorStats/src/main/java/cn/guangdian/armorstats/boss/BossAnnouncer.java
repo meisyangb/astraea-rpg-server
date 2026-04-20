@@ -1,11 +1,12 @@
 package cn.guangdian.armorstats.boss;
 
 import cn.guangdian.armorstats.GuangDianArmorStats;
+import cn.guangdian.rpgcore.message.MiniMessageService;
+import cn.guangdian.rpgcore.sound.SoundService;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -14,7 +15,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.Bukkit;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -24,15 +24,22 @@ import java.util.UUID;
 /**
  * BOSS 公告系统
  * 处理 BOSS 死亡公告、血量阶段公告等
+ *
+ * RPGCore 服务集成:
+ * - MiniMessageService: 使用 RPGCore 统一消息服务进行文本格式化
+ * - SoundService: 使用 RPGCore 统一音效服务
  */
 public class BossAnnouncer implements Listener {
 
     private final GuangDianArmorStats plugin;
     private final BossStatsManager bossStatsManager;
+    private final MiniMessageService miniMessage;
+    private final SoundService soundService;
+    private final MiniMessage miniMessageParser;
 
     // BOSS 血量阶段跟踪 (用于阶段公告)
     private final Map<UUID, Integer> bossPhaseTracker = new HashMap<>();
-    
+
     // 公告配置
     private boolean enabled = true;
     private int announceRadius = 50;
@@ -40,6 +47,9 @@ public class BossAnnouncer implements Listener {
     public BossAnnouncer(GuangDianArmorStats plugin, BossStatsManager bossStatsManager) {
         this.plugin = plugin;
         this.bossStatsManager = bossStatsManager;
+        this.miniMessage = plugin.getMiniMessage();
+        this.soundService = plugin.getSoundService();
+        this.miniMessageParser = miniMessage.getMiniMessage();
         loadConfig();
     }
 
@@ -109,23 +119,24 @@ public class BossAnnouncer implements Listener {
         // 移除颜色代码获取纯文本名称
         String plainName = bossName.replaceAll("[&§][0-9a-fk-or]", "");
 
-        // 发送 Title (Paper 1.21.4: 使用 showTitle)
-        Component title = LegacyComponentSerializer.legacySection().deserialize("§a§l胜利!");
-        Component subtitleText = LegacyComponentSerializer.legacySection().deserialize(
-            "§f" + plainName + " §e已被 " + killerName + " 击败!");
+        // 发送 Title - 使用 RPGCore MiniMessageService
+        Component title = miniMessageParser.deserialize("<green><bold>胜利!");
+        Component subtitleText = miniMessageParser.deserialize(
+            "<white>" + plainName + " <yellow>已被 " + killerName + " 击败!");
         Title titleObj = Title.title(title, subtitleText,
             Title.Times.times(Duration.ofMillis(500), Duration.ofMillis(3000), Duration.ofMillis(1000)));
 
         for (Player player : boss.getWorld().getPlayers()) {
             if (player.getLocation().distanceSquared(boss.getLocation()) <= announceRadius * announceRadius) {
                 player.showTitle(titleObj);
-                player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
+                // 使用 RPGCore SoundService
+                soundService.playSound(player.getLocation(), "UI_TOAST_CHALLENGE_COMPLETE", 1.0f, 1.0f);
             }
         }
 
-        // 发送聊天消息
-        Component deathMessage = LegacyComponentSerializer.legacySection().deserialize(
-            "§c§l[BOSS] §f" + plainName + " §e已陨落！击杀者: §b" + killerName);
+        // 发送聊天消息 - 使用 RPGCore MiniMessageService
+        Component deathMessage = miniMessageParser.deserialize(
+            "<dark_red><bold>[BOSS] <white>" + plainName + " <yellow>已陨落！击杀者: <aqua>" + killerName);
         for (Player player : boss.getWorld().getPlayers()) {
             if (player.getLocation().distanceSquared(boss.getLocation()) <= announceRadius * announceRadius) {
                 player.sendMessage(deathMessage);
@@ -147,32 +158,33 @@ public class BossAnnouncer implements Listener {
 
         String titleText;
         String subtitleText;
-        Sound sound;
+        String soundName;
 
         if (healthPercent <= 30) {
-            titleText = "§c§l狂暴!";
-            subtitleText = "§f" + plainName + " §c进入狂暴状态!";
-            sound = Sound.ENTITY_WITHER_SPAWN;
+            titleText = "<dark_red><bold>狂暴!";
+            subtitleText = "<white>" + plainName + " <dark_red>进入狂暴状态!";
+            soundName = "ENTITY_WITHER_SPAWN";
         } else if (healthPercent <= 50) {
-            titleText = "§e§l危险!";
-            subtitleText = "§f" + plainName + " §e血量过低!";
-            sound = Sound.ENTITY_ENDER_DRAGON_GROWL;
+            titleText = "<yellow><bold>危险!";
+            subtitleText = "<white>" + plainName + " <yellow>血量过低!";
+            soundName = "ENTITY_ENDER_DRAGON_GROWL";
         } else {
-            titleText = "§6§l警告!";
-            subtitleText = "§f" + plainName + " §6进入战斗状态!";
-            sound = Sound.ENTITY_ENDER_DRAGON_GROWL;
+            titleText = "<gold><bold>警告!";
+            subtitleText = "<white>" + plainName + " <gold>进入战斗状态!";
+            soundName = "ENTITY_ENDER_DRAGON_GROWL";
         }
 
-        // Paper 1.21.4: 使用 showTitle
-        Component title = LegacyComponentSerializer.legacySection().deserialize(titleText);
-        Component subtitle = LegacyComponentSerializer.legacySection().deserialize(subtitleText);
+        // 使用 RPGCore MiniMessageService
+        Component title = miniMessageParser.deserialize(titleText);
+        Component subtitle = miniMessageParser.deserialize(subtitleText);
         Title titleObj = Title.title(title, subtitle,
             Title.Times.times(Duration.ofMillis(500), Duration.ofMillis(2000), Duration.ofMillis(500)));
 
         for (Player player : boss.getWorld().getPlayers()) {
             if (player.getLocation().distanceSquared(boss.getLocation()) <= announceRadius * announceRadius) {
                 player.showTitle(titleObj);
-                player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
+                // 使用 RPGCore SoundService
+                soundService.playSound(player.getLocation(), soundName, 1.0f, 1.0f);
             }
         }
     }
@@ -189,26 +201,35 @@ public class BossAnnouncer implements Listener {
 
         String plainName = bossName.replaceAll("[&§][0-9a-fk-or]", "");
 
-        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
-        if (rpgCore != null) {
-            rpgCore.getScheduler().runSyncLater(() -> {
-                if (!boss.isValid() || boss.isDead()) return;
+        // 使用 RPGCore Scheduler
+        if (plugin.isRPGCoreEnabled() && plugin.getRPGCoreScheduler() != null) {
+            plugin.getRPGCoreScheduler().runSyncLater(() -> {
+                announceBossSpawnInternal(boss, plainName);
+            }, 20L);
+        }
+    }
 
-            Component title = LegacyComponentSerializer.legacySection().deserialize("§c§lBOSS战");
-            Component subtitle = LegacyComponentSerializer.legacySection().deserialize(
-                "§f" + plainName + " §e已刷新!");
-            Title titleObj = Title.title(title, subtitle,
-                Title.Times.times(Duration.ofMillis(500), Duration.ofMillis(3000), Duration.ofMillis(1000)));
+    /**
+     * 内部方法：执行 BOSS 刷新公告
+     */
+    private void announceBossSpawnInternal(LivingEntity boss, String plainName) {
+        if (!boss.isValid() || boss.isDead()) return;
 
-            for (Player player : boss.getWorld().getPlayers()) {
-                if (player.getLocation().distanceSquared(boss.getLocation()) <= announceRadius * announceRadius) {
-                    player.showTitle(titleObj);
-                    player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1.0f, 0.8f);
-                    player.sendMessage(LegacyComponentSerializer.legacySection().deserialize(
-                        "§c§l[BOSS] §f" + plainName + ": §e愚蠢的入侵者，你们将成为我的祭品！"));
-                }
+        // 使用 RPGCore MiniMessageService
+        Component title = miniMessageParser.deserialize("<dark_red><bold>BOSS战");
+        Component subtitle = miniMessageParser.deserialize(
+            "<white>" + plainName + " <yellow>已刷新!");
+        Title titleObj = Title.title(title, subtitle,
+            Title.Times.times(Duration.ofMillis(500), Duration.ofMillis(3000), Duration.ofMillis(1000)));
+
+        for (Player player : boss.getWorld().getPlayers()) {
+            if (player.getLocation().distanceSquared(boss.getLocation()) <= announceRadius * announceRadius) {
+                player.showTitle(titleObj);
+                // 使用 RPGCore SoundService
+                soundService.playSound(player.getLocation(), "ENTITY_WITHER_SPAWN", 1.0f, 0.8f);
+                player.sendMessage(miniMessageParser.deserialize(
+                    "<dark_red><bold>[BOSS] <white>" + plainName + ": <yellow>愚蠢的入侵者，你们将成为我的祭品！"));
             }
-        }, 20L);
         }
     }
 }

@@ -1,4 +1,4 @@
-settings:
+﻿settings:
   default-balance: 0
   auto-save-interval-minutes: 5
 
@@ -14,19 +14,19 @@ optimization:
   concurrency:
     enabled: true
     lock-timeout-ms: 3000
-    lock-timeout-message: "&c操作繁忙，请稍后重试"
+    lock-timeout-message: "<red>操作繁忙，请稍后重试"
 
   # 异步保存配置
   async-save:
     enabled: true
 
 messages:
-  balance-display: "&e你当前有 &6%balance% &e点卷"
-  insufficient-funds: "&c点卷不足!"
-  player-not-found: "&c玩家不在线!"
-  give-success: "&a已给予 %player% %amount% 点卷!"
-  receive-points: "&e你收到了 &6%amount% &e点卷!"
-  pay-success: "&a已转账 %amount% 点卷给 %player%!"
-  receive-transfer: "&e你收到了 %player% 转账的 &6%amount% &e点卷!"
-  lock-timeout: "&c操作繁忙，请稍后重试"
-  transfer-failed: "&c转账失败，请重试"
+  balance-display: "<yellow>你当前有 <gold>%balance% <yellow>点卷"
+  insufficient-funds: "<red>点卷不足!"
+  player-not-found: "<red>玩家不在线!"
+  give-success: "<green>已给予 %player% %amount% 点卷!"
+  receive-points: "<yellow>你收到了 <gold>%amount% <yellow>点卷!"
+  pay-success: "<green>已转账 %amount% 点卷给 %player%!"
+  receive-transfer: "<yellow>你收到了 %player% 转账的 <gold>%amount% <yellow>点卷!"
+  lock-timeout: "<red>操作繁忙，请稍后重试"
+  transfer-failed: "<red>转账失败，请重试"

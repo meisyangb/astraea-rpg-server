@@ -5,6 +5,7 @@ import cn.guangdian.name.lifecycle.NameDataHandler;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
 import cn.guangdian.rpgcore.api.SyncScheduler;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -45,12 +46,15 @@ public class GuangDianName extends AbstractRPGPlugin implements Listener {
     private NameDataHandler dataHandler;
     private NamePlaceholder namePlaceholder;
     private DisplayServiceAdapter displayServiceAdapter;
+    private MiniMessageService miniMessage;
     private long joinTaskId = -1;
     private long respawnTaskId = -1;
     
     @Override
     protected void onPluginEnable() {
         saveDefaultConfig();
+        
+        initRPGCoreServices();
         
         healthDisplay = new HealthDisplay(this);
         titleDisplay = new TitleDisplay(this);
@@ -82,6 +86,21 @@ public class GuangDianName extends AbstractRPGPlugin implements Listener {
         getLogger().info("GuangDianName 已启动");
         getLogger().info("功能: 血量显示、工会显示(TextDisplay)、称号显示、婚姻显示");
         getLogger().info("显示层级: 工会(第1行) -> 称号+玩家名+婚姻(第2行) -> 血量(第3行)");
+    }
+    
+    private void initRPGCoreServices() {
+        if (getServer().getPluginManager().isPluginEnabled("RPGCore")) {
+            try {
+                RPGCore rpgCore = RPGCore.getInstance();
+                miniMessage = rpgCore.getMiniMessageService();
+                getLogger().info("使用 RPGCore MiniMessageService 服务");
+            } catch (Exception e) {
+                getLogger().warning("无法获取 RPGCore MiniMessageService: " + e.getMessage());
+            }
+        }
+        if (miniMessage == null) {
+            miniMessage = MiniMessageService.getInstance();
+        }
     }
     
     @Override
@@ -209,5 +228,9 @@ public class GuangDianName extends AbstractRPGPlugin implements Listener {
     
     public HealthMonitor getHealthMonitor() {
         return healthMonitor;
+    }
+
+    public MiniMessageService getMiniMessageService() {
+        return miniMessage;
     }
 }

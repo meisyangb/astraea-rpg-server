@@ -1,6 +1,7 @@
-# ========================================
+﻿﻿# ========================================
 # 光点聊天插件配置文件
 # GuangDianChat Configuration
+# RPGCore MiniMessage 格式支持
 # ========================================
 # 作者: Gumin
 # QQ: 2271257344
@@ -13,7 +14,7 @@
 enabled: true
 
 # ========================================
-# 聊天格式
+# 聊天格式 - 使用 MiniMessage 格式 (<color> 替代 <red>olor)
 # ========================================
 # 可用占位符:
 # %player_name% - 玩家名称
@@ -33,17 +34,17 @@ enabled: true
 # %message% - 聊天消息内容
 
 # 默认聊天格式
-default-format: "&8[&b%player_world%&8] &7冒险者 &f%player_name%&f: &7%message%"
+default-format: "<dark_gray>[<aqua>%player_world%<dark_gray>] <gray>冒险者 <white>%player_name%<white>: <gray>%message%"
 
 # 权限组专属格式
 group-formats:
-  owner: "&8[&b%player_world%&8] &6⚜ &e服主 &6%player_name%&f: &e%message%"
-  admin: "&8[&b%player_world%&8] &c⚡ &4管理员 &c%player_name%&f: &c%message%"
-  gm: "&8[&b%player_world%&8] &b☆ &fGM &b%player_name%&f: &b%message%"
-  svip: "&8[&b%player_world%&8] &d♦ &5SVIP &d%player_name%&f: &d%message%"
-  vip: "&8[&b%player_world%&8] &e★ &6VIP &e%player_name%&f: &e%message%"
-  mvp: "&8[&b%player_world%&8] &e♦ &eMVP &e%player_name%&f: &f%message%"
-  default: "&8[&b%player_world%&8] &7冒险者 &f%player_name%&f: &7%message%"
+  owner: "<dark_gray>[<aqua>%player_world%<dark_gray>] <gold>⚜ <yellow>服主 <gold>%player_name%<white>: <yellow>%message%"
+  admin: "<dark_gray>[<aqua>%player_world%<dark_gray>] <red>⚡ <dark_red>管理员 <red>%player_name%<white>: <red>%message%"
+  gm: "<dark_gray>[<aqua>%player_world%<dark_gray>] <aqua>☆ <white>GM <aqua>%player_name%<white>: <aqua>%message%"
+  svip: "<dark_gray>[<aqua>%player_world%<dark_gray>] <light_purple>♦ <dark_purple>SVIP <light_purple>%player_name%<white>: <light_purple>%message%"
+  vip: "<dark_gray>[<aqua>%player_world%<dark_gray>] <yellow>★ <gold>VIP <yellow>%player_name%<white>: <yellow>%message%"
+  mvp: "<dark_gray>[<aqua>%player_world%<dark_gray>] <yellow>♦ <yellow>MVP <yellow>%player_name%<white>: <white>%message%"
+  default: "<dark_gray>[<aqua>%player_world%<dark_gray>] <gray>冒险者 <white>%player_name%<white>: <gray>%message%"
 
 # ========================================
 # 世界别名设置
@@ -71,18 +72,18 @@ settings:
   # 聊天范围 (0=全局)
   chat-range: 0
 
-  # 欢迎消息
+  # 欢迎消息 - MiniMessage 格式
   show-welcome-message: true
-  welcome-message: "&a&m─────────────────────────────────────"
-  welcome-message-2: "&6✦ &e欢迎来到 &6光点RPG &e世界!"
-  welcome-message-3: "&7冒险者 &a%player_name% &7加入了游戏"
-  welcome-message-4: "&a&m─────────────────────────────────────"
+  welcome-message: "<green><strikethrough>─────────────────────────────────────"
+  welcome-message-2: "<gold>✦ <yellow>欢迎来到 <gold>光点RPG <yellow>世界!"
+  welcome-message-3: "<gray>冒险者 <green>%player_name% <gray>加入了游戏"
+  welcome-message-4: "<green><strikethrough>─────────────────────────────────────"
 
-  # 离开消息
+  # 离开消息 - MiniMessage 格式
   show-quit-message: true
-  quit-message: "&c&m─────────────────────────────────────"
-  quit-message-2: "&e%player_name% &7离开了游戏"
-  quit-message-3: "&c&m─────────────────────────────────────"
+  quit-message: "<red><strikethrough>─────────────────────────────────────"
+  quit-message-2: "<yellow>%player_name% <gray>离开了游戏"
+  quit-message-3: "<red><strikethrough>─────────────────────────────────────"
 
 # ========================================
 # 高级设置
@@ -94,16 +95,16 @@ advanced:
   enable-metrics: true
 
 # ========================================
-# 消息设置
+# 消息设置 - MiniMessage 格式
 # ========================================
 messages:
-  no-permission: "&c✗ &f您没有权限执行此操作!"
-  config-reloaded: "&a✓ &f聊天配置已重新加载!"
+  no-permission: "<red>✗ <white>您没有权限执行此操作!"
+  config-reloaded: "<green>✓ <white>聊天配置已重新加载!"
   plugin-info:
-    - "&6&m────────────────────────────────"
-    - "&e光点RPG &7聊天系统"
-    - "&f"
-    - "&e版本: &f2.0.0"
-    - "&e作者: &fGumin"
-    - "&e状态: &a✓ 已启用"
-    - "&6&m────────────────────────────────"
+    - "<gold><strikethrough>────────────────────────────────"
+    - "<yellow>光点RPG <gray>聊天系统"
+    - "<white>"
+    - "<yellow>版本: <white>2.0.0"
+    - "<yellow>作者: <white>Gumin"
+    - "<yellow>状态: <green>✓ 已启用"
+    - "<gold><strikethrough>────────────────────────────────"

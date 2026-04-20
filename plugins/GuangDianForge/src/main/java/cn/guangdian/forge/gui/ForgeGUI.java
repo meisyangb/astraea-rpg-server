@@ -7,7 +7,7 @@ import cn.guangdian.forge.model.PlayerForgeData;
 import cn.guangdian.forge.util.ForgeUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -38,19 +38,21 @@ public class ForgeGUI implements InventoryHolder {
     private final Player player;
     private final Inventory inventory;
     private final ForgeRecipe recipe;
-    
+    private final MiniMessage miniMessage;
+
     private static final int SIZE = 27;
     private static final int[] MATERIAL_SLOTS = {1, 2, 3, 10, 11, 12};
     private static final int RESULT_SLOT = 6;
     private static final int SUCCESS_RATE_SLOT = 14;
     private static final int FORGE_BUTTON = 15;
     private static final int BACK_BUTTON = 17;
-    
+
     public ForgeGUI(GuangDianForge plugin, Player player, ForgeRecipe recipe) {
         this.plugin = plugin;
         this.player = player;
         this.recipe = recipe;
-        this.inventory = Bukkit.createInventory(this, SIZE, 
+        this.miniMessage = plugin.getMiniMessageParser();
+        this.inventory = Bukkit.createInventory(this, SIZE,
             Component.text("锻造: " + recipe.getDisplayName(), NamedTextColor.GOLD));
     }
     
@@ -165,16 +167,15 @@ public class ForgeGUI implements InventoryHolder {
             String displayName = recipe.getIngredientDisplayName(entry.getKey());
             int required = entry.getValue();
             int have = getMaterialCount(entry.getKey());
-            // 使用Legacy序列化器处理§颜色代码
-            String prefix = have >= required ? "  §a✔ " : "  §c✘ ";
-            lore.add(LegacyComponentSerializer.legacySection()
-                .deserialize(prefix + displayName + " x" + required + " (" + have + ")"));
+            // 使用 MiniMessage 处理颜色代码
+            String prefix = have >= required ? "  <green>✔ " : "  <red>✘ ";
+            lore.add(miniMessage.deserialize(prefix + displayName + " x" + required + " (" + have + ")"));
         }
         
         // 显示结果物品
         lore.add(Component.empty());
         lore.add(Component.text("锻造结果:", NamedTextColor.GOLD));
-        lore.add(Component.text("§d" + recipe.getResultMythicMobsItem(), NamedTextColor.LIGHT_PURPLE));
+        lore.add(Component.text(recipe.getResultMythicMobsItem(), NamedTextColor.LIGHT_PURPLE));
         
         meta.lore(lore);
         rateItem.setItemMeta(meta);

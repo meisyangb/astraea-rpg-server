@@ -1,7 +1,7 @@
 # Astraea RPG 禁止模式清单
 
 > 所有开发必须遵守的禁止模式，违反将导致代码被拒绝
-> **版本: 1.1.0 | 更新: 2026-04-14**
+> **版本: 1.2.0 | 更新: 2026-04-16**
 
 ---
 
@@ -254,4 +254,67 @@ D:\gradle\gradle-9.4.0\bin\gradle.bat build --no-configuration-cache -x test
 
 ---
 
-*最后更新: 2026-04-14*
+## 12. RPGCore 统一服务禁止项 (v1.2.0 新增)
+
+### ❌ 禁止 (重复实现 RPGCore 已提供的功能)
+
+```java
+// 禁止: 自己实现 colorize() 方法
+private Component colorize(String text) {
+    return miniMessage.deserialize(text.replace("&a", "<green>")...);
+}
+
+// 禁止: 直接使用 ConcurrentHashMap 存储玩家数据
+private final Map<UUID, PlayerData> cache = new ConcurrentHashMap<>();
+
+// 禁止: 手动加载/保存 YAML 文件
+YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
+yaml.save(file);
+
+// 禁止: 自己实现冷却管理
+private final Map<UUID, Long> cooldowns = new ConcurrentHashMap<>();
+
+// 禁止: 直接创建 PlaceholderExpansion
+new MyPlaceholderExpansion().register();
+```
+
+### ✅ 正确 (使用 RPGCore 统一服务)
+
+```java
+// 正确: 使用 UnifiedMessageService
+UnifiedMessageService msg = UnifiedMessageService.getInstance();
+Component component = msg.colorize("&a成功消息");
+msg.sendMessage(player, "&6金色文字");
+
+// 正确: 继承 PlayerDataService
+public class MyDataService extends PlayerDataService<MyData> {
+    // 自动处理缓存、保存、序列化
+}
+
+// 正确: 使用 YamlDataStore
+YamlDataStore store = YamlDataStore.getInstance();
+Map<String, Object> data = store.load(file);
+store.save(file, data);
+
+// 正确: 使用 CooldownManager
+CooldownManager cooldown = CooldownManager.getInstance();
+cooldown.setCooldown(playerUUID, "action", 10000);
+
+// 正确: 使用 PlaceholderService
+PlaceholderService placeholder = PlaceholderService.getInstance();
+placeholder.register("my_value", (player, params) -> "value");
+```
+
+**原因**: 
+- 避免 2500+ 行重复代码
+- 统一管理,便于维护
+- 内置性能优化和异常处理
+- 符合微内核架构原则
+
+**参考文档**:
+- [UNIFIED_SERVICES_OVERVIEW.md](../docs/RPGCore/UNIFIED_SERVICES_OVERVIEW.md)
+- [ARCHITECTURE_UPGRADE_GUIDE.md](../docs/RPGCore/ARCHITECTURE_UPGRADE_GUIDE.md)
+
+---
+
+*最后更新: 2026-04-16*

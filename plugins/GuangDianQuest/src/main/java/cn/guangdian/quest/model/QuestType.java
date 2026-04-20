@@ -8,22 +8,22 @@ public enum QuestType {
     /**
      * 主线任务 - 剧情推进、解锁系统
      */
-    MAIN("主线任务", "&6&l【主线】", true, false),
+    MAIN("主线任务", "<gold><bold>【主线】", true, false),
     
     /**
      * 支线任务 - NPC委托、探索任务
      */
-    SIDE("支线任务", "&b&l【支线】", true, false),
+    SIDE("支线任务", "<aqua><bold>【支线】", true, false),
     
     /**
      * 每日任务 - 每日重置，限制数量
      */
-    DAILY("每日任务", "&e&l【每日】", false, true),
+    DAILY("每日任务", "<yellow><bold>【每日】", false, true),
     
     /**
      * 成就任务 - 长期目标，累计奖励
      */
-    ACHIEVEMENT("成就任务", "&d&l【成就】", true, false);
+    ACHIEVEMENT("成就任务", "<light_purple><bold>【成就】", true, false);
     
     private final String displayName;
     private final String prefix;

@@ -1,6 +1,7 @@
 package cn.guangdian.mcp.tools.impl;
 
 import cn.guangdian.mcp.GuangDianMCP;
+import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.mcp.tools.MCPTool;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -178,7 +179,7 @@ public class EntityTool implements MCPTool {
     private ToolResult listEntities(String worldName) {
         CompletableFuture<ToolResult> future = new CompletableFuture<>();
         
-        plugin.getServer().getScheduler().runTask(plugin, () -> {
+        RPGCore.getInstance().getScheduler().runSync(() -> {
             try {
                 JsonObject result = new JsonObject();
                 
@@ -237,7 +238,7 @@ public class EntityTool implements MCPTool {
     private ToolResult countEntities(String worldName, String typeName) {
         CompletableFuture<ToolResult> future = new CompletableFuture<>();
         
-        plugin.getServer().getScheduler().runTask(plugin, () -> {
+        RPGCore.getInstance().getScheduler().runSync(() -> {
             try {
                 int total = 0;
                 JsonObject result = new JsonObject();
@@ -306,7 +307,7 @@ public class EntityTool implements MCPTool {
     private ToolResult killEntities(String worldName, String typeName) {
         CompletableFuture<ToolResult> future = new CompletableFuture<>();
         
-        plugin.getServer().getScheduler().runTask(plugin, () -> {
+        RPGCore.getInstance().getScheduler().runSync(() -> {
             try {
                 int killed = 0;
                 
@@ -406,7 +407,7 @@ public class EntityTool implements MCPTool {
         final EntityType finalType = entityType;
         final int finalAmount = amount;
         
-        plugin.getServer().getScheduler().runTask(plugin, () -> {
+        RPGCore.getInstance().getScheduler().runSync(() -> {
             for (int i = 0; i < finalAmount; i++) {
                 finalWorld.spawnEntity(finalWorld.getSpawnLocation(), finalType);
             }
@@ -432,7 +433,7 @@ public class EntityTool implements MCPTool {
         final EntityType finalType = entityType;
         final int finalAmount = amount;
         
-        plugin.getServer().getScheduler().runTask(plugin, () -> {
+        RPGCore.getInstance().getScheduler().runSync(() -> {
             Location loc = new Location(finalWorld, x, y, z);
             for (int i = 0; i < finalAmount; i++) {
                 finalWorld.spawnEntity(loc, finalType);
@@ -446,7 +447,7 @@ public class EntityTool implements MCPTool {
     private ToolResult getEntityInfo(String entityId, String worldName) {
         CompletableFuture<ToolResult> future = new CompletableFuture<>();
         
-        plugin.getServer().getScheduler().runTask(plugin, () -> {
+        RPGCore.getInstance().getScheduler().runSync(() -> {
             try {
                 if (entityId != null) {
                     UUID uuid;
@@ -530,7 +531,7 @@ public class EntityTool implements MCPTool {
     private ToolResult killEntitiesNear(String worldName, String typeName, double x, double y, double z, double radius) {
         CompletableFuture<ToolResult> future = new CompletableFuture<>();
         
-        plugin.getServer().getScheduler().runTask(plugin, () -> {
+        RPGCore.getInstance().getScheduler().runSync(() -> {
             try {
                 World world;
                 if (worldName != null) {

@@ -1,5 +1,6 @@
-# GuangDianMobHealth 配置文件
+﻿# GuangDianMobHealth 配置文件
 # 怪物血量显示插件 - 使用TextDisplay实体显示怪物血量条
+# 使用 MiniMessage 格式 (<color> 替代 <red>olor)
 
 # ==================== 核心设置 ====================
 enabled: true
@@ -29,7 +30,8 @@ display:
   #   {max_health} - 最大血量
   #   {health_bar} - 血量条 [IIIIIIIII]
   #   {percent} - 血量百分比
-  format: "{name}§r {health_bar}§r §a{health}"
+  # 使用 MiniMessage 格式
+  format: "{name}<reset> {health_bar}<reset> <green>{health}"
   
   # 血量条设置
   bar:
@@ -40,16 +42,16 @@ display:
     symbol: "|"
     
     # 血量条颜色 (按血量百分比分段)
-    # 格式: "百分比范围:颜色代码"
+    # 格式: "百分比范围:MiniMessage颜色"
     colors:
-      - "0-100:&a"   # 绿色（有血量）
+      - "0-100:<green>"   # 绿色（有血量）
     
     # 空血量条颜色（失去的血量）
-    empty-color: "&c"
+    empty-color: "<red>"
     
     # 血量条两端括号
-    bracket-left: "&8["
-    bracket-right: "&8]"
+    bracket-left: "<dark_gray>["
+    bracket-right: "<dark_gray>]"
 
 # ==================== 过滤设置 ====================
 filter:

@@ -3,6 +3,7 @@ package cn.guangdian.mobhealth;
 import cn.guangdian.mobhealth.adapter.MobHealthServiceAdapter;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -26,11 +27,14 @@ public class GuangDianMobHealth extends AbstractRPGPlugin implements Listener {
     private boolean pluginEnabled = true;
     private boolean debug = false;
     private MobHealthServiceAdapter mobHealthServiceAdapter;
+    private MiniMessageService miniMessage;
 
     @Override
     protected void onPluginEnable() {
         instance = this;
         saveDefaultConfig();
+        
+        initRPGCoreServices();
         
         pluginEnabled = getConfig().getBoolean("enabled", true);
         debug = getConfig().getBoolean("debug", false);
@@ -49,6 +53,21 @@ public class GuangDianMobHealth extends AbstractRPGPlugin implements Listener {
         
         getLogger().info("GuangDianMobHealth 已启动");
         getLogger().info("功能: 怪物血量显示 (TextDisplay实体)");
+    }
+    
+    private void initRPGCoreServices() {
+        if (getServer().getPluginManager().isPluginEnabled("RPGCore")) {
+            try {
+                RPGCore rpgCore = RPGCore.getInstance();
+                miniMessage = rpgCore.getMiniMessageService();
+                getLogger().info("使用 RPGCore MiniMessageService 服务");
+            } catch (Exception e) {
+                getLogger().warning("无法获取 RPGCore MiniMessageService: " + e.getMessage());
+            }
+        }
+        if (miniMessage == null) {
+            miniMessage = MiniMessageService.getInstance();
+        }
     }
 
     @Override
@@ -129,5 +148,9 @@ public class GuangDianMobHealth extends AbstractRPGPlugin implements Listener {
         if (debug) {
             getLogger().info("[DEBUG] " + message);
         }
+    }
+
+    public MiniMessageService getMiniMessageService() {
+        return miniMessage;
     }
 }

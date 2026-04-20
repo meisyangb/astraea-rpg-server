@@ -23,6 +23,8 @@ import cn.guangdian.rpgcore.concurrency.PlayerLockManager;
 import cn.guangdian.rpgcore.config.ConfigManagerImpl;
 import cn.guangdian.rpgcore.cron.CronSchedulerImpl;
 import cn.guangdian.rpgcore.database.CoreDatabase;
+import cn.guangdian.rpgcore.command.CommandFramework;
+import cn.guangdian.rpgcore.data.YamlDataStore;
 import cn.guangdian.rpgcore.display.AdventureBossBarService;
 import cn.guangdian.rpgcore.display.DisplayService;
 import cn.guangdian.rpgcore.display.DisplayServiceImpl;
@@ -33,8 +35,11 @@ import cn.guangdian.rpgcore.export.DataExporterImpl;
 import cn.guangdian.rpgcore.http.HttpClientImpl;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegrationImpl;
+import cn.guangdian.rpgcore.integration.PlaceholderService;
 import cn.guangdian.rpgcore.lifecycle.PlayerLifecycleManager;
 import cn.guangdian.rpgcore.logging.AsyncLogger;
+import cn.guangdian.rpgcore.manager.ItemAttributeManager;
+import cn.guangdian.rpgcore.message.AudienceService;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.message.MessageServiceImpl;
 import cn.guangdian.rpgcore.module.RPGModule;
@@ -50,6 +55,7 @@ import cn.guangdian.rpgcore.service.api.MessageService;
 import cn.guangdian.rpgcore.service.api.TextDisplayService;
 import cn.guangdian.rpgcore.sound.SoundService;
 import cn.guangdian.rpgcore.storage.UnifiedDataManager;
+import cn.guangdian.rpgcore.util.CooldownManager;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -104,6 +110,7 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
     private TextDisplayService textDisplayService;
     private GameLogger gameLogger;
     private MiniMessageService miniMessageService;
+    private ItemAttributeManager itemAttributeManager;
 
     private int asyncThreadPoolSize;
     private int cacheMaxSize;
@@ -128,9 +135,26 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
 
         registerListeners();
 
+        // 延迟刷新外部服务状态（等待所有插件加载完成）
+        scheduleExternalServicesRefresh();
+
         logStartupInfo();
 
         getLogger().info("RPGCore v" + getDescription().getVersion() + " enabled!");
+    }
+
+    /**
+     * 延迟刷新外部服务状态
+     * 解决插件加载顺序导致的检测不准确问题
+     */
+    private void scheduleExternalServicesRefresh() {
+        // 延迟 5 秒后刷新，确保所有插件已加载
+        scheduler.runSyncLater(() -> {
+            if (externalServices instanceof ExternalServiceIntegrationImpl esi) {
+                esi.refreshPlaceholderAPI();
+                getLogger().info("[ExternalService] 已刷新外部服务状态: " + esi.getExternalServiceStatus());
+            }
+        }, 5 * 20L); // 5 秒 = 100 ticks
     }
 
     @Override
@@ -265,13 +289,28 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         getLogger().info("MiniMessageService initialized");
 
         messageService = new MessageServiceImpl();
-        getLogger().info("MessageService initialized");
+        serviceRegistry.registerService(MessageService.class, messageService);
+        getLogger().info("MessageService initialized and registered");
 
         textDisplayService = new TextDisplayServiceImpl(this);
-        getLogger().info("TextDisplayService initialized");
+        serviceRegistry.registerService(TextDisplayService.class, textDisplayService);
+        getLogger().info("TextDisplayService initialized and registered");
 
         gameLogger = new AsyncLogger();
         getLogger().info("GameLogger (AsyncLogger) initialized");
+
+        itemAttributeManager = new ItemAttributeManager(this);
+        getLogger().info("ItemAttributeManager initialized");
+        
+        // 注册其他核心服务到 ServiceRegistry
+        serviceRegistry.registerService(MiniMessageService.class, miniMessageService);
+        serviceRegistry.registerService(AudienceService.class, AudienceService.getInstance());
+        serviceRegistry.registerService(SoundService.class, SoundService.getInstance());
+        serviceRegistry.registerService(CooldownManager.class, CooldownManager.getInstance());
+        serviceRegistry.registerService(YamlDataStore.class, YamlDataStore.getInstance());
+        serviceRegistry.registerService(CommandFramework.class, CommandFramework.getInstance());
+        serviceRegistry.registerService(PlaceholderService.class, PlaceholderService.getInstance());
+        getLogger().info("Core services registered to ServiceRegistry");
     }
 
     private void initDatabase() {
@@ -351,6 +390,9 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
                 loadConfiguration();
                 sender.sendMessage(miniMessageService.green("配置已重新加载!"));
             }
+            case "services" -> sendServicesList(sender);
+            case "modules" -> sendModulesList(sender);
+            case "caches" -> sendCachesStats(sender);
             case "help" -> sendHelp(sender);
             default -> sendHelp(sender);
         }
@@ -365,6 +407,9 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         if (args.length == 1) {
             completions.add("info");
             completions.add("stats");
+            completions.add("services");
+            completions.add("modules");
+            completions.add("caches");
             if (sender.hasPermission("rpgcore.reload")) {
                 completions.add("reload");
             }
@@ -378,6 +423,9 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         sender.sendMessage(miniMessageService.gold("========== RPGCore 帮助 =========="));
         sender.sendMessage(miniMessageService.colorize("<yellow>/rpgcore info <gray>- 查看信息"));
         sender.sendMessage(miniMessageService.colorize("<yellow>/rpgcore stats <gray>- 查看统计"));
+        sender.sendMessage(miniMessageService.colorize("<yellow>/rpgcore services <gray>- 列出已注册服务"));
+        sender.sendMessage(miniMessageService.colorize("<yellow>/rpgcore modules <gray>- 列出已加载模块"));
+        sender.sendMessage(miniMessageService.colorize("<yellow>/rpgcore caches <gray>- 查看缓存状态"));
         if (sender.hasPermission("rpgcore.reload")) {
             sender.sendMessage(miniMessageService.colorize("<yellow>/rpgcore reload <gray>- 重载配置"));
         }
@@ -406,6 +454,64 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         if (CoreDatabase.isEnabled()) {
             sender.sendMessage(miniMessageService.colorize("<yellow>数据库连接池: <white>" + CoreDatabase.getPoolStatus()));
         }
+        sender.sendMessage(miniMessageService.gold("=================================="));
+    }
+
+    private void sendServicesList(CommandSender sender) {
+        sender.sendMessage(miniMessageService.gold("========== 已注册服务 =========="));
+        
+        if (serviceRegistry instanceof SimpleServiceRegistry ssr) {
+            var serviceTypes = ssr.getRegisteredServiceTypes();
+            if (serviceTypes.isEmpty()) {
+                sender.sendMessage(miniMessageService.colorize("<gray>暂无已注册的服务"));
+            } else {
+                int index = 1;
+                for (Class<?> serviceType : serviceTypes) {
+                    String serviceName = serviceType.getSimpleName();
+                    sender.sendMessage(miniMessageService.colorize(
+                        String.format("<gray>%d. <gold>%s", index++, serviceName)));
+                }
+                sender.sendMessage(miniMessageService.colorize("<gray>共 <gold>" + serviceTypes.size() + " <gray>个服务"));
+            }
+        } else {
+            sender.sendMessage(miniMessageService.colorize("<gray>服务数量: <gold>" + serviceRegistry.getServiceCount()));
+        }
+        
+        sender.sendMessage(miniMessageService.gold("=================================="));
+    }
+
+    private void sendModulesList(CommandSender sender) {
+        sender.sendMessage(miniMessageService.gold("========== 已加载模块 =========="));
+        
+        if (modules.isEmpty()) {
+            sender.sendMessage(miniMessageService.colorize("<gray>暂无已加载的模块"));
+        } else {
+            int index = 1;
+            for (Map.Entry<String, RPGModule> entry : modules.entrySet()) {
+                String moduleId = entry.getKey();
+                RPGModule module = entry.getValue();
+                String state = module.getState().name();
+                String stateColor = state.equals("ENABLED") ? "<green>" : 
+                                   state.equals("LOADED") ? "<yellow>" : "<red>";
+                sender.sendMessage(miniMessageService.colorize(
+                    String.format("<gray>%d. <gold>%s <gray>[%s%s<gray>]", index++, moduleId, stateColor, state)));
+            }
+            sender.sendMessage(miniMessageService.colorize("<gray>共 <gold>" + modules.size() + " <gray>个模块"));
+        }
+        
+        sender.sendMessage(miniMessageService.gold("=================================="));
+    }
+
+    private void sendCachesStats(CommandSender sender) {
+        sender.sendMessage(miniMessageService.gold("========== 缓存状态 =========="));
+        
+        sender.sendMessage(miniMessageService.colorize("<yellow>缓存模式: <white>" + cacheMode));
+        sender.sendMessage(miniMessageService.colorize("<yellow>最大容量: <white>" + cacheMaxSize));
+        sender.sendMessage(miniMessageService.colorize("<yellow>默认TTL: <white>" + cacheDefaultTTL.toMinutes() + "分钟"));
+        sender.sendMessage(miniMessageService.colorize(""));
+        sender.sendMessage(miniMessageService.colorize("<yellow>统计信息:"));
+        sender.sendMessage(miniMessageService.colorize("<gray>" + cacheProvider.getStats()));
+        
         sender.sendMessage(miniMessageService.gold("=================================="));
     }
 
@@ -531,6 +637,14 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
      */
     public EntityService getEntityService() {
         return EntityService.getInstance();
+    }
+
+    /**
+     * 获取物品属性管理器
+     * @return ItemAttributeManager 实例
+     */
+    public ItemAttributeManager getItemAttributeManager() {
+        return itemAttributeManager;
     }
 
     public boolean isDatabaseEnabled() {

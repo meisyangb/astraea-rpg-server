@@ -1,0 +1,23 @@
+# GuangDianItemLabel 配置文件
+# 物品掉落标签系统
+
+# 标签更新间隔 (tick)
+update-interval: 20
+
+# 标签显示设置
+label:
+  # 标签在物品上方的偏移量 (Y轴)
+  offset-y: 0.3
+
+  # 标签缩放比例
+  scale: 0.8
+
+  # 标签可见范围 (方块)
+  view-range: 20
+
+  # 是否显示物品数量
+  show-amount: true
+
+  # 物品静止检测 tick 数 (物品需要在地上静止多少tick后才显示标签)
+  # 20 tick = 1秒
+  settle-ticks: 5

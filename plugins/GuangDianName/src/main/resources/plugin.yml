@@ -2,6 +2,7 @@ name: GuangDianName
 version: 1.0.0
 main: cn.guangdian.name.GuangDianName
 description: 玩家头顶显示插件 - 血量、称号、工会、婚姻（三行显示）
+api-version: '1.21'
 authors:
   - GuangDian Team
 

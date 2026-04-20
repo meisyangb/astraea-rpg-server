@@ -1,4 +1,4 @@
-# 战令系统配置文件
+﻿# 战令系统配置文件
 # Astraea RPG - GuangDianBattlePass
 
 # 高级战令价格（点券）
@@ -26,14 +26,14 @@ exp-settings:
 
 # 消息设置
 messages:
-  prefix: "&6[战令] &r"
-  no-permission: "&c你没有权限执行此操作！"
-  season-not-active: "&c当前没有进行中的赛季！"
-  premium-purchased: "&a成功购买高级战令！"
-  insufficient-points: "&c点券不足！需要 %price% 点券"
-  reward-claimed: "&a成功领取奖励！"
-  already-claimed: "&c你已经领取过这个奖励了！"
-  level-up: "&e恭喜！你的战令等级提升到了 &6%level% &e级！"
+  prefix: "<gold>[战令] <reset>"
+  no-permission: "<red>你没有权限执行此操作！"
+  season-not-active: "<red>当前没有进行中的赛季！"
+  premium-purchased: "<green>成功购买高级战令！"
+  insufficient-points: "<red>点券不足！需要 %price% 点券"
+  reward-claimed: "<green>成功领取奖励！"
+  already-claimed: "<red>你已经领取过这个奖励了！"
+  level-up: "<yellow>恭喜！你的战令等级提升到了 <gold>%level% <yellow>级！"
 
 # 自动保存设置
 auto-save:

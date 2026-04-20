@@ -2,8 +2,9 @@ package cn.guangdian.armorstats.manager;
 
 import cn.guangdian.armorstats.GuangDianArmorStats;
 import cn.guangdian.armorstats.data.PlayerStats;
+import cn.guangdian.rpgcore.message.MiniMessageService;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -16,7 +17,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * BossBar管理器
- * 
+ *
+ * RPGCore 服务集成:
+ * - MiniMessageService: 使用 RPGCore 统一消息服务进行文本格式化
+ *
  * 优化特性:
  * - 使用BossBarOptimizer按需更新，减少网络开销
  * - 支持战斗状态检测，动态调整更新频率
@@ -32,11 +36,13 @@ public class BossBarManager {
     private String format;
     private boolean hideWhenFull;
     private final GuangDianArmorStats plugin;
+    private final MiniMessageService miniMessage;
 
     public BossBarManager(GuangDianArmorStats plugin, StatsManager statsManager) {
         this.plugin = plugin;
         this.statsManager = statsManager;
         this.bossBarOptimizer = null; // 将在配置加载后初始化
+        this.miniMessage = plugin.getMiniMessage();
         loadConfig();
     }
     
@@ -53,12 +59,12 @@ public class BossBarManager {
         if (bossBarSection != null) {
             enabled = bossBarSection.getBoolean("enabled", true);
             updateInterval = bossBarSection.getInt("update_interval", 20);
-            format = bossBarSection.getString("format", "&c❤ &f%current%&7/&f%max%");
+            format = bossBarSection.getString("format", "<red>❤ <white>%current%<gray>/<white>%max%");
             hideWhenFull = bossBarSection.getBoolean("hide_when_full", true);
         } else {
             enabled = true;
             updateInterval = 20;
-            format = "&c❤ &f%current%&7/&f%max%";
+            format = "<red>❤ <white>%current%<gray>/<white>%max%";
             hideWhenFull = true;
         }
     }
@@ -117,8 +123,9 @@ public class BossBarManager {
         String title = format
             .replace("%current%", String.format("%.0f", currentHealth))
             .replace("%max%", String.format("%.0f", maxHealth));
-        bossBar.setTitle(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().serialize(
-            net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacyAmpersand().deserialize(title)));
+        // 使用 RPGCore MiniMessageService 进行颜色格式化
+        Component titleComponent = miniMessage.colorize(title);
+        bossBar.setTitle(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(titleComponent));
 
         double progress = maxHealth > 0 ? currentHealth / maxHealth : 0;
         progress = Math.max(0.0, Math.min(1.0, progress));

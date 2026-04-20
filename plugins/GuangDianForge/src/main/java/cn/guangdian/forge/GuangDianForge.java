@@ -13,16 +13,30 @@ import cn.guangdian.forge.manager.RecipeManager;
 import cn.guangdian.forge.placeholder.ForgePlaceholder;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
+import cn.guangdian.rpgcore.api.GameLogger;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 
 import java.util.Optional;
 
 /**
- * ForgePlugin - 锻造插件主类
+ * GuangDianForge - 光点锻造插件主类
  * 
- * <p>支持 RPGCore 服务框架集成，提供 ForgeService 服务。</p>
+ * <p>本插件已优化集成 RPGCore 服务：</p>
+ * <ul>
+ *   <li>日志系统 - 使用 RPGCore GameLogger（带降级兼容）</li>
+ *   <li>异步执行 - 使用 RPGCore AsyncExecutor</li>
+ *   <li>消息发送 - 使用 MiniMessage 格式</li>
+ * </ul>
+ * 
  * <p>支持 MythicMobs 自定义物品作为材料和锻造结果。</p>
+ * 
+ * @author GuangDian
+ * @version 1.1.0
+ * @since 1.0.0
+ * @see OPTIMIZATION.md 优化详情
  */
 public class GuangDianForge extends AbstractRPGPlugin {
     private static GuangDianForge instance;
@@ -31,6 +45,11 @@ public class GuangDianForge extends AbstractRPGPlugin {
     private ForgeServiceAdapter serviceAdapter;
     private MythicMobsHook mythicMobsHook;
     private boolean useRPGCore;
+    
+    // RPGCore 服务
+    private GameLogger gameLogger;
+    private MiniMessageService miniMessage;
+    private MiniMessage miniMessageParser;
 
     @Override
     protected void onPluginEnable() {
@@ -38,6 +57,9 @@ public class GuangDianForge extends AbstractRPGPlugin {
         
         // 检查 RPGCore 是否可用
         useRPGCore = Bukkit.getPluginManager().isPluginEnabled("RPGCore");
+        
+        // 初始化 RPGCore 服务
+        initRPGCoreServices();
         
         saveDefaultConfig();
         saveResource("recipes.yml", false);
@@ -67,15 +89,42 @@ public class GuangDianForge extends AbstractRPGPlugin {
         // 注册 PlaceholderAPI 扩展
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new ForgePlaceholder(this).register();
-            getLogger().info("已注册 PlaceholderAPI 扩展!");
+            logInfo("已注册 PlaceholderAPI 扩展!");
         }
         
-        getLogger().info("GuangDianForge 已启动! 加载了 " + recipeManager.getAllRecipes().size() + " 个图纸");
+        logInfo("GuangDianForge 已启动! 加载了 " + recipeManager.getAllRecipes().size() + " 个图纸");
         if (useRPGCore) {
-            getLogger().info("RPGCore 集成模式已启用");
+            logInfo("RPGCore 集成模式已启用");
         }
         if (mythicMobsHook.isEnabled()) {
-            getLogger().info("MythicMobs 物品集成已启用");
+            logInfo("MythicMobs 物品集成已启用");
+        }
+    }
+    
+    /**
+     * 初始化 RPGCore 核心服务
+     */
+    private void initRPGCoreServices() {
+        if (useRPGCore) {
+            RPGCore rpgCore = RPGCore.getInstance();
+            if (rpgCore != null) {
+                gameLogger = rpgCore.getGameLogger();
+                miniMessage = rpgCore.getMiniMessageService();
+                if (miniMessage != null) {
+                    miniMessageParser = miniMessage.getMiniMessage();
+                }
+                logInfo("已连接到 RPGCore 服务 (GameLogger, MiniMessageService)");
+            }
+        }
+
+        // 如果 RPGCore 服务不可用，使用本地降级
+        if (gameLogger == null) {
+            logInfo("使用 Bukkit Logger（降级）");
+        }
+        if (miniMessage == null) {
+            miniMessage = MiniMessageService.getInstance();
+            miniMessageParser = miniMessage.getMiniMessage();
+            logInfo("使用本地 MiniMessageService（降级）");
         }
     }
 
@@ -101,13 +150,85 @@ public class GuangDianForge extends AbstractRPGPlugin {
                 playerDataManager.save(data);
             }
         }
-        getLogger().info("GuangDianForge 已关闭，数据已保存");
+        logInfo("GuangDianForge 已关闭，数据已保存");
     }
     
     @Override
     protected String getPluginName() {
         return "GuangDianForge";
     }
+
+    // ==================== RPGCore 服务访问 ====================
+
+    public GameLogger getGameLogger() {
+        return gameLogger;
+    }
+
+    /**
+     * 获取 MiniMessageService
+     * @return MiniMessageService 实例
+     */
+    public MiniMessageService getMiniMessage() {
+        return miniMessage;
+    }
+
+    /**
+     * 获取 MiniMessage 解析器
+     * @return MiniMessage 实例
+     */
+    public MiniMessage getMiniMessageParser() {
+        return miniMessageParser;
+    }
+
+    /**
+     * 检查是否使用 RPGCore 服务
+     */
+    public boolean isUsingRPGCoreLogger() {
+        return gameLogger != null;
+    }
+    
+    // ==================== 日志快捷方法 ====================
+    
+    public void logInfo(String message) {
+        if (gameLogger != null) {
+            gameLogger.info(message);
+        } else {
+            getLogger().info(message);
+        }
+    }
+    
+    public void logWarning(String message) {
+        if (gameLogger != null) {
+            gameLogger.warning(message);
+        } else {
+            getLogger().warning(message);
+        }
+    }
+    
+    public void logSevere(String message) {
+        if (gameLogger != null) {
+            gameLogger.severe(message);
+        } else {
+            getLogger().severe(message);
+        }
+    }
+    
+    public void logSevere(String message, Throwable throwable) {
+        if (gameLogger != null) {
+            gameLogger.severe(message, throwable);
+        } else {
+            getLogger().severe(message + " - " + throwable.getMessage());
+            throwable.printStackTrace();
+        }
+    }
+    
+    public void logDebug(String message) {
+        if (gameLogger != null) {
+            gameLogger.debug(message);
+        }
+    }
+
+    // ==================== 业务方法 ====================
 
     public static GuangDianForge getInstance() { return instance; }
     public RecipeManager getRecipeManager() { return recipeManager; }

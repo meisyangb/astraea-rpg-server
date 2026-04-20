@@ -3,8 +3,9 @@ package cn.guangdian.cleaner.command;
 import cn.guangdian.cleaner.GuangDianCleaner;
 import cn.guangdian.cleaner.config.ConfigManager;
 import cn.guangdian.cleaner.manager.CleanManager;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,11 +31,27 @@ public class CleanerCommand implements CommandExecutor, TabExecutor {
         this.cleanManager = cleanManager;
     }
 
+    private final MiniMessage miniMessage = MiniMessage.miniMessage();
+
     /**
-     * 转换颜色代码
+     * 使用 MiniMessage 解析颜色代码
      */
-    private String color(String message) {
-        return ChatColor.translateAlternateColorCodes('&', message);
+    private Component color(String message) {
+        if (message == null) return Component.empty();
+        // 将 & 颜色代码转换为 MiniMessage 格式
+        String miniMessageText = message
+            .replace("<black>", "<black>").replace("<dark_blue>", "<dark_blue>")
+            .replace("<dark_green>", "<dark_green>").replace("<dark_aqua>", "<dark_aqua>")
+            .replace("<dark_red>", "<dark_red>").replace("<dark_purple>", "<dark_purple>")
+            .replace("<gold>", "<gold>").replace("<gray>", "<gray>")
+            .replace("<dark_gray>", "<dark_gray>").replace("<blue>", "<blue>")
+            .replace("<green>", "<green>").replace("<aqua>", "<aqua>")
+            .replace("<red>", "<red>").replace("<light_purple>", "<light_purple>")
+            .replace("<yellow>", "<yellow>").replace("<white>", "<white>")
+            .replace("<obfuscated>", "<obfuscated>").replace("<bold>", "<bold>")
+            .replace("<strikethrough>", "<strikethrough>").replace("<underlined>", "<underlined>")
+            .replace("<italic>", "<italic>").replace("<reset>", "<reset>");
+        return miniMessage.deserialize(miniMessageText);
     }
 
     @Override
@@ -72,7 +89,7 @@ public class CleanerCommand implements CommandExecutor, TabExecutor {
                 break;
 
             default:
-                sender.sendMessage(configManager.getMessagePrefix() + color("&c未知的子命令!"));
+                sender.sendMessage(configManager.getMessagePrefix() + color("<red>未知的子命令!"));
                 sendHelp(sender);
                 break;
         }
@@ -90,7 +107,7 @@ public class CleanerCommand implements CommandExecutor, TabExecutor {
         }
 
         if (cleanManager.isCleaning()) {
-            sender.sendMessage(configManager.getMessagePrefix() + color("&c正在清理中，请稍候..."));
+            sender.sendMessage(configManager.getMessagePrefix() + color("<red>正在清理中，请稍候..."));
             return;
         }
 
@@ -100,7 +117,7 @@ public class CleanerCommand implements CommandExecutor, TabExecutor {
             cleanManager.performClean(true);
         });
 
-        sender.sendMessage(configManager.getMessagePrefix() + color("&a正在执行清理..."));
+        sender.sendMessage(configManager.getMessagePrefix() + color("<green>正在执行清理..."));
     }
 
     /**
@@ -118,10 +135,10 @@ public class CleanerCommand implements CommandExecutor, TabExecutor {
         // 简单起见，我们直接重启任务
         if (currentState) {
             cleanManager.stopAutoCleanTask();
-            sender.sendMessage(configManager.getMessagePrefix() + color("&c自动清理已关闭!"));
+            sender.sendMessage(configManager.getMessagePrefix() + color("<red>自动清理已关闭!"));
         } else {
             cleanManager.startAutoCleanTask();
-            sender.sendMessage(configManager.getMessagePrefix() + color("&a自动清理已开启!"));
+            sender.sendMessage(configManager.getMessagePrefix() + color("<green>自动清理已开启!"));
         }
     }
 
@@ -134,15 +151,15 @@ public class CleanerCommand implements CommandExecutor, TabExecutor {
             return;
         }
 
-        String status = configManager.isAutoCleanEnabled() ? color("&a开启") : color("&c关闭");
-        sender.sendMessage(configManager.getMessagePrefix() + color("当前状态:"));
-        sender.sendMessage(color("  &e自动清理: ") + status);
-        sender.sendMessage(color("  &e清理间隔: &a" + configManager.getAutoCleanInterval() + "秒"));
-        sender.sendMessage(color("  &e预警时间: &a" + configManager.getWarningTime() + "秒"));
-        sender.sendMessage(color("  &e过滤模式: &a" + configManager.getFilterMode().name()));
-        sender.sendMessage(color("  &e世界模式: &a" + configManager.getWorldMode().name()));
-        sender.sendMessage(color("  &e保护命名物品: " + (configManager.isProtectNamedItems() ? "&a是" : "&c否")));
-        sender.sendMessage(color("  &e保护玩家掉落: " + (configManager.isProtectPlayerDrops() ? "&a是" : "&c否")));
+        Component status = configManager.isAutoCleanEnabled() ? color("<green>开启") : color("<red>关闭");
+        sender.sendMessage(color(configManager.getMessagePrefix() + "当前状态:"));
+        sender.sendMessage(color("  <yellow>自动清理: ").append(status));
+        sender.sendMessage(color("  <yellow>清理间隔: <green>" + configManager.getAutoCleanInterval() + "秒"));
+        sender.sendMessage(color("  <yellow>预警时间: <green>" + configManager.getWarningTime() + "秒"));
+        sender.sendMessage(color("  <yellow>过滤模式: <green>" + configManager.getFilterMode().name()));
+        sender.sendMessage(color("  <yellow>世界模式: <green>" + configManager.getWorldMode().name()));
+        sender.sendMessage(color("  <yellow>保护命名物品: " + (configManager.isProtectNamedItems() ? "<green>是" : "<red>否")));
+        sender.sendMessage(color("  <yellow>保护玩家掉落: " + (configManager.isProtectPlayerDrops() ? "<green>是" : "<red>否")));
     }
 
     /**
@@ -155,12 +172,12 @@ public class CleanerCommand implements CommandExecutor, TabExecutor {
         }
 
         sender.sendMessage(configManager.getMessagePrefix() + color("清理统计:"));
-        sender.sendMessage(color("  &e累计清理物品: &a" + configManager.getTotalCleanedItems() + "个"));
-        sender.sendMessage(color("  &e累计清理实体: &a" + configManager.getTotalCleanedEntities() + "个"));
+        sender.sendMessage(color("  <yellow>累计清理物品: <green>" + configManager.getTotalCleanedItems() + "个"));
+        sender.sendMessage(color("  <yellow>累计清理实体: <green>" + configManager.getTotalCleanedEntities() + "个"));
 
         // 提供重置选项
         if (sender.hasPermission("gdclean.admin")) {
-            sender.sendMessage(color("  &7使用 &e/gdclean resetstats &7重置统计"));
+            sender.sendMessage(color("  <gray>使用 <yellow>/gdclean resetstats <gray>重置统计"));
         }
     }
 
@@ -184,17 +201,17 @@ public class CleanerCommand implements CommandExecutor, TabExecutor {
      */
     private void sendHelp(CommandSender sender) {
         sender.sendMessage(configManager.getMessagePrefix() + color("命令帮助:"));
-        sender.sendMessage(color("  &e/gdclean clean &7- 手动执行清理"));
-        sender.sendMessage(color("  &e/gdclean status &7- 查看当前状态"));
-        sender.sendMessage(color("  &e/gdclean stats &7- 查看清理统计"));
+        sender.sendMessage(color("  <yellow>/gdclean clean <gray>- 手动执行清理"));
+        sender.sendMessage(color("  <yellow>/gdclean status <gray>- 查看当前状态"));
+        sender.sendMessage(color("  <yellow>/gdclean stats <gray>- 查看清理统计"));
 
         if (sender.hasPermission("gdclean.admin")) {
-            sender.sendMessage(color("  &e/gdclean toggle &7- 开关自动清理"));
-            sender.sendMessage(color("  &e/gdclean reload &7- 重载配置文件"));
-            sender.sendMessage(color("  &e/gdclean resetstats &7- 重置统计数据"));
+            sender.sendMessage(color("  <yellow>/gdclean toggle <gray>- 开关自动清理"));
+            sender.sendMessage(color("  <yellow>/gdclean reload <gray>- 重载配置文件"));
+            sender.sendMessage(color("  <yellow>/gdclean resetstats <gray>- 重置统计数据"));
         }
 
-        sender.sendMessage(color("  &e/gdclean help &7- 显示此帮助"));
+        sender.sendMessage(color("  <yellow>/gdclean help <gray>- 显示此帮助"));
     }
 
     @Override

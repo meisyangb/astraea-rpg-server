@@ -500,6 +500,6 @@ public final class ColorUtil {
             return "";
         }
         Component component = colorize(text);
-        return LegacyComponentSerializer.legacyAmpersand().serialize(component);
+        return LegacyComponentSerializer.legacySection().serialize(component);
     }
 }

@@ -5,7 +5,8 @@ import cn.guangdian.cavefu.cave.Cave;
 import cn.guangdian.cavefu.cave.CaveLevel;
 import cn.guangdian.cavefu.config.ConfigManager;
 import cn.guangdian.cavefu.storage.DataManager;
-import org.bukkit.ChatColor;
+import cn.guangdian.rpgcore.message.MiniMessageService;
+import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,11 +26,20 @@ public class CaveAdminCommand implements CommandExecutor, TabCompleter {
     private final GuangDianCaveFu plugin;
     private final ConfigManager configManager;
     private final DataManager dataManager;
+    private final MiniMessageService miniMessage;
 
     public CaveAdminCommand(GuangDianCaveFu plugin) {
         this.plugin = plugin;
         this.configManager = plugin.getConfigManager();
         this.dataManager = plugin.getDataManager();
+        this.miniMessage = plugin.getMiniMessageService();
+    }
+
+    /**
+     * 使用 MiniMessage 发送消息
+     */
+    private void sendMessage(CommandSender sender, String text) {
+        sender.sendMessage(miniMessage.colorize(text));
     }
 
     @Override
@@ -59,23 +69,23 @@ public class CaveAdminCommand implements CommandExecutor, TabCompleter {
     }
 
     private void sendHelp(CommandSender sender) {
-        sender.sendMessage(ChatColor.GOLD + "========== 洞府管理帮助 ==========");
-        sender.sendMessage(ChatColor.YELLOW + "/caveadmin tp <玩家> " + ChatColor.GRAY + "- 传送至玩家洞府");
-        sender.sendMessage(ChatColor.YELLOW + "/caveadmin delete <玩家> " + ChatColor.GRAY + "- 删除玩家洞府");
-        sender.sendMessage(ChatColor.YELLOW + "/caveadmin setlevel <玩家> <等级> " + ChatColor.GRAY + "- 设置洞府等级");
-        sender.sendMessage(ChatColor.YELLOW + "/caveadmin reload " + ChatColor.GRAY + "- 重载配置");
-        sender.sendMessage(ChatColor.YELLOW + "/caveadmin list " + ChatColor.GRAY + "- 查看所有洞府");
-        sender.sendMessage(ChatColor.GOLD + "================================");
+        sendMessage(sender, "<gold>========== 洞府管理帮助 ==========");
+        sendMessage(sender, "<yellow>/caveadmin tp <玩家> <gray>- 传送至玩家洞府");
+        sendMessage(sender, "<yellow>/caveadmin delete <玩家> <gray>- 删除玩家洞府");
+        sendMessage(sender, "<yellow>/caveadmin setlevel <玩家> <等级> <gray>- 设置洞府等级");
+        sendMessage(sender, "<yellow>/caveadmin reload <gray>- 重载配置");
+        sendMessage(sender, "<yellow>/caveadmin list <gray>- 查看所有洞府");
+        sendMessage(sender, "<gold>================================");
     }
 
     private void handleTp(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "此命令只能由玩家执行！");
+            sendMessage(sender, "<red>此命令只能由玩家执行！");
             return;
         }
 
         if (args.length < 2) {
-            sender.sendMessage(ChatColor.RED + "用法: /caveadmin tp <玩家>");
+            sendMessage(sender, "<red>用法: /caveadmin tp <玩家>");
             return;
         }
 
@@ -90,12 +100,12 @@ public class CaveAdminCommand implements CommandExecutor, TabCompleter {
 
         Player player = (Player) sender;
         player.teleport(cave.getHomeLocation());
-        player.sendMessage(ChatColor.GREEN + "已传送到 " + targetName + " 的洞府");
+        sendMessage(player, "<green>已传送到 " + targetName + " 的洞府");
     }
 
     private void handleDelete(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage(ChatColor.RED + "用法: /caveadmin delete <玩家>");
+            sendMessage(sender, "<red>用法: /caveadmin delete <玩家>");
             return;
         }
 
@@ -109,12 +119,12 @@ public class CaveAdminCommand implements CommandExecutor, TabCompleter {
         }
 
         plugin.getCaveManager().deleteCave(target.getUniqueId());
-        sender.sendMessage(ChatColor.GREEN + "已删除 " + targetName + " 的洞府");
+        sendMessage(sender, "<green>已删除 " + targetName + " 的洞府");
     }
 
     private void handleSetLevel(CommandSender sender, String[] args) {
         if (args.length < 3) {
-            sender.sendMessage(ChatColor.RED + "用法: /caveadmin setlevel <玩家> <等级>");
+            sendMessage(sender, "<red>用法: /caveadmin setlevel <玩家> <等级>");
             return;
         }
 
@@ -124,7 +134,7 @@ public class CaveAdminCommand implements CommandExecutor, TabCompleter {
         try {
             level = Integer.parseInt(args[2]);
         } catch (NumberFormatException e) {
-            sender.sendMessage(ChatColor.RED + "等级必须是数字！");
+            sendMessage(sender, "<red>等级必须是数字！");
             return;
         }
 
@@ -138,36 +148,33 @@ public class CaveAdminCommand implements CommandExecutor, TabCompleter {
 
         CaveLevel levelConfig = configManager.getLevel(level);
         if (levelConfig == null) {
-            sender.sendMessage(ChatColor.RED + "无效的等级！");
+            sendMessage(sender, "<red>无效的等级！");
             return;
         }
 
         cave.setLevel(level);
         dataManager.save();
-        sender.sendMessage(ChatColor.GREEN + "已将 " + targetName + " 的洞府等级设置为 " + level);
+        sendMessage(sender, "<green>已将 " + targetName + " 的洞府等级设置为 " + level);
     }
 
     private void handleReload(CommandSender sender) {
         configManager.reload();
-        sender.sendMessage(ChatColor.GREEN + "配置已重新加载！");
+        sendMessage(sender, "<green>配置已重新加载！");
     }
 
     private void handleList(CommandSender sender) {
-        sender.sendMessage(ChatColor.GOLD + "========== 洞府列表 ==========");
+        sendMessage(sender, "<gold>========== 洞府列表 ==========");
 
         int count = 0;
         for (Cave cave : dataManager.getAllCaves()) {
             CaveLevel level = configManager.getLevel(cave.getLevel());
             String levelName = level != null ? level.getName() : "未知";
-            sender.sendMessage(ChatColor.YELLOW + cave.getOwnerName() +
-                ChatColor.GRAY + " - " + ChatColor.WHITE +
-                "等级: " + levelName +
-                " 成员: " + cave.getMembers().size());
+            sendMessage(sender, "<yellow>" + cave.getOwnerName() + " <gray>- <white>等级: " + levelName + " 成员: " + cave.getMembers().size());
             count++;
         }
 
-        sender.sendMessage(ChatColor.GOLD + "总计: " + ChatColor.WHITE + count + " 个洞府");
-        sender.sendMessage(ChatColor.GOLD + "================================");
+        sendMessage(sender, "<gold>总计: <white>" + count + " 个洞府");
+        sendMessage(sender, "<gold>================================");
     }
 
     @Override

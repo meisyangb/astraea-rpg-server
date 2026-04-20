@@ -184,4 +184,12 @@ public class GuangDianMCP extends AbstractRPGPlugin {
     public SchedulerManager getSchedulerManager() {
         return schedulerManager;
     }
+    
+    /**
+     * 获取 RPGCore SyncScheduler
+     * @return SyncScheduler 实例，如果 RPGCore 未启用则返回 null
+     */
+    public cn.guangdian.rpgcore.api.SyncScheduler getRPGCoreScheduler() {
+        return scheduler;
+    }
 }

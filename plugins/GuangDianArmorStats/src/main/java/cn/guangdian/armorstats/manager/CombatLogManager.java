@@ -1,8 +1,9 @@
 package cn.guangdian.armorstats.manager;
 
 import cn.guangdian.armorstats.GuangDianArmorStats;
+import cn.guangdian.rpgcore.message.MiniMessageService;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -14,6 +15,12 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 战斗日志管理器
+ *
+ * RPGCore 服务集成:
+ * - MiniMessageService: 使用 RPGCore 统一消息服务进行文本格式化
+ */
 public class CombatLogManager {
 
     private final GuangDianArmorStats plugin;
@@ -43,9 +50,11 @@ public class CombatLogManager {
 
     private final Map<UUID, Long> combatCooldowns = new ConcurrentHashMap<>();
     private final Map<UUID, Map<String, Long>> typeCooldowns = new ConcurrentHashMap<>();
+    private final MiniMessage miniMessage;
 
     public CombatLogManager(GuangDianArmorStats plugin) {
         this.plugin = plugin;
+        this.miniMessage = plugin.getMiniMessage().getMiniMessage();
         loadConfig();
     }
 
@@ -61,19 +70,19 @@ public class CombatLogManager {
         showSkill = plugin.getConfig().getBoolean("combat_log.show_skill", true);
         messageCooldown = plugin.getConfig().getLong("combat_log.message_cooldown", 500);
 
-        formatDamage = plugin.getConfig().getString("combat_log.format.damage", "&c[战斗] &e%attacker% &f对 &e%target% &f造成了 &c%damage% &f伤害");
-        formatCrit = plugin.getConfig().getString("combat_log.format.crit", "&c[战斗] &e%attacker% &f对 &e%target% &f造成了 &4&l%damage% &c&l暴击&f伤害!");
-        formatPVPDamage = plugin.getConfig().getString("combat_log.format.pvp_damage", "&c[PVP] &e%attacker% &f对 &e%target% &f造成了 &c%damage% &f伤害");
-        formatPVPCrit = plugin.getConfig().getString("combat_log.format.pvp_crit", "&c[PVP] &e%attacker% &f对 &e%target% &f造成了 &4&l%damage% &c&l暴击&f伤害!");
-        formatDodge = plugin.getConfig().getString("combat_log.format.dodge", "&b[闪避] &e%defender% &f闪避了攻击!");
-        formatParry = plugin.getConfig().getString("combat_log.format.parry", "&e[招架] &e%defender% &f招架了攻击!");
-        formatReflect = plugin.getConfig().getString("combat_log.format.reflect", "&c[反弹] &e%defender% &f反弹了 &c%damage% &f伤害!");
-        formatLifesteal = plugin.getConfig().getString("combat_log.format.lifesteal", "&c[吸血] &e%player% &f恢复了 &c%amount% &f生命值!");
-        formatPoison = plugin.getConfig().getString("combat_log.format.poison", "&a[中毒] &e%attacker% &f使 &e%target% &f中毒!");
-        formatFreeze = plugin.getConfig().getString("combat_log.format.freeze", "&b[冰冻] &e%attacker% &f冻结了 &e%target%&f!");
-        formatBlind = plugin.getConfig().getString("combat_log.format.blind", "&8[致盲] &e%attacker% &f致盲了 &e%target%&f!");
-        formatSkillDamage = plugin.getConfig().getString("combat_log.format.skill_damage", "&d[技能] &e%skill% &f对 &e%target% &f造成了 &c%damage% &f伤害!");
-        formatSkillHeal = plugin.getConfig().getString("combat_log.format.skill_heal", "&a[治疗] &e%skill% &f恢复了 &c%amount% &f生命值!");
+        formatDamage = plugin.getConfig().getString("combat_log.format.damage", "<red>[战斗] <yellow>%attacker% <white>对 <yellow>%target% <white>造成了 <red>%damage% <white>伤害");
+        formatCrit = plugin.getConfig().getString("combat_log.format.crit", "<red>[战斗] <yellow>%attacker% <white>对 <yellow>%target% <white>造成了 <dark_red><bold>%damage% <red><bold>暴击<white>伤害!");
+        formatPVPDamage = plugin.getConfig().getString("combat_log.format.pvp_damage", "<red>[PVP] <yellow>%attacker% <white>对 <yellow>%target% <white>造成了 <red>%damage% <white>伤害");
+        formatPVPCrit = plugin.getConfig().getString("combat_log.format.pvp_crit", "<red>[PVP] <yellow>%attacker% <white>对 <yellow>%target% <white>造成了 <dark_red><bold>%damage% <red><bold>暴击<white>伤害!");
+        formatDodge = plugin.getConfig().getString("combat_log.format.dodge", "<aqua>[闪避] <yellow>%defender% <white>闪避了攻击!");
+        formatParry = plugin.getConfig().getString("combat_log.format.parry", "<yellow>[招架] <yellow>%defender% <white>招架了攻击!");
+        formatReflect = plugin.getConfig().getString("combat_log.format.reflect", "<red>[反弹] <yellow>%defender% <white>反弹了 <red>%damage% <white>伤害!");
+        formatLifesteal = plugin.getConfig().getString("combat_log.format.lifesteal", "<red>[吸血] <yellow>%player% <white>恢复了 <red>%amount% <white>生命值!");
+        formatPoison = plugin.getConfig().getString("combat_log.format.poison", "<green>[中毒] <yellow>%attacker% <white>使 <yellow>%target% <white>中毒!");
+        formatFreeze = plugin.getConfig().getString("combat_log.format.freeze", "<aqua>[冰冻] <yellow>%attacker% <white>冻结了 <yellow>%target%<white>!");
+        formatBlind = plugin.getConfig().getString("combat_log.format.blind", "<dark_gray>[致盲] <yellow>%attacker% <white>致盲了 <yellow>%target%<white>!");
+        formatSkillDamage = plugin.getConfig().getString("combat_log.format.skill_damage", "<light_purple>[技能] <yellow>%skill% <white>对 <yellow>%target% <white>造成了 <red>%damage% <white>伤害!");
+        formatSkillHeal = plugin.getConfig().getString("combat_log.format.skill_heal", "<green>[治疗] <yellow>%skill% <white>恢复了 <red>%amount% <white>生命值!");
     }
 
     public void logDamage(Player attacker, LivingEntity target, double damage, boolean isCrit, boolean isPVP) {
@@ -250,18 +259,21 @@ public class CombatLogManager {
         }
 
         playerTypeCooldowns.put(logType, now);
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        // 使用 RPGCore MiniMessageService 进行颜色格式化
+        // 配置中已使用 MiniMessage 格式，直接解析
+        player.sendMessage(miniMessage.deserialize(message));
     }
 
     private String getEntityName(LivingEntity entity) {
         if (entity instanceof Player) {
             return ((Player) entity).getName();
         }
-        
+
         if (entity.getCustomName() != null) {
-            return entity.getCustomName();
+            // 将旧版颜色代码转换为MiniMessage格式
+            return convertLegacyColorsToMiniMessage(entity.getCustomName());
         }
-        
+
         String name = entity.getType().name();
         StringBuilder result = new StringBuilder();
         for (String word : name.split("_")) {
@@ -269,6 +281,59 @@ public class CombatLogManager {
             result.append(word.substring(0, 1).toUpperCase()).append(word.substring(1).toLowerCase());
         }
         return result.toString();
+    }
+
+    /**
+     * 将旧版颜色代码 (&x 和 §x) 转换为MiniMessage格式
+     */
+    private String convertLegacyColorsToMiniMessage(String text) {
+        if (text == null) return "";
+
+        // 先处理 && 转义，避免被误转换
+        text = text.replace("&&", "\u0000ESC\u0000");
+
+        // 定义颜色映射
+        java.util.Map<Character, String> colorMap = new java.util.HashMap<>();
+        colorMap.put('0', "<black>");
+        colorMap.put('1', "<dark_blue>");
+        colorMap.put('2', "<dark_green>");
+        colorMap.put('3', "<dark_aqua>");
+        colorMap.put('4', "<dark_red>");
+        colorMap.put('5', "<dark_purple>");
+        colorMap.put('6', "<gold>");
+        colorMap.put('7', "<gray>");
+        colorMap.put('8', "<dark_gray>");
+        colorMap.put('9', "<blue>");
+        colorMap.put('a', "<green>");
+        colorMap.put('b', "<aqua>");
+        colorMap.put('c', "<red>");
+        colorMap.put('d', "<light_purple>");
+        colorMap.put('e', "<yellow>");
+        colorMap.put('f', "<white>");
+        colorMap.put('k', "<obfuscated>");
+        colorMap.put('l', "<bold>");
+        colorMap.put('m', "<strikethrough>");
+        colorMap.put('n', "<underlined>");
+        colorMap.put('o', "<italic>");
+        colorMap.put('r', "<reset>");
+
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if ((c == '&' || c == '§') && i + 1 < text.length()) {
+                char code = text.charAt(i + 1);
+                String miniMessage = colorMap.get(Character.toLowerCase(code));
+                if (miniMessage != null) {
+                    result.append(miniMessage);
+                    i++; // 跳过颜色代码字符
+                    continue;
+                }
+            }
+            result.append(c);
+        }
+
+        // 恢复 && 转义
+        return result.toString().replace("\u0000ESC\u0000", "&&");
     }
 
     public void clearCooldown(UUID playerId) {

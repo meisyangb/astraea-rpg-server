@@ -9,6 +9,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.UUID;
+import java.util.function.Predicate;
+
 public class MessageServiceImpl implements MessageService {
 
     private static MessageServiceImpl instance;
@@ -164,5 +168,91 @@ public class MessageServiceImpl implements MessageService {
             }
         }
         return result;
+    }
+
+    // ==================== 扩展方法实现 ====================
+
+    @Override
+    public boolean sendMessage(UUID playerId, String message) {
+        Player player = Bukkit.getPlayer(playerId);
+        if (player != null && player.isOnline()) {
+            player.sendMessage(miniMessage.colorize(message));
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void sendMessage(Collection<? extends Player> players, String message) {
+        if (message == null) {
+            return;
+        }
+        Component component = miniMessage.colorize(message);
+        for (Player player : players) {
+            if (player != null && player.isOnline()) {
+                player.sendMessage(component);
+            }
+        }
+    }
+
+    @Override
+    public void broadcastFiltered(String message, Predicate<Player> filter) {
+        if (message == null || filter == null) {
+            return;
+        }
+        Component component = miniMessage.colorize(message);
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (filter.test(player)) {
+                player.sendMessage(component);
+            }
+        }
+    }
+
+    @Override
+    public void sendActionBar(Player player, String message) {
+        if (player == null || message == null) {
+            return;
+        }
+        player.sendActionBar(miniMessage.colorize(message));
+    }
+
+    @Override
+    public void sendActionBar(Collection<? extends Player> players, String message) {
+        if (message == null) {
+            return;
+        }
+        Component component = miniMessage.colorize(message);
+        for (Player player : players) {
+            if (player != null && player.isOnline()) {
+                player.sendActionBar(component);
+            }
+        }
+    }
+
+    @Override
+    public void showTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+        if (player == null) {
+            return;
+        }
+        AudienceService.getInstance().showTitle(
+            player,
+            miniMessage.colorize(title),
+            miniMessage.colorize(subtitle),
+            fadeIn, stay, fadeOut
+        );
+    }
+
+    @Override
+    public void showTitle(Collection<? extends Player> players, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+        if (title == null) {
+            return;
+        }
+        Component titleComp = miniMessage.colorize(title);
+        Component subtitleComp = subtitle != null ? miniMessage.colorize(subtitle) : Component.empty();
+        for (Player player : players) {
+            if (player != null && player.isOnline()) {
+                AudienceService.getInstance().showTitle(player, titleComp, subtitleComp, fadeIn, stay, fadeOut);
+            }
+        }
     }
 }

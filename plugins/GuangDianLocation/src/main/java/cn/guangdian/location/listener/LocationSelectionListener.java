@@ -1,7 +1,9 @@
 package cn.guangdian.location.listener;
 
 import cn.guangdian.location.GuangDianLocation;
-import org.bukkit.ChatColor;
+import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.message.UnifiedMessageService;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -20,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -41,7 +44,7 @@ public class LocationSelectionListener implements Listener {
     private final GuangDianLocation plugin;
 
     // 等待输入名称的玩家
-    private final Map<UUID, PendingSelection> pendingSelections = new HashMap<>();
+    private final Map<UUID, PendingSelection> pendingSelections = new ConcurrentHashMap<>();
 
     // 名称输入超时时间（秒）
     private static final int INPUT_TIMEOUT_SECONDS = 30;
@@ -79,20 +82,15 @@ public class LocationSelectionListener implements Listener {
         showSelectionEffect(player, targetLocation);
 
         // 提示玩家输入名称
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', 
-            "&6===== 坐标点选择 ====="));
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', 
-            "&e你选中了一个位置:"));
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', 
-            "&7世界: &f" + targetLocation.getWorld().getName()));
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', 
-            "&7坐标: &fX=" + targetLocation.getBlockX() + 
-            ", Y=" + targetLocation.getBlockY() + 
+        UnifiedMessageService msg = UnifiedMessageService.getInstance();
+        player.sendMessage(msg.colorize("<gold>===== 坐标点选择 ====="));
+        player.sendMessage(msg.colorize("<yellow>你选中了一个位置:"));
+        player.sendMessage(msg.colorize("<gray>世界: <white>" + targetLocation.getWorld().getName()));
+        player.sendMessage(msg.colorize("<gray>坐标: <white>X=" + targetLocation.getBlockX() +
+            ", Y=" + targetLocation.getBlockY() +
             ", Z=" + targetLocation.getBlockZ()));
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', 
-            "&a请在聊天栏输入坐标名称（30秒内有效）"));
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', 
-            "&7输入 'cancel' 取消本次操作"));
+        player.sendMessage(msg.colorize("<green>请在聊天栏输入坐标名称（30秒内有效）"));
+        player.sendMessage(msg.colorize("<gray>输入 'cancel' 取消本次操作"));
 
         // 记录待命名位置
         PendingSelection pending = new PendingSelection(
@@ -120,9 +118,11 @@ public class LocationSelectionListener implements Listener {
         // 检查是否超时
         if (System.currentTimeMillis() > pending.getExpireTime()) {
             pendingSelections.remove(playerId);
-            plugin.getServer().getScheduler().runTask(plugin, () -> 
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', 
-                    "&c输入超时，坐标选择已取消。")));
+            RPGCore rpgCore = RPGCore.getInstance();
+            if (rpgCore != null) {
+                rpgCore.getScheduler().runSync(() ->
+                    player.sendMessage(plugin.getUnifiedMessageService().colorize("<red>输入超时，坐标选择已取消。")));
+            }
             return;
         }
 
@@ -132,18 +132,22 @@ public class LocationSelectionListener implements Listener {
         if (input.equalsIgnoreCase("cancel") || input.equalsIgnoreCase("取消")) {
             pendingSelections.remove(playerId);
             event.setCancelled(true);
-            plugin.getServer().getScheduler().runTask(plugin, () -> 
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', 
-                    "&e已取消本次坐标选择。")));
+            RPGCore rpgCore = RPGCore.getInstance();
+            if (rpgCore != null) {
+                rpgCore.getScheduler().runSync(() ->
+                    player.sendMessage(plugin.getUnifiedMessageService().colorize("<yellow>已取消本次坐标选择。")));
+            }
             return;
         }
 
         // 验证名称
         if (!isValidName(input)) {
             event.setCancelled(true);
-            plugin.getServer().getScheduler().runTask(plugin, () -> 
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', 
-                    "&c坐标名称无效！名称只能包含字母、数字、下划线、中文，长度2-32个字符。")));
+            RPGCore rpgCore = RPGCore.getInstance();
+            if (rpgCore != null) {
+                rpgCore.getScheduler().runSync(() ->
+                    player.sendMessage(plugin.getUnifiedMessageService().colorize("<red>坐标名称无效！名称只能包含字母、数字、下划线、中文，长度2-32个字符。")));
+            }
             return;
         }
 
@@ -157,8 +161,11 @@ public class LocationSelectionListener implements Listener {
         Location location = pending.getLocation();
         String name = input;
 
-        plugin.getServer().getScheduler().runTask(plugin, () -> 
-            plugin.handleLocationSelection(player, location, name));
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            rpgCore.getScheduler().runSync(() -> 
+                plugin.handleLocationSelection(player, location, name));
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

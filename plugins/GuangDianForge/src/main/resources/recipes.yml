@@ -1,4 +1,4 @@
-# ─── 锻造图纸配置 ──
+﻿# ─── 锻造图纸配置 ──
 # 
 # 本插件只支持锻造 MythicMobs 物品！
 #
@@ -30,7 +30,7 @@ recipes:
   
   # 尤里斯圣剑（使用MythicMobs物品作为材料和结果）
   yulis_sword:
-    name: "&c&l尤里斯圣剑"
+    name: "<red><bold>尤里斯圣剑"
     required-forge-level: 10
     ingredients:
       mm:杀戮圣石I: 1
@@ -40,13 +40,13 @@ recipes:
       mythicmobs-item: "尤里斯圣剑成品"
     base-success-rate: 0.3
     blueprint:
-      display: "&c&l【图纸】尤里斯圣剑"
+      display: "<red><bold>【图纸】尤里斯圣剑"
       is-book: true
       # lore 不配置会自动生成，包含材料需求、等级要求、右键学习提示
 
   # 魔法护身符
   magic_amulet:
-    name: "&b魔法护身符"
+    name: "<aqua>魔法护身符"
     required-forge-level: 5
     ingredients:
       mm:魔法精华: 3
@@ -57,7 +57,7 @@ recipes:
 
   # 暗影匕首
   shadow_dagger:
-    name: "&8暗影匕首"
+    name: "<dark_gray>暗影匕首"
     required-forge-level: 8
     ingredients:
       mm:暗影精华: 2
@@ -66,23 +66,23 @@ recipes:
       mythicmobs-item: "暗影匕首成品"
     base-success-rate: 0.35
     blueprint:
-      display: "&8&l【图纸】暗影匕首"
+      display: "<dark_gray><bold>【图纸】暗影匕首"
       lore:
-        - "&8&m═══════════════════════"
-        - "&8&l       暗影匕首"
-        - "&8&m═══════════════════════"
+        - "<dark_gray><strikethrough>═══════════════════════"
+        - "<dark_gray><bold>       暗影匕首"
+        - "<dark_gray><strikethrough>═══════════════════════"
         - ""
-        - "&7&l「 传说记载 」"
-        - "&8这把匕首由暗影精华锻造而成"
-        - "&8锋利无比，能穿透任何护甲"
-        - "&8是刺客的首选武器"
+        - "<gray><bold>「 传说记载 」"
+        - "<dark_gray>这把匕首由暗影精华锻造而成"
+        - "<dark_gray>锋利无比，能穿透任何护甲"
+        - "<dark_gray>是刺客的首选武器"
         - ""
-        - "&7&l「 所需材料 」"
-        - "&d◆ 暗影精华 x2"
-        - "&d◆ 陨铁碎片 x3"
+        - "<gray><bold>「 所需材料 」"
+        - "<light_purple>◆ 暗影精华 x2"
+        - "<light_purple>◆ 陨铁碎片 x3"
         - ""
-        - "&8&m═══════════════════════"
-        - "&6&l    锻造等级要求: 8级"
-        - "&8&m═══════════════════════"
-        - "&a右键使用学习此图纸"
+        - "<dark_gray><strikethrough>═══════════════════════"
+        - "<gold><bold>    锻造等级要求: 8级"
+        - "<dark_gray><strikethrough>═══════════════════════"
+        - "<green>右键使用学习此图纸"
       is-book: true

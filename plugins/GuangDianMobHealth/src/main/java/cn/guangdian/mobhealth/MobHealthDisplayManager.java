@@ -1,8 +1,10 @@
 package cn.guangdian.mobhealth;
 
 import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import net.kyori.adventure.text.Component;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
@@ -25,17 +27,18 @@ public class MobHealthDisplayManager {
     private final Map<UUID, Long> lastAttackTime = new ConcurrentHashMap<>();
     private long timeoutCheckTaskId = -1;
 
+    private final MiniMessageService miniMessage;
     private boolean enabled = true;
     private float displayHeight = 2.5f;
     private boolean hideVanillaName = true;
     private boolean hideMythicMobsName = true;
     private int displayTimeout = 100;
-    private String format = "{name}§r {health_bar}§r §a{health}";
+    private String format = "{name} <reset>{health_bar}<reset> <green>{health}";
     private int barLength = 10;
     private String barSymbol = "█";
-    private String emptyColor = "§7";
-    private String bracketLeft = "§8[";
-    private String bracketRight = "§8]";
+    private String emptyColor = "<gray>";
+    private String bracketLeft = "<dark_gray>[";
+    private String bracketRight = "<dark_gray>]";
     private List<BarColorRange> barColors = new ArrayList<>();
     private double minHealth = 0;
     private Set<EntityType> excludedTypes = new HashSet<>();
@@ -45,6 +48,7 @@ public class MobHealthDisplayManager {
     public MobHealthDisplayManager(GuangDianMobHealth plugin, MythicMobsHook mythicMobsHook) {
         this.plugin = plugin;
         this.mythicMobsHook = mythicMobsHook;
+        this.miniMessage = plugin.getMiniMessageService();
         loadConfig();
     }
 
@@ -54,15 +58,16 @@ public class MobHealthDisplayManager {
         hideVanillaName = plugin.getConfig().getBoolean("display.hide-vanilla-name", true);
         hideMythicMobsName = plugin.getConfig().getBoolean("display.hide-mythicmobs-name", true);
         displayTimeout = plugin.getConfig().getInt("display.timeout", 100);
-        format = plugin.getConfig().getString("display.format", "{name}§r {health_bar}§r §a{health}");
+        // 使用 MiniMessage 格式的占位符 <name> 而不是 {name}
+        format = plugin.getConfig().getString("display.format", "<name><reset> <health_bar><reset> <green><health>");
+        // 兼容旧版配置：如果格式中包含 {name} 等旧占位符，转换为 <name>
+        format = convertOldPlaceholders(format);
         barLength = plugin.getConfig().getInt("display.bar.length", 10);
         barSymbol = plugin.getConfig().getString("display.bar.symbol", "█");
-        emptyColor = ChatColor.translateAlternateColorCodes('&', 
-            plugin.getConfig().getString("display.bar.empty-color", "&7"));
-        bracketLeft = ChatColor.translateAlternateColorCodes('&', 
-            plugin.getConfig().getString("display.bar.bracket-left", "§8["));
-        bracketRight = ChatColor.translateAlternateColorCodes('&', 
-            plugin.getConfig().getString("display.bar.bracket-right", "§8]"));
+        // 直接使用 MiniMessage 格式，不再转换
+        emptyColor = plugin.getConfig().getString("display.bar.empty-color", "<red>");
+        bracketLeft = plugin.getConfig().getString("display.bar.bracket-left", "<dark_gray>[");
+        bracketRight = plugin.getConfig().getString("display.bar.bracket-right", "<dark_gray>]");
         
         barColors.clear();
         List<String> colorList = plugin.getConfig().getStringList("display.bar.colors");
@@ -74,7 +79,8 @@ public class MobHealthDisplayManager {
                     try {
                         int min = Integer.parseInt(range[0].trim());
                         int max = Integer.parseInt(range[1].trim());
-                        String color = ChatColor.translateAlternateColorCodes('&', parts[1]);
+                        // 直接使用 MiniMessage 格式
+                        String color = parts[1].trim();
                         barColors.add(new BarColorRange(min, max, color));
                     } catch (NumberFormatException ignored) {}
                 }
@@ -203,14 +209,19 @@ public class MobHealthDisplayManager {
         String healthBar = buildHealthBar(health, maxHealth);
         int percent = (int) ((health / maxHealth) * 100);
         
-        String text = format
-            .replace("{name}", name)
-            .replace("{health_bar}", healthBar)
-            .replace("{health}", String.valueOf((int) health))
-            .replace("{max_health}", String.valueOf((int) maxHealth))
-            .replace("{percent}", String.valueOf(percent));
-        
-        display.text(Component.text(text));
+        // 先解析 healthBar 中的 MiniMessage 标签
+        Component healthBarComponent = miniMessage.parse(healthBar);
+
+        // 使用 TagResolver 动态替换占位符（官方 MiniMessage 方式）
+        TagResolver resolver = TagResolver.resolver(
+            Placeholder.unparsed("name", name),
+            Placeholder.component("health_bar", healthBarComponent),
+            Placeholder.unparsed("health", String.valueOf((int) health)),
+            Placeholder.unparsed("max_health", String.valueOf((int) maxHealth)),
+            Placeholder.unparsed("percent", String.valueOf(percent))
+        );
+
+        display.text(miniMessage.parse(format, resolver));
         healthCache.put(entityId, new HealthData(health, maxHealth));
     }
 
@@ -331,7 +342,22 @@ public class MobHealthDisplayManager {
                 return range.color;
             }
         }
-        return "§a";
+        return "<green>";
+    }
+
+    /**
+     * 将旧版 {placeholder} 格式转换为 MiniMessage <placeholder> 格式
+     */
+    private String convertOldPlaceholders(String format) {
+        if (format == null || format.isEmpty()) {
+            return format;
+        }
+        return format
+            .replace("{name}", "<name>")
+            .replace("{health}", "<health>")
+            .replace("{max_health}", "<max_health>")
+            .replace("{health_bar}", "<health_bar>")
+            .replace("{percent}", "<percent>");
     }
 
     public boolean hasDisplay(UUID entityId) {

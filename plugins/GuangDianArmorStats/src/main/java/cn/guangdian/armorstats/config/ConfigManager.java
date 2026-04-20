@@ -26,7 +26,6 @@ public class ConfigManager {
     public static final String[] CONFIG_FILES = {
         "config",
         "attributes",
-        "gems",
         "skills",
         "damage",
         "regen",
@@ -101,13 +100,6 @@ public class ConfigManager {
      */
     public FileConfiguration getAttributes() {
         return configs.get("attributes");
-    }
-
-    /**
-     * 获取宝石配置
-     */
-    public FileConfiguration getGems() {
-        return configs.get("gems");
     }
 
     /**

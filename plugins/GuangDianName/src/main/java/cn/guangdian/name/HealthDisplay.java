@@ -1,5 +1,6 @@
 package cn.guangdian.name;
 
+import cn.guangdian.rpgcore.util.ColorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
@@ -34,8 +35,8 @@ public class HealthDisplay {
     }
     
     public void loadConfig() {
-        displayName = plugin.getConfig().getString("display-name", "&c❤");
-        displayName = ChatColor.translateAlternateColorCodes('&', displayName);
+        displayName = plugin.getConfig().getString("display-name", "<red>❤");
+        displayName = ColorUtil.legacyColorize(displayName);
     }
     
     public void setDebug(boolean debug) {

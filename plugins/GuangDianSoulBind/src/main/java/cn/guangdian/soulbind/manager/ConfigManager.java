@@ -34,7 +34,7 @@ public class ConfigManager {
         preventTrade = config.getBoolean("protection.prevent-trade", true);
         keepOnDeath = config.getBoolean("protection.keep-on-death", true);
 
-        loreFormat = config.getString("lore-format.format", "&8灵魂绑定：&f%player%");
+        loreFormat = config.getString("lore-format.format", "<dark_gray>灵魂绑定：<white>%player%");
     }
 
     public void reloadConfig() {

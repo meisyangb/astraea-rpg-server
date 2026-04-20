@@ -1,0 +1,58 @@
+# ========================================
+# RPGSkill 技能配置
+# ========================================
+
+skills:
+  # 主动技能 - 范围伤害
+  星陨冲击:
+    name: "星陨冲击"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 15
+    mana-cost: 10
+    executor: area_damage
+    params:
+      range: 5.0
+      damage-multiplier: 1.0
+      effect: lightning
+      particle: ELECTRIC_SPARK
+      sound: ENTITY_LIGHTNING_BOLT_THUNDER
+
+  # 主动技能 - 治疗
+  救赎之光:
+    name: "救赎之光"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 60
+    mana-cost: 20
+    executor: heal
+    params:
+      heal-percent: 30
+      sound: BLOCK_BEACON_POWER_SELECT
+
+  # 被动技能 - 被攻击时触发
+  黎明炽焰:
+    name: "黎明炽焰"
+    type: PASSIVE
+    trigger: ON_DAMAGE_TAKEN
+    cooldown: 10
+    executor: area_damage
+    params:
+      range: 3.0
+      damage-multiplier: 0.5
+      effect: fire
+      particle: FLAME
+      sound: ENTITY_BLAZE_SHOOT
+
+  # 单体伤害技能
+  致死斩击:
+    name: "致死斩击"
+    type: PASSIVE
+    trigger: ON_HIT
+    cooldown: 5
+    executor: single_target
+    params:
+      damage-multiplier: 1.5
+      true-damage: true
+      effect: magic
+      sound: ENTITY_WITHER_HURT

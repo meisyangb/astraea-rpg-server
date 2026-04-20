@@ -1,4 +1,4 @@
-# ========================================
+﻿# ========================================
 # 光点装备属性插件主配置
 # GuangDianArmorStats Main Configuration
 # ========================================
@@ -57,8 +57,8 @@ damage_debug:
 # 注意: MythicMobs 已支持通过 Skills 自己处理 BOSS 公告
 # 建议: 在 MythicMobs 怪物配置中使用 ~onSpawn, ~onDeath, ~onDamaged 触发公告
 # 示例:
-#   - 'message{msg="&c&l[BOSS] &fBOSS已刷新"} @PlayersInRadius{r=50} ~onSpawn'
-#   - sendtitle{title="&c&lBOSS战";subtitle="&fBOSS已刷新"} @PlayersInRadius{r=50} ~onSpawn
+#   - 'message{msg="<red><bold>[BOSS] <white>BOSS已刷新"} @PlayersInRadius{r=50} ~onSpawn'
+#   - sendtitle{title="<red><bold>BOSS战";subtitle="<white>BOSS已刷新"} @PlayersInRadius{r=50} ~onSpawn
 boss_announce:
   # 是否启用 BOSS 公告 (建议禁用，使用 MythicMobs 技能处理)
   enabled: false
@@ -74,7 +74,7 @@ health_display:
 bossbar:
   enabled: true
   update_interval: 20
-  format: '&c❤ &f%current%&7/&f%max%'
+  format: '<red>❤ <white>%current%<gray>/<white>%max%'
   hide_when_full: true
 
 # 闪避配置 (兼容旧版)

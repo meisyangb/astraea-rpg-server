@@ -1,4 +1,4 @@
-worlds:
+﻿worlds:
   world:
     alias: ''
     environment: normal
@@ -23,7 +23,7 @@ worlds:
       yaw: 0.0
 
   spawn:
-    alias: '&a出生点大厅'
+    alias: '<green>出生点大厅'
     environment: normal
     difficulty: peaceful
     gamemode: adventure
@@ -45,7 +45,7 @@ worlds:
       pitch: 0.0
       yaw: 0.0
   CaveFuWorld:
-    alias: '&b洞府世界'
+    alias: '<aqua>洞府世界'
     environment: normal
     difficulty: easy
     gamemode: survival
@@ -67,7 +67,7 @@ worlds:
       pitch: 0.0
       yaw: 0.0
   DemonLands:
-    alias: '&c恶魔之地'
+    alias: '<red>恶魔之地'
     environment: normal
     difficulty: normal
     gamemode: survival

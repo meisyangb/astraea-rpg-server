@@ -1,0 +1,578 @@
+# GuangDianMobs 技能配置
+# 使用 MiniMessage 格式: <color>, <bold>, <reset> 等
+#
+# 配置说明:
+# - conditions: 技能触发条件，如 targetwithin 25, health <50
+# - target: 目标选择器，支持 @PlayersInRadius{r=40} 格式
+# - sub-skills: 子技能列表，用于组合技能
+# - delay: 延迟执行（tick）
+
+skills:
+  # ============================================
+  # 基础攻击技能
+  # ============================================
+
+  weak_attack:
+    display-name: "<gray>弱攻击"
+    type: DAMAGE
+    damage: 2
+    cooldown: 40
+    range: 2
+    chance: 0.5
+    target: TARGET
+    particle: CRIT
+    sound: ENTITY_PLAYER_ATTACK_WEAK
+
+  shoot_arrow:
+    display-name: "<white>射击"
+    type: PROJECTILE
+    damage: 5
+    cooldown: 60
+    range: 20
+    chance: 0.4
+    target: TARGET
+    particle: CRIT
+    sound: ENTITY_ARROW_SHOOT
+
+  poison_bite:
+    display-name: "<dark_green>毒咬"
+    type: DEBUFF
+    damage: 3
+    cooldown: 80
+    range: 2
+    chance: 0.3
+    target: TARGET
+    effects:
+      - POISON
+    particle: SLIME
+    sound: ENTITY_SPIDER_AMBIENT
+    message: "<dark_green>你被毒蜘蛛咬伤了！"
+
+  # ============================================
+  # 近战技能
+  # ============================================
+
+  charge_attack:
+    display-name: "<yellow><bold>冲锋"
+    type: DAMAGE
+    damage: 15
+    cooldown: 150
+    range: 5
+    chance: 0.25
+    target: TARGET
+    conditions:
+      - "targetwithin 8"
+    particle: CLOUD
+    sound: ENTITY_ZOMBIE_ATTACK_IRON_DOOR
+    message: "<yellow>怪物向你发起了冲锋！"
+
+  shield_bash:
+    display-name: "<gray><bold>盾击"
+    type: DAMAGE
+    damage: 8
+    cooldown: 100
+    range: 3
+    chance: 0.3
+    target: TARGET
+    effects:
+      - SLOW
+    particle: CRIT
+    sound: ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR
+    message: "<gray>你被盾击眩晕了！"
+
+  backstab:
+    display-name: "<dark_purple><bold>背刺"
+    type: DAMAGE
+    damage: 25
+    cooldown: 200
+    range: 2
+    chance: 0.2
+    target: TARGET
+    conditions:
+      - "targetwithin 3"
+    particle: SMOKE
+    sound: ENTITY_PLAYER_ATTACK_CRIT
+    message: "<dark_purple>你被背刺了！"
+
+  poison_blade:
+    display-name: "<green><bold>毒刃"
+    type: DEBUFF
+    damage: 10
+    cooldown: 120
+    range: 2
+    chance: 0.3
+    target: TARGET
+    effects:
+      - POISON
+      - WEAKNESS
+    particle: SPELL_MOB
+    sound: ENTITY_SPLASH_POTION_BREAK
+    message: "<green>毒刃划破了你的皮肤！"
+
+  # ============================================
+  # 元素技能 - 火焰
+  # ============================================
+
+  fireball:
+    display-name: "<red><bold>火球术"
+    type: PROJECTILE
+    damage: 20
+    cooldown: 120
+    range: 25
+    chance: 0.3
+    target: TARGET
+    particle: FLAME
+    sound: ENTITY_GHAST_SHOOT
+    message: "<red>怪物对你发射了火球！"
+
+  fire_nova:
+    display-name: "<gold><bold>火焰新星"
+    type: DAMAGE
+    damage: 30
+    cooldown: 200
+    range: 8
+    chance: 0.2
+    target: "@PlayersInRadius{r=8}"
+    conditions:
+      - "targetwithin 10"
+    sub-skills:
+      - "fire_burn"
+    particle: LAVA
+    sound: ENTITY_BLAZE_SHOOT
+    message: "<gold>火焰新星爆发！"
+
+  fire_burn:
+    display-name: "<red>灼烧"
+    type: DEBUFF
+    damage: 5
+    cooldown: 0
+    range: 8
+    chance: 1.0
+    target: "@PlayersInRadius{r=8}"
+    effects:
+      - FIRE_RESISTANCE
+    particle: FLAME
+    sound: ENTITY_GENERIC_BURN
+
+  flame_shield:
+    display-name: "<orange><bold>火焰护盾"
+    type: BUFF
+    cooldown: 300
+    range: 0
+    chance: 0.15
+    target: SELF
+    conditions:
+      - "health <40"
+    effects:
+      - FIRE_RESISTANCE
+    particle: FLAME
+    sound: ENTITY_BLAZE_AMBIENT
+
+  lava_burst:
+    display-name: "<dark_red><bold>岩浆爆发"
+    type: DAMAGE
+    damage: 40
+    cooldown: 250
+    range: 6
+    chance: 0.2
+    target: "@PlayersInRadius{r=6}"
+    particle: LAVA
+    sound: ENTITY_GENERIC_EXPLODE
+    message: "<dark_red>岩浆喷涌而出！"
+
+  # ============================================
+  # 元素技能 - 冰霜
+  # ============================================
+
+  frost_nova:
+    display-name: "<aqua><bold>冰霜新星"
+    type: DAMAGE
+    damage: 25
+    cooldown: 180
+    range: 10
+    chance: 0.25
+    target: "@PlayersInRadius{r=10}"
+    conditions:
+      - "targetwithin 12"
+    effects:
+      - SLOW
+    particle: SNOWBALL
+    sound: ENTITY_PLAYER_HURT_FREEZE
+    message: "<aqua>冰霜新星冻结了你！"
+
+  ice_shield:
+    display-name: "<blue><bold>冰霜护盾"
+    type: BUFF
+    cooldown: 250
+    range: 0
+    chance: 0.2
+    target: SELF
+    conditions:
+      - "health <50"
+    effects:
+      - RESISTANCE
+    particle: SNOWBALL
+    sound: BLOCK_GLASS_BREAK
+
+  # ============================================
+  # 元素技能 - 雷电
+  # ============================================
+
+  lightning_strike:
+    display-name: "<yellow><bold>雷电打击"
+    type: DAMAGE
+    damage: 35
+    cooldown: 150
+    range: 20
+    chance: 0.25
+    target: TARGET
+    particle: END_ROD
+    sound: ENTITY_LIGHTNING_BOLT_THUNDER
+    message: "<yellow>雷电从天而降！"
+
+  chain_lightning:
+    display-name: "<gold><bold>连锁闪电"
+    type: DAMAGE
+    damage: 25
+    cooldown: 200
+    range: 15
+    chance: 0.2
+    target: "@PlayersInRadius{r=15}"
+    conditions:
+      - "targetwithin 15"
+    particle: END_ROD
+    sound: ENTITY_LIGHTNING_BOLT_IMPACT
+    message: "<gold>连锁闪电在玩家间跳跃！"
+
+  thunderstorm:
+    display-name: "<yellow><bold>雷暴"
+    type: DAMAGE
+    damage: 50
+    cooldown: 400
+    range: 20
+    chance: 0.1
+    target: "@PlayersInRadius{r=20}"
+    delay: 40
+    particle: END_ROD
+    sound: ENTITY_LIGHTNING_BOLT_THUNDER
+    message: "<yellow>雷暴降临！"
+
+  # ============================================
+  # 辅助技能
+  # ============================================
+
+  heal:
+    display-name: "<green><bold>治疗术"
+    type: HEAL
+    heal: 30
+    cooldown: 250
+    range: 0
+    chance: 0.2
+    target: SELF
+    conditions:
+      - "health <50"
+    particle: HEART
+    sound: ENTITY_PLAYER_LEVELUP
+
+  regenerate:
+    display-name: "<green><bold>再生"
+    type: BUFF
+    cooldown: 300
+    range: 0
+    chance: 0.15
+    target: SELF
+    conditions:
+      - "health <30"
+    effects:
+      - REGENERATION
+    particle: HEART
+    sound: ENTITY_ZOMBIE_VILLAGER_CURE
+
+  life_drain:
+    display-name: "<dark_red><bold>生命吸取"
+    type: DAMAGE
+    damage: 15
+    cooldown: 150
+    range: 5
+    chance: 0.25
+    target: TARGET
+    conditions:
+      - "targetwithin 5"
+    sub-skills:
+      - "heal_self"
+    particle: SPELL_WITCH
+    sound: ENTITY_WITCH_DRINK
+    message: "<dark_red>你的生命被吸取了！"
+
+  heal_self:
+    display-name: "<green>自我治疗"
+    type: HEAL
+    heal: 15
+    cooldown: 0
+    range: 0
+    chance: 1.0
+    target: SELF
+    particle: HEART
+
+  # ============================================
+  # 召唤技能
+  # ============================================
+
+  summon_skeletons:
+    display-name: "<gray><bold>召唤骷髅"
+    type: SUMMON
+    cooldown: 300
+    range: 0
+    chance: 0.15
+    target: SELF
+    delay: 20
+    effects:
+      - "3"
+    particle: SMOKE
+    sound: ENTITY_WITHER_SPAWN
+    message: "<gray>骷髅王召唤了骷髅战士！"
+
+  summon_minions:
+    display-name: "<dark_purple><bold>召唤仆从"
+    type: SUMMON
+    cooldown: 400
+    range: 0
+    chance: 0.1
+    target: SELF
+    delay: 30
+    effects:
+      - "5"
+    particle: PORTAL
+    sound: ENTITY_ENDER_DRAGON_GROWL
+    message: "<dark_purple>末日守卫召唤了黑暗仆从！"
+
+  split:
+    display-name: "<green><bold>分裂"
+    type: SUMMON
+    cooldown: 200
+    range: 0
+    chance: 0.3
+    target: SELF
+    conditions:
+      - "health <50"
+    effects:
+      - "2"
+    particle: SLIME
+    sound: ENTITY_SLIME_SQUISH
+
+  # ============================================
+  # 位移技能
+  # ============================================
+
+  teleport:
+    display-name: "<aqua><bold>闪现"
+    type: TELEPORT
+    cooldown: 200
+    range: 10
+    chance: 0.2
+    target: SELF
+    conditions:
+      - "targetwithin 5"
+    particle: END_ROD
+    sound: ENTITY_ENDERMAN_TELEPORT
+
+  phase_shift:
+    display-name: "<white><bold>相位转移"
+    type: TELEPORT
+    cooldown: 150
+    range: 8
+    chance: 0.25
+    target: SELF
+    conditions:
+      - "health <40"
+    particle: END_ROD
+    sound: ENTITY_ENDERMAN_TELEPORT
+
+  # ============================================
+  # 范围攻击技能
+  # ============================================
+
+  smash_attack:
+    display-name: "<dark_red><bold>重击"
+    type: DAMAGE
+    damage: 30
+    cooldown: 200
+    range: 5
+    chance: 0.2
+    target: "@PlayersInRadius{r=5}"
+    conditions:
+      - "targetwithin 10"
+    sub-skills:
+      - "throw"
+      - "explosion_effect"
+    particle: CRIT
+    sound: ENTITY_GENERIC_EXPLODE
+    message: "<dark_red>怪物对你发动了重击！"
+
+  ground_slam:
+    display-name: "<dark_gray><bold>大地猛击"
+    type: DAMAGE
+    damage: 40
+    cooldown: 250
+    range: 8
+    chance: 0.15
+    target: "@PlayersInRadius{r=8}"
+    conditions:
+      - "targetwithin 10"
+    sub-skills:
+      - "stun"
+    particle: BLOCK_CRACK
+    sound: ENTITY_GENERIC_EXPLODE
+    message: "<dark_gray>大地在颤抖！"
+
+  doom_nova:
+    display-name: "<dark_red><bold>末日新星"
+    type: DAMAGE
+    damage: 80
+    cooldown: 500
+    range: 15
+    chance: 0.1
+    target: "@PlayersInRadius{r=15}"
+    conditions:
+      - "health <30"
+    delay: 60
+    particle: SMOKE
+    sound: ENTITY_ENDER_DRAGON_DEATH
+    message: "<dark_red>末日新星即将爆发！"
+
+  # ============================================
+  # 子技能 (元技能组件)
+  # ============================================
+
+  throw:
+    display-name: "<yellow>投掷"
+    type: DEBUFF
+    cooldown: 0
+    range: 5
+    chance: 1.0
+    target: "@PlayersInRadius{r=5}"
+    effects:
+      - LEVITATION
+    particle: CLOUD
+
+  explosion_effect:
+    display-name: "<red>爆炸"
+    type: DAMAGE
+    damage: 10
+    cooldown: 0
+    range: 5
+    chance: 1.0
+    target: "@PlayersInRadius{r=5}"
+    particle: EXPLOSION
+    sound: ENTITY_GENERIC_EXPLODE
+
+  stun:
+    display-name: "<gray>眩晕"
+    type: DEBUFF
+    cooldown: 0
+    range: 8
+    chance: 1.0
+    target: "@PlayersInRadius{r=8}"
+    effects:
+      - SLOW
+      - WEAKNESS
+    particle: SPELL
+
+  fire_burn:
+    display-name: "<red>燃烧"
+    type: DEBUFF
+    cooldown: 0
+    range: 8
+    chance: 1.0
+    target: "@PlayersInRadius{r=8}"
+    effects:
+      - FIRE_RESISTANCE
+    particle: FLAME
+
+  # ============================================
+  # 特殊技能
+  # ============================================
+
+  poison_cloud:
+    display-name: "<green><bold>毒云"
+    type: DEBUFF
+    damage: 5
+    cooldown: 150
+    range: 12
+    chance: 0.25
+    target: "@PlayersInRadius{r=12}"
+    effects:
+      - POISON
+      - NAUSEA
+    particle: SPELL_MOB
+    sound: ENTITY_SLIME_SQUISH
+    message: "<green>毒云笼罩了你！"
+
+  devour:
+    display-name: "<dark_red><bold>吞噬"
+    type: DAMAGE
+    damage: 50
+    cooldown: 300
+    range: 3
+    chance: 0.15
+    target: TARGET
+    conditions:
+      - "targetwithin 3"
+    sub-skills:
+      - "heal_large"
+    particle: SLIME
+    sound: ENTITY_GENERIC_EAT
+    message: "<dark_red>你被深渊蠕虫吞噬了！"
+
+  heal_large:
+    display-name: "<green>大量治疗"
+    type: HEAL
+    heal: 50
+    cooldown: 0
+    range: 0
+    chance: 1.0
+    target: SELF
+    particle: HEART
+
+  bone_shield:
+    display-name: "<white><bold>骨盾"
+    type: BUFF
+    cooldown: 350
+    range: 0
+    chance: 0.15
+    target: SELF
+    conditions:
+      - "health <40"
+    effects:
+      - RESISTANCE
+      - ABSORPTION
+    particle: SNOWBALL
+    sound: BLOCK_BONE_BLOCK_BREAK
+
+  dark_orb:
+    display-name: "<dark_purple><bold>黑暗法球"
+    type: PROJECTILE
+    damage: 60
+    cooldown: 200
+    range: 30
+    chance: 0.2
+    target: TARGET
+    particle: DRAGON_BREATH
+    sound: ENTITY_WITHER_SHOOT
+    message: "<dark_purple>黑暗法球向你飞来！"
+
+  berserk:
+    display-name: "<red><bold>狂暴"
+    type: BUFF
+    cooldown: 400
+    range: 0
+    chance: 0.1
+    target: SELF
+    conditions:
+      - "health <25"
+    effects:
+      - INCREASE_DAMAGE
+      - SPEED
+    particle: CRIT
+    sound: ENTITY_ENDER_DRAGON_GROWL
+    message: "<red>末日守卫进入了狂暴状态！"

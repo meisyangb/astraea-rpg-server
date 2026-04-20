@@ -71,7 +71,7 @@ public class NPCServiceAdapter implements NPCService {
             return false;
         }
 
-        NPCData npc = new NPCData(lowerId, displayName != null ? displayName : "&e" + npcId, location, "main");
+        NPCData npc = new NPCData(lowerId, displayName != null ? displayName : "<yellow>" + npcId, location, "main");
         if (skinPlayerName != null) {
             npc.setSkinName(skinPlayerName);
         }

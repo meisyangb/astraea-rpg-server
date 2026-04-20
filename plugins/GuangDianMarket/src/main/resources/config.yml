@@ -1,4 +1,4 @@
-# ================================
+﻿# ================================
 # GuangDianMarket 全球市场配置
 # ================================
 
@@ -25,33 +25,33 @@ settings:
 
 # 消息配置
 messages:
-  insufficient-funds: "&c%currency%不足!"
-  invalid-price: "&c无效的价格!"
-  no-item-in-hand: "&c请手持要出售的物品!"
-  max-listings-reached: "&c你已达到最大上架数量 (&6%max%&c)!"
-  item-listed: "&a成功上架物品! 价格: &6%price% %currency%"
-  item-sold: "&a你的物品已售出! 获得 &6%price% %currency%"
-  purchase-success: "&a购买成功! 花费 &6%price% %currency%"
-  cannot-buy-own: "&c不能购买自己的物品!"
-  not-your-item: "&c这不是你的物品!"
-  listing-cancelled: "&a已取消上架，物品已返还!"
-  item-expired: "&c你的市场物品已过期并已返还!"
-  no-permission: "&c你没有权限使用市场!"
+  insufficient-funds: "<red>%currency%不足!"
+  invalid-price: "<red>无效的价格!"
+  no-item-in-hand: "<red>请手持要出售的物品!"
+  max-listings-reached: "<red>你已达到最大上架数量 (<gold>%max%<red>)!"
+  item-listed: "<green>成功上架物品! 价格: <gold>%price% %currency%"
+  item-sold: "<green>你的物品已售出! 获得 <gold>%price% %currency%"
+  purchase-success: "<green>购买成功! 花费 <gold>%price% %currency%"
+  cannot-buy-own: "<red>不能购买自己的物品!"
+  not-your-item: "<red>这不是你的物品!"
+  listing-cancelled: "<green>已取消上架，物品已返还!"
+  item-expired: "<red>你的市场物品已过期并已返还!"
+  no-permission: "<red>你没有权限使用市场!"
 
 # GUI配置
 gui:
-  market-title: "&6全球市场 &7- 第 %page% 页"
-  my-listings-title: "&6我的上架"
-  prev-page: "&a上一页"
-  next-page: "&c下一页"
-  current-page: "&e当前页: %page%/%total%"
-  my-listings: "&6我的上架"
-  balance-display: "&e点券: %points% &7| &e金币: %economy%"
-  price-display: "&e价格: &6%price% %currency%"
-  seller-display: "&7卖家: &f%seller%"
-  time-remaining: "&7剩余时间: &f%time%"
-  click-to-buy: "&a点击购买"
-  click-to-cancel: "&c点击下架"
+  market-title: "<gold>全球市场 <gray>- 第 %page% 页"
+  my-listings-title: "<gold>我的上架"
+  prev-page: "<green>上一页"
+  next-page: "<red>下一页"
+  current-page: "<yellow>当前页: %page%/%total%"
+  my-listings: "<gold>我的上架"
+  balance-display: "<yellow>点券: %points% <gray>| <yellow>金币: %economy%"
+  price-display: "<yellow>价格: <gold>%price% %currency%"
+  seller-display: "<gray>卖家: <white>%seller%"
+  time-remaining: "<gray>剩余时间: <white>%time%"
+  click-to-buy: "<green>点击购买"
+  click-to-cancel: "<red>点击下架"
 
 # 音效配置
 sounds:

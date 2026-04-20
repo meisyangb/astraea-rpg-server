@@ -1,6 +1,5 @@
 package cn.guangdian.board;
 
-import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
@@ -106,7 +105,8 @@ public class DifferentialUpdater {
         for (int i = 0; i < totalLines; i++) {
             String line = newLines.get(i);
             if (line == null || line.isEmpty()) {
-                line = ChatColor.RESET.toString();
+                // 使用空字符串替代 ChatColor.RESET
+                line = " ";
             }
             int score = totalLines - i;
             newSnapshot[i] = new LineSnapshot(line, score);
@@ -175,7 +175,8 @@ public class DifferentialUpdater {
         for (int i = 0; i < totalLines; i++) {
             String line = lines.get(i);
             if (line == null || line.isEmpty()) {
-                line = ChatColor.RESET.toString();
+                // 使用空字符串替代 ChatColor.RESET
+                line = " ";
             }
 
             String entry = appendUniqueSuffix(line, i);
@@ -196,7 +197,8 @@ public class DifferentialUpdater {
         for (int i = 0; i < totalLines; i++) {
             String line = lines.get(i);
             if (line == null || line.isEmpty()) {
-                line = ChatColor.RESET.toString();
+                // 使用空字符串替代 ChatColor.RESET
+                line = " ";
             }
             int score = totalLines - i;
             snapshot[i] = new LineSnapshot(line, score);
@@ -219,6 +221,7 @@ public class DifferentialUpdater {
      */
     private static String appendUniqueSuffix(String line, int index) {
         char suffixChar = SUFFIX_POOL[index % SUFFIX_POOL.length];
-        return line + ChatColor.RESET + ChatColor.COLOR_CHAR + suffixChar;
+        // 使用 § 字符替代 ChatColor.COLOR_CHAR
+        return line + "§r§" + suffixChar;
     }
 }
