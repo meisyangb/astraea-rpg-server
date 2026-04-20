@@ -8,15 +8,16 @@ import java.util.Map;
 
 /**
  * 图纸数据模型
- * 只支持 MythicMobs 自定义物品作为锻造结果
+ * 支持 MythicMobs 和 RPGItems 自定义物品作为锻造结果
  * 使用 MiniMessage 格式
  */
 public class ForgeRecipe {
     private final String id;
     private final String displayName;
     private final int requiredForgeLevel;
-    private final Map<String, Integer> ingredients; // 格式: "mm:物品ID" 或 "mythicmobs:物品ID"
-    private final String resultMythicMobsItem; // MythicMobs结果物品ID（必须配置）
+    private final Map<String, Integer> ingredients; // 格式: "mm:物品ID" 或 "mythicmobs:物品ID" 或 "rpg:物品ID"
+    private final String resultMythicMobsItem; // MythicMobs结果物品ID
+    private final String resultRPGItem; // RPGItems结果物品ID
     private final double baseSuccessRate;
 
     // 图纸信息
@@ -25,7 +26,7 @@ public class ForgeRecipe {
     private final boolean isBlueprintBook; // 是否显示为书本
 
     public ForgeRecipe(String id, String displayName, int requiredForgeLevel,
-                       Map<String, Integer> ingredients, String resultMythicMobsItem,
+                       Map<String, Integer> ingredients, String resultMythicMobsItem, String resultRPGItem,
                        double baseSuccessRate,
                        String blueprintDisplay, List<String> blueprintLore, boolean isBlueprintBook) {
         this.id = id;
@@ -33,6 +34,7 @@ public class ForgeRecipe {
         this.requiredForgeLevel = requiredForgeLevel;
         this.ingredients = ingredients;
         this.resultMythicMobsItem = resultMythicMobsItem;
+        this.resultRPGItem = resultRPGItem;
         this.baseSuccessRate = baseSuccessRate;
         this.blueprintDisplay = blueprintDisplay;
         this.blueprintLore = blueprintLore;
@@ -44,7 +46,22 @@ public class ForgeRecipe {
     public int getRequiredForgeLevel() { return requiredForgeLevel; }
     public Map<String, Integer> getIngredients() { return ingredients; }
     public String getResultMythicMobsItem() { return resultMythicMobsItem; }
+    public String getResultRPGItem() { return resultRPGItem; }
     public double getBaseSuccessRate() { return baseSuccessRate; }
+
+    /**
+     * 获取结果物品类型
+     * @return "mythicmobs" 或 "rpgitems" 或 null
+     */
+    public String getResultType() {
+        if (resultMythicMobsItem != null && !resultMythicMobsItem.isEmpty()) {
+            return "mythicmobs";
+        }
+        if (resultRPGItem != null && !resultRPGItem.isEmpty()) {
+            return "rpgitems";
+        }
+        return null;
+    }
 
     // 图纸相关方法
     public String getBlueprintDisplay() {
@@ -104,6 +121,9 @@ public class ForgeRecipe {
         if (lowerStr.startsWith("mythicmobs:") || lowerStr.startsWith("mm:")) {
             String itemId = ingredientKey.substring(ingredientKey.indexOf(':') + 1);
             return "<light_purple>" + itemId;
+        } else if (lowerStr.startsWith("rpg:") || lowerStr.startsWith("rpgitems:")) {
+            String itemId = ingredientKey.substring(ingredientKey.indexOf(':') + 1);
+            return "<aqua>" + itemId;
         } else if (lowerStr.startsWith("vanilla:") || lowerStr.startsWith("minecraft:")) {
             String materialName = ingredientKey.substring(ingredientKey.indexOf(':') + 1);
             return "<yellow>" + formatMaterialName(materialName);

@@ -5,6 +5,7 @@ import cn.guangdian.decompose.command.DecomposeAdminCommand;
 import cn.guangdian.decompose.command.DecomposeCommand;
 import cn.guangdian.decompose.gui.DecomposeGUI;
 import cn.guangdian.decompose.hook.MythicMobsHook;
+import cn.guangdian.decompose.hook.RPGItemsHook;
 import cn.guangdian.decompose.listener.DecomposeListener;
 import cn.guangdian.decompose.manager.DecomposeManager;
 import cn.guangdian.decompose.manager.RuleManager;
@@ -21,6 +22,7 @@ public class GuangDianDecompose extends AbstractRPGPlugin {
     private static GuangDianDecompose instance;
     private RPGCore rpgCore;
     private MythicMobsHook mythicMobsHook;
+    private RPGItemsHook rpgItemsHook;
     private RuleManager ruleManager;
     private DecomposeManager decomposeManager;
     private DecomposeGUI decomposeGUI;
@@ -46,6 +48,7 @@ public class GuangDianDecompose extends AbstractRPGPlugin {
         saveDefaultRules();
 
         mythicMobsHook = new MythicMobsHook();
+        rpgItemsHook = new RPGItemsHook();
         ruleManager = new RuleManager(this);
         decomposeManager = new DecomposeManager(this);
         decomposeGUI = new DecomposeGUI(this);
@@ -148,6 +151,10 @@ public class GuangDianDecompose extends AbstractRPGPlugin {
 
     public MythicMobsHook getMythicMobsHook() {
         return mythicMobsHook;
+    }
+
+    public RPGItemsHook getRPGItemsHook() {
+        return rpgItemsHook;
     }
 
     public RuleManager getRuleManager() {

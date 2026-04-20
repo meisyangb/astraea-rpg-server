@@ -80,6 +80,10 @@ public class DecomposeRule {
             return "vanilla".equalsIgnoreCase(type);
         }
 
+        public boolean isRPGItem() {
+            return "rpg".equalsIgnoreCase(type) || "rpgitems".equalsIgnoreCase(type);
+        }
+
         @Override
         public String toString() {
             return type + ":" + itemId + ":" + amount;

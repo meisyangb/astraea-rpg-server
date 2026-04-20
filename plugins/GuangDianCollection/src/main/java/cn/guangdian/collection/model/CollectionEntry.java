@@ -16,6 +16,7 @@ public class CollectionEntry {
     
     private Material material;
     private String mythicId;
+    private String rpgItemId;
     private EntityType entityType;
     private int targetCount;
     
@@ -25,6 +26,7 @@ public class CollectionEntry {
     public enum EntryType {
         VANILLA_ITEM,
         MYTHICMOBS_ITEM,
+        RPGITEMS_ITEM,
         VANILLA_MOB,
         MYTHICMOBS_MOB
     }
@@ -46,6 +48,7 @@ public class CollectionEntry {
     public String getHint() { return hint; }
     public Material getMaterial() { return material; }
     public String getMythicId() { return mythicId; }
+    public String getRpgItemId() { return rpgItemId; }
     public EntityType getEntityType() { return entityType; }
     public int getTargetCount() { return targetCount; }
     public EntryReward getReward() { return reward; }
@@ -55,6 +58,7 @@ public class CollectionEntry {
     public void setHint(String hint) { this.hint = hint; }
     public void setMaterial(Material material) { this.material = material; }
     public void setMythicId(String mythicId) { this.mythicId = mythicId; }
+    public void setRpgItemId(String rpgItemId) { this.rpgItemId = rpgItemId; }
     public void setEntityType(EntityType entityType) { this.entityType = entityType; }
     public void setTargetCount(int targetCount) { this.targetCount = targetCount; }
     public void setReward(EntryReward reward) { this.reward = reward; }
@@ -65,7 +69,7 @@ public class CollectionEntry {
     }
     
     public boolean isItemEntry() {
-        return type == EntryType.VANILLA_ITEM || type == EntryType.MYTHICMOBS_ITEM;
+        return type == EntryType.VANILLA_ITEM || type == EntryType.MYTHICMOBS_ITEM || type == EntryType.RPGITEMS_ITEM;
     }
     
     public static class EntryReward {

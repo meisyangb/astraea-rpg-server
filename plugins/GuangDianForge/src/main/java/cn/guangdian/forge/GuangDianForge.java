@@ -5,6 +5,7 @@ import cn.guangdian.forge.command.ForgeCommand;
 import cn.guangdian.forge.command.ForgeGiveCommand;
 import cn.guangdian.forge.command.ForgeAdminCommand;
 import cn.guangdian.forge.hook.MythicMobsHook;
+import cn.guangdian.forge.hook.RPGItemsHook;
 import cn.guangdian.forge.listener.ForgeListener;
 import cn.guangdian.forge.listener.LearnRecipeListener;
 import cn.guangdian.forge.listener.PlayerJoinQuitListener;
@@ -44,6 +45,7 @@ public class GuangDianForge extends AbstractRPGPlugin {
     private PlayerDataManager playerDataManager;
     private ForgeServiceAdapter serviceAdapter;
     private MythicMobsHook mythicMobsHook;
+    private RPGItemsHook rpgItemsHook;
     private boolean useRPGCore;
     
     // RPGCore 服务
@@ -67,6 +69,9 @@ public class GuangDianForge extends AbstractRPGPlugin {
         // 初始化 MythicMobs Hook
         mythicMobsHook = new MythicMobsHook();
         mythicMobsHook.init();
+
+        // 初始化 RPGItems Hook
+        rpgItemsHook = new RPGItemsHook();
         
         recipeManager = new RecipeManager(this);
         recipeManager.loadRecipes();
@@ -98,6 +103,9 @@ public class GuangDianForge extends AbstractRPGPlugin {
         }
         if (mythicMobsHook.isEnabled()) {
             logInfo("MythicMobs 物品集成已启用");
+        }
+        if (rpgItemsHook.isEnabled()) {
+            logInfo("RPGItems 物品集成已启用");
         }
     }
     
@@ -235,6 +243,7 @@ public class GuangDianForge extends AbstractRPGPlugin {
     public PlayerDataManager getPlayerDataManager() { return playerDataManager; }
     public ForgeServiceAdapter getServiceAdapter() { return serviceAdapter; }
     public MythicMobsHook getMythicMobsHook() { return mythicMobsHook; }
+    public RPGItemsHook getRPGItemsHook() { return rpgItemsHook; }
     
     /**
      * 检查是否使用 RPGCore

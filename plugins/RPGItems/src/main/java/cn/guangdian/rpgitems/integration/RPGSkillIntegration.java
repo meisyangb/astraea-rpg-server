@@ -92,28 +92,22 @@ public class RPGSkillIntegration {
             return false;
         }
 
-        // 检查冷却
-        String playerId = player.getUniqueId().toString();
-        if (skillAPI.isOnCooldown(playerId, skillId)) {
-            long remaining = skillAPI.getCooldownRemaining(playerId, skillId);
-            player.sendMessage(miniMessage.yellow("技能冷却中，剩余 " + remaining + " 秒"));
-            return false;
-        }
-
         // 检查玩家是否在线
         if (!player.isOnline()) {
             return false;
         }
 
         // 创建技能上下文并执行
-        // 注意：冷却由 SkillService 自动管理，不需要在这里设置
+        // 注意：冷却检查和设置由 SkillService 统一管理
         SkillContext context = SkillContext.builder(player).build();
         SkillResult result = skillAPI.executeSkill(skillId, context);
 
+        // 根据结果类型处理
         if (result.isSuccess()) {
             return true;
         } else {
-            player.sendMessage(miniMessage.red("技能执行失败: " + result.getMessage()));
+            // 失败消息（包括冷却提示）已由 SkillService 发送，这里不再重复
+            // 除非需要额外的错误处理
             return false;
         }
     }

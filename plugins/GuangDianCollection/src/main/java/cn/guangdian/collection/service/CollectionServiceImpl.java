@@ -6,6 +6,8 @@ import cn.guangdian.collection.model.*;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.service.api.PointsService;
+import cn.guangdian.rpgitems.RPGItems;
+import cn.guangdian.rpgitems.api.RPGItemsAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -135,9 +137,14 @@ public class CollectionServiceImpl implements CollectionService {
             String fullId = category.getId() + "." + entryId;
             String typeStr = entrySection.getString("type", "VANILLA");
             
-            CollectionEntry.EntryType entryType = typeStr.equals("MYTHICMOBS") 
-                ? CollectionEntry.EntryType.MYTHICMOBS_ITEM 
-                : CollectionEntry.EntryType.VANILLA_ITEM;
+            CollectionEntry.EntryType entryType;
+            if (typeStr.equals("MYTHICMOBS")) {
+                entryType = CollectionEntry.EntryType.MYTHICMOBS_ITEM;
+            } else if (typeStr.equals("RPGITEMS")) {
+                entryType = CollectionEntry.EntryType.RPGITEMS_ITEM;
+            } else {
+                entryType = CollectionEntry.EntryType.VANILLA_ITEM;
+            }
             
             CollectionEntry entry = new CollectionEntry(
                 fullId, 
@@ -156,8 +163,10 @@ public class CollectionServiceImpl implements CollectionService {
                 } catch (IllegalArgumentException e) {
                     entry.setMaterial(Material.STONE);
                 }
-            } else {
+            } else if (entryType == CollectionEntry.EntryType.MYTHICMOBS_ITEM) {
                 entry.setMythicId(entrySection.getString("mythic-id", ""));
+            } else if (entryType == CollectionEntry.EntryType.RPGITEMS_ITEM) {
+                entry.setRpgItemId(entrySection.getString("rpg-item-id", ""));
             }
             
             ConfigurationSection rewardSection = entrySection.getConfigurationSection("reward");
@@ -266,6 +275,8 @@ public class CollectionServiceImpl implements CollectionService {
                 return matchesVanillaItem(entry, item);
             case MYTHICMOBS_ITEM:
                 return matchesMythicMobsItem(entry, item);
+            case RPGITEMS_ITEM:
+                return matchesRPGItemsItem(entry, item);
             default:
                 return false;
         }
@@ -283,6 +294,27 @@ public class CollectionServiceImpl implements CollectionService {
         if (mythicId == null) return false;
         
         return mythicId.equals(entry.getMythicId());
+    }
+    
+    private boolean matchesRPGItemsItem(CollectionEntry entry, ItemStack item) {
+        if (entry.getRpgItemId() == null || entry.getRpgItemId().isEmpty()) return false;
+        
+        String rpgItemId = getRPGItemsId(item);
+        if (rpgItemId == null) return false;
+        
+        return rpgItemId.equals(entry.getRpgItemId());
+    }
+    
+    private String getRPGItemsId(ItemStack item) {
+        if (item == null) return null;
+        
+        RPGItems rpgItems = RPGItems.getInstance();
+        if (rpgItems == null) return null;
+        
+        RPGItemsAPI api = rpgItems.getAPI();
+        if (api == null) return null;
+        
+        return api.getItemId(item).orElse(null);
     }
     
     private String getMythicMobsId(ItemStack item) {

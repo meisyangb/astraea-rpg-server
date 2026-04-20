@@ -50,7 +50,7 @@ public final class RPGItems extends AbstractRPGPlugin {
 
         // 初始化物品注册表
         itemRegistry = new ItemRegistry();
-        itemRegistry.loadFromConfig(configManager.getItemConfig());
+        itemRegistry.loadFromConfigs(configManager.getAllConfigs());
 
         // 初始化物品工厂
         itemFactory = new ItemFactory(this);
