@@ -476,17 +476,12 @@ public class SocketInlayGUI implements InventoryHolder {
 
     private ItemStack createEquipmentPreview() {
         ItemStack preview = equipmentItem.clone();
-        ItemMeta meta = preview.getItemMeta();
-        if (meta == null) return preview;
-
-        List<String> lore = meta.hasLore() && meta.getLore() != null
-            ? new ArrayList<>(meta.getLore())
-            : new ArrayList<>();
+        
         List<ItemStack> allGems = collectAllGems();
         Map<String, AttributeValue> allAttrs = collectAllGemAttributes(allGems);
-        lore = SocketParser.replaceSocketWithInlay(lore, allGems, allAttrs);
-        meta.setLore(lore);
-        preview.setItemMeta(meta);
+        
+        SocketParser.applyInlay(preview, allGems, allAttrs);
+        
         return preview;
     }
 

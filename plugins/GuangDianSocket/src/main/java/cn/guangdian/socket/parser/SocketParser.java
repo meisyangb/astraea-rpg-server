@@ -562,9 +562,36 @@ public class SocketParser {
         return attrName.contains("几率") || attrName.contains("概率") || attrName.contains("率");
     }
 
+    /**
+     * 移除颜色代码，保留纯文本
+     * 支持传统颜色字符（& 和 §）和 MiniMessage 标签
+     */
     private static String stripColor(String text) {
         if (text == null) return "";
-        return text.replaceAll("§[0-9a-fk-or]", "").replaceAll("&[0-9a-fk-or]", "").replaceAll("<[^>]+>", "");
+        
+        String result = text;
+        
+        // 1. 移除传统 § 颜色代码
+        result = result.replaceAll("§[0-9a-fk-or]", "");
+        
+        // 2. 移除传统 & 颜色代码
+        result = result.replaceAll("&[0-9a-fk-or]", "");
+        
+        // 3. 移除 MiniMessage 颜色标签（但保留其他标签内容）
+        // 颜色标签列表
+        String[] colorTags = {
+            "black", "dark_blue", "dark_green", "dark_aqua", "dark_red", "dark_purple", "gold", "gray",
+            "dark_gray", "blue", "green", "aqua", "red", "light_purple", "yellow", "white",
+            "reset", "bold", "italic", "underlined", "strikethrough", "obfuscated"
+        };
+        for (String tag : colorTags) {
+            result = result.replaceAll("</?" + tag + ">", "");
+        }
+        
+        // 4. 移除十六进制颜色 <#RRGGBB>
+        result = result.replaceAll("<#[0-9a-fA-F]{6}>", "");
+        
+        return result;
     }
 
     private static String serializeGems(List<ItemStack> gems) {
