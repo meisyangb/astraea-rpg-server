@@ -1,7 +1,7 @@
 package cn.guangdian.armorstats.adapter;
 
 import cn.guangdian.armorstats.GuangDianArmorStats;
-import cn.guangdian.armorstats.skill.SkillManager;
+import cn.guangdian.armorstats.skill.SkillIntegration;
 import cn.guangdian.armorstats.manager.StatsManager;
 import cn.guangdian.armorstats.data.AttributeValue;
 import cn.guangdian.armorstats.data.PlayerStats;
@@ -206,32 +206,31 @@ public class ArmorStatsServiceAdapter implements StatsService, SkillService, Att
 
     @Override
     public boolean triggerActiveSkill(Player player, String skillName) {
-        SkillManager skillManager = plugin.getSkillManager();
-        if (skillManager != null) {
-            return skillManager.tryTriggerPassiveSkill(player, skillName, 0);
+        SkillIntegration skillIntegration = plugin.getSkillIntegration();
+        if (skillIntegration != null && skillIntegration.isEnabled()) {
+            return skillIntegration.executeSkill(player, skillName);
         }
         return false;
     }
 
     @Override
     public List<String> getLearnedSkills(UUID playerId) {
-        SkillManager skillManager = plugin.getSkillManager();
-        if (skillManager != null) {
-            return new ArrayList<>(skillManager.getSkills().keySet());
-        }
+        // 技能由 RPGSkill 统一管理，ArmorStats 不再维护技能列表
+        // 返回空列表，实际技能查询应通过 RPGSkillAPI
         return new ArrayList<>();
     }
-    
+
     @Override
     public int getLearnedSkillCount(UUID playerId) {
-        return getLearnedSkills(playerId).size();
+        // 技能由 RPGSkill 统一管理
+        return 0;
     }
 
     @Override
     public boolean hasSkill(UUID playerId, String skillName) {
-        SkillManager skillManager = plugin.getSkillManager();
-        if (skillManager != null) {
-            return skillManager.getSkill(skillName) != null;
+        SkillIntegration skillIntegration = plugin.getSkillIntegration();
+        if (skillIntegration != null && skillIntegration.isEnabled()) {
+            return skillIntegration.hasSkill(skillName);
         }
         return false;
     }
@@ -262,9 +261,12 @@ public class ArmorStatsServiceAdapter implements StatsService, SkillService, Att
 
     @Override
     public long getCooldownRemaining(UUID playerId, String skillName) {
-        SkillManager skillManager = plugin.getSkillManager();
-        if (skillManager != null && skillManager.isOnCooldown(playerId, skillName)) {
-            return 1; // 还在冷却中
+        SkillIntegration skillIntegration = plugin.getSkillIntegration();
+        if (skillIntegration != null && skillIntegration.isEnabled()) {
+            Player player = plugin.getServer().getPlayer(playerId);
+            if (player != null) {
+                return skillIntegration.getCooldownRemaining(player, skillName);
+            }
         }
         return 0;
     }
@@ -351,10 +353,11 @@ public class ArmorStatsServiceAdapter implements StatsService, SkillService, Att
     
     @Override
     public void triggerPassiveSkills(Player player, String triggerType, Map<String, Object> context) {
-        // ArmorStats 被动技能触发
-        SkillManager skillManager = plugin.getSkillManager();
-        if (skillManager != null) {
-            skillManager.tryTriggerPassiveSkill(player, triggerType, 0);
+        // 技能由 RPGSkill 统一管理，被动技能触发通过 RPGSkill 处理
+        // ArmorStats 不再直接管理技能触发
+        SkillIntegration skillIntegration = plugin.getSkillIntegration();
+        if (skillIntegration != null && skillIntegration.isEnabled()) {
+            // 可以通过 RPGSkillAPI 触发被动技能（如果需要）
         }
     }
     
@@ -380,19 +383,16 @@ public class ArmorStatsServiceAdapter implements StatsService, SkillService, Att
     
     @Override
     public boolean skillExists(String skillId) {
-        SkillManager skillManager = plugin.getSkillManager();
-        if (skillManager != null) {
-            return skillManager.getSkill(skillId) != null;
+        SkillIntegration skillIntegration = plugin.getSkillIntegration();
+        if (skillIntegration != null && skillIntegration.isEnabled()) {
+            return skillIntegration.hasSkill(skillId);
         }
         return false;
     }
-    
+
     @Override
     public List<String> getAllSkills() {
-        SkillManager skillManager = plugin.getSkillManager();
-        if (skillManager != null) {
-            return new ArrayList<>(skillManager.getSkills().keySet());
-        }
+        // 技能由 RPGSkill 统一管理，ArmorStats 不再维护技能列表
         return new ArrayList<>();
     }
     

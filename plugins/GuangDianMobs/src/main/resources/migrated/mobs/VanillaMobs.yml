@@ -1,0 +1,22 @@
+# GuangDianMobs 怪物配置
+# 从 MythicMobs 迁移生成: VanillaMobs.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+mobs:
+
+  # CAVE_SPIDER
+  cave_spider:
+    health: 30
+    damage: 7
+
+  # WITHER_SKELETON
+  wither_skeleton:
+    health: 50
+    damage: 10
+
+  # GIANT
+  giant:
+    health: 1000
+    damage: 20
+    damage-modifiers:
+      potion{type=POISON;duration=100;lvl=1}: @target

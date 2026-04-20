@@ -3,16 +3,23 @@ package cn.guangdian.classsystem.adapter;
 import cn.guangdian.classsystem.GuangDianClass;
 import cn.guangdian.classsystem.api.ClassService;
 import cn.guangdian.classsystem.data.ClassDataHandler;
+import cn.guangdian.classsystem.event.PlayerAttributeChangeEvent;
 import cn.guangdian.classsystem.manager.ClassManager;
 import cn.guangdian.classsystem.manager.ExpManager;
+import cn.guangdian.classsystem.model.AttributeEffect;
+import cn.guangdian.classsystem.model.AttributeType;
 import cn.guangdian.classsystem.model.GameClass;
 import cn.guangdian.classsystem.model.PlayerClassData;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class ClassServiceAdapter implements ClassService {
@@ -243,5 +250,150 @@ public class ClassServiceAdapter implements ClassService {
     @Override
     public int getPlayerAdvancementLevel(Player player) {
         return getPlayerAdvancementLevel(player.getUniqueId());
+    }
+    
+    @Override
+    public int getAvailableAttributePoints(UUID playerId) {
+        PlayerClassData data = getPlayerData(playerId);
+        return data != null ? data.getAvailableAttributePoints() : 0;
+    }
+    
+    @Override
+    public int getAvailableAttributePoints(Player player) {
+        return getAvailableAttributePoints(player.getUniqueId());
+    }
+    
+    @Override
+    public int getAllocatedAttributePoints(UUID playerId, AttributeType type) {
+        PlayerClassData data = getPlayerData(playerId);
+        return data != null ? data.getAllocatedAttribute(type) : 0;
+    }
+    
+    @Override
+    public int getAllocatedAttributePoints(Player player, AttributeType type) {
+        return getAllocatedAttributePoints(player.getUniqueId(), type);
+    }
+    
+    @Override
+    public boolean allocateAttribute(UUID playerId, AttributeType type, int points) {
+        PlayerClassData data = getPlayerData(playerId);
+        if (data == null) return false;
+        
+        GameClass gameClass = classManager.getClass(data.getClassId());
+        if (gameClass == null || !gameClass.hasAttribute(type)) return false;
+        
+        int oldValue = data.getAllocatedAttribute(type);
+        boolean success = data.allocateAttribute(type, points);
+        
+        if (success) {
+            Player player = Bukkit.getPlayer(playerId);
+            if (player != null) {
+                int newValue = data.getAllocatedAttribute(type);
+                PlayerAttributeChangeEvent event = new PlayerAttributeChangeEvent(
+                    player, type, oldValue, newValue, PlayerAttributeChangeEvent.ChangeType.ALLOCATE
+                );
+                Bukkit.getPluginManager().callEvent(event);
+            }
+        }
+        
+        return success;
+    }
+    
+    @Override
+    public boolean allocateAttribute(Player player, AttributeType type, int points) {
+        return allocateAttribute(player.getUniqueId(), type, points);
+    }
+    
+    @Override
+    public boolean deallocateAttribute(UUID playerId, AttributeType type, int points) {
+        PlayerClassData data = getPlayerData(playerId);
+        if (data == null) return false;
+        
+        int oldValue = data.getAllocatedAttribute(type);
+        boolean success = data.deallocateAttribute(type, points);
+        
+        if (success) {
+            Player player = Bukkit.getPlayer(playerId);
+            if (player != null) {
+                int newValue = data.getAllocatedAttribute(type);
+                PlayerAttributeChangeEvent event = new PlayerAttributeChangeEvent(
+                    player, type, oldValue, newValue, PlayerAttributeChangeEvent.ChangeType.DEALLOCATE
+                );
+                Bukkit.getPluginManager().callEvent(event);
+            }
+        }
+        
+        return success;
+    }
+    
+    @Override
+    public boolean deallocateAttribute(Player player, AttributeType type, int points) {
+        return deallocateAttribute(player.getUniqueId(), type, points);
+    }
+    
+    @Override
+    public void resetAttributes(UUID playerId) {
+        PlayerClassData data = getPlayerData(playerId);
+        if (data == null) return;
+        
+        Player player = Bukkit.getPlayer(playerId);
+        if (player != null) {
+            PlayerAttributeChangeEvent event = new PlayerAttributeChangeEvent(
+                player, null, data.getUsedAttributePoints(), 0, PlayerAttributeChangeEvent.ChangeType.RESET
+            );
+            Bukkit.getPluginManager().callEvent(event);
+        }
+        
+        data.resetAttributes();
+    }
+    
+    @Override
+    public void resetAttributes(Player player) {
+        resetAttributes(player.getUniqueId());
+    }
+    
+    @Override
+    public Map<String, Double> getPlayerAttributeBonuses(UUID playerId) {
+        Map<String, Double> totalBonuses = new HashMap<>();
+        
+        PlayerClassData data = getPlayerData(playerId);
+        if (data == null) return totalBonuses;
+        
+        GameClass gameClass = classManager.getClass(data.getClassId());
+        if (gameClass == null) return totalBonuses;
+        
+        for (AttributeType type : gameClass.getAvailableAttributes()) {
+            int allocated = data.getAllocatedAttribute(type);
+            if (allocated <= 0) continue;
+            
+            AttributeEffect effect = gameClass.getAttributeEffect(type);
+            if (effect == null) continue;
+            
+            Map<String, Double> bonuses = effect.calculateBonuses(allocated);
+            for (Map.Entry<String, Double> entry : bonuses.entrySet()) {
+                totalBonuses.merge(entry.getKey(), entry.getValue(), Double::sum);
+            }
+        }
+        
+        return totalBonuses;
+    }
+    
+    @Override
+    public Map<String, Double> getPlayerAttributeBonuses(Player player) {
+        return getPlayerAttributeBonuses(player.getUniqueId());
+    }
+    
+    @Override
+    public List<AttributeType> getAvailableAttributesForClass(String classId) {
+        GameClass gameClass = classManager.getClass(classId);
+        return gameClass != null ? gameClass.getAvailableAttributes() : new ArrayList<>();
+    }
+    
+    @Override
+    public List<AttributeType> getAvailableAttributesForPlayer(UUID playerId) {
+        PlayerClassData data = getPlayerData(playerId);
+        if (data == null) return new ArrayList<>();
+        
+        return getAvailableAttributesForClass(data.getClassId());
     }
 }

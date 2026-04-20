@@ -1,0 +1,25 @@
+# GuangDianMobs 刷新点配置
+# 从 MythicMobs 迁移生成: 天空之船小怪刷怪点5.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+spawnpoints:
+
+  # 天空之船小怪刷怪点5
+  5:
+    world: FB1
+    x: -125
+    y: 193
+    z: 135
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '2'
+    cooldown: 300
+    radius: 6.0
+    use-timer: true
+    require-player: true
+    player-range: 40.0
+    enabled: true
+    display-name: "天空之船小怪刷怪点5"

@@ -1,0 +1,25 @@
+# GuangDianMobs 刷新点配置
+# 从 MythicMobs 迁移生成: 新手副本_刷怪点2_骷髅射手.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+spawnpoints:
+
+  # 新手副本_刷怪点2_骷髅射手
+  2:
+    world: rpg
+    x: 19.5
+    y: 33
+    z: -23.5
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: 1
+    amount: 1
+    max-mobs: 2
+    cooldown: 200
+    radius: 0
+    use-timer: true
+    require-player: true
+    player-range: 20
+    enabled: true
+    display-name: "新手副本_刷怪点2_骷髅射手"

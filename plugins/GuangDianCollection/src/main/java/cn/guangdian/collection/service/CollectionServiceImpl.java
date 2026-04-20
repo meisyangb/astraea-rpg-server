@@ -4,9 +4,9 @@ import cn.guangdian.collection.GuangDianCollection;
 import cn.guangdian.collection.api.CollectionService;
 import cn.guangdian.collection.model.*;
 import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.api.ServiceRegistry;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.service.api.PointsService;
-import cn.guangdian.rpgitems.RPGItems;
 import cn.guangdian.rpgitems.api.RPGItemsAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -29,13 +29,16 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CollectionServiceImpl implements CollectionService {
-    
+
     private final GuangDianCollection plugin;
     private final Map<String, CollectionSet> sets = new ConcurrentHashMap<>();
     private final Map<String, CollectionCategory> categories = new ConcurrentHashMap<>();
     private final Map<UUID, PlayerCollectionData> playerDataCache = new ConcurrentHashMap<>();
-    
+
     private File playerDataFolder;
+
+    // RPGCore 服务引用（通过 ServiceRegistry 获取）
+    private RPGItemsAPI rpgItemsAPI;
     
     private static final NamespacedKey MYTHIC_TYPE_KEY = new NamespacedKey("mythicmobs", "type");
     private static final NamespacedKey MYTHIC_OLD_KEY = new NamespacedKey("mythicmobs", "item");
@@ -46,7 +49,34 @@ public class CollectionServiceImpl implements CollectionService {
         if (!playerDataFolder.exists()) {
             playerDataFolder.mkdirs();
         }
+        initializeRPGCoreServices();
         loadData();
+    }
+
+    /**
+     * 初始化 RPGCore 服务（通过 ServiceRegistry 解耦）
+     */
+    private void initializeRPGCoreServices() {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore == null) {
+            plugin.getLogger().warning("RPGCore 未加载，RPGItems 集成功能不可用");
+            return;
+        }
+
+        ServiceRegistry serviceRegistry = rpgCore.getServiceRegistry();
+        if (serviceRegistry == null) {
+            plugin.getLogger().warning("ServiceRegistry 不可用，RPGItems 集成功能不可用");
+            return;
+        }
+
+        // 通过 ServiceRegistry 获取 RPGItemsAPI（解耦方式）
+        java.util.Optional<RPGItemsAPI> apiOpt = serviceRegistry.getOptionalService(RPGItemsAPI.class);
+        if (apiOpt.isPresent()) {
+            this.rpgItemsAPI = apiOpt.get();
+            plugin.getLogger().info("RPGItems 集成已启用（通过 ServiceRegistry）");
+        } else {
+            plugin.getLogger().info("RPGItems 服务未注册，RPGItems 集成功能不可用");
+        }
     }
     
     private void loadData() {
@@ -307,14 +337,11 @@ public class CollectionServiceImpl implements CollectionService {
     
     private String getRPGItemsId(ItemStack item) {
         if (item == null) return null;
-        
-        RPGItems rpgItems = RPGItems.getInstance();
-        if (rpgItems == null) return null;
-        
-        RPGItemsAPI api = rpgItems.getAPI();
-        if (api == null) return null;
-        
-        return api.getItemId(item).orElse(null);
+
+        // 使用通过 ServiceRegistry 获取的 RPGItemsAPI（解耦方式）
+        if (rpgItemsAPI == null) return null;
+
+        return rpgItemsAPI.getItemId(item).orElse(null);
     }
     
     private String getMythicMobsId(ItemStack item) {

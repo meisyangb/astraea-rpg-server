@@ -1,0 +1,184 @@
+# GuangDianMobs 怪物配置
+# 从 MythicMobs 迁移生成: 第二层怪物.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+mobs:
+
+  # 天弃士兵
+  :
+    display-name: "<aqua>天弃士兵"
+    type: ZOMBIE
+    health: 3500
+    damage: 0
+    speed: 0.3
+    follow-range: 5
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天弃战士
+  :
+    display-name: "<aqua>天弃战士"
+    type: ZOMBIE
+    health: 4000
+    damage: 0
+    speed: 0.3
+    follow-range: 5
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天弃战将
+  :
+    display-name: "<light_purple>天弃战将"
+    type: ZOMBIE
+    health: 5000
+    damage: 0
+    speed: 0.3
+    follow-range: 5
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天弃营长
+  :
+    display-name: "<light_purple>天弃营长"
+    type: ZOMBIE
+    health: 40000
+    damage: 0
+    speed: 0.3
+    follow-range: 5
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - "aoe"
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天弃统领
+  :
+    display-name: "<dark_purple>天弃统领"
+    type: ZOMBIE
+    health: 50000
+    damage: 0
+    speed: 0.3
+    follow-range: 5
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - "aoe"
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 呼延觉罗战
+  :
+    display-name: "<dark_red>呼延觉罗战"
+    type: ZOMBIE
+    health: 200000
+    damage: 0
+    speed: 0.000001
+    follow-range: 30
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - "homer"
+      - "icebolt"
+      - "aoe"
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0

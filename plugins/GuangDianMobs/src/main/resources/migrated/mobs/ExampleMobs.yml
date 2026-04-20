@@ -1,0 +1,61 @@
+# GuangDianMobs 怪物配置
+# 从 MythicMobs 迁移生成: ExampleMobs.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+mobs:
+
+  # SkeletalKnight
+  skeletalknight:
+    display-name: "<dark_green>Skeletal Knight"
+    type: WITHER_SKELETON
+    health: 40
+    damage: 8
+    speed: 0.1
+
+  # StaticallyChargedSheep
+  staticallychargedsheep:
+    display-name: "<aqua>Statically Charged Sheep"
+    type: SHEEP
+    health: 100
+    damage: 2
+    speed: 0.3
+    damage-modifiers:
+      LIGHTNING: 0
+      FIRE: 0.5
+
+  # AngrySludge
+  angrysludge:
+    display-name: "Angry Sludge"
+    type: SLIME
+    health: 100
+    damage: 2
+    speed: 0.1
+    options:
+      prevent-other-drops: true
+      knockback-resistance: 1
+      size: 20
+    skills:
+      - "angrysludgepoison"
+
+  # SkeletonKing
+  skeletonking:
+    display-name: "<gold>Skeleton King"
+    type: WITHER_SKELETON
+    health: 500
+    damage: 10
+    speed: 0.2
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+    equipment:
+    skills:
+      - "summonskeletons"
+      - "smashattack"
+
+  # SkeletalMinion
+  skeletalminion:
+    display-name: "<dark_green>Skeletal Minion"
+    type: SKELETON
+    health: 10
+    damage: 2
+    speed: 0.1

@@ -4,8 +4,7 @@ import cn.guangdian.classsystem.adapter.ClassServiceAdapter;
 import cn.guangdian.classsystem.api.ClassService;
 import cn.guangdian.classsystem.command.ClassCommand;
 import cn.guangdian.classsystem.data.ClassDataHandler;
-import cn.guangdian.classsystem.gui.AttributeGUI;
-import cn.guangdian.classsystem.gui.GUIListener;
+import cn.guangdian.classsystem.gui.ClassAttributeGUI;
 import cn.guangdian.classsystem.manager.AttributeManager;
 import cn.guangdian.classsystem.manager.ClassManager;
 import cn.guangdian.classsystem.manager.ExpManager;
@@ -15,7 +14,6 @@ import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class GuangDianClass extends AbstractRPGPlugin {
     
@@ -27,7 +25,7 @@ public class GuangDianClass extends AbstractRPGPlugin {
     private ClassDataHandler dataHandler;
     private ClassServiceAdapter serviceAdapter;
     private ClassPlaceholder placeholder;
-    private GUIListener guiListener;
+    private ClassAttributeGUI attributeGUI;
     
     private String defaultClassId;
     
@@ -50,8 +48,7 @@ public class GuangDianClass extends AbstractRPGPlugin {
         
         serviceAdapter = new ClassServiceAdapter(this, classManager, expManager, dataHandler);
         
-        guiListener = new GUIListener();
-        getServer().getPluginManager().registerEvents(guiListener, this);
+        attributeGUI = new ClassAttributeGUI(this, serviceAdapter);
         
         registerCommands();
         
@@ -69,7 +66,7 @@ public class GuangDianClass extends AbstractRPGPlugin {
         getLogger().info("GuangDianClass 职业系统已启动!");
         getLogger().info("阶位系统: 1阶 - 9阶");
         getLogger().info("转职系统: 3阶一转 / 6阶二转 / 8阶三转 / 9阶神级");
-        getLogger().info("属性点系统: 力量/体质/敏捷/智力/幸运");
+        getLogger().info("属性点系统: 职业差异化属性加成");
     }
     
     @Override
@@ -141,9 +138,7 @@ public class GuangDianClass extends AbstractRPGPlugin {
     }
     
     public void openAttributeGUI(Player player) {
-        AttributeGUI gui = new AttributeGUI(this, attributeManager, player);
-        guiListener.registerGUI(player, gui);
-        gui.open();
+        attributeGUI.open(player);
     }
     
     public static GuangDianClass getInstance() {

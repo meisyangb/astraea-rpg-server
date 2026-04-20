@@ -1,0 +1,77 @@
+# GuangDianMobs 怪物配置
+# 从 MythicMobs 迁移生成: 福利boss.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+mobs:
+
+  # 淬炼石宝宝
+  :
+    display-name: "<red>淬炼石宝宝"
+    type: PLAYER
+    health: 10000000
+    damage: 0
+    speed: 0.3
+    follow-range: 10
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 经验书宝宝
+  :
+    display-name: "<red>经验书宝宝"
+    type: PLAYER
+    health: 10000000
+    damage: 0
+    speed: 0.3
+    follow-range: 10
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天巡专用大哥
+  :
+    display-name: "<red>天巡专业大哥"
+    type: PLAYER
+    health: 10000000000
+    damage: 0
+    speed: 0.3
+    follow-range: 10
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0

@@ -36,6 +36,12 @@ public class CustomMob {
     // AI配置
     private MobAI ai;                     // AI配置
 
+    // 击杀消息
+    private List<String> killMessages;    // 击杀消息列表
+
+    // 命令掉落
+    private List<CommandDrop> commandDrops; // 命令掉落列表
+
     // 装备
     private ItemStack helmet;
     private ItemStack chestplate;
@@ -59,6 +65,8 @@ public class CustomMob {
         this.levelModifiers = new HashMap<>();
         this.damageModifiers = new HashMap<>();
         this.options = new MobOptions();
+        this.killMessages = new ArrayList<>();
+        this.commandDrops = new ArrayList<>();
     }
 
     // Getters and Setters
@@ -130,6 +138,36 @@ public class CustomMob {
 
     public MobAI getAi() { return ai; }
     public void setAi(MobAI ai) { this.ai = ai; }
+
+    public List<String> getKillMessages() { return killMessages; }
+    public void setKillMessages(List<String> killMessages) { this.killMessages = killMessages; }
+
+    public List<CommandDrop> getCommandDrops() { return commandDrops; }
+    public void setCommandDrops(List<CommandDrop> commandDrops) { this.commandDrops = commandDrops; }
+
+    /**
+     * 命令掉落数据类
+     */
+    public static class CommandDrop {
+        private String command;     // 命令
+        private double chance;      // 几率 (0-1)
+        private String target;      // 目标: @self, @trigger, @killer
+
+        public CommandDrop(String command, double chance, String target) {
+            this.command = command;
+            this.chance = chance;
+            this.target = target;
+        }
+
+        public String getCommand() { return command; }
+        public void setCommand(String command) { this.command = command; }
+
+        public double getChance() { return chance; }
+        public void setChance(double chance) { this.chance = chance; }
+
+        public String getTarget() { return target; }
+        public void setTarget(String target) { this.target = target; }
+    }
 
     /**
      * 根据等级计算属性值

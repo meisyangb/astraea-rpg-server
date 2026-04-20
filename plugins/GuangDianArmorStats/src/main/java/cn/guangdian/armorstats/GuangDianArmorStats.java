@@ -12,7 +12,7 @@ import cn.guangdian.armorstats.manager.DamageManager;
 import cn.guangdian.armorstats.manager.HealthManager;
 import cn.guangdian.armorstats.manager.CombatLogManager;
 import cn.guangdian.armorstats.manager.BossBarManager;
-import cn.guangdian.armorstats.skill.SkillManager;
+import cn.guangdian.armorstats.skill.SkillIntegration;
 import cn.guangdian.armorstats.listener.EventListeners;
 import cn.guangdian.armorstats.command.ArmorStatsCommand;
 import cn.guangdian.armorstats.placeholder.ArmorStatsPlaceholderExpansion;
@@ -39,7 +39,7 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
     private StatsManager statsManager;
     private DamageManager damageManager;
     private HealthManager healthManager;
-    private SkillManager skillManager;
+    private SkillIntegration skillIntegration;  // 通过 RPGSkill 执行技能（解耦）
     private CombatLogManager combatLogManager;
     private BossBarManager bossBarManager;
     private RegenTask regenTask;
@@ -83,13 +83,12 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
 
         statsManager = new StatsManager(this);
         healthManager = new HealthManager(statsManager);
-        skillManager = new SkillManager(statsManager);
-        damageManager = new DamageManager(statsManager, skillManager);
+        skillIntegration = new SkillIntegration(this);  // 通过 RPGSkill 执行技能（解耦）
+        damageManager = new DamageManager(statsManager, skillIntegration);
         combatLogManager = new CombatLogManager(this);
         bossBarManager = new BossBarManager(this, statsManager);
         regenTask = new RegenTask(this, statsManager, bossBarManager);
         damageManager.setCombatLogManager(combatLogManager);
-        skillManager.setCombatLogManager(combatLogManager);
         
         // 集成 RPGCore 框架组件到管理器
         if (rpgCoreAsyncExecutor != null) {
@@ -113,7 +112,7 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
         //     getLogger().info("BOSS公告系统已启用");
         // }
 
-        getServer().getPluginManager().registerEvents(new EventListeners(this, statsManager, healthManager, skillManager), this);
+        getServer().getPluginManager().registerEvents(new EventListeners(this, statsManager, healthManager, skillIntegration), this);
         
         // 注册玩家生命周期处理器
         if (getServer().getPluginManager().isPluginEnabled("RPGCore")) {
@@ -124,7 +123,7 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
             getLogger().warning("RPGCore 未启用，使用传统事件监听");
         }
 
-        getCommand("armorstats").setExecutor(new ArmorStatsCommand(statsManager, skillManager, this));
+        getCommand("armorstats").setExecutor(new ArmorStatsCommand(statsManager, skillIntegration, this));
 
         bossBarManager.startUpdateTask();
         regenTask.start();
@@ -340,8 +339,16 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
         return healthManager;
     }
 
-    public SkillManager getSkillManager() {
-        return skillManager;
+    public SkillIntegration getSkillIntegration() {
+        return skillIntegration;
+    }
+
+    /**
+     * @deprecated 使用 getSkillIntegration() 替代，技能由 RPGSkill 统一管理
+     */
+    @Deprecated
+    public cn.guangdian.armorstats.skill.SkillManager getSkillManager() {
+        return null;
     }
 
     public CombatLogManager getCombatLogManager() {
@@ -442,7 +449,7 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
         configManager.reloadAll();
         statsManager.loadConfig();
         damageManager.reloadConfig();
-        skillManager.loadSkills();
+        // skillManager.loadSkills(); // 已迁移到 RPGSkill，不再需要本地加载
         bossBarManager.reloadConfig();
         // if (bossAnnouncer != null) {
         //     bossAnnouncer.reloadConfig();

@@ -12,7 +12,7 @@ import cn.guangdian.armorstats.event.RpgDamageCalculateEvent;
 import cn.guangdian.armorstats.event.RpgPostDamageEvent;
 import cn.guangdian.armorstats.formula.DamageFormulaManager;
 import cn.guangdian.armorstats.parser.LoreParser;
-import cn.guangdian.armorstats.skill.SkillManager;
+import cn.guangdian.armorstats.skill.SkillIntegration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -31,7 +31,7 @@ public class DamageManager {
 
     private final StatsManager statsManager;
     private final DamagePipeline pipeline;
-    private SkillManager skillManager;
+    private SkillIntegration skillIntegration;  // 通过 RPGSkill 执行技能（解耦）
     private CombatLogManager combatLogManager;
     private PostDamageInterceptor postInterceptor;
     private BossStatsInterceptor bossStatsInterceptor;
@@ -46,12 +46,12 @@ public class DamageManager {
 
     private double minDamage;
 
-    public DamageManager(StatsManager statsManager, SkillManager skillManager) {
+    public DamageManager(StatsManager statsManager, SkillIntegration skillIntegration) {
         this.statsManager = statsManager;
-        this.skillManager = skillManager;
+        this.skillIntegration = skillIntegration;
         this.pipeline = new DamagePipeline(GuangDianArmorStats.getInstance());
         this.formulaManager = new DamageFormulaManager(GuangDianArmorStats.getInstance());
-        
+
         loadConfig();
         registerDefaultInterceptors();
     }
@@ -121,8 +121,8 @@ public class DamageManager {
     }
     */
 
-    public void setSkillManager(SkillManager skillManager) {
-        this.skillManager = skillManager;
+    public void setSkillIntegration(SkillIntegration skillIntegration) {
+        this.skillIntegration = skillIntegration;
     }
 
     public void setCombatLogManager(CombatLogManager combatLogManager) {
@@ -160,11 +160,12 @@ public class DamageManager {
         Player targetPlayer = isPVP ? (Player) targetEntity : null;
         PlayerStats targetStats = targetPlayer != null ? statsManager.getPlayerStats(targetPlayer) : null;
 
-        boolean isSkillDamage = attacker.hasMetadata(SkillManager.SKILL_DAMAGE_KEY);
+        // 技能伤害检测 - 使用 RPGSkill 的元数据键（如果 RPGSkill 设置了）
+        boolean isSkillDamage = attacker.hasMetadata("SKILL_DAMAGE");
         double baseDamage = event.getDamage();
-        
+
         if (isSkillDamage) {
-            baseDamage = attacker.getMetadata(SkillManager.SKILL_DAMAGE_KEY).get(0).asDouble();
+            baseDamage = attacker.getMetadata("SKILL_DAMAGE").get(0).asDouble();
         }
 
         boolean isVanillaAttack = !isSkillDamage && isVanillaWeapon(attacker);

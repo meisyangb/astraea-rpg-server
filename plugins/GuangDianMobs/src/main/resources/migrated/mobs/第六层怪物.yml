@@ -1,0 +1,80 @@
+# GuangDianMobs 怪物配置
+# 从 MythicMobs 迁移生成: 第六层怪物.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+mobs:
+
+  # 死亡骸骨
+  :
+    display-name: "<dark_red>死亡骸骨"
+    type: SKELETON
+    health: 35000
+    damage: 10000
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    damage-modifiers:
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 恐惧惊骸
+  :
+    display-name: "<dark_red>恐惧惊骸"
+    type: SKELETON
+    health: 800000
+    damage: 100000
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+    damage-modifiers:
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 巫妖恩佩斯
+  :
+    display-name: "<dark_red>巫妖恩佩斯"
+    type: SKELETON
+    health: 2000000
+    damage: 200000
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+    damage-modifiers:
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0

@@ -94,18 +94,16 @@ public class AttackInterceptor implements DamageInterceptor {
 
     /**
      * 尝试触发被动技能
+     * <p>技能由 RPGSkill 统一管理，ArmorStats 不再直接触发技能</p>
      */
     private void tryTriggerPassiveSkills(Player attacker, double damage) {
         var plugin = GuangDianArmorStats.getInstance();
         if (plugin == null) return;
-        
-        var statsManager = plugin.getStatsManager();
-        var skillManager = plugin.getSkillManager();
-        if (statsManager == null || skillManager == null) return;
 
-        List<String> skills = statsManager.getPlayerSkills(attacker);
-        for (String skillName : skills) {
-            skillManager.tryTriggerPassiveSkill(attacker, skillName, damage);
-        }
+        var skillIntegration = plugin.getSkillIntegration();
+        if (skillIntegration == null || !skillIntegration.isEnabled()) return;
+
+        // 技能触发由 RPGSkill 处理，ArmorStats 只负责属性计算
+        // 如果需要触发装备相关的被动技能，可以通过 RPGSkillAPI 触发
     }
 }

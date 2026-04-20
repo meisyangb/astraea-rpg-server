@@ -1,0 +1,206 @@
+# GuangDianMobs 技能配置
+# 从 MythicMobs 迁移生成: 第一层技能.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+skills:
+
+  # 天族卫队队长特效
+  :
+    display-name: "<yellow>天族卫队队长特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 天族卫队队长刷新
+  :
+    display-name: "<yellow>天族卫队队长刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 天族卫队队长死亡
+  :
+    display-name: "<yellow>天族卫队队长死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 天族卫队队长劈砍
+  :
+    display-name: "<yellow>天族卫队队长劈砍"
+    type: DAMAGE
+    damage: 45
+    cooldown: 0
+    conditions:
+      - "targetwithin 4"
+
+  # 天族卫队队长旋风斩
+  :
+    display-name: "<yellow>天族卫队队长旋风斩"
+    type: DAMAGE
+    damage: 40
+    cooldown: 0
+
+  # 天族卫队队长治愈
+  :
+    display-name: "<yellow>天族卫队队长治愈"
+    type: HEAL
+    heal: 75
+    cooldown: 0
+
+  # 天族卫队副官特效
+  :
+    display-name: "<yellow>天族卫队副官特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 天族卫队副官刷新
+  :
+    display-name: "<yellow>天族卫队副官刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 天族卫队副官死亡
+  :
+    display-name: "<yellow>天族卫队副官死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 天族卫队副官重击
+  :
+    display-name: "<yellow>天族卫队副官重击"
+    type: DAMAGE
+    damage: 80
+    cooldown: 0
+    conditions:
+      - "targetwithin 4"
+
+  # 天族卫队副官旋风斩
+  :
+    display-name: "<yellow>天族卫队副官旋风斩"
+    type: DAMAGE
+    damage: 100
+    cooldown: 0
+
+  # 天族卫队副官治愈
+  :
+    display-name: "<yellow>天族卫队副官治愈"
+    type: HEAL
+    heal: 125
+    cooldown: 0
+
+  # 苍穹守卫冲锋
+  :
+    display-name: "<yellow>苍穹守卫冲锋"
+    type: DAMAGE
+    damage: 10
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 苍穹战士冲锋
+  :
+    display-name: "<yellow>苍穹战士冲锋"
+    type: DAMAGE
+    damage: 15
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 苍穹精锐冲锋
+  :
+    display-name: "<yellow>苍穹精锐冲锋"
+    type: DAMAGE
+    damage: 25
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 苍穹弓手射击
+  :
+    display-name: "<yellow>苍穹弓手射击"
+    type: DAMAGE
+    damage: 20
+    cooldown: 0
+    conditions:
+      - "targetwithin 15"
+
+  # 苍穹精锐弓手射击
+  :
+    display-name: "<yellow>苍穹精锐弓手射击"
+    type: DAMAGE
+    damage: 30
+    cooldown: 0
+    conditions:
+      - "targetwithin 15"
+
+  # 艾瑟尔刷新
+  :
+    display-name: "<yellow>艾瑟尔刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 艾瑟尔死亡
+  :
+    display-name: "<yellow>艾瑟尔死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 艾瑟尔闪电剑
+  :
+    display-name: "<yellow>艾瑟尔闪电剑"
+    type: DAMAGE
+    damage: 100
+    cooldown: 100
+    conditions:
+      - "targetwithin 6"
+
+  # 艾瑟尔瞬移
+  :
+    display-name: "<yellow>艾瑟尔瞬移"
+    type: DAMAGE
+    cooldown: 200
+
+  # 艾瑟尔旋风斩
+  :
+    display-name: "<yellow>艾瑟尔旋风斩"
+    type: DAMAGE
+    damage: 150
+    cooldown: 160
+
+  # 艾瑟尔治愈
+  :
+    display-name: "<yellow>艾瑟尔治愈"
+    type: HEAL
+    heal: 200
+    cooldown: 0
+
+  # 舰灵天枢能量护盾
+  :
+    display-name: "<yellow>舰灵天枢能量护盾"
+    type: DAMAGE
+    cooldown: 0
+
+  # 舰灵天枢全域攻击
+  :
+    display-name: "<yellow>舰灵天枢全域攻击"
+    type: DAMAGE
+    damage: 200
+    cooldown: 300
+
+  # 舰灵天枢召唤苍穹守卫
+  :
+    display-name: "<yellow>舰灵天枢召唤苍穹守卫"
+    type: DAMAGE
+    cooldown: 400
+
+  # 舰灵天枢治愈
+  :
+    display-name: "<yellow>舰灵天枢治愈"
+    type: HEAL
+    heal: 500
+    cooldown: 200
+
+  # 舰灵天枢死亡
+  :
+    display-name: "<yellow>舰灵天枢死亡"
+    type: DAMAGE
+    cooldown: 0
+    target: SELF

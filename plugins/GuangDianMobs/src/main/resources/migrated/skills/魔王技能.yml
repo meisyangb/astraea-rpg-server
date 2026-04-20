@@ -1,0 +1,104 @@
+# GuangDianMobs 技能配置
+# 从 MythicMobs 迁移生成: 魔王技能.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+skills:
+
+  # 魔王音乐
+  :
+    display-name: "<yellow>魔王音乐"
+    type: DAMAGE
+
+  # 魔王天命
+  :
+    display-name: "<yellow>魔王天命"
+    type: DAMAGE
+    damage: 900000
+    target: @PlayersInRadius{r=70}
+
+  # 魔王天命1
+  1:
+    display-name: "<yellow>魔王天命1"
+    type: DAMAGE
+    damage: 900000
+    target: @PlayersInRadius{r=70}
+
+  # 多重打击[魔王]
+  :
+    display-name: "<yellow>多重打击[魔王]"
+    type: DAMAGE
+    cooldown: 12000
+    target: @PlayersInRadius{r=20}
+
+  # 多重打击[法师特效]
+  :
+    display-name: "<yellow>多重打击[法师特效]"
+    type: DAMAGE
+
+  # 多重打击[法师击中]
+  :
+    display-name: "<yellow>多重打击[法师击中]"
+    type: DAMAGE
+
+  # 御神柱爆发
+  :
+    display-name: "<yellow>御神柱爆发"
+    type: DAMAGE
+    target: @PlayersInRadius{r=8}
+
+  # 终极爆发
+  :
+    display-name: "<yellow>终极爆发"
+    type: DAMAGE
+    target: SELF
+
+  # 魔王弹幕技能
+  :
+    display-name: "<yellow>魔王弹幕技能"
+    type: DAMAGE
+    target: SELF
+
+  # 魔王弹幕技能特效
+  :
+    display-name: "<yellow>魔王弹幕技能特效"
+    type: DAMAGE
+
+  # 魔王弹幕技能击中
+  :
+    display-name: "<yellow>魔王弹幕技能击中"
+    type: DAMAGE
+    target: SELF
+
+  # 战斗脱离
+  :
+    display-name: "<yellow>战斗脱离"
+    type: DAMAGE
+    target: @PlayersInRadius{r=15}
+
+  # 召唤御神柱[1]
+  1:
+    display-name: "<yellow>召唤御神柱[1]"
+    type: DAMAGE
+    cooldown: 12000
+    target: @PlayersInRadius{r=15}
+
+  # 召唤御神柱[2]
+  2:
+    display-name: "<yellow>召唤御神柱[2]"
+    type: DAMAGE
+    cooldown: 12000
+    target: @PlayersInRadius{r=15}
+
+  # 召唤御神柱[3]
+  3:
+    display-name: "<yellow>召唤御神柱[3]"
+    type: DAMAGE
+    cooldown: 12000
+    target: @PlayersInRadius{r=15}
+
+  # 聚集爆炸
+  :
+    display-name: "<yellow>聚集爆炸"
+    type: DAMAGE
+    cooldown: 12000
+    target: @PlayersInRadius{r=12}

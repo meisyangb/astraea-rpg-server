@@ -1,0 +1,152 @@
+# GuangDianMobs 技能配置
+# 从 MythicMobs 迁移生成: 怪物技能补充.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+skills:
+
+  # 第一层技能补充
+  :
+    display-name: "<yellow>第一层技能补充"
+    type: DAMAGE
+
+  # 幻界精英士兵远攻
+  :
+    display-name: "<yellow>幻界精英士兵远攻"
+    type: DAMAGE
+    damage: 50
+    cooldown: 60
+
+  # 第三层技能补充
+  :
+    display-name: "<yellow>第三层技能补充"
+    type: DAMAGE
+
+  # 幻界炎狱大恶魔远攻
+  :
+    display-name: "<yellow>幻界炎狱大恶魔远攻"
+    type: DAMAGE
+    damage: 100
+    cooldown: 60
+
+  # 幻界魔族统帅远攻
+  :
+    display-name: "<yellow>幻界魔族统帅远攻"
+    type: DAMAGE
+    damage: 120
+    cooldown: 60
+
+  # 恶魔圣者-伊特拉苏回血
+  :
+    display-name: "<yellow>恶魔圣者-伊特拉苏回血"
+    type: HEAL
+    heal: 500
+
+  # 第四层技能补充
+  :
+    display-name: "<yellow>第四层技能补充"
+    type: DAMAGE
+
+  # 处刑者远攻
+  :
+    display-name: "<yellow>处刑者远攻"
+    type: DAMAGE
+    damage: 80
+    cooldown: 60
+
+  # 处刑者回血
+  :
+    display-name: "<yellow>处刑者回血"
+    type: HEAL
+    heal: 200
+
+  # 处刑者IceBolt
+  icebolt:
+    display-name: "<yellow>处刑者IceBolt"
+    type: DAMAGE
+    cooldown: 100
+
+  # 伤害
+  :
+    display-name: "<yellow>伤害"
+    type: DAMAGE
+    damage: 100
+
+  # 第五层技能补充
+  :
+    display-name: "<yellow>第五层技能补充"
+    type: DAMAGE
+
+  # 五觉天使剑技能
+  :
+    display-name: "<yellow>五觉天使剑技能"
+    type: DAMAGE
+    damage: 500
+    cooldown: 200
+    target: TARGET
+
+  # 多重打击[魔王]8
+  8:
+    display-name: "<yellow>多重打击[魔王]8"
+    type: DAMAGE
+    damage: 200
+    cooldown: 60
+
+  # 多重打击[魔王]3
+  3:
+    display-name: "<yellow>多重打击[魔王]3"
+    type: DAMAGE
+    damage: 300
+    cooldown: 60
+
+  # 魔王侍卫群攻
+  :
+    display-name: "<yellow>魔王侍卫群攻"
+    type: DAMAGE
+    damage: 150
+    cooldown: 100
+
+  # 第六层技能补充
+  :
+    display-name: "<yellow>第六层技能补充"
+    type: DAMAGE
+
+  # 恐惧惊骸光波
+  :
+    display-name: "<yellow>恐惧惊骸光波"
+    type: DAMAGE
+    damage: 200
+    cooldown: 100
+    target: SELF
+
+  # 恐惧惊骸粒子球
+  :
+    display-name: "<yellow>恐惧惊骸粒子球"
+    type: DAMAGE
+    target: SELF
+
+  # 巫妖恩佩斯炸弹
+  :
+    display-name: "<yellow>巫妖恩佩斯炸弹"
+    type: DAMAGE
+    damage: 300
+    cooldown: 160
+    target: SELF
+
+  # 巫妖恩佩斯粒子球
+  :
+    display-name: "<yellow>巫妖恩佩斯粒子球"
+    type: DAMAGE
+    target: SELF
+
+  # 第七层技能补充
+  :
+    display-name: "<yellow>第七层技能补充"
+    type: DAMAGE
+
+  # TownGuard-Charge
+  townguard_charge:
+    display-name: "<yellow>TownGuard-Charge"
+    type: DAMAGE
+    damage: 150
+    cooldown: 100
+    target: TARGET

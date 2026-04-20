@@ -721,15 +721,65 @@ public class StatsManager {
             stats.addPlayerStats(offHandStats);
         }
         
-        // 合并技能列表
+        mergeClassAttributeStats(uuid, stats);
+        
         mergeSkills(uuid);
         
-        // 更新回血跟踪
         if (plugin.getRegenTask() != null) {
             plugin.getRegenTask().updatePlayerRegen(uuid, stats.getHealthRegen());
         }
         
         return stats;
+    }
+    
+    /**
+     * 合并职业属性加成
+     */
+    private void mergeClassAttributeStats(UUID uuid, PlayerStats stats) {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore == null) return;
+        
+        cn.guangdian.rpgcore.api.ServiceRegistry registry = rpgCore.getServiceRegistry();
+        if (registry == null) return;
+        
+        try {
+            Class<?> classServiceClass = Class.forName("cn.guangdian.classsystem.api.ClassService");
+            Object service = registry.getService(classServiceClass);
+            if (service == null) return;
+            
+            java.lang.reflect.Method method = classServiceClass.getMethod("getPlayerAttributeBonuses", java.util.UUID.class);
+            @SuppressWarnings("unchecked")
+            java.util.Map<String, Double> bonuses = (java.util.Map<String, Double>) method.invoke(service, uuid);
+            
+            if (bonuses == null || bonuses.isEmpty()) return;
+            
+            for (java.util.Map.Entry<String, Double> entry : bonuses.entrySet()) {
+                String attrName = entry.getKey();
+                double value = entry.getValue();
+                
+                switch (attrName) {
+                    case "health" -> stats.setMaxHealth(stats.getMaxHealth() + value);
+                    case "attack-min" -> stats.setMinAttack(stats.getMinAttack() + value);
+                    case "attack-max" -> stats.setMaxAttack(stats.getMaxAttack() + value);
+                    case "defense-min" -> stats.setDefenseMin(stats.getDefenseMin() + value);
+                    case "defense-max" -> stats.setDefenseMax(stats.getDefenseMax() + value);
+                    case "crit-chance" -> stats.setCritChancePercent(stats.getCritChancePercent() + value);
+                    case "crit-damage" -> stats.setCritDamagePercent(stats.getCritDamagePercent() + value);
+                    case "lifesteal" -> stats.setLifestealPercent(stats.getLifestealPercent() + value);
+                    case "dodge" -> stats.setDodgePercent(stats.getDodgePercent() + value);
+                    case "parry" -> stats.setParryPercent(stats.getParryPercent() + value);
+                    case "armor" -> stats.setArmorPercent(stats.getArmorPercent() + value);
+                    case "armor-strength" -> stats.setArmorStrength(stats.getArmorStrength() + value);
+                    case "magic-resist" -> stats.setMagicResistPercent(stats.getMagicResistPercent() + value);
+                    case "health-regen" -> stats.setHealthRegen(stats.getHealthRegen() + value);
+                    case "exp-bonus" -> stats.setExpBonusPercent(stats.getExpBonusPercent() + value);
+                    case "move-speed" -> stats.setMoveSpeedPercent(stats.getMoveSpeedPercent() + value);
+                    default -> {}
+                }
+            }
+        } catch (Exception e) {
+            // ClassService not available, skip
+        }
     }
     
     /**

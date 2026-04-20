@@ -1,0 +1,704 @@
+# ========================================
+# 从 GuangDianArmorStats 迁移的技能
+# 生成时间: Mon Apr 20 22:29:50 CST 2026
+# ========================================
+
+skills:
+
+  # 从 ArmorStats 迁移: 烈焰打击
+  :
+    name: "烈焰打击"
+    type: PASSIVE
+    trigger: ON_HIT
+    cooldown: 0
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 3.0
+      damage-multiplier: 0.8
+      trigger-chance: 15.0
+      effect: fire
+      particle: FLAME
+      sound: ENTITY_BLAZE_SHOOT
+
+  # 从 ArmorStats 迁移: 冰霜之触
+  :
+    name: "冰霜之触"
+    type: PASSIVE
+    trigger: ON_HIT
+    cooldown: 0
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 3.0
+      damage-multiplier: 0.6
+      trigger-chance: 10.0
+      effect: ice
+      particle: SNOWFLAKE
+      sound: BLOCK_GLASS_BREAK
+
+  # 从 ArmorStats 迁移: 毒刃
+  :
+    name: "毒刃"
+    type: PASSIVE
+    trigger: ON_HIT
+    cooldown: 0
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 3.0
+      damage-multiplier: 0.5
+      trigger-chance: 12.0
+      dot: true
+      dot-duration: 4
+      effect: poison
+      particle: DAMAGE_INDICATOR
+      sound: ENTITY_SPIDER_AMBIENT
+
+  # 从 ArmorStats 迁移: 火球术
+  :
+    name: "火球术"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 15
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 6.0
+      damage-multiplier: 1.5
+      trigger-chance: 100.0
+      effect: fire
+      particle: FLAME
+      sound: ENTITY_BLAZE_SHOOT
+
+  # 从 ArmorStats 迁移: 闪电打击
+  :
+    name: "闪电打击"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 20
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 5.0
+      damage-multiplier: 1.2
+      trigger-chance: 100.0
+      effect: lightning
+      particle: ELECTRIC_SPARK
+      sound: ENTITY_LIGHTNING_BOLT_THUNDER
+
+  # 从 ArmorStats 迁移: 治愈之光
+  :
+    name: "治愈之光"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 30
+    mana-cost: 0
+    executor: heal
+    params:
+      range: 0.0
+      damage-multiplier: 0.0
+      trigger-chance: 100.0
+      heal-percent: 15.0
+      effect: heal
+      particle: HEART
+      sound: BLOCK_BEACON_POWER_SELECT
+
+  # 从 ArmorStats 迁移: 荆棘护甲
+  :
+    name: "荆棘护甲"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 5
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 3.0
+      damage-multiplier: 0.3
+      trigger-chance: 20.0
+      effect: magic
+      particle: ENCHANT
+      sound: BLOCK_ENCHANTMENT_TABLE_USE
+
+  # 从 ArmorStats 迁移: 毁灭烈焰
+  :
+    name: "毁灭烈焰"
+    type: PASSIVE
+    trigger: ON_HIT
+    cooldown: 0
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 4.0
+      damage-multiplier: 1.0
+      trigger-chance: 20.0
+      effect: fire
+      particle: FLAME
+      sound: ENTITY_BLAZE_SHOOT
+
+  # 从 ArmorStats 迁移: 炽焰荆棘
+  :
+    name: "炽焰荆棘"
+    type: PASSIVE
+    trigger: ON_HIT
+    cooldown: 0
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 3.0
+      damage-multiplier: 1.0
+      trigger-chance: 15.0
+      effect: fire
+      particle: FLAME
+      sound: ENTITY_BLAZE_SHOOT
+
+  # 从 ArmorStats 迁移: 寒冰领域
+  :
+    name: "寒冰领域"
+    type: PASSIVE
+    trigger: ON_HIT
+    cooldown: 0
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 5.0
+      damage-multiplier: 0.8
+      trigger-chance: 12.0
+      effect: ice
+      particle: SNOWFLAKE
+      sound: BLOCK_GLASS_BREAK
+
+  # 从 ArmorStats 迁移: 剧毒蔓延
+  :
+    name: "剧毒蔓延"
+    type: PASSIVE
+    trigger: ON_HIT
+    cooldown: 0
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 4.0
+      damage-multiplier: 0.6
+      trigger-chance: 10.0
+      dot: true
+      dot-duration: 5
+      effect: poison
+      particle: DAMAGE_INDICATOR
+      sound: ENTITY_SPIDER_AMBIENT
+
+  # 从 ArmorStats 迁移: 生命汲取
+  :
+    name: "生命汲取"
+    type: PASSIVE
+    trigger: ON_HIT
+    cooldown: 0
+    mana-cost: 0
+    executor: heal
+    params:
+      range: 3.0
+      damage-multiplier: 0.8
+      trigger-chance: 15.0
+      heal-percent: 5.0
+      effect: magic
+      particle: ENCHANT
+      sound: BLOCK_ENCHANTMENT_TABLE_USE
+
+  # 从 ArmorStats 迁移: 狂暴闪电
+  :
+    name: "狂暴闪电"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 15
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 8.0
+      damage-multiplier: 1.5
+      trigger-chance: 100.0
+      effect: lightning
+      particle: ELECTRIC_SPARK
+      sound: ENTITY_LIGHTNING_BOLT_THUNDER
+
+  # 从 ArmorStats 迁移: 冰霜新星
+  :
+    name: "冰霜新星"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 20
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 6.0
+      damage-multiplier: 1.2
+      trigger-chance: 100.0
+      effect: ice
+      particle: SNOWFLAKE
+      sound: BLOCK_GLASS_BREAK
+
+  # 从 ArmorStats 迁移: 暗影步
+  :
+    name: "暗影步"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 25
+    mana-cost: 0
+    executor: heal
+    params:
+      range: 0.0
+      damage-multiplier: 0.0
+      trigger-chance: 100.0
+      heal-percent: 10.0
+      effect: magic
+      particle: ENCHANT
+      sound: BLOCK_ENCHANTMENT_TABLE_USE
+
+  # 从 ArmorStats 迁移: 爆裂火球
+  :
+    name: "爆裂火球"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 20
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 8.0
+      damage-multiplier: 2.0
+      trigger-chance: 100.0
+      effect: explosion
+      particle: EXPLOSION
+      sound: ENTITY_GENERIC_EXPLODE
+
+  # 从 ArmorStats 迁移: 反击风暴
+  :
+    name: "反击风暴"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 8
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 4.0
+      damage-multiplier: 0.8
+      trigger-chance: 15.0
+      effect: lightning
+      particle: ELECTRIC_SPARK
+      sound: ENTITY_LIGHTNING_BOLT_THUNDER
+
+  # 从 ArmorStats 迁移: 铁壁
+  :
+    name: "铁壁"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 10
+    mana-cost: 0
+    executor: single_target
+    params:
+      range: 0.0
+      damage-multiplier: 0.0
+      trigger-chance: 20.0
+      effect: magic
+      particle: ENCHANT
+      sound: BLOCK_ENCHANTMENT_TABLE_USE
+
+  # 从 ArmorStats 迁移: 雷神之怒
+  :
+    name: "雷神之怒"
+    type: PASSIVE
+    trigger: ON_HIT
+    cooldown: 0
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 12.0
+      damage-multiplier: 1.5
+      trigger-chance: 25.0
+      effect: lightning
+      particle: ELECTRIC_SPARK
+      sound: ENTITY_LIGHTNING_BOLT_THUNDER
+
+  # 从 ArmorStats 迁移: 地狱烈焰
+  :
+    name: "地狱烈焰"
+    type: PASSIVE
+    trigger: ON_HIT
+    cooldown: 0
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 6.0
+      damage-multiplier: 1.5
+      trigger-chance: 18.0
+      dot: true
+      dot-duration: 5
+      effect: fire
+      particle: FLAME
+      sound: ENTITY_BLAZE_SHOOT
+
+  # 从 ArmorStats 迁移: 暴风雪
+  :
+    name: "暴风雪"
+    type: PASSIVE
+    trigger: ON_HIT
+    cooldown: 0
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 8.0
+      damage-multiplier: 1.2
+      trigger-chance: 15.0
+      effect: ice
+      particle: SNOWFLAKE
+      sound: BLOCK_GLASS_BREAK
+
+  # 从 ArmorStats 迁移: 死亡之触
+  :
+    name: "死亡之触"
+    type: PASSIVE
+    trigger: ON_HIT
+    cooldown: 0
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 3.0
+      damage-multiplier: 2.0
+      trigger-chance: 8.0
+      dot: true
+      dot-duration: 6
+      effect: poison
+      particle: DAMAGE_INDICATOR
+      sound: ENTITY_SPIDER_AMBIENT
+
+  # 从 ArmorStats 迁移: 战意高昂
+  :
+    name: "战意高昂"
+    type: PASSIVE
+    trigger: ON_HIT
+    cooldown: 0
+    mana-cost: 0
+    executor: heal
+    params:
+      range: 3.0
+      damage-multiplier: 1.0
+      trigger-chance: 20.0
+      heal-percent: 8.0
+      effect: magic
+      particle: ENCHANT
+      sound: BLOCK_ENCHANTMENT_TABLE_USE
+
+  # 从 ArmorStats 迁移: 天罚
+  :
+    name: "天罚"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 30
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 10.0
+      damage-multiplier: 2.5
+      trigger-chance: 100.0
+      effect: lightning
+      particle: ELECTRIC_SPARK
+      sound: ENTITY_LIGHTNING_BOLT_THUNDER
+
+  # 从 ArmorStats 迁移: 陨石坠落
+  :
+    name: "陨石坠落"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 45
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 10.0
+      damage-multiplier: 3.0
+      trigger-chance: 100.0
+      effect: explosion
+      particle: EXPLOSION
+      sound: ENTITY_GENERIC_EXPLODE
+
+  # 从 ArmorStats 迁移: 绝对零度
+  :
+    name: "绝对零度"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 35
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 8.0
+      damage-multiplier: 2.0
+      trigger-chance: 100.0
+      effect: ice
+      particle: SNOWFLAKE
+      sound: BLOCK_GLASS_BREAK
+
+  # 从 ArmorStats 迁移: 治愈波
+  :
+    name: "治愈波"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 40
+    mana-cost: 0
+    executor: heal
+    params:
+      range: 0.0
+      damage-multiplier: 0.0
+      trigger-chance: 100.0
+      heal-percent: 25.0
+      effect: heal
+      particle: HEART
+      sound: BLOCK_BEACON_POWER_SELECT
+
+  # 从 ArmorStats 迁移: 雷霆反击
+  :
+    name: "雷霆反击"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 10
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 6.0
+      damage-multiplier: 1.5
+      trigger-chance: 15.0
+      effect: lightning
+      particle: ELECTRIC_SPARK
+      sound: ENTITY_LIGHTNING_BOLT_THUNDER
+
+  # 从 ArmorStats 迁移: 不屈意志
+  :
+    name: "不屈意志"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 30
+    mana-cost: 0
+    executor: heal
+    params:
+      range: 0.0
+      damage-multiplier: 0.0
+      trigger-chance: 10.0
+      heal-percent: 15.0
+      effect: heal
+      particle: HEART
+      sound: BLOCK_BEACON_POWER_SELECT
+
+  # 从 ArmorStats 迁移: 诸神黄昏
+  :
+    name: "诸神黄昏"
+    type: PASSIVE
+    trigger: ON_HIT
+    cooldown: 0
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 15.0
+      damage-multiplier: 2.0
+      trigger-chance: 15.0
+      effect: explosion
+      particle: EXPLOSION
+      sound: ENTITY_GENERIC_EXPLODE
+
+  # 从 ArmorStats 迁移: 永恒烈焰
+  :
+    name: "永恒烈焰"
+    type: PASSIVE
+    trigger: ON_HIT
+    cooldown: 0
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 8.0
+      damage-multiplier: 2.0
+      trigger-chance: 20.0
+      dot: true
+      dot-duration: 8
+      effect: fire
+      particle: FLAME
+      sound: ENTITY_BLAZE_SHOOT
+
+  # 从 ArmorStats 迁移: 虚空吞噬
+  :
+    name: "虚空吞噬"
+    type: PASSIVE
+    trigger: ON_HIT
+    cooldown: 0
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 5.0
+      damage-multiplier: 3.0
+      trigger-chance: 10.0
+      true-damage: true
+      effect: magic
+      particle: ENCHANT
+      sound: BLOCK_ENCHANTMENT_TABLE_USE
+
+  # 从 ArmorStats 迁移: 不死鸟之魂
+  :
+    name: "不死鸟之魂"
+    type: PASSIVE
+    trigger: ON_HIT
+    cooldown: 0
+    mana-cost: 0
+    executor: heal
+    params:
+      range: 3.0
+      damage-multiplier: 1.0
+      trigger-chance: 15.0
+      heal-percent: 12.0
+      effect: fire
+      particle: FLAME
+      sound: ENTITY_BLAZE_SHOOT
+
+  # 从 ArmorStats 迁移: 末日审判
+  :
+    name: "末日审判"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 60
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 15.0
+      damage-multiplier: 4.0
+      trigger-chance: 100.0
+      effect: explosion
+      particle: EXPLOSION
+      sound: ENTITY_GENERIC_EXPLODE
+
+  # 从 ArmorStats 迁移: 神罚
+  :
+    name: "神罚"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 45
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 12.0
+      damage-multiplier: 3.5
+      trigger-chance: 100.0
+      true-damage: true
+      effect: lightning
+      particle: ELECTRIC_SPARK
+      sound: ENTITY_LIGHTNING_BOLT_THUNDER
+
+  # 从 ArmorStats 迁移: 冰封世界
+  :
+    name: "冰封世界"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 50
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 12.0
+      damage-multiplier: 2.5
+      trigger-chance: 100.0
+      effect: ice
+      particle: SNOWFLAKE
+      sound: BLOCK_GLASS_BREAK
+
+  # 从 ArmorStats 迁移: 复活
+  :
+    name: "复活"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 120
+    mana-cost: 0
+    executor: heal
+    params:
+      range: 0.0
+      damage-multiplier: 0.0
+      trigger-chance: 100.0
+      heal-percent: 50.0
+      effect: heal
+      particle: HEART
+      sound: BLOCK_BEACON_POWER_SELECT
+
+  # 从 ArmorStats 迁移: 天罚反击
+  :
+    name: "天罚反击"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 15
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 8.0
+      damage-multiplier: 2.0
+      trigger-chance: 10.0
+      true-damage: true
+      effect: lightning
+      particle: ELECTRIC_SPARK
+      sound: ENTITY_LIGHTNING_BOLT_THUNDER
+
+  # 从 ArmorStats 迁移: 不灭之躯
+  :
+    name: "不灭之躯"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 60
+    mana-cost: 0
+    executor: heal
+    params:
+      range: 0.0
+      damage-multiplier: 0.0
+      trigger-chance: 8.0
+      heal-percent: 30.0
+      effect: heal
+      particle: HEART
+      sound: BLOCK_BEACON_POWER_SELECT
+
+  # 从 ArmorStats 迁移: 破甲打击
+  :
+    name: "破甲打击"
+    type: PASSIVE
+    trigger: ON_HIT
+    cooldown: 0
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 3.0
+      damage-multiplier: 1.5
+      trigger-chance: 15.0
+      pvp-only: true
+      effect: magic
+      particle: ENCHANT
+      sound: BLOCK_ENCHANTMENT_TABLE_USE
+
+  # 从 ArmorStats 迁移: 致命一击
+  :
+    name: "致命一击"
+    type: PASSIVE
+    trigger: ON_HIT
+    cooldown: 0
+    mana-cost: 0
+    executor: area_damage
+    params:
+      range: 3.0
+      damage-multiplier: 3.0
+      trigger-chance: 8.0
+      pvp-only: true
+      effect: explosion
+      particle: EXPLOSION
+      sound: ENTITY_GENERIC_EXPLODE
+
+  # 从 ArmorStats 迁移: 战场恢复
+  :
+    name: "战场恢复"
+    type: ACTIVE
+    trigger: RIGHT_CLICK
+    cooldown: 20
+    mana-cost: 0
+    executor: heal
+    params:
+      range: 0.0
+      damage-multiplier: 0.0
+      trigger-chance: 15.0
+      pvp-only: true
+      heal-percent: 10.0
+      effect: heal
+      particle: HEART
+      sound: BLOCK_BEACON_POWER_SELECT

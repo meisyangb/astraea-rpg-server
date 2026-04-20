@@ -1,0 +1,25 @@
+# GuangDianMobs 刷新点配置
+# 从 MythicMobs 迁移生成: 新手副本_刷怪点5_腐肉僵尸2.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+spawnpoints:
+
+  # 新手副本_刷怪点5_腐肉僵尸2
+  5_2:
+    world: rpg
+    x: -33.5
+    y: 32
+    z: -52.5
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: 1
+    amount: 1
+    max-mobs: 2
+    cooldown: 1200
+    radius: 0
+    use-timer: true
+    require-player: true
+    player-range: 20
+    enabled: true
+    display-name: "新手副本_刷怪点5_腐肉僵尸2"

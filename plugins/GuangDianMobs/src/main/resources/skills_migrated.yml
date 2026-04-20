@@ -1,0 +1,3343 @@
+# GuangDianMobs 技能配置
+# 从 MythicMobs 迁移生成
+# 生成时间: Mon Apr 20 22:11:45 CST 2026
+
+skills:
+
+  # SmashAttack
+  smashattack:
+    display-name: "<yellow>SmashAttack"
+    type: DAMAGE
+    damage: 5
+    cooldown: 160
+    target: @PlayersInRadius{r=5}
+    conditions:
+      - "targetwithin 25"
+
+  # SummonSkeletons
+  summonskeletons:
+    display-name: "<yellow>SummonSkeletons"
+    type: DAMAGE
+    cooldown: 300
+
+  # AngrySludgePoison
+  angrysludgepoison:
+    display-name: "<yellow>AngrySludgePoison"
+    type: DAMAGE
+    cooldown: 200
+    target: @PlayersInRadius{r=15}
+
+  # 第一层技能补充
+  :
+    display-name: "<yellow>第一层技能补充"
+    type: DAMAGE
+
+  # 幻界精英士兵远攻
+  :
+    display-name: "<yellow>幻界精英士兵远攻"
+    type: DAMAGE
+    damage: 50
+    cooldown: 60
+
+  # 第三层技能补充
+  :
+    display-name: "<yellow>第三层技能补充"
+    type: DAMAGE
+
+  # 幻界炎狱大恶魔远攻
+  :
+    display-name: "<yellow>幻界炎狱大恶魔远攻"
+    type: DAMAGE
+    damage: 100
+    cooldown: 60
+
+  # 幻界魔族统帅远攻
+  :
+    display-name: "<yellow>幻界魔族统帅远攻"
+    type: DAMAGE
+    damage: 120
+    cooldown: 60
+
+  # 恶魔圣者-伊特拉苏回血
+  :
+    display-name: "<yellow>恶魔圣者-伊特拉苏回血"
+    type: HEAL
+    heal: 500
+
+  # 第四层技能补充
+  :
+    display-name: "<yellow>第四层技能补充"
+    type: DAMAGE
+
+  # 处刑者远攻
+  :
+    display-name: "<yellow>处刑者远攻"
+    type: DAMAGE
+    damage: 80
+    cooldown: 60
+
+  # 处刑者回血
+  :
+    display-name: "<yellow>处刑者回血"
+    type: HEAL
+    heal: 200
+
+  # 处刑者IceBolt
+  icebolt:
+    display-name: "<yellow>处刑者IceBolt"
+    type: DAMAGE
+    cooldown: 100
+
+  # 伤害
+  :
+    display-name: "<yellow>伤害"
+    type: DAMAGE
+    damage: 100
+
+  # 第五层技能补充
+  :
+    display-name: "<yellow>第五层技能补充"
+    type: DAMAGE
+
+  # 五觉天使剑技能
+  :
+    display-name: "<yellow>五觉天使剑技能"
+    type: DAMAGE
+    damage: 500
+    cooldown: 200
+    target: TARGET
+
+  # 多重打击[魔王]8
+  8:
+    display-name: "<yellow>多重打击[魔王]8"
+    type: DAMAGE
+    damage: 200
+    cooldown: 60
+
+  # 多重打击[魔王]3
+  3:
+    display-name: "<yellow>多重打击[魔王]3"
+    type: DAMAGE
+    damage: 300
+    cooldown: 60
+
+  # 魔王侍卫群攻
+  :
+    display-name: "<yellow>魔王侍卫群攻"
+    type: DAMAGE
+    damage: 150
+    cooldown: 100
+
+  # 第六层技能补充
+  :
+    display-name: "<yellow>第六层技能补充"
+    type: DAMAGE
+
+  # 恐惧惊骸光波
+  :
+    display-name: "<yellow>恐惧惊骸光波"
+    type: DAMAGE
+    damage: 200
+    cooldown: 100
+    target: SELF
+
+  # 恐惧惊骸粒子球
+  :
+    display-name: "<yellow>恐惧惊骸粒子球"
+    type: DAMAGE
+    target: SELF
+
+  # 巫妖恩佩斯炸弹
+  :
+    display-name: "<yellow>巫妖恩佩斯炸弹"
+    type: DAMAGE
+    damage: 300
+    cooldown: 160
+    target: SELF
+
+  # 巫妖恩佩斯粒子球
+  :
+    display-name: "<yellow>巫妖恩佩斯粒子球"
+    type: DAMAGE
+    target: SELF
+
+  # 第七层技能补充
+  :
+    display-name: "<yellow>第七层技能补充"
+    type: DAMAGE
+
+  # TownGuard-Charge
+  townguard_charge:
+    display-name: "<yellow>TownGuard-Charge"
+    type: DAMAGE
+    damage: 150
+    cooldown: 100
+    target: TARGET
+
+  # 野狼冲锋
+  :
+    display-name: "<yellow>野狼冲锋"
+    type: DAMAGE
+    damage: 20
+    cooldown: 100
+    range: 15
+    target: TARGET
+    conditions:
+      - "targetwithin 15"
+
+  # 野狼撕咬
+  :
+    display-name: "<yellow>野狼撕咬"
+    type: DAMAGE
+    damage: 25
+    cooldown: 160
+    range: 5
+    conditions:
+      - "targetwithin 5"
+
+  # 射箭
+  :
+    display-name: "<yellow>射箭"
+    type: DAMAGE
+    cooldown: 60
+    range: 25
+    target: TARGET
+    conditions:
+      - "targetwithin 25"
+
+  # 蜘蛛毒液
+  :
+    display-name: "<yellow>蜘蛛毒液"
+    type: DAMAGE
+    damage: 30
+    cooldown: 80
+    range: 10
+    message: <red>你中毒了！
+    conditions:
+      - "targetwithin 10"
+
+  # 僵尸抓击
+  :
+    display-name: "<yellow>僵尸抓击"
+    type: DAMAGE
+    damage: 35
+    cooldown: 120
+    range: 5
+    conditions:
+      - "targetwithin 5"
+
+  # 感染攻击
+  :
+    display-name: "<yellow>感染攻击"
+    type: DAMAGE
+    damage: 25
+    cooldown: 120
+    range: 5
+    message: <red>你被感染了！
+    conditions:
+      - "targetwithin 5"
+
+  # 弹跳攻击
+  :
+    display-name: "<yellow>弹跳攻击"
+    type: DAMAGE
+    damage: 40
+    cooldown: 80
+    range: 15
+    conditions:
+      - "targetwithin 15"
+
+  # 黏液束缚
+  :
+    display-name: "<yellow>黏液束缚"
+    type: DAMAGE
+    damage: 20
+    cooldown: 200
+    range: 10
+    message: <green>你被黏液束缚了！
+    conditions:
+      - "targetwithin 10"
+
+  # 冲锋
+  :
+    display-name: "<yellow>冲锋"
+    type: DAMAGE
+    damage: 30
+    cooldown: 100
+    range: 15
+    target: TARGET
+    conditions:
+      - "targetwithin 15"
+
+  # 重击
+  :
+    display-name: "<yellow>重击"
+    type: DAMAGE
+    damage: 60
+    cooldown: 80
+    range: 6
+    message: <red>黑暗守卫对你造成了重击！
+    conditions:
+      - "targetwithin 6"
+
+  # 践踏
+  :
+    display-name: "<yellow>践踏"
+    type: DAMAGE
+    damage: 40
+    cooldown: 240
+    message: <red>黑暗守卫践踏大地！
+
+  # BOSS出现
+  boss:
+    display-name: "<yellow>BOSS出现"
+    type: DAMAGE
+    target: @PlayersInRadius{r=30}
+    message: <red><bold>【世界公告】黑暗守卫出现了！就在新手副本深处，冒险者们，准备应战！
+
+  # BOSS血量显示
+  boss:
+    display-name: "<yellow>BOSS血量显示"
+    type: DAMAGE
+    target: @PlayersInRadius{r=30}
+
+  # BOSS死亡
+  boss:
+    display-name: "<yellow>BOSS死亡"
+    type: DAMAGE
+    target: @PlayersInRadius{r=30}
+    message: <green><bold>【恭喜】<yellow><trigger.name> <green>成功击败了黑暗守卫！获得奖励！
+
+  # 天族卫队队长特效
+  :
+    display-name: "<yellow>天族卫队队长特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 天族卫队队长刷新
+  :
+    display-name: "<yellow>天族卫队队长刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 天族卫队队长死亡
+  :
+    display-name: "<yellow>天族卫队队长死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 天族卫队队长劈砍
+  :
+    display-name: "<yellow>天族卫队队长劈砍"
+    type: DAMAGE
+    damage: 45
+    cooldown: 0
+    conditions:
+      - "targetwithin 4"
+
+  # 天族卫队队长旋风斩
+  :
+    display-name: "<yellow>天族卫队队长旋风斩"
+    type: DAMAGE
+    damage: 40
+    cooldown: 0
+
+  # 天族卫队队长治愈
+  :
+    display-name: "<yellow>天族卫队队长治愈"
+    type: HEAL
+    heal: 75
+    cooldown: 0
+
+  # 天族卫队副官特效
+  :
+    display-name: "<yellow>天族卫队副官特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 天族卫队副官刷新
+  :
+    display-name: "<yellow>天族卫队副官刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 天族卫队副官死亡
+  :
+    display-name: "<yellow>天族卫队副官死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 天族卫队副官重击
+  :
+    display-name: "<yellow>天族卫队副官重击"
+    type: DAMAGE
+    damage: 80
+    cooldown: 0
+    conditions:
+      - "targetwithin 4"
+
+  # 天族卫队副官旋风斩
+  :
+    display-name: "<yellow>天族卫队副官旋风斩"
+    type: DAMAGE
+    damage: 100
+    cooldown: 0
+
+  # 天族卫队副官治愈
+  :
+    display-name: "<yellow>天族卫队副官治愈"
+    type: HEAL
+    heal: 125
+    cooldown: 0
+
+  # 苍穹守卫冲锋
+  :
+    display-name: "<yellow>苍穹守卫冲锋"
+    type: DAMAGE
+    damage: 10
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 苍穹战士冲锋
+  :
+    display-name: "<yellow>苍穹战士冲锋"
+    type: DAMAGE
+    damage: 15
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 苍穹精锐冲锋
+  :
+    display-name: "<yellow>苍穹精锐冲锋"
+    type: DAMAGE
+    damage: 25
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 苍穹弓手射击
+  :
+    display-name: "<yellow>苍穹弓手射击"
+    type: DAMAGE
+    damage: 20
+    cooldown: 0
+    conditions:
+      - "targetwithin 15"
+
+  # 苍穹精锐弓手射击
+  :
+    display-name: "<yellow>苍穹精锐弓手射击"
+    type: DAMAGE
+    damage: 30
+    cooldown: 0
+    conditions:
+      - "targetwithin 15"
+
+  # 艾瑟尔刷新
+  :
+    display-name: "<yellow>艾瑟尔刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 艾瑟尔死亡
+  :
+    display-name: "<yellow>艾瑟尔死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 艾瑟尔闪电剑
+  :
+    display-name: "<yellow>艾瑟尔闪电剑"
+    type: DAMAGE
+    damage: 100
+    cooldown: 100
+    conditions:
+      - "targetwithin 6"
+
+  # 艾瑟尔瞬移
+  :
+    display-name: "<yellow>艾瑟尔瞬移"
+    type: DAMAGE
+    cooldown: 200
+
+  # 艾瑟尔旋风斩
+  :
+    display-name: "<yellow>艾瑟尔旋风斩"
+    type: DAMAGE
+    damage: 150
+    cooldown: 160
+
+  # 艾瑟尔治愈
+  :
+    display-name: "<yellow>艾瑟尔治愈"
+    type: HEAL
+    heal: 200
+    cooldown: 0
+
+  # 舰灵天枢能量护盾
+  :
+    display-name: "<yellow>舰灵天枢能量护盾"
+    type: DAMAGE
+    cooldown: 0
+
+  # 舰灵天枢全域攻击
+  :
+    display-name: "<yellow>舰灵天枢全域攻击"
+    type: DAMAGE
+    damage: 200
+    cooldown: 300
+
+  # 舰灵天枢召唤苍穹守卫
+  :
+    display-name: "<yellow>舰灵天枢召唤苍穹守卫"
+    type: DAMAGE
+    cooldown: 400
+
+  # 舰灵天枢治愈
+  :
+    display-name: "<yellow>舰灵天枢治愈"
+    type: HEAL
+    heal: 500
+    cooldown: 200
+
+  # 舰灵天枢死亡
+  :
+    display-name: "<yellow>舰灵天枢死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域兵长布鲁克血量
+  :
+    display-name: "<yellow>神域兵长布鲁克血量"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域兵长布鲁克刷新
+  :
+    display-name: "<yellow>神域兵长布鲁克刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域兵长布鲁克死亡
+  :
+    display-name: "<yellow>神域兵长布鲁克死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域骑士克劳德刷新
+  :
+    display-name: "<yellow>神域骑士克劳德刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域骑士克劳德死亡
+  :
+    display-name: "<yellow>神域骑士克劳德死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域将领杰佛理刷新
+  :
+    display-name: "<yellow>神域将领杰佛理刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域将领杰佛理死亡
+  :
+    display-name: "<yellow>神域将领杰佛理死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域骑士克劳德血量
+  :
+    display-name: "<yellow>神域骑士克劳德血量"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域将领杰佛理血量
+  :
+    display-name: "<yellow>神域将领杰佛理血量"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域兵长布鲁克远攻
+  :
+    display-name: "<yellow>神域兵长布鲁克远攻"
+    type: DAMAGE
+    damage: 50000
+    cooldown: 0
+    conditions:
+      - "targetwithin 6"
+
+  # 神域骑士克劳德远攻
+  :
+    display-name: "<yellow>神域骑士克劳德远攻"
+    type: DAMAGE
+    damage: 80000
+    cooldown: 0
+    conditions:
+      - "targetwithin 6"
+
+  # 神域将领杰佛理远攻
+  :
+    display-name: "<yellow>神域将领杰佛理远攻"
+    type: DAMAGE
+    damage: 120000
+    cooldown: 0
+    conditions:
+      - "targetwithin 6"
+
+  # 兵长天命
+  :
+    display-name: "<yellow>兵长天命"
+    type: DAMAGE
+    damage: 1500000
+    target: @PlayersInRadius{r=70}
+
+  # 兵长天命1
+  1:
+    display-name: "<yellow>兵长天命1"
+    type: DAMAGE
+    damage: 1500000
+    target: @PlayersInRadius{r=70}
+
+  # 骑士天命
+  :
+    display-name: "<yellow>骑士天命"
+    type: DAMAGE
+    damage: 2400000
+    target: @PlayersInRadius{r=70}
+
+  # 骑士天命1
+  1:
+    display-name: "<yellow>骑士天命1"
+    type: DAMAGE
+    damage: 2400000
+    target: @PlayersInRadius{r=70}
+
+  # 将领天命
+  :
+    display-name: "<yellow>将领天命"
+    type: DAMAGE
+    damage: 3500000
+    target: @PlayersInRadius{r=70}
+
+  # 将领天命1
+  1:
+    display-name: "<yellow>将领天命1"
+    type: DAMAGE
+    damage: 3500000
+    target: @PlayersInRadius{r=70}
+
+  # 神域兵长布鲁克回血
+  :
+    display-name: "<yellow>神域兵长布鲁克回血"
+    type: HEAL
+    heal: 1000000
+    cooldown: 0
+
+  # 神域将领杰佛理回血
+  :
+    display-name: "<yellow>神域将领杰佛理回血"
+    type: HEAL
+    heal: 2000000
+    cooldown: 0
+
+  # 神域骑士克劳德回血
+  :
+    display-name: "<yellow>神域骑士克劳德回血"
+    type: HEAL
+    heal: 1500000
+    cooldown: 0
+
+  # 神域兵长布鲁克特效
+  :
+    display-name: "<yellow>神域兵长布鲁克特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域兵长布鲁克群攻
+  :
+    display-name: "<yellow>神域兵长布鲁克群攻"
+    type: DAMAGE
+
+  # 神域兵长布鲁克Homer_TICK
+  homer_tick:
+    display-name: "<yellow>神域兵长布鲁克Homer_TICK"
+    type: DAMAGE
+
+  # 神域兵长布鲁克Homer_HIT
+  homer_hit:
+    display-name: "<yellow>神域兵长布鲁克Homer_HIT"
+    type: DAMAGE
+
+  # 神域兵长布鲁克投掷
+  :
+    display-name: "<yellow>神域兵长布鲁克投掷"
+    type: DAMAGE
+    target: @PlayersInRadius{r=40}
+
+  # 神域卫兵远攻
+  :
+    display-name: "<yellow>神域卫兵远攻"
+    type: DAMAGE
+    damage: 5000
+    cooldown: 0
+    conditions:
+      - "targetwithin 4"
+
+  # 神域卫兵回血
+  :
+    display-name: "<yellow>神域卫兵回血"
+    type: HEAL
+    heal: 10000
+    cooldown: 0
+
+  # 神域弓箭手远攻
+  :
+    display-name: "<yellow>神域弓箭手远攻"
+    type: DAMAGE
+    damage: 20000
+    cooldown: 0
+    conditions:
+      - "targetwithin 15"
+
+  # 神域弓箭手回血
+  :
+    display-name: "<yellow>神域弓箭手回血"
+    type: HEAL
+    heal: 100000
+    cooldown: 0
+
+  # 神域守卫远攻
+  :
+    display-name: "<yellow>神域守卫远攻"
+    type: DAMAGE
+    damage: 50000
+    cooldown: 0
+    conditions:
+      - "targetwithin 5"
+
+  # 神域守卫回血
+  :
+    display-name: "<yellow>神域守卫回血"
+    type: HEAL
+    heal: 100000
+    cooldown: 0
+
+  # 神域守卫冲锋
+  :
+    display-name: "<yellow>神域守卫冲锋"
+    type: DAMAGE
+    cooldown: 200
+
+  # 神域守卫冲锋Tick
+  tick:
+    display-name: "<yellow>神域守卫冲锋Tick"
+    type: DAMAGE
+
+  # 神域守卫冲锋Hit
+  hit:
+    display-name: "<yellow>神域守卫冲锋Hit"
+    type: DAMAGE
+
+  # 神域守卫冲锋End
+  end:
+    display-name: "<yellow>神域守卫冲锋End"
+    type: DAMAGE
+
+  # 神域兵长布鲁克冲锋
+  :
+    display-name: "<yellow>神域兵长布鲁克冲锋"
+    type: DAMAGE
+    cooldown: 200
+
+  # 神域兵长布鲁克冲锋Tick
+  tick:
+    display-name: "<yellow>神域兵长布鲁克冲锋Tick"
+    type: DAMAGE
+
+  # 神域兵长布鲁克冲锋Hit
+  hit:
+    display-name: "<yellow>神域兵长布鲁克冲锋Hit"
+    type: DAMAGE
+
+  # 神域兵长布鲁克冲锋End
+  end:
+    display-name: "<yellow>神域兵长布鲁克冲锋End"
+    type: DAMAGE
+
+  # 神域兵长闪现斩击
+  :
+    display-name: "<yellow>神域兵长闪现斩击"
+    type: DAMAGE
+    cooldown: 120
+    target: SELF
+
+  # 神域兵长闪现斩击Tick
+  tick:
+    display-name: "<yellow>神域兵长闪现斩击Tick"
+    type: DAMAGE
+
+  # 神域兵长闪现斩击2Tick
+  2tick:
+    display-name: "<yellow>神域兵长闪现斩击2Tick"
+    type: DAMAGE
+
+  # 神域兵长闪现斩击Hit
+  hit:
+    display-name: "<yellow>神域兵长闪现斩击Hit"
+    type: DAMAGE
+
+  # 神域兵长闪现斩击2Hit
+  2hit:
+    display-name: "<yellow>神域兵长闪现斩击2Hit"
+    type: DAMAGE
+
+  # 神域兵长闪现斩击End
+  end:
+    display-name: "<yellow>神域兵长闪现斩击End"
+    type: DAMAGE
+
+  # 神域兵长闪现斩击2End
+  2end:
+    display-name: "<yellow>神域兵长闪现斩击2End"
+    type: DAMAGE
+
+  # 神域魔法师Rally
+  rally:
+    display-name: "<yellow>神域魔法师Rally"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域魔法师MagicMissile
+  magicmissile:
+    display-name: "<yellow>神域魔法师MagicMissile"
+    type: DAMAGE
+    cooldown: 0
+    target: TARGET
+    conditions:
+      - "targetwithin 30"
+
+  # 神域魔法师Tick
+  tick:
+    display-name: "<yellow>神域魔法师Tick"
+    type: DAMAGE
+
+  # 神域魔法师Hit
+  hit:
+    display-name: "<yellow>神域魔法师Hit"
+    type: DAMAGE
+    damage: 100000
+
+  # 神域魔法师End
+  end:
+    display-name: "<yellow>神域魔法师End"
+    type: DAMAGE
+
+  # 神域骑士闪现斩击
+  :
+    display-name: "<yellow>神域骑士闪现斩击"
+    type: DAMAGE
+    cooldown: 120
+    target: SELF
+
+  # 神域骑士闪现斩击Tick
+  tick:
+    display-name: "<yellow>神域骑士闪现斩击Tick"
+    type: DAMAGE
+
+  # 神域骑士闪现斩击2Tick
+  2tick:
+    display-name: "<yellow>神域骑士闪现斩击2Tick"
+    type: DAMAGE
+
+  # 神域骑士闪现斩击Hit
+  hit:
+    display-name: "<yellow>神域骑士闪现斩击Hit"
+    type: DAMAGE
+
+  # 神域骑士闪现斩击2Hit
+  2hit:
+    display-name: "<yellow>神域骑士闪现斩击2Hit"
+    type: DAMAGE
+
+  # 神域骑士闪现斩击End
+  end:
+    display-name: "<yellow>神域骑士闪现斩击End"
+    type: DAMAGE
+
+  # 神域骑士闪现斩击2End
+  2end:
+    display-name: "<yellow>神域骑士闪现斩击2End"
+    type: DAMAGE
+
+  # 神域骑士闪现脱离
+  :
+    display-name: "<yellow>神域骑士闪现脱离"
+    type: DAMAGE
+    cooldown: 200
+    target: SELF
+
+  # 神域骑士闪现脱离Tick
+  tick:
+    display-name: "<yellow>神域骑士闪现脱离Tick"
+    type: DAMAGE
+
+  # 神域骑士闪现脱离Hit
+  hit:
+    display-name: "<yellow>神域骑士闪现脱离Hit"
+    type: DAMAGE
+
+  # 神域骑士闪现脱离End
+  end:
+    display-name: "<yellow>神域骑士闪现脱离End"
+    type: DAMAGE
+
+  # 神域骑士一闪
+  :
+    display-name: "<yellow>神域骑士一闪"
+    type: DAMAGE
+    cooldown: 200
+    target: SELF
+
+  # 神域骑士一闪Tick
+  tick:
+    display-name: "<yellow>神域骑士一闪Tick"
+    type: DAMAGE
+
+  # 神域骑士一闪Hit
+  hit:
+    display-name: "<yellow>神域骑士一闪Hit"
+    type: DAMAGE
+
+  # 神域骑士一闪End
+  end:
+    display-name: "<yellow>神域骑士一闪End"
+    type: DAMAGE
+
+  # 神域骑士爆发群攻
+  :
+    display-name: "<yellow>神域骑士爆发群攻"
+    type: DAMAGE
+    cooldown: 100
+
+  # 神域骑士爆发群攻Homer_TICK
+  homer_tick:
+    display-name: "<yellow>神域骑士爆发群攻Homer_TICK"
+    type: DAMAGE
+
+  # 神域骑士爆发群攻Homer_HIT
+  homer_hit:
+    display-name: "<yellow>神域骑士爆发群攻Homer_HIT"
+    type: DAMAGE
+
+  # 鬼闪
+  :
+    display-name: "<yellow>鬼闪"
+    type: DAMAGE
+    cooldown: 400
+    target: SELF
+
+  # 鬼闪Tick
+  tick:
+    display-name: "<yellow>鬼闪Tick"
+    type: DAMAGE
+
+  # 鬼闪Hit
+  hit:
+    display-name: "<yellow>鬼闪Hit"
+    type: DAMAGE
+
+  # 鬼闪End
+  end:
+    display-name: "<yellow>鬼闪End"
+    type: DAMAGE
+
+  # 爆发群攻
+  :
+    display-name: "<yellow>爆发群攻"
+    type: DAMAGE
+    cooldown: 100
+
+  # 爆发群攻Homer_TICK
+  homer_tick:
+    display-name: "<yellow>爆发群攻Homer_TICK"
+    type: DAMAGE
+
+  # 爆发群攻Homer_HIT
+  homer_hit:
+    display-name: "<yellow>爆发群攻Homer_HIT"
+    type: DAMAGE
+
+  # 次元斩击
+  :
+    display-name: "<yellow>次元斩击"
+    type: DAMAGE
+    cooldown: 400
+    target: SELF
+
+  # 次元斩击Tick
+  tick:
+    display-name: "<yellow>次元斩击Tick"
+    type: DAMAGE
+
+  # 次元斩击Hit
+  hit:
+    display-name: "<yellow>次元斩击Hit"
+    type: DAMAGE
+
+  # 次元斩击End
+  end:
+    display-name: "<yellow>次元斩击End"
+    type: DAMAGE
+
+  # 次元闪击
+  :
+    display-name: "<yellow>次元闪击"
+    type: DAMAGE
+    cooldown: 200
+    target: SELF
+
+  # 次元闪击Tick
+  tick:
+    display-name: "<yellow>次元闪击Tick"
+    type: DAMAGE
+
+  # 次元闪击Hit
+  hit:
+    display-name: "<yellow>次元闪击Hit"
+    type: DAMAGE
+
+  # 次元闪击End
+  end:
+    display-name: "<yellow>次元闪击End"
+    type: DAMAGE
+
+  # 召唤圣灵
+  :
+    display-name: "<yellow>召唤圣灵"
+    type: DAMAGE
+
+  # 召唤章鱼
+  :
+    display-name: "<yellow>召唤章鱼"
+    type: DAMAGE
+
+  # 圣灵
+  :
+    display-name: "<yellow>圣灵"
+    type: DAMAGE
+    cooldown: 600
+    target: SELF
+
+  # 圣灵IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>圣灵IceBolt-Tick"
+    type: DAMAGE
+
+  # 圣灵IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>圣灵IceBolt-Hit"
+    type: DAMAGE
+    damage: 300000
+
+  # 圣灵自杀
+  :
+    display-name: "<yellow>圣灵自杀"
+    type: DAMAGE
+    cooldown: 12000
+
+  # 召唤章鱼
+  :
+    display-name: "<yellow>召唤章鱼"
+    type: DAMAGE
+
+  # 章鱼骑脸
+  :
+    display-name: "<yellow>章鱼骑脸"
+    type: DAMAGE
+    cooldown: 1200
+    target: @PlayersInRadius{r=64}
+
+  # 章鱼伤害
+  :
+    display-name: "<yellow>章鱼伤害"
+    type: DAMAGE
+    damage: 50000
+    cooldown: 20
+
+  # 章鱼爆炸
+  :
+    display-name: "<yellow>章鱼爆炸"
+    type: DAMAGE
+    damage: 9000000
+    cooldown: 1200
+    target: SELF
+
+  # 幻界炎狱大恶魔
+  :
+    display-name: "<yellow>幻界炎狱大恶魔"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界魔族统帅特效
+  :
+    display-name: "<yellow>幻界魔族统帅特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 恶魔圣者-伊特拉苏特效
+  :
+    display-name: "<yellow>恶魔圣者-伊特拉苏特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 堕天之翼特效
+  :
+    display-name: "<yellow>堕天之翼特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 堕天之翼粒子
+  :
+    display-name: "<yellow>堕天之翼粒子"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界炎狱大恶魔刷新
+  :
+    display-name: "<yellow>幻界炎狱大恶魔刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界炎狱大恶魔死亡
+  :
+    display-name: "<yellow>幻界炎狱大恶魔死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界魔族统帅刷新
+  :
+    display-name: "<yellow>幻界魔族统帅刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界魔族统帅死亡
+  :
+    display-name: "<yellow>幻界魔族统帅死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 恶魔圣者-伊特拉苏刷新
+  :
+    display-name: "<yellow>恶魔圣者-伊特拉苏刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 恶魔圣者-伊特拉苏死亡
+  :
+    display-name: "<yellow>恶魔圣者-伊特拉苏死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 堕天之翼刷新
+  :
+    display-name: "<yellow>堕天之翼刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 堕天之翼死亡
+  :
+    display-name: "<yellow>堕天之翼死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界魔族士兵远攻
+  :
+    display-name: "<yellow>幻界魔族士兵远攻"
+    type: DAMAGE
+    damage: 120
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 幻界魔族战将远攻
+  :
+    display-name: "<yellow>幻界魔族战将远攻"
+    type: DAMAGE
+    damage: 150
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 幻界炎狱幽灵远攻
+  :
+    display-name: "<yellow>幻界炎狱幽灵远攻"
+    type: DAMAGE
+    damage: 350
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 幻界炎狱大恶魔
+  :
+    display-name: "<yellow>幻界炎狱大恶魔"
+    type: DAMAGE
+    damage: 500
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 幻界魔族统帅
+  :
+    display-name: "<yellow>幻界魔族统帅"
+    type: DAMAGE
+    damage: 400
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 恶魔圣者-伊特拉苏
+  :
+    display-name: "<yellow>恶魔圣者-伊特拉苏"
+    type: DAMAGE
+    damage: 700
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 堕天之翼
+  :
+    display-name: "<yellow>堕天之翼"
+    type: DAMAGE
+    damage: 2500
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 幻界炎狱大恶魔AOE
+  aoe:
+    display-name: "<yellow>幻界炎狱大恶魔AOE"
+    type: DAMAGE
+    damage: 800
+    cooldown: 0
+
+  # 幻界魔族统帅AOE
+  aoe:
+    display-name: "<yellow>幻界魔族统帅AOE"
+    type: DAMAGE
+    damage: 600
+    cooldown: 0
+
+  # 恶魔圣者-伊特拉苏AOE
+  aoe:
+    display-name: "<yellow>恶魔圣者-伊特拉苏AOE"
+    type: DAMAGE
+    damage: 800
+    cooldown: 0
+
+  # 堕天之翼AOE
+  aoe:
+    display-name: "<yellow>堕天之翼AOE"
+    type: DAMAGE
+    damage: 3000
+    cooldown: 0
+
+  # 堕天之翼中毒
+  :
+    display-name: "<yellow>堕天之翼中毒"
+    type: DAMAGE
+    damage: 10000
+
+  # 幻界魔族士兵回血
+  :
+    display-name: "<yellow>幻界魔族士兵回血"
+    type: HEAL
+    heal: 300
+    cooldown: 0
+
+  # 幻界魔族战将回血
+  :
+    display-name: "<yellow>幻界魔族战将回血"
+    type: HEAL
+    heal: 300
+    cooldown: 0
+
+  # 幻界炎狱幽灵回血
+  :
+    display-name: "<yellow>幻界炎狱幽灵回血"
+    type: HEAL
+    heal: 300
+    cooldown: 0
+
+  # 幻界炎狱大恶魔回血
+  :
+    display-name: "<yellow>幻界炎狱大恶魔回血"
+    type: HEAL
+    heal: 500
+    cooldown: 0
+
+  # 幻界魔族统帅回血
+  :
+    display-name: "<yellow>幻界魔族统帅回血"
+    type: HEAL
+    heal: 600
+    cooldown: 0
+
+  # 恶魔圣者-伊特拉苏
+  :
+    display-name: "<yellow>恶魔圣者-伊特拉苏"
+    type: HEAL
+    heal: 1000
+    cooldown: 0
+
+  # 堕天之翼回血
+  :
+    display-name: "<yellow>堕天之翼回血"
+    type: HEAL
+    heal: 3000
+    cooldown: 0
+
+  # Homer
+  homer:
+    display-name: "<yellow>Homer"
+    type: DAMAGE
+
+  # Homer_TICK
+  homer_tick:
+    display-name: "<yellow>Homer_TICK"
+    type: DAMAGE
+
+  # Homer_HIT
+  homer_hit:
+    display-name: "<yellow>Homer_HIT"
+    type: DAMAGE
+
+  # IceBolt
+  icebolt:
+    display-name: "<yellow>IceBolt"
+    type: DAMAGE
+
+  # IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>IceBolt-Tick"
+    type: DAMAGE
+    target: SELF
+
+  # IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>IceBolt-Hit"
+    type: DAMAGE
+
+  # 恶魔圣者-伊特拉苏Homer
+  homer:
+    display-name: "<yellow>恶魔圣者-伊特拉苏Homer"
+    type: DAMAGE
+
+  # 恶魔圣者-伊特拉苏Homer_TICK
+  homer_tick:
+    display-name: "<yellow>恶魔圣者-伊特拉苏Homer_TICK"
+    type: DAMAGE
+
+  # 恶魔圣者-伊特拉苏Homer_HIT
+  homer_hit:
+    display-name: "<yellow>恶魔圣者-伊特拉苏Homer_HIT"
+    type: DAMAGE
+
+  # d恶魔圣者-伊特拉苏Homer
+  d_homer:
+    display-name: "<yellow>d恶魔圣者-伊特拉苏Homer"
+    type: DAMAGE
+
+  # d恶魔圣者-伊特拉苏Homer_TICK
+  d_homer_tick:
+    display-name: "<yellow>d恶魔圣者-伊特拉苏Homer_TICK"
+    type: DAMAGE
+
+  # d恶魔圣者-伊特拉苏Homer_HIT
+  d_homer_hit:
+    display-name: "<yellow>d恶魔圣者-伊特拉苏Homer_HIT"
+    type: DAMAGE
+
+  # 恶魔圣者-伊特拉苏IceBolt
+  icebolt:
+    display-name: "<yellow>恶魔圣者-伊特拉苏IceBolt"
+    type: DAMAGE
+
+  # 恶魔圣者-伊特拉苏IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>恶魔圣者-伊特拉苏IceBolt-Tick"
+    type: DAMAGE
+
+  # 恶魔圣者-伊特拉苏IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>恶魔圣者-伊特拉苏IceBolt-Hit"
+    type: DAMAGE
+
+  # 堕天之翼回血
+  :
+    display-name: "<yellow>堕天之翼回血"
+    type: HEAL
+    heal: 1000
+    cooldown: 0
+
+  # 堕天之翼Homer
+  homer:
+    display-name: "<yellow>堕天之翼Homer"
+    type: DAMAGE
+
+  # 堕天之翼Homer_TICK
+  homer_tick:
+    display-name: "<yellow>堕天之翼Homer_TICK"
+    type: DAMAGE
+
+  # 堕天之翼Homer_HIT
+  homer_hit:
+    display-name: "<yellow>堕天之翼Homer_HIT"
+    type: DAMAGE
+
+  # d堕天之翼Homer
+  d_homer:
+    display-name: "<yellow>d堕天之翼Homer"
+    type: DAMAGE
+
+  # d堕天之翼Homer_TICK
+  d_homer_tick:
+    display-name: "<yellow>d堕天之翼Homer_TICK"
+    type: DAMAGE
+
+  # d堕天之翼Homer_HIT
+  d_homer_hit:
+    display-name: "<yellow>d堕天之翼Homer_HIT"
+    type: DAMAGE
+
+  # 堕天之翼IceBolt
+  icebolt:
+    display-name: "<yellow>堕天之翼IceBolt"
+    type: DAMAGE
+
+  # 堕天之翼IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>堕天之翼IceBolt-Tick"
+    type: DAMAGE
+
+  # 堕天之翼IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>堕天之翼IceBolt-Hit"
+    type: DAMAGE
+
+  # 幻界百夫长特效
+  :
+    display-name: "<yellow>幻界百夫长特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界魔化营长特效
+  :
+    display-name: "<yellow>幻界魔化营长特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界恶魔统领特效
+  :
+    display-name: "<yellow>幻界恶魔统领特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 魔王莫洛斯托的分身特效
+  :
+    display-name: "<yellow>魔王莫洛斯托的分身特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界百夫长刷新
+  :
+    display-name: "<yellow>幻界百夫长刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界百夫长死亡
+  :
+    display-name: "<yellow>幻界百夫长死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界魔化营长刷新
+  :
+    display-name: "<yellow>幻界魔化营长刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界魔化营长死亡
+  :
+    display-name: "<yellow>幻界魔化营长死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界恶魔统领刷新
+  :
+    display-name: "<yellow>幻界恶魔统领刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界恶魔统领死亡
+  :
+    display-name: "<yellow>幻界恶魔统领死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 魔王莫洛斯托的分身刷新
+  :
+    display-name: "<yellow>魔王莫洛斯托的分身刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 魔王莫洛斯托的分身死亡
+  :
+    display-name: "<yellow>魔王莫洛斯托的分身死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界魔化士兵远攻
+  :
+    display-name: "<yellow>幻界魔化士兵远攻"
+    type: DAMAGE
+    damage: 60
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 魔王莫洛斯托的分身远攻
+  :
+    display-name: "<yellow>魔王莫洛斯托的分身远攻"
+    type: DAMAGE
+    damage: 500
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 幻界恶魔统领远攻
+  :
+    display-name: "<yellow>幻界恶魔统领远攻"
+    type: DAMAGE
+    damage: 200
+    cooldown: 0
+    conditions:
+      - "targetwithin 5"
+
+  # 幻界恶魔战士远攻
+  :
+    display-name: "<yellow>幻界恶魔战士远攻"
+    type: DAMAGE
+    damage: 75
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 幻界恶魔战将远攻
+  :
+    display-name: "<yellow>幻界恶魔战将远攻"
+    type: DAMAGE
+    damage: 90
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 幻界战士远攻
+  :
+    display-name: "<yellow>幻界战士远攻"
+    type: DAMAGE
+    damage: 15
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 幻界精英士兵
+  :
+    display-name: "<yellow>幻界精英士兵"
+    type: DAMAGE
+    damage: 25
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 幻界弓箭手远攻
+  :
+    display-name: "<yellow>幻界弓箭手远攻"
+    type: DAMAGE
+    damage: 20
+    cooldown: 0
+    conditions:
+      - "targetwithin 15"
+
+  # 幻界精英弓箭手远攻
+  :
+    display-name: "<yellow>幻界精英弓箭手远攻"
+    type: DAMAGE
+    damage: 30
+    cooldown: 0
+    conditions:
+      - "targetwithin 15"
+
+  # 幻界百夫长远攻
+  :
+    display-name: "<yellow>幻界百夫长远攻"
+    type: DAMAGE
+    damage: 45
+    cooldown: 0
+    conditions:
+      - "targetwithin 4"
+
+  # 幻界营长远攻
+  :
+    display-name: "<yellow>幻界营长远攻"
+    type: DAMAGE
+    damage: 80
+    cooldown: 0
+    conditions:
+      - "targetwithin 4"
+
+  # 幻界魔化营长AOE
+  aoe:
+    display-name: "<yellow>幻界魔化营长AOE"
+    type: DAMAGE
+    damage: 150
+    cooldown: 0
+
+  # 幻界恶魔统领AOE
+  aoe:
+    display-name: "<yellow>幻界恶魔统领AOE"
+    type: DAMAGE
+    damage: 300
+    cooldown: 0
+
+  # 魔王莫洛斯托的分身AOE
+  aoe:
+    display-name: "<yellow>魔王莫洛斯托的分身AOE"
+    type: DAMAGE
+    damage: 800
+    cooldown: 0
+
+  # 幻界魔化营长回血
+  :
+    display-name: "<yellow>幻界魔化营长回血"
+    type: HEAL
+    heal: 300
+    cooldown: 0
+
+  # 幻界恶魔统领回血
+  :
+    display-name: "<yellow>幻界恶魔统领回血"
+    type: HEAL
+    heal: 500
+    cooldown: 0
+
+  # 魔王莫洛斯托的分身回血
+  :
+    display-name: "<yellow>魔王莫洛斯托的分身回血"
+    type: HEAL
+    heal: 1000
+    cooldown: 0
+
+  # 魔王莫洛斯托的分身Homer
+  homer:
+    display-name: "<yellow>魔王莫洛斯托的分身Homer"
+    type: DAMAGE
+
+  # 魔王莫洛斯托的分身Homer_TICK
+  homer_tick:
+    display-name: "<yellow>魔王莫洛斯托的分身Homer_TICK"
+    type: DAMAGE
+
+  # 魔王莫洛斯托的分身Homer_HIT
+  homer_hit:
+    display-name: "<yellow>魔王莫洛斯托的分身Homer_HIT"
+    type: DAMAGE
+
+  # d魔王莫洛斯托的分身Homer
+  d_homer:
+    display-name: "<yellow>d魔王莫洛斯托的分身Homer"
+    type: DAMAGE
+
+  # d魔王莫洛斯托的分身Homer_TICK
+  d_homer_tick:
+    display-name: "<yellow>d魔王莫洛斯托的分身Homer_TICK"
+    type: DAMAGE
+
+  # d魔王莫洛斯托的分身Homer_HIT
+  d_homer_hit:
+    display-name: "<yellow>d魔王莫洛斯托的分身Homer_HIT"
+    type: DAMAGE
+
+  # 魔王莫洛斯托的分身IceBolt
+  icebolt:
+    display-name: "<yellow>魔王莫洛斯托的分身IceBolt"
+    type: DAMAGE
+
+  # 魔王莫洛斯托的分身IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>魔王莫洛斯托的分身IceBolt-Tick"
+    type: DAMAGE
+
+  # 魔王莫洛斯托的分身IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>魔王莫洛斯托的分身IceBolt-Hit"
+    type: DAMAGE
+
+  # 天弃士兵远攻
+  :
+    display-name: "<yellow>天弃士兵远攻"
+    type: DAMAGE
+    damage: 60
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 天弃战士远攻
+  :
+    display-name: "<yellow>天弃战士远攻"
+    type: DAMAGE
+    damage: 75
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 天弃战将远攻
+  :
+    display-name: "<yellow>天弃战将远攻"
+    type: DAMAGE
+    damage: 90
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 天弃营长特效
+  :
+    display-name: "<yellow>天弃营长特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 天弃营长刷新
+  :
+    display-name: "<yellow>天弃营长刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 天弃营长死亡
+  :
+    display-name: "<yellow>天弃营长死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 天弃营长AOE
+  aoe:
+    display-name: "<yellow>天弃营长AOE"
+    type: DAMAGE
+    damage: 150
+    cooldown: 0
+
+  # 天弃营长回血
+  :
+    display-name: "<yellow>天弃营长回血"
+    type: HEAL
+    heal: 300
+    cooldown: 0
+
+  # 天弃统领特效
+  :
+    display-name: "<yellow>天弃统领特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 天弃统领刷新
+  :
+    display-name: "<yellow>天弃统领刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 天弃统领死亡
+  :
+    display-name: "<yellow>天弃统领死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 天弃统领远攻
+  :
+    display-name: "<yellow>天弃统领远攻"
+    type: DAMAGE
+    damage: 200
+    cooldown: 0
+    conditions:
+      - "targetwithin 5"
+
+  # 天弃统领AOE
+  aoe:
+    display-name: "<yellow>天弃统领AOE"
+    type: DAMAGE
+    damage: 300
+    cooldown: 0
+
+  # 天弃统领回血
+  :
+    display-name: "<yellow>天弃统领回血"
+    type: HEAL
+    heal: 500
+    cooldown: 0
+
+  # 呼延觉罗战特效
+  :
+    display-name: "<yellow>呼延觉罗战特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 呼延觉罗战刷新
+  :
+    display-name: "<yellow>呼延觉罗战刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 呼延觉罗战死亡
+  :
+    display-name: "<yellow>呼延觉罗战死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 呼延觉罗战远攻
+  :
+    display-name: "<yellow>呼延觉罗战远攻"
+    type: DAMAGE
+    damage: 500
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 呼延觉罗战AOE
+  aoe:
+    display-name: "<yellow>呼延觉罗战AOE"
+    type: DAMAGE
+    damage: 800
+    cooldown: 0
+
+  # 呼延觉罗战回血
+  :
+    display-name: "<yellow>呼延觉罗战回血"
+    type: HEAL
+    heal: 1000
+    cooldown: 0
+
+  # 呼延觉罗战Homer
+  homer:
+    display-name: "<yellow>呼延觉罗战Homer"
+    type: DAMAGE
+
+  # 呼延觉罗战Homer_TICK
+  homer_tick:
+    display-name: "<yellow>呼延觉罗战Homer_TICK"
+    type: DAMAGE
+
+  # 呼延觉罗战Homer_HIT
+  homer_hit:
+    display-name: "<yellow>呼延觉罗战Homer_HIT"
+    type: DAMAGE
+
+  # 呼延觉罗战IceBolt
+  icebolt:
+    display-name: "<yellow>呼延觉罗战IceBolt"
+    type: DAMAGE
+
+  # 呼延觉罗战IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>呼延觉罗战IceBolt-Tick"
+    type: DAMAGE
+
+  # 呼延觉罗战IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>呼延觉罗战IceBolt-Hit"
+    type: DAMAGE
+
+  # 脱战回血
+  :
+    display-name: "<yellow>脱战回血"
+    type: DAMAGE
+    cooldown: 0
+    target: SELF
+
+  # 遗忘战士远攻
+  :
+    display-name: "<yellow>遗忘战士远攻"
+    type: DAMAGE
+    damage: 500
+    cooldown: 0
+    conditions:
+      - "targetwithin 4"
+
+  # 遗忘战士回血
+  :
+    display-name: "<yellow>遗忘战士回血"
+    type: HEAL
+    heal: 1000
+    cooldown: 0
+
+  # 遗忘术士远攻
+  :
+    display-name: "<yellow>遗忘术士远攻"
+    type: DAMAGE
+    damage: 500
+    cooldown: 0
+    conditions:
+      - "targetwithin 4"
+
+  # 遗忘术士回血
+  :
+    display-name: "<yellow>遗忘术士回血"
+    type: HEAL
+    heal: 1000
+    cooldown: 0
+
+  # 遗忘术士Homer
+  homer:
+    display-name: "<yellow>遗忘术士Homer"
+    type: DAMAGE
+
+  # 遗忘术士Homer_TICK
+  homer_tick:
+    display-name: "<yellow>遗忘术士Homer_TICK"
+    type: DAMAGE
+
+  # 遗忘术士Homer_HIT
+  homer_hit:
+    display-name: "<yellow>遗忘术士Homer_HIT"
+    type: DAMAGE
+
+  # 遗忘幻术师远攻
+  :
+    display-name: "<yellow>遗忘幻术师远攻"
+    type: DAMAGE
+    damage: 4000
+    cooldown: 0
+    conditions:
+      - "targetwithin 3000"
+
+  # 遗忘幻术师血条
+  :
+    display-name: "<yellow>遗忘幻术师血条"
+    type: DAMAGE
+    cooldown: 0
+
+  # 遗忘幻术师回血
+  :
+    display-name: "<yellow>遗忘幻术师回血"
+    type: HEAL
+    heal: 2000
+    cooldown: 0
+
+  # 遗忘幻术师Homer
+  homer:
+    display-name: "<yellow>遗忘幻术师Homer"
+    type: DAMAGE
+
+  # 遗忘幻术师Homer_TICK
+  homer_tick:
+    display-name: "<yellow>遗忘幻术师Homer_TICK"
+    type: DAMAGE
+
+  # 遗忘幻术师Homer_HIT
+  homer_hit:
+    display-name: "<yellow>遗忘幻术师Homer_HIT"
+    type: DAMAGE
+
+  # 遗忘幻术师天命之理
+  :
+    display-name: "<yellow>遗忘幻术师天命之理"
+    type: DAMAGE
+    damage: 100000
+    cooldown: 12000
+    target: @PlayersInRadius{r=10}
+
+  # 遗忘幻术师爆发冲击
+  :
+    display-name: "<yellow>遗忘幻术师爆发冲击"
+    type: DAMAGE
+
+  # "侵蚀311"
+  311:
+    display-name: "<yellow>"侵蚀311""
+    type: DAMAGE
+
+  # "侵蚀1511"
+  1511:
+    display-name: "<yellow>"侵蚀1511""
+    type: DAMAGE
+    target: @PlayersInRadius{r=15}
+
+  # 遗忘幻术师召唤随从
+  :
+    display-name: "<yellow>遗忘幻术师召唤随从"
+    type: DAMAGE
+    cooldown: 0
+    target: @PlayersInRadius{r=30}
+
+  # 遗忘幻术师IceBolt
+  icebolt:
+    display-name: "<yellow>遗忘幻术师IceBolt"
+    type: DAMAGE
+
+  # 遗忘幻术师IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>遗忘幻术师IceBolt-Tick"
+    type: DAMAGE
+
+  # 遗忘幻术师IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>遗忘幻术师IceBolt-Hit"
+    type: DAMAGE
+    damage: 30000
+
+  # 幻术师随从Homer
+  homer:
+    display-name: "<yellow>幻术师随从Homer"
+    type: DAMAGE
+
+  # 幻术师随从Homer_TICK
+  homer_tick:
+    display-name: "<yellow>幻术师随从Homer_TICK"
+    type: DAMAGE
+
+  # 幻术师随从Homer_HIT
+  homer_hit:
+    display-name: "<yellow>幻术师随从Homer_HIT"
+    type: DAMAGE
+
+  # 遗忘幻术师特效
+  :
+    display-name: "<yellow>遗忘幻术师特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 遗忘士兵远攻
+  :
+    display-name: "<yellow>遗忘士兵远攻"
+    type: DAMAGE
+    damage: 800
+    cooldown: 0
+    conditions:
+      - "targetwithin 4"
+
+  # 遗忘士兵回血
+  :
+    display-name: "<yellow>遗忘士兵回血"
+    type: HEAL
+    heal: 1500
+    cooldown: 0
+
+  # 遗忘力士远攻
+  :
+    display-name: "<yellow>遗忘力士远攻"
+    type: DAMAGE
+    damage: 1000
+    cooldown: 0
+    conditions:
+      - "targetwithin 4"
+
+  # 遗忘力士回血
+  :
+    display-name: "<yellow>遗忘力士回血"
+    type: HEAL
+    heal: 2000
+    cooldown: 0
+
+  # 遗忘力士IceBolt
+  icebolt:
+    display-name: "<yellow>遗忘力士IceBolt"
+    type: DAMAGE
+
+  # 遗忘力士IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>遗忘力士IceBolt-Tick"
+    type: DAMAGE
+
+  # 遗忘力士IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>遗忘力士IceBolt-Hit"
+    type: DAMAGE
+    damage: 3000
+
+  # 遗忘军士-科洛莫斯远攻
+  :
+    display-name: "<yellow>遗忘军士-科洛莫斯远攻"
+    type: DAMAGE
+    damage: 6000
+    cooldown: 0
+    conditions:
+      - "targetwithin 12"
+
+  # 遗忘军士-科洛莫斯血条
+  :
+    display-name: "<yellow>遗忘军士-科洛莫斯血条"
+    type: DAMAGE
+    cooldown: 0
+
+  # 遗忘军士-科洛莫斯回血
+  :
+    display-name: "<yellow>遗忘军士-科洛莫斯回血"
+    type: HEAL
+    heal: 4000
+    cooldown: 0
+
+  # 遗忘军士爆发冲击
+  :
+    display-name: "<yellow>遗忘军士爆发冲击"
+    type: DAMAGE
+
+  # "侵蚀3111"
+  3111:
+    display-name: "<yellow>"侵蚀3111""
+    type: DAMAGE
+
+  # "侵蚀15111"
+  15111:
+    display-name: "<yellow>"侵蚀15111""
+    type: DAMAGE
+    target: @PlayersInRadius{r=15}
+
+  # 遗忘军士天命之理
+  :
+    display-name: "<yellow>遗忘军士天命之理"
+    type: DAMAGE
+    damage: 250000
+    target: @PlayersInRadius{r=10}
+
+  # 遗忘军士-科洛莫斯IceBolt
+  icebolt:
+    display-name: "<yellow>遗忘军士-科洛莫斯IceBolt"
+    type: DAMAGE
+
+  # 遗忘军士-科洛莫斯IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>遗忘军士-科洛莫斯IceBolt-Tick"
+    type: DAMAGE
+
+  # 遗忘军士-科洛莫斯IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>遗忘军士-科洛莫斯IceBolt-Hit"
+    type: DAMAGE
+    damage: 50000
+
+  # 遗忘军士-科洛莫斯30IceBolt
+  30icebolt:
+    display-name: "<yellow>遗忘军士-科洛莫斯30IceBolt"
+    type: DAMAGE
+    target: SELF
+
+  # 遗忘军士-科洛莫斯30IceBolt-Tick
+  30icebolt_tick:
+    display-name: "<yellow>遗忘军士-科洛莫斯30IceBolt-Tick"
+    type: DAMAGE
+
+  # 遗忘军士-科洛莫斯30IceBolt-Hit
+  30icebolt_hit:
+    display-name: "<yellow>遗忘军士-科洛莫斯30IceBolt-Hit"
+    type: DAMAGE
+    damage: 999999
+
+  # 遗忘军士-科洛莫斯Homer
+  homer:
+    display-name: "<yellow>遗忘军士-科洛莫斯Homer"
+    type: DAMAGE
+
+  # 遗忘军士-科洛莫斯Homer_TICK
+  homer_tick:
+    display-name: "<yellow>遗忘军士-科洛莫斯Homer_TICK"
+    type: DAMAGE
+
+  # 遗忘军士-科洛莫斯Homer_HIT
+  homer_hit:
+    display-name: "<yellow>遗忘军士-科洛莫斯Homer_HIT"
+    type: DAMAGE
+
+  # 遗忘军士-科洛莫斯特效
+  :
+    display-name: "<yellow>遗忘军士-科洛莫斯特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 遗忘者远攻
+  :
+    display-name: "<yellow>遗忘者远攻"
+    type: DAMAGE
+    damage: 1500
+    cooldown: 0
+    conditions:
+      - "targetwithin 4"
+
+  # 遗忘者回血
+  :
+    display-name: "<yellow>遗忘者回血"
+    type: HEAL
+    heal: 2000
+    cooldown: 0
+
+  # 遗忘者IceBolt
+  icebolt:
+    display-name: "<yellow>遗忘者IceBolt"
+    type: DAMAGE
+
+  # 遗忘者IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>遗忘者IceBolt-Tick"
+    type: DAMAGE
+
+  # 遗忘者IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>遗忘者IceBolt-Hit"
+    type: DAMAGE
+    damage: 5000
+
+  # 遗忘城主-卡拉特斯远攻
+  :
+    display-name: "<yellow>遗忘城主-卡拉特斯远攻"
+    type: DAMAGE
+    damage: 8000
+    cooldown: 0
+    conditions:
+      - "targetwithin 30"
+
+  # 遗忘城主-卡拉特斯血条
+  :
+    display-name: "<yellow>遗忘城主-卡拉特斯血条"
+    type: DAMAGE
+    cooldown: 0
+
+  # 遗忘城主-卡拉特斯回血
+  :
+    display-name: "<yellow>遗忘城主-卡拉特斯回血"
+    type: HEAL
+    heal: 6000
+    cooldown: 0
+
+  # 遗忘城主天命之理
+  :
+    display-name: "<yellow>遗忘城主天命之理"
+    type: DAMAGE
+    damage: 400000
+    target: @PlayersInRadius{r=10}
+
+  # 遗忘城主天命之理1
+  1:
+    display-name: "<yellow>遗忘城主天命之理1"
+    type: DAMAGE
+    damage: 400000
+    target: @PlayersInRadius{r=10}
+
+  # 遗忘城主爆发冲击
+  :
+    display-name: "<yellow>遗忘城主爆发冲击"
+    type: DAMAGE
+
+  # "侵蚀31111"
+  31111:
+    display-name: "<yellow>"侵蚀31111""
+    type: DAMAGE
+
+  # "侵蚀151111"
+  151111:
+    display-name: "<yellow>"侵蚀151111""
+    type: DAMAGE
+    target: @PlayersInRadius{r=15}
+
+  # 遗忘城主-卡拉特斯IceBolt
+  icebolt:
+    display-name: "<yellow>遗忘城主-卡拉特斯IceBolt"
+    type: DAMAGE
+
+  # 遗忘城主-卡拉特斯IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>遗忘城主-卡拉特斯IceBolt-Tick"
+    type: DAMAGE
+
+  # 遗忘城主-卡拉特斯IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>遗忘城主-卡拉特斯IceBolt-Hit"
+    type: DAMAGE
+    damage: 75000
+
+  # 遗忘城主-卡拉特斯Homer
+  homer:
+    display-name: "<yellow>遗忘城主-卡拉特斯Homer"
+    type: DAMAGE
+
+  # 遗忘城主-卡拉特斯Homer_TICK
+  homer_tick:
+    display-name: "<yellow>遗忘城主-卡拉特斯Homer_TICK"
+    type: DAMAGE
+
+  # 遗忘城主-卡拉特斯Homer_HIT
+  homer_hit:
+    display-name: "<yellow>遗忘城主-卡拉特斯Homer_HIT"
+    type: DAMAGE
+
+  # 遗忘城主-卡拉特斯召唤
+  :
+    display-name: "<yellow>遗忘城主-卡拉特斯召唤"
+    type: DAMAGE
+    cooldown: 0
+
+  # 遗忘城主-卡拉特斯30IceBolt
+  30icebolt:
+    display-name: "<yellow>遗忘城主-卡拉特斯30IceBolt"
+    type: DAMAGE
+    target: SELF
+
+  # 遗忘城主-卡拉特斯30IceBolt-Tick
+  30icebolt_tick:
+    display-name: "<yellow>遗忘城主-卡拉特斯30IceBolt-Tick"
+    type: DAMAGE
+
+  # 遗忘城主-卡拉特斯30IceBolt-Hit
+  30icebolt_hit:
+    display-name: "<yellow>遗忘城主-卡拉特斯30IceBolt-Hit"
+    type: DAMAGE
+    damage: 999999
+
+  # 遗忘幽魂Homer
+  homer:
+    display-name: "<yellow>遗忘幽魂Homer"
+    type: DAMAGE
+
+  # 遗忘幽魂Homer_TICK
+  homer_tick:
+    display-name: "<yellow>遗忘幽魂Homer_TICK"
+    type: DAMAGE
+
+  # 遗忘幽魂Homer_HIT
+  homer_hit:
+    display-name: "<yellow>遗忘幽魂Homer_HIT"
+    type: DAMAGE
+
+  # 遗忘城主-卡拉特斯特效
+  :
+    display-name: "<yellow>遗忘城主-卡拉特斯特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 路西法出生特效
+  :
+    display-name: "<yellow>路西法出生特效"
+    type: DAMAGE
+    damage: 30000000
+    target: SELF
+
+  # 路西法背景音乐
+  :
+    display-name: "<yellow>路西法背景音乐"
+    type: DAMAGE
+    cooldown: 2400
+    target: SELF
+
+  # 路西法AOE
+  aoe:
+    display-name: "<yellow>路西法AOE"
+    type: DAMAGE
+    damage: 200000
+    cooldown: 0
+
+  # 路西法回血
+  :
+    display-name: "<yellow>路西法回血"
+    type: DAMAGE
+    cooldown: 0
+
+  # 路西法火焰之力
+  :
+    display-name: "<yellow>路西法火焰之力"
+    type: DAMAGE
+    cooldown: 300
+    target: SELF
+
+  # 路西法火焰之力Tick
+  tick:
+    display-name: "<yellow>路西法火焰之力Tick"
+    type: DAMAGE
+
+  # 路西法火焰之力Hit
+  hit:
+    display-name: "<yellow>路西法火焰之力Hit"
+    type: DAMAGE
+
+  # 路西法瘟疫之力
+  :
+    display-name: "<yellow>路西法瘟疫之力"
+    type: DAMAGE
+    cooldown: 200
+    target: SELF
+
+  # 路西法瘟疫之力Tick
+  tick:
+    display-name: "<yellow>路西法瘟疫之力Tick"
+    type: DAMAGE
+
+  # 路西法瘟疫之力Hit
+  hit:
+    display-name: "<yellow>路西法瘟疫之力Hit"
+    type: DAMAGE
+
+  # 路西法屠杀之力
+  :
+    display-name: "<yellow>路西法屠杀之力"
+    type: DAMAGE
+    cooldown: 600
+    target: SELF
+
+  # 路西法屠杀之力Tick
+  tick:
+    display-name: "<yellow>路西法屠杀之力Tick"
+    type: DAMAGE
+
+  # 路西法屠杀之力Hit
+  hit:
+    display-name: "<yellow>路西法屠杀之力Hit"
+    type: DAMAGE
+
+  # 路西法饥饿之力
+  :
+    display-name: "<yellow>路西法饥饿之力"
+    type: DAMAGE
+    cooldown: 500
+    target: SELF
+
+  # 路西法饥饿之力Tick
+  tick:
+    display-name: "<yellow>路西法饥饿之力Tick"
+    type: DAMAGE
+
+  # 路西法饥饿之力Hit
+  hit:
+    display-name: "<yellow>路西法饥饿之力Hit"
+    type: DAMAGE
+
+  # 路西法死亡之力
+  :
+    display-name: "<yellow>路西法死亡之力"
+    type: DAMAGE
+    cooldown: 400
+    target: SELF
+
+  # 路西法死亡之力Tick
+  tick:
+    display-name: "<yellow>路西法死亡之力Tick"
+    type: DAMAGE
+
+  # 路西法死亡之力Hit
+  hit:
+    display-name: "<yellow>路西法死亡之力Hit"
+    type: DAMAGE
+
+  # 路西法审判之力
+  :
+    display-name: "<yellow>路西法审判之力"
+    type: DAMAGE
+    cooldown: 500
+    target: SELF
+
+  # 路西法审判之力IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>路西法审判之力IceBolt-Tick"
+    type: DAMAGE
+
+  # 路西法审判之力IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>路西法审判之力IceBolt-Hit"
+    type: DAMAGE
+    damage: 9999999
+
+  # 路西法审判之力IceBolt-End
+  icebolt_end:
+    display-name: "<yellow>路西法审判之力IceBolt-End"
+    type: DAMAGE
+
+  # 路西法召唤瘟疫骑士
+  :
+    display-name: "<yellow>路西法召唤瘟疫骑士"
+    type: DAMAGE
+    cooldown: 12000
+    target: @PlayersInRadius{r=64}
+
+  # 天启骑士AOE
+  aoe:
+    display-name: "<yellow>天启骑士AOE"
+    type: DAMAGE
+    damage: 200000
+    cooldown: 0
+
+  # 天帝
+  :
+    display-name: "<yellow>天帝"
+    type: DAMAGE
+    cooldown: 0
+    target: SELF
+
+  # 瘟疫骑士群攻
+  :
+    display-name: "<yellow>瘟疫骑士群攻"
+    type: DAMAGE
+    cooldown: 200
+
+  # 瘟疫骑士群攻Homer_TICK
+  homer_tick:
+    display-name: "<yellow>瘟疫骑士群攻Homer_TICK"
+    type: DAMAGE
+
+  # 瘟疫骑士群攻Homer_HIT
+  homer_hit:
+    display-name: "<yellow>瘟疫骑士群攻Homer_HIT"
+    type: DAMAGE
+
+  # 瘟疫骑士散播瘟疫
+  :
+    display-name: "<yellow>瘟疫骑士散播瘟疫"
+    type: DAMAGE
+    cooldown: 200
+    target: SELF
+
+  # 瘟疫骑士散播瘟疫Tick
+  tick:
+    display-name: "<yellow>瘟疫骑士散播瘟疫Tick"
+    type: DAMAGE
+
+  # 瘟疫骑士散播瘟疫Hit
+  hit:
+    display-name: "<yellow>瘟疫骑士散播瘟疫Hit"
+    type: HEAL
+    heal: 10000000
+
+  # 瘟疫骑士散播瘟疫End
+  end:
+    display-name: "<yellow>瘟疫骑士散播瘟疫End"
+    type: DAMAGE
+
+  # 瘟疫骑士瘟疫吸血
+  :
+    display-name: "<yellow>瘟疫骑士瘟疫吸血"
+    type: DAMAGE
+    cooldown: 400
+    target: @PlayersInRadius{r=12}
+
+  # 路西法召唤屠杀骑士
+  :
+    display-name: "<yellow>路西法召唤屠杀骑士"
+    type: DAMAGE
+    cooldown: 12000
+    target: @PlayersInRadius{r=64}
+
+  # 屠杀骑士群攻
+  :
+    display-name: "<yellow>屠杀骑士群攻"
+    type: DAMAGE
+    cooldown: 200
+
+  # 屠杀骑士群攻Homer_TICK
+  homer_tick:
+    display-name: "<yellow>屠杀骑士群攻Homer_TICK"
+    type: DAMAGE
+
+  # 屠杀骑士群攻Homer_HIT
+  homer_hit:
+    display-name: "<yellow>屠杀骑士群攻Homer_HIT"
+    type: DAMAGE
+
+  # 屠杀骑士屠杀之力
+  :
+    display-name: "<yellow>屠杀骑士屠杀之力"
+    type: DAMAGE
+    cooldown: 600
+    target: SELF
+
+  # 屠杀骑士屠杀之力Tick
+  tick:
+    display-name: "<yellow>屠杀骑士屠杀之力Tick"
+    type: DAMAGE
+
+  # 屠杀骑士屠杀之力Hit
+  hit:
+    display-name: "<yellow>屠杀骑士屠杀之力Hit"
+    type: HEAL
+    heal: 10000000
+
+  # 屠杀骑士群体混乱
+  :
+    display-name: "<yellow>屠杀骑士群体混乱"
+    type: DAMAGE
+    cooldown: 300
+    target: @PlayersInRadius{r=12}
+
+  # 路西法召唤饥饿骑士
+  :
+    display-name: "<yellow>路西法召唤饥饿骑士"
+    type: DAMAGE
+    cooldown: 12000
+    target: @PlayersInRadius{r=64}
+
+  # 饥饿骑士群攻
+  :
+    display-name: "<yellow>饥饿骑士群攻"
+    type: DAMAGE
+    cooldown: 200
+
+  # 饥饿骑士群攻Homer_TICK
+  homer_tick:
+    display-name: "<yellow>饥饿骑士群攻Homer_TICK"
+    type: DAMAGE
+
+  # 饥饿骑士群攻Homer_HIT
+  homer_hit:
+    display-name: "<yellow>饥饿骑士群攻Homer_HIT"
+    type: DAMAGE
+
+  # 饥饿骑士饥荒之力
+  :
+    display-name: "<yellow>饥饿骑士饥荒之力"
+    type: DAMAGE
+    cooldown: 500
+    target: SELF
+
+  # 饥饿骑士饥荒之力Tick
+  tick:
+    display-name: "<yellow>饥饿骑士饥荒之力Tick"
+    type: DAMAGE
+
+  # 饥饿骑士饥荒之力Hit
+  hit:
+    display-name: "<yellow>饥饿骑士饥荒之力Hit"
+    type: HEAL
+    heal: 10000000
+
+  # 饥饿骑士颓废之风
+  :
+    display-name: "<yellow>饥饿骑士颓废之风"
+    type: DAMAGE
+    cooldown: 300
+    target: @PlayersInRadius{r=12}
+
+  # 路西法召唤死亡骑士
+  :
+    display-name: "<yellow>路西法召唤死亡骑士"
+    type: DAMAGE
+    cooldown: 12000
+    target: @PlayersInRadius{r=64}
+
+  # 死亡骑士群攻
+  :
+    display-name: "<yellow>死亡骑士群攻"
+    type: DAMAGE
+    cooldown: 200
+
+  # 死亡骑士群攻Homer_TICK
+  homer_tick:
+    display-name: "<yellow>死亡骑士群攻Homer_TICK"
+    type: DAMAGE
+
+  # 死亡骑士群攻Homer_HIT
+  homer_hit:
+    display-name: "<yellow>死亡骑士群攻Homer_HIT"
+    type: DAMAGE
+
+  # 死亡骑士凋零之力
+  :
+    display-name: "<yellow>死亡骑士凋零之力"
+    type: DAMAGE
+    cooldown: 400
+    target: SELF
+
+  # 死亡骑士凋零之力Tick
+  tick:
+    display-name: "<yellow>死亡骑士凋零之力Tick"
+    type: DAMAGE
+
+  # 死亡骑士凋零之力Hit
+  hit:
+    display-name: "<yellow>死亡骑士凋零之力Hit"
+    type: HEAL
+    heal: 10000000
+
+  # 死亡骑士恐惧之风
+  :
+    display-name: "<yellow>死亡骑士恐惧之风"
+    type: DAMAGE
+    cooldown: 200
+
+  # 路西法血条
+  :
+    display-name: "<yellow>路西法血条"
+    type: DAMAGE
+    cooldown: 0
+
+  # 瘟疫骑士血条
+  :
+    display-name: "<yellow>瘟疫骑士血条"
+    type: DAMAGE
+    cooldown: 0
+
+  # 屠杀骑士血条
+  :
+    display-name: "<yellow>屠杀骑士血条"
+    type: DAMAGE
+    cooldown: 0
+
+  # 饥饿骑士血条
+  :
+    display-name: "<yellow>饥饿骑士血条"
+    type: DAMAGE
+    cooldown: 0
+
+  # 死亡骑士血条
+  :
+    display-name: "<yellow>死亡骑士血条"
+    type: DAMAGE
+    cooldown: 0
+
+  # 死亡骸骨远攻
+  :
+    display-name: "<yellow>死亡骸骨远攻"
+    type: DAMAGE
+    damage: 750
+    cooldown: 0
+    conditions:
+      - "targetwithin 4"
+
+  # 死亡骸骨回血
+  :
+    display-name: "<yellow>死亡骸骨回血"
+    type: HEAL
+    heal: 2000
+    cooldown: 0
+
+  # 恐惧惊骸群攻
+  :
+    display-name: "<yellow>恐惧惊骸群攻"
+    type: DAMAGE
+    damage: 3000
+    cooldown: 0
+    conditions:
+      - "targetwithin 3000"
+
+  # 恐惧惊骸回血
+  :
+    display-name: "<yellow>恐惧惊骸回血"
+    type: HEAL
+    heal: 5000
+    cooldown: 0
+
+  # 恐惧惊骸IceBolt
+  icebolt:
+    display-name: "<yellow>恐惧惊骸IceBolt"
+    type: DAMAGE
+
+  # 恐惧惊骸IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>恐惧惊骸IceBolt-Tick"
+    type: DAMAGE
+
+  # 恐惧惊骸IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>恐惧惊骸IceBolt-Hit"
+    type: DAMAGE
+    damage: 30000
+
+  # 巫妖恩佩斯群攻
+  :
+    display-name: "<yellow>巫妖恩佩斯群攻"
+    type: DAMAGE
+    damage: 5000
+    cooldown: 0
+    conditions:
+      - "targetwithin 3000"
+
+  # 巫妖恩佩斯回血
+  :
+    display-name: "<yellow>巫妖恩佩斯回血"
+    type: HEAL
+    heal: 7500
+    cooldown: 0
+
+  # 巫妖恩佩斯血条
+  :
+    display-name: "<yellow>巫妖恩佩斯血条"
+    type: DAMAGE
+    cooldown: 0
+
+  # 巫妖恩佩斯特效
+  :
+    display-name: "<yellow>巫妖恩佩斯特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 巫妖恩佩斯Homer
+  homer:
+    display-name: "<yellow>巫妖恩佩斯Homer"
+    type: DAMAGE
+
+  # 巫妖恩佩斯Homer_TICK
+  homer_tick:
+    display-name: "<yellow>巫妖恩佩斯Homer_TICK"
+    type: DAMAGE
+
+  # 巫妖恩佩斯Homer_HIT
+  homer_hit:
+    display-name: "<yellow>巫妖恩佩斯Homer_HIT"
+    type: DAMAGE
+
+  # 巫妖恩佩斯IceBolt
+  icebolt:
+    display-name: "<yellow>巫妖恩佩斯IceBolt"
+    type: DAMAGE
+
+  # 巫妖恩佩斯IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>巫妖恩佩斯IceBolt-Tick"
+    type: DAMAGE
+
+  # 巫妖恩佩斯IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>巫妖恩佩斯IceBolt-Hit"
+    type: DAMAGE
+    damage: 60000
+
+  # 巫妖恩佩斯30IceBolt
+  30icebolt:
+    display-name: "<yellow>巫妖恩佩斯30IceBolt"
+    type: DAMAGE
+
+  # 巫妖恩佩斯30IceBolt-Tick
+  30icebolt_tick:
+    display-name: "<yellow>巫妖恩佩斯30IceBolt-Tick"
+    type: DAMAGE
+
+  # 巫妖恩佩斯30IceBolt-Hit
+  30icebolt_hit:
+    display-name: "<yellow>巫妖恩佩斯30IceBolt-Hit"
+    type: DAMAGE
+    damage: 500000
+
+  # 幻界堕落召唤师特效
+  :
+    display-name: "<yellow>幻界堕落召唤师特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界堕落召唤师刷新
+  :
+    display-name: "<yellow>幻界堕落召唤师刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界堕落召唤师血条
+  :
+    display-name: "<yellow>幻界堕落召唤师血条"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界堕落召唤师死亡
+  :
+    display-name: "<yellow>幻界堕落召唤师死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 堕落大贤者-阿卡斯塔特效
+  :
+    display-name: "<yellow>堕落大贤者-阿卡斯塔特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 堕落大贤者-阿卡斯塔刷新
+  :
+    display-name: "<yellow>堕落大贤者-阿卡斯塔刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 堕落大贤者-阿卡斯塔血条
+  :
+    display-name: "<yellow>堕落大贤者-阿卡斯塔血条"
+    type: DAMAGE
+    cooldown: 0
+
+  # 堕落大贤者-阿卡斯塔死亡
+  :
+    display-name: "<yellow>堕落大贤者-阿卡斯塔死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界堕落战士远攻
+  :
+    display-name: "<yellow>幻界堕落战士远攻"
+    type: DAMAGE
+    damage: 300
+    cooldown: 0
+
+  # 幻界堕落召唤师远攻
+  :
+    display-name: "<yellow>幻界堕落召唤师远攻"
+    type: DAMAGE
+    damage: 1500
+    cooldown: 0
+
+  # 堕落大贤者-阿卡斯塔远攻
+  :
+    display-name: "<yellow>堕落大贤者-阿卡斯塔远攻"
+    type: DAMAGE
+    damage: 3000
+    cooldown: 0
+
+  # 幻界堕落战士回血
+  :
+    display-name: "<yellow>幻界堕落战士回血"
+    type: HEAL
+    heal: 500
+    cooldown: 0
+
+  # 幻界堕落召唤师回血
+  :
+    display-name: "<yellow>幻界堕落召唤师回血"
+    type: HEAL
+    heal: 1200
+    cooldown: 0
+
+  # 堕落大贤者-阿卡斯塔回血
+  :
+    display-name: "<yellow>堕落大贤者-阿卡斯塔回血"
+    type: HEAL
+    heal: 1500
+    cooldown: 0
+
+  # 堕落大贤者-阿卡斯塔Homer
+  homer:
+    display-name: "<yellow>堕落大贤者-阿卡斯塔Homer"
+    type: DAMAGE
+
+  # 堕落大贤者-阿卡斯塔Homer_TICK
+  homer_tick:
+    display-name: "<yellow>堕落大贤者-阿卡斯塔Homer_TICK"
+    type: DAMAGE
+
+  # 堕落大贤者-阿卡斯塔Homer_HIT
+  homer_hit:
+    display-name: "<yellow>堕落大贤者-阿卡斯塔Homer_HIT"
+    type: DAMAGE
+
+  # d堕落大贤者-阿卡斯塔Homer
+  d_homer:
+    display-name: "<yellow>d堕落大贤者-阿卡斯塔Homer"
+    type: DAMAGE
+
+  # d堕落大贤者-阿卡斯塔Homer_TICK
+  d_homer_tick:
+    display-name: "<yellow>d堕落大贤者-阿卡斯塔Homer_TICK"
+    type: DAMAGE
+
+  # d堕落大贤者-阿卡斯塔Homer_HIT
+  d_homer_hit:
+    display-name: "<yellow>d堕落大贤者-阿卡斯塔Homer_HIT"
+    type: DAMAGE
+
+  # 堕落大贤者-阿卡斯塔IceBolt
+  icebolt:
+    display-name: "<yellow>堕落大贤者-阿卡斯塔IceBolt"
+    type: DAMAGE
+
+  # 堕落大贤者-阿卡斯塔IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>堕落大贤者-阿卡斯塔IceBolt-Tick"
+    type: DAMAGE
+
+  # 堕落大贤者-阿卡斯塔IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>堕落大贤者-阿卡斯塔IceBolt-Hit"
+    type: DAMAGE
+
+  # 幻界堕落召唤师回血
+  :
+    display-name: "<yellow>幻界堕落召唤师回血"
+    type: HEAL
+    heal: 1000
+    cooldown: 0
+
+  # 幻界堕落召唤师Homer
+  homer:
+    display-name: "<yellow>幻界堕落召唤师Homer"
+    type: DAMAGE
+
+  # 幻界堕落召唤师Homer_TICK
+  homer_tick:
+    display-name: "<yellow>幻界堕落召唤师Homer_TICK"
+    type: DAMAGE
+
+  # 幻界堕落召唤师Homer_HIT
+  homer_hit:
+    display-name: "<yellow>幻界堕落召唤师Homer_HIT"
+    type: DAMAGE
+
+  # d幻界堕落召唤师Homer
+  d_homer:
+    display-name: "<yellow>d幻界堕落召唤师Homer"
+    type: DAMAGE
+
+  # d幻界堕落召唤师Homer_TICK
+  d_homer_tick:
+    display-name: "<yellow>d幻界堕落召唤师Homer_TICK"
+    type: DAMAGE
+
+  # d幻界堕落召唤师Homer_HIT
+  d_homer_hit:
+    display-name: "<yellow>d幻界堕落召唤师Homer_HIT"
+    type: DAMAGE
+
+  # 幻界堕落召唤师IceBolt
+  icebolt:
+    display-name: "<yellow>幻界堕落召唤师IceBolt"
+    type: DAMAGE
+
+  # 幻界堕落召唤师IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>幻界堕落召唤师IceBolt-Tick"
+    type: DAMAGE
+
+  # 幻界堕落召唤师IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>幻界堕落召唤师IceBolt-Hit"
+    type: DAMAGE
+
+  # 野狼王远攻
+  :
+    display-name: "<yellow>野狼王远攻"
+    type: DAMAGE
+    damage: 500
+    cooldown: 60
+    target: TARGET
+
+  # 野狼王回血
+  :
+    display-name: "<yellow>野狼王回血"
+    type: HEAL
+    heal: 200
+
+  # 野狼王刷新
+  :
+    display-name: "<yellow>野狼王刷新"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 野狼王死亡
+  :
+    display-name: "<yellow>野狼王死亡"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 野狼王特效
+  :
+    display-name: "<yellow>野狼王特效"
+    type: DAMAGE
+    target: SELF
+
+  # 尸王穆拉远攻
+  :
+    display-name: "<yellow>尸王穆拉远攻"
+    type: DAMAGE
+    damage: 600
+    cooldown: 60
+    target: TARGET
+
+  # 尸王穆拉回血
+  :
+    display-name: "<yellow>尸王穆拉回血"
+    type: HEAL
+    heal: 300
+
+  # 尸王穆拉刷新
+  :
+    display-name: "<yellow>尸王穆拉刷新"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 尸王穆拉死亡
+  :
+    display-name: "<yellow>尸王穆拉死亡"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 尸王穆拉特效
+  :
+    display-name: "<yellow>尸王穆拉特效"
+    type: DAMAGE
+    target: SELF
+
+  # 骷髅王特里远攻
+  :
+    display-name: "<yellow>骷髅王特里远攻"
+    type: DAMAGE
+    damage: 700
+    cooldown: 60
+    target: TARGET
+
+  # 骷髅王特里回血
+  :
+    display-name: "<yellow>骷髅王特里回血"
+    type: HEAL
+    heal: 400
+
+  # 骷髅王特里刷新
+  :
+    display-name: "<yellow>骷髅王特里刷新"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 骷髅王特里死亡
+  :
+    display-name: "<yellow>骷髅王特里死亡"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 点券宝宝刷新
+  :
+    display-name: "<yellow>点券宝宝刷新"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 点券宝宝死亡
+  :
+    display-name: "<yellow>点券宝宝死亡"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 点券宝宝血条
+  :
+    display-name: "<yellow>点券宝宝血条"
+    type: DAMAGE
+
+  # 年兽血条
+  :
+    display-name: "<yellow>年兽血条"
+    type: DAMAGE
+
+  # 年兽回血
+  :
+    display-name: "<yellow>年兽回血"
+    type: HEAL
+    heal: 500
+
+  # 年兽冲锋
+  :
+    display-name: "<yellow>年兽冲锋"
+    type: DAMAGE
+    damage: 200
+    cooldown: 100
+    target: TARGET
+
+  # 年兽刷新
+  :
+    display-name: "<yellow>年兽刷新"
+    type: DAMAGE
+
+  # 年兽召唤
+  :
+    display-name: "<yellow>年兽召唤"
+    type: DAMAGE
+
+  # 脱战回血
+  :
+    display-name: "<yellow>脱战回血"
+    type: HEAL
+    heal: 1000
+
+  # 野狼远攻
+  :
+    display-name: "<yellow>野狼远攻"
+    type: DAMAGE
+    damage: 50
+    cooldown: 60
+
+  # 游荡者远攻
+  :
+    display-name: "<yellow>游荡者远攻"
+    type: DAMAGE
+    damage: 80
+    cooldown: 60
+
+  # 死亡游荡者远攻
+  :
+    display-name: "<yellow>死亡游荡者远攻"
+    type: DAMAGE
+    damage: 100
+    cooldown: 60
+
+  # 古天乐喊话
+  :
+    display-name: "<yellow>古天乐喊话"
+    type: DAMAGE
+
+  # 古天乐刷新
+  :
+    display-name: "<yellow>古天乐刷新"
+    type: DAMAGE
+
+  # 渣渣辉喊话
+  :
+    display-name: "<yellow>渣渣辉喊话"
+    type: DAMAGE
+
+  # 渣渣辉刷新
+  :
+    display-name: "<yellow>渣渣辉刷新"
+    type: DAMAGE
+
+  # 冰雪风暴
+  :
+    display-name: "<yellow>冰雪风暴"
+    type: DAMAGE
+    damage: 150
+    target: @PlayersInRadius{r=30}
+
+  # 年兽闪现斩击
+  :
+    display-name: "<yellow>年兽闪现斩击"
+    type: DAMAGE
+    damage: 300
+    cooldown: 100
+    target: TARGET
+
+  # 年兽群星坠落cf
+  cf:
+    display-name: "<yellow>年兽群星坠落cf"
+    type: DAMAGE
+    damage: 500
+    cooldown: 200
+    target: TARGET
+
+  # 年兽一闪
+  :
+    display-name: "<yellow>年兽一闪"
+    type: DAMAGE
+    damage: 400
+    cooldown: 60
+
+  # 年兽闪现脱离
+  :
+    display-name: "<yellow>年兽闪现脱离"
+    type: DAMAGE
+    cooldown: 160
+    target: TARGET
+
+  # 露娜召唤
+  :
+    display-name: "<yellow>露娜召唤"
+    type: DAMAGE
+
+  # 炙热剑芒
+  :
+    display-name: "<yellow>炙热剑芒"
+    type: DAMAGE
+    damage: 200
+    target: SELF
+
+  # 月光喊话
+  :
+    display-name: "<yellow>月光喊话"
+    type: DAMAGE
+
+  # 经验猪
+  :
+    display-name: "<yellow>经验猪"
+    type: DAMAGE
+
+  # 魔王音乐
+  :
+    display-name: "<yellow>魔王音乐"
+    type: DAMAGE
+
+  # 魔王天命
+  :
+    display-name: "<yellow>魔王天命"
+    type: DAMAGE
+    damage: 900000
+    target: @PlayersInRadius{r=70}
+
+  # 魔王天命1
+  1:
+    display-name: "<yellow>魔王天命1"
+    type: DAMAGE
+    damage: 900000
+    target: @PlayersInRadius{r=70}
+
+  # 多重打击[魔王]
+  :
+    display-name: "<yellow>多重打击[魔王]"
+    type: DAMAGE
+    cooldown: 12000
+
+  # 多重打击[法师特效]
+  :
+    display-name: "<yellow>多重打击[法师特效]"
+    type: DAMAGE
+
+  # 多重打击[法师击中]
+  :
+    display-name: "<yellow>多重打击[法师击中]"
+    type: DAMAGE
+
+  # 御神柱爆发
+  :
+    display-name: "<yellow>御神柱爆发"
+    type: DAMAGE
+    target: @PlayersInRadius{r=8}
+
+  # 终极爆发
+  :
+    display-name: "<yellow>终极爆发"
+    type: DAMAGE
+    target: @PlayersInRadius{r=25}
+
+  # 魔王弹幕技能
+  :
+    display-name: "<yellow>魔王弹幕技能"
+    type: DAMAGE
+
+  # 魔王弹幕技能特效
+  :
+    display-name: "<yellow>魔王弹幕技能特效"
+    type: DAMAGE
+
+  # 魔王弹幕技能击中
+  :
+    display-name: "<yellow>魔王弹幕技能击中"
+    type: DAMAGE
+
+  # 战斗脱离
+  :
+    display-name: "<yellow>战斗脱离"
+    type: DAMAGE
+
+  # 召唤御神柱[1]
+  1:
+    display-name: "<yellow>召唤御神柱[1]"
+    type: DAMAGE
+    cooldown: 12000
+
+  # 召唤御神柱[2]
+  2:
+    display-name: "<yellow>召唤御神柱[2]"
+    type: DAMAGE
+    cooldown: 12000
+
+  # 召唤御神柱[3]
+  3:
+    display-name: "<yellow>召唤御神柱[3]"
+    type: DAMAGE
+    cooldown: 12000
+
+  # 聚集爆炸
+  :
+    display-name: "<yellow>聚集爆炸"
+    type: DAMAGE
+    cooldown: 12000
+    target: @PlayersInRadius{r=12}

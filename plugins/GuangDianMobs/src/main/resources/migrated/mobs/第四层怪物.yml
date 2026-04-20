@@ -1,0 +1,169 @@
+# GuangDianMobs 怪物配置
+# 从 MythicMobs 迁移生成: 第四层怪物.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+mobs:
+
+  # 幻界堕落战士
+  :
+    display-name: "<red>幻界堕落战士"
+    type: PLAYER
+    health: 15000
+    damage: 0
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 幻界堕落召唤师
+  :
+    display-name: "<red>幻界堕落召唤师"
+    type: PLAYER
+    health: 250000
+    damage: 0
+    speed: 0.2
+    follow-range: 12
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - ""
+      - "d_homer"
+      - "homer"
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 幻界堕落召唤师VIP
+  vip:
+    display-name: "<red>幻界堕落召唤师"
+    type: PLAYER
+    health: 250000
+    damage: 0
+    speed: 0.2
+    follow-range: 12
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - ""
+      - "d_homer"
+      - "homer"
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 堕落大贤者-阿卡斯塔
+  :
+    display-name: "<red>堕落大贤者-阿卡斯塔"
+    type: PLAYER
+    health: 500000
+    damage: 0
+    speed: 0.2
+    follow-range: 12
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - ""
+      - "homer"
+      - "icebolt"
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 堕落大贤者-阿卡斯塔VIP
+  vip:
+    display-name: "<red>堕落大贤者-阿卡斯塔"
+    type: PLAYER
+    health: 500000
+    damage: 0
+    speed: 0.2
+    follow-range: 12
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - ""
+      - "homer"
+      - "icebolt"
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0

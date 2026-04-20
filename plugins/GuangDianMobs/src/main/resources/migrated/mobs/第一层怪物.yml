@@ -1,0 +1,258 @@
+# GuangDianMobs 怪物配置
+# 从 MythicMobs 迁移生成: 第一层怪物.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+mobs:
+
+  # 苍穹守卫
+  :
+    display-name: "<red>苍穹守卫"
+    type: ZOMBIE
+    health: 1000
+    damage: 0
+    speed: 0.3
+    follow-range: 5
+    options:
+      always-show-name: false
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 苍穹弓手
+  :
+    display-name: "<yellow>[35级]<white>苍穹弓手"
+    type: SKELETON
+    health: 1200
+    damage: 20
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: false
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 苍穹战士
+  :
+    display-name: "<red>苍穹战士"
+    type: ZOMBIE
+    health: 1500
+    damage: 0
+    speed: 0.3
+    follow-range: 5
+    options:
+      always-show-name: false
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 苍穹精锐
+  :
+    display-name: "<red>苍穹精锐"
+    type: ZOMBIE
+    health: 2000
+    damage: 0
+    speed: 0.3
+    follow-range: 10
+    options:
+      always-show-name: false
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 苍穹精锐弓手
+  :
+    display-name: "<yellow>[35级]<white>苍穹精锐弓手"
+    type: SKELETON
+    health: 1500
+    damage: 0
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: false
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天族卫队队长
+  :
+    display-name: "<red>天族卫队队长"
+    type: ZOMBIE
+    health: 20000
+    damage: 0
+    speed: 0.3
+    follow-range: 10
+    options:
+      always-show-name: false
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天族卫队副官
+  :
+    display-name: "<red>天族卫队副官"
+    type: ZOMBIE
+    health: 30000
+    damage: 0
+    speed: 0.3
+    follow-range: 10
+    options:
+      always-show-name: false
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 艾瑟尔的残影
+  :
+    display-name: "<gold><bold>艾瑟尔的残影"
+    type: ZOMBIE
+    health: 50000
+    damage: 0
+    speed: 0.4
+    follow-range: 15
+    options:
+      always-show-name: false
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 苍穹舰灵天枢
+  :
+    display-name: "<gold><bold>苍穹舰灵·天枢"
+    type: SKELETON
+    health: 100000
+    damage: 100
+    speed: 0.2
+    follow-range: 30
+    options:
+      always-show-name: false
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0

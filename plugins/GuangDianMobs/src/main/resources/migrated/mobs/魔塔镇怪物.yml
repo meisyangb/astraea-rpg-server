@@ -1,0 +1,394 @@
+# GuangDianMobs 怪物配置
+# 从 MythicMobs 迁移生成: 魔塔镇怪物.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+mobs:
+
+  # 莫邪
+  :
+    display-name: "<gray>[<aqua>莫邪<gray>]"
+    type: ZOMBIE
+    health: 50000000
+    damage: 100000
+    speed: 0.1
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 古天乐
+  :
+    display-name: "<gray>[<aqua>古天乐<gray>]"
+    type: ZOMBIE
+    health: 50000000
+    damage: 10
+    speed: 0.1
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 渣渣辉
+  :
+    display-name: "<gray>[<aqua>渣渣辉<gray>]"
+    type: ZOMBIE
+    health: 50000000
+    damage: 10
+    speed: 0.1
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 王昭君
+  :
+    display-name: "<gray>[<aqua>王昭君<gray>]"
+    type: ZOMBIE
+    health: 5000000
+    damage: 10
+    speed: 0.1
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 年兽
+  :
+    display-name: "<gray>[<aqua>年兽<gray>]"
+    type: GIANT
+    health: 50000000
+    damage: 10
+    speed: 0.1
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 露娜
+  :
+    display-name: "<gray>[<aqua>露娜<gray>]"
+    type: PLAYER
+    health: 5000000
+    damage: 10
+    speed: 0.1
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - "cf"
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 经验猪
+  :
+    display-name: "<gray>经验猪"
+    type: PIG
+    health: 5000
+    damage: 0
+    speed: 0.4
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+
+  # 野狼
+  :
+    display-name: "<yellow>[10级]<white>野狼"
+    type: WOLF
+    health: 50
+    damage: 2
+    speed: 0.3
+    follow-range: 10
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 游荡者
+  :
+    display-name: "<yellow>[20级]<white>游荡者"
+    type: ZOMBIE
+    health: 200
+    damage: 4
+    speed: 0.25
+    follow-range: 10
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 死亡游荡者
+  :
+    display-name: "<yellow>[35级]<white>死亡游荡者"
+    type: ZOMBIE
+    health: 300
+    damage: 5
+    speed: 0.25
+    follow-range: 10
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 野狼王
+  :
+    display-name: "<yellow>[50级]<white>野狼王"
+    type: WOLF
+    health: 15000
+    damage: 10
+    speed: 0.4
+    follow-range: 30
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 尸王穆拉
+  :
+    display-name: "<yellow>[50级]<white>尸王穆拉"
+    type: ZOMBIE
+    health: 15000
+    damage: 20
+    speed: 0.4
+    follow-range: 30
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 骷髅王特里
+  :
+    display-name: "<yellow>[50级]<white>骷髅王特里"
+    type: SKELETON
+    health: 15000
+    damage: 25
+    speed: 0.4
+    follow-range: 30
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 点券宝宝
+  :
+    display-name: "<dark_red>点券宝宝"
+    type: ZOMBIE
+    health: 200000
+    damage: 0
+    speed: 0.3
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0

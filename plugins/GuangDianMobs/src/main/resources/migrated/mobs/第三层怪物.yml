@@ -1,0 +1,217 @@
+# GuangDianMobs 怪物配置
+# 从 MythicMobs 迁移生成: 第三层怪物.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+mobs:
+
+  # 幻界魔族士兵
+  :
+    display-name: "<red>幻界魔族士兵"
+    type: ZOMBIE
+    health: 7000
+    damage: 0
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 幻界魔族战将
+  :
+    display-name: "<red>幻界魔族战将"
+    type: ZOMBIE
+    health: 7500
+    damage: 0
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 幻界炎狱幽灵
+  :
+    display-name: "<red>幻界炎狱幽灵"
+    type: BLAZE
+    health: 6000
+    damage: 0
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 幻界炎狱大恶魔
+  :
+    display-name: "<red>幻界炎狱大恶魔"
+    type: BLAZE
+    health: 100000
+    damage: 0
+    speed: 0.4
+    follow-range: 20
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - "aoe"
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 幻界魔族统帅
+  :
+    display-name: "<red>幻界魔族统帅"
+    type: ZOMBIE
+    health: 75000
+    damage: 0
+    speed: 0.5
+    follow-range: 5
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - "aoe"
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 恶魔圣者-伊特拉苏
+  :
+    display-name: "<dark_red>恶魔圣者-伊特拉苏"
+    type: WITHER_SKELETON
+    health: 200000
+    damage: 0
+    speed: 0.2
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - "homer"
+      - "icebolt"
+      - "aoe"
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 堕天之翼
+  :
+    display-name: "<dark_red>堕天之翼"
+    type: WITHER_SKELETON
+    health: 600000
+    damage: 0
+    speed: 0.0000001
+    follow-range: 30
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - "aoe"
+      - ""
+      - ""
+      - ""
+      - ""
+      - "homer"
+      - "icebolt"
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0

@@ -1,0 +1,185 @@
+# GuangDianMobs 技能配置
+# 从 MythicMobs 迁移生成: 第四层技能.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+skills:
+
+  # 幻界堕落召唤师特效
+  :
+    display-name: "<yellow>幻界堕落召唤师特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界堕落召唤师刷新
+  :
+    display-name: "<yellow>幻界堕落召唤师刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界堕落召唤师血条
+  :
+    display-name: "<yellow>幻界堕落召唤师血条"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界堕落召唤师死亡
+  :
+    display-name: "<yellow>幻界堕落召唤师死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 堕落大贤者-阿卡斯塔特效
+  :
+    display-name: "<yellow>堕落大贤者-阿卡斯塔特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 堕落大贤者-阿卡斯塔刷新
+  :
+    display-name: "<yellow>堕落大贤者-阿卡斯塔刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 堕落大贤者-阿卡斯塔血条
+  :
+    display-name: "<yellow>堕落大贤者-阿卡斯塔血条"
+    type: DAMAGE
+    cooldown: 0
+
+  # 堕落大贤者-阿卡斯塔死亡
+  :
+    display-name: "<yellow>堕落大贤者-阿卡斯塔死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界堕落战士远攻
+  :
+    display-name: "<yellow>幻界堕落战士远攻"
+    type: DAMAGE
+    damage: 300
+    cooldown: 0
+
+  # 幻界堕落召唤师远攻
+  :
+    display-name: "<yellow>幻界堕落召唤师远攻"
+    type: DAMAGE
+    damage: 1500
+    cooldown: 0
+
+  # 堕落大贤者-阿卡斯塔远攻
+  :
+    display-name: "<yellow>堕落大贤者-阿卡斯塔远攻"
+    type: DAMAGE
+    damage: 3000
+    cooldown: 0
+
+  # 幻界堕落战士回血
+  :
+    display-name: "<yellow>幻界堕落战士回血"
+    type: HEAL
+    heal: 500
+    cooldown: 0
+
+  # 幻界堕落召唤师回血
+  :
+    display-name: "<yellow>幻界堕落召唤师回血"
+    type: HEAL
+    heal: 1000
+    cooldown: 0
+
+  # 堕落大贤者-阿卡斯塔回血
+  :
+    display-name: "<yellow>堕落大贤者-阿卡斯塔回血"
+    type: HEAL
+    heal: 1500
+    cooldown: 0
+
+  # 堕落大贤者-阿卡斯塔Homer
+  homer:
+    display-name: "<yellow>堕落大贤者-阿卡斯塔Homer"
+    type: DAMAGE
+
+  # 堕落大贤者-阿卡斯塔Homer_TICK
+  homer_tick:
+    display-name: "<yellow>堕落大贤者-阿卡斯塔Homer_TICK"
+    type: DAMAGE
+
+  # 堕落大贤者-阿卡斯塔Homer_HIT
+  homer_hit:
+    display-name: "<yellow>堕落大贤者-阿卡斯塔Homer_HIT"
+    type: DAMAGE
+
+  # d堕落大贤者-阿卡斯塔Homer
+  d_homer:
+    display-name: "<yellow>d堕落大贤者-阿卡斯塔Homer"
+    type: DAMAGE
+
+  # d堕落大贤者-阿卡斯塔Homer_TICK
+  d_homer_tick:
+    display-name: "<yellow>d堕落大贤者-阿卡斯塔Homer_TICK"
+    type: DAMAGE
+
+  # d堕落大贤者-阿卡斯塔Homer_HIT
+  d_homer_hit:
+    display-name: "<yellow>d堕落大贤者-阿卡斯塔Homer_HIT"
+    type: DAMAGE
+
+  # 堕落大贤者-阿卡斯塔IceBolt
+  icebolt:
+    display-name: "<yellow>堕落大贤者-阿卡斯塔IceBolt"
+    type: DAMAGE
+
+  # 堕落大贤者-阿卡斯塔IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>堕落大贤者-阿卡斯塔IceBolt-Tick"
+    type: DAMAGE
+
+  # 堕落大贤者-阿卡斯塔IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>堕落大贤者-阿卡斯塔IceBolt-Hit"
+    type: DAMAGE
+
+  # 幻界堕落召唤师Homer
+  homer:
+    display-name: "<yellow>幻界堕落召唤师Homer"
+    type: DAMAGE
+
+  # 幻界堕落召唤师Homer_TICK
+  homer_tick:
+    display-name: "<yellow>幻界堕落召唤师Homer_TICK"
+    type: DAMAGE
+
+  # 幻界堕落召唤师Homer_HIT
+  homer_hit:
+    display-name: "<yellow>幻界堕落召唤师Homer_HIT"
+    type: DAMAGE
+
+  # d幻界堕落召唤师Homer
+  d_homer:
+    display-name: "<yellow>d幻界堕落召唤师Homer"
+    type: DAMAGE
+
+  # d幻界堕落召唤师Homer_TICK
+  d_homer_tick:
+    display-name: "<yellow>d幻界堕落召唤师Homer_TICK"
+    type: DAMAGE
+
+  # d幻界堕落召唤师Homer_HIT
+  d_homer_hit:
+    display-name: "<yellow>d幻界堕落召唤师Homer_HIT"
+    type: DAMAGE
+
+  # 幻界堕落召唤师IceBolt
+  icebolt:
+    display-name: "<yellow>幻界堕落召唤师IceBolt"
+    type: DAMAGE
+
+  # 幻界堕落召唤师IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>幻界堕落召唤师IceBolt-Tick"
+    type: DAMAGE
+
+  # 幻界堕落召唤师IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>幻界堕落召唤师IceBolt-Hit"
+    type: DAMAGE

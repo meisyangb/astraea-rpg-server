@@ -1,0 +1,2569 @@
+# GuangDianMobs 怪物配置
+# 从 MythicMobs 迁移生成
+# 生成时间: Mon Apr 20 22:11:45 CST 2026
+
+mobs:
+
+  # 天启骑士-瘟疫
+  :
+    display-name: <dark_red>天启骑士-瘟疫
+    type: PLAYER
+    health: 300000000
+    damage: 0
+    speed: 0.2
+    follow-range: 32
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - "aoe"
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天启骑士-屠杀
+  :
+    display-name: <dark_red>天启骑士-屠杀
+    type: PLAYER
+    health: 350000000
+    damage: 0
+    speed: 0.2
+    follow-range: 32
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - "aoe"
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天启骑士-饥饿
+  :
+    display-name: <dark_red>天启骑士-饥饿
+    type: PLAYER
+    health: 400000000
+    damage: 0
+    speed: 0.2
+    follow-range: 32
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - "aoe"
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天启骑士-死亡
+  :
+    display-name: <dark_red>天启骑士-死亡
+    type: PLAYER
+    health: 100000000
+    damage: 0
+    speed: 0.2
+    follow-range: 32
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - "aoe"
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # SkeletalKnight
+  skeletalknight:
+    display-name: <dark_green>Skeletal Knight
+    type: WITHER_SKELETON
+    health: 40
+    damage: 8
+    speed: 0.1
+
+  # StaticallyChargedSheep
+  staticallychargedsheep:
+    display-name: <aqua>Statically Charged Sheep
+    type: SHEEP
+    health: 100
+    damage: 2
+    speed: 0.3
+    damage-modifiers:
+      LIGHTNING: 0
+      FIRE: 0.5
+
+  # AngrySludge
+  angrysludge:
+    display-name: Angry Sludge
+    type: SLIME
+    health: 100
+    damage: 2
+    speed: 0.1
+    options:
+      prevent-other-drops: true
+      knockback-resistance: 1
+      size: 20
+    skills:
+      - "angrysludgepoison"
+
+  # SkeletonKing
+  skeletonking:
+    display-name: <gold>Skeleton King
+    type: WITHER_SKELETON
+    health: 500
+    damage: 10
+    speed: 0.2
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+    skills:
+      - "summonskeletons"
+      - "smashattack"
+
+  # SkeletalMinion
+  skeletalminion:
+    display-name: <dark_green>Skeletal Minion
+    type: SKELETON
+    health: 10
+    damage: 2
+    speed: 0.1
+
+  # CAVE_SPIDER
+  cave_spider:
+    health: 30
+    damage: 7
+
+  # WITHER_SKELETON
+  wither_skeleton:
+    health: 50
+    damage: 10
+
+  # GIANT
+  giant:
+    health: 1000
+    damage: 20
+    damage-modifiers:
+      potion{type=POISON;duration=100;lvl=1}: @target
+
+  # 野狼
+  :
+    display-name: <yellow>野狼
+    type: WOLF
+    health: 300
+    damage: 25
+    defense: 0
+    level: 1
+    speed: 0.2
+    attack-speed: 1.5
+    follow-range: 20
+    options:
+      always-show-name: true
+      prevent-other-drops: false
+      knockback-resistance: 0.1
+    skills:
+      - ""
+      - ""
+
+  # 骷髅射手
+  :
+    display-name: <yellow>骷髅射手
+    type: SKELETON
+    health: 400
+    damage: 35
+    defense: 0
+    level: 1
+    speed: 0.18
+    attack-speed: 1.2
+    follow-range: 25
+    options:
+      always-show-name: true
+      prevent-other-drops: false
+      knockback-resistance: 0.1
+    skills:
+      - ""
+    equipment:
+      helmet: "LEATHER_HELMET"
+      main-hand: "BOW"
+
+  # 暗影蜘蛛
+  :
+    display-name: <yellow>暗影蜘蛛
+    type: SPIDER
+    health: 250
+    damage: 40
+    defense: 0
+    level: 1
+    speed: 0.3
+    attack-speed: 2.0
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: false
+      knockback-resistance: 0.05
+    skills:
+      - ""
+
+  # 腐肉僵尸
+  :
+    display-name: <yellow>腐肉僵尸
+    type: ZOMBIE
+    health: 500
+    damage: 45
+    defense: 0
+    level: 1
+    speed: 0.15
+    attack-speed: 0.8
+    follow-range: 20
+    options:
+      always-show-name: true
+      prevent-other-drops: false
+      knockback-resistance: 0.2
+    skills:
+      - ""
+      - ""
+    equipment:
+      helmet: "黑皮帽"
+
+  # 精英黏液怪
+  :
+    display-name: <green><bold>精英黏液怪
+    type: SLIME
+    health: 800
+    damage: 50
+    defense: 5
+    level: 1
+    speed: 0.12
+    attack-speed: 0.6
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: false
+      knockback-resistance: 0.3
+      size: 2
+    skills:
+      - ""
+      - ""
+
+  # 新手BOSS黑暗守卫
+  boss:
+    display-name: <red><bold>黑暗守卫
+    type: ZOMBIE
+    health: 2000
+    damage: 80
+    defense: 10
+    level: 1
+    speed: 0.1
+    attack-speed: 0.5
+    follow-range: 25
+    options:
+      always-show-name: true
+      prevent-other-drops: false
+      knockback-resistance: 0.5
+      show-boss-bar: true
+      boss-bar-color: RED
+      boss-bar-style: SEGMENTED_10
+    skills:
+      - "boss"
+      - "boss"
+      - "boss"
+      - ""
+      - ""
+      - ""
+    equipment:
+      helmet: "LEATHER_HELMET"
+      chestplate: "LEATHER_CHESTPLATE"
+      leggings: "LEATHER_LEGGINGS"
+      boots: "LEATHER_BOOTS"
+      main-hand: "IRON_SWORD"
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 淬炼石宝宝
+  :
+    display-name: <red>淬炼石宝宝
+    type: PLAYER
+    health: 10000000
+    damage: 0
+    speed: 0.3
+    follow-range: 10
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 经验书宝宝
+  :
+    display-name: <red>经验书宝宝
+    type: PLAYER
+    health: 10000000
+    damage: 0
+    speed: 0.3
+    follow-range: 10
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天巡专用大哥
+  :
+    display-name: <red>天巡专业大哥
+    type: PLAYER
+    health: 10000000000
+    damage: 0
+    speed: 0.3
+    follow-range: 10
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 苍穹守卫
+  :
+    display-name: <red>苍穹守卫
+    type: ZOMBIE
+    health: 1000
+    damage: 0
+    speed: 0.3
+    follow-range: 5
+    options:
+      always-show-name: false
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+    equipment:
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 苍穹弓手
+  :
+    display-name: <yellow>[35级]<white>苍穹弓手
+    type: SKELETON
+    health: 1200
+    damage: 20
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: false
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+    equipment:
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 苍穹战士
+  :
+    display-name: <red>苍穹战士
+    type: ZOMBIE
+    health: 1500
+    damage: 0
+    speed: 0.3
+    follow-range: 5
+    options:
+      always-show-name: false
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+    equipment:
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 苍穹精锐
+  :
+    display-name: <red>苍穹精锐
+    type: ZOMBIE
+    health: 2000
+    damage: 0
+    speed: 0.3
+    follow-range: 10
+    options:
+      always-show-name: false
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+    equipment:
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 苍穹精锐弓手
+  :
+    display-name: <yellow>[35级]<white>苍穹精锐弓手
+    type: SKELETON
+    health: 1500
+    damage: 0
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: false
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+    equipment:
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天族卫队队长
+  :
+    display-name: <red>天族卫队队长
+    type: ZOMBIE
+    health: 20000
+    damage: 0
+    speed: 0.3
+    follow-range: 10
+    options:
+      always-show-name: false
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    equipment:
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天族卫队副官
+  :
+    display-name: <red>天族卫队副官
+    type: ZOMBIE
+    health: 30000
+    damage: 0
+    speed: 0.3
+    follow-range: 10
+    options:
+      always-show-name: false
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    equipment:
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 艾瑟尔的残影
+  :
+    display-name: <gold><bold>艾瑟尔的残影
+    type: ZOMBIE
+    health: 50000
+    damage: 0
+    speed: 0.4
+    follow-range: 15
+    options:
+      always-show-name: false
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    equipment:
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 苍穹舰灵天枢
+  :
+    display-name: <gold><bold>苍穹舰灵·天枢
+    type: SKELETON
+    health: 100000
+    damage: 100
+    speed: 0.2
+    follow-range: 30
+    options:
+      always-show-name: false
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    equipment:
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 神域卫兵
+  :
+    display-name: <red>神域卫兵
+    type: PLAYER
+    health: 1000000
+    damage: 0
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 神域弓箭手
+  :
+    display-name: <red>神域弓箭手
+    type: PLAYER
+    health: 1500000
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 神域守卫
+  :
+    display-name: <red>神域守卫
+    type: IRON_GOLEM
+    health: 2000000
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - "townguard_charge"
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 神域魔法师
+  :
+    display-name: <red>神域魔法师
+    type: PLAYER
+    health: 2500000
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - "rally"
+      - "magicmissile"
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 神域兵长布鲁克
+  :
+    display-name: <red>神域兵长布鲁克
+    type: PLAYER
+    health: 50000000
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - "1"
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 神域兵长布鲁克VIP
+  vip:
+    display-name: <red>神域兵长布鲁克
+    type: PLAYER
+    health: 50000000
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - "1"
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 神域骑士克劳德
+  :
+    display-name: <red>神域骑士克劳德
+    type: PLAYER
+    health: 100000000
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - "1"
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 神域骑士克劳德VIP
+  vip:
+    display-name: <red>神域骑士克劳德VIP
+    type: PLAYER
+    health: 100000000
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - "1"
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 神域将领杰佛理
+  :
+    display-name: <red>神域将领杰佛理
+    type: PLAYER
+    health: 200000000
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - "1"
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 神域将领杰佛理VIP
+  vip:
+    display-name: <red>神域将领杰佛理
+    type: PLAYER
+    health: 200000000
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - "1"
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 幻界魔族士兵
+  :
+    display-name: <red>幻界魔族士兵
+    type: ZOMBIE
+    health: 7000
+    damage: 0
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 幻界魔族战将
+  :
+    display-name: <red>幻界魔族战将
+    type: ZOMBIE
+    health: 7500
+    damage: 0
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 幻界炎狱幽灵
+  :
+    display-name: <red>幻界炎狱幽灵
+    type: BLAZE
+    health: 6000
+    damage: 0
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 幻界炎狱大恶魔
+  :
+    display-name: <red>幻界炎狱大恶魔
+    type: BLAZE
+    health: 100000
+    damage: 0
+    speed: 0.4
+    follow-range: 20
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - "aoe"
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 幻界魔族统帅
+  :
+    display-name: <red>幻界魔族统帅
+    type: ZOMBIE
+    health: 75000
+    damage: 0
+    speed: 0.5
+    follow-range: 5
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - "aoe"
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 恶魔圣者-伊特拉苏
+  :
+    display-name: <dark_red>恶魔圣者-伊特拉苏
+    type: WITHER_SKELETON
+    health: 200000
+    damage: 0
+    speed: 0.2
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - "homer"
+      - "icebolt"
+      - "aoe"
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 堕天之翼
+  :
+    display-name: <dark_red>堕天之翼
+    type: WITHER_SKELETON
+    health: 600000
+    damage: 0
+    speed: 0.0000001
+    follow-range: 30
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - "aoe"
+      - ""
+      - ""
+      - ""
+      - ""
+      - "homer"
+      - "icebolt"
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天弃士兵
+  :
+    display-name: <aqua>天弃士兵
+    type: ZOMBIE
+    health: 3500
+    damage: 0
+    speed: 0.3
+    follow-range: 5
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天弃战士
+  :
+    display-name: <aqua>天弃战士
+    type: ZOMBIE
+    health: 4000
+    damage: 0
+    speed: 0.3
+    follow-range: 5
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天弃战将
+  :
+    display-name: <light_purple>天弃战将
+    type: ZOMBIE
+    health: 5000
+    damage: 0
+    speed: 0.3
+    follow-range: 5
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天弃营长
+  :
+    display-name: <light_purple>天弃营长
+    type: ZOMBIE
+    health: 40000
+    damage: 0
+    speed: 0.3
+    follow-range: 5
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - "aoe"
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天弃统领
+  :
+    display-name: <dark_purple>天弃统领
+    type: ZOMBIE
+    health: 50000
+    damage: 0
+    speed: 0.3
+    follow-range: 5
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - "aoe"
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 呼延觉罗战
+  :
+    display-name: <dark_red>呼延觉罗战
+    type: ZOMBIE
+    health: 200000
+    damage: 0
+    speed: 0.000001
+    follow-range: 30
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - "homer"
+      - "icebolt"
+      - "aoe"
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 遗忘战士
+  :
+    display-name: <red>遗忘战士
+    type: PLAYER
+    health: 30000
+    damage: 0
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 遗忘术士
+  :
+    display-name: <red>遗忘术士
+    type: PLAYER
+    health: 20000
+    damage: 0
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - "homer"
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 遗忘幻术师
+  :
+    display-name: <red>遗忘幻术师
+    type: PLAYER
+    health: 1500000
+    damage: 0
+    speed: 0.0001
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 遗忘幻术师
+  :
+
+  # 遗忘幻术师VIP
+  vip:
+    display-name: <red>遗忘幻术师
+    type: PLAYER
+    health: 1500000
+    damage: 0
+    speed: 0.0001
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 幻术师随从
+  :
+
+  # 幻术师随从
+  :
+    display-name: <red>幻术师随从
+    type: SKELETON
+    health: 30000
+    damage: 0
+    speed: 0.1
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - "homer"
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 遗忘士兵
+  :
+    display-name: <red>遗忘士兵
+    type: PLAYER
+    health: 40000
+    damage: 0
+    speed: 0.4
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 遗忘力士
+  :
+    display-name: <red>遗忘力士
+    type: PLAYER
+    health: 50000
+    damage: 0
+    speed: 0.4
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 遗忘军士-科洛莫斯
+  :
+    display-name: <red>遗忘军士-科洛莫斯
+    type: PLAYER
+    health: 3000000
+    damage: 0
+    speed: 0.0001
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - "homer"
+      - "icebolt"
+      - "30icebolt"
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 遗忘军士-科洛莫斯VIP
+  vip:
+    display-name: <red>遗忘军士-科洛莫斯
+    type: PLAYER
+    health: 3000000
+    damage: 0
+    speed: 0.0001
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - "homer"
+      - "icebolt"
+      - "30icebolt"
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 遗忘幽魂
+  :
+    display-name: <red>遗忘幽魂
+    type: BLAZE
+    health: 60000
+    damage: 0
+    speed: 0.1
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - "homer"
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 遗忘者
+  :
+    display-name: <red>遗忘者
+    type: PLAYER
+    health: 50000
+    damage: 0
+    speed: 0.4
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - "icebolt"
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 遗忘城主-卡拉特斯
+  :
+    display-name: <red>遗忘城主-卡拉特斯
+    type: PLAYER
+    health: 6000000
+    damage: 0
+    speed: 0.0001
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - "1"
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 遗忘城主-卡拉特斯VIP
+  vip:
+    display-name: <red>遗忘城主-卡拉特斯
+    type: PLAYER
+    health: 6000000
+    damage: 0
+    speed: 0.0001
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 战士
+  :
+    display-name: <red>战士
+    type: ZOMBIE
+    health: 30000000
+    damage: 1
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 处刑者侍卫
+  :
+    display-name: <red>处刑者侍卫
+    type: PLAYER
+    health: 50000
+    damage: 0
+    speed: 0.4
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - "icebolt"
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 魔王
+  :
+    display-name: <dark_red>魔王莫洛斯托
+    type: PLAYER
+    health: 35000000
+    damage: 10000
+    speed: 0.001
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - "8"
+      - "1"
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 魔王VIP
+  vip:
+    display-name: <dark_red>魔王莫洛斯托
+    type: PLAYER
+    health: 35000000
+    damage: 30000
+    speed: 0.0001
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - "8"
+      - "3"
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 魔王侍卫
+  :
+    display-name: <red>魔王侍卫
+    type: PLAYER
+    health: 300000
+    damage: 0
+    speed: 0.4
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 魔王御神柱
+  :
+    display-name: <yellow>魔王御神柱
+    type: PLAYER
+    health: 5000000
+    speed: -10000000000
+    follow-range: 20
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 10000000
+    skills:
+      - ""
+      - ""
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 魔王弹幕
+  :
+    display-name: <dark_red>魔王弹幕
+    type: BAT
+    health: 999999999
+    speed: 0.1
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 100000
+    skills:
+      - ""
+
+  # 死亡骸骨
+  :
+    display-name: <dark_red>死亡骸骨
+    type: SKELETON
+    health: 35000
+    damage: 10000
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    damage-modifiers:
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 恐惧惊骸
+  :
+    display-name: <dark_red>恐惧惊骸
+    type: SKELETON
+    health: 800000
+    damage: 100000
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+    damage-modifiers:
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 巫妖恩佩斯
+  :
+    display-name: <dark_red>巫妖恩佩斯
+    type: SKELETON
+    health: 2000000
+    damage: 200000
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+    damage-modifiers:
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 幻界堕落战士
+  :
+    display-name: <red>幻界堕落战士
+    type: PLAYER
+    health: 15000
+    damage: 0
+    speed: 0.3
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 幻界堕落召唤师
+  :
+    display-name: <red>幻界堕落召唤师
+    type: PLAYER
+    health: 250000
+    damage: 0
+    speed: 0.2
+    follow-range: 12
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - "d_homer"
+      - "homer"
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 幻界堕落召唤师VIP
+  vip:
+    display-name: <red>幻界堕落召唤师
+    type: PLAYER
+    health: 250000
+    damage: 0
+    speed: 0.2
+    follow-range: 12
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - "d_homer"
+      - "homer"
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 堕落大贤者-阿卡斯塔
+  :
+    display-name: <red>堕落大贤者-阿卡斯塔
+    type: PLAYER
+    health: 500000
+    damage: 0
+    speed: 0.2
+    follow-range: 12
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - "homer"
+      - "icebolt"
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 堕落大贤者-阿卡斯塔VIP
+  vip:
+    display-name: <red>堕落大贤者-阿卡斯塔
+    type: PLAYER
+    health: 500000
+    damage: 0
+    speed: 0.2
+    follow-range: 12
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - "homer"
+      - "icebolt"
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 莫邪
+  :
+    display-name: <gray>[<aqua>莫邪<gray>]
+    type: ZOMBIE
+    health: 50000000
+    damage: 100000
+    speed: 0.1
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 古天乐
+  :
+    display-name: <gray>[<aqua>古天乐<gray>]
+    type: ZOMBIE
+    health: 50000000
+    damage: 10
+    speed: 0.1
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 渣渣辉
+  :
+    display-name: <gray>[<aqua>渣渣辉<gray>]
+    type: ZOMBIE
+    health: 50000000
+    damage: 10
+    speed: 0.1
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 王昭君
+  :
+    display-name: <gray>[<aqua>王昭君<gray>]
+    type: ZOMBIE
+    health: 5000000
+    damage: 10
+    speed: 0.1
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 年兽
+  :
+    display-name: <gray>[<aqua>年兽<gray>]
+    type: GIANT
+    health: 50000000
+    damage: 10
+    speed: 0.1
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 露娜
+  :
+    display-name: <gray>[<aqua>露娜<gray>]
+    type: PLAYER
+    health: 5000000
+    damage: 10
+    speed: 0.1
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - "cf"
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 经验猪
+  :
+    display-name: <gray>经验猪
+    type: PIG
+    health: 5000
+    damage: 0
+    speed: 0.4
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+
+  # 野狼
+  :
+    display-name: <yellow>[10级]<white>野狼
+    type: WOLF
+    health: 50
+    damage: 2
+    speed: 0.3
+    follow-range: 10
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 游荡者
+  :
+    display-name: <yellow>[20级]<white>游荡者
+    type: ZOMBIE
+    health: 200
+    damage: 4
+    speed: 0.25
+    follow-range: 10
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 死亡游荡者
+  :
+    display-name: <yellow>[35级]<white>死亡游荡者
+    type: ZOMBIE
+    health: 300
+    damage: 5
+    speed: 0.25
+    follow-range: 10
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 野狼王
+  :
+    display-name: <yellow>[50级]<white>野狼王
+    type: WOLF
+    health: 15000
+    damage: 10
+    speed: 0.4
+    follow-range: 30
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 尸王穆拉
+  :
+    display-name: <yellow>[50级]<white>尸王穆拉
+    type: ZOMBIE
+    health: 15000
+    damage: 20
+    speed: 0.4
+    follow-range: 30
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 骷髅王特里
+  :
+    display-name: <yellow>[50级]<white>骷髅王特里
+    type: SKELETON
+    health: 15000
+    damage: 25
+    speed: 0.4
+    follow-range: 30
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 点券宝宝
+  :
+    display-name: <dark_red>点券宝宝
+    type: ZOMBIE
+    health: 200000
+    damage: 0
+    speed: 0.3
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    skills:
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0

@@ -1,0 +1,165 @@
+# GuangDianMobs 技能配置
+# 从 MythicMobs 迁移生成: 第五层技能1.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+skills:
+
+  # 脱战回血
+  :
+    display-name: "<yellow>脱战回血"
+    type: DAMAGE
+    cooldown: 0
+    target: SELF
+
+  # 遗忘战士远攻
+  :
+    display-name: "<yellow>遗忘战士远攻"
+    type: DAMAGE
+    damage: 500
+    cooldown: 0
+    conditions:
+      - "targetwithin 4"
+
+  # 遗忘战士回血
+  :
+    display-name: "<yellow>遗忘战士回血"
+    type: HEAL
+    heal: 1000
+    cooldown: 0
+
+  # 遗忘术士远攻
+  :
+    display-name: "<yellow>遗忘术士远攻"
+    type: DAMAGE
+    damage: 500
+    cooldown: 0
+    conditions:
+      - "targetwithin 4"
+
+  # 遗忘术士回血
+  :
+    display-name: "<yellow>遗忘术士回血"
+    type: HEAL
+    heal: 1000
+    cooldown: 0
+
+  # 遗忘术士Homer
+  homer:
+    display-name: "<yellow>遗忘术士Homer"
+    type: DAMAGE
+
+  # 遗忘术士Homer_TICK
+  homer_tick:
+    display-name: "<yellow>遗忘术士Homer_TICK"
+    type: DAMAGE
+
+  # 遗忘术士Homer_HIT
+  homer_hit:
+    display-name: "<yellow>遗忘术士Homer_HIT"
+    type: DAMAGE
+
+  # 遗忘幻术师远攻
+  :
+    display-name: "<yellow>遗忘幻术师远攻"
+    type: DAMAGE
+    damage: 4000
+    cooldown: 0
+    conditions:
+      - "targetwithin 3000"
+
+  # 遗忘幻术师血条
+  :
+    display-name: "<yellow>遗忘幻术师血条"
+    type: DAMAGE
+    cooldown: 0
+
+  # 遗忘幻术师回血
+  :
+    display-name: "<yellow>遗忘幻术师回血"
+    type: HEAL
+    heal: 2000
+    cooldown: 0
+
+  # 遗忘幻术师Homer
+  homer:
+    display-name: "<yellow>遗忘幻术师Homer"
+    type: DAMAGE
+
+  # 遗忘幻术师Homer_TICK
+  homer_tick:
+    display-name: "<yellow>遗忘幻术师Homer_TICK"
+    type: DAMAGE
+
+  # 遗忘幻术师Homer_HIT
+  homer_hit:
+    display-name: "<yellow>遗忘幻术师Homer_HIT"
+    type: DAMAGE
+
+  # 遗忘幻术师天命之理
+  :
+    display-name: "<yellow>遗忘幻术师天命之理"
+    type: DAMAGE
+    damage: 100000
+    cooldown: 12000
+    target: @PlayersInRadius{r=10}
+
+  # 遗忘幻术师爆发冲击
+  :
+    display-name: "<yellow>遗忘幻术师爆发冲击"
+    type: DAMAGE
+    target: SELF
+
+  # "侵蚀311"
+  311:
+    display-name: "<yellow>侵蚀311"
+    type: DAMAGE
+
+  # "侵蚀1511"
+  1511:
+    display-name: "<yellow>侵蚀1511"
+    type: DAMAGE
+    target: SELF
+
+  # 遗忘幻术师召唤随从
+  :
+    display-name: "<yellow>遗忘幻术师召唤随从"
+    type: DAMAGE
+    cooldown: 0
+    target: @PlayersInRadius{r=40}
+
+  # 遗忘幻术师IceBolt
+  icebolt:
+    display-name: "<yellow>遗忘幻术师IceBolt"
+    type: DAMAGE
+
+  # 遗忘幻术师IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>遗忘幻术师IceBolt-Tick"
+    type: DAMAGE
+
+  # 遗忘幻术师IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>遗忘幻术师IceBolt-Hit"
+    type: DAMAGE
+    damage: 30000
+
+  # 幻术师随从Homer
+  homer:
+    display-name: "<yellow>幻术师随从Homer"
+    type: DAMAGE
+
+  # 幻术师随从Homer_TICK
+  homer_tick:
+    display-name: "<yellow>幻术师随从Homer_TICK"
+    type: DAMAGE
+
+  # 幻术师随从Homer_HIT
+  homer_hit:
+    display-name: "<yellow>幻术师随从Homer_HIT"
+    type: DAMAGE
+
+  # 遗忘幻术师特效
+  :
+    display-name: "<yellow>遗忘幻术师特效"
+    type: DAMAGE
+    cooldown: 0

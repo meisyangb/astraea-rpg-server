@@ -1,0 +1,166 @@
+# GuangDianMobs 技能配置
+# 从 MythicMobs 迁移生成: 第五层技能3.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+skills:
+
+  # 遗忘者远攻
+  :
+    display-name: "<yellow>遗忘者远攻"
+    type: DAMAGE
+    damage: 1500
+    cooldown: 0
+    conditions:
+      - "targetwithin 4"
+
+  # 遗忘者回血
+  :
+    display-name: "<yellow>遗忘者回血"
+    type: HEAL
+    heal: 2000
+    cooldown: 0
+
+  # 遗忘者IceBolt
+  icebolt:
+    display-name: "<yellow>遗忘者IceBolt"
+    type: DAMAGE
+
+  # 遗忘者IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>遗忘者IceBolt-Tick"
+    type: DAMAGE
+
+  # 遗忘者IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>遗忘者IceBolt-Hit"
+    type: DAMAGE
+    damage: 5000
+
+  # 遗忘城主-卡拉特斯远攻
+  :
+    display-name: "<yellow>遗忘城主-卡拉特斯远攻"
+    type: DAMAGE
+    damage: 8000
+    cooldown: 0
+    conditions:
+      - "targetwithin 30"
+
+  # 遗忘城主-卡拉特斯血条
+  :
+    display-name: "<yellow>遗忘城主-卡拉特斯血条"
+    type: DAMAGE
+    cooldown: 0
+
+  # 遗忘城主-卡拉特斯回血
+  :
+    display-name: "<yellow>遗忘城主-卡拉特斯回血"
+    type: HEAL
+    heal: 6000
+    cooldown: 0
+
+  # 遗忘城主天命之理
+  :
+    display-name: "<yellow>遗忘城主天命之理"
+    type: DAMAGE
+    damage: 400000
+    target: @PlayersInRadius{r=10}
+
+  # 遗忘城主天命之理1
+  1:
+    display-name: "<yellow>遗忘城主天命之理1"
+    type: DAMAGE
+    damage: 400000
+    target: @PlayersInRadius{r=10}
+
+  # 遗忘城主爆发冲击
+  :
+    display-name: "<yellow>遗忘城主爆发冲击"
+    type: DAMAGE
+    target: SELF
+
+  # "侵蚀31111"
+  31111:
+    display-name: "<yellow>侵蚀31111"
+    type: DAMAGE
+
+  # "侵蚀151111"
+  151111:
+    display-name: "<yellow>侵蚀151111"
+    type: DAMAGE
+    target: SELF
+
+  # 遗忘城主-卡拉特斯IceBolt
+  icebolt:
+    display-name: "<yellow>遗忘城主-卡拉特斯IceBolt"
+    type: DAMAGE
+
+  # 遗忘城主-卡拉特斯IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>遗忘城主-卡拉特斯IceBolt-Tick"
+    type: DAMAGE
+
+  # 遗忘城主-卡拉特斯IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>遗忘城主-卡拉特斯IceBolt-Hit"
+    type: DAMAGE
+    damage: 75000
+
+  # 遗忘城主-卡拉特斯Homer
+  homer:
+    display-name: "<yellow>遗忘城主-卡拉特斯Homer"
+    type: DAMAGE
+
+  # 遗忘城主-卡拉特斯Homer_TICK
+  homer_tick:
+    display-name: "<yellow>遗忘城主-卡拉特斯Homer_TICK"
+    type: DAMAGE
+
+  # 遗忘城主-卡拉特斯Homer_HIT
+  homer_hit:
+    display-name: "<yellow>遗忘城主-卡拉特斯Homer_HIT"
+    type: DAMAGE
+
+  # 遗忘城主-卡拉特斯召唤
+  :
+    display-name: "<yellow>遗忘城主-卡拉特斯召唤"
+    type: DAMAGE
+    cooldown: 0
+    target: @PlayersInRadius{r=40}
+
+  # 遗忘城主-卡拉特斯30IceBolt
+  30icebolt:
+    display-name: "<yellow>遗忘城主-卡拉特斯30IceBolt"
+    type: DAMAGE
+    target: @PlayersInRadius{r=40}
+
+  # 遗忘城主-卡拉特斯30IceBolt-Tick
+  30icebolt_tick:
+    display-name: "<yellow>遗忘城主-卡拉特斯30IceBolt-Tick"
+    type: DAMAGE
+
+  # 遗忘城主-卡拉特斯30IceBolt-Hit
+  30icebolt_hit:
+    display-name: "<yellow>遗忘城主-卡拉特斯30IceBolt-Hit"
+    type: DAMAGE
+    damage: 999999
+
+  # 遗忘幽魂Homer
+  homer:
+    display-name: "<yellow>遗忘幽魂Homer"
+    type: DAMAGE
+
+  # 遗忘幽魂Homer_TICK
+  homer_tick:
+    display-name: "<yellow>遗忘幽魂Homer_TICK"
+    type: DAMAGE
+
+  # 遗忘幽魂Homer_HIT
+  homer_hit:
+    display-name: "<yellow>遗忘幽魂Homer_HIT"
+    type: DAMAGE
+
+  # 遗忘城主-卡拉特斯特效
+  :
+    display-name: "<yellow>遗忘城主-卡拉特斯特效"
+    type: DAMAGE
+    cooldown: 0

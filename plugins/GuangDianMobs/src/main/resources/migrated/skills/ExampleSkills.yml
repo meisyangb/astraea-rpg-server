@@ -1,0 +1,29 @@
+# GuangDianMobs 技能配置
+# 从 MythicMobs 迁移生成: ExampleSkills.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+skills:
+
+  # SmashAttack
+  smashattack:
+    display-name: "<yellow>SmashAttack"
+    type: DAMAGE
+    damage: 5
+    cooldown: 160
+    target: SELF
+    conditions:
+      - "targetwithin 25"
+
+  # SummonSkeletons
+  summonskeletons:
+    display-name: "<yellow>SummonSkeletons"
+    type: DAMAGE
+    cooldown: 300
+    target: SELF
+
+  # AngrySludgePoison
+  angrysludgepoison:
+    display-name: "<yellow>AngrySludgePoison"
+    type: DAMAGE
+    cooldown: 200
+    target: SELF

@@ -4,7 +4,7 @@ import cn.guangdian.armorstats.GuangDianArmorStats;
 import cn.guangdian.armorstats.manager.StatsManager;
 import cn.guangdian.armorstats.manager.HealthManager;
 import cn.guangdian.armorstats.manager.BossBarManager;
-import cn.guangdian.armorstats.skill.SkillManager;
+import cn.guangdian.armorstats.skill.SkillIntegration;
 import cn.guangdian.armorstats.data.PlayerStats;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import org.bukkit.Bukkit;
@@ -37,7 +37,7 @@ public class EventListeners implements Listener {
     private final BossBarManager bossBarManager;
     private final GuangDianArmorStats plugin;
 
-    public EventListeners(GuangDianArmorStats plugin, StatsManager statsManager, HealthManager healthManager, SkillManager skillManager) {
+    public EventListeners(GuangDianArmorStats plugin, StatsManager statsManager, HealthManager healthManager, SkillIntegration skillIntegration) {
         this.plugin = plugin;
         this.statsManager = statsManager;
         this.healthManager = healthManager;
@@ -474,6 +474,36 @@ public class EventListeners implements Listener {
                 return Math.max(stats.getFireResistPercent(), stats.getLavaResistPercent());
             default:
                 return 0;
+        }
+    }
+    
+    // ==================== 职业属性变更 ====================
+    
+    /**
+     * 监听职业属性变更事件
+     * 
+     * <p>当玩家在职业系统中分配或回收属性点时，刷新玩家的属性。</p>
+     */
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onClassAttributeChange(cn.guangdian.classsystem.event.PlayerAttributeChangeEvent event) {
+        Player player = event.getPlayer();
+        
+        plugin.getLogger().info("[职业属性变更] " + player.getName() + 
+            " 类型: " + event.getChangeType() +
+            " 属性: " + (event.getAttributeType() != null ? event.getAttributeType().getDisplayName() : "全部") +
+            " 变化: " + event.getDelta());
+        
+        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+        if (rpgCore != null) {
+            rpgCore.getScheduler().runSyncLater(() -> {
+                if (player.isOnline()) {
+                    statsManager.refreshFullStats(player);
+                    healthManager.syncPlayerHealth(player);
+                    if (bossBarManager != null) {
+                        bossBarManager.updateBossBar(player);
+                    }
+                }
+            }, 1L);
         }
     }
 }

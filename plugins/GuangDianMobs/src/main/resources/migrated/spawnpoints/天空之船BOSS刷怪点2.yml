@@ -1,0 +1,25 @@
+# GuangDianMobs 刷新点配置
+# 从 MythicMobs 迁移生成: 天空之船BOSS刷怪点2.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+spawnpoints:
+
+  # 天空之船BOSS刷怪点2
+  boss_2:
+    world: FB1
+    x: -195
+    y: 200
+    z: 145
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '1'
+    cooldown: 6000
+    radius: 10.0
+    use-timer: true
+    require-player: true
+    player-range: 50.0
+    enabled: true
+    display-name: "天空之船BOSS刷怪点2"

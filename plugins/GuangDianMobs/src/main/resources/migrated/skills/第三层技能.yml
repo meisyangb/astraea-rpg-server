@@ -1,0 +1,335 @@
+# GuangDianMobs 技能配置
+# 从 MythicMobs 迁移生成: 第三层技能.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+skills:
+
+  # 幻界炎狱大恶魔
+  :
+    display-name: "<yellow>幻界炎狱大恶魔"
+    type: DAMAGE
+    damage: 500
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 幻界魔族统帅特效
+  :
+    display-name: "<yellow>幻界魔族统帅特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 恶魔圣者-伊特拉苏特效
+  :
+    display-name: "<yellow>恶魔圣者-伊特拉苏特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 堕天之翼特效
+  :
+    display-name: "<yellow>堕天之翼特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 堕天之翼粒子
+  :
+    display-name: "<yellow>堕天之翼粒子"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界炎狱大恶魔刷新
+  :
+    display-name: "<yellow>幻界炎狱大恶魔刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界炎狱大恶魔死亡
+  :
+    display-name: "<yellow>幻界炎狱大恶魔死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界魔族统帅刷新
+  :
+    display-name: "<yellow>幻界魔族统帅刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界魔族统帅死亡
+  :
+    display-name: "<yellow>幻界魔族统帅死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 恶魔圣者-伊特拉苏刷新
+  :
+    display-name: "<yellow>恶魔圣者-伊特拉苏刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 恶魔圣者-伊特拉苏死亡
+  :
+    display-name: "<yellow>恶魔圣者-伊特拉苏死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 堕天之翼刷新
+  :
+    display-name: "<yellow>堕天之翼刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 堕天之翼死亡
+  :
+    display-name: "<yellow>堕天之翼死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 幻界魔族士兵远攻
+  :
+    display-name: "<yellow>幻界魔族士兵远攻"
+    type: DAMAGE
+    damage: 120
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 幻界魔族战将远攻
+  :
+    display-name: "<yellow>幻界魔族战将远攻"
+    type: DAMAGE
+    damage: 150
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 幻界炎狱幽灵远攻
+  :
+    display-name: "<yellow>幻界炎狱幽灵远攻"
+    type: DAMAGE
+    damage: 350
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 幻界魔族统帅
+  :
+    display-name: "<yellow>幻界魔族统帅"
+    type: DAMAGE
+    damage: 400
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 恶魔圣者-伊特拉苏
+  :
+    display-name: "<yellow>恶魔圣者-伊特拉苏"
+    type: HEAL
+    heal: 1000
+    cooldown: 0
+
+  # 堕天之翼
+  :
+    display-name: "<yellow>堕天之翼"
+    type: DAMAGE
+    damage: 2500
+    cooldown: 0
+    conditions:
+      - "targetwithin 3"
+
+  # 幻界炎狱大恶魔AOE
+  aoe:
+    display-name: "<yellow>幻界炎狱大恶魔AOE"
+    type: DAMAGE
+    damage: 800
+    cooldown: 0
+
+  # 幻界魔族统帅AOE
+  aoe:
+    display-name: "<yellow>幻界魔族统帅AOE"
+    type: DAMAGE
+    damage: 600
+    cooldown: 0
+
+  # 恶魔圣者-伊特拉苏AOE
+  aoe:
+    display-name: "<yellow>恶魔圣者-伊特拉苏AOE"
+    type: DAMAGE
+    damage: 800
+    cooldown: 0
+
+  # 堕天之翼AOE
+  aoe:
+    display-name: "<yellow>堕天之翼AOE"
+    type: DAMAGE
+    damage: 3000
+    cooldown: 0
+
+  # 堕天之翼中毒
+  :
+    display-name: "<yellow>堕天之翼中毒"
+    type: DAMAGE
+    damage: 10000
+
+  # 幻界魔族士兵回血
+  :
+    display-name: "<yellow>幻界魔族士兵回血"
+    type: HEAL
+    heal: 300
+    cooldown: 0
+
+  # 幻界魔族战将回血
+  :
+    display-name: "<yellow>幻界魔族战将回血"
+    type: HEAL
+    heal: 300
+    cooldown: 0
+
+  # 幻界炎狱幽灵回血
+  :
+    display-name: "<yellow>幻界炎狱幽灵回血"
+    type: HEAL
+    heal: 300
+    cooldown: 0
+
+  # 幻界炎狱大恶魔回血
+  :
+    display-name: "<yellow>幻界炎狱大恶魔回血"
+    type: HEAL
+    heal: 500
+    cooldown: 0
+
+  # 幻界魔族统帅回血
+  :
+    display-name: "<yellow>幻界魔族统帅回血"
+    type: HEAL
+    heal: 600
+    cooldown: 0
+
+  # 堕天之翼回血
+  :
+    display-name: "<yellow>堕天之翼回血"
+    type: HEAL
+    heal: 1000
+    cooldown: 0
+
+  # Homer
+  homer:
+    display-name: "<yellow>Homer"
+    type: DAMAGE
+
+  # Homer_TICK
+  homer_tick:
+    display-name: "<yellow>Homer_TICK"
+    type: DAMAGE
+
+  # Homer_HIT
+  homer_hit:
+    display-name: "<yellow>Homer_HIT"
+    type: DAMAGE
+
+  # IceBolt
+  icebolt:
+    display-name: "<yellow>IceBolt"
+    type: DAMAGE
+
+  # IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>IceBolt-Tick"
+    type: DAMAGE
+    target: SELF
+
+  # IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>IceBolt-Hit"
+    type: DAMAGE
+
+  # 恶魔圣者-伊特拉苏Homer
+  homer:
+    display-name: "<yellow>恶魔圣者-伊特拉苏Homer"
+    type: DAMAGE
+
+  # 恶魔圣者-伊特拉苏Homer_TICK
+  homer_tick:
+    display-name: "<yellow>恶魔圣者-伊特拉苏Homer_TICK"
+    type: DAMAGE
+
+  # 恶魔圣者-伊特拉苏Homer_HIT
+  homer_hit:
+    display-name: "<yellow>恶魔圣者-伊特拉苏Homer_HIT"
+    type: DAMAGE
+
+  # d恶魔圣者-伊特拉苏Homer
+  d_homer:
+    display-name: "<yellow>d恶魔圣者-伊特拉苏Homer"
+    type: DAMAGE
+
+  # d恶魔圣者-伊特拉苏Homer_TICK
+  d_homer_tick:
+    display-name: "<yellow>d恶魔圣者-伊特拉苏Homer_TICK"
+    type: DAMAGE
+
+  # d恶魔圣者-伊特拉苏Homer_HIT
+  d_homer_hit:
+    display-name: "<yellow>d恶魔圣者-伊特拉苏Homer_HIT"
+    type: DAMAGE
+
+  # 恶魔圣者-伊特拉苏IceBolt
+  icebolt:
+    display-name: "<yellow>恶魔圣者-伊特拉苏IceBolt"
+    type: DAMAGE
+
+  # 恶魔圣者-伊特拉苏IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>恶魔圣者-伊特拉苏IceBolt-Tick"
+    type: DAMAGE
+
+  # 恶魔圣者-伊特拉苏IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>恶魔圣者-伊特拉苏IceBolt-Hit"
+    type: DAMAGE
+
+  # 堕天之翼Homer
+  homer:
+    display-name: "<yellow>堕天之翼Homer"
+    type: DAMAGE
+
+  # 堕天之翼Homer_TICK
+  homer_tick:
+    display-name: "<yellow>堕天之翼Homer_TICK"
+    type: DAMAGE
+
+  # 堕天之翼Homer_HIT
+  homer_hit:
+    display-name: "<yellow>堕天之翼Homer_HIT"
+    type: DAMAGE
+
+  # d堕天之翼Homer
+  d_homer:
+    display-name: "<yellow>d堕天之翼Homer"
+    type: DAMAGE
+
+  # d堕天之翼Homer_TICK
+  d_homer_tick:
+    display-name: "<yellow>d堕天之翼Homer_TICK"
+    type: DAMAGE
+
+  # d堕天之翼Homer_HIT
+  d_homer_hit:
+    display-name: "<yellow>d堕天之翼Homer_HIT"
+    type: DAMAGE
+
+  # 堕天之翼IceBolt
+  icebolt:
+    display-name: "<yellow>堕天之翼IceBolt"
+    type: DAMAGE
+
+  # 堕天之翼IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>堕天之翼IceBolt-Tick"
+    type: DAMAGE
+
+  # 堕天之翼IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>堕天之翼IceBolt-Hit"
+    type: DAMAGE

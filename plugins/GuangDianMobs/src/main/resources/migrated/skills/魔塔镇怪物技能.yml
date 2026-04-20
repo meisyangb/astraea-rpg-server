@@ -1,0 +1,257 @@
+# GuangDianMobs 技能配置
+# 从 MythicMobs 迁移生成: 魔塔镇怪物技能.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+skills:
+
+  # 野狼王远攻
+  :
+    display-name: "<yellow>野狼王远攻"
+    type: DAMAGE
+    damage: 500
+    cooldown: 60
+    target: TARGET
+
+  # 野狼王回血
+  :
+    display-name: "<yellow>野狼王回血"
+    type: HEAL
+    heal: 200
+
+  # 野狼王刷新
+  :
+    display-name: "<yellow>野狼王刷新"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 野狼王死亡
+  :
+    display-name: "<yellow>野狼王死亡"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 野狼王特效
+  :
+    display-name: "<yellow>野狼王特效"
+    type: DAMAGE
+    target: SELF
+
+  # 尸王穆拉远攻
+  :
+    display-name: "<yellow>尸王穆拉远攻"
+    type: DAMAGE
+    damage: 600
+    cooldown: 60
+    target: TARGET
+
+  # 尸王穆拉回血
+  :
+    display-name: "<yellow>尸王穆拉回血"
+    type: HEAL
+    heal: 300
+
+  # 尸王穆拉刷新
+  :
+    display-name: "<yellow>尸王穆拉刷新"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 尸王穆拉死亡
+  :
+    display-name: "<yellow>尸王穆拉死亡"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 尸王穆拉特效
+  :
+    display-name: "<yellow>尸王穆拉特效"
+    type: DAMAGE
+    target: SELF
+
+  # 骷髅王特里远攻
+  :
+    display-name: "<yellow>骷髅王特里远攻"
+    type: DAMAGE
+    damage: 700
+    cooldown: 60
+    target: TARGET
+
+  # 骷髅王特里回血
+  :
+    display-name: "<yellow>骷髅王特里回血"
+    type: HEAL
+    heal: 400
+
+  # 骷髅王特里刷新
+  :
+    display-name: "<yellow>骷髅王特里刷新"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 骷髅王特里死亡
+  :
+    display-name: "<yellow>骷髅王特里死亡"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 点券宝宝刷新
+  :
+    display-name: "<yellow>点券宝宝刷新"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 点券宝宝死亡
+  :
+    display-name: "<yellow>点券宝宝死亡"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 点券宝宝血条
+  :
+    display-name: "<yellow>点券宝宝血条"
+    type: DAMAGE
+    target: @PlayersInRadius{r=10}
+
+  # 年兽血条
+  :
+    display-name: "<yellow>年兽血条"
+    type: DAMAGE
+    target: @PlayersInRadius{r=60}
+
+  # 年兽回血
+  :
+    display-name: "<yellow>年兽回血"
+    type: HEAL
+    heal: 500
+
+  # 年兽冲锋
+  :
+    display-name: "<yellow>年兽冲锋"
+    type: DAMAGE
+    damage: 200
+    cooldown: 100
+    target: TARGET
+
+  # 年兽刷新
+  :
+    display-name: "<yellow>年兽刷新"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 年兽召唤
+  :
+    display-name: "<yellow>年兽召唤"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 脱战回血
+  :
+    display-name: "<yellow>脱战回血"
+    type: HEAL
+    heal: 1000
+
+  # 野狼远攻
+  :
+    display-name: "<yellow>野狼远攻"
+    type: DAMAGE
+    damage: 50
+    cooldown: 60
+
+  # 游荡者远攻
+  :
+    display-name: "<yellow>游荡者远攻"
+    type: DAMAGE
+    damage: 80
+    cooldown: 60
+
+  # 死亡游荡者远攻
+  :
+    display-name: "<yellow>死亡游荡者远攻"
+    type: DAMAGE
+    damage: 100
+    cooldown: 60
+
+  # 古天乐喊话
+  :
+    display-name: "<yellow>古天乐喊话"
+    type: DAMAGE
+    target: @PlayersInRadius{r=30}
+
+  # 古天乐刷新
+  :
+    display-name: "<yellow>古天乐刷新"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 渣渣辉喊话
+  :
+    display-name: "<yellow>渣渣辉喊话"
+    type: DAMAGE
+    target: @PlayersInRadius{r=30}
+
+  # 渣渣辉刷新
+  :
+    display-name: "<yellow>渣渣辉刷新"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 冰雪风暴
+  :
+    display-name: "<yellow>冰雪风暴"
+    type: DAMAGE
+    damage: 150
+    target: @PlayersInRadius{r=30}
+
+  # 年兽闪现斩击
+  :
+    display-name: "<yellow>年兽闪现斩击"
+    type: DAMAGE
+    damage: 300
+    cooldown: 100
+    target: TARGET
+
+  # 年兽群星坠落cf
+  cf:
+    display-name: "<yellow>年兽群星坠落cf"
+    type: DAMAGE
+    damage: 500
+    cooldown: 200
+    target: TARGET
+
+  # 年兽一闪
+  :
+    display-name: "<yellow>年兽一闪"
+    type: DAMAGE
+    damage: 400
+    cooldown: 60
+
+  # 年兽闪现脱离
+  :
+    display-name: "<yellow>年兽闪现脱离"
+    type: DAMAGE
+    cooldown: 160
+    target: TARGET
+
+  # 露娜召唤
+  :
+    display-name: "<yellow>露娜召唤"
+    type: DAMAGE
+    target: @PlayersInRadius{r=50}
+
+  # 炙热剑芒
+  :
+    display-name: "<yellow>炙热剑芒"
+    type: DAMAGE
+    damage: 200
+    target: SELF
+
+  # 月光喊话
+  :
+    display-name: "<yellow>月光喊话"
+    type: DAMAGE
+    target: @PlayersInRadius{r=40}
+
+  # 经验猪
+  :
+    display-name: "<yellow>经验猪"
+    type: DAMAGE

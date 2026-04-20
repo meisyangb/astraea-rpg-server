@@ -1,0 +1,565 @@
+# GuangDianMobs 刷新点配置
+# 从 MythicMobs 迁移生成
+# 生成时间: Mon Apr 20 22:11:45 CST 2026
+
+spawnpoints:
+
+  # 天空之船BOSS刷怪点
+  boss:
+    world: FB1
+    x: -209
+    y: 198
+    z: 138
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '1'
+    cooldown: 0
+    radius: 0.0
+    use-timer: true
+    require-player: true
+    player-range: 32.0
+    enabled: true
+    display-name: "天空之船BOSS刷怪点"
+
+  # 天空之船BOSS刷怪点2
+  boss_2:
+    world: FB1
+    x: -195
+    y: 200
+    z: 145
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '1'
+    cooldown: 6000
+    radius: 10.0
+    use-timer: true
+    require-player: true
+    player-range: 50.0
+    enabled: true
+    display-name: "天空之船BOSS刷怪点2"
+
+  # 天空之船BOSS刷怪点3
+  boss_3:
+    world: FB1
+    x: -180
+    y: 205
+    z: 130
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '1'
+    cooldown: 12000
+    radius: 12.0
+    use-timer: true
+    require-player: true
+    player-range: 60.0
+    enabled: true
+    display-name: "天空之船BOSS刷怪点3"
+
+  # 天空之船天枢BOSS
+  boss:
+    world: FB1
+    x: -154
+    y: 211
+    z: 124
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '1'
+    cooldown: 36000
+    radius: 15.0
+    use-timer: true
+    require-player: true
+    player-range: 80.0
+    enabled: true
+    display-name: "天空之船天枢BOSS"
+
+  # 天空之船天枢BOSS2
+  boss2:
+    world: FB1
+    x: -159
+    y: 210
+    z: 152
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '1'
+    cooldown: 0
+    radius: 0.0
+    use-timer: true
+    require-player: true
+    player-range: 32.0
+    enabled: true
+    display-name: "天空之船天枢BOSS2"
+
+  # 天空之船小怪刷怪点
+  :
+    world: FB1
+    x: -116
+    y: 188
+    z: 158
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '1'
+    cooldown: 0
+    radius: 0.0
+    use-timer: true
+    require-player: true
+    player-range: 32.0
+    enabled: true
+    display-name: "天空之船小怪刷怪点"
+
+  # 天空之船小怪刷怪点1
+  1:
+    world: FB1
+    x: -133
+    y: 191
+    z: 151
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '5'
+    cooldown: 160
+    radius: 8.0
+    use-timer: true
+    require-player: true
+    player-range: 40.0
+    enabled: true
+    display-name: "天空之船小怪刷怪点1"
+
+  # 天空之船小怪刷怪点10
+  10:
+    world: FB1
+    x: -195
+    y: 198
+    z: 148
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '1'
+    cooldown: 0
+    radius: 0.0
+    use-timer: true
+    require-player: true
+    player-range: 32.0
+    enabled: true
+    display-name: "天空之船小怪刷怪点10"
+
+  # 天空之船小怪刷怪点2
+  2:
+    world: FB1
+    x: -111
+    y: 187
+    z: 122
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '1'
+    cooldown: 0
+    radius: 0.0
+    use-timer: true
+    require-player: true
+    player-range: 32.0
+    enabled: true
+    display-name: "天空之船小怪刷怪点2"
+
+  # 天空之船小怪刷怪点3
+  3:
+    world: FB1
+    x: -145
+    y: 190
+    z: 140
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '4'
+    cooldown: 200
+    radius: 8.0
+    use-timer: true
+    require-player: true
+    player-range: 40.0
+    enabled: true
+    display-name: "天空之船小怪刷怪点3"
+
+  # 天空之船小怪刷怪点4
+  4:
+    world: FB1
+    x: -110
+    y: 192
+    z: 145
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '3'
+    cooldown: 240
+    radius: 6.0
+    use-timer: true
+    require-player: true
+    player-range: 40.0
+    enabled: true
+    display-name: "天空之船小怪刷怪点4"
+
+  # 天空之船小怪刷怪点5
+  5:
+    world: FB1
+    x: -125
+    y: 193
+    z: 135
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '2'
+    cooldown: 300
+    radius: 6.0
+    use-timer: true
+    require-player: true
+    player-range: 40.0
+    enabled: true
+    display-name: "天空之船小怪刷怪点5"
+
+  # 天空之船小怪刷怪点6
+  6:
+    world: FB1
+    x: -162
+    y: 195
+    z: 134
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '1'
+    cooldown: 0
+    radius: 0.0
+    use-timer: true
+    require-player: true
+    player-range: 32.0
+    enabled: true
+    display-name: "天空之船小怪刷怪点6"
+
+  # 天空之船小怪刷怪点7
+  7:
+    world: FB1
+    x: -115
+    y: 190
+    z: 155
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '4'
+    cooldown: 200
+    radius: 8.0
+    use-timer: true
+    require-player: true
+    player-range: 40.0
+    enabled: true
+    display-name: "天空之船小怪刷怪点7"
+
+  # 天空之船小怪刷怪点8
+  8:
+    world: FB1
+    x: -180
+    y: 197
+    z: 132
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '1'
+    cooldown: 0
+    radius: 0.0
+    use-timer: true
+    require-player: true
+    player-range: 32.0
+    enabled: true
+    display-name: "天空之船小怪刷怪点8"
+
+  # 天空之船小怪刷怪点9
+  9:
+    world: FB1
+    x: -192
+    y: 197
+    z: 132
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '1'
+    cooldown: 0
+    radius: 0.0
+    use-timer: true
+    require-player: true
+    player-range: 32.0
+    enabled: true
+    display-name: "天空之船小怪刷怪点9"
+
+  # 天空之船艾瑟尔残影刷怪点
+  :
+    world: FB1
+    x: -204
+    y: 205
+    z: 117
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '1'
+    cooldown: 0
+    radius: 0.0
+    use-timer: true
+    require-player: true
+    player-range: 32.0
+    enabled: true
+    display-name: "天空之船艾瑟尔残影刷怪点"
+
+  # 天空之船艾瑟尔残影刷怪点2
+  2:
+    world: FB1
+    x: -205
+    y: 200
+    z: 160
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '1'
+    cooldown: 0
+    radius: 0.0
+    use-timer: true
+    require-player: true
+    player-range: 32.0
+    enabled: true
+    display-name: "天空之船艾瑟尔残影刷怪点2"
+
+  # 天空之船艾瑟尔残影刷怪点3
+  3:
+    world: FB1
+    x: -166
+    y: 202
+    z: 160
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '1'
+    cooldown: 0
+    radius: 0.0
+    use-timer: true
+    require-player: true
+    player-range: 32.0
+    enabled: true
+    display-name: "天空之船艾瑟尔残影刷怪点3"
+
+  # 天空之船艾瑟尔残影刷怪点4
+  4:
+    world: FB1
+    x: -166
+    y: 203
+    z: 117
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '1'
+    cooldown: 0
+    radius: 0.0
+    use-timer: true
+    require-player: true
+    player-range: 32.0
+    enabled: true
+    display-name: "天空之船艾瑟尔残影刷怪点4"
+
+  # 新手副本_BOSS点_黑暗守卫
+  boss:
+    world: rpg
+    x: -65.5
+    y: 33
+    z: -29.5
+    yaw: 0
+    pitch: 0
+    mob: boss
+    level: 1
+    amount: 1
+    max-mobs: 1
+    cooldown: 1200
+    radius: 0
+    use-timer: true
+    require-player: true
+    player-range: 30
+    enabled: true
+    display-name: "新手副本_BOSS点_黑暗守卫"
+
+  # 新手副本_刷怪点1_野狼
+  1:
+    world: rpg
+    x: 3.5
+    y: 32
+    z: -40.5
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: 1
+    amount: 1
+    max-mobs: 3
+    cooldown: 1200
+    radius: 0
+    use-timer: true
+    require-player: true
+    player-range: 20
+    enabled: true
+    display-name: "新手副本_刷怪点1_野狼"
+
+  # 新手副本_刷怪点2_骷髅射手
+  2:
+    world: rpg
+    x: 19.5
+    y: 33
+    z: -23.5
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: 1
+    amount: 1
+    max-mobs: 2
+    cooldown: 200
+    radius: 0
+    use-timer: true
+    require-player: true
+    player-range: 20
+    enabled: true
+    display-name: "新手副本_刷怪点2_骷髅射手"
+
+  # 新手副本_刷怪点3_暗影蜘蛛
+  3:
+    world: rpg
+    x: -27.5
+    y: 33
+    z: -29.5
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: 1
+    amount: 1
+    max-mobs: 3
+    cooldown: 1200
+    radius: 0
+    use-timer: true
+    require-player: true
+    player-range: 20
+    enabled: true
+    display-name: "新手副本_刷怪点3_暗影蜘蛛"
+
+  # 新手副本_刷怪点4_腐肉僵尸
+  4:
+    world: rpg
+    x: -45.5
+    y: 32
+    z: -51.5
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: 1
+    amount: 1
+    max-mobs: 2
+    cooldown: 1200
+    radius: 0
+    use-timer: true
+    require-player: true
+    player-range: 20
+    enabled: true
+    display-name: "新手副本_刷怪点4_腐肉僵尸"
+
+  # 新手副本_刷怪点5_腐肉僵尸2
+  5_2:
+    world: rpg
+    x: -33.5
+    y: 32
+    z: -52.5
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: 1
+    amount: 1
+    max-mobs: 2
+    cooldown: 1200
+    radius: 0
+    use-timer: true
+    require-player: true
+    player-range: 20
+    enabled: true
+    display-name: "新手副本_刷怪点5_腐肉僵尸2"
+
+  # 新手副本_刷怪点6_骷髅射手2
+  6_2:
+    world: rpg
+    x: 11.5
+    y: 33
+    z: -54.5
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: 1
+    amount: 1
+    max-mobs: 2
+    cooldown: 200
+    radius: 0
+    use-timer: true
+    require-player: true
+    player-range: 20
+    enabled: true
+    display-name: "新手副本_刷怪点6_骷髅射手2"
+
+  # 新手副本_精英点_黏液怪
+  :
+    world: rpg
+    x: 26.5
+    y: 33
+    z: -40.5
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: 1
+    amount: 1
+    max-mobs: 1
+    cooldown: 1200
+    radius: 0
+    use-timer: true
+    require-player: true
+    player-range: 25
+    enabled: true
+    display-name: "新手副本_精英点_黏液怪"

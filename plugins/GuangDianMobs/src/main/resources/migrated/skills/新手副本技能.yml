@@ -1,0 +1,139 @@
+# GuangDianMobs 技能配置
+# 从 MythicMobs 迁移生成: 新手副本技能.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+skills:
+
+  # 野狼冲锋
+  :
+    display-name: "<yellow>野狼冲锋"
+    type: DAMAGE
+    damage: 20
+    cooldown: 100
+    range: 15
+    target: TARGET
+    conditions:
+      - "targetwithin 15"
+
+  # 野狼撕咬
+  :
+    display-name: "<yellow>野狼撕咬"
+    type: DAMAGE
+    damage: 25
+    cooldown: 160
+    range: 5
+    conditions:
+      - "targetwithin 5"
+
+  # 射箭
+  :
+    display-name: "<yellow>射箭"
+    type: DAMAGE
+    cooldown: 60
+    range: 25
+    target: TARGET
+    conditions:
+      - "targetwithin 25"
+
+  # 蜘蛛毒液
+  :
+    display-name: "<yellow>蜘蛛毒液"
+    type: DAMAGE
+    damage: 30
+    cooldown: 80
+    range: 10
+    message: "<red>你中毒了！"
+    conditions:
+      - "targetwithin 10"
+
+  # 僵尸抓击
+  :
+    display-name: "<yellow>僵尸抓击"
+    type: DAMAGE
+    damage: 35
+    cooldown: 120
+    range: 5
+    conditions:
+      - "targetwithin 5"
+
+  # 感染攻击
+  :
+    display-name: "<yellow>感染攻击"
+    type: DAMAGE
+    damage: 25
+    cooldown: 120
+    range: 5
+    message: "<red>你被感染了！"
+    conditions:
+      - "targetwithin 5"
+
+  # 弹跳攻击
+  :
+    display-name: "<yellow>弹跳攻击"
+    type: DAMAGE
+    damage: 40
+    cooldown: 80
+    range: 15
+    conditions:
+      - "targetwithin 15"
+
+  # 黏液束缚
+  :
+    display-name: "<yellow>黏液束缚"
+    type: DAMAGE
+    damage: 20
+    cooldown: 200
+    range: 10
+    message: "<green>你被黏液束缚了！"
+    conditions:
+      - "targetwithin 10"
+
+  # 冲锋
+  :
+    display-name: "<yellow>冲锋"
+    type: DAMAGE
+    damage: 30
+    cooldown: 100
+    range: 15
+    target: TARGET
+    conditions:
+      - "targetwithin 15"
+
+  # 重击
+  :
+    display-name: "<yellow>重击"
+    type: DAMAGE
+    damage: 60
+    cooldown: 80
+    range: 6
+    message: "<red>黑暗守卫对你造成了重击！"
+    conditions:
+      - "targetwithin 6"
+
+  # 践踏
+  :
+    display-name: "<yellow>践踏"
+    type: DAMAGE
+    damage: 40
+    cooldown: 240
+    message: "<red>黑暗守卫践踏大地！"
+
+  # BOSS出现
+  boss:
+    display-name: "<yellow>BOSS出现"
+    type: DAMAGE
+    target: @PlayersInRadius{r=30}
+    message: "<red><bold>【世界公告】黑暗守卫出现了！就在新手副本深处，冒险者们，准备应战！"
+
+  # BOSS血量显示
+  boss:
+    display-name: "<yellow>BOSS血量显示"
+    type: DAMAGE
+    target: @PlayersInRadius{r=30}
+
+  # BOSS死亡
+  boss:
+    display-name: "<yellow>BOSS死亡"
+    type: DAMAGE
+    target: @PlayersInRadius{r=30}
+    message: "<green><bold>【恭喜】<yellow><trigger.name> <green>成功击败了黑暗守卫！获得奖励！"

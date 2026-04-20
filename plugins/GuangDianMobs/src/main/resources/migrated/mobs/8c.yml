@@ -1,0 +1,136 @@
+# GuangDianMobs 怪物配置
+# 从 MythicMobs 迁移生成: 8c.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+mobs:
+
+  # 天启骑士-瘟疫
+  :
+    display-name: "<dark_red>天启骑士-瘟疫"
+    type: PLAYER
+    health: 300000000
+    damage: 0
+    speed: 0.2
+    follow-range: 32
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - "aoe"
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天启骑士-屠杀
+  :
+    display-name: "<dark_red>天启骑士-屠杀"
+    type: PLAYER
+    health: 350000000
+    damage: 0
+    speed: 0.2
+    follow-range: 32
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - "aoe"
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天启骑士-饥饿
+  :
+    display-name: "<dark_red>天启骑士-饥饿"
+    type: PLAYER
+    health: 400000000
+    damage: 0
+    speed: 0.2
+    follow-range: 32
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - "aoe"
+      - ""
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
+
+  # 天启骑士-死亡
+  :
+    display-name: "<dark_red>天启骑士-死亡"
+    type: PLAYER
+    health: 100000000
+    damage: 0
+    speed: 0.2
+    follow-range: 32
+    options:
+      always-show-name: true
+      prevent-other-drops: true
+      knockback-resistance: 1
+    equipment:
+    skills:
+      - ""
+      - ""
+      - "aoe"
+      - ""
+      - ""
+      - ""
+    damage-modifiers:
+      FIRE_TICK: 0
+      FIRE: 0
+      potion{type=FIRE_RESISTANCE;duration=200;level=4}: @Self
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0

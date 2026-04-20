@@ -1,0 +1,381 @@
+# GuangDianMobs 技能配置
+# 从 MythicMobs 迁移生成: 第八层技能.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+skills:
+
+  # 路西法出生特效
+  :
+    display-name: "<yellow>路西法出生特效"
+    type: DAMAGE
+    damage: 30000000
+    target: SELF
+
+  # 路西法背景音乐
+  :
+    display-name: "<yellow>路西法背景音乐"
+    type: DAMAGE
+    cooldown: 2400
+    target: SELF
+
+  # 路西法AOE
+  aoe:
+    display-name: "<yellow>路西法AOE"
+    type: DAMAGE
+    damage: 200000
+    cooldown: 0
+
+  # 路西法回血
+  :
+    display-name: "<yellow>路西法回血"
+    type: DAMAGE
+    cooldown: 0
+
+  # 路西法火焰之力
+  :
+    display-name: "<yellow>路西法火焰之力"
+    type: DAMAGE
+    cooldown: 300
+    target: SELF
+
+  # 路西法火焰之力Tick
+  tick:
+    display-name: "<yellow>路西法火焰之力Tick"
+    type: DAMAGE
+
+  # 路西法火焰之力Hit
+  hit:
+    display-name: "<yellow>路西法火焰之力Hit"
+    type: DAMAGE
+
+  # 路西法瘟疫之力
+  :
+    display-name: "<yellow>路西法瘟疫之力"
+    type: DAMAGE
+    cooldown: 200
+    target: SELF
+
+  # 路西法瘟疫之力Tick
+  tick:
+    display-name: "<yellow>路西法瘟疫之力Tick"
+    type: DAMAGE
+
+  # 路西法瘟疫之力Hit
+  hit:
+    display-name: "<yellow>路西法瘟疫之力Hit"
+    type: DAMAGE
+
+  # 路西法屠杀之力
+  :
+    display-name: "<yellow>路西法屠杀之力"
+    type: DAMAGE
+    cooldown: 600
+    target: SELF
+
+  # 路西法屠杀之力Tick
+  tick:
+    display-name: "<yellow>路西法屠杀之力Tick"
+    type: DAMAGE
+
+  # 路西法屠杀之力Hit
+  hit:
+    display-name: "<yellow>路西法屠杀之力Hit"
+    type: DAMAGE
+
+  # 路西法饥饿之力
+  :
+    display-name: "<yellow>路西法饥饿之力"
+    type: DAMAGE
+    cooldown: 500
+    target: SELF
+
+  # 路西法饥饿之力Tick
+  tick:
+    display-name: "<yellow>路西法饥饿之力Tick"
+    type: DAMAGE
+
+  # 路西法饥饿之力Hit
+  hit:
+    display-name: "<yellow>路西法饥饿之力Hit"
+    type: DAMAGE
+
+  # 路西法死亡之力
+  :
+    display-name: "<yellow>路西法死亡之力"
+    type: DAMAGE
+    cooldown: 400
+    target: SELF
+
+  # 路西法死亡之力Tick
+  tick:
+    display-name: "<yellow>路西法死亡之力Tick"
+    type: DAMAGE
+
+  # 路西法死亡之力Hit
+  hit:
+    display-name: "<yellow>路西法死亡之力Hit"
+    type: DAMAGE
+
+  # 路西法审判之力
+  :
+    display-name: "<yellow>路西法审判之力"
+    type: DAMAGE
+    cooldown: 500
+    target: SELF
+
+  # 路西法审判之力IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>路西法审判之力IceBolt-Tick"
+    type: DAMAGE
+
+  # 路西法审判之力IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>路西法审判之力IceBolt-Hit"
+    type: DAMAGE
+    damage: 9999999
+
+  # 路西法审判之力IceBolt-End
+  icebolt_end:
+    display-name: "<yellow>路西法审判之力IceBolt-End"
+    type: DAMAGE
+
+  # 路西法召唤瘟疫骑士
+  :
+    display-name: "<yellow>路西法召唤瘟疫骑士"
+    type: DAMAGE
+    cooldown: 12000
+    target: SELF
+
+  # 天启骑士AOE
+  aoe:
+    display-name: "<yellow>天启骑士AOE"
+    type: DAMAGE
+    damage: 200000
+    cooldown: 0
+
+  # 天帝
+  :
+    display-name: "<yellow>天帝"
+    type: DAMAGE
+    cooldown: 0
+    target: SELF
+
+  # 瘟疫骑士群攻
+  :
+    display-name: "<yellow>瘟疫骑士群攻"
+    type: DAMAGE
+    cooldown: 200
+
+  # 瘟疫骑士群攻Homer_TICK
+  homer_tick:
+    display-name: "<yellow>瘟疫骑士群攻Homer_TICK"
+    type: DAMAGE
+
+  # 瘟疫骑士群攻Homer_HIT
+  homer_hit:
+    display-name: "<yellow>瘟疫骑士群攻Homer_HIT"
+    type: DAMAGE
+
+  # 瘟疫骑士散播瘟疫
+  :
+    display-name: "<yellow>瘟疫骑士散播瘟疫"
+    type: DAMAGE
+    cooldown: 200
+    target: SELF
+
+  # 瘟疫骑士散播瘟疫Tick
+  tick:
+    display-name: "<yellow>瘟疫骑士散播瘟疫Tick"
+    type: DAMAGE
+
+  # 瘟疫骑士散播瘟疫Hit
+  hit:
+    display-name: "<yellow>瘟疫骑士散播瘟疫Hit"
+    type: HEAL
+    heal: 10000000
+
+  # 瘟疫骑士散播瘟疫End
+  end:
+    display-name: "<yellow>瘟疫骑士散播瘟疫End"
+    type: DAMAGE
+
+  # 瘟疫骑士瘟疫吸血
+  :
+    display-name: "<yellow>瘟疫骑士瘟疫吸血"
+    type: DAMAGE
+    cooldown: 400
+    target: @PlayersInRadius{r=12}
+
+  # 路西法召唤屠杀骑士
+  :
+    display-name: "<yellow>路西法召唤屠杀骑士"
+    type: DAMAGE
+    cooldown: 12000
+    target: SELF
+
+  # 屠杀骑士群攻
+  :
+    display-name: "<yellow>屠杀骑士群攻"
+    type: DAMAGE
+    cooldown: 200
+
+  # 屠杀骑士群攻Homer_TICK
+  homer_tick:
+    display-name: "<yellow>屠杀骑士群攻Homer_TICK"
+    type: DAMAGE
+
+  # 屠杀骑士群攻Homer_HIT
+  homer_hit:
+    display-name: "<yellow>屠杀骑士群攻Homer_HIT"
+    type: DAMAGE
+
+  # 屠杀骑士屠杀之力
+  :
+    display-name: "<yellow>屠杀骑士屠杀之力"
+    type: DAMAGE
+    cooldown: 600
+    target: SELF
+
+  # 屠杀骑士屠杀之力Tick
+  tick:
+    display-name: "<yellow>屠杀骑士屠杀之力Tick"
+    type: DAMAGE
+
+  # 屠杀骑士屠杀之力Hit
+  hit:
+    display-name: "<yellow>屠杀骑士屠杀之力Hit"
+    type: HEAL
+    heal: 10000000
+
+  # 屠杀骑士群体混乱
+  :
+    display-name: "<yellow>屠杀骑士群体混乱"
+    type: DAMAGE
+    cooldown: 300
+    target: @PlayersInRadius{r=12}
+
+  # 路西法召唤饥饿骑士
+  :
+    display-name: "<yellow>路西法召唤饥饿骑士"
+    type: DAMAGE
+    cooldown: 12000
+    target: SELF
+
+  # 饥饿骑士群攻
+  :
+    display-name: "<yellow>饥饿骑士群攻"
+    type: DAMAGE
+    cooldown: 200
+
+  # 饥饿骑士群攻Homer_TICK
+  homer_tick:
+    display-name: "<yellow>饥饿骑士群攻Homer_TICK"
+    type: DAMAGE
+
+  # 饥饿骑士群攻Homer_HIT
+  homer_hit:
+    display-name: "<yellow>饥饿骑士群攻Homer_HIT"
+    type: DAMAGE
+
+  # 饥饿骑士饥荒之力
+  :
+    display-name: "<yellow>饥饿骑士饥荒之力"
+    type: DAMAGE
+    cooldown: 500
+    target: SELF
+
+  # 饥饿骑士饥荒之力Tick
+  tick:
+    display-name: "<yellow>饥饿骑士饥荒之力Tick"
+    type: DAMAGE
+
+  # 饥饿骑士饥荒之力Hit
+  hit:
+    display-name: "<yellow>饥饿骑士饥荒之力Hit"
+    type: HEAL
+    heal: 10000000
+
+  # 饥饿骑士颓废之风
+  :
+    display-name: "<yellow>饥饿骑士颓废之风"
+    type: DAMAGE
+    cooldown: 300
+    target: @PlayersInRadius{r=12}
+
+  # 路西法召唤死亡骑士
+  :
+    display-name: "<yellow>路西法召唤死亡骑士"
+    type: DAMAGE
+    cooldown: 12000
+    target: SELF
+
+  # 死亡骑士群攻
+  :
+    display-name: "<yellow>死亡骑士群攻"
+    type: DAMAGE
+    cooldown: 200
+
+  # 死亡骑士群攻Homer_TICK
+  homer_tick:
+    display-name: "<yellow>死亡骑士群攻Homer_TICK"
+    type: DAMAGE
+
+  # 死亡骑士群攻Homer_HIT
+  homer_hit:
+    display-name: "<yellow>死亡骑士群攻Homer_HIT"
+    type: DAMAGE
+
+  # 死亡骑士凋零之力
+  :
+    display-name: "<yellow>死亡骑士凋零之力"
+    type: DAMAGE
+    cooldown: 400
+    target: SELF
+
+  # 死亡骑士凋零之力Tick
+  tick:
+    display-name: "<yellow>死亡骑士凋零之力Tick"
+    type: DAMAGE
+
+  # 死亡骑士凋零之力Hit
+  hit:
+    display-name: "<yellow>死亡骑士凋零之力Hit"
+    type: HEAL
+    heal: 10000000
+
+  # 死亡骑士恐惧之风
+  :
+    display-name: "<yellow>死亡骑士恐惧之风"
+    type: DAMAGE
+    cooldown: 200
+    target: @PlayersInRadius{r=32}
+
+  # 路西法血条
+  :
+    display-name: "<yellow>路西法血条"
+    type: DAMAGE
+    cooldown: 0
+
+  # 瘟疫骑士血条
+  :
+    display-name: "<yellow>瘟疫骑士血条"
+    type: DAMAGE
+    cooldown: 0
+
+  # 屠杀骑士血条
+  :
+    display-name: "<yellow>屠杀骑士血条"
+    type: DAMAGE
+    cooldown: 0
+
+  # 饥饿骑士血条
+  :
+    display-name: "<yellow>饥饿骑士血条"
+    type: DAMAGE
+    cooldown: 0
+
+  # 死亡骑士血条
+  :
+    display-name: "<yellow>死亡骑士血条"
+    type: DAMAGE
+    cooldown: 0

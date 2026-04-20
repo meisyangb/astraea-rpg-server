@@ -5,8 +5,7 @@ import cn.guangdian.armorstats.data.AttributeValue;
 import cn.guangdian.armorstats.data.PlayerStats;
 import cn.guangdian.armorstats.manager.StatsManager;
 import cn.guangdian.armorstats.parser.LoreParser;
-import cn.guangdian.armorstats.skill.Skill;
-import cn.guangdian.armorstats.skill.SkillManager;
+import cn.guangdian.armorstats.skill.SkillIntegration;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -34,13 +33,13 @@ import java.util.UUID;
 public class ArmorStatsCommand implements CommandExecutor {
 
     private final StatsManager statsManager;
-    private final SkillManager skillManager;
+    private final SkillIntegration skillIntegration;  // 通过 RPGSkill 执行技能（解耦）
     private final GuangDianArmorStats plugin;
     private final MiniMessage miniMessage;
 
-    public ArmorStatsCommand(StatsManager statsManager, SkillManager skillManager, GuangDianArmorStats plugin) {
+    public ArmorStatsCommand(StatsManager statsManager, SkillIntegration skillIntegration, GuangDianArmorStats plugin) {
         this.statsManager = statsManager;
-        this.skillManager = skillManager;
+        this.skillIntegration = skillIntegration;
         this.plugin = plugin;
         this.miniMessage = plugin.getMiniMessage().getMiniMessage();
     }
@@ -138,9 +137,14 @@ public class ArmorStatsCommand implements CommandExecutor {
                 return true;
             }
             String skillName = args[1];
-            boolean triggered = skillManager.triggerActiveSkill(player, skillName);
+            boolean triggered = skillIntegration.executeSkill(player, skillName);
             if (!triggered) {
-                player.sendMessage(Component.text("技能 " + skillName + " 不存在或冷却中!").color(NamedTextColor.RED));
+                long remaining = skillIntegration.getCooldownRemaining(player, skillName);
+                if (remaining > 0) {
+                    player.sendMessage(Component.text("技能 " + skillName + " 冷却中 (" + remaining + "秒)!").color(NamedTextColor.RED));
+                } else {
+                    player.sendMessage(Component.text("技能 " + skillName + " 不存在!").color(NamedTextColor.RED));
+                }
             }
         } else if (args[0].equalsIgnoreCase("help")) {
             showHelp(sender);
@@ -227,13 +231,17 @@ public class ArmorStatsCommand implements CommandExecutor {
 
         player.sendMessage(Component.text("=== 你的技能 ===").color(NamedTextColor.GOLD));
         for (String skillName : skills) {
-            Skill skill = skillManager.getSkill(skillName);
-            if (skill != null && skill.isActive()) {
-                long remaining = skillManager.getCooldownRemaining(player.getUniqueId(), skillName);
+            // 通过 RPGSkill 检查技能状态
+            boolean hasSkill = skillIntegration.hasSkill(skillName);
+            if (hasSkill) {
+                long remaining = skillIntegration.getCooldownRemaining(player, skillName);
                 Component status = remaining > 0 ?
                     Component.text(" (冷却: " + remaining + "秒)").color(NamedTextColor.RED) :
                     Component.text(" (就绪)").color(NamedTextColor.GREEN);
                 player.sendMessage(Component.text(skillName).color(NamedTextColor.YELLOW).append(status));
+            } else {
+                player.sendMessage(Component.text(skillName).color(NamedTextColor.YELLOW)
+                    .append(Component.text(" (未加载)").color(NamedTextColor.GRAY)));
             }
         }
     }
@@ -460,11 +468,14 @@ public class ArmorStatsCommand implements CommandExecutor {
             sender.sendMessage(Component.text("╠══════════════════════════════╣").color(NamedTextColor.GOLD));
             sender.sendMessage(Component.text("  【技能列表】").color(NamedTextColor.GOLD));
             for (String skillName : skills) {
-                Skill skill = skillManager.getSkill(skillName);
-                if (skill != null) {
-                    String type = skill.isPassive() ? "被动" : "主动";
+                // 通过 SkillIntegration 检查技能状态
+                boolean hasSkill = skillIntegration.hasSkill(skillName);
+                if (hasSkill) {
                     sender.sendMessage(Component.text("  " + skillName).color(NamedTextColor.YELLOW)
-                        .append(Component.text(" (" + type + ")").color(NamedTextColor.GRAY)));
+                        .append(Component.text(" (已学习)").color(NamedTextColor.GREEN)));
+                } else {
+                    sender.sendMessage(Component.text("  " + skillName).color(NamedTextColor.YELLOW)
+                        .append(Component.text(" (未加载)").color(NamedTextColor.GRAY)));
                 }
             }
         }

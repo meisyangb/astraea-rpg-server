@@ -1,0 +1,572 @@
+# GuangDianMobs 技能配置
+# 从 MythicMobs 迁移生成: 第七层怪物技能.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+skills:
+
+  # 神域兵长布鲁克血量
+  :
+    display-name: "<yellow>神域兵长布鲁克血量"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域兵长布鲁克刷新
+  :
+    display-name: "<yellow>神域兵长布鲁克刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域兵长布鲁克死亡
+  :
+    display-name: "<yellow>神域兵长布鲁克死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域骑士克劳德刷新
+  :
+    display-name: "<yellow>神域骑士克劳德刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域骑士克劳德死亡
+  :
+    display-name: "<yellow>神域骑士克劳德死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域将领杰佛理刷新
+  :
+    display-name: "<yellow>神域将领杰佛理刷新"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域将领杰佛理死亡
+  :
+    display-name: "<yellow>神域将领杰佛理死亡"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域骑士克劳德血量
+  :
+    display-name: "<yellow>神域骑士克劳德血量"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域将领杰佛理血量
+  :
+    display-name: "<yellow>神域将领杰佛理血量"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域兵长布鲁克远攻
+  :
+    display-name: "<yellow>神域兵长布鲁克远攻"
+    type: DAMAGE
+    damage: 50000
+    cooldown: 0
+    conditions:
+      - "targetwithin 6"
+
+  # 神域骑士克劳德远攻
+  :
+    display-name: "<yellow>神域骑士克劳德远攻"
+    type: DAMAGE
+    damage: 80000
+    cooldown: 0
+    conditions:
+      - "targetwithin 6"
+
+  # 神域将领杰佛理远攻
+  :
+    display-name: "<yellow>神域将领杰佛理远攻"
+    type: DAMAGE
+    damage: 120000
+    cooldown: 0
+    conditions:
+      - "targetwithin 6"
+
+  # 兵长天命
+  :
+    display-name: "<yellow>兵长天命"
+    type: DAMAGE
+    damage: 1500000
+    target: @PlayersInRadius{r=70}
+
+  # 兵长天命1
+  1:
+    display-name: "<yellow>兵长天命1"
+    type: DAMAGE
+    damage: 1500000
+    target: @PlayersInRadius{r=70}
+
+  # 骑士天命
+  :
+    display-name: "<yellow>骑士天命"
+    type: DAMAGE
+    damage: 2400000
+    target: @PlayersInRadius{r=70}
+
+  # 骑士天命1
+  1:
+    display-name: "<yellow>骑士天命1"
+    type: DAMAGE
+    damage: 2400000
+    target: @PlayersInRadius{r=70}
+
+  # 将领天命
+  :
+    display-name: "<yellow>将领天命"
+    type: DAMAGE
+    damage: 3500000
+    target: @PlayersInRadius{r=70}
+
+  # 将领天命1
+  1:
+    display-name: "<yellow>将领天命1"
+    type: DAMAGE
+    damage: 3500000
+    target: @PlayersInRadius{r=70}
+
+  # 神域兵长布鲁克回血
+  :
+    display-name: "<yellow>神域兵长布鲁克回血"
+    type: HEAL
+    heal: 1000000
+    cooldown: 0
+
+  # 神域将领杰佛理回血
+  :
+    display-name: "<yellow>神域将领杰佛理回血"
+    type: HEAL
+    heal: 2000000
+    cooldown: 0
+
+  # 神域骑士克劳德回血
+  :
+    display-name: "<yellow>神域骑士克劳德回血"
+    type: HEAL
+    heal: 1500000
+    cooldown: 0
+
+  # 神域兵长布鲁克特效
+  :
+    display-name: "<yellow>神域兵长布鲁克特效"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域兵长布鲁克群攻
+  :
+    display-name: "<yellow>神域兵长布鲁克群攻"
+    type: DAMAGE
+
+  # 神域兵长布鲁克Homer_TICK
+  homer_tick:
+    display-name: "<yellow>神域兵长布鲁克Homer_TICK"
+    type: DAMAGE
+
+  # 神域兵长布鲁克Homer_HIT
+  homer_hit:
+    display-name: "<yellow>神域兵长布鲁克Homer_HIT"
+    type: DAMAGE
+
+  # 神域兵长布鲁克投掷
+  :
+    display-name: "<yellow>神域兵长布鲁克投掷"
+    type: DAMAGE
+    target: @PlayersInRadius{r=40}
+
+  # 神域卫兵远攻
+  :
+    display-name: "<yellow>神域卫兵远攻"
+    type: DAMAGE
+    damage: 5000
+    cooldown: 0
+    conditions:
+      - "targetwithin 4"
+
+  # 神域卫兵回血
+  :
+    display-name: "<yellow>神域卫兵回血"
+    type: HEAL
+    heal: 10000
+    cooldown: 0
+
+  # 神域弓箭手远攻
+  :
+    display-name: "<yellow>神域弓箭手远攻"
+    type: DAMAGE
+    damage: 20000
+    cooldown: 0
+    conditions:
+      - "targetwithin 15"
+
+  # 神域弓箭手回血
+  :
+    display-name: "<yellow>神域弓箭手回血"
+    type: HEAL
+    heal: 100000
+    cooldown: 0
+
+  # 神域守卫远攻
+  :
+    display-name: "<yellow>神域守卫远攻"
+    type: DAMAGE
+    damage: 50000
+    cooldown: 0
+    conditions:
+      - "targetwithin 5"
+
+  # 神域守卫回血
+  :
+    display-name: "<yellow>神域守卫回血"
+    type: HEAL
+    heal: 100000
+    cooldown: 0
+
+  # 神域守卫冲锋
+  :
+    display-name: "<yellow>神域守卫冲锋"
+    type: DAMAGE
+    cooldown: 200
+
+  # 神域守卫冲锋Tick
+  tick:
+    display-name: "<yellow>神域守卫冲锋Tick"
+    type: DAMAGE
+
+  # 神域守卫冲锋Hit
+  hit:
+    display-name: "<yellow>神域守卫冲锋Hit"
+    type: DAMAGE
+
+  # 神域守卫冲锋End
+  end:
+    display-name: "<yellow>神域守卫冲锋End"
+    type: DAMAGE
+
+  # 神域兵长布鲁克冲锋
+  :
+    display-name: "<yellow>神域兵长布鲁克冲锋"
+    type: DAMAGE
+    cooldown: 200
+
+  # 神域兵长布鲁克冲锋Tick
+  tick:
+    display-name: "<yellow>神域兵长布鲁克冲锋Tick"
+    type: DAMAGE
+
+  # 神域兵长布鲁克冲锋Hit
+  hit:
+    display-name: "<yellow>神域兵长布鲁克冲锋Hit"
+    type: DAMAGE
+
+  # 神域兵长布鲁克冲锋End
+  end:
+    display-name: "<yellow>神域兵长布鲁克冲锋End"
+    type: DAMAGE
+
+  # 神域兵长闪现斩击
+  :
+    display-name: "<yellow>神域兵长闪现斩击"
+    type: DAMAGE
+    cooldown: 120
+    target: SELF
+
+  # 神域兵长闪现斩击Tick
+  tick:
+    display-name: "<yellow>神域兵长闪现斩击Tick"
+    type: DAMAGE
+
+  # 神域兵长闪现斩击2Tick
+  2tick:
+    display-name: "<yellow>神域兵长闪现斩击2Tick"
+    type: DAMAGE
+
+  # 神域兵长闪现斩击Hit
+  hit:
+    display-name: "<yellow>神域兵长闪现斩击Hit"
+    type: DAMAGE
+
+  # 神域兵长闪现斩击2Hit
+  2hit:
+    display-name: "<yellow>神域兵长闪现斩击2Hit"
+    type: DAMAGE
+
+  # 神域兵长闪现斩击End
+  end:
+    display-name: "<yellow>神域兵长闪现斩击End"
+    type: DAMAGE
+    target: @PlayersInRadius{r=10}
+
+  # 神域兵长闪现斩击2End
+  2end:
+    display-name: "<yellow>神域兵长闪现斩击2End"
+    type: DAMAGE
+
+  # 神域魔法师Rally
+  rally:
+    display-name: "<yellow>神域魔法师Rally"
+    type: DAMAGE
+    cooldown: 0
+
+  # 神域魔法师MagicMissile
+  magicmissile:
+    display-name: "<yellow>神域魔法师MagicMissile"
+    type: DAMAGE
+    cooldown: 0
+    target: TARGET
+    conditions:
+      - "targetwithin 30"
+
+  # 神域魔法师Tick
+  tick:
+    display-name: "<yellow>神域魔法师Tick"
+    type: DAMAGE
+
+  # 神域魔法师Hit
+  hit:
+    display-name: "<yellow>神域魔法师Hit"
+    type: DAMAGE
+    damage: 100000
+
+  # 神域魔法师End
+  end:
+    display-name: "<yellow>神域魔法师End"
+    type: DAMAGE
+
+  # 神域骑士闪现斩击
+  :
+    display-name: "<yellow>神域骑士闪现斩击"
+    type: DAMAGE
+    cooldown: 120
+    target: SELF
+
+  # 神域骑士闪现斩击Tick
+  tick:
+    display-name: "<yellow>神域骑士闪现斩击Tick"
+    type: DAMAGE
+
+  # 神域骑士闪现斩击2Tick
+  2tick:
+    display-name: "<yellow>神域骑士闪现斩击2Tick"
+    type: DAMAGE
+
+  # 神域骑士闪现斩击Hit
+  hit:
+    display-name: "<yellow>神域骑士闪现斩击Hit"
+    type: DAMAGE
+
+  # 神域骑士闪现斩击2Hit
+  2hit:
+    display-name: "<yellow>神域骑士闪现斩击2Hit"
+    type: DAMAGE
+
+  # 神域骑士闪现斩击End
+  end:
+    display-name: "<yellow>神域骑士闪现斩击End"
+    type: DAMAGE
+    target: @PlayersInRadius{r=10}
+
+  # 神域骑士闪现斩击2End
+  2end:
+    display-name: "<yellow>神域骑士闪现斩击2End"
+    type: DAMAGE
+
+  # 神域骑士闪现脱离
+  :
+    display-name: "<yellow>神域骑士闪现脱离"
+    type: DAMAGE
+    cooldown: 200
+    target: SELF
+
+  # 神域骑士闪现脱离Tick
+  tick:
+    display-name: "<yellow>神域骑士闪现脱离Tick"
+    type: DAMAGE
+
+  # 神域骑士闪现脱离Hit
+  hit:
+    display-name: "<yellow>神域骑士闪现脱离Hit"
+    type: DAMAGE
+
+  # 神域骑士闪现脱离End
+  end:
+    display-name: "<yellow>神域骑士闪现脱离End"
+    type: DAMAGE
+
+  # 神域骑士一闪
+  :
+    display-name: "<yellow>神域骑士一闪"
+    type: DAMAGE
+    cooldown: 200
+    target: SELF
+
+  # 神域骑士一闪Tick
+  tick:
+    display-name: "<yellow>神域骑士一闪Tick"
+    type: DAMAGE
+
+  # 神域骑士一闪Hit
+  hit:
+    display-name: "<yellow>神域骑士一闪Hit"
+    type: DAMAGE
+
+  # 神域骑士一闪End
+  end:
+    display-name: "<yellow>神域骑士一闪End"
+    type: DAMAGE
+    target: @PlayersInRadius{r=10}
+
+  # 神域骑士爆发群攻
+  :
+    display-name: "<yellow>神域骑士爆发群攻"
+    type: DAMAGE
+    cooldown: 100
+
+  # 神域骑士爆发群攻Homer_TICK
+  homer_tick:
+    display-name: "<yellow>神域骑士爆发群攻Homer_TICK"
+    type: DAMAGE
+
+  # 神域骑士爆发群攻Homer_HIT
+  homer_hit:
+    display-name: "<yellow>神域骑士爆发群攻Homer_HIT"
+    type: DAMAGE
+
+  # 鬼闪
+  :
+    display-name: "<yellow>鬼闪"
+    type: DAMAGE
+    cooldown: 400
+    target: SELF
+
+  # 鬼闪Tick
+  tick:
+    display-name: "<yellow>鬼闪Tick"
+    type: DAMAGE
+
+  # 鬼闪Hit
+  hit:
+    display-name: "<yellow>鬼闪Hit"
+    type: DAMAGE
+
+  # 鬼闪End
+  end:
+    display-name: "<yellow>鬼闪End"
+    type: DAMAGE
+
+  # 爆发群攻
+  :
+    display-name: "<yellow>爆发群攻"
+    type: DAMAGE
+    cooldown: 100
+
+  # 爆发群攻Homer_TICK
+  homer_tick:
+    display-name: "<yellow>爆发群攻Homer_TICK"
+    type: DAMAGE
+
+  # 爆发群攻Homer_HIT
+  homer_hit:
+    display-name: "<yellow>爆发群攻Homer_HIT"
+    type: DAMAGE
+
+  # 次元斩击
+  :
+    display-name: "<yellow>次元斩击"
+    type: DAMAGE
+    cooldown: 400
+    target: SELF
+
+  # 次元斩击Tick
+  tick:
+    display-name: "<yellow>次元斩击Tick"
+    type: DAMAGE
+
+  # 次元斩击Hit
+  hit:
+    display-name: "<yellow>次元斩击Hit"
+    type: DAMAGE
+
+  # 次元斩击End
+  end:
+    display-name: "<yellow>次元斩击End"
+    type: DAMAGE
+
+  # 次元闪击
+  :
+    display-name: "<yellow>次元闪击"
+    type: DAMAGE
+    cooldown: 200
+    target: SELF
+
+  # 次元闪击Tick
+  tick:
+    display-name: "<yellow>次元闪击Tick"
+    type: DAMAGE
+
+  # 次元闪击Hit
+  hit:
+    display-name: "<yellow>次元闪击Hit"
+    type: DAMAGE
+
+  # 次元闪击End
+  end:
+    display-name: "<yellow>次元闪击End"
+    type: DAMAGE
+
+  # 召唤圣灵
+  :
+    display-name: "<yellow>召唤圣灵"
+    type: DAMAGE
+
+  # 召唤章鱼
+  :
+    display-name: "<yellow>召唤章鱼"
+    type: DAMAGE
+
+  # 圣灵
+  :
+    display-name: "<yellow>圣灵"
+    type: DAMAGE
+    cooldown: 600
+    target: SELF
+
+  # 圣灵IceBolt-Tick
+  icebolt_tick:
+    display-name: "<yellow>圣灵IceBolt-Tick"
+    type: DAMAGE
+
+  # 圣灵IceBolt-Hit
+  icebolt_hit:
+    display-name: "<yellow>圣灵IceBolt-Hit"
+    type: DAMAGE
+    damage: 300000
+
+  # 圣灵自杀
+  :
+    display-name: "<yellow>圣灵自杀"
+    type: DAMAGE
+    cooldown: 12000
+
+  # 章鱼骑脸
+  :
+    display-name: "<yellow>章鱼骑脸"
+    type: DAMAGE
+    cooldown: 1200
+    target: @PlayersInRadius{r=64}
+
+  # 章鱼伤害
+  :
+    display-name: "<yellow>章鱼伤害"
+    type: DAMAGE
+    damage: 50000
+    cooldown: 20
+
+  # 章鱼爆炸
+  :
+    display-name: "<yellow>章鱼爆炸"
+    type: DAMAGE
+    damage: 9000000
+    cooldown: 1200
+    target: SELF

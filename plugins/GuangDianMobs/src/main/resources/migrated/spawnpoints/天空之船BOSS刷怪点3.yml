@@ -1,0 +1,25 @@
+# GuangDianMobs 刷新点配置
+# 从 MythicMobs 迁移生成: 天空之船BOSS刷怪点3.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+spawnpoints:
+
+  # 天空之船BOSS刷怪点3
+  boss_3:
+    world: FB1
+    x: -180
+    y: 205
+    z: 130
+    yaw: 0
+    pitch: 0
+    mob: 
+    level: '1'
+    amount: 1
+    max-mobs: '1'
+    cooldown: 12000
+    radius: 12.0
+    use-timer: true
+    require-player: true
+    player-range: 60.0
+    enabled: true
+    display-name: "天空之船BOSS刷怪点3"

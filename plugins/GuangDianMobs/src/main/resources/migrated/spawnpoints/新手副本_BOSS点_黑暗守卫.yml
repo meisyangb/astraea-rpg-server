@@ -1,0 +1,25 @@
+# GuangDianMobs 刷新点配置
+# 从 MythicMobs 迁移生成: 新手副本_BOSS点_黑暗守卫.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+spawnpoints:
+
+  # 新手副本_BOSS点_黑暗守卫
+  boss:
+    world: rpg
+    x: -65.5
+    y: 33
+    z: -29.5
+    yaw: 0
+    pitch: 0
+    mob: boss
+    level: 1
+    amount: 1
+    max-mobs: 1
+    cooldown: 1200
+    radius: 0
+    use-timer: true
+    require-player: true
+    player-range: 30
+    enabled: true
+    display-name: "新手副本_BOSS点_黑暗守卫"

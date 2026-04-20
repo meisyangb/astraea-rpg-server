@@ -1,0 +1,142 @@
+# GuangDianMobs 怪物配置
+# 从 MythicMobs 迁移生成: 新手副本.yml
+# 生成时间: Mon Apr 20 22:15:04 CST 2026
+
+mobs:
+
+  # 野狼
+  :
+    display-name: "<yellow>野狼"
+    type: WOLF
+    health: 300
+    damage: 25
+    defense: 0
+    level: 1
+    speed: 0.2
+    attack-speed: 1.5
+    follow-range: 20
+    options:
+      always-show-name: true
+      prevent-other-drops: false
+      knockback-resistance: 0.1
+    skills:
+      - ""
+      - ""
+
+  # 骷髅射手
+  :
+    display-name: "<yellow>骷髅射手"
+    type: SKELETON
+    health: 400
+    damage: 35
+    defense: 0
+    level: 1
+    speed: 0.18
+    attack-speed: 1.2
+    follow-range: 25
+    options:
+      always-show-name: true
+      prevent-other-drops: false
+      knockback-resistance: 0.1
+    equipment:
+      helmet: "LEATHER_HELMET"
+      main-hand: "BOW"
+    skills:
+      - ""
+
+  # 暗影蜘蛛
+  :
+    display-name: "<yellow>暗影蜘蛛"
+    type: SPIDER
+    health: 250
+    damage: 40
+    defense: 0
+    level: 1
+    speed: 0.3
+    attack-speed: 2.0
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: false
+      knockback-resistance: 0.05
+    skills:
+      - ""
+
+  # 腐肉僵尸
+  :
+    display-name: "<yellow>腐肉僵尸"
+    type: ZOMBIE
+    health: 500
+    damage: 45
+    defense: 0
+    level: 1
+    speed: 0.15
+    attack-speed: 0.8
+    follow-range: 20
+    options:
+      always-show-name: true
+      prevent-other-drops: false
+      knockback-resistance: 0.2
+    equipment:
+      helmet: "黑皮帽"
+    skills:
+      - ""
+      - ""
+
+  # 精英黏液怪
+  :
+    display-name: "<green><bold>精英黏液怪"
+    type: SLIME
+    health: 800
+    damage: 50
+    defense: 5
+    level: 1
+    speed: 0.12
+    attack-speed: 0.6
+    follow-range: 15
+    options:
+      always-show-name: true
+      prevent-other-drops: false
+      knockback-resistance: 0.3
+    skills:
+      - ""
+      - ""
+
+  # 新手BOSS黑暗守卫
+  boss:
+    display-name: "<red><bold>黑暗守卫"
+    type: ZOMBIE
+    health: 2000
+    damage: 80
+    defense: 10
+    level: 1
+    speed: 0.1
+    attack-speed: 0.5
+    follow-range: 25
+    options:
+      always-show-name: true
+      prevent-other-drops: false
+      knockback-resistance: 0.5
+      show-boss-bar: true
+      boss-bar-color: RED
+      boss-bar-style: SEGMENTED_10
+    equipment:
+      helmet: "LEATHER_HELMET"
+      chestplate: "LEATHER_CHESTPLATE"
+      leggings: "LEATHER_LEGGINGS"
+      boots: "LEATHER_BOOTS"
+      main-hand: "IRON_SWORD"
+    skills:
+      - "boss"
+      - "boss"
+      - "boss"
+      - ""
+      - ""
+      - ""
+    ai:
+      target-selectors:
+        - "players"
+        - "highestthreat"
+      threat:
+        use-threat-table: true
+        radius: 32.0
