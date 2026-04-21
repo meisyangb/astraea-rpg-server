@@ -16,7 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 宝石镶嵌解析器
+ * 宝石镶嵌解析器 - MiniMessage版本
  * 适配 GuangDian Items 系统 - 支持基于装备类型的槽位匹配
  */
 public class SocketParser {
@@ -28,6 +28,7 @@ public class SocketParser {
     private static List<Pattern> socketPatterns = new ArrayList<>();
     private static Map<String, String> gemTypes = new HashMap<>();
     private static Map<String, Map<String, AttributeValue>> gemAttributesCache = new HashMap<>();
+    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
 
     public static void initialize(ConfigurationSection socketSection, ConfigurationSection gemTypeSection) {
         // 初始化宝石孔位匹配模式
@@ -94,26 +95,32 @@ public class SocketParser {
 
     /**
      * 解析装备的宝石孔位
-     * 从装备 Lore 中解析实际定义的槽位
+     * 从装备 Lore 中解析实际定义的槽位 - MiniMessage版本
      */
     public static List<String> parseSocketGems(ItemStack item) {
         List<String> sockets = new ArrayList<>();
         if (item == null || !item.hasItemMeta()) return sockets;
 
         ItemMeta meta = item.getItemMeta();
-        if (meta == null || !meta.hasLore()) return sockets;
+        if (meta == null) return sockets;
 
-        List<String> lore = meta.getLore();
+        // 使用MiniMessage版本的lore获取
+        List<Component> lore = meta.lore();
         if (lore == null) return sockets;
 
         // 从 Lore 中解析槽位定义
-        for (String line : lore) {
+        for (Component lineComponent : lore) {
+            String line = MINI_MESSAGE.serialize(lineComponent);
             String plain = stripColor(line);
             for (Pattern pattern : socketPatterns) {
                 Matcher matcher = pattern.matcher(plain);
                 if (matcher.find()) {
                     String socketType = matcher.group(1);
-                    sockets.add(socketType != null ? socketType : "通用");
+                    // 去除可能的尖括号（如 <红宝石> -> 红宝石）
+                    if (socketType != null) {
+                        socketType = socketType.replaceAll("[<>]", "").trim();
+                    }
+                    sockets.add(socketType != null && !socketType.isEmpty() ? socketType : "通用");
                     break;
                 }
             }
@@ -123,17 +130,19 @@ public class SocketParser {
     }
 
     /**
-     * 判断物品是否为宝石
+     * 判断物品是否为宝石 - MiniMessage版本
      */
     public static boolean isGem(ItemStack item) {
         if (item == null || !item.hasItemMeta()) return false;
         ItemMeta meta = item.getItemMeta();
-        if (meta == null || !meta.hasLore()) return false;
+        if (meta == null) return false;
 
-        List<String> lore = meta.getLore();
+        // 使用MiniMessage版本的lore获取
+        List<Component> lore = meta.lore();
         if (lore == null) return false;
 
-        for (String line : lore) {
+        for (Component lineComponent : lore) {
+            String line = MINI_MESSAGE.serialize(lineComponent);
             String plain = stripColor(line);
             if (plain.contains("宝石") || gemTypes.values().stream().anyMatch(plain::contains)) {
                 return true;
@@ -143,54 +152,76 @@ public class SocketParser {
     }
 
     /**
-     * 获取宝石类型
+     * 获取宝石类型 - MiniMessage版本
+     * 从宝石Lore的第二行解析类型（如<dark_red>红宝石）
      */
     public static String getGemType(ItemStack item) {
         if (!isGem(item)) return "未知";
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return "未知";
 
-        List<String> lore = meta.getLore();
-        if (lore == null) return "未知";
+        List<Component> lore = meta.lore();
+        if (lore == null || lore.size() < 2) return "未知";
 
-        for (String line : lore) {
+        // 宝石类型通常在第二行（索引1）
+        // 格式: <dark_red>红宝石, <dark_green>绿宝石, <yellow>黄宝石等
+        for (int i = 0; i < lore.size(); i++) {
+            String line = MINI_MESSAGE.serialize(lore.get(i));
             String plain = stripColor(line);
-            for (Map.Entry<String, String> entry : gemTypes.entrySet()) {
-                if (plain.contains(entry.getValue())) {
-                    return entry.getValue();
+            
+            // 检查是否包含宝石类型
+            for (String gemType : gemTypes.values()) {
+                if (plain.contains(gemType)) {
+                    return gemType;
                 }
             }
+            
+            // 直接匹配常见宝石类型
+            if (plain.contains("红宝石")) return "红宝石";
+            if (plain.contains("绿宝石")) return "绿宝石";
+            if (plain.contains("黄宝石")) return "黄宝石";
+            if (plain.contains("蓝宝石")) return "蓝宝石";
+            if (plain.contains("紫宝石")) return "紫宝石";
         }
         return "通用";
     }
 
     /**
      * 检查宝石是否兼容孔位
+     * 严格匹配：红宝石槽位只能镶嵌红宝石，黄宝石槽位只能镶嵌黄宝石
+     * 通用槽位可以镶嵌任何类型的宝石
      */
     public static boolean isGemCompatible(String socketType, String gemType) {
         if (socketType == null || gemType == null) return false;
+        
+        // 标准化类型名称（去除空格，转小写）
+        String normalizedSocket = socketType.trim().toLowerCase();
+        String normalizedGem = gemType.trim().toLowerCase();
+        
         // 通用孔位兼容所有宝石
-        if (socketType.equals("通用") || socketType.equalsIgnoreCase("any")) return true;
-        // 精确匹配
-        return socketType.equalsIgnoreCase(gemType) || gemType.contains(socketType) || socketType.contains(gemType);
+        if (normalizedSocket.equals("通用") || normalizedSocket.equals("any")) return true;
+        
+        // 严格匹配：宝石类型必须完全等于槽位类型
+        return normalizedSocket.equals(normalizedGem);
     }
 
     /**
-     * 解析宝石属性
+     * 解析宝石属性 - MiniMessage版本
      */
     public static Map<String, AttributeValue> parseGemAttributes(ItemStack gem) {
         Map<String, AttributeValue> attrs = new HashMap<>();
         if (gem == null || !gem.hasItemMeta()) return attrs;
 
         ItemMeta meta = gem.getItemMeta();
-        if (meta == null || !meta.hasLore()) return attrs;
+        if (meta == null) return attrs;
 
-        List<String> lore = meta.getLore();
+        List<Component> lore = meta.lore();
         if (lore == null) return attrs;
 
         Pattern attrPattern = Pattern.compile("([\\u4e00-\\u9fa5]+)\\s*[:：]\\s*\\+?([\\d.]+)(?:-([\\d.]+))?");
 
-        for (String line : lore) {
+        for (Component lineComponent : lore) {
+            String line = MINI_MESSAGE.serialize(lineComponent);
             String plain = stripColor(line);
             Matcher matcher = attrPattern.matcher(plain);
             if (matcher.find()) {
@@ -212,8 +243,9 @@ public class SocketParser {
 
     /**
      * 应用镶嵌到装备
-     * 将"可镶嵌"槽位替换为"已镶嵌"状态并显示属性
-     * 只修改镶嵌行，保持其他 lore 完全不变
+     * 将宝石镶嵌到装备上，只修改"可镶嵌"槽位对应的 lore 行
+     * 宝石类型必须与槽位类型匹配（如红宝石只能镶嵌到红宝石槽位）
+     * 其他 lore 行保持完全不变（包括颜色、格式、特殊字符等）
      */
     public static void applyInlay(ItemStack item, List<ItemStack> gems, Map<String, AttributeValue> attributes) {
         if (item == null) return;
@@ -227,14 +259,16 @@ public class SocketParser {
             existingLore = new ArrayList<>();
         }
 
+        // 创建可修改的宝石列表副本
+        List<ItemStack> remainingGems = new ArrayList<>(gems);
+        List<ItemStack> usedGems = new ArrayList<>();
+
         // 直接操作 Component 列表，只修改需要改变的行
-        MiniMessage miniMessage = MiniMessage.miniMessage();
         List<Component> newLore = new ArrayList<>();
-        int gemIndex = 0;
 
         for (Component lineComponent : existingLore) {
             // 将 Component 序列化为字符串用于匹配
-            String line = miniMessage.serialize(lineComponent);
+            String line = MINI_MESSAGE.serialize(lineComponent);
             String plain = stripColor(line);
             boolean matched = false;
 
@@ -242,18 +276,26 @@ public class SocketParser {
             for (Pattern pattern : socketPatterns) {
                 Matcher matcher = pattern.matcher(plain);
                 if (matcher.find()) {
-                    String gemType = matcher.group(1);
-                    if (gemType != null && gemIndex < gems.size()) {
-                        ItemStack gem = gems.get(gemIndex);
-                        String gemName = getGemDisplayName(gem);
+                    String socketType = matcher.group(1);
+                    if (socketType != null) {
+                        // 去除尖括号（如 <红宝石> -> 红宝石）
+                        socketType = socketType.replaceAll("[<>]", "").trim();
 
-                        // 构建新的已镶嵌行 Component
-                        String inlayLine = buildInlaidLine(gemName, attributes);
-                        newLore.add(miniMessage.deserialize(inlayLine));
+                        // 查找匹配的宝石（类型必须匹配）
+                        ItemStack matchingGem = findMatchingGem(remainingGems, socketType);
+                        if (matchingGem != null) {
+                            String gemName = getGemDisplayName(matchingGem);
 
-                        gemIndex++;
-                        matched = true;
-                        break;
+                            // 构建新的已镶嵌行 Component
+                            String inlayLine = buildInlaidLine(gemName, attributes);
+                            newLore.add(MINI_MESSAGE.deserialize(inlayLine));
+
+                            // 从剩余宝石中移除已使用的
+                            remainingGems.remove(matchingGem);
+                            usedGems.add(matchingGem);
+                            matched = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -268,10 +310,31 @@ public class SocketParser {
 
         // 保存宝石数据到 PDC
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
-        String gemData = serializeGems(gems);
+        String gemData = serializeGems(usedGems);
         pdc.set(new NamespacedKey(JavaPlugin.getProvidingPlugin(SocketParser.class), GEM_DATA_KEY), PersistentDataType.STRING, gemData);
 
         item.setItemMeta(meta);
+    }
+
+    /**
+     * 查找与槽位类型匹配的宝石
+     */
+    private static ItemStack findMatchingGem(List<ItemStack> gems, String socketType) {
+        for (ItemStack gem : gems) {
+            if (gem != null && !gem.getType().isAir()) {
+                String gemType = getGemType(gem);
+                // 去除尖括号并标准化
+                String normalizedSocket = socketType.replaceAll("[<>]", "").trim().toLowerCase();
+                String normalizedGem = gemType.replaceAll("[<>]", "").trim().toLowerCase();
+
+                // 通用槽位可以镶嵌任何宝石，或者类型必须匹配
+                if (normalizedSocket.equals("通用") || normalizedSocket.equals("any") ||
+                    normalizedSocket.equals(normalizedGem)) {
+                    return gem;
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -311,12 +374,11 @@ public class SocketParser {
         // 恢复 Lore 中的槽位为"可镶嵌"状态
         List<Component> existingLore = meta.lore();
         if (existingLore != null) {
-            MiniMessage miniMessage = MiniMessage.miniMessage();
             List<Component> newLore = new ArrayList<>();
 
             for (Component lineComponent : existingLore) {
                 // 将 Component 序列化为字符串用于匹配
-                String line = miniMessage.serialize(lineComponent);
+                String line = MINI_MESSAGE.serialize(lineComponent);
                 String plain = stripColor(line);
                 boolean isInlaid = false;
 
@@ -328,7 +390,7 @@ public class SocketParser {
                         if (gemType != null && plain.contains("已镶嵌")) {
                             // 恢复为"可镶嵌"状态
                             String restoredLine = restoreSocketLine(line, gemType);
-                            newLore.add(miniMessage.deserialize(restoredLine));
+                            newLore.add(MINI_MESSAGE.deserialize(restoredLine));
                             isInlaid = true;
                             break;
                         }
@@ -450,17 +512,24 @@ public class SocketParser {
     }
 
     /**
-     * 获取宝石的显示名称
+     * 获取宝石的显示名称 - MiniMessage版本
      */
     private static String getGemDisplayName(ItemStack gem) {
         if (gem == null || !gem.hasItemMeta()) return "未知宝石";
         ItemMeta meta = gem.getItemMeta();
-        if (meta == null || !meta.hasDisplayName()) {
-            // 如果没有显示名称，返回物品类型名称
-            return gem.getType().name().replace("_", " ").toLowerCase();
+        if (meta == null) return "未知宝石";
+        
+        // 优先使用displayName
+        if (meta.hasDisplayName()) {
+            Component displayName = meta.displayName();
+            if (displayName != null) {
+                String name = MINI_MESSAGE.serialize(displayName);
+                return stripColor(name);
+            }
         }
-        // 移除颜色代码返回纯名称
-        return stripColor(meta.getDisplayName());
+        
+        // 如果没有显示名称，返回物品类型名称
+        return gem.getType().name().replace("_", " ").toLowerCase();
     }
 
     /**
