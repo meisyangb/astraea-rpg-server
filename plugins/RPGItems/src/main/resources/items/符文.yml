@@ -1,0 +1,240 @@
+圣者符文:
+  Id: 399
+  Display: <green>圣者符文
+  Lore:
+  - <dark_gray>「<green>℘<dark_gray>」
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <gray>远古符文      <blue>属性型
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <yellow>上面记录着远古的魔法语.
+  - <yellow>似乎蕴藏着强大的属性值.
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+恶魔符文:
+  Id: 399
+  Display: <red>恶魔符文
+  Lore:
+  - <dark_gray>「<red>ℭ<dark_gray>」
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <gray>远古符文      <blue>属性型
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <yellow>上面记录着远古的魔法语.
+  - <yellow>似乎蕴藏着强大的属性值.
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+神圣符文:
+  Id: 399
+  Display: <yellow>神圣符文
+  Lore:
+  - <dark_gray>「<yellow>ℒ<dark_gray>」
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <gray>远古符文      <blue>属性型
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <yellow>上面记录着远古的魔法语.
+  - <yellow>似乎蕴藏着强大的属性值.
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+圣者符文2:
+  Id: 399
+  Display: <green>圣者符文Ⅱ
+  Lore:
+  - <dark_gray>「<green>℘Ⅱ<dark_gray>」
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <gray>远古符文      <blue>属性型
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <yellow>上面记录着远古的魔法语.
+  - <yellow>似乎蕴藏着强大的属性值.
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+恶魔符文2:
+  Id: 399
+  Display: <red>恶魔符文Ⅱ
+  Lore:
+  - <dark_gray>「<red>ℭⅡ<dark_gray>」
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <gray>远古符文      <blue>属性型
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <yellow>上面记录着远古的魔法语.
+  - <yellow>似乎蕴藏着强大的属性值.
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+神圣符文2:
+  Id: 399
+  Display: <yellow>神圣符文Ⅱ
+  Lore:
+  - <dark_gray>「<yellow>ℒⅡ<dark_gray>」
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <gray>远古符文      <blue>属性型
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <yellow>上面记录着远古的魔法语.
+  - <yellow>似乎蕴藏着强大的属性值.
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空力量符文I:
+  Id: 399
+  Display: <dark_red>天空力量符文Ⅰ
+  Lore:
+  - <dark_gray>「<dark_red>✞Ⅰ<dark_gray>」
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <gray>远古符文      <blue>属性型
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <yellow>上面记录着远古的魔法语.
+  - <yellow>似乎蕴藏着强大的属性值.
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空力量符文II:
+  Id: 399
+  Display: <dark_red>天空力量符文Ⅱ
+  Lore:
+  - <dark_gray>「<dark_red>✞Ⅱ<dark_gray>」
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <gray>远古符文      <blue>属性型
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <yellow>上面记录着远古的魔法语.
+  - <yellow>似乎蕴藏着强大的属性值.
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空力量符文III:
+  Id: 399
+  Display: <dark_red>天空力量符文Ⅲ
+  Lore:
+  - <dark_gray>「<dark_red>✞Ⅲ<dark_gray>」
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <gray>远古符文      <blue>属性型
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <yellow>上面记录着远古的魔法语.
+  - <yellow>似乎蕴藏着强大的属性值.
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空力量符文IV:
+  Id: 399
+  Display: <dark_red>天空力量符文Ⅳ
+  Lore:
+  - <dark_gray>「<dark_red>✞Ⅳ<dark_gray>」
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <gray>远古符文      <blue>属性型
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <yellow>上面记录着远古的魔法语.
+  - <yellow>似乎蕴藏着强大的属性值.
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空力量符文V:
+  Id: 399
+  Display: <dark_red>天空力量符文Ⅴ
+  Lore:
+  - <dark_gray>「<dark_red>✞Ⅴ<dark_gray>」
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <gray>远古符文      <blue>属性型
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <yellow>上面记录着远古的魔法语.
+  - <yellow>似乎蕴藏着强大的属性值.
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空生命符文I:
+  Id: 399
+  Display: <dark_green>天空生命符文Ⅰ
+  Lore:
+  - <dark_gray>「<dark_green>✙Ⅰ<dark_gray>」
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <gray>远古符文      <blue>属性型
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <yellow>上面记录着远古的魔法语.
+  - <yellow>似乎蕴藏着强大的属性值.
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空生命符文II:
+  Id: 399
+  Display: <dark_green>天空生命符文Ⅱ
+  Lore:
+  - <dark_gray>「<dark_green>✙Ⅱ<dark_gray>」
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <gray>远古符文      <blue>属性型
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <yellow>上面记录着远古的魔法语.
+  - <yellow>似乎蕴藏着强大的属性值.
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空生命符文III:
+  Id: 399
+  Display: <dark_green>天空生命符文Ⅲ
+  Lore:
+  - <dark_gray>「<dark_green>✙Ⅲ<dark_gray>」
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <gray>远古符文      <blue>属性型
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <yellow>上面记录着远古的魔法语.
+  - <yellow>似乎蕴藏着强大的属性值.
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空生命符文IV:
+  Id: 399
+  Display: <dark_green>天空生命符文Ⅳ
+  Lore:
+  - <dark_gray>「<dark_green>✙Ⅳ<dark_gray>」
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <gray>远古符文      <blue>属性型
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <yellow>上面记录着远古的魔法语.
+  - <yellow>似乎蕴藏着强大的属性值.
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空生命符文V:
+  Id: 399
+  Display: <dark_green>天空生命符文Ⅴ
+  Lore:
+  - <dark_gray>「<dark_green>✙Ⅴ<dark_gray>」
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <gray>远古符文      <blue>属性型
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  - <yellow>上面记录着远古的魔法语.
+  - <yellow>似乎蕴藏着强大的属性值.
+  - <dark_gray><strikethrough>－－－－－－－－－－－－
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0

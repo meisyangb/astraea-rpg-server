@@ -1,0 +1,118 @@
+遗忘战士铁剑:
+  Id: 267
+  Display: <green>遗忘战士铁剑
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+遗忘术士木剑:
+  Id: 268
+  Display: <green>遗忘术士木剑
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+遗忘者钻石剑:
+  Id: 276
+  Display: <green>遗忘者钻石剑
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+遗忘幻术师木剑:
+  Id: 268
+  Display: <green>遗忘幻术师木剑
+  Lore:
+  - '<dark_aqua>暴击伤害: <green>250'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+遗忘幻术师头盔:
+  Id: 302
+  Display: <green>遗忘幻术师头盔
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+遗忘士兵铁剑:
+  Id: 267
+  Display: <green>遗忘士兵铁剑
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+腐竹剑:
+  Id: 267
+  Display: <green>腐竹剑
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+遗忘力士铁斧:
+  Id: 258
+  Display: <green>遗忘力士铁斧
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+遗忘军士-科洛莫斯金剑:
+  Id: 283
+  Display: <green>遗忘军士-科洛莫斯金剑
+  Lore:
+  - '<dark_aqua>暴击伤害: <green>300'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+遗忘军士头盔:
+  Id: 314
+  Display: <green>遗忘军士头盔
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+遗忘城主-卡拉特斯钻石剑:
+  Id: 276
+  Display: <green>遗忘城主-卡拉特斯钻石剑
+  Lore:
+  - '<dark_aqua>暴击伤害: <green>300'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+遗忘城主头盔:
+  Id: 310
+  Display: <green>遗忘城主头盔
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+处刑者侍卫钻石剑:
+  Id: 276
+  Display: <green>处刑者侍卫钻石剑
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔王头盔1:
+  Id: 310
+  Display: <green>魔王头盔
+  Lore:
+  - '<dark_aqua>伤害反弹: <green>5'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+莫洛斯托魔王之刃:
+  Id: 276
+  Display: <green>莫洛斯托魔王之刃
+  Lore:
+  - '<dark_aqua>暴击伤害: <green>300'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔王瘟疫之刃:
+  Id: 276
+  Display: <green>魔王瘟疫之刃
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔王病毒之刃:
+  Id: 276
+  Display: <green>魔王瘟疫之刃
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔王死亡之刃:
+  Id: 276
+  Display: <green>魔王瘟疫之刃
+  Options:
+    Unbreakable: true
+    HideAttributes: true

@@ -1,0 +1,80 @@
+幻界堕落战士钻石剑:
+  Id: 276
+  Display: <green>木剑
+  Lore:
+  - '<dark_aqua>攻击力: <green>300'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+幻界堕落召唤师钻石剑:
+  Id: 276
+  Display: <green>木剑
+  Lore:
+  - '<dark_aqua>攻击力: <green>1500'
+  - '<dark_aqua>燃烧: <green>5'
+  - '<dark_aqua>暴击几率: <green>3'
+  - '<dark_aqua>暴击伤害: <green>200'
+  - '<dark_aqua>中毒: <green>3'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+堕落大贤者-阿卡斯塔金剑:
+  Id: 283
+  Display: <green>木剑
+  Lore:
+  - '<dark_aqua>攻击力: <green>3000'
+  - '<dark_aqua>燃烧: <green>5'
+  - '<dark_aqua>暴击几率: <green>3'
+  - '<dark_aqua>暴击伤害: <green>300'
+  - '<dark_aqua>中毒: <green>3'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+青皮帽:
+  Id: 298
+  Display: <green>皮帽
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+青皮甲:
+  Id: 299
+  Display: <green>皮甲
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+青皮裤:
+  Id: 300
+  Display: <green>皮裤
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+青皮靴:
+  Id: 301
+  Display: <green>皮靴
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+蓝皮帽:
+  Id: 298
+  Display: <green>皮帽
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+蓝皮甲:
+  Id: 299
+  Display: <green>皮甲
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+蓝皮裤:
+  Id: 300
+  Display: <green>皮裤
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+蓝皮靴:
+  Id: 301
+  Display: <green>皮靴
+  Options:
+    Unbreakable: true
+    HideAttributes: true

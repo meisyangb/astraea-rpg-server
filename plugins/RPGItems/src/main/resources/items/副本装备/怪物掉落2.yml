@@ -1,0 +1,286 @@
+呼延觉罗战圣剑:
+  Id: 283
+  Display: <dark_purple>呼延觉罗战圣剑
+  Lore:
+  - <aqua>隐藏武器                 史诗
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>攻击力: <aqua>75-850'
+  - '<dark_gray>招架: <aqua>5%'
+  - '<dark_gray>暴击几率: <aqua>15%'
+  - '<dark_gray>暴击伤害: <aqua>150%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>10
+  - '<dark_gray>评分: <red>400'
+  - <yellow>呼延觉罗战的佩剑
+  - <yellow>曾是天界最神圣的武器
+  - <yellow>如今却成为黑暗与悲愤的象征
+  - <dark_purple>二阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃营长圣剑:
+  Id: 276
+  Display: <light_purple>天弃营长圣剑
+  Lore:
+  - <aqua>天弃之城掉落           稀有
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>攻击力: <aqua>50-320'
+  - '<dark_gray>暴击几率: <aqua>8%'
+  - '<dark_gray>暴击伤害: <aqua>120%'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>8
+  - '<dark_gray>评分: <red>280'
+  - <yellow>天弃营长曾经荣耀的佩剑
+  - <yellow>圣光已逝，只剩下无尽的悲愤
+  - <dark_purple>二阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃营长圣甲:
+  Id: 311
+  Display: <light_purple>天弃营长圣甲
+  Lore:
+  - <aqua>天弃之城掉落           稀有
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>防御力: <aqua>45-280'
+  - '<dark_gray>生命值: <aqua>+500'
+  - '<dark_gray>减伤: <aqua>5%'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>8
+  - '<dark_gray>评分: <red>260'
+  - <yellow>天弃营长的铠甲
+  - <yellow>曾被圣光笼罩，如今黯淡无光
+  - <dark_purple>二阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃营长护腿:
+  Id: 312
+  Display: <light_purple>天弃营长护腿
+  Lore:
+  - <aqua>天弃之城掉落           稀有
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>防御力: <aqua>40-250'
+  - '<dark_gray>生命值: <aqua>+400'
+  - '<dark_gray>闪避: <aqua>3%'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>8
+  - '<dark_gray>评分: <red>240'
+  - <yellow>天弃营长的护腿
+  - <yellow>残留着神圣的痕迹
+  - <dark_purple>二阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃营长战靴:
+  Id: 313
+  Display: <light_purple>天弃营长战靴
+  Lore:
+  - <aqua>天弃之城掉落           稀有
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>防御力: <aqua>35-220'
+  - '<dark_gray>移动速度: <aqua>+5%'
+  - '<dark_gray>闪避: <aqua>5%'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>8
+  - '<dark_gray>评分: <red>230'
+  - <yellow>天弃营长的战靴
+  - <yellow>踏过天弃之城的废墟
+  - <dark_purple>二阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃统领圣剑:
+  Id: 276
+  Display: <dark_purple>天弃统领圣剑
+  Lore:
+  - <aqua>天弃之城掉落          史诗
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>攻击力: <aqua>65-450'
+  - '<dark_gray>暴击几率: <aqua>12%'
+  - '<dark_gray>暴击伤害: <aqua>140%'
+  - '<dark_gray>穿透: <aqua>5%'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>9
+  - '<dark_gray>评分: <red>350'
+  - <yellow>天弃统领的审判之剑
+  - <yellow>圣光已逝，黑暗永存
+  - <dark_purple>二阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃统领圣甲:
+  Id: 311
+  Display: <dark_purple>天弃统领圣甲
+  Lore:
+  - <aqua>天弃之城掉落          史诗
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>防御力: <aqua>55-350'
+  - '<dark_gray>生命值: <aqua>+800'
+  - '<dark_gray>减伤: <aqua>8%'
+  - '<dark_gray>反伤: <aqua>3%'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>9
+  - '<dark_gray>评分: <red>330'
+  - <yellow>天弃统领的铠甲
+  - <yellow>散发着堕落的气息
+  - <dark_purple>二阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃统领护腿:
+  Id: 312
+  Display: <dark_purple>天弃统领护腿
+  Lore:
+  - <aqua>天弃之城掉落          史诗
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>防御力: <aqua>50-320'
+  - '<dark_gray>生命值: <aqua>+600'
+  - '<dark_gray>闪避: <aqua>5%'
+  - '<dark_gray>韧性: <aqua>3%'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>9
+  - '<dark_gray>评分: <red>310'
+  - <yellow>天弃统领的护腿
+  - <yellow>黑暗力量在其中涌动
+  - <dark_purple>二阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃统领战靴:
+  Id: 313
+  Display: <dark_purple>天弃统领战靴
+  Lore:
+  - <aqua>天弃之城掉落          史诗
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>防御力: <aqua>45-300'
+  - '<dark_gray>移动速度: <aqua>+8%'
+  - '<dark_gray>闪避: <aqua>8%'
+  - '<dark_gray>韧性: <aqua>2%'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>9
+  - '<dark_gray>评分: <red>300'
+  - <yellow>天弃统领的战靴
+  - <yellow>每一步都踏在绝望之上
+  - <dark_purple>二阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天使结晶:
+  Id: 371
+  Display: <aqua>天使结晶
+  Lore:
+  - <aqua>天弃之城材料
+  - <dark_gray>从堕落天使身上提取的结晶
+  - <dark_gray>残留着微弱的圣光
+  - <dark_gray>可用于锻造天弃系列装备
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃碎片:
+  Id: 371
+  Display: <dark_purple>天弃碎片
+  Lore:
+  - <aqua>天弃之城材料
+  - <dark_gray>天族遗物的碎片
+  - <dark_gray>蕴含着被遗弃者的悲愤
+  - <dark_gray>可用于强化天弃系列装备
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃杀戮之石:
+  Id: 331
+  Display: <dark_red>天弃杀戮之石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>攻击力: <aqua>+85-130'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天弃生命之石:
+  Id: 388
+  Display: <green>天弃生命之石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>生命上限: <aqua>+900'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天弃屠戮之石:
+  Id: 331
+  Display: <dark_red>天弃屠戮之石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+12%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天弃敏捷之石:
+  Id: 388
+  Display: <green>天弃敏捷之石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>闪避: <aqua>+1.8%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0

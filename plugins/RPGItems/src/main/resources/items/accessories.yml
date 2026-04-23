@@ -1,0 +1,309 @@
+StarterBadge:
+  Id: DIAMOND
+  Display: <white>新手徽章
+  Lore:
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <gray>送给新手的礼物
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <white>★☆☆☆☆ 新手
+  - ''
+  - <white>新手徽章
+  - '<gray>生命上限: <green>+50'
+  - '<gray>防御力: <green>+5-10'
+  - ''
+  - <dark_gray>[新手礼包赠送]
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  Enchantments:
+  - PROTECTION_ENVIRONMENTAL:1
+WarriorBadge:
+  Id: DIAMOND
+  Display: <yellow>战士徽章
+  Lore:
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <gray>勇气的象征，提升战斗能力
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <yellow>★★★☆☆ 稀有
+  - ''
+  - <yellow>战士徽章
+  - '<red>攻击力: <green>+15-25'
+  - '<red>暴击几率: <green>+5%'
+  - '<red>暴击伤害: <green>+15%'
+  - ''
+  - <dark_gray>[战士公会认证]
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  Enchantments:
+  - DAMAGE_ALL:2
+MageBadge:
+  Id: DIAMOND
+  Display: <aqua>法师徽章
+  Lore:
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <gray>智慧的象征，提升魔法能力
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <aqua>★★★☆☆ 稀有
+  - ''
+  - <aqua>法师徽章
+  - '<light_purple>生命上限: <green>+80'
+  - '<light_purple>每秒回血: <green>+3'
+  - '<light_purple>暴击抵抗: <green>+8%'
+  - ''
+  - <dark_gray>[法师塔认证]
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  Enchantments:
+  - PROTECTION_ENVIRONMENTAL:2
+HunterBadge:
+  Id: DIAMOND
+  Display: <green>猎人徽章
+  Lore:
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <gray>敏捷的象征，提升狩猎能力
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <green>★★★☆☆ 稀有
+  - ''
+  - <green>猎人徽章
+  - '<yellow>攻击力: <green>+10-18'
+  - '<yellow>闪避: <green>+10%'
+  - '<yellow>移动速度: <green>+5%'
+  - '<yellow>暴击几率: <green>+8%'
+  - ''
+  - <dark_gray>[猎人公会认证]
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  Enchantments:
+  - DAMAGE_ALL:1
+GuardianBadge:
+  Id: DIAMOND
+  Display: <blue>守护者徽章
+  Lore:
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <gray>守护的象征，提升生存能力
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <blue>★★★☆☆ 稀有
+  - ''
+  - <blue>守护者徽章
+  - '<blue>防御力: <green>+20-35'
+  - '<blue>生命上限: <green>+100'
+  - '<blue>暴击抵抗: <green>+12%'
+  - '<blue>招架: <green>+8%'
+  - ''
+  - <dark_gray>[守护者联盟认证]
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  Enchantments:
+  - PROTECTION_ENVIRONMENTAL:3
+WarriorMedal:
+  Id: NETHER_STAR
+  Display: <red>战神勋章
+  Lore:
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <gray>战神的荣耀，提升战斗能力
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <red>★★★★☆ 史诗
+  - ''
+  - <red>战神勋章
+  - '<red>攻击力: <green>+35-55'
+  - '<red>暴击几率: <green>+12%'
+  - '<red>暴击伤害: <green>+35%'
+  - '<red>吸血几率: <green>+8%'
+  - ''
+  - <dark_gray>[战神殿授予]
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  Enchantments:
+  - DAMAGE_ALL:4
+GuardianMedal:
+  Id: NETHER_STAR
+  Display: <blue>守护勋章
+  Lore:
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <gray>守护者的荣耀，增强防御
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <blue>★★★★☆ 史诗
+  - ''
+  - <blue>守护勋章
+  - '<blue>防御力: <green>+45-70'
+  - '<blue>生命上限: <green>+200'
+  - '<blue>暴击抵抗: <green>+18%'
+  - '<blue>招架: <green>+12%'
+  - '<blue>伤害反弹: <green>+5%'
+  - ''
+  - <dark_gray>[守护者联盟授予]
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  Enchantments:
+  - PROTECTION_ENVIRONMENTAL:5
+HunterMedal:
+  Id: NETHER_STAR
+  Display: <green>猎人勋章
+  Lore:
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <gray>猎人的荣耀，提升敏捷
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <green>★★★★☆ 史诗
+  - ''
+  - <green>猎人勋章
+  - '<green>攻击力: <green>+25-40'
+  - '<green>闪避: <green>+18%'
+  - '<green>移动速度: <green>+10%'
+  - '<green>暴击几率: <green>+15%'
+  - ''
+  - <dark_gray>[猎人公会授予]
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  Enchantments:
+  - DAMAGE_ALL:3
+SaintMedal:
+  Id: NETHER_STAR
+  Display: <white>圣者勋章
+  Lore:
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <gray>圣者的荣耀，全面提升能力
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <white>★★★★☆ 史诗
+  - ''
+  - <white>圣者勋章
+  - '<white>攻击力: <green>+20-30'
+  - '<white>防御力: <green>+25-40'
+  - '<white>生命上限: <green>+150'
+  - '<white>每秒回血: <green>+5'
+  - '<white>暴击抵抗: <green>+10%'
+  - '<white>经验加成: <green>+15%'
+  - ''
+  - <dark_gray>[圣殿授予]
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  Enchantments:
+  - PROTECTION_ENVIRONMENTAL:3
+  - DAMAGE_ALL:2
+VIPMedal:
+  Id: NETHER_STAR
+  Display: <gold>VIP勋章
+  Lore:
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <gray>VIP专属勋章
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <gold>★★★★★ 传说
+  - ''
+  - <gold>VIP勋章
+  - '<gold>攻击力: <green>+40-60'
+  - '<gold>防御力: <green>+35-55'
+  - '<gold>生命上限: <green>+250'
+  - '<gold>暴击几率: <green>+15%'
+  - '<gold>暴击伤害: <green>+25%'
+  - '<gold>经验加成: <green>+25%'
+  - '<gold>移动速度: <green>+8%'
+  - ''
+  - <yellow>✦ VIP专属特权 ✦
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  Enchantments:
+  - PROTECTION_ENVIRONMENTAL:5
+  - DAMAGE_ALL:4
+AncientRelic:
+  Id: DRAGON_HEAD
+  Display: <light_purple>远古圣物
+  Lore:
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <gray>传说中的神器，蕴含神秘力量
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <light_purple>★★★★★ 传说
+  - ''
+  - <light_purple>远古圣物
+  - '<light_purple>攻击力: <green>+50-80'
+  - '<light_purple>防御力: <green>+40-65'
+  - '<light_purple>生命上限: <green>+350'
+  - '<light_purple>暴击几率: <green>+20%'
+  - '<light_purple>暴击伤害: <green>+45%'
+  - '<light_purple>吸血几率: <green>+12%'
+  - '<light_purple>每秒回血: <green>+8'
+  - ''
+  - <dark_purple>✧ 远古之力觉醒 ✧
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  Enchantments:
+  - PROTECTION_ENVIRONMENTAL:6
+  - DAMAGE_ALL:5
+DragonRelic:
+  Id: DRAGON_HEAD
+  Display: <red>龙族圣物
+  Lore:
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <gray>龙之力量，无与伦比
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <red>★★★★★ 传说
+  - ''
+  - <red>龙族圣物
+  - '<red>攻击力: <green>+65-100'
+  - '<red>暴击几率: <green>+25%'
+  - '<red>暴击伤害: <green>+55%'
+  - '<red>吸血几率: <green>+15%'
+  - '<red>吸血倍率: <green>+20%'
+  - '<red>冰冻: <green>+10%'
+  - ''
+  - <dark_red>✧ 龙之怒火 ✧
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  Enchantments:
+  - DAMAGE_ALL:6
+  - FIRE_ASPECT:2
+AngelRelic:
+  Id: DRAGON_HEAD
+  Display: <white>天使圣物
+  Lore:
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <gray>天使的祝福，强大的治愈力量
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <white>★★★★★ 传说
+  - ''
+  - <white>天使圣物
+  - '<white>生命上限: <green>+500'
+  - '<white>每秒回血: <green>+15'
+  - '<white>防御力: <green>+50-80'
+  - '<white>暴击抵抗: <green>+25%'
+  - '<white>暴伤抵抗: <green>+20%'
+  - '<white>吸血抵抗: <green>+15%'
+  - ''
+  - <aqua>✧ 天使之佑 ✧
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  Enchantments:
+  - PROTECTION_ENVIRONMENTAL:6
+DemonLordRelic:
+  Id: DRAGON_HEAD
+  Display: <dark_gray>魔王圣物
+  Lore:
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <gray>魔王的力量，毁灭一切
+  - <dark_gray>━━━━━━━━━━━━━━━━━━━━━━
+  - <dark_gray>★★★★★ 传说
+  - ''
+  - <dark_gray>魔王圣物
+  - '<dark_gray>攻击力: <green>+80-120'
+  - '<dark_gray>暴击几率: <green>+30%'
+  - '<dark_gray>暴击伤害: <green>+70%'
+  - '<dark_gray>中毒: <green>+15%'
+  - '<dark_gray>致盲: <green>+12%'
+  - '<dark_gray>吸血几率: <green>+18%'
+  - ''
+  - <black>✧ 魔王降临 ✧
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  Enchantments:
+  - DAMAGE_ALL:7

@@ -1,0 +1,56 @@
+苍穹守卫长剑:
+  Id: 276
+  Display: <green>木剑
+  Lore:
+  - '<dark_aqua>攻击力: <green>25'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+苍穹弓:
+  Id: 261
+  Display: <green>弓
+  Lore:
+  - '<dark_aqua>攻击力: <green>20'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+苍穹精锐弓:
+  Id: 261
+  Display: <green>弓
+  Lore:
+  - '<dark_aqua>攻击力: <green>30'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+苍穹战士长剑:
+  Id: 276
+  Display: <green>木剑
+  Lore:
+  - '<dark_aqua>攻击力: <green>25'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+苍穹精锐长剑:
+  Id: 276
+  Display: <green>木剑
+  Lore:
+  - '<dark_aqua>攻击力: <green>25'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天族卫队副官剑:
+  Id: 276
+  Display: <green>木剑
+  Lore:
+  - '<dark_aqua>攻击力: <green>80'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天族卫队长剑:
+  Id: 276
+  Display: <green>木剑
+  Lore:
+  - '<dark_aqua>攻击力: <green>45'
+  Options:
+    Unbreakable: true
+    HideAttributes: true

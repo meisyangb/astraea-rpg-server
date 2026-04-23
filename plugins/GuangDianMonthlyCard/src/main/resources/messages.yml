@@ -1,0 +1,41 @@
+# GuangDianMonthlyCard - 消息配置
+# 使用 MiniMessage <color> 格式
+
+# ==================== 前缀 ====================
+prefix: "<gold>[月卡] <reset>"
+
+# ==================== 成功消息 ====================
+success:
+  activate: "<green>成功激活 <yellow>%card% <green>!"
+  claim: "<green>成功领取今日奖励! <yellow>+%points%点券"
+  makeup: "<green>成功补签第 <yellow>%day% <green>天!"
+  milestone: "<gold>🎉 恭喜获得 %day% 天累计奖励! <yellow>+%points%点券"
+  auto-renew: "<green>月卡已自动续期，享受<yellow>%discount%%<green>折扣!"
+  extend: "<green>月卡已延长 <yellow>%days% <green>天"
+
+# ==================== 错误消息 ====================
+error:
+  no-permission: "<red>你没有权限执行此操作"
+  player-not-found: "<red>玩家不存在或不在线"
+  card-not-found: "<red>未知的月卡类型"
+  no-active-card: "<red>你还没有激活月卡"
+  already-claimed: "<yellow>今日奖励已领取"
+  insufficient-funds: "<red>余额不足，需要 <yellow>%amount% %currency%"
+  makeup-limit: "<red>本月补签次数已用完"
+  makeup-no-card: "<red>没有激活的月卡无法补签"
+  makeup-invalid-date: "<red>无效的补签日期"
+  already-has-card: "<yellow>你已经拥有此月卡，已自动续期"
+
+# ==================== 提示消息 ====================
+info:
+  card-expired: "<red>你的月卡已过期"
+  expire-reminder: "<yellow>你的月卡将在 <red>%days% <yellow>天后到期"
+  exp-boost: "<green>月卡经验加成: <yellow>+%boost%"
+  drop-boost: "<green>月卡掉落加成: <yellow>+%boost%"
+  privilege-prefix: "<gray>你的月卡特权前缀: %prefix%"
+
+# ==================== 帮助消息 ====================
+help:
+  title: "<gold>========== 月卡系统帮助 =========="
+  command: "<yellow>/%cmd% <gray>- %desc%"
+  footer: "<gold>==================================="

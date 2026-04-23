@@ -1,0 +1,46 @@
+路西法头盔:
+  Id: 302
+  Display: <gold><bold>路西法头盔
+  Lore:
+  - '<gold>护甲强度: <aqua>90'
+  - '<gold>闪避: <aqua>30'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+锁链胸甲:
+  Id: 303
+  Display: <gold><bold>锁链胸甲
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+锁链护腿:
+  Id: 304
+  Display: <gold><bold>锁链护腿
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+锁链靴子:
+  Id: 305
+  Display: <gold><bold>锁链靴子
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+路西法剑:
+  Id: 276
+  Display: <gold><bold>路西法剑
+  Lore:
+  - '<gold>攻击力: <aqua>100000'
+  - '<gold>暴击几率: <aqua>10'
+  - '<gold>暴击伤害: <aqua>200'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启骑士头盔:
+  Id: 302
+  Display: <gold><bold>天启骑士头盔
+  Lore:
+  - '<gold>护甲强度: <aqua>55'
+  - '<gold>闪避: <aqua>20'
+  Options:
+    Unbreakable: true
+    HideAttributes: true

@@ -1,0 +1,305 @@
+苍穹百夫长剑:
+  Id: 283
+  Display: <blue>天族卫队长剑
+  Lore:
+  - <white>近战武器                 稀有
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>攻击力: <aqua>30-255'
+  - '<dark_gray>招架: <aqua>5%'
+  - '<dark_gray>暴击几率: <aqua>10%'
+  - '<dark_gray>暴击伤害: <aqua>100%'
+  - '<dark_gray>吸血几率: <aqua>5%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>5
+  - '<dark_gray>评分: <red>100'
+  - <yellow>天族卫队长使用的制式长剑
+  - <dark_purple>一阶装备
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天族卫队护腿:
+  Id: 316
+  Display: <blue>天族卫队护腿
+  Lore:
+  - <white>防具                   稀有
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>8%'
+  - '<dark_gray>生命上限: <aqua>600'
+  - '<green>生命恢复: <light_purple>1%'
+  - '<dark_gray>闪避: <aqua>2.5%'
+  - '<dark_gray>每秒回血: <aqua>3'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>5
+  - '<dark_gray>评分: <red>100'
+  - <yellow>天族卫队长穿戴的护腿
+  - <dark_purple>一阶装备
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+苍穹百夫战靴:
+  Id: 317
+  Display: <blue>天族卫队战靴
+  Lore:
+  - <white>防具                   稀有
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>7%'
+  - '<dark_gray>生命上限: <aqua>400'
+  - '<green>生命恢复: <light_purple>1%'
+  - '<dark_gray>闪避: <aqua>2.5%'
+  - '<dark_gray>移动速度: <aqua>10%'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>5
+  - '<dark_gray>评分: <red>100'
+  - <yellow>天族卫队长穿戴的战靴
+  - <dark_purple>一阶装备
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天族卫队副官剑:
+  Id: 283
+  Display: <blue>天族卫队副官剑
+  Lore:
+  - <white>近战武器                 稀有
+  - '<dark_red><strikethrough>                      '
+  - '<dark_gray>攻击力: <aqua>35-330'
+  - '<dark_gray>招架: <aqua>5%'
+  - '<dark_gray>暴击几率: <aqua>10%'
+  - '<dark_gray>暴击伤害: <aqua>100%'
+  - '<dark_gray>吸血几率: <aqua>5%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - '<dark_red><strikethrough>                      '
+  - <dark_gray>装备等级： <aqua>5
+  - '<dark_gray>评分: <red>125'
+  - <yellow>天族卫队副官使用的制式长剑
+  - <dark_purple>一阶装备
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天族卫队副官护腿:
+  Id: 316
+  Display: <blue>天族卫队副官护腿
+  Lore:
+  - <white>防具                   稀有
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>8%'
+  - '<dark_gray>生命上限: <aqua>1000'
+  - '<green>生命恢复: <light_purple>1%'
+  - '<dark_gray>闪避: <aqua>2.5%'
+  - '<dark_gray>每秒回血: <aqua>5'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>5
+  - '<dark_gray>评分: <red>125'
+  - <yellow>天族卫队副官穿戴的护腿
+  - <dark_purple>一阶装备
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天族卫队副官战靴:
+  Id: 317
+  Display: <blue>天族卫队副官战靴
+  Lore:
+  - <white>防具                   稀有
+  - '<dark_red><strikethrough>                      '
+  - '<dark_gray>护甲强度: <aqua>8%'
+  - '<dark_gray>生命上限: <aqua>600'
+  - '<green>生命恢复: <light_purple>1%'
+  - '<dark_gray>闪避: <aqua>2.5%'
+  - '<dark_gray>移动速度: <aqua>15%'
+  - '<dark_red><strikethrough>                      '
+  - <dark_gray>装备等级： <aqua>5
+  - '<dark_gray>评分: <red>125'
+  - <yellow>天族卫队副官穿戴的战靴
+  - <dark_purple>一阶装备
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+苍穹细剑:
+  Id: 283
+  Display: <dark_purple>苍穹细剑
+  Lore:
+  - <aqua>隐藏武器                 史诗
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>攻击力: <aqua>75-850'
+  - '<dark_gray>招架: <aqua>5%'
+  - '<dark_gray>暴击几率: <aqua>15%'
+  - '<dark_gray>暴击伤害: <aqua>150%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>10
+  - '<dark_gray>评分: <red>400'
+  - <yellow>天族女战士艾瑟尔残影使用的细剑
+  - <dark_purple>一阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+苍穹元帅头盔:
+  Id: 310
+  Display: <gold><bold>苍穹元帅头盔
+  Lore:
+  - <blue>防具                   远古传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>12%'
+  - '<dark_gray>生命上限: <aqua>50000'
+  - '<dark_gray>攻击力: <aqua>300-450'
+  - '<gray>招架: <aqua>3%'
+  - '<gray>闪避: <aqua>3%'
+  - '<dark_gray>每秒回血: <aqua>80'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - '<dark_gray>评分: <red>7500'
+  - <yellow>苍穹舰灵·天枢的头盔
+  - <red>天空之船最终奖励
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+苍穹元帅胸甲:
+  Id: 311
+  Display: <gold><bold>苍穹元帅胸甲
+  Lore:
+  - <blue>防具                   远古传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>50000'
+  - '<dark_gray>攻击力: <aqua>750-1000'
+  - '<dark_gray>每秒回血: <aqua>120'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - '<dark_gray>评分: <red>7500'
+  - <yellow>苍穹舰灵·天枢的胸甲
+  - <red>天空之船最终奖励
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+苍穹元帅护腿:
+  Id: 312
+  Display: <gold><bold>苍穹元帅护腿
+  Lore:
+  - <blue>防具                   远古传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>13%'
+  - '<dark_gray>生命上限: <aqua>50000'
+  - '<dark_gray>闪避: <aqua>6%'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - '<dark_gray>评分: <red>7500'
+  - <yellow>苍穹舰灵·天枢的护腿
+  - <red>天空之船最终奖励
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+苍穹元帅战靴:
+  Id: 313
+  Display: <gold><bold>苍穹元帅战靴
+  Lore:
+  - <blue>防具                   远古传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>10%'
+  - '<dark_gray>生命上限: <aqua>50000'
+  - '<dark_gray>移动速度: <aqua>25%'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - '<dark_gray>评分: <red>7500'
+  - <yellow>苍穹舰灵·天枢的战靴
+  - <red>天空之船最终奖励
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+苍穹元帅长剑:
+  Id: 283
+  Display: <gold><bold>苍穹元帅长剑
+  Lore:
+  - <blue>近战武器             远古传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>攻击力: <aqua>1000-1500'
+  - '<dark_gray>招架: <aqua>5%'
+  - '<dark_gray>暴击几率: <aqua>15%'
+  - '<dark_gray>暴击伤害: <aqua>150%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>40%'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - '<dark_gray>评分: <red>7500'
+  - <yellow>苍穹舰灵·天枢佩带的长剑
+  - <red>天空之船最终奖励
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天晶:
+  Id: 388
+  Display: <aqua>天晶
+  Lore:
+  - <gray>天族遗迹中发现的能量结晶
+  - <gray>蕴含着纯净的天族之力
+  - ''
+  - '<yellow>右键出售: <green>20 金币'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天穹石:
+  Id: 388
+  Display: <blue>天穹石
+  Lore:
+  - <gray>天空之船核心材料碎片
+  - <gray>蕴含着天族文明的精华
+  - ''
+  - <yellow>收集足够数量可兑换天族装备
+  - <red>不可出售
+  Options:
+    Unbreakable: true
+    HideAttributes: true

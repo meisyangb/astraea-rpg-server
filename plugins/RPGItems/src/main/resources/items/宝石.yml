@@ -1,0 +1,1253 @@
+幻域杀戮宝石:
+  Id: 331
+  Display: <dark_red>幻域杀戮宝石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>攻击力: <aqua>+300-600'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+幻域屠戮宝石:
+  Id: 331
+  Display: <dark_red>幻域屠戮宝石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+30%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+杀戮之石I:
+  Id: 331
+  Display: <dark_red>杀戮之石I
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>攻击力: <aqua>+0-50'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+杀戮之石II:
+  Id: 331
+  Display: <dark_red>杀戮之石II
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>攻击力: <aqua>+25-100'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+杀戮之石III:
+  Id: 331
+  Display: <dark_red>杀戮之石III
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>攻击力: <aqua>+50-150'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+屠戮之石I:
+  Id: 331
+  Display: <dark_red>屠戮之石I
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+5%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+屠戮之石II:
+  Id: 331
+  Display: <dark_red>屠戮之石II
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+10%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+屠戮之石III:
+  Id: 331
+  Display: <dark_red>屠戮之石III
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+15%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+魔化杀戮之石:
+  Id: 331
+  Display: <dark_red>魔化杀戮之石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>攻击力: <aqua>+25-50'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+恶魔屠戮之石:
+  Id: 331
+  Display: <dark_red>恶魔屠戮之石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+6%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+魔王狂暴之石:
+  Id: 331
+  Display: <dark_red>魔王狂暴之石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击几率: <aqua>+5%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+魔族杀戮之石:
+  Id: 331
+  Display: <dark_red>魔族杀戮之石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>攻击力: <aqua>+75-100'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+圣者杀戮之石:
+  Id: 331
+  Display: <dark_red>圣者杀戮之石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>攻击力: <aqua>+100-200'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+堕天狂暴之石:
+  Id: 331
+  Display: <dark_red>堕天狂暴之石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击几率: <aqua>+10%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+召唤师屠戮之石:
+  Id: 331
+  Display: <dark_red>召唤师屠戮之石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+18%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+贤者杀戮之石:
+  Id: 331
+  Display: <dark_red>贤者杀戮之石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>攻击力: <aqua>+150-350'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+生命之石I:
+  Id: 388
+  Display: <green>生命之石I
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>生命上限: <aqua>+250'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+生命之石II:
+  Id: 388
+  Display: <green>生命之石II
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>生命上限: <aqua>+500'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+生命之石III:
+  Id: 388
+  Display: <green>生命之石III
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>生命上限: <aqua>+750'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+幻域生命宝石:
+  Id: 388
+  Display: <green>幻域生命宝石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>生命上限: <aqua>+3000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+魔化生命之石:
+  Id: 388
+  Display: <green>魔化生命之石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>生命上限: <aqua>+350'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+恶魔敏捷之石:
+  Id: 388
+  Display: <green>恶魔敏捷之石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>闪避: <aqua>+1.5%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+魔王防御之石:
+  Id: 388
+  Display: <green>魔王防御之石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>防御力: <aqua>+1000-2000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+魔族生命之石:
+  Id: 388
+  Display: <green>魔族生命之石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>生命上限: <aqua>+600'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+圣者生命之石:
+  Id: 388
+  Display: <green>圣者生命之石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>生命上限: <aqua>+1200'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+堕天防御之石:
+  Id: 388
+  Display: <green>堕天防御之石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>防御力: <aqua>+1500-3000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+召唤师敏捷之石:
+  Id: 388
+  Display: <green>召唤师敏捷之石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>闪避: <aqua>+2%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+贤者生命之石:
+  Id: 388
+  Display: <green>贤者生命之石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>生命上限: <aqua>+2000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+保护卷轴:
+  Id: 339
+  Display: <gold>强化保护卷轴
+  Lore:
+  - <green>确保强化必成卷轴
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+巫妖生命之石:
+  Id: 388
+  Display: <green>巫妖生命之石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>生命上限: <aqua>+5000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+巫妖杀戮之石:
+  Id: 331
+  Display: <dark_red>巫妖杀戮之石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>攻击力: <aqua>+1000-2500'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+魔王杀戮圣石:
+  Id: 331
+  Display: <dark_red>魔王杀戮圣石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>攻击力: <aqua>+5000-8000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+魔王屠戮圣石:
+  Id: 331
+  Display: <dark_red>魔王屠戮圣石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+100%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+魔王狂暴圣石:
+  Id: 331
+  Display: <dark_red>魔王狂暴圣石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击几率: <aqua>+5%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+魔王生命圣石:
+  Id: 388
+  Display: <green>魔王生命圣石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>生命上限: <aqua>+15000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+魔王杀戮神石:
+  Id: INK_SAC
+  Display: <yellow>魔王杀戮神石
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>攻击力: <aqua>+2500-5000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+魔王生命神石:
+  Id: INK_SAC
+  Display: <yellow>魔王生命神石
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>生命上限: <aqua>+10000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+强化石:
+  Id: INK_SAC
+  Display: <green>强化石
+  Lore:
+  - <green>纯度:<yellow><bold>5
+  - <yellow>说明1:<gray>增加锻造强度极品率
+  - <yellow>说明2:<gray>但不会影响品质几率
+  - <yellow>说明3:<gray>纯度5代表+5%几率，可叠加使用
+  - <yellow>说明4:<gray>建议一次不要超过20个，多了浪费
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 12
+魔王韧性神石:
+  Id: 388
+  Display: <dark_green>魔王韧性神石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>暴伤抵抗: <aqua>+60%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+魔王冷静神石:
+  Id: 388
+  Display: <dark_green>魔王冷静神石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>暴击抵抗: <aqua>+3%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+魔王荆棘神石:
+  Id: INK_SAC
+  Display: <yellow>魔王荆棘神石
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>反伤比例: <aqua>+2%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+魔王坚固神石:
+  Id: INK_SAC
+  Display: <yellow>魔王坚固神石
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>反伤比例: <aqua>+15%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+魔王穿刺神石:
+  Id: 331
+  Display: <dark_red>魔王穿刺神石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+100%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+魔王毁灭神石:
+  Id: 331
+  Display: <dark_red>魔王毁灭神石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+120%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+魔王愤怒神石:
+  Id: 331
+  Display: <dark_red>魔王愤怒神石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+80%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+魔王战神神石:
+  Id: 331
+  Display: <dark_red>魔王战神神石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>【PVP】攻击力: <aqua>+7000-15000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+魔王金刚神石:
+  Id: 388
+  Display: <dark_green>魔王金刚神石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>【PVP】防御力: <aqua>+7000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+魔王专注神石:
+  Id: 331
+  Display: <dark_red>魔王专注神石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击几率: <aqua>+3%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空破甲神石:
+  Id: 331
+  Display: <dark_red>天空破甲神石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+30%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空破甲神石2:
+  Id: 331
+  Display: <dark_red>天空破甲神石II
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+50%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空愤怒神石:
+  Id: 331
+  Display: <dark_red>天空愤怒神石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+35%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空愤怒神石2:
+  Id: 331
+  Display: <dark_red>天空愤怒神石II
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+55%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空破防神石:
+  Id: 331
+  Display: <dark_red>天空破防神石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+80%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空破防神石2:
+  Id: 331
+  Display: <dark_red>天空破防神石II
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+100%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空专注神石:
+  Id: 331
+  Display: <dark_red>天空专注神石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击几率: <aqua>+4%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空专注神石2:
+  Id: 331
+  Display: <dark_red>天空专注神石II
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击几率: <aqua>+8%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空暴怒神石:
+  Id: 331
+  Display: <dark_red>天空暴怒神石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+130%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空暴怒神石2:
+  Id: 331
+  Display: <dark_red>天空暴怒神石II
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+180%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空狂暴神石:
+  Id: 331
+  Display: <dark_red>天空狂暴神石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击几率: <aqua>+6%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空吸血神石:
+  Id: 331
+  Display: <dark_red>天空吸血神石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>生命吸取: <aqua>+5%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空嗜血神石:
+  Id: 331
+  Display: <dark_red>天空嗜血神石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>吸血倍率: <aqua>+60%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空战神神石:
+  Id: 331
+  Display: <dark_red>天空战神神石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>【PVP】攻击力: <aqua>+12000-25000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空战神神石2:
+  Id: 331
+  Display: <dark_red>天空战神神石II
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>【PVP】攻击力: <aqua>+20000-45000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空力量神石:
+  Id: INK_SAC
+  Display: <yellow>天空力量神石
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>攻击力: <aqua>+4500-12500'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+天空力量神石2:
+  Id: 331
+  Display: <dark_red>天空力量神石II
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>攻击力: <aqua>+8000-21000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空冷静神石:
+  Id: 388
+  Display: <dark_green>天空冷静神石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>暴击抵抗: <aqua>+5%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空自愈圣石:
+  Id: 388
+  Display: <green>天空自愈圣石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>每秒回血: <aqua>+5000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空铠甲神石:
+  Id: INK_SAC
+  Display: <yellow>天空铠甲神石
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>【PVP】防御力: <aqua>+15000-30000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+天空铠甲神石2:
+  Id: INK_SAC
+  Display: <yellow>天空铠甲神石II
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>【PVP】防御力: <aqua>+50000-75000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+天空圣光神石:
+  Id: 388
+  Display: <dark_green>天空圣光神石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>吸血抵抗: <aqua>+5%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空生命神石:
+  Id: INK_SAC
+  Display: <yellow>天空生命神石
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>生命上限: <aqua>+20000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+天空生命圣石:
+  Id: 388
+  Display: <green>天空生命圣石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>生命上限: <aqua>+25000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空生命圣石2:
+  Id: 388
+  Display: <green>天空生命圣石II
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>生命上限: <aqua>+40000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空生命神石2:
+  Id: INK_SAC
+  Display: <yellow>天空生命神石II
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>生命上限: <aqua>+35000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+天空韧性圣石:
+  Id: 388
+  Display: <green>天空韧性圣石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>暴伤抵抗: <aqua>+110%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空韧性圣石2:
+  Id: 388
+  Display: <green>天空韧性圣石II
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>暴伤抵抗: <aqua>+150%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空镇定圣石:
+  Id: 388
+  Display: <green>天空镇定圣石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>暴击抵抗: <aqua>+5%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空神圣圣石:
+  Id: 388
+  Display: <green>天空神圣圣石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>生命上限: <aqua>+5000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空神圣圣石2:
+  Id: 388
+  Display: <green>天空神圣圣石II
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>生命上限: <aqua>+8000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天空荆棘神石:
+  Id: INK_SAC
+  Display: <yellow>天空荆棘神石
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>反伤比例: <aqua>+1%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+天空荆棘神石2:
+  Id: INK_SAC
+  Display: <yellow>天空荆棘神石II
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>反伤比例: <aqua>+5%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+天空防御神石:
+  Id: INK_SAC
+  Display: <yellow>天空防御神石
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>防御力: <aqua>+35000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+天空防御神石2:
+  Id: INK_SAC
+  Display: <yellow>天空防御神石II
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>防御力: <aqua>+55000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+天空护甲神石:
+  Id: INK_SAC
+  Display: <yellow>天空护甲神石
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>防御力: <aqua>+8000-15000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+天空护甲神石2:
+  Id: INK_SAC
+  Display: <yellow>天空护甲神石II
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>防御力: <aqua>+15000-25000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+天空闪避神石:
+  Id: INK_SAC
+  Display: <yellow>天空闪避神石
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>闪避: <aqua>+7%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+天空闪避神石2:
+  Id: INK_SAC
+  Display: <yellow>天空闪避神石II
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>闪避: <aqua>+10%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+天空坚固神石:
+  Id: INK_SAC
+  Display: <yellow>天空坚固神石
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>防御力: <aqua>+10000-20000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+天空坚固神石2:
+  Id: INK_SAC
+  Display: <yellow>天空坚固神石II
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>防御力: <aqua>+20000-35000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+幻术师生命之石:
+  Id: 388
+  Display: <green>幻术师生命之石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>生命上限: <aqua>+7500'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+幻术师敏捷之石:
+  Id: INK_SAC
+  Display: <yellow>幻术师敏捷之石
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>闪避: <aqua>+5%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+军士生命之石:
+  Id: 388
+  Display: <green>军士生命之石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>生命上限: <aqua>+10000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+军士杀戮之石:
+  Id: INK_SAC
+  Display: <yellow>军士杀戮之石
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>攻击力: <aqua>+1500-3000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+城主杀戮之石:
+  Id: 331
+  Display: <dark_red>城主杀戮之石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>攻击力: <aqua>+3500-5500'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+城主屠戮之石:
+  Id: 331
+  Display: <dark_red>城主屠戮之石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+75%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+城主狂暴之石:
+  Id: 331
+  Display: <dark_red>城主狂暴之石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击几率: <aqua>+4%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天启狂暴之石:
+  Id: 331
+  Display: <dark_red>天启狂暴之石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击几率: <aqua>+8%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天启狂暴之石2:
+  Id: 331
+  Display: <dark_red>天启狂暴之石II
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击几率: <aqua>+10%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天启屠戮之石:
+  Id: 331
+  Display: <dark_red>天启屠戮之石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+200%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天启屠戮之石2:
+  Id: 331
+  Display: <dark_red>天启屠戮之石II
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+230%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天启杀戮之石:
+  Id: 331
+  Display: <dark_red>天启杀戮之石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>攻击力: <aqua>+21000-25000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天启杀戮之石2:
+  Id: 331
+  Display: <dark_red>天启杀戮之石II
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>攻击力: <aqua>+25000-30000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天启镇定圣石:
+  Id: 388
+  Display: <green>天启镇定圣石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>暴击抵抗: <aqua>+8%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天启镇定圣石2:
+  Id: 388
+  Display: <green>天启镇定圣石II
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>暴击抵抗: <aqua>+10%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天启韧性圣石:
+  Id: 388
+  Display: <green>天启韧性圣石
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>暴伤抵抗: <aqua>+150%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天启韧性圣石2:
+  Id: 388
+  Display: <green>天启韧性圣石II
+  Lore:
+  - <white>强化石
+  - <dark_green>绿宝石
+  - '<gray>暴伤抵抗: <aqua>+210%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天启荆棘神石:
+  Id: INK_SAC
+  Display: <yellow>天启荆棘神石
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>反伤比例: <aqua>+1%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+天启荆棘神石2:
+  Id: INK_SAC
+  Display: <yellow>天启荆棘神石II
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>反伤比例: <aqua>+1%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+天启破防神石:
+  Id: 331
+  Display: <dark_red>天启破防神石
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+150%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天启破防神石2:
+  Id: 331
+  Display: <dark_red>天启破防神石II
+  Lore:
+  - <white>强化石
+  - <dark_red>红宝石
+  - '<gray>暴击伤害: <aqua>+200%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+天启坚固神石:
+  Id: INK_SAC
+  Display: <yellow>天启坚固神石
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>防御力: <aqua>+15000-25000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+天启坚固神石2:
+  Id: INK_SAC
+  Display: <yellow>天启坚固神石II
+  Lore:
+  - <white>强化石
+  - <yellow>黄宝石
+  - '<gray>防御力: <aqua>+25000-40000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+暗影打击:
+  Id: INK_SAC
+  Display: <dark_red>暗影打击
+  Lore:
+  - <white>强化石
+  - <dark_purple>紫宝石
+  - '<gray>闪避: <aqua>+25%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 5
+神圣打击:
+  Id: INK_SAC
+  Display: <dark_red>神圣打击
+  Lore:
+  - <white>强化石
+  - <dark_purple>紫宝石
+  - '<gray>闪避: <aqua>+25%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 8

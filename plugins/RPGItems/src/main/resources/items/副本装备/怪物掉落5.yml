@@ -1,0 +1,426 @@
+莫洛斯托魔剑:
+  Id: 276
+  Display: <gold><bold>莫洛斯托-魔剑
+  Lore:
+  - <blue>主手武器                 远古传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>攻击力:<aqua>4000-13500
+  - <dark_gray>招架:<aqua>6%
+  - <dark_gray>暴击几率:<aqua>10%
+  - <dark_gray>暴击伤害:<aqua>200%
+  - <dark_gray>吸血几率:<aqua>20%
+  - <dark_gray>吸血倍率:<aqua>20%
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_gray>评分:<red>7500
+  - <yellow>魔王莫洛斯托的佩剑
+  - <red>魔王拆解
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔王头盔:
+  Id: 310
+  Display: <gold><bold>魔王头盔
+  Lore:
+  - <blue>防具                   远古传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>护甲强度:<aqua>12%
+  - <dark_gray>生命上限:<aqua>50000
+  - <dark_gray>攻击力:<aqua>300-450
+  - <gray>招架:<aqua>3%
+  - <gray>闪避:<aqua>3%
+  - <dark_gray>每秒回血:<aqua>80
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_gray>评分:<red>7500
+  - <yellow>魔王莫洛斯托的头盔
+  - <red>魔王拆解
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔王铠甲:
+  Id: 311
+  Display: <gold><bold>魔王铠甲
+  Lore:
+  - <blue>防具                   远古传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>护甲强度:<aqua>15%
+  - <dark_gray>生命上限:<aqua>50000
+  - <dark_gray>攻击力:<aqua>750-1000
+  - <dark_gray>每秒回血:<aqua>120
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_gray>评分:<red>7500
+  - <yellow>魔王莫洛斯托的铠甲
+  - <red>魔王拆解
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔王护腿:
+  Id: 312
+  Display: <gold><bold>魔王护腿
+  Lore:
+  - <blue>防具                   远古传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>护甲强度:<aqua>13%
+  - <dark_gray>生命上限:<aqua>50000
+  - <dark_gray>闪避:<aqua>6%
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_gray>评分:<red>7500
+  - <yellow>魔王莫洛斯托的护腿
+  - <red>魔王拆解
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔王战靴:
+  Id: 313
+  Display: <gold><bold>魔王战靴
+  Lore:
+  - <blue>防具                   远古传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>护甲强度:<aqua>10%
+  - <dark_gray>生命上限:<aqua>50000
+  - <dark_gray>移动速度:<aqua>25%
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_gray>评分:<red>7500
+  - <yellow>魔王莫洛斯托的战靴
+  - <red>魔王拆解
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+卡拉特斯佩剑:
+  Id: 267
+  Display: <gold><bold>卡拉特斯佩剑
+  Lore:
+  - <green>主手武器                远古传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>攻击力:<aqua>2500-8500
+  - <dark_gray>招架:<aqua>6%
+  - <dark_gray>暴击几率:<aqua>10%
+  - <dark_gray>暴击伤害:<aqua>200%
+  - <dark_gray>吸血几率:<aqua>15%
+  - <dark_gray>吸血倍率:<aqua>20%
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_gray>评分:<red>5000
+  - <yellow>城主卡拉特斯的佩剑
+  - <dark_purple>四阶装备
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+卡拉特斯铠甲:
+  Id: 311
+  Display: <gold><bold>卡拉特斯铠甲
+  Lore:
+  - <green>防具                   远古传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>护甲强度:<aqua>17%
+  - <dark_gray>生命上限:<aqua>35000
+  - <dark_gray>攻击力:<aqua>500-650
+  - <dark_gray>每秒回血:<aqua>80
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_gray>评分:<red>5000
+  - <yellow>城主卡拉特斯的铠甲
+  - <dark_purple>四阶装备
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+卡拉特斯护腿:
+  Id: 312
+  Display: <gold><bold>卡拉特斯护腿
+  Lore:
+  - <green>防具                   传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>护甲强度:<aqua>17%
+  - <dark_gray>生命上限:<aqua>35000
+  - <dark_gray>闪避:<aqua>3%
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_gray>评分:<red>5000
+  - <yellow>城主卡拉特斯的护腿
+  - <dark_purple>四阶装备
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+卡拉特斯战靴:
+  Id: 313
+  Display: <gold><bold>卡拉特斯战靴
+  Lore:
+  - <green>防具                   传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>护甲强度:<aqua>12%
+  - <dark_gray>生命上限:<aqua>35000
+  - <dark_gray>闪避:<aqua>3%
+  - <dark_gray>移动速度:<aqua>20%
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_gray>评分:<red>5000
+  - <yellow>城主卡拉特斯的战靴
+  - <dark_purple>四阶装备
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+科洛莫斯重剑:
+  Id: 267
+  Display: <gold>科洛莫斯重剑
+  Lore:
+  - <green>主手武器                 传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>攻击力:<aqua>1000-6000
+  - <dark_gray>招架:<aqua>6%
+  - <dark_gray>暴击几率:<aqua>10%
+  - <dark_gray>暴击伤害:<aqua>230%
+  - <dark_gray>吸血几率:<aqua>17.5%
+  - <dark_gray>吸血倍率:<aqua>20%
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_gray>评分:<red>3500
+  - <yellow>遗忘军士-科洛莫斯使用的巨剑
+  - <dark_purple>四阶装备
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+科洛莫斯重甲:
+  Id: 315
+  Display: <gold>科洛莫斯重甲
+  Lore:
+  - <green>防具                   传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>护甲强度:<aqua>16%
+  - <dark_gray>生命上限:<aqua>26000
+  - <dark_gray>攻击力:<aqua>300-400
+  - <dark_gray>每秒回血:<aqua>70
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_gray>评分:<red>3500
+  - <yellow>遗忘军士-科洛莫斯的重甲
+  - <dark_purple>四阶装备
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+科洛莫斯护腿:
+  Id: 316
+  Display: <gold>科洛莫斯护腿
+  Lore:
+  - <green>防具                   传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>护甲强度:<aqua>16%
+  - <dark_gray>生命上限:<aqua>26000
+  - <dark_gray>闪避:<aqua>3%
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_gray>评分:<red>3500
+  - <yellow>遗忘军士-科洛莫斯穿戴的护腿
+  - <dark_purple>四阶装备
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+科洛莫斯战靴:
+  Id: 317
+  Display: <gold>科洛莫斯战靴
+  Lore:
+  - <green>防具                   传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>护甲强度:<aqua>11%
+  - <dark_gray>生命上限:<aqua>26000
+  - <dark_gray>闪避:<aqua>3%
+  - <dark_gray>移动速度:<aqua>20%
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_gray>评分:<red>3500
+  - <yellow>遗忘军士-科洛莫斯穿戴的战靴
+  - <dark_purple>四阶装备
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+遗忘术士之剑:
+  Id: 267
+  Display: <gold>遗忘术士之剑
+  Lore:
+  - <green>主手武器                 传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>攻击力:<aqua>800-4800
+  - <dark_gray>招架:<aqua>6%
+  - <dark_gray>暴击几率:<aqua>10%
+  - <dark_gray>暴击伤害:<aqua>150%
+  - <dark_gray>吸血几率:<aqua>15%
+  - <dark_gray>吸血倍率:<aqua>20%
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_gray>评分:<red>2000
+  - <yellow>不知名咒术师使用的重剑
+  - <dark_purple>四阶装备
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+遗忘术士链甲:
+  Id: 303
+  Display: <gold>遗忘幻术士链甲
+  Lore:
+  - <green>防具                   传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>护甲强度:<aqua>15%
+  - <dark_gray>生命上限:<aqua>18000
+  - <dark_gray>攻击力:<aqua>200-300
+  - <dark_gray>每秒回血:<aqua>60
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_gray>评分:<red>2000
+  - <yellow>不知名咒术师穿戴的链甲
+  - <dark_purple>四阶装备
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+遗忘术士链腿:
+  Id: 304
+  Display: <gold>遗忘幻术士链腿
+  Lore:
+  - <green>防具                   传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>护甲强度:<aqua>15%
+  - <dark_gray>生命上限:<aqua>18000
+  - <dark_gray>闪避:<aqua>3%
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_gray>评分:<red>3500
+  - <yellow>不知名咒术师穿戴的护腿
+  - <dark_purple>四阶装备
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+遗忘术士链靴:
+  Id: 305
+  Display: <gold>遗忘幻术士链靴
+  Lore:
+  - <green>防具                   传说
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>护甲强度:<aqua>10%
+  - <dark_gray>生命上限:<aqua>18000
+  - <dark_gray>闪避:<aqua>3%
+  - <dark_gray>移动速度:<aqua>20%
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_gray>评分:<red>2000
+  - <yellow>不知名咒术师穿戴的链靴
+  - <dark_purple>四阶装备
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true

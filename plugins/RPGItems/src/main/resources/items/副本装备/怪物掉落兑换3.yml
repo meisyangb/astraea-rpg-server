@@ -1,0 +1,192 @@
+魔族结晶:
+  Id: 405
+  Display: <blue>魔族结晶
+  Lore:
+  - <white>材料                   稀有
+  - <yellow>可以用于兑换
+  - <yellow>幻界魔族要塞BOSS装备
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔族统帅之剑:
+  Id: 276
+  Display: <blue>魔族统帅之剑
+  Lore:
+  - <white>近战武器                  稀有
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>攻击力： <aqua>60-900
+  - <dark_gray>招架： <aqua>5%
+  - <dark_gray>暴击几率： <aqua>13%
+  - <dark_gray>暴击伤害： <aqua>125%
+  - <dark_gray>吸血几率： <aqua>5%
+  - <dark_gray>吸血倍率： <aqua>20%
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>15
+  - <dark_gray>评分： <red>300
+  - <yellow>魔族统帅使用的魔剑
+  - <dark_purple>二阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔族统帅布甲:
+  Id: 299
+  Display: <blue>魔族统帅布甲
+  Lore:
+  - <white>防具                    稀有
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>护甲强度： <aqua>15%
+  - <dark_gray>生命上限： <aqua>5000
+  - <dark_gray>攻击力： <aqua>20-80
+  - <dark_gray>每秒回血： <aqua>15
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>15
+  - <dark_gray>评分： <red>300
+  - <yellow>魔族统帅穿戴的布甲
+  - <dark_purple>二阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔族统帅绑腿:
+  Id: 300
+  Display: <blue>魔族统帅绑腿
+  Lore:
+  - <white>防具                    稀有
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>护甲强度： <aqua>10%
+  - <dark_gray>生命上限： <aqua>4500
+  - <dark_gray>闪避： <aqua>2.5%
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>15
+  - <dark_gray>评分： <red>300
+  - <yellow>魔界统帅穿戴的绑腿
+  - <dark_purple>二阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔族统帅布靴:
+  Id: 301
+  Display: <blue>魔族统帅布靴
+  Lore:
+  - <white>防具                    稀有
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>护甲强度： <aqua>10%
+  - <dark_gray>生命上限： <aqua>4000
+  - <dark_gray>闪避： <aqua>2.5%
+  - <dark_gray>移动速度： <aqua>15%
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>15
+  - <dark_gray>评分： <red>300
+  - <yellow>魔界统帅穿戴的布靴
+  - <dark_purple>二阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+伊特拉苏裁决之刃:
+  Id: 283
+  Display: <dark_purple>伊特拉苏裁决之刃
+  Lore:
+  - <aqua>近战武器                   史诗
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>攻击力： <aqua>150-1800
+  - <dark_gray>招架： <aqua>5%
+  - <dark_gray>暴击几率： <aqua>15%
+  - <dark_gray>暴击伤害： <aqua>150%
+  - <dark_gray>吸血几率： <aqua>10%
+  - <dark_gray>吸血倍率： <aqua>20%
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>15
+  - <dark_gray>评分： <red>500
+  - <yellow>精灵圣者曾经的武器裁决之刃
+  - <dark_purple>三阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+伊特拉苏衬衫:
+  Id: 299
+  Display: <dark_purple>伊特拉苏衬衫
+  Lore:
+  - <aqua>防具                   史诗
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>护甲强度： <aqua>15%
+  - <dark_gray>生命上限： <aqua>7000
+  - <dark_gray>攻击力： <aqua>50-100
+  - <dark_gray>燃烧： <aqua>1%
+  - <dark_gray>每秒回血： <aqua>20
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>15
+  - <dark_gray>评分： <red>500
+  - <yellow>精灵圣者曾经穿戴的魔法衬衫
+  - <dark_purple>二阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+伊特拉苏长裤:
+  Id: 300
+  Display: <dark_purple>伊特拉苏长裤
+  Lore:
+  - <aqua>防具                   史诗
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>护甲强度： <aqua>10%
+  - <dark_gray>生命上限： <aqua>6500
+  - <dark_gray>闪避： <aqua>2.5%
+  - <dark_gray>燃烧： <aqua>1%
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>15
+  - <dark_gray>评分： <red>500
+  - <yellow>精灵圣者曾经穿戴的魔法长裤
+  - <dark_purple>二阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+伊特拉苏长靴:
+  Id: 301
+  Display: <dark_purple>伊特拉苏长靴
+  Lore:
+  - <aqua>防具                   史诗
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>护甲强度： <aqua>10%
+  - <dark_gray>生命上限： <aqua>6000
+  - <dark_gray>闪避： <aqua>2.5%
+  - <dark_gray>燃烧： <aqua>1%
+  - <dark_gray>移动速度： <aqua>15%
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>15
+  - <dark_gray>评分： <red>500
+  - <yellow>精灵圣者曾经穿戴的魔法长靴
+  - <dark_purple>二阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true

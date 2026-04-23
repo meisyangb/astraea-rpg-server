@@ -1,0 +1,99 @@
+魔剑卡拉特尔:
+  Id: 283
+  Display: <dark_purple>魔剑卡拉特尔
+  Lore:
+  - <aqua>隐藏武器                 史诗
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>攻击力: <aqua>150-2500'
+  - '<dark_gray>招架: <aqua>5%'
+  - '<dark_gray>暴击几率: <aqua>20%'
+  - '<dark_gray>暴击伤害: <aqua>200%'
+  - '<dark_gray>吸血几率: <aqua>20%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>17
+  - '<dark_gray>评分: <red>1000'
+  - <yellow>堕落天使手持的魔剑
+  - <dark_purple>三阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+堕天圣铠:
+  Id: 307
+  Display: <dark_purple>堕天圣铠
+  Lore:
+  - <aqua>隐藏防具                 史诗
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>15000'
+  - '<dark_gray>攻击力: <aqua>150-300'
+  - '<dark_gray>燃烧: <aqua>2%'
+  - '<dark_gray>每秒回血: <aqua>50'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>17
+  - '<dark_gray>评分: <red>1500'
+  - <yellow>被堕落天使污染的圣铠
+  - <dark_purple>三阶装备
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+堕天护腿:
+  Id: 308
+  Display: <dark_purple>堕天护腿
+  Lore:
+  - <aqua>隐藏防具                 史诗
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>15000'
+  - '<dark_gray>闪避: <aqua>2.5%'
+  - '<dark_gray>燃烧: <aqua>2%'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>17
+  - '<dark_gray>评分: <red>1500'
+  - <yellow>被堕落天使污染的护腿
+  - <dark_purple>三阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+堕天战靴:
+  Id: 309
+  Display: <dark_purple>堕天战靴
+  Lore:
+  - <aqua>隐藏防具                   史诗
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>15000'
+  - '<dark_gray>生命恢复: <aqua>1%'
+  - '<dark_gray>移动速度: <aqua>20%'
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <dark_gray>装备等级： <aqua>17
+  - '<dark_gray>评分: <red>1500'
+  - <yellow>被堕落天使污染的战靴
+  - <dark_purple>三阶装备
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <gray>*******<aqua>宝石镶嵌<gray>*******
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true

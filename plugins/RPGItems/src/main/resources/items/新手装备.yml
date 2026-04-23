@@ -1,0 +1,260 @@
+冒险者短剑:
+  Id: IRON_SWORD
+  Display: <yellow>冒险者短剑
+  Lore:
+  - <white>近战武器                  普通
+  - <white><strikethrough>一一一一一一一一一一
+  - <yellow>攻击力： <dark_aqua>50-200
+  - <yellow>招架： <dark_aqua>3%
+  - <white><strikethrough>一一一一一一一一一一
+  - <yellow>冒险者常用的武器
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+冒险者头盔:
+  Id: IRON_HELMET
+  Display: <yellow>冒险者头盔
+  Lore:
+  - <white>防具                    普通
+  - <white><strikethrough>一一一一一一一一一一
+  - <yellow>护甲强度： <dark_aqua>3%
+  - <yellow>生命上限： <dark_aqua>300
+  - <white><strikethrough>一一一一一一一一一一
+  - <yellow>冒险者穿戴的头盔
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+冒险者胸甲:
+  Id: IRON_CHESTPLATE
+  Display: <yellow>冒险者胸甲
+  Lore:
+  - <white>防具                    普通
+  - <white><strikethrough>一一一一一一一一一一
+  - <yellow>护甲强度： <dark_aqua>5%
+  - <yellow>生命上限： <dark_aqua>500
+  - <white><strikethrough>一一一一一一一一一一
+  - <yellow>冒险者穿戴的胸甲
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+冒险者护腿:
+  Id: IRON_LEGGINGS
+  Display: <yellow>冒险者护腿
+  Lore:
+  - <white>防具                    普通
+  - <white><strikethrough>一一一一一一一一一一
+  - <yellow>护甲强度： <dark_aqua>4%
+  - <yellow>生命上限： <dark_aqua>300
+  - <white><strikethrough>一一一一一一一一一一
+  - <yellow>冒险者穿戴的护腿
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+冒险者短靴:
+  Id: IRON_BOOTS
+  Display: <yellow>冒险者短靴
+  Lore:
+  - <white>防具                    普通
+  - <white><strikethrough>一一一一一一一一一一
+  - <yellow>护甲强度： <dark_aqua>3%
+  - <yellow>生命上限： <dark_aqua>300
+  - <yellow>移动速度： <dark_aqua>5%
+  - <white><strikethrough>一一一一一一一一一一
+  - <yellow>冒险者穿戴的短靴
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+点券:
+  Id: PAPER
+  Display: <yellow>1000<aqua>点券
+  Lore:
+  - <gray>[<gold>点券<gray>]      <gray>[<light_purple>右键使用<gray>]
+  - <green>兑换1000点券
+  - <green>使用后消耗掉
+  - <yellow>"<gray>[<dark_purple>仅限主城使用<gray>]<yellow>"
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+初级魔法药水:
+  Id: GLASS_BOTTLE
+  Display: <dark_aqua>初级魔法药水
+  Lore:
+  - <white>补给品      药水
+  - <green>使用后消耗掉
+  - <gray>恢复魔法<aqua>30<gray>点
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+钻石原矿探测器:
+  Id: COMPASS
+  Display: <dark_aqua>[<green><bold>钻石原矿探测器<dark_aqua>]
+  Lore:
+  - <white>到资源世界手持探测器
+  - <white>按shift+右键后开启探测！
+  - <white>可获得100格内钻石原矿的XZ坐标
+  - <white>每次只会获得一个坐标
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+宝石碎片:
+  Id: QUARTZ
+  Display: <dark_purple>宝石碎片
+  Lore:
+  - <aqua>材料               史诗
+  - <yellow>可以收集用于兑换
+  - <yellow>各种强化宝石
+  - '<yellow>回收价格: <light_purple>250'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+堕落结晶:
+  Id: CHARCOAL
+  Display: <dark_purple>堕落结晶
+  Lore:
+  - <aqua>材料                    史诗
+  - <yellow>可以用于兑换
+  - <yellow>幻界堕落祭坛BOSS装备
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+炎狱头颅:
+  Id: PLAYER_HEAD
+  Display: <blue>炎狱头颅
+  Lore:
+  - <white>材料                   稀有
+  - <yellow>可以用于兑换
+  - <yellow>幻界魔族要塞头部装备
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+恶魔结晶:
+  Id: NETHER_BRICK
+  Display: <blue>恶魔结晶
+  Lore:
+  - <white>材料                   稀有
+  - <yellow>可以用于兑换
+  - <yellow>幻界前线战场BOSS装备
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔族结晶:
+  Id: NETHER_STAR
+  Display: <blue>魔族结晶
+  Lore:
+  - <white>材料                   稀有
+  - <yellow>可以用于兑换
+  - <yellow>幻界魔族要塞BOSS装备
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+圣石碎片:
+  Id: INK_SAC
+  Display: <dark_purple>圣石碎片
+  Lore:
+  - <aqua>材料           史诗
+  - <yellow>遗忘城邦的奇异碎片
+  - <yellow>可以用于兑换一些宝石
+  - '<yellow>回收价格: <light_purple>3000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 12
+遗忘图纸残页:
+  Id: PAPER
+  Display: <light_purple>遗忘图纸残页
+  Lore:
+  - <yellow>图纸残页                                     副职业用品
+  - <green>遗忘套装设计图的残页
+  - <green>收集一定数量可以兑换<gray>[<dark_purple>遗忘套装设计图<gray>]
+  - <green>与<gray>[<yellow>金币商城<gray>]<green>处兑换
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+真·魔王套装图纸:
+  Id: PAPER
+  Display: <red>真魔王装备残页
+  Lore:
+  - <yellow>图纸残页                                     副职业用品
+  - <red>真魔王装备锻造书残页
+  - <green>收集一定数量可以兑换
+  - <gray>[<red>完整的真魔王装备锻造图<gray>]
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天使核心:
+  Id: GOLD_NUGGET
+  Display: <yellow><bold>天使核心
+  Lore:
+  - <light_purple>进阶核心                   进阶道具
+  - <gold>从天使套上拆卸下来的核心部件
+  - <gold>可以使天使套的属性进一步解放加强
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+路西法的投影结晶:
+  Id: GOLDEN_SWORD
+  Display: <light_purple><bold>路西法的投影结晶
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+堕天使之尘:
+  Id: GOLDEN_SWORD
+  Display: <dark_gray><bold>堕天使之尘
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+破损的堕天使战盔:
+  Id: GOLDEN_SWORD
+  Display: <dark_gray><bold>破损的堕天使战盔
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+破损的堕天使战甲:
+  Id: GOLDEN_SWORD
+  Display: <dark_gray><bold>破损的堕天使战甲
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+破损的堕天使胫甲:
+  Id: GOLDEN_SWORD
+  Display: <dark_gray><bold>破损的堕天使胫甲
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+破损的堕天使战靴:
+  Id: GOLDEN_SWORD
+  Display: <dark_gray><bold>破损的堕天使战靴
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+白骨之骸设计图残页:
+  Id: PAPER
+  Display: <white>&L白之骸骨图纸残页
+  Lore:
+  - <yellow>图纸残页                 副职业用品
+  - <white><bold>白之骸骨套装<green>设计图的残页
+  - <green>收集一定数量可以兑换<white>&L白之骸骨套装设计图
+  - <green>于<yellow>图纸商店<green>处兑换
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+莫邪日志:
+  Id: PAPER
+  Display: <red>莫邪日志
+  Lore:
+  - <gold>锻造书碎片                     <blue>史诗
+  - <yellow>上面记录着莫邪神剑
+  - <yellow>的铸造方法但似乎缺少好多页
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔剑核心:
+  Id: BLAZE_ROD
+  Display: <red>魔剑核心
+  Lore:
+  - <white>材料                               <aqua>稀有
+  - <yellow>充满魔力的核心,可魔化神剑
+  - <yellow>用于强化三阶以上魔剑
+  Options:
+    Unbreakable: true
+    HideAttributes: true

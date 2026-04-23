@@ -1,0 +1,59 @@
+穆拉的护腿:
+  Id: 316
+  Display: <green>穆拉的护腿
+  Lore:
+  - <white>防具                   优秀
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>7%'
+  - '<dark_gray>生命上限: <aqua>300'
+  - '<dark_gray>闪避: <aqua>2.5%'
+  - '<dark_gray>每秒回血: <aqua>5'
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>评分: <red>50'
+  - <yellow>尸王穆拉穿戴的护腿
+  - <dark_purple>一阶装备
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+狼王靴子:
+  Id: 317
+  Display: <green>狼王靴子
+  Lore:
+  - <white>防具                   优秀
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>6%'
+  - '<dark_gray>生命上限: <aqua>300'
+  - '<dark_gray>闪避: <aqua>3%'
+  - '<dark_gray>移动速度: <aqua>5%'
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>评分: <red>50'
+  - <yellow>用狼王硬皮做成的神奇靴子
+  - <dark_purple>一阶装备
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+骷髅王之刃:
+  Id: 283
+  Display: <green>骷髅王之刃
+  Lore:
+  - <white>主手武器                 优秀
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>攻击力: <aqua>160-300'
+  - '<dark_gray>招架: <aqua>5%'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>75%'
+  - '<dark_gray>吸血几率: <aqua>5%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>评分: <red>50'
+  - <yellow>骷髅王特里使用的叶刃
+  - <dark_purple>一阶装备
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true

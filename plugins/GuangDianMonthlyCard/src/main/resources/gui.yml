@@ -1,0 +1,155 @@
+# GuangDianMonthlyCard - GUI配置
+
+# ==================== 主菜单 ====================
+main:
+  title: "<gold>☆ 月卡中心 ☆"
+  size: 45
+  
+  filler:
+    material: "BLACK_STAINED_GLASS_PANE"
+    name: " "
+  
+  # 按钮位置
+  slots:
+    status: 13                     # 月卡状态
+    claim: 20                      # 领取奖励
+    makeup: 21                     # 补签
+    preview: 22                    # 奖励预览
+    milestone: 23                  # 累计奖励
+    card1: 29                      # 普通月卡
+    card2: 31                      # 高级月卡
+    card3: 33                      # 至尊月卡
+    close: 40                      # 关闭
+  
+  # 物品配置
+  items:
+    status-active:
+      material: "GOLDEN_CARROT"
+      name: "<gold><bold>✦ 月卡状态 ✦"
+      lore:
+        - ""
+        - "<yellow>月卡类型: <white>%card_type%"
+        - "<yellow>剩余天数: <green>%remaining_days% 天"
+        - "<yellow>已签到: <aqua>%claimed_days% 天"
+        - "<yellow>连续签到: <aqua>%consecutive_days% 天"
+        - "<yellow>补签次数: <aqua>%makeup_count%/%max_makeup%"
+        - ""
+        - "<gray>经验加成: <green>+%exp_boost%%"
+        - "<gray>掉落加成: <green>+%drop_boost%%"
+    
+    status-inactive:
+      material: "BARRIER"
+      name: "<red><bold>✘ 未激活月卡"
+      lore:
+        - ""
+        - "<gray>你还没有激活月卡"
+        - "<yellow>点击下方月卡购买!"
+    
+    claim-available:
+      material: "CHEST"
+      name: "<green><bold>✦ 领取每日奖励 ✦"
+      lore:
+        - ""
+        - "<yellow>今日奖励: <green>+%points%点券"
+        - ""
+        - "<green><bold>点击领取!"
+      glow: true
+    
+    claim-claimed:
+      material: "TRAPPED_CHEST"
+      name: "<gray>今日已领取"
+      lore:
+        - ""
+        - "<gray>明日再来领取吧~"
+    
+    makeup-available:
+      material: "BOOK"
+      name: "<aqua><bold>📖 补签"
+      lore:
+        - ""
+        - "<yellow>补签费用: <green>%cost% %currency%"
+        - "<yellow>剩余次数: <green>%remaining%"
+        - ""
+        - "<aqua>点击补签昨天"
+    
+    makeup-unavailable:
+      material: "BOOK"
+      name: "<gray>补签"
+      lore:
+        - ""
+        - "<gray>暂无可补签的天数"
+    
+    milestone:
+      material: "NETHER_STAR"
+      name: "<gold><bold>🏆 累计奖励"
+      lore:
+        - ""
+        - "<yellow>7天: <green>%reward_7%"
+        - "<yellow>14天: <green>%reward_14%"
+        - "<yellow>21天: <green>%reward_21%"
+        - "<yellow>30天: <green>%reward_30%"
+    
+    preview:
+      material: "ENDER_EYE"
+      name: "<light_purple><bold>👁 奖励预览"
+      lore:
+        - ""
+        - "<yellow>查看30天完整奖励列表"
+    
+    close:
+      material: "BARRIER"
+      name: "<red>关闭"
+
+# ==================== 奖励预览菜单 ====================
+preview:
+  title: "<gold>☆ 奖励预览 - 第%page%/%total_pages%页 ☆"
+  size: 54
+  
+  filler:
+    material: "BLACK_STAINED_GLASS_PANE"
+    name: " "
+  
+  slots:
+    back: 45
+    prev-page: 48
+    next-page: 50
+    close: 49
+    reward-start: 10
+  
+  items:
+    claimed:
+      material: "LIME_STAINED_GLASS_PANE"
+      name: "<green>✔ 第 %day% 天"
+      lore:
+        - ""
+        - "<yellow>奖励: <green>%reward%"
+        - ""
+        - "<green>✔ 已领取"
+    
+    current:
+      material: "GOLD_BLOCK"
+      name: "<gold>▶ 第 %day% 天"
+      lore:
+        - ""
+        - "<yellow>奖励: <green>%reward%"
+        - ""
+        - "<gold>▶ 今日可领取"
+      glow: true
+    
+    missed:
+      material: "RED_STAINED_GLASS_PANE"
+      name: "<red>✘ 第 %day% 天"
+      lore:
+        - ""
+        - "<yellow>奖励: <green>%reward%"
+        - ""
+        - "<red>✘ 错过 - 点击补签"
+    
+    future:
+      material: "WHITE_STAINED_GLASS_PANE"
+      name: "<white>第 %day% 天"
+      lore:
+        - ""
+        - "<yellow>奖励: <green>%reward%"
+        - ""
+        - "<gray>未解锁"

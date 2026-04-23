@@ -1,0 +1,121 @@
+标准型胸甲:
+  Id: 307
+  Display: <aqua>标准型胸甲
+  Lore:
+  - <white>防具                   普通
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>护甲强度： <aqua>10%
+  - <dark_gray>生命上限： <aqua>130
+  - <dark_gray>每秒回血： <aqua>1
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>评分： <red>10
+  - <yellow>标准的防御胸甲
+  - <yellow>回收价格： <light_purple>50
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+强化型胸甲:
+  Id: 307
+  Display: <aqua>强化型胸甲
+  Lore:
+  - <white>防具                   普通
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>护甲强度： <aqua>15%
+  - <dark_gray>生命上限： <aqua>200
+  - <dark_gray>每秒回血： <aqua>2
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>评分： <red>30
+  - <yellow>强化型防御胸甲
+  - <yellow>回收价格： <light_purple>150
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+柯莱特盔甲:
+  Id: 315
+  Display: <green>柯莱特盔甲
+  Lore:
+  - <white>防具                   优秀
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>护甲强度： <aqua>15%
+  - <dark_gray>生命上限： <aqua>260
+  - <dark_gray>攻击力： <aqua>0-10
+  - <dark_gray>招架： <aqua>1%
+  - <dark_gray>每秒回血： <aqua>3
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - 评分： <red>50
+  - <yellow>特殊锻造的全身覆甲
+  - <yellow>回收价格： <light_purple>300
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+强化型幻界盔甲:
+  Id: 311
+  Display: <green>强化型幻界盔甲
+  Lore:
+  - <white>防具                   优秀
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>护甲强度： <aqua>15%
+  - <dark_gray>生命上限： <aqua>650
+  - <dark_gray>攻击力： <aqua>10-20
+  - <dark_gray>每秒回血： <aqua>2
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>装备限制: <aqua>5'
+  - <dark_gray>评分： <red>100
+  - <yellow>通过幻石强化制作的覆甲
+  - <yellow>回收价格： <light_purple>2000
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔化型钻石铠甲:
+  Id: 311
+  Display: <green>魔化型钻石铠甲
+  Lore:
+  - <white>防具                   优秀
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>护甲强度： <aqua>15%
+  - <dark_gray>生命上限： <aqua>850
+  - <dark_gray>攻击力： <aqua>10-30
+  - <dark_gray>每秒回血： <aqua>10
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>装备限制: <aqua>10'
+  - <dark_gray>评分： <red>150
+  - <yellow>通过魔界石制作出来的铠甲
+  - <yellow>回收价格： <light_purple>3000
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔化型钻石护腿:
+  Id: 312
+  Display: <green>魔化型钻石护腿
+  Lore:
+  - <white>防具                   优秀
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>护甲强度： <aqua>10%
+  - <dark_gray>生命上限： <aqua>520
+  - <green>生命恢复： <light_purple>0.5%
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>装备限制: <aqua>10'
+  - <dark_gray>评分： <red>150
+  - <yellow>通过魔界石制作出来的护腿
+  - <yellow>回收价格： <light_purple>2000
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔化型钻石靴子:
+  Id: 313
+  Display: <green>魔化型钻石靴子
+  Lore:
+  - <white>防具                   优秀
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>护甲强度： <aqua>10%
+  - <dark_gray>生命上限： <aqua>330
+  - <green>生命恢复： <light_purple>0.5%
+  - <dark_gray>移动速度： <aqua>30%
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>装备限制: <aqua>10'
+  - <dark_gray>评分： <red>150
+  - <yellow>通过魔界石制作出来的靴子
+  - <yellow>回收价格： <light_purple>1500
+  Options:
+    Unbreakable: true
+    HideAttributes: true

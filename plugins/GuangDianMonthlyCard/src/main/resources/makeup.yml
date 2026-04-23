@@ -1,0 +1,28 @@
+# GuangDianMonthlyCard - 补签配置
+
+# ==================== 基础设置 ====================
+enabled: true
+
+# ==================== 补签限制 ====================
+limits:
+  max-per-month: 3                 # 每月最大补签次数
+  max-days-back: 7                 # 最多补签7天内的
+
+# ==================== 补签费用 ====================
+cost:
+  type: "points"                   # points/money
+  amount: 500
+  
+  # 不同月卡类型的补签费用倍率
+  multipliers:
+    normal: 1.0
+    premium: 0.8                   # 高级月卡8折
+    vip: 0.5                       # 至尊月卡5折
+
+# ==================== 补签奖励 ====================
+# 补签是否发放奖励
+rewards:
+  enabled: true
+  
+  # 补签奖励倍率（相对于正常奖励）
+  multiplier: 1.0

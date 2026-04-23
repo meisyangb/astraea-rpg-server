@@ -1,0 +1,847 @@
+星辉天使剑1:
+  Id: 272
+  Display: <light_purple><bold>星芒·梅洛提亚
+  Lore:
+  - <yellow>近战武器                        亚神器
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪<gray>✪✪✪✪
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>攻击力: <aqua>11700-24180'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>75%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - '<dark_gray>冰冻: <green>10%'
+  - '<dark_gray>致盲: <green>10%'
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <yellow>星辉纪元坠落的星辰之剑
+  - <yellow>承载着古老星灵的永恒意志
+  - <dark_red><strikethrough>一一一一一一一一一
+  - <dark_purple>分解后可获得<dark_gray>[<yellow>星辉核心<dark_gray>]<dark_purple>4颗
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]
+  - <dark_red><strikethrough>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+星辉天使头盔1:
+  Id: 302
+  Display: <red><bold>曙光天穹头盔
+  Lore:
+  - <yellow>防具                          亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪<gray>✪✪✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>曙光守护者铸造的圣器
+  - <yellow>承载着黎明之初的第一缕光芒
+  - <yellow>凡人难以触及的领域
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>97500'
+  - '<dark_gray>攻击力: <aqua>1500-5000'
+  - '<dark_gray>闪避: <aqua>5%'
+  - '<dark_gray>每秒回血: <aqua>40'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>分解后可获得<dark_gray>[<yellow>星辉核心<dark_gray>]<dark_purple>2颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+星辉天使链甲1:
+  Id: 303
+  Display: <light_purple><bold>星辉圣徒胸甲
+  Lore:
+  - <yellow>防具                          亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪<gray>✪✪✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>20%'
+  - '<dark_gray>生命上限: <aqua>78000'
+  - '<dark_gray>攻击力: <aqua>780-1560'
+  - '<dark_gray>每秒回血: <aqua>100'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>星辉圣廷骑士团的制式铠甲
+  - <yellow>铭刻着对抗暗影的古老誓言
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>分解后可获得<dark_gray>[<yellow>星辉核心<dark_gray>]<dark_purple>1颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red><strikethrough>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+星辉天使链腿1:
+  Id: 304
+  Display: <light_purple><bold>星辉圣徒护腿
+  Lore:
+  - <yellow>防具                          亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪<gray>✪✪✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>78000'
+  - '<dark_gray>闪避: <aqua>5%'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>星辉圣廷骑士团的制式铠甲
+  - <yellow>铭刻着对抗暗影的古老誓言
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>分解后可获得<dark_gray>[<yellow>星辉核心<dark_gray>]<dark_purple>1颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+星辉天使链靴1:
+  Id: 305
+  Display: <light_purple><bold>星辉圣徒战靴
+  Lore:
+  - <yellow>防具                          亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪<gray>✪✪✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>78000'
+  - '<dark_gray>移动速度: <aqua>20%'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>星辉圣廷骑士团的制式铠甲
+  - <yellow>铭刻着对抗暗影的古老誓言
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>分解后可获得<dark_gray>[<yellow>星辉核心<dark_gray>]<dark_purple>1颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+星辉天使剑2:
+  Id: 267
+  Display: <aqua><bold>星辉裁决之刃
+  Lore:
+  - <yellow>近战武器                        亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪<gray>✪✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>攻击力: <aqua>24180-50690'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>50%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - '<dark_gray>冰冻: <aqua>15%'
+  - '<dark_gray>致盲: <aqua>15%'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>星芒二阶觉醒的裁决之剑
+  - <yellow>承载着星辰对暗影的审判
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>分解后可获得<dark_gray>[<yellow>星辉核心<dark_gray>]<dark_purple>8颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <blue>*<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+星辉天使头盔2:
+  Id: 306
+  Display: <red><bold>曙光裁决头盔
+  Lore:
+  - <yellow>防具                          亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪<gray>✪✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>曙光守护者的进阶战盔
+  - <yellow>黎明光芒在其上流转不息
+  - <yellow>唯有真正的勇者方能驾驭
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>156000'
+  - '<dark_gray>攻击力: <aqua>5000-7500'
+  - '<dark_gray>闪避: <aqua>5%'
+  - '<dark_gray>每秒回血: <aqua>80'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>分解后可获得<dark_gray>[<yellow>星辉核心<dark_gray>]<dark_purple>4颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+星辉天使链甲2:
+  Id: 307
+  Display: <light_purple><bold>星辉裁决胸甲
+  Lore:
+  - <yellow>防具                          亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪<gray>✪✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>20%'
+  - '<dark_gray>生命上限: <aqua>156000'
+  - '<dark_gray>攻击力: <aqua>1300-2600'
+  - '<dark_gray>每秒回血: <aqua>200'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>星辉圣廷裁决骑士的荣耀铠甲
+  - <yellow>铭刻着星辰的律法与审判
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>分解后可获得<dark_gray>[<yellow>星辉核心<dark_gray>]<dark_purple>3颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+星辉天使链腿2:
+  Id: 308
+  Display: <light_purple><bold>星辉裁决护腿
+  Lore:
+  - <yellow>防具                          亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪<gray>✪✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>156000'
+  - '<dark_gray>闪避: <aqua>6%'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>星辉圣廷裁决骑士的荣耀铠甲
+  - <yellow>铭刻着星辰的律法与审判
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>分解后可获得<dark_gray>[<yellow>星辉核心<dark_gray>]<dark_purple>3颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+星辉天使链靴2:
+  Id: 309
+  Display: <light_purple><bold>星辉裁决战靴
+  Lore:
+  - <yellow>防具                          亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪<gray>✪✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>156000'
+  - '<dark_gray>移动速度: <aqua>20%'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>星辉圣廷裁决骑士的荣耀铠甲
+  - <yellow>铭刻着星辰的律法与审判
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>分解后可获得<dark_gray>[<yellow>星辉核心<dark_gray>]<dark_purple>3颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+星辉天使剑3:
+  Id: 283
+  Display: <light_purple><bold>星芒·梅洛提亚
+  Lore:
+  - <yellow>近战武器                        亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪✪<gray>✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>攻击力: <aqua>35100-69160'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>75%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>50%'
+  - '<dark_gray>冰冻: <aqua>15%'
+  - '<dark_gray>致盲: <aqua>15%'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>分解后可获得<dark_gray>[<yellow>星辉核心<dark_gray>]<dark_purple>15颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>技能类型: <aqua>主动技能'
+  - '<dark_gray>技能名称: <gold>神技 星陨冲击'
+  - '<dark_gray>技能冷却: <aqua>15'
+  - '<dark_gray>魔法消耗: <aqua>10'
+  - <gray>【<gold>神技 <aqua>星陨冲击<gray>】
+  - <green>召唤星辰之力，对前方扇形区域
+  - <green>降下星辉之雨毁灭一切敌人.
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <yellow>三阶觉醒的星灵圣剑
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <aqua><bold>符文➱<gray>「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <blue>*<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  Skills:
+    - id: 星陨冲击
+      trigger: RIGHT_CLICK
+      cooldown: 15
+星辉天使头盔4:
+  Id: 310
+  Display: <red><bold>曙光裁决头盔
+  Lore:
+  - <yellow>防具                          亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪✪✪<gray>✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>曙光守护者的究极战盔
+  - <yellow>黎明意志在其上永恒流转
+  - <yellow>见证过星辰纪元的兴衰更替
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>防御力: <aqua>12250-23750'
+  - '<dark_gray>生命上限: <aqua>390000'
+  - '<dark_gray>攻击力: <aqua>30000-75000'
+  - '<dark_gray>每秒回血: <aqua>3000'
+  - '<dark_gray>闪避: <aqua>3%'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>分解后可获得<dark_gray>[<yellow>星辉核心<dark_gray>]<dark_purple>35颗
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>技能类型: <aqua>被动技能'
+  - '<dark_gray>技能名称: <gold>黎明炽焰'
+  - '<dark_gray>触发类型: <aqua>伤害触发'
+  - '<dark_gray>技能几率: <aqua>15'
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <gray>【<gold>神技 <aqua>黎明炽焰<gray>】
+  - <green>召唤黎明审判，对3码范围内敌人
+  - <green>降下永恒的晨曦之火.
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <aqua><bold>符文➱<gray>「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+星辉天使链甲4:
+  Id: 311
+  Display: <red><bold>星辉裁决胸甲
+  Lore:
+  - <yellow>防具                          亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪✪✪<gray>✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>20%'
+  - '<dark_gray>生命上限: <aqua>364000'
+  - '<dark_gray>攻击力: <aqua>5200-10400'
+  - '<dark_gray>防御力: <aqua>12700-14200'
+  - '<dark_gray>每秒回血: <aqua>900'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>星辉圣廷最高裁决者的神圣铠甲
+  - <yellow>承载着对抗混沌的永恒誓约
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>分解后可获得<dark_gray>[<yellow>星辉核心<dark_gray>]<dark_purple>25颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <aqua><bold>符文➱<gray>「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+星辉天使链腿4:
+  Id: 312
+  Display: <red><bold>星辉裁决护腿
+  Lore:
+  - <yellow>防具                          亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪✪✪<gray>✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>364000'
+  - '<dark_gray>闪避: <aqua>10%'
+  - '<dark_gray>防御力: <aqua>12550-14650'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>星辉圣廷最高裁决者的神圣铠甲
+  - <yellow>承载着对抗混沌的永恒誓约
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>分解后可获得<dark_gray>[<yellow>星辉核心<dark_gray>]<dark_purple>25颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <aqua><bold>符文➱<gray>「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+星辉天使链靴4:
+  Id: 313
+  Display: <red><bold>星辉裁决战靴
+  Lore:
+  - <yellow>防具                          亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪✪✪<gray>✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>325000'
+  - '<dark_gray>防御力: <aqua>11950-13250'
+  - '<dark_gray>移动速度: <aqua>25%'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>星辉圣廷最高裁决者的神圣铠甲
+  - <yellow>承载着对抗混沌的永恒誓约
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>分解后可获得<dark_gray>[<yellow>星辉核心<dark_gray>]<dark_purple>25颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <aqua><bold>符文➱<gray>「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+星辉天使剑4:
+  Id: 283
+  Display: <light_purple><bold>星芒·梅洛提亚
+  Lore:
+  - <yellow>近战武器                        亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪✪✪<gray>✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>攻击力: <aqua>48100-154160'
+  - '<dark_gray>暴击几率: <aqua>15%'
+  - '<dark_gray>暴击伤害: <aqua>150%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>50%'
+  - '<dark_gray>冰冻: <aqua>15%'
+  - '<dark_gray>致盲: <aqua>15%'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>分解后可获得<dark_gray>[<yellow>星辉核心<dark_gray>]<dark_purple>30颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>技能类型: <aqua>主动技能'
+  - '<dark_gray>技能名称: <gold>神技 星陨冲击'
+  - '<dark_gray>技能冷却: <aqua>15'
+  - '<dark_gray>魔法消耗: <aqua>10'
+  - <gray>【<gold>神技 <aqua>星陨冲击<gray>】
+  - <green>召唤星辰之力，对前方扇形区域
+  - <green>降下星辉之雨毁灭一切敌人.
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <yellow>四阶觉醒的星灵圣剑
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <aqua><bold>符文➱<gray>「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <blue>*<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+星辉天使头盔3:
+  Id: 314
+  Display: <red><bold>曙光裁决头盔
+  Lore:
+  - <yellow>防具                          亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪✪<gray>✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>曙光守护者的究极战盔
+  - <yellow>黎明意志在其上永恒流转
+  - <yellow>见证过星辰纪元的兴衰更替
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>防御力: <aqua>750-2250'
+  - '<dark_gray>生命上限: <aqua>286000'
+  - '<dark_gray>攻击力: <aqua>15000-27500'
+  - '<dark_gray>每秒回血: <aqua>100'
+  - '<dark_gray>闪避: <aqua>3%'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>分解后可获得<dark_gray>[<yellow>星辉核心<dark_gray>]<dark_purple>8颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>技能类型: <aqua>被动技能'
+  - '<dark_gray>技能名称: <gold>黎明炽焰'
+  - '<dark_gray>触发类型: <aqua>伤害触发'
+  - '<dark_gray>技能几率: <aqua>15'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <aqua><bold>符文➯<dark_gray>⇝<blue>✵<dark_gray>⇜
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+星辉天使链甲3:
+  Id: 315
+  Display: <red><bold>星辉裁决胸甲
+  Lore:
+  - <yellow>防具                          亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪✪<gray>✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>20%'
+  - '<dark_gray>生命上限: <aqua>234000'
+  - '<dark_gray>攻击力: <aqua>2600-5200'
+  - '<dark_gray>防御力: <aqua>900-2700'
+  - '<dark_gray>每秒回血: <aqua>300'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>星辉圣廷最高裁决者的神圣铠甲
+  - <yellow>承载着对抗混沌的永恒誓约
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>分解后可获得<dark_gray>[<yellow>星辉核心<dark_gray>]<dark_purple>6颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <aqua><bold>符文➯<dark_gray>⇝<blue>✵<dark_gray>⇜
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+星辉天使链腿3:
+  Id: 316
+  Display: <red><bold>星辉裁决护腿
+  Lore:
+  - <yellow>防具                          亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪✪<gray>✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>234000'
+  - '<dark_gray>闪避: <aqua>6%'
+  - '<dark_gray>防御力: <aqua>1050-3100'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>星辉圣廷最高裁决者的神圣铠甲
+  - <yellow>承载着对抗混沌的永恒誓约
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>分解后可获得<dark_gray>[<yellow>星辉核心<dark_gray>]<dark_purple>6颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <aqua><bold>符文➯<dark_gray>⇝<blue>✵<dark_gray>⇜
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+星辉天使链靴3:
+  Id: 317
+  Display: <red><bold>星辉裁决战靴
+  Lore:
+  - <yellow>防具                          亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪✪<gray>✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>234000'
+  - '<dark_gray>防御力: <aqua>650-6500'
+  - '<dark_gray>移动速度: <aqua>20%'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>星辉圣廷最高裁决者的神圣铠甲
+  - <yellow>承载着对抗混沌的永恒誓约
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>分解后可获得<dark_gray>[<yellow>星辉核心<dark_gray>]<dark_purple>6颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - <aqua><bold>符文➯<dark_gray>⇝<blue>✵<dark_gray>⇜
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+老星辉天使剑2:
+  Id: 267
+  Display: <aqua><bold>星辉裁决之刃
+  Lore:
+  - <yellow>主手武器             亚神器
+  - <dark_red><strikethrough>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪<gray>✪
+  - <dark_red><strikethrough>一一一一一一一一一
+  - '<dark_gray>攻击力: <aqua>23250-50850'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>75%'
+  - '<dark_gray>吸血几率: <aqua>5%'
+  - '<dark_gray>吸血倍率: <aqua>40%'
+  - '<dark_gray>经验加成: <aqua>150%'
+  - '<dark_gray>命中: <green>15%'
+  - '<dark_gray>冰冻: <green>15%'
+  - '<dark_gray>致盲: <green>15%'
+  - <dark_red><strikethrough>一一一一一一一一一
+  - <light_purple>分解后可获得<dark_gray>[<yellow>&L星辉核心<dark_gray>]<light_purple>8颗
+  - <dark_red><strikethrough>一一一一一一一一一
+  - <dark_gray>技能名称:<green> 星辉审判
+  - <dark_gray>触发方式:<aqua> 右键
+  - '<dark_gray>冷却: <gold>15秒'
+  - ''
+  - <green>召唤星辰之力
+  - <green>对目标降下永恒的星辉审判
+  - <green>造成100000+武器伤害
+  - <dark_red><strikethrough>一一一一一一一一一
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <blue>*<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+老星辉天使剑3:
+  Id: 283
+  Display: <light_purple><bold>星辉裁决之刃
+  Lore:
+  - <yellow>主手武器             亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪✪<gray>✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>攻击力: <aqua>36750-80580'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>75%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>50%'
+  - '<dark_gray>经验加成: <aqua>200%'
+  - '<dark_gray>命中: <green>15%'
+  - '<dark_gray>冰冻: <green>20%'
+  - '<dark_gray>致盲: <green>20%'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <light_purple>分解后可获得<dark_gray>[<yellow>&L星辉核心<dark_gray>]<light_purple>18颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>技能名称:<green> 终焉星陨
+  - <dark_gray>触发方式:<aqua> 右键
+  - '<dark_gray>冷却: <gold>15秒'
+  - ''
+  - <green>召唤星辰坠落
+  - <green>对周围8格内敌人降下毁灭性星陨
+  - <green>造成150000+武器伤害
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <aqua><bold>符文➯<dark_gray>⇝<blue>✵<dark_gray>⇜
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <blue>*<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+老星辉天使头盔3:
+  Id: 314
+  Display: <light_purple><bold>曙光裁决头盔
+  Lore:
+  - <yellow>锻造装备              亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪✪<gray>✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>防御力: <aqua>1200-6250'
+  - '<dark_gray>护甲值: <aqua>12%'
+  - '<dark_gray>攻击力: <aqua>15000-27500'
+  - '<dark_gray>生命上限: <aqua>286000'
+  - '<dark_gray>暴伤抵抗: <aqua>50%'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>曙光守护者铸造的圣器
+  - <yellow>承载着黎明纪元的永恒荣光
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <light_purple>分解后可获得<dark_gray>[<yellow>&L星辉核心<dark_gray>]<light_purple>15颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>技能名称:<green> 黎明炽焰
+  - <dark_gray>触发方式:<aqua> 被攻击
+  - '<dark_gray>触发几率: <gold>10%'
+  - '<dark_gray>冷却: <gold>15秒'
+  - ''
+  - <green>释放黎明圣焰
+  - <green>对侵犯者进行永恒的灼烧
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <aqua><bold>符文➯<dark_gray>⇝<blue>✵<dark_gray>⇜
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <blue>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+老星辉天使链甲3:
+  Id: 315
+  Display: <light_purple><bold>星辉裁决胸甲
+  Lore:
+  - <yellow>锻造装备              亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪✪<gray>✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲值: <aqua>12%'
+  - '<dark_gray>攻击力: <aqua>1200-5050'
+  - '<dark_gray>防御力: <aqua>1500-3050'
+  - '<dark_gray>生命上限: <aqua>260000'
+  - '<dark_gray>暴伤抵抗: <aqua>40%'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>星辉圣廷铸造的神圣胸甲
+  - <yellow>铭刻着星辰纪元的古老符文
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <light_purple>分解后可获得<dark_gray>[<yellow>&L星辉核心<dark_gray>]<light_purple>12颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <aqua><bold>符文➯<dark_gray>⇝<blue>✵<dark_gray>⇜
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+老星辉天使链腿3:
+  Id: 316
+  Display: <light_purple><bold>星辉裁决护腿
+  Lore:
+  - <yellow>锻造装备              亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪✪<gray>✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲值: <aqua>10%'
+  - '<dark_gray>防御力: <aqua>1700-3150'
+  - '<dark_gray>生命上限: <aqua>260000'
+  - '<dark_gray>暴伤抵抗: <aqua>40%'
+  - '<dark_gray>闪避: <aqua>5%'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>星辉圣廷铸造的神圣护腿
+  - <yellow>铭刻着星辰纪元的古老符文
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <light_purple>分解后可获得<dark_gray>[<yellow>&L星辉核心<dark_gray>]<light_purple>12颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <aqua><bold>符文➯<dark_gray>⇝<blue>✵<dark_gray>⇜
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+老星辉天使链靴3:
+  Id: 317
+  Display: <light_purple><bold>星辉裁决战靴
+  Lore:
+  - <yellow>锻造装备              亚神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪✪<gray>✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲值: <aqua>15%'
+  - '<dark_gray>攻击力: <aqua>2400-6900'
+  - '<dark_gray>生命上限: <aqua>260000'
+  - '<dark_gray>暴伤抵抗: <aqua>40%'
+  - '<dark_gray>移动速度: <aqua>25%'
+  - '<dark_gray>闪避: <aqua>5%'
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>星辉圣廷铸造的神圣战靴
+  - <yellow>铭刻着星辰纪元的古老符文
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <light_purple>分解后可获得<dark_gray>[<yellow>&L星辉核心<dark_gray>]<light_purple>12颗
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <aqua><bold>符文➯<dark_gray>⇝<blue>✵<dark_gray>⇜
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true

@@ -1,0 +1,41 @@
+少量黄金:
+  Id: 266
+  Display: <yellow><bold>少量黄金
+  Lore:
+  - <light_purple>交易货币          价值1000金
+  - <green>右键出售该物品
+  - <green>使用后消耗掉
+  - <yellow>便携式货币
+  - <yellow>可以用于玩家之间的交易
+  - '<yellow>回收价格: <light_purple>1000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+中量黄金:
+  Id: 266
+  Display: <yellow><bold>中量黄金
+  Lore:
+  - <light_purple>交易货币          价值10万金
+  - <green>右键出售该物品
+  - <green>使用后消耗掉
+  - <yellow>便携式货币
+  - <yellow>可以用于玩家之间的交易
+  - <yellow>和"<dark_red><bold>少量黄金<yellow>"交换比例是<dark_purple><bold>1:100
+  - '<yellow>回收价格: <light_purple>100000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+大量黄金:
+  Id: 266
+  Display: <yellow><bold>大量黄金
+  Lore:
+  - <light_purple>交易货币          价值1000万金
+  - <green>右键出售该物品
+  - <green>使用后消耗掉
+  - <yellow>便携式货币
+  - <yellow>可以用于玩家之间的交易
+  - <yellow>和"<dark_purple><bold>中量黄金<yellow>"交换比例是<gold><bold>1:100
+  - '<yellow>回收价格: <light_purple>10000000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
