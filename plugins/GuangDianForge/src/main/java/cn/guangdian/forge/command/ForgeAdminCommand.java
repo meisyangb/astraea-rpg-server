@@ -32,6 +32,7 @@ public class ForgeAdminCommand implements CommandExecutor {
         if (args.length == 0) {
             sender.sendMessage(Component.text("=== 锻造管理 ===", NamedTextColor.GOLD));
             sender.sendMessage(Component.text("/forgeadmin reload - 重载配置", NamedTextColor.YELLOW));
+            sender.sendMessage(Component.text("/forgeadmin list - 列出所有图纸", NamedTextColor.YELLOW));
             sender.sendMessage(Component.text("/forgeadmin setlevel <玩家> <等级> - 设置锻造等级", NamedTextColor.YELLOW));
             sender.sendMessage(Component.text("/forgeadmin setexp <玩家> <经验> - 设置锻造经验", NamedTextColor.YELLOW));
             sender.sendMessage(Component.text("/forgeadmin unlock <玩家> <图纸ID> - 解锁图纸", NamedTextColor.YELLOW));
@@ -43,6 +44,18 @@ public class ForgeAdminCommand implements CommandExecutor {
                 plugin.reloadConfig();
                 plugin.getRecipeManager().loadRecipes();
                 sender.sendMessage(Component.text("配置已重载!", NamedTextColor.GREEN));
+            }
+            case "list" -> {
+                var recipes = plugin.getRecipeManager().getAllRecipes();
+                sender.sendMessage(Component.text("=== 所有锻造图纸 (共 " + recipes.size() + " 个) ===", NamedTextColor.GOLD));
+                for (var recipe : recipes) {
+                    sender.sendMessage(Component.text("ID: ", NamedTextColor.YELLOW)
+                        .append(Component.text(recipe.getId(), NamedTextColor.WHITE))
+                        .append(Component.text(" | 名称: ", NamedTextColor.GRAY))
+                        .append(Component.text(recipe.getDisplayName(), NamedTextColor.AQUA))
+                        .append(Component.text(" | 等级要求: ", NamedTextColor.GRAY))
+                        .append(Component.text(recipe.getRequiredForgeLevel() + "级", NamedTextColor.GREEN)));
+                }
             }
             case "setlevel" -> {
                 if (args.length < 3) {

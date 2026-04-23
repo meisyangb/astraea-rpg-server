@@ -89,15 +89,15 @@ public class TradePlaceholder extends PlaceholderExpansion {
                 UUID partnerId = plugin.getTradePartnerAPI(playerId);
                 if (partnerId == null) return "";
                 OfflinePlayer partner = Bukkit.getOfflinePlayer(partnerId);
-                return partner.getName() != null ? partner.getName() : "§c未知";
+                return partner.getName() != null ? partner.getName() : "<red>未知";
 
             case "partner_status":
             case "伙伴状态":
                 // 交易伙伴状态
                 UUID partnerId2 = plugin.getTradePartnerAPI(playerId);
-                if (partnerId2 == null) return "§7无";
+                if (partnerId2 == null) return "<gray>无";
                 OfflinePlayer partner2 = Bukkit.getOfflinePlayer(partnerId2);
-                return partner2.isOnline() ? "§a在线" : "§c离线";
+                return partner2.isOnline() ? "<green>在线" : "<red>离线";
 
             case "pending":
             case "待处理":

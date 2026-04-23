@@ -45,7 +45,7 @@ public class CaveAdminCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!sender.hasPermission("guangdian.cave.admin")) {
-            sender.sendMessage(configManager.getMessage("no-permission"));
+            sendMessage(sender, configManager.getMessage("no-permission"));
             return true;
         }
 
@@ -94,7 +94,7 @@ public class CaveAdminCommand implements CommandExecutor, TabCompleter {
 
         Cave cave = dataManager.getCaveByOwner(target.getUniqueId());
         if (cave == null) {
-            sender.sendMessage(configManager.getMessage("target-no-cave"));
+            sendMessage(sender, configManager.getMessage("target-no-cave"));
             return;
         }
 
@@ -114,7 +114,7 @@ public class CaveAdminCommand implements CommandExecutor, TabCompleter {
 
         Cave cave = dataManager.getCaveByOwner(target.getUniqueId());
         if (cave == null) {
-            sender.sendMessage(configManager.getMessage("target-no-cave"));
+            sendMessage(sender, configManager.getMessage("target-no-cave"));
             return;
         }
 
@@ -142,7 +142,7 @@ public class CaveAdminCommand implements CommandExecutor, TabCompleter {
 
         Cave cave = dataManager.getCaveByOwner(target.getUniqueId());
         if (cave == null) {
-            sender.sendMessage(configManager.getMessage("target-no-cave"));
+            sendMessage(sender, configManager.getMessage("target-no-cave"));
             return;
         }
 

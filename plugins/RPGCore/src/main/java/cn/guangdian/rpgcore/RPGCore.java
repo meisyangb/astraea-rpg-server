@@ -29,6 +29,7 @@ import cn.guangdian.rpgcore.display.AdventureBossBarService;
 import cn.guangdian.rpgcore.display.DisplayService;
 import cn.guangdian.rpgcore.display.DisplayServiceImpl;
 import cn.guangdian.rpgcore.display.TextDisplayServiceImpl;
+import cn.guangdian.rpgcore.gui.GUIManager;
 import cn.guangdian.rpgcore.event.SimpleEventBus;
 import cn.guangdian.rpgcore.exception.ExceptionHandlerImpl;
 import cn.guangdian.rpgcore.export.DataExporterImpl;
@@ -53,6 +54,7 @@ import cn.guangdian.rpgcore.entity.EntityService;
 import cn.guangdian.rpgcore.server.ServerService;
 import cn.guangdian.rpgcore.service.api.MessageService;
 import cn.guangdian.rpgcore.service.api.TextDisplayService;
+import cn.guangdian.rpgcore.service.api.MenuService;
 import cn.guangdian.rpgcore.sound.SoundService;
 import cn.guangdian.rpgcore.storage.UnifiedDataManager;
 import cn.guangdian.rpgcore.util.CooldownManager;
@@ -296,6 +298,11 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         textDisplayService = new TextDisplayServiceImpl(this);
         serviceRegistry.registerService(TextDisplayService.class, textDisplayService);
         getLogger().info("TextDisplayService initialized and registered");
+
+        // 初始化 GUI 管理器
+        GUIManager guiManager = GUIManager.getInstance();
+        guiManager.initialize(this);
+        getLogger().info("GUIManager initialized");
 
         gameLogger = new AsyncLogger();
         getLogger().info("GameLogger (AsyncLogger) initialized");
@@ -606,6 +613,10 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
 
     public TextDisplayService getTextDisplayService() {
         return textDisplayService;
+    }
+
+    public MenuService getMenuService() {
+        return serviceRegistry.getService(MenuService.class);
     }
 
     public GameLogger getGameLogger() {

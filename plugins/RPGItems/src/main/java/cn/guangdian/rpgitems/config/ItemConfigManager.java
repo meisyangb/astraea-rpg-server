@@ -11,12 +11,11 @@ import java.util.List;
 
 /**
  * 物品配置管理器
- * 支持多配置文件加载（包括中文文件名）
+ * 支持多配置文件加载（包括中文文件名和子文件夹递归）
  */
 public class ItemConfigManager {
 
     private final RPGItems plugin;
-    private FileConfiguration itemConfig;
     private final List<FileConfiguration> allConfigs = new ArrayList<>();
 
     public ItemConfigManager(RPGItems plugin) {
@@ -24,30 +23,28 @@ public class ItemConfigManager {
     }
 
     public void loadAll() {
-        // 保存默认配置
         plugin.saveDefaultConfig();
         allConfigs.clear();
 
-        // 加载主物品配置（兼容旧版本）
-        File itemFile = new File(plugin.getDataFolder(), "items.yml");
-        if (!itemFile.exists()) {
-            plugin.saveResource("items.yml", false);
-        }
-        itemConfig = YamlConfiguration.loadConfiguration(itemFile);
-        if (itemConfig != null && !itemConfig.getKeys(false).isEmpty()) {
-            allConfigs.add(itemConfig);
-            plugin.getLogger().info("已加载主配置文件: items.yml");
-        }
-
-        // 加载 items 文件夹下的所有配置文件
+        // 加载 items 文件夹下的所有配置文件（递归子文件夹）
         File itemsFolder = new File(plugin.getDataFolder(), "items");
         if (!itemsFolder.exists()) {
             itemsFolder.mkdirs();
             createDefaultItemFiles(itemsFolder);
         }
 
-        // 加载文件夹中的所有 .yml 文件（支持中文文件名）
-        File[] ymlFiles = itemsFolder.listFiles(new FilenameFilter() {
+        // 递归加载所有 .yml 文件
+        loadYamlFilesRecursive(itemsFolder, "items");
+
+        plugin.getLogger().info("共加载 " + allConfigs.size() + " 个配置文件");
+    }
+
+    /**
+     * 递归加载文件夹中的所有 .yml 文件
+     */
+    private void loadYamlFilesRecursive(File folder, String relativePath) {
+        // 加载当前文件夹中的 .yml 文件
+        File[] ymlFiles = folder.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
                 return name.toLowerCase().endsWith(".yml");
@@ -60,7 +57,7 @@ public class ItemConfigManager {
                     FileConfiguration config = YamlConfiguration.loadConfiguration(file);
                     if (config != null && !config.getKeys(false).isEmpty()) {
                         allConfigs.add(config);
-                        plugin.getLogger().info("已加载物品配置: items/" + file.getName());
+                        plugin.getLogger().info("已加载物品配置: " + relativePath + "/" + file.getName());
                     }
                 } catch (Exception e) {
                     plugin.getLogger().warning("加载物品配置失败: " + file.getName() + " - " + e.getMessage());
@@ -68,7 +65,13 @@ public class ItemConfigManager {
             }
         }
 
-        plugin.getLogger().info("共加载 " + allConfigs.size() + " 个配置文件");
+        // 递归处理子文件夹
+        File[] subDirs = folder.listFiles(File::isDirectory);
+        if (subDirs != null) {
+            for (File subDir : subDirs) {
+                loadYamlFilesRecursive(subDir, relativePath + "/" + subDir.getName());
+            }
+        }
     }
 
     /**
@@ -131,13 +134,6 @@ public class ItemConfigManager {
                 plugin.getLogger().warning("创建默认材料配置失败: " + e.getMessage());
             }
         }
-    }
-
-    /**
-     * 获取主物品配置（兼容旧版本）
-     */
-    public FileConfiguration getItemConfig() {
-        return itemConfig;
     }
 
     /**

@@ -396,7 +396,7 @@ public class DamageManager {
             }
         } catch (Exception e) {
             // MythicMobs 反射调用失败，使用基础伤害
-            Bukkit.getLogger().fine("[GuangDianArmorStats] 获取MythicMobs伤害失败: " + e.getMessage());
+            java.util.logging.Logger.getLogger("GuangDianArmorStats").fine("[GuangDianArmorStats] 获取MythicMobs伤害失败: " + e.getMessage());
         }
         return baseDamage;
     }

@@ -3,6 +3,7 @@ package cn.guangdian.socket.parser;
 import cn.guangdian.socket.model.AttributeValue;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -29,6 +30,7 @@ public class SocketParser {
     private static Map<String, String> gemTypes = new HashMap<>();
     private static Map<String, Map<String, AttributeValue>> gemAttributesCache = new HashMap<>();
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
+    private static final PlainTextComponentSerializer PLAIN_TEXT_SERIALIZER = PlainTextComponentSerializer.plainText();
 
     public static void initialize(ConfigurationSection socketSection, ConfigurationSection gemTypeSection) {
         // 初始化宝石孔位匹配模式
@@ -110,14 +112,15 @@ public class SocketParser {
 
         // 从 Lore 中解析槽位定义
         for (Component lineComponent : lore) {
-            String line = MINI_MESSAGE.serialize(lineComponent);
-            String plain = stripColor(line);
+            String plain = PLAIN_TEXT_SERIALIZER.serialize(lineComponent);
             for (Pattern pattern : socketPatterns) {
                 Matcher matcher = pattern.matcher(plain);
                 if (matcher.find()) {
                     String socketType = matcher.group(1);
                     // 去除可能的尖括号（如 <红宝石> -> 红宝石）
                     if (socketType != null) {
+                        // 移除所有尖括号及其内容中的反斜杠转义
+                        socketType = socketType.replace("\\", "").trim();
                         socketType = socketType.replaceAll("[<>]", "").trim();
                     }
                     sockets.add(socketType != null && !socketType.isEmpty() ? socketType : "通用");
@@ -142,8 +145,7 @@ public class SocketParser {
         if (lore == null) return false;
 
         for (Component lineComponent : lore) {
-            String line = MINI_MESSAGE.serialize(lineComponent);
-            String plain = stripColor(line);
+            String plain = PLAIN_TEXT_SERIALIZER.serialize(lineComponent);
             if (plain.contains("宝石") || gemTypes.values().stream().anyMatch(plain::contains)) {
                 return true;
             }
@@ -166,8 +168,7 @@ public class SocketParser {
         // 宝石类型通常在第二行（索引1）
         // 格式: <dark_red>红宝石, <dark_green>绿宝石, <yellow>黄宝石等
         for (int i = 0; i < lore.size(); i++) {
-            String line = MINI_MESSAGE.serialize(lore.get(i));
-            String plain = stripColor(line);
+            String plain = PLAIN_TEXT_SERIALIZER.serialize(lore.get(i));
             
             // 检查是否包含宝石类型
             for (String gemType : gemTypes.values()) {
@@ -221,8 +222,7 @@ public class SocketParser {
         Pattern attrPattern = Pattern.compile("([\\u4e00-\\u9fa5]+)\\s*[:：]\\s*\\+?([\\d.]+)(?:-([\\d.]+))?");
 
         for (Component lineComponent : lore) {
-            String line = MINI_MESSAGE.serialize(lineComponent);
-            String plain = stripColor(line);
+            String plain = PLAIN_TEXT_SERIALIZER.serialize(lineComponent);
             Matcher matcher = attrPattern.matcher(plain);
             if (matcher.find()) {
                 String attrName = matcher.group(1);
@@ -253,10 +253,19 @@ public class SocketParser {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return;
 
-        // 获取现有的 Component Lore
+        // 获取现有的 Lore - 优先使用Component Lore，如果不存在则使用String Lore转换
         List<Component> existingLore = meta.lore();
         if (existingLore == null) {
             existingLore = new ArrayList<>();
+            // 尝试从String Lore转换
+            if (meta.hasLore()) {
+                List<String> stringLore = meta.getLore();
+                if (stringLore != null) {
+                    for (String line : stringLore) {
+                        existingLore.add(MINI_MESSAGE.deserialize(line));
+                    }
+                }
+            }
         }
 
         // 创建可修改的宝石列表副本
@@ -267,9 +276,7 @@ public class SocketParser {
         List<Component> newLore = new ArrayList<>();
 
         for (Component lineComponent : existingLore) {
-            // 将 Component 序列化为字符串用于匹配
-            String line = MINI_MESSAGE.serialize(lineComponent);
-            String plain = stripColor(line);
+            String plain = PLAIN_TEXT_SERIALIZER.serialize(lineComponent);
             boolean matched = false;
 
             // 检查是否匹配"可镶嵌"槽位格式
@@ -278,7 +285,8 @@ public class SocketParser {
                 if (matcher.find()) {
                     String socketType = matcher.group(1);
                     if (socketType != null) {
-                        // 去除尖括号（如 <红宝石> -> 红宝石）
+                        // 去除尖括号和反斜杠（如 <红宝石> 或 \红宝石 -> 红宝石）
+                        socketType = socketType.replace("\\", "").trim();
                         socketType = socketType.replaceAll("[<>]", "").trim();
 
                         // 查找匹配的宝石（类型必须匹配）
@@ -377,9 +385,7 @@ public class SocketParser {
             List<Component> newLore = new ArrayList<>();
 
             for (Component lineComponent : existingLore) {
-                // 将 Component 序列化为字符串用于匹配
-                String line = MINI_MESSAGE.serialize(lineComponent);
-                String plain = stripColor(line);
+                String plain = PLAIN_TEXT_SERIALIZER.serialize(lineComponent);
                 boolean isInlaid = false;
 
                 // 检查是否匹配"已镶嵌"槽位格式
@@ -389,7 +395,7 @@ public class SocketParser {
                         String gemType = matcher.group(1);
                         if (gemType != null && plain.contains("已镶嵌")) {
                             // 恢复为"可镶嵌"状态
-                            String restoredLine = restoreSocketLine(line, gemType);
+                            String restoredLine = restoreSocketLine(MINI_MESSAGE.serialize(lineComponent), gemType);
                             newLore.add(MINI_MESSAGE.deserialize(restoredLine));
                             isInlaid = true;
                             break;
@@ -418,7 +424,8 @@ public class SocketParser {
         List<String> result = new ArrayList<>();
 
         for (String line : lore) {
-            String plain = stripColor(line);
+            Component component = MINI_MESSAGE.deserialize(line);
+            String plain = PLAIN_TEXT_SERIALIZER.serialize(component);
 
             // 检查是否匹配"已镶嵌"槽位格式
             boolean isInlaid = false;
@@ -450,8 +457,8 @@ public class SocketParser {
      * 返回带 MiniMessage 格式的字符串
      */
     private static String restoreSocketLine(String originalLine, String gemType) {
-        // 移除颜色代码获取纯文本
-        String plain = stripColor(originalLine);
+        Component component = MINI_MESSAGE.deserialize(originalLine);
+        String plain = PLAIN_TEXT_SERIALIZER.serialize(component);
 
         // 替换"已镶嵌"为"可镶嵌"
         String newPlain = plain.replace("已镶嵌", "可镶嵌");
@@ -477,7 +484,8 @@ public class SocketParser {
         int gemIndex = 0;
 
         for (String line : lore) {
-            String plain = stripColor(line);
+            Component component = MINI_MESSAGE.deserialize(line);
+            String plain = PLAIN_TEXT_SERIALIZER.serialize(component);
             boolean matched = false;
 
             // 检查是否匹配"可镶嵌"槽位格式
@@ -523,8 +531,7 @@ public class SocketParser {
         if (meta.hasDisplayName()) {
             Component displayName = meta.displayName();
             if (displayName != null) {
-                String name = MINI_MESSAGE.serialize(displayName);
-                return stripColor(name);
+                return PLAIN_TEXT_SERIALIZER.serialize(displayName);
             }
         }
         
@@ -574,7 +581,8 @@ public class SocketParser {
         boolean inInlaySection = false;
 
         for (String line : lore) {
-            String plain = stripColor(line);
+            Component component = MINI_MESSAGE.deserialize(line);
+            String plain = PLAIN_TEXT_SERIALIZER.serialize(component);
             if (plain.contains(INLAY_SECTION_TITLE)) {
                 inInlaySection = true;
                 continue;
@@ -629,38 +637,6 @@ public class SocketParser {
 
     private static boolean isPercentAttribute(String attrName) {
         return attrName.contains("几率") || attrName.contains("概率") || attrName.contains("率");
-    }
-
-    /**
-     * 移除颜色代码，保留纯文本
-     * 支持传统颜色字符（& 和 §）和 MiniMessage 标签
-     */
-    private static String stripColor(String text) {
-        if (text == null) return "";
-        
-        String result = text;
-        
-        // 1. 移除传统 § 颜色代码
-        result = result.replaceAll("§[0-9a-fk-or]", "");
-        
-        // 2. 移除传统 & 颜色代码
-        result = result.replaceAll("&[0-9a-fk-or]", "");
-        
-        // 3. 移除 MiniMessage 颜色标签（但保留其他标签内容）
-        // 颜色标签列表
-        String[] colorTags = {
-            "black", "dark_blue", "dark_green", "dark_aqua", "dark_red", "dark_purple", "gold", "gray",
-            "dark_gray", "blue", "green", "aqua", "red", "light_purple", "yellow", "white",
-            "reset", "bold", "italic", "underlined", "strikethrough", "obfuscated"
-        };
-        for (String tag : colorTags) {
-            result = result.replaceAll("</?" + tag + ">", "");
-        }
-        
-        // 4. 移除十六进制颜色 <#RRGGBB>
-        result = result.replaceAll("<#[0-9a-fA-F]{6}>", "");
-        
-        return result;
     }
 
     private static String serializeGems(List<ItemStack> gems) {

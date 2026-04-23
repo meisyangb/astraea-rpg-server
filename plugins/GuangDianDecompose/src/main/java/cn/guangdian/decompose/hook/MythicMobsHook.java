@@ -1,15 +1,16 @@
 package cn.guangdian.decompose.hook;
 
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.lang.reflect.Method;
+import java.util.logging.Logger;
 
 public class MythicMobsHook {
 
+    private static final Logger logger = Logger.getLogger("GuangDianDecompose");
     private Object mythicBukkitInstance;
     private Method getItemManagerMethod;
     private static final NamespacedKey MYTHIC_TYPE_KEY = new NamespacedKey("mythicmobs", "type");
@@ -20,7 +21,7 @@ public class MythicMobsHook {
             mythicBukkitInstance = mythicBukkitClass.getMethod("inst").invoke(null);
             getItemManagerMethod = mythicBukkitClass.getMethod("getItemManager");
         } catch (Exception e) {
-            Bukkit.getLogger().warning("[GuangDianDecompose] MythicMobs not found, using PDC fallback");
+            logger.warning("[GuangDianDecompose] MythicMobs not found, using PDC fallback");
         }
     }
 
@@ -54,7 +55,7 @@ public class MythicMobsHook {
             }
             return item;
         } catch (Exception e) {
-            Bukkit.getLogger().warning("[GuangDianDecompose] Failed to get MythicMobs item: " + itemId);
+            logger.warning("[GuangDianDecompose] Failed to get MythicMobs item: " + itemId);
             e.printStackTrace();
         }
         return null;

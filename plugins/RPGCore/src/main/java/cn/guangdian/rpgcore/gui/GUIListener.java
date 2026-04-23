@@ -1,12 +1,15 @@
 package cn.guangdian.rpgcore.gui;
 
+import cn.guangdian.rpgcore.gui.model.MenuHolder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -55,13 +58,32 @@ public final class GUIListener implements Listener {
             return;
         }
 
-        GUI gui = playerGUIs.get(player.getUniqueId());
-        if (gui != null) {
-            // 检查是否是同一个 inventory
-            Inventory clickedInventory = event.getClickedInventory();
-            if (clickedInventory != null && clickedInventory.equals(gui.getInventory())) {
-                gui.handleClick(event);
+        Inventory clickedInventory = event.getClickedInventory();
+        Inventory topInventory = event.getView().getTopInventory();
+
+        // 检查是否点击了 GUI 界面 (top inventory)
+        if (clickedInventory != null && clickedInventory.equals(topInventory)) {
+            InventoryHolder holder = topInventory.getHolder();
+
+            // 处理 GUI 类型的 holder
+            if (holder instanceof GUI gui) {
+                event.setCancelled(true); // 取消所有在 GUI 内的点击操作
+                gui.handleClick(event);   // 但允许 GUI 处理点击逻辑
+                return;
             }
+
+            // 处理 MenuHolder 类型的 holder
+            if (holder instanceof MenuHolder) {
+                event.setCancelled(true); // 取消所有在菜单内的点击操作
+                return;
+            }
+        }
+
+        // 备用：检查 playerGUIs Map
+        GUI gui = playerGUIs.get(player.getUniqueId());
+        if (gui != null && clickedInventory != null && clickedInventory.equals(gui.getInventory())) {
+            event.setCancelled(true);
+            gui.handleClick(event);
         }
     }
 
@@ -83,6 +105,35 @@ public final class GUIListener implements Listener {
         GUI gui = playerGUIs.remove(player.getUniqueId());
         if (gui != null) {
             // 触发关闭处理器 (已在 GUI.close 中处理，这里是备用)
+        }
+    }
+
+    @EventHandler
+    public void onInventoryDrag(@NotNull InventoryDragEvent event) {
+        if (!(event.getWhoClicked() instanceof Player player)) {
+            return;
+        }
+
+        Inventory topInventory = event.getView().getTopInventory();
+        if (topInventory == null) {
+            return;
+        }
+
+        // 直接检查 holder 类型
+        InventoryHolder holder = topInventory.getHolder();
+        if (holder instanceof GUI) {
+            event.setCancelled(true);
+            return;
+        }
+        if (holder instanceof MenuHolder) {
+            event.setCancelled(true);
+            return;
+        }
+
+        // 备用：检查 playerGUIs Map
+        GUI gui = playerGUIs.get(player.getUniqueId());
+        if (gui != null && topInventory.equals(gui.getInventory())) {
+            event.setCancelled(true);
         }
     }
 }

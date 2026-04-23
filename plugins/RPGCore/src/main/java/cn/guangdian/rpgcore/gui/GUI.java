@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,7 +23,7 @@ import java.util.function.Consumer;
  * @author Astraea RPG Team
  * @since 1.1.0
  */
-public final class GUI {
+public class GUI implements InventoryHolder {
 
     private final String title;
     private final int size;
@@ -37,7 +38,15 @@ public final class GUI {
     GUI(@NotNull String title, int size) {
         this.title = title;
         this.size = size;
-        this.inventory = Bukkit.createInventory(null, size, Component.text(title));
+        this.inventory = Bukkit.createInventory(this, size, Component.text(title));
+        this.clickHandlers = new HashMap<>();
+        this.msg = UnifiedMessageService.getInstance();
+    }
+
+    GUI(@NotNull String title, int size, @NotNull Inventory externalInventory) {
+        this.title = title;
+        this.size = size;
+        this.inventory = externalInventory;
         this.clickHandlers = new HashMap<>();
         this.msg = UnifiedMessageService.getInstance();
     }
@@ -138,9 +147,12 @@ public final class GUI {
             return; // 点击了玩家背包
         }
 
+        // 取消所有在 GUI 内的点击操作（防止物品移动）
+        event.setCancelled(true);
+
+        // 如果有点击处理器，执行它
         Consumer<InventoryClickEvent> handler = clickHandlers.get(slot);
         if (handler != null) {
-            event.setCancelled(true); // 默认取消点击
             handler.accept(event);
         }
     }
@@ -172,6 +184,7 @@ public final class GUI {
         return size;
     }
 
+    @Override
     public @NotNull Inventory getInventory() {
         return inventory;
     }

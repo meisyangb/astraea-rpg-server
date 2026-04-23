@@ -3,10 +3,12 @@ package cn.guangdian.monthlycard;
 import cn.guangdian.monthlycard.adapter.MonthlyCardServiceAdapter;
 import cn.guangdian.monthlycard.api.MonthlyCardService;
 import cn.guangdian.monthlycard.command.MonthlyCardCommand;
+import cn.guangdian.monthlycard.config.ConfigManager;
 import cn.guangdian.monthlycard.data.MonthlyCardData;
 import cn.guangdian.monthlycard.data.MonthlyCardType;
 import cn.guangdian.monthlycard.gui.MonthlyCardGUI;
 import cn.guangdian.monthlycard.lifecycle.MonthlyCardDataHandler;
+import cn.guangdian.monthlycard.listener.PrivilegeListener;
 import cn.guangdian.monthlycard.manager.MonthlyCardManager;
 import cn.guangdian.monthlycard.placeholder.MonthlyCardPlaceholder;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
@@ -21,6 +23,7 @@ public class GuangDianMonthlyCard extends AbstractRPGPlugin {
 
     private static GuangDianMonthlyCard instance;
 
+    private ConfigManager configManager;
     private MonthlyCardManager cardManager;
     private MonthlyCardServiceAdapter serviceAdapter;
     private MonthlyCardDataHandler dataHandler;
@@ -32,9 +35,12 @@ public class GuangDianMonthlyCard extends AbstractRPGPlugin {
     protected void onPluginEnable() {
         instance = this;
         
-        saveDefaultConfig();
+        // 初始化配置管理器
+        configManager = new ConfigManager(this);
+        configManager.loadAllConfigs();
         
         cardManager = new MonthlyCardManager(this);
+        cardManager.init(); // 初始化数据库
         cardManager.loadCardTypes();
 
         monthlyCardGUI = new MonthlyCardGUI(this);
@@ -58,7 +64,7 @@ public class GuangDianMonthlyCard extends AbstractRPGPlugin {
         }
         
         if (cardManager != null) {
-            cardManager.saveAllData();
+            cardManager.shutdown();
         }
         
         if (serviceAdapter != null) {
@@ -113,10 +119,8 @@ public class GuangDianMonthlyCard extends AbstractRPGPlugin {
     }
 
     private void registerListeners() {
-        if (monthlyCardGUI != null) {
-            getServer().getPluginManager().registerEvents(monthlyCardGUI, this);
-            getLogger().info("已注册 GUI 事件监听器!");
-        }
+        getServer().getPluginManager().registerEvents(new PrivilegeListener(this), this);
+        getLogger().info("已注册特权监听器 (经验/掉落加成)!");
     }
     
     private void startTasks() {
@@ -173,5 +177,9 @@ public class GuangDianMonthlyCard extends AbstractRPGPlugin {
 
     public MonthlyCardGUI getMonthlyCardGUI() {
         return monthlyCardGUI;
+    }
+    
+    public ConfigManager getConfigManager() {
+        return configManager;
     }
 }

@@ -22,6 +22,7 @@ public class GuangDianSignIn extends AbstractRPGPlugin {
         configManager.loadConfig();
         
         dataHandler = new SignInDataHandler(this);
+        dataHandler.initialize();
         if (rpgCore != null) {
             rpgCore.getPlayerLifecycle().registerHandler(dataHandler);
         }

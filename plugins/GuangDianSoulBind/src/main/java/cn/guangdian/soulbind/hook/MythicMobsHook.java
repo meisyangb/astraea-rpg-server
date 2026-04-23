@@ -5,37 +5,29 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Method;
+import java.util.logging.Logger;
 
 public class MythicMobsHook {
 
+    private static final Logger logger = Logger.getLogger("GuangDianSoulBind");
+    private Object mythicBukkitInstance;
+    private Method getItemManagerMethod;
+    private static final NamespacedKey MYTHIC_TYPE_KEY = new NamespacedKey("mythicmobs", "type");
     private boolean enabled = false;
-    private Object itemManager;
-    private Method getItemStackMethod;
+    private boolean initialized = false;
 
     public void init() {
-        Plugin plugin = Bukkit.getPluginManager().getPlugin("MythicMobs");
-        if (plugin == null || !plugin.isEnabled()) {
-            Bukkit.getLogger().info("[GuangDianSoulBind] MythicMobs 未安装，跳过物品集成");
-            return;
-        }
-
+        if (initialized) return;
+        initialized = true;
         try {
             Class<?> mythicBukkitClass = Class.forName("io.lumine.mythic.bukkit.MythicBukkit");
-            Method instMethod = mythicBukkitClass.getMethod("inst");
-            Object mythicBukkitInst = instMethod.invoke(null);
-
-            Method getItemManagerMethod = mythicBukkitClass.getMethod("getItemManager");
-            itemManager = getItemManagerMethod.invoke(mythicBukkitInst);
-
-            getItemStackMethod = itemManager.getClass().getMethod("getItemStack", String.class);
-
+            mythicBukkitInstance = mythicBukkitClass.getMethod("inst").invoke(null);
+            getItemManagerMethod = mythicBukkitClass.getMethod("getItemManager");
             enabled = true;
-            Bukkit.getLogger().info("[GuangDianSoulBind] MythicMobs 物品集成已启用");
         } catch (Exception e) {
-            Bukkit.getLogger().warning("[GuangDianSoulBind] MythicMobs 物品集成失败: " + e.getMessage());
+            logger.warning("[GuangDianSoulBind] MythicMobs not found, using PDC fallback");
         }
     }
 
@@ -43,42 +35,54 @@ public class MythicMobsHook {
         return enabled;
     }
 
-    public boolean isMythicItem(ItemStack item) {
-        if (item == null || !item.hasItemMeta()) return false;
-
-        ItemMeta meta = item.getItemMeta();
-        NamespacedKey typeKey = new NamespacedKey("mythicmobs", "type");
-        return meta.getPersistentDataContainer().has(typeKey, PersistentDataType.STRING);
+    public MythicMobsHook() {
+        try {
+            Class<?> mythicBukkitClass = Class.forName("io.lumine.mythic.bukkit.MythicBukkit");
+            mythicBukkitInstance = mythicBukkitClass.getMethod("inst").invoke(null);
+            getItemManagerMethod = mythicBukkitClass.getMethod("getItemManager");
+            enabled = true;
+        } catch (Exception e) {
+            logger.warning("[GuangDianSoulBind] MythicMobs not found, using PDC fallback");
+        }
     }
 
     public String getMythicItemId(ItemStack item) {
-        if (item == null || !item.hasItemMeta()) return null;
+        if (item == null || !item.hasItemMeta()) {
+            return null;
+        }
 
         ItemMeta meta = item.getItemMeta();
-        NamespacedKey typeKey = new NamespacedKey("mythicmobs", "type");
-        return meta.getPersistentDataContainer().get(typeKey, PersistentDataType.STRING);
-    }
+        
+        String pdcId = meta.getPersistentDataContainer().get(MYTHIC_TYPE_KEY, PersistentDataType.STRING);
+        if (pdcId != null) {
+            return pdcId;
+        }
 
-    public boolean isMythicItem(ItemStack item, String itemId) {
-        if (item == null || !item.hasItemMeta()) return false;
-
-        String storedId = getMythicItemId(item);
-        return itemId.equals(storedId);
+        return null;
     }
 
     public ItemStack getMythicItem(String itemId, int amount) {
-        if (!enabled || itemManager == null || getItemStackMethod == null) {
+        if (mythicBukkitInstance == null || getItemManagerMethod == null) {
             return null;
         }
 
         try {
+            Object itemManager = getItemManagerMethod.invoke(mythicBukkitInstance);
+            Method getItemStackMethod = itemManager.getClass().getMethod("getItemStack", String.class);
             ItemStack item = (ItemStack) getItemStackMethod.invoke(itemManager, itemId);
+
             if (item != null) {
                 item.setAmount(amount);
             }
             return item;
         } catch (Exception e) {
-            return null;
+            logger.warning("[GuangDianSoulBind] Failed to get MythicMobs item: " + itemId);
+            e.printStackTrace();
         }
+        return null;
+    }
+
+    public boolean isMythicItem(ItemStack item) {
+        return getMythicItemId(item) != null;
     }
 }

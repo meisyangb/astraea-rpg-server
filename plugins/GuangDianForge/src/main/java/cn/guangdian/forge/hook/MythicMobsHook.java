@@ -9,12 +9,15 @@ import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Method;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * MythicMobs物品集成Hook
  * 支持材料识别和物品获取
  */
 public class MythicMobsHook {
+    
+    private static final Logger logger = Logger.getLogger("GuangDianForge");
     
     private boolean enabled = false;
     private Object itemManager;
@@ -27,7 +30,7 @@ public class MythicMobsHook {
     public void init() {
         Plugin plugin = Bukkit.getPluginManager().getPlugin("MythicMobs");
         if (plugin == null || !plugin.isEnabled()) {
-            Bukkit.getLogger().info("[GuangDianForge] MythicMobs 未安装，跳过物品集成");
+            logger.info("[GuangDianForge] MythicMobs 未安装，跳过物品集成");
             return;
         }
         
@@ -46,9 +49,9 @@ public class MythicMobsHook {
             getItemStackMethod = itemManager.getClass().getMethod("getItemStack", String.class);
             
             enabled = true;
-            Bukkit.getLogger().info("[GuangDianForge] MythicMobs 物品集成已启用");
+            logger.info("[GuangDianForge] MythicMobs 物品集成已启用");
         } catch (Exception e) {
-            Bukkit.getLogger().warning("[GuangDianForge] MythicMobs 物品集成失败: " + e.getMessage());
+            logger.warning("[GuangDianForge] MythicMobs 物品集成失败: " + e.getMessage());
         }
     }
     
@@ -125,7 +128,7 @@ public class MythicMobsHook {
             }
             return item;
         } catch (Exception e) {
-            Bukkit.getLogger().warning("[GuangDianForge] 获取MythicMobs物品失败: " + itemId + " - " + e.getMessage());
+            logger.warning("[GuangDianForge] 获取MythicMobs物品失败: " + itemId + " - " + e.getMessage());
             return null;
         }
     }
@@ -153,7 +156,7 @@ public class MythicMobsHook {
                 org.bukkit.Material material = org.bukkit.Material.valueOf(materialName);
                 return new ItemStack(material, amount);
             } catch (IllegalArgumentException e) {
-                Bukkit.getLogger().warning("[GuangDianForge] 无效的原版材料: " + materialName);
+                logger.warning("[GuangDianForge] 无效的原版材料: " + materialName);
                 return null;
             }
         } else {

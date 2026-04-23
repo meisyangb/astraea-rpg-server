@@ -130,7 +130,7 @@ public class QuestListGUI extends QuestGUI {
         builder.setItem(QuestNavigation.SLOT_INFO, nav.createLocationIndicator(
             "第 " + currentPage + "/" + totalPages + " 页",
             "共 " + quests.size() + " 个任务"
-        ), null);
+        ));
 
         // 下一页按钮
         if (currentPage < totalPages) {

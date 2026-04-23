@@ -17,7 +17,7 @@ public class DecomposeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage("§c此命令只能由玩家执行!");
+            sender.sendMessage(net.kyori.adventure.text.Component.text("此命令只能由玩家执行!").color(net.kyori.adventure.text.format.NamedTextColor.RED));
             return true;
         }
 

@@ -19,6 +19,7 @@ repositories {
 dependencies {
     // Paper API
     compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+    testImplementation 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
 
     // 外部插件 API - 从本地文件加载
     compileOnly name: 'PlaceholderAPI'
@@ -43,8 +44,8 @@ dependencies {
     implementation 'it.sauronsoftware.cron4j:cron4j:2.2.5'
 
     // 单元测试
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation 'org.mockito:mockito-core:5.8.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.8.0'
     testImplementation 'org.assertj:assertj-core:3.24.2'
@@ -66,25 +67,19 @@ compileJava {
 
 test {
     useJUnitPlatform()
-    enabled = true
-}
-
-// 启用测试编译
-compileTestJava {
-    enabled = true
 }
 
 // 普通 JAR 配置
 jar {
     archiveClassifier.set('')
     archiveFileName = "RPGCore-${version}.jar"
-    
+
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
-    
+
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    
+
     manifest {
         attributes(
             'Main-Class': 'cn.guangdian.rpgcore.RPGCore',

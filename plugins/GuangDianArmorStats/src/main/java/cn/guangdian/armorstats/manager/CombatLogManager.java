@@ -288,52 +288,7 @@ public class CombatLogManager {
      */
     private String convertLegacyColorsToMiniMessage(String text) {
         if (text == null) return "";
-
-        // 先处理 && 转义，避免被误转换
-        text = text.replace("&&", "\u0000ESC\u0000");
-
-        // 定义颜色映射
-        java.util.Map<Character, String> colorMap = new java.util.HashMap<>();
-        colorMap.put('0', "<black>");
-        colorMap.put('1', "<dark_blue>");
-        colorMap.put('2', "<dark_green>");
-        colorMap.put('3', "<dark_aqua>");
-        colorMap.put('4', "<dark_red>");
-        colorMap.put('5', "<dark_purple>");
-        colorMap.put('6', "<gold>");
-        colorMap.put('7', "<gray>");
-        colorMap.put('8', "<dark_gray>");
-        colorMap.put('9', "<blue>");
-        colorMap.put('a', "<green>");
-        colorMap.put('b', "<aqua>");
-        colorMap.put('c', "<red>");
-        colorMap.put('d', "<light_purple>");
-        colorMap.put('e', "<yellow>");
-        colorMap.put('f', "<white>");
-        colorMap.put('k', "<obfuscated>");
-        colorMap.put('l', "<bold>");
-        colorMap.put('m', "<strikethrough>");
-        colorMap.put('n', "<underlined>");
-        colorMap.put('o', "<italic>");
-        colorMap.put('r', "<reset>");
-
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < text.length(); i++) {
-            char c = text.charAt(i);
-            if ((c == '&' || c == '§') && i + 1 < text.length()) {
-                char code = text.charAt(i + 1);
-                String miniMessage = colorMap.get(Character.toLowerCase(code));
-                if (miniMessage != null) {
-                    result.append(miniMessage);
-                    i++; // 跳过颜色代码字符
-                    continue;
-                }
-            }
-            result.append(c);
-        }
-
-        // 恢复 && 转义
-        return result.toString().replace("\u0000ESC\u0000", "&&");
+        return cn.guangdian.rpgcore.util.TextStripper.legacyToMiniMessage(text);
     }
 
     public void clearCooldown(UUID playerId) {

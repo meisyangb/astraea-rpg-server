@@ -9,9 +9,11 @@ import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Method;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MythicMobsHook {
     
+    private static final Logger logger = Logger.getLogger("GuangDianAccessory");
     private static MythicMobsHook instance;
     private boolean enabled = false;
     private boolean initialized = false;
@@ -35,7 +37,7 @@ public class MythicMobsHook {
         
         Plugin plugin = Bukkit.getPluginManager().getPlugin("MythicMobs");
         if (plugin == null || !plugin.isEnabled()) {
-            Bukkit.getLogger().info("[GuangDianAccessory] MythicMobs 未安装，饰品将无法加载");
+            logger.info("[GuangDianAccessory] MythicMobs 未安装，饰品将无法加载");
             return;
         }
         
@@ -50,9 +52,9 @@ public class MythicMobsHook {
             getItemStackMethod = itemManager.getClass().getMethod("getItemStack", String.class);
             
             enabled = true;
-            Bukkit.getLogger().info("[GuangDianAccessory] MythicMobs 物品集成已启用");
+            logger.info("[GuangDianAccessory] MythicMobs 物品集成已启用");
         } catch (Exception e) {
-            Bukkit.getLogger().log(Level.WARNING, "[GuangDianAccessory] MythicMobs 物品集成失败: " + e.getMessage());
+            logger.log(Level.WARNING, "[GuangDianAccessory] MythicMobs 物品集成失败: " + e.getMessage());
         }
     }
     

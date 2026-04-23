@@ -1,6 +1,7 @@
 package cn.guangdian.name;
 
-import cn.guangdian.rpgcore.util.ColorUtil;
+import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -12,15 +13,16 @@ import org.jetbrains.annotations.NotNull;
  * - %gdname_show_title% - 称号显示状态
  * - %gdname_show_guild% - 工会显示状态
  * - %gdname_show_marriage% - 婚姻显示状态
+ * - %gdname_show_health% - 血量显示状态
  */
 public class NamePlaceholder extends PlaceholderExpansion {
 
     private final GuangDianName plugin;
-    private final TitleDisplay titleDisplay;
+    private final NameDisplayManager displayManager;
 
-    public NamePlaceholder(GuangDianName plugin, TitleDisplay titleDisplay) {
+    public NamePlaceholder(GuangDianName plugin, NameDisplayManager displayManager) {
         this.plugin = plugin;
-        this.titleDisplay = titleDisplay;
+        this.displayManager = displayManager;
     }
 
     @Override
@@ -54,18 +56,29 @@ public class NamePlaceholder extends PlaceholderExpansion {
             return "";
         }
 
+        String result;
         switch (params.toLowerCase()) {
             case "show_title":
-                return ColorUtil.legacyColorize(
-                        titleDisplay.getShowTitleStatus(player));
+                result = displayManager.getShowTitleStatus(player);
+                break;
             case "show_guild":
-                return ColorUtil.legacyColorize(
-                        titleDisplay.getShowGuildStatus(player));
+                result = displayManager.getShowGuildStatus(player);
+                break;
             case "show_marriage":
-                return ColorUtil.legacyColorize(
-                        titleDisplay.getShowMarriageStatus(player));
+                result = displayManager.getShowMarriageStatus(player);
+                break;
+            case "show_health":
+                result = displayManager.getShowHealthStatus(player);
+                break;
             default:
                 return null;
         }
+
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            MiniMessageService mm = rpgCore.getMiniMessageService();
+            return mm.serialize(mm.colorize(result));
+        }
+        return result;
     }
 }

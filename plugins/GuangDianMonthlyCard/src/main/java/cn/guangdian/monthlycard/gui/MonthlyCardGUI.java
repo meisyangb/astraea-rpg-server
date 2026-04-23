@@ -1,544 +1,475 @@
 package cn.guangdian.monthlycard.gui;
 
 import cn.guangdian.monthlycard.GuangDianMonthlyCard;
+import cn.guangdian.monthlycard.config.GUIConfig;
+import cn.guangdian.monthlycard.config.GUIConfig.*;
 import cn.guangdian.monthlycard.data.DailyReward;
 import cn.guangdian.monthlycard.data.MonthlyCardData;
 import cn.guangdian.monthlycard.data.MonthlyCardType;
+import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.gui.GUI;
 import cn.guangdian.rpgcore.gui.GUIBuilder;
+import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 
-/**
- * 月卡GUI系统 - 使用RPGCore GUI服务
- *
- * @author Astraea RPG Team
- * @since 1.1.0
- */
-public class MonthlyCardGUI implements Listener {
+public class MonthlyCardGUI {
 
     private final GuangDianMonthlyCard plugin;
-    private final MiniMessageService msg;
+    private final GUIConfig guiConfig;
+    private final MiniMessageService miniMessage;
+    private final ExternalServiceIntegration externalServices;
+    private static final int REWARDS_PER_PAGE = 28;
 
     public MonthlyCardGUI(GuangDianMonthlyCard plugin) {
         this.plugin = plugin;
-        this.msg = MiniMessageService.getInstance();
-    }
+        this.guiConfig = new GUIConfig(plugin);
 
-    /**
-     * 打开月卡主菜单
-     */
-    public void openMainMenu(Player player) {
-        MonthlyCardData data = plugin.getPlayerData(player.getUniqueId());
-
-        GUI gui = GUIBuilder.create("<gold>☆ 月卡中心 ☆", 6)
-            .setFiller(Material.BLACK_STAINED_GLASS_PANE)
-            .build();
-
-        refreshMainMenu(gui, player, data);
-        gui.open(player);
-    }
-
-    private void refreshMainMenu(GUI gui, Player player, MonthlyCardData data) {
-        gui.clear();
-
-        // 装饰边框
-        ItemStack border = createItem(Material.PURPLE_STAINED_GLASS_PANE, Component.text(" "));
-        gui.fillEmptySlots(border);
-
-        // 月卡状态信息
-        ItemStack statusItem = createStatusItem(data);
-        gui.setItem(4, statusItem);
-
-        // 每日奖励按钮
-        ItemStack dailyRewardItem = createDailyRewardItem(data);
-        gui.setItem(20, dailyRewardItem, event -> {
-            if (!data.hasActiveCard()) {
-                player.sendMessage(msg.red("你还没有激活月卡!"));
-                return;
-            }
-            if (!data.canClaimToday()) {
-                player.sendMessage(msg.yellow("今日奖励已领取!"));
-                return;
-            }
-            if (plugin.claimDailyReward(player.getUniqueId())) {
-                player.sendMessage(msg.green("成功领取今日月卡奖励!"));
-                openMainMenu(player);
-            }
-        });
-
-        // 月卡详情按钮
-        ItemStack detailsItem = createDetailsItem(data);
-        gui.setItem(22, detailsItem, event -> {
-            if (!data.hasActiveCard()) {
-                player.sendMessage(msg.red("你还没有激活月卡!"));
-                return;
-            }
-            openRewardPreview(player, data);
-        });
-
-        // 购买月卡按钮
-        ItemStack buyItem = createBuyItem();
-        gui.setItem(24, buyItem, event -> openCardShop(player));
-
-        // 奖励预览按钮
-        ItemStack previewItem = createPreviewItem();
-        gui.setItem(31, previewItem, event -> openCardShop(player));
-
-        // 关闭按钮
-        ItemStack closeItem = createItem(Material.BARRIER, Component.text("关闭").color(NamedTextColor.RED));
-        gui.setItem(49, closeItem, event -> gui.close(player));
-
-        // 帮助按钮
-        ItemStack helpItem = createHelpItem();
-        gui.setItem(52, helpItem);
-    }
-
-    /**
-     * 打开月卡商店
-     */
-    public void openCardShop(Player player) {
-        GUI gui = GUIBuilder.create("<gold>☆ 购买月卡 ☆", 6)
-            .setFiller(Material.GRAY_STAINED_GLASS_PANE)
-            .build();
-
-        // 装饰边框
-        ItemStack border = createItem(Material.CYAN_STAINED_GLASS_PANE, Component.text(" "));
-        gui.fillEmptySlots(border);
-
-        // 返回按钮
-        ItemStack backItem = createItem(Material.ARROW, Component.text("返回主菜单").color(NamedTextColor.YELLOW));
-        gui.setItem(45, backItem, event -> openMainMenu(player));
-
-        // 关闭按钮
-        ItemStack closeItem = createItem(Material.BARRIER, Component.text("关闭").color(NamedTextColor.RED));
-        gui.setItem(49, closeItem, event -> gui.close(player));
-
-        // 显示所有月卡类型
-        List<MonthlyCardType> cardTypes = plugin.getCardManager().getAllCardTypes();
-        int[] slots = {20, 22, 24, 29, 31, 33};
-        int index = 0;
-
-        for (MonthlyCardType type : cardTypes) {
-            if (index >= slots.length) break;
-
-            ItemStack cardItem = createCardTypeItem(type);
-            int slot = slots[index++];
-
-            gui.setItem(slot, cardItem, event -> {
-                if (plugin.getService().activateCard(player.getUniqueId(), type.getId(), true)) {
-                    player.sendMessage(msg.green("成功购买并激活月卡: " + type.getDisplayName()));
-                    openMainMenu(player);
-                } else {
-                    player.sendMessage(msg.red("购买失败，请检查余额是否充足!"));
-                }
-            });
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            this.miniMessage = rpgCore.getMiniMessageService();
+            this.externalServices = rpgCore.getExternalServices();
+        } else {
+            this.miniMessage = MiniMessageService.getInstance();
+            this.externalServices = null;
         }
-
-        gui.open(player);
     }
 
-    /**
-     * 打开奖励预览
-     */
-    public void openRewardPreview(Player player, MonthlyCardData data) {
-        Optional<MonthlyCardType> typeOpt = plugin.getCardType(data.getCardType());
-        if (typeOpt.isEmpty()) {
-            player.sendMessage(msg.red("无法加载月卡数据!"));
+    public void reloadConfig() {
+        guiConfig.loadConfig();
+    }
+
+    public void openMainMenu(Player player) {
+        MenuConfig menu = guiConfig.getMainMenu();
+        if (menu == null) {
+            player.sendMessage(miniMessage.red("GUI配置加载失败"));
             return;
         }
 
-        MonthlyCardType type = typeOpt.get();
-        int currentDay = data.getDaysSinceActivation();
-        int totalPages = (int) Math.ceil(type.getDailyRewards().size() / 28.0);
-
-        openRewardPage(player, data, type, 1, totalPages, currentDay);
-    }
-
-    private void openRewardPage(Player player, MonthlyCardData data, MonthlyCardType type,
-                                int page, int totalPages, int currentDay) {
-        String title = "<gold>☆ 奖励预览 - 第" + page + "/" + totalPages + "页 ☆";
-        GUI gui = GUIBuilder.create(title, 6)
-            .setFiller(Material.BLACK_STAINED_GLASS_PANE)
-            .build();
-
-        // 装饰边框
-        ItemStack border = createItem(Material.BLUE_STAINED_GLASS_PANE, Component.text(" "));
-        gui.fillEmptySlots(border);
-
-        // 返回按钮
-        ItemStack backItem = createItem(Material.ARROW, Component.text("返回主菜单").color(NamedTextColor.YELLOW));
-        gui.setItem(45, backItem, event -> openMainMenu(player));
-
-        // 上一页
-        if (page > 1) {
-            ItemStack prevItem = createItem(Material.PAPER, Component.text("上一页").color(NamedTextColor.YELLOW));
-            gui.setItem(48, prevItem, event ->
-                openRewardPage(player, data, type, page - 1, totalPages, currentDay));
+        MonthlyCardData data = plugin.getCardManager().getPlayerData(player.getUniqueId());
+        if (data == null) {
+            player.sendMessage(miniMessage.red("无法获取玩家数据"));
+            return;
         }
 
-        // 下一页
-        if (page < totalPages) {
-            ItemStack nextItem = createItem(Material.PAPER, Component.text("下一页").color(NamedTextColor.YELLOW));
-            gui.setItem(50, nextItem, event ->
-                openRewardPage(player, data, type, page + 1, totalPages, currentDay));
-        }
+        boolean hasCard = data.isActive();
 
-        // 关闭按钮
-        ItemStack closeItem = createItem(Material.BARRIER, Component.text("关闭").color(NamedTextColor.RED));
-        gui.setItem(49, closeItem, event -> gui.close(player));
+        GUIBuilder builder = GUIBuilder.create(menu.title, menu.rows);
 
-        // 显示奖励
-        int startDay = (page - 1) * 28 + 1;
-        int endDay = Math.min(startDay + 27, type.getDailyRewards().size());
-
-        int slot = 10;
-        for (int day = startDay; day <= endDay; day++) {
-            if (slot % 9 == 8) {
-                slot += 2;
+        if (menu.filler != null) {
+            ItemStack filler = createItemFromConfig(menu.filler);
+            for (int i = 0; i < menu.rows * 9; i++) {
+                builder.setItem(i, filler);
             }
-            if (slot >= 44) break;
-
-            DailyReward reward = type.getRewardForDay(day);
-            boolean isCurrentDay = day == currentDay;
-            boolean isPast = day < currentDay;
-            boolean isClaimed = data.getClaimedDays().contains("day" + day);
-
-            ItemStack rewardItem = createRewardPreviewItem(day, reward, isCurrentDay, isPast, isClaimed);
-            gui.setItem(slot, rewardItem);
-
-            slot++;
         }
 
+        if (menu.border != null && menu.border.enabled) {
+            ItemStack borderItem = createItemFromConfig(menu.border.item);
+            for (int slot : menu.border.slots) {
+                if (slot < menu.rows * 9) {
+                    builder.setItem(slot, borderItem);
+                }
+            }
+        }
+
+        ButtonConfig statusBtn = menu.buttons.get("status");
+        if (statusBtn != null) {
+            String state = hasCard ? "active" : "inactive";
+            ItemConfig itemConfig = statusBtn.states.get(state);
+            if (itemConfig != null) {
+                builder.setItem(statusBtn.slot, createItemFromConfig(itemConfig, data));
+            }
+        }
+
+        ButtonConfig dailyBtn = menu.buttons.get("daily-reward");
+        if (dailyBtn != null) {
+            String state;
+            if (!hasCard) {
+                state = "no-card";
+            } else if (data.hasClaimedToday()) {
+                state = "claimed";
+            } else {
+                state = "can-claim";
+            }
+            ItemConfig itemConfig = dailyBtn.states.get(state);
+            if (itemConfig != null) {
+                ItemStack item = createItemFromConfig(itemConfig, data);
+                builder.setItem(dailyBtn.slot, item, event -> {
+                    handleDailyRewardClick(player);
+                });
+            }
+        }
+
+        ButtonConfig makeupBtn = menu.buttons.get("makeup");
+        if (makeupBtn != null) {
+            List<String> missedDays = plugin.getCardManager().getMissedDays(player.getUniqueId());
+            String state = hasCard && !missedDays.isEmpty() ? "available" : "unavailable";
+            ItemConfig itemConfig = makeupBtn.states.get(state);
+            if (itemConfig != null) {
+                ItemStack item = createItemFromConfig(itemConfig, data);
+                builder.setItem(makeupBtn.slot, item, event -> {
+                    handleMakeupClick(player);
+                });
+            }
+        }
+
+        ButtonConfig previewBtn = menu.buttons.get("preview");
+        if (previewBtn != null && previewBtn.defaultItem != null) {
+            builder.setItem(previewBtn.slot, createItemFromConfig(previewBtn.defaultItem), event -> {
+                openRewardPreview(player, 0);
+            });
+        }
+
+        ButtonConfig milestoneBtn = menu.buttons.get("milestone");
+        if (milestoneBtn != null && milestoneBtn.defaultItem != null) {
+            builder.setItem(milestoneBtn.slot, createItemFromConfig(milestoneBtn.defaultItem), event -> {
+                handleMilestoneClick(player);
+            });
+        }
+
+        ButtonConfig closeBtn = menu.buttons.get("close");
+        if (closeBtn != null && closeBtn.defaultItem != null) {
+            builder.setItem(closeBtn.slot, createItemFromConfig(closeBtn.defaultItem), event -> {
+                player.closeInventory();
+            });
+        }
+
+        GUI gui = builder.build();
         gui.open(player);
     }
 
-    // ==================== 物品创建方法 ====================
+    public void openShopMenu(Player player) {
+        MenuConfig menu = guiConfig.getShopMenu();
+        if (menu == null) {
+            player.sendMessage(miniMessage.red("商店配置加载失败"));
+            return;
+        }
 
-    private ItemStack createStatusItem(MonthlyCardData data) {
-        Material material = data.hasActiveCard() ? Material.GOLDEN_CARROT : Material.BARRIER;
-        ItemStack item = new ItemStack(material);
-        ItemMeta meta = item.getItemMeta();
+        GUIBuilder builder = GUIBuilder.create(menu.title, menu.rows);
 
-        if (data.hasActiveCard()) {
-            Optional<MonthlyCardType> typeOpt = plugin.getCardType(data.getCardType());
-            String typeName = typeOpt.map(MonthlyCardType::getDisplayName).orElse(data.getCardType());
-
-            meta.displayName(Component.text("✦ 月卡状态 ✦").color(NamedTextColor.GOLD).decoration(TextDecoration.BOLD, true));
-
-            List<Component> lore = new ArrayList<>();
-            lore.add(Component.empty());
-            lore.add(Component.text("月卡类型: ").color(NamedTextColor.YELLOW).append(Component.text(typeName).color(NamedTextColor.WHITE)));
-            lore.add(Component.text("剩余天数: ").color(NamedTextColor.YELLOW).append(Component.text(data.getRemainingDaysInt() + " 天").color(NamedTextColor.GREEN)));
-            lore.add(Component.text("已签到: ").color(NamedTextColor.YELLOW).append(Component.text(data.getTotalClaimedDays() + " 天").color(NamedTextColor.AQUA)));
-            lore.add(Component.text("当前第: ").color(NamedTextColor.YELLOW).append(Component.text(data.getDaysSinceActivation() + " 天").color(NamedTextColor.AQUA)));
-            lore.add(Component.empty());
-
-            if (data.canClaimToday()) {
-                lore.add(Component.text("✔ 今日奖励可领取!").color(NamedTextColor.GREEN).decoration(TextDecoration.BOLD, true));
-            } else {
-                lore.add(Component.text("今日奖励已领取").color(NamedTextColor.GRAY));
+        if (menu.filler != null) {
+            ItemStack filler = createItemFromConfig(menu.filler);
+            for (int i = 0; i < menu.rows * 9; i++) {
+                builder.setItem(i, filler);
             }
-
-            meta.lore(lore);
-        } else {
-            meta.displayName(Component.text("✘ 未激活月卡").color(NamedTextColor.RED).decoration(TextDecoration.BOLD, true));
-
-            List<Component> lore = new ArrayList<>();
-            lore.add(Component.empty());
-            lore.add(Component.text("你还没有激活月卡").color(NamedTextColor.GRAY));
-            lore.add(Component.text("点击购买月卡开始领取每日奖励!").color(NamedTextColor.YELLOW));
-            lore.add(Component.empty());
-            lore.add(Component.text("月卡特权:").color(NamedTextColor.AQUA));
-            lore.add(Component.text("- 每日点券奖励").color(NamedTextColor.GRAY));
-            lore.add(Component.text("- 每日游戏币奖励").color(NamedTextColor.GRAY));
-            lore.add(Component.text("- 累计签到额外奖励").color(NamedTextColor.GRAY));
-
-            meta.lore(lore);
         }
 
-        item.setItemMeta(meta);
-        return item;
-    }
-
-    private ItemStack createDailyRewardItem(MonthlyCardData data) {
-        Material material = data.canClaimToday() ? Material.CHEST : Material.TRAPPED_CHEST;
-        ItemStack item = new ItemStack(material);
-        ItemMeta meta = item.getItemMeta();
-
-        if (data.canClaimToday()) {
-            meta.displayName(Component.text("✦ 领取每日奖励 ✦").color(NamedTextColor.GREEN).decoration(TextDecoration.BOLD, true));
-            meta.addEnchant(org.bukkit.enchantments.Enchantment.UNBREAKING, 1, true);
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        } else if (!data.hasActiveCard()) {
-            meta.displayName(Component.text("未激活月卡").color(NamedTextColor.RED));
-        } else {
-            meta.displayName(Component.text("今日已领取").color(NamedTextColor.GRAY));
-        }
-
-        List<Component> lore = new ArrayList<>();
-        lore.add(Component.empty());
-
-        if (data.hasActiveCard()) {
-            Optional<MonthlyCardType> typeOpt = plugin.getCardType(data.getCardType());
-            if (typeOpt.isPresent()) {
-                MonthlyCardType type = typeOpt.get();
-                int day = data.getDaysSinceActivation();
-                DailyReward reward = type.getRewardForDay(day);
-
-                if (reward != null && reward.hasAnyReward()) {
-                    lore.add(Component.text("今日奖励内容:").color(NamedTextColor.YELLOW));
-                    if (reward.getPoints() > 0) {
-                        lore.add(Component.text("  + " + reward.getPoints() + " 点券").color(NamedTextColor.GOLD));
-                    }
-                    if (reward.getMoney() > 0) {
-                        lore.add(Component.text("  + " + reward.getMoney() + " 游戏币").color(NamedTextColor.GREEN));
-                    }
+        if (menu.border != null && menu.border.enabled) {
+            ItemStack borderItem = createItemFromConfig(menu.border.item);
+            for (int slot : menu.border.slots) {
+                if (slot < menu.rows * 9) {
+                    builder.setItem(slot, borderItem);
                 }
             }
-            lore.add(Component.empty());
         }
 
-        if (data.canClaimToday()) {
-            lore.add(Component.text("点击领取今日奖励!").color(NamedTextColor.GREEN).decoration(TextDecoration.BOLD, true));
-        } else if (!data.hasActiveCard()) {
-            lore.add(Component.text("请先购买月卡").color(NamedTextColor.RED));
-        } else {
-            lore.add(Component.text("明日再来领取吧~").color(NamedTextColor.GRAY));
+        ButtonConfig backBtn = menu.buttons.get("back");
+        if (backBtn != null && backBtn.defaultItem != null) {
+            builder.setItem(backBtn.slot, createItemFromConfig(backBtn.defaultItem), event -> {
+                openMainMenu(player);
+            });
         }
 
-        meta.lore(lore);
-        item.setItemMeta(meta);
-        return item;
-    }
-
-    private ItemStack createDetailsItem(MonthlyCardData data) {
-        Material material = data.hasActiveCard() ? Material.BOOK : Material.PAPER;
-        ItemStack item = new ItemStack(material);
-        ItemMeta meta = item.getItemMeta();
-
-        meta.displayName(Component.text("📖 月卡详情").color(NamedTextColor.AQUA).decoration(TextDecoration.BOLD, true));
-
-        List<Component> lore = new ArrayList<>();
-        lore.add(Component.empty());
-
-        if (data.hasActiveCard()) {
-            lore.add(Component.text("点击查看30天完整奖励列表").color(NamedTextColor.YELLOW));
-            lore.add(Component.text("了解每一天的奖励内容").color(NamedTextColor.GRAY));
-        } else {
-            lore.add(Component.text("激活月卡后查看详情").color(NamedTextColor.GRAY));
+        ButtonConfig closeBtn = menu.buttons.get("close");
+        if (closeBtn != null && closeBtn.defaultItem != null) {
+            builder.setItem(closeBtn.slot, createItemFromConfig(closeBtn.defaultItem), event -> {
+                player.closeInventory();
+            });
         }
 
-        lore.add(Component.empty());
-        lore.add(Component.text("点击打开奖励预览").color(NamedTextColor.AQUA));
+        List<MonthlyCardType> cardTypes = new ArrayList<>(plugin.getCardManager().getAllCardTypes());
+        List<Integer> slots = menu.cardSlots;
 
-        meta.lore(lore);
-        item.setItemMeta(meta);
-        return item;
-    }
+        for (int i = 0; i < Math.min(cardTypes.size(), slots.size()); i++) {
+            MonthlyCardType cardType = cardTypes.get(i);
+            int slot = slots.get(i);
 
-    private ItemStack createBuyItem() {
-        ItemStack item = new ItemStack(Material.EMERALD);
-        ItemMeta meta = item.getItemMeta();
+            ItemConfig template = menu.cardTemplates.get(cardType.getId());
+            if (template == null) {
+                template = menu.cardTemplates.getOrDefault("normal", 
+                    menu.cardTemplates.values().iterator().next());
+            }
 
-        meta.displayName(Component.text("💎 购买月卡").color(NamedTextColor.GREEN).decoration(TextDecoration.BOLD, true));
-
-        List<Component> lore = new ArrayList<>();
-        lore.add(Component.empty());
-        lore.add(Component.text("点击查看所有可购买的月卡").color(NamedTextColor.YELLOW));
-        lore.add(Component.text("多种类型任你选择").color(NamedTextColor.GRAY));
-        lore.add(Component.empty());
-        lore.add(Component.text("可用月卡类型:").color(NamedTextColor.AQUA));
-
-        for (MonthlyCardType type : plugin.getCardManager().getAllCardTypes()) {
-            lore.add(Component.text("- " + type.getDisplayName()).color(NamedTextColor.GRAY));
+            ItemStack item = createCardItem(template, cardType);
+            builder.setItem(slot, item, event -> {
+                handleCardPurchase(player, cardType);
+            });
         }
 
-        lore.add(Component.empty());
-        lore.add(Component.text("点击打开商店!").color(NamedTextColor.GREEN).decoration(TextDecoration.BOLD, true));
-
-        meta.lore(lore);
-        item.setItemMeta(meta);
-        return item;
+        GUI gui = builder.build();
+        gui.open(player);
     }
 
-    private ItemStack createPreviewItem() {
-        ItemStack item = new ItemStack(Material.ENDER_EYE);
-        ItemMeta meta = item.getItemMeta();
-
-        meta.displayName(Component.text("👁 奖励预览").color(NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.BOLD, true));
-
-        List<Component> lore = new ArrayList<>();
-        lore.add(Component.empty());
-        lore.add(Component.text("查看所有月卡的奖励内容").color(NamedTextColor.YELLOW));
-        lore.add(Component.text("对比不同月卡的价值").color(NamedTextColor.GRAY));
-        lore.add(Component.empty());
-        lore.add(Component.text("点击预览").color(NamedTextColor.AQUA));
-
-        meta.lore(lore);
-        item.setItemMeta(meta);
-        return item;
-    }
-
-    private ItemStack createHelpItem() {
-        ItemStack item = new ItemStack(Material.WRITABLE_BOOK);
-        ItemMeta meta = item.getItemMeta();
-
-        meta.displayName(Component.text("❓ 使用帮助").color(NamedTextColor.YELLOW).decoration(TextDecoration.BOLD, true));
-
-        List<Component> lore = new ArrayList<>();
-        lore.add(Component.empty());
-        lore.add(Component.text("月卡系统说明:").color(NamedTextColor.YELLOW));
-        lore.add(Component.text("1. 购买月卡后有效期30天").color(NamedTextColor.GRAY));
-        lore.add(Component.text("2. 每天可领取一次奖励").color(NamedTextColor.GRAY));
-        lore.add(Component.text("3. 累计签到有额外奖励").color(NamedTextColor.GRAY));
-        lore.add(Component.text("4. 过期后需重新购买").color(NamedTextColor.GRAY));
-        lore.add(Component.empty());
-        lore.add(Component.text("命令:").color(NamedTextColor.AQUA));
-        lore.add(Component.text("/monthlycard - 打开此菜单").color(NamedTextColor.GRAY));
-        lore.add(Component.text("/monthlycard claim - 领取奖励").color(NamedTextColor.GRAY));
-
-        meta.lore(lore);
-        item.setItemMeta(meta);
-        return item;
-    }
-
-    private ItemStack createCardTypeItem(MonthlyCardType type) {
-        Material material;
-        NamedTextColor color;
-
-        switch (type.getId().toLowerCase()) {
-            case "vip":
-            case "premium":
-                material = Material.NETHER_STAR;
-                color = NamedTextColor.LIGHT_PURPLE;
-                break;
-            case "normal":
-            default:
-                material = Material.SUNFLOWER;
-                color = NamedTextColor.YELLOW;
-                break;
+    public void openRewardPreview(Player player, int page) {
+        MenuConfig menu = guiConfig.getRewardPreviewMenu();
+        if (menu == null) {
+            player.sendMessage(miniMessage.red("奖励预览配置加载失败"));
+            return;
         }
 
-        ItemStack item = new ItemStack(material);
-        ItemMeta meta = item.getItemMeta();
+        String title = menu.title.replace("%page%", String.valueOf(page + 1))
+                                 .replace("%total_pages%", "3");
 
-        meta.displayName(msg.parse(type.getDisplayName()).color(color).decoration(TextDecoration.BOLD, true));
+        GUIBuilder builder = GUIBuilder.create(title, menu.rows);
 
-        List<Component> lore = new ArrayList<>();
-        lore.add(Component.empty());
-        lore.add(Component.text("价格: " + type.getPrice() + " " + type.getCurrencyType()).color(NamedTextColor.YELLOW));
-        lore.add(Component.text("时长: " + type.getDurationDays() + " 天").color(NamedTextColor.AQUA));
-        lore.add(Component.empty());
-        lore.add(Component.text(type.getDescription()).color(NamedTextColor.GRAY));
-        lore.add(Component.empty());
-
-        // 显示前几天的奖励预览
-        lore.add(Component.text("奖励预览:").color(NamedTextColor.YELLOW));
-        for (int i = 1; i <= Math.min(3, type.getDailyRewards().size()); i++) {
-            DailyReward reward = type.getRewardForDay(i);
-            if (reward != null) {
-                lore.add(Component.text("第" + i + "天: " + reward.getPoints() + "点券").color(NamedTextColor.GRAY));
+        if (menu.filler != null) {
+            ItemStack filler = createItemFromConfig(menu.filler);
+            for (int i = 0; i < menu.rows * 9; i++) {
+                builder.setItem(i, filler);
             }
         }
-        if (type.getDailyRewards().size() > 3) {
-            lore.add(Component.text("... 共" + type.getDailyRewards().size() + "天奖励").color(NamedTextColor.GRAY));
+
+        if (menu.border != null && menu.border.enabled) {
+            ItemStack borderItem = createItemFromConfig(menu.border.item);
+            for (int slot : menu.border.slots) {
+                if (slot < menu.rows * 9) {
+                    builder.setItem(slot, borderItem);
+                }
+            }
         }
 
-        lore.add(Component.empty());
-        lore.add(Component.text("点击购买!").color(NamedTextColor.GREEN).decoration(TextDecoration.BOLD, true));
+        ButtonConfig backBtn = menu.buttons.get("back");
+        if (backBtn != null && backBtn.defaultItem != null) {
+            builder.setItem(backBtn.slot, createItemFromConfig(backBtn.defaultItem), event -> {
+                openMainMenu(player);
+            });
+        }
 
-        meta.lore(lore);
-        item.setItemMeta(meta);
-        return item;
+        ButtonConfig closeBtn = menu.buttons.get("close");
+        if (closeBtn != null && closeBtn.defaultItem != null) {
+            builder.setItem(closeBtn.slot, createItemFromConfig(closeBtn.defaultItem), event -> {
+                player.closeInventory();
+            });
+        }
+
+        if (page > 0) {
+            ButtonConfig prevBtn = menu.buttons.get("prev-page");
+            if (prevBtn != null && prevBtn.defaultItem != null) {
+                builder.setItem(prevBtn.slot, createItemFromConfig(prevBtn.defaultItem), event -> {
+                    openRewardPreview(player, page - 1);
+                });
+            }
+        }
+
+        if (page < 2) {
+            ButtonConfig nextBtn = menu.buttons.get("next-page");
+            if (nextBtn != null && nextBtn.defaultItem != null) {
+                builder.setItem(nextBtn.slot, createItemFromConfig(nextBtn.defaultItem), event -> {
+                    openRewardPreview(player, page + 1);
+                });
+            }
+        }
+
+        MonthlyCardData data = plugin.getCardManager().getPlayerData(player.getUniqueId());
+        int currentDay = data != null && data.isActive() ? data.getCurrentDay() : 0;
+
+        int startDay = page * REWARDS_PER_PAGE + 1;
+        int endDay = Math.min(startDay + REWARDS_PER_PAGE - 1, 30);
+
+        int slot = menu.rewardStartSlot;
+        for (int day = startDay; day <= endDay; day++) {
+            if (slot >= menu.rows * 9) break;
+
+            String state;
+            if (data != null && data.isActive()) {
+                if (day < currentDay) {
+                    state = data.hasClaimedDay(day) ? "claimed" : "past";
+                } else if (day == currentDay) {
+                    state = "current";
+                } else {
+                    state = "future";
+                }
+            } else {
+                state = "future";
+            }
+
+            ItemConfig itemConfig = menu.rewardStates.get(state);
+            if (itemConfig != null) {
+                DailyReward reward = plugin.getCardManager().getRewardForDay(day);
+                ItemStack item = createRewardItem(itemConfig, day, reward);
+                builder.setItem(slot, item);
+            }
+
+            slot++;
+            if (slot % 9 == 8) slot += 2;
+        }
+
+        GUI gui = builder.build();
+        gui.open(player);
     }
 
-    private ItemStack createRewardPreviewItem(int day, DailyReward reward, boolean isCurrentDay,
-                                               boolean isPast, boolean isClaimed) {
-        Material material;
-        NamedTextColor color;
-
-        if (isClaimed) {
-            material = Material.LIME_STAINED_GLASS_PANE;
-            color = NamedTextColor.GREEN;
-        } else if (isCurrentDay) {
-            material = Material.GOLD_BLOCK;
-            color = NamedTextColor.GOLD;
-        } else if (isPast) {
-            material = Material.GRAY_STAINED_GLASS_PANE;
-            color = NamedTextColor.GRAY;
+    private void handleDailyRewardClick(Player player) {
+        if (plugin.getCardManager().claimDailyReward(player.getUniqueId())) {
+            String msg = plugin.getConfigManager().getSuccessMessage("claim")
+                .replace("%points%", "50");
+            player.sendMessage(miniMessage.colorize(msg));
+            openMainMenu(player);
         } else {
-            material = Material.WHITE_STAINED_GLASS_PANE;
-            color = NamedTextColor.WHITE;
+            String msg = plugin.getConfigManager().getErrorMessage("already-claimed");
+            if (msg.isEmpty()) {
+                msg = "<red>✘ 无法领取奖励，请检查月卡状态或今日是否已领取";
+            }
+            player.sendMessage(miniMessage.colorize(msg));
+        }
+    }
+
+    private void handleMakeupClick(Player player) {
+        List<String> missedDays = plugin.getCardManager().getMissedDays(player.getUniqueId());
+        if (!missedDays.isEmpty()) {
+            String yesterday = missedDays.get(missedDays.size() - 1);
+            if (plugin.getCardManager().makeupClaim(player.getUniqueId(), yesterday)) {
+                String msg = plugin.getConfigManager().getSuccessMessage("makeup")
+                    .replace("%day%", yesterday);
+                player.sendMessage(miniMessage.colorize(msg));
+                openMainMenu(player);
+            } else {
+                String msg = plugin.getConfigManager().getErrorMessage("makeup-limit");
+                if (msg.isEmpty()) {
+                    msg = "<red>补签失败，请检查补签次数或余额";
+                }
+                player.sendMessage(miniMessage.colorize(msg));
+            }
+        }
+    }
+
+    private void handleMilestoneClick(Player player) {
+        player.sendMessage(miniMessage.colorize("<gold>🏆 累计签到奖励"));
+        player.sendMessage(miniMessage.colorize("<yellow>7天: <green>200点券 + 500游戏币"));
+        player.sendMessage(miniMessage.colorize("<yellow>14天: <green>500点券 + 1500游戏币"));
+        player.sendMessage(miniMessage.colorize("<yellow>21天: <green>1000点券 + 3000游戏币"));
+        player.sendMessage(miniMessage.colorize("<yellow>30天: <green>2000点券 + 8000游戏币"));
+    }
+
+    private void handleCardPurchase(Player player, MonthlyCardType cardType) {
+        if (plugin.getCardManager().purchaseCard(player.getUniqueId(), cardType.getId())) {
+            player.sendMessage(miniMessage.green("✔ 成功购买 " + cardType.getDisplayName() + "！"));
+            openMainMenu(player);
+        } else {
+            player.sendMessage(miniMessage.red("✘ 购买失败，请检查余额是否充足"));
+        }
+    }
+
+    private ItemStack createItemFromConfig(ItemConfig config) {
+        return createItemFromConfig(config, null);
+    }
+
+    private ItemStack createItemFromConfig(ItemConfig config, MonthlyCardData data) {
+        if (config == null) {
+            return new ItemStack(Material.STONE);
         }
 
-        ItemStack item = new ItemStack(material);
+        ItemStack item = new ItemStack(config.material);
         ItemMeta meta = item.getItemMeta();
+        if (meta == null) return item;
 
-        String prefix = isClaimed ? "✔ " : (isCurrentDay ? "▶ " : "  ");
-        meta.displayName(Component.text(prefix + "第 " + day + " 天").color(color));
+        String name = config.name;
+        List<String> lore = new ArrayList<>(config.lore);
 
-        List<Component> lore = new ArrayList<>();
-        lore.add(Component.empty());
+        if (data != null && data.isActive()) {
+            name = name.replace("%card_type%", data.getCardTypeId())
+                       .replace("%remaining_days%", String.valueOf(plugin.getCardManager().getRemainingDays(data.getPlayerId())))
+                       .replace("%claimed_days%", String.valueOf(data.getClaimedDays().size()))
+                       .replace("%current_day%", String.valueOf(data.getCurrentDay()));
 
-        if (reward != null && reward.hasAnyReward()) {
-            if (reward.getPoints() > 0) {
-                lore.add(Component.text("点券: +" + reward.getPoints()).color(NamedTextColor.GOLD));
+            for (int i = 0; i < lore.size(); i++) {
+                lore.set(i, lore.get(i)
+                    .replace("%card_type%", data.getCardTypeId())
+                    .replace("%remaining_days%", String.valueOf(plugin.getCardManager().getRemainingDays(data.getPlayerId())))
+                    .replace("%claimed_days%", String.valueOf(data.getClaimedDays().size()))
+                    .replace("%current_day%", String.valueOf(data.getCurrentDay()))
+                    .replace("%claim_status%", data.hasClaimedToday() ? "<green>今日已领取" : "<yellow>今日可领取"));
             }
-            if (reward.getMoney() > 0) {
-                lore.add(Component.text("游戏币: +" + reward.getMoney()).color(NamedTextColor.GREEN));
-            }
-            if (!reward.getItems().isEmpty()) {
-                lore.add(Component.text("物品: " + reward.getItems().size() + " 个").color(NamedTextColor.YELLOW));
-            }
-        } else {
-            lore.add(Component.text("无特殊奖励").color(NamedTextColor.GRAY));
         }
 
-        lore.add(Component.empty());
+        meta.displayName(miniMessage.colorize(name));
 
-        if (isClaimed) {
-            lore.add(Component.text("✔ 已领取").color(NamedTextColor.GREEN));
-        } else if (isCurrentDay) {
-            lore.add(Component.text("▶ 今日可领取").color(NamedTextColor.GOLD));
-        } else if (isPast) {
-            lore.add(Component.text("✘ 已过期").color(NamedTextColor.RED));
-        } else {
-            lore.add(Component.text("未解锁").color(NamedTextColor.GRAY));
+        List<Component> loreComponents = new ArrayList<>();
+        for (String line : lore) {
+            loreComponents.add(miniMessage.colorize(line));
+        }
+        meta.lore(loreComponents);
+
+        if (config.glow) {
+            meta.setEnchantmentGlintOverride(true);
         }
 
-        meta.lore(lore);
         item.setItemMeta(meta);
         return item;
     }
 
-    private ItemStack createItem(Material material, Component name) {
-        ItemStack item = new ItemStack(material);
+    private ItemStack createCardItem(ItemConfig config, MonthlyCardType cardType) {
+        ItemStack item = new ItemStack(config.material);
         ItemMeta meta = item.getItemMeta();
-        meta.displayName(name);
+        if (meta == null) return item;
+
+        String name = config.name.replace("%display_name%", cardType.getDisplayName());
+
+        List<String> lore = new ArrayList<>();
+        for (String line : config.lore) {
+            lore.add(line
+                .replace("%display_name%", cardType.getDisplayName())
+                .replace("%price%", String.valueOf(cardType.getPrice()))
+                .replace("%currency%", cardType.getCurrency())
+                .replace("%duration%", String.valueOf(cardType.getDuration()))
+                .replace("%description%", cardType.getDescription()));
+        }
+
+        meta.displayName(miniMessage.colorize(name));
+
+        List<Component> loreComponents = new ArrayList<>();
+        for (String line : lore) {
+            loreComponents.add(miniMessage.colorize(line));
+        }
+        meta.lore(loreComponents);
+
+        if (config.glow) {
+            meta.setEnchantmentGlintOverride(true);
+        }
+
         item.setItemMeta(meta);
         return item;
     }
 
-    // ==================== 事件监听 ====================
+    private ItemStack createRewardItem(ItemConfig config, int day, DailyReward reward) {
+        ItemStack item = new ItemStack(config.material);
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return item;
 
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) {
-        // GUI点击事件由RPGCore GUIManager统一处理
-        // 这里可以添加额外的全局处理逻辑
+        String name = config.name.replace("%day%", String.valueOf(day));
+
+        List<String> lore = new ArrayList<>();
+        for (String line : config.lore) {
+            String newLine = line.replace("%day%", String.valueOf(day));
+            if (newLine.contains("%reward_info%")) {
+                if (reward != null) {
+                    newLine = newLine.replace("%reward_info%", reward.getDescription());
+                } else {
+                    newLine = newLine.replace("%reward_info%", "无奖励");
+                }
+            }
+            lore.add(newLine);
+        }
+
+        meta.displayName(miniMessage.colorize(name));
+
+        List<Component> loreComponents = new ArrayList<>();
+        for (String line : lore) {
+            loreComponents.add(miniMessage.colorize(line));
+        }
+        meta.lore(loreComponents);
+
+        if (config.glow) {
+            meta.setEnchantmentGlintOverride(true);
+        }
+
+        item.setItemMeta(meta);
+        return item;
     }
 }

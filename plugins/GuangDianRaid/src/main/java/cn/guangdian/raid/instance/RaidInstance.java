@@ -164,23 +164,23 @@ public class RaidInstance {
         switch (newPhase) {
             case INFILTRATION -> {
                 phaseTimeRemaining = 30;
-                team.broadcastTitle("", "§e潜入副本...", 10, 40, 10);
+                team.broadcastTitle("", "潜入副本...", 10, 40, 10);
             }
             case SEARCH -> {
                 phaseTimeRemaining = raid.getSearchPhase() != null ? raid.getSearchPhase().getDuration() : 180;
-                team.broadcastTitle("§6搜索阶段", "§e收集情报，解锁区域", 10, 60, 10);
+                team.broadcastTitle("搜索阶段", "收集情报，解锁区域", 10, 60, 10);
                 spawnIntelItems();
                 plugin.getSpawnManager().spawnWavesForPhase(this, RaidPhaseType.SEARCH);
             }
             case COMBAT -> {
                 phaseTimeRemaining = raid.getCombatPhase() != null ? raid.getCombatPhase().getDuration() : 300;
-                team.broadcastTitle("§c战斗阶段", "§e消灭所有敌人", 10, 60, 10);
+                team.broadcastTitle("战斗阶段", "消灭所有敌人", 10, 60, 10);
                 plugin.getSpawnManager().spawnWavesForPhase(this, RaidPhaseType.COMBAT);
             }
             case EXTRACTION -> {
                 phaseTimeRemaining = raid.getExtractPhase() != null ? raid.getExtractPhase().getDuration() : 120;
                 extractionActive = true;
-                team.broadcastTitle("§a撤离阶段", "§e前往撤离点", 10, 60, 10);
+                team.broadcastTitle("撤离阶段", "前往撤离点", 10, 60, 10);
                 team.broadcastSound(Sound.BLOCK_BELL_USE, 1.0f, 1.0f);
                 plugin.getExtractionManager().activateExtractionPoints(this);
             }
@@ -340,7 +340,7 @@ public class RaidInstance {
         RaidReward reward = plugin.getLootManager().calculateReward(this);
         distributeRewards(reward);
 
-        team.broadcastTitle("§a任务完成", "§e成功撤离！", 10, 100, 20);
+        team.broadcastTitle("任务完成", "成功撤离！", 10, 100, 20);
         team.broadcastSound(Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
 
         Bukkit.getPluginManager().callEvent(new RaidEvent.RaidCompleteEvent(this, true));
@@ -366,7 +366,7 @@ public class RaidInstance {
         cancelAllTasks();
         cleanupEntities();
 
-        team.broadcastTitle("§c任务失败", "§7" + reason, 10, 100, 20);
+        team.broadcastTitle("任务失败", reason, 10, 100, 20);
         team.broadcastSound(Sound.ENTITY_WITHER_DEATH, 1.0f, 0.5f);
 
         Bukkit.getPluginManager().callEvent(new RaidEvent.RaidCompleteEvent(this, false));

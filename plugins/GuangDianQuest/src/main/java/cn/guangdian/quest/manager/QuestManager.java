@@ -197,7 +197,9 @@ public class QuestManager {
                     return;
                 }
             }
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+            plugin.getLogger().fine("通过RPGCore发放积分失败，尝试备用方法: " + e.getMessage());
+        }
 
         if (Bukkit.getPluginManager().isPluginEnabled("GuangDianPoints")) {
             try {
@@ -208,7 +210,9 @@ public class QuestManager {
                     java.lang.reflect.Method addMethod = api.getClass().getMethod("addBalance", UUID.class, long.class);
                     addMethod.invoke(api, playerId, (long) amount);
                 }
-            } catch (Exception ignored) {}
+            } catch (Exception e) {
+                plugin.getLogger().fine("通过GuangDianPoints发放积分失败: " + e.getMessage());
+            }
         }
     }
 
@@ -327,7 +331,9 @@ public class QuestManager {
             if (event != null) {
                 eventBus.publish(event);
             }
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+            plugin.getLogger().fine("发布任务事件失败: questId=" + questId + ", action=" + action + ", error=" + e.getMessage());
+        }
     }
 
     public boolean canComplete(UUID playerId, String questId) {

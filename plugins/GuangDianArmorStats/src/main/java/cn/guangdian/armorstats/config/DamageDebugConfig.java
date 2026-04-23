@@ -1,5 +1,7 @@
 package cn.guangdian.armorstats.config;
 
+import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.api.GameLogger;
 import cn.guangdian.armorstats.GuangDianArmorStats;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -9,6 +11,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 public class DamageDebugConfig {
 
     private static DamageDebugConfig instance;
+    private static final GameLogger logger = RPGCore.getInstance().getGameLogger();
     
     private boolean enabled;
     private boolean attackLog;
@@ -47,39 +50,35 @@ public class DamageDebugConfig {
         return instance;
     }
 
-    // ========== 日志输出方法 ==========
-
     public void logAttack(String message) {
         if (enabled && attackLog) {
-            System.out.println("[AttackInterceptor] " + message);
+            logger.info("[AttackInterceptor] " + message);
         }
     }
 
     public void logCrit(String message) {
         if (enabled && critLog) {
-            System.out.println("[CritInterceptor] " + message);
+            logger.info("[CritInterceptor] " + message);
         }
     }
 
     public void logDefense(String message) {
         if (enabled && defenseLog) {
-            System.out.println("[DefenseInterceptor] " + message);
+            logger.info("[DefenseInterceptor] " + message);
         }
     }
 
     public void logBossStats(String message) {
         if (enabled && bossStatsLog) {
-            System.out.println("[BossStatsInterceptor] " + message);
+            logger.info("[BossStatsInterceptor] " + message);
         }
     }
 
     public void logBossManager(String message) {
         if (enabled && bossStatsLog) {
-            System.out.println("[BossStatsManager] " + message);
+            logger.info("[BossStatsManager] " + message);
         }
     }
-
-    // ========== Getters ==========
 
     public boolean isEnabled() {
         return enabled;

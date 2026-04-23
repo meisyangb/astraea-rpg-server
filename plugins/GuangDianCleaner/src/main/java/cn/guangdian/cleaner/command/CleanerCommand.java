@@ -3,14 +3,12 @@ package cn.guangdian.cleaner.command;
 import cn.guangdian.cleaner.GuangDianCleaner;
 import cn.guangdian.cleaner.config.ConfigManager;
 import cn.guangdian.cleaner.manager.CleanManager;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,34 +22,18 @@ public class CleanerCommand implements CommandExecutor, TabExecutor {
     private final GuangDianCleaner plugin;
     private final ConfigManager configManager;
     private final CleanManager cleanManager;
+    private final MiniMessageService miniMessage;
 
     public CleanerCommand(GuangDianCleaner plugin, ConfigManager configManager, CleanManager cleanManager) {
         this.plugin = plugin;
         this.configManager = configManager;
         this.cleanManager = cleanManager;
+        this.miniMessage = MiniMessageService.getInstance();
     }
 
-    private final MiniMessage miniMessage = MiniMessage.miniMessage();
-
-    /**
-     * 使用 MiniMessage 解析颜色代码
-     */
     private Component color(String message) {
         if (message == null) return Component.empty();
-        // 将 & 颜色代码转换为 MiniMessage 格式
-        String miniMessageText = message
-            .replace("<black>", "<black>").replace("<dark_blue>", "<dark_blue>")
-            .replace("<dark_green>", "<dark_green>").replace("<dark_aqua>", "<dark_aqua>")
-            .replace("<dark_red>", "<dark_red>").replace("<dark_purple>", "<dark_purple>")
-            .replace("<gold>", "<gold>").replace("<gray>", "<gray>")
-            .replace("<dark_gray>", "<dark_gray>").replace("<blue>", "<blue>")
-            .replace("<green>", "<green>").replace("<aqua>", "<aqua>")
-            .replace("<red>", "<red>").replace("<light_purple>", "<light_purple>")
-            .replace("<yellow>", "<yellow>").replace("<white>", "<white>")
-            .replace("<obfuscated>", "<obfuscated>").replace("<bold>", "<bold>")
-            .replace("<strikethrough>", "<strikethrough>").replace("<underlined>", "<underlined>")
-            .replace("<italic>", "<italic>").replace("<reset>", "<reset>");
-        return miniMessage.deserialize(miniMessageText);
+        return miniMessage.parse(message);
     }
 
     @Override

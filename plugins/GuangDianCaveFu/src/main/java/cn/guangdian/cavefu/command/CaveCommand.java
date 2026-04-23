@@ -102,45 +102,45 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
 
     private void handleCreate(Player player) {
         if (!player.hasPermission("guangdian.cave.create")) {
-            player.sendMessage(configManager.getMessage("no-permission"));
+            sendMessage(player, configManager.getMessage("no-permission"));
             return;
         }
 
         Cave existing = caveManager.getPlayerCave(player.getUniqueId());
         if (existing != null) {
-            player.sendMessage(configManager.getMessage("already-have-cave"));
+            sendMessage(player, configManager.getMessage("already-have-cave"));
             return;
         }
 
         Cave cave = caveManager.createCave(player);
         if (cave == null) {
-            player.sendMessage(configManager.getMessage("cave-full"));
+            sendMessage(player, configManager.getMessage("cave-full"));
             return;
         }
 
-        player.sendMessage(configManager.getMessage("cave-created"));
+        sendMessage(player, configManager.getMessage("cave-created"));
         player.teleport(cave.getHomeLocation());
     }
 
     private void handleHome(Player player) {
         if (!player.hasPermission("guangdian.cave.home")) {
-            player.sendMessage(configManager.getMessage("no-permission"));
+            sendMessage(player, configManager.getMessage("no-permission"));
             return;
         }
 
         Cave cave = caveManager.getPlayerCave(player.getUniqueId());
         if (cave == null) {
-            player.sendMessage(configManager.getMessage("no-cave"));
+            sendMessage(player, configManager.getMessage("no-cave"));
             return;
         }
 
-        player.sendMessage(configManager.getMessage("teleporting"));
+        sendMessage(player, configManager.getMessage("teleporting"));
         caveManager.teleportHome(player);
     }
 
     private void handleWorld(Player player) {
         if (!player.hasPermission("guangdian.cave.world")) {
-            player.sendMessage(configManager.getMessage("no-permission"));
+            sendMessage(player, configManager.getMessage("no-permission"));
             return;
         }
 
@@ -150,29 +150,29 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
             return;
         }
 
-        player.sendMessage(configManager.getMessage("teleporting"));
+        sendMessage(player, configManager.getMessage("teleporting"));
         player.teleport(spawnLoc);
     }
 
     private void handleSetHome(Player player) {
         if (!player.hasPermission("guangdian.cave.sethome")) {
-            player.sendMessage(configManager.getMessage("no-permission"));
+            sendMessage(player, configManager.getMessage("no-permission"));
             return;
         }
 
         Cave cave = caveManager.getPlayerCave(player.getUniqueId());
         if (cave == null) {
-            player.sendMessage(configManager.getMessage("no-cave"));
+            sendMessage(player, configManager.getMessage("no-cave"));
             return;
         }
 
         if (!cave.isInside(player.getLocation())) {
-            player.sendMessage(configManager.getMessage("not-in-cave"));
+            sendMessage(player, configManager.getMessage("not-in-cave"));
             return;
         }
 
         if (caveManager.setHome(player)) {
-            player.sendMessage(configManager.getMessage("home-set"));
+            sendMessage(player, configManager.getMessage("home-set"));
         }
     }
 
@@ -196,7 +196,7 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
         }
 
         if (cave == null) {
-            player.sendMessage(configManager.getMessage("no-cave"));
+            sendMessage(player, configManager.getMessage("no-cave"));
             return;
         }
 
@@ -212,30 +212,30 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
 
     private void handleUpgrade(Player player) {
         if (!player.hasPermission("guangdian.cave.upgrade")) {
-            player.sendMessage(configManager.getMessage("no-permission"));
+            sendMessage(player, configManager.getMessage("no-permission"));
             return;
         }
 
         Cave cave = caveManager.getOwnerCave(player.getUniqueId());
         if (cave == null) {
-            player.sendMessage(configManager.getMessage("no-cave"));
+            sendMessage(player, configManager.getMessage("no-cave"));
             return;
         }
 
         CaveLevel nextLevel = configManager.getNextLevel(cave.getLevel());
         if (nextLevel == null) {
-            player.sendMessage(configManager.getMessage("upgrade-max"));
+            sendMessage(player, configManager.getMessage("upgrade-max"));
             return;
         }
 
         if (!upgradeManager.canUpgrade(player, cave)) {
             String cost = upgradeManager.getUpgradeCostDescription(nextLevel.getLevel());
-            player.sendMessage(configManager.getMessage("upgrade-failed") + " 需要: " + cost);
+            sendMessage(player, configManager.getMessage("upgrade-failed") + " 需要: " + cost);
             return;
         }
 
         if (upgradeManager.upgrade(player, cave)) {
-            player.sendMessage(configManager.getMessage("upgrade-success",
+            sendMessage(player, configManager.getMessage("upgrade-success",
                 "level", String.valueOf(nextLevel.getLevel()),
                 "name", nextLevel.getName()));
         }
@@ -243,7 +243,7 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
 
     private void handleInvite(Player player, String[] args) {
         if (!player.hasPermission("guangdian.cave.invite")) {
-            player.sendMessage(configManager.getMessage("no-permission"));
+            sendMessage(player, configManager.getMessage("no-permission"));
             return;
         }
 
@@ -255,24 +255,24 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
         String targetName = args[1];
         Player target = plugin.getServer().getPlayer(targetName);
         if (target == null) {
-            player.sendMessage(configManager.getMessage("player-not-online"));
+            sendMessage(player, configManager.getMessage("player-not-online"));
             return;
         }
 
         Cave cave = caveManager.getOwnerCave(player.getUniqueId());
         if (cave == null) {
-            player.sendMessage(configManager.getMessage("not-owner"));
+            sendMessage(player, configManager.getMessage("not-owner"));
             return;
         }
 
         if (cave.isMember(target.getUniqueId())) {
-            player.sendMessage(configManager.getMessage("player-already-member"));
+            sendMessage(player, configManager.getMessage("player-already-member"));
             return;
         }
 
         if (caveManager.inviteMember(player, target)) {
-            player.sendMessage(configManager.getMessage("invite-sent", "player", target.getName()));
-            target.sendMessage(configManager.getMessage("invite-received", "player", player.getName()));
+            sendMessage(player, configManager.getMessage("invite-sent", "player", target.getName()));
+            sendMessage(target, configManager.getMessage("invite-received", "player", player.getName()));
         } else {
             sendMessage(player, "<red>邀请失败！");
         }
@@ -280,16 +280,16 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
 
     private void handleAccept(Player player) {
         // 这里简化处理，实际邀请已在invite时直接加入
-        player.sendMessage(configManager.getMessage("invite-none"));
+        sendMessage(player, configManager.getMessage("invite-none"));
     }
 
     private void handleDeny(Player player) {
-        player.sendMessage(configManager.getMessage("invite-none"));
+        sendMessage(player, configManager.getMessage("invite-none"));
     }
 
     private void handleKick(Player player, String[] args) {
         if (!player.hasPermission("guangdian.cave.kick")) {
-            player.sendMessage(configManager.getMessage("no-permission"));
+            sendMessage(player, configManager.getMessage("no-permission"));
             return;
         }
 
@@ -302,7 +302,7 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
 
         Cave cave = caveManager.getOwnerCave(player.getUniqueId());
         if (cave == null) {
-            player.sendMessage(configManager.getMessage("not-owner"));
+            sendMessage(player, configManager.getMessage("not-owner"));
             return;
         }
 
@@ -316,7 +316,7 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
         }
 
         if (targetUuid == null) {
-            player.sendMessage(configManager.getMessage("player-not-member"));
+            sendMessage(player, configManager.getMessage("player-not-member"));
             return;
         }
 
@@ -324,20 +324,20 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
             sendMessage(player, "<green>已移除成员: " + targetName);
             Player target = plugin.getServer().getPlayer(targetUuid);
             if (target != null) {
-                target.sendMessage(configManager.getMessage("member-kicked"));
+                sendMessage(target, configManager.getMessage("member-kicked"));
             }
         }
     }
 
     private void handleMembers(Player player) {
         if (!player.hasPermission("guangdian.cave.members")) {
-            player.sendMessage(configManager.getMessage("no-permission"));
+            sendMessage(player, configManager.getMessage("no-permission"));
             return;
         }
 
         Cave cave = caveManager.getPlayerCave(player.getUniqueId());
         if (cave == null) {
-            player.sendMessage(configManager.getMessage("no-cave"));
+            sendMessage(player, configManager.getMessage("no-cave"));
             return;
         }
 
@@ -352,13 +352,13 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
 
     private void handleLeave(Player player) {
         if (!player.hasPermission("guangdian.cave.leave")) {
-            player.sendMessage(configManager.getMessage("no-permission"));
+            sendMessage(player, configManager.getMessage("no-permission"));
             return;
         }
 
         Cave cave = caveManager.getPlayerCave(player.getUniqueId());
         if (cave == null) {
-            player.sendMessage(configManager.getMessage("no-cave"));
+            sendMessage(player, configManager.getMessage("no-cave"));
             return;
         }
 
@@ -374,7 +374,7 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
 
     private void handleTransfer(Player player, String[] args) {
         if (!player.hasPermission("guangdian.cave.transfer")) {
-            player.sendMessage(configManager.getMessage("no-permission"));
+            sendMessage(player, configManager.getMessage("no-permission"));
             return;
         }
 
@@ -386,12 +386,12 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
         String targetName = args[1];
         Player target = plugin.getServer().getPlayer(targetName);
         if (target == null) {
-            player.sendMessage(configManager.getMessage("player-not-online"));
+            sendMessage(player, configManager.getMessage("player-not-online"));
             return;
         }
 
         if (caveManager.transferOwner(player, target)) {
-            player.sendMessage(configManager.getMessage("transfer-success", "player", target.getName()));
+            sendMessage(player, configManager.getMessage("transfer-success", "player", target.getName()));
             sendMessage(target, "<green>你已成为新的洞主！");
         } else {
             sendMessage(player, "<red>转让失败！");
@@ -400,7 +400,7 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
 
     private void handleVisit(Player player, String[] args) {
         if (!player.hasPermission("guangdian.cave.visit")) {
-            player.sendMessage(configManager.getMessage("no-permission"));
+            sendMessage(player, configManager.getMessage("no-permission"));
             return;
         }
 
@@ -421,21 +421,21 @@ public class CaveCommand implements CommandExecutor, TabCompleter {
         }
 
         if (targetCave == null) {
-            player.sendMessage(configManager.getMessage("target-no-cave"));
+            sendMessage(player, configManager.getMessage("target-no-cave"));
             return;
         }
 
         if (targetCave.isMember(player.getUniqueId())) {
             // 成员直接传送
-            player.sendMessage(configManager.getMessage("teleporting"));
+            sendMessage(player, configManager.getMessage("teleporting"));
             player.teleport(targetCave.getHomeLocation());
         } else if (configManager.isAllowVisitor()) {
             // 访客模式
-            player.sendMessage(configManager.getMessage("teleporting"));
-            player.sendMessage(configManager.getMessage("visitor-allowed"));
+            sendMessage(player, configManager.getMessage("teleporting"));
+            sendMessage(player, configManager.getMessage("visitor-allowed"));
             player.teleport(targetCave.getHomeLocation());
         } else {
-            player.sendMessage(configManager.getMessage("visitor-denied"));
+            sendMessage(player, configManager.getMessage("visitor-denied"));
         }
     }
 

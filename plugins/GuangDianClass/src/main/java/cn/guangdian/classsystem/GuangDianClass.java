@@ -4,11 +4,11 @@ import cn.guangdian.classsystem.adapter.ClassServiceAdapter;
 import cn.guangdian.classsystem.api.ClassService;
 import cn.guangdian.classsystem.command.ClassCommand;
 import cn.guangdian.classsystem.data.ClassDataHandler;
-import cn.guangdian.classsystem.gui.ClassAttributeGUI;
-import cn.guangdian.classsystem.gui.ClassMainGUI;
-import cn.guangdian.classsystem.gui.ClassSelectionGUI;
 import cn.guangdian.classsystem.gui.ClassAdvanceGUI;
 import cn.guangdian.classsystem.gui.ClassInfoGUI;
+import cn.guangdian.classsystem.gui.ClassMainGUI;
+import cn.guangdian.classsystem.gui.ClassSelectionGUI;
+import cn.guangdian.classsystem.gui.ClassAttributeGUI;
 import cn.guangdian.classsystem.manager.AttributeManager;
 import cn.guangdian.classsystem.manager.ClassManager;
 import cn.guangdian.classsystem.manager.ExpManager;
@@ -56,11 +56,12 @@ public class GuangDianClass extends AbstractRPGPlugin {
         
         serviceAdapter = new ClassServiceAdapter(this, classManager, expManager, dataHandler);
         
-        attributeGUI = new ClassAttributeGUI(this, serviceAdapter);
+        attributeGUI = new ClassAttributeGUI(this, serviceAdapter, classManager);
         mainGUI = new ClassMainGUI(this, serviceAdapter);
         selectionGUI = new ClassSelectionGUI(this, serviceAdapter, classManager);
         advanceGUI = new ClassAdvanceGUI(this, serviceAdapter, classManager);
         infoGUI = new ClassInfoGUI(this, serviceAdapter, classManager);
+        // 注意: InventoryDragEvent 由 RPGCore 的 GUIListener 统一处理
 
         registerCommands();
         

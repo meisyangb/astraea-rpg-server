@@ -4,7 +4,6 @@ import cn.guangdian.name.adapter.DisplayServiceAdapter;
 import cn.guangdian.name.lifecycle.NameDataHandler;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
-import cn.guangdian.rpgcore.api.SyncScheduler;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.Bukkit;
@@ -17,31 +16,26 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 /**
- * GuangDianName - 玩家头顶显示插件
+ * GuangDianName - 玩家头顶显示插件 (全TextDisplay版本)
  * 
  * 功能：
- * 1. 头顶血量显示 (BELOW_NAME) - 第3行
- * 2. 头顶工会显示 (TextDisplay) - 第1行
- * 3. 头顶称号显示 (Team Prefix) - 第2行
- * 4. 头顶婚姻显示 (Team Suffix) - 第2行
+ * 1. 头顶血量显示 (TextDisplay) - 第1行
+ * 2. 头顶称号+玩家名+婚姻显示 (TextDisplay) - 第2行
+ * 3. 头顶工会显示 (TextDisplay) - 第3行
  * 
- * 显示层级：
- * - 第1行：工会（TextDisplay实体骑在玩家头上）
- * - 第2行：称号 + 玩家名 + 婚姻（Team Prefix/Suffix）
- * - 第3行：血量（Below Name）
+ * 显示层级（从下到上）：
+ * - 第1行：血量
+ * - 第2行：称号 + 玩家名 + 婚姻
+ * - 第3行：工会
  * 
  * 设计原则：
- * 1. 订阅 RPGCore 血量事件，实时更新显示
- * 2. 使用 Scoreboard BELOW_NAME 方式显示血量
- * 3. 使用 Scoreboard Team 方式显示称号/婚姻
- * 4. 使用 TextDisplay 实体方式显示工会（1.19.4+最优方案）
+ * 1. 全部使用 TextDisplay 实体显示，性能更好
+ * 2. 支持 MiniMessage 颜色格式
+ * 3. 每个玩家维护自己的显示实体
  */
 public class GuangDianName extends AbstractRPGPlugin implements Listener {
     
-    private HealthDisplay healthDisplay;
-    private TitleDisplay titleDisplay;
-    private TextDisplayManager textDisplayManager;
-    private RPGCoreListener rpgCoreListener;
+    private NameDisplayManager nameDisplayManager;
     private HealthMonitor healthMonitor;
     private NameDataHandler dataHandler;
     private NamePlaceholder namePlaceholder;
@@ -56,36 +50,27 @@ public class GuangDianName extends AbstractRPGPlugin implements Listener {
         
         initRPGCoreServices();
         
-        healthDisplay = new HealthDisplay(this);
-        titleDisplay = new TitleDisplay(this);
-        textDisplayManager = new TextDisplayManager(this);
-        rpgCoreListener = new RPGCoreListener(this, healthDisplay);
-        healthMonitor = new HealthMonitor(this);
+        nameDisplayManager = new NameDisplayManager(this);
+        healthMonitor = new HealthMonitor(this, nameDisplayManager);
         
         Bukkit.getPluginManager().registerEvents(this, this);
         
         getCommand("gdname").setExecutor(new DebugCommand(this));
-        getCommand("gdnametoggle").setExecutor(new ToggleCommand(this, titleDisplay));
-        
-        rpgCoreListener.subscribe();
+        getCommand("gdnametoggle").setExecutor(new ToggleCommand(this, nameDisplayManager));
         
         healthMonitor.start();
-        
-        textDisplayManager.startUpdateTask();
+        nameDisplayManager.startUpdateTask();
         
         registerPlaceholderAPI();
-        
         registerRPGCoreService();
         
         for (Player player : Bukkit.getOnlinePlayers()) {
-            healthDisplay.initPlayer(player);
-            titleDisplay.initPlayer(player);
-            textDisplayManager.createTextDisplay(player);
+            nameDisplayManager.initPlayer(player);
         }
         
-        getLogger().info("GuangDianName 已启动");
-        getLogger().info("功能: 血量显示、工会显示(TextDisplay)、称号显示、婚姻显示");
-        getLogger().info("显示层级: 工会(第1行) -> 称号+玩家名+婚姻(第2行) -> 血量(第3行)");
+        getLogger().info("GuangDianName 已启动 (全TextDisplay版本)");
+        getLogger().info("功能: 血量显示、称号显示、工会显示、婚姻显示");
+        getLogger().info("显示层级: 血量(第1行) -> 称号+玩家名+婚姻(第2行) -> 工会(第3行)");
     }
     
     private void initRPGCoreServices() {
@@ -105,7 +90,6 @@ public class GuangDianName extends AbstractRPGPlugin implements Listener {
     
     @Override
     protected void onPluginDisable() {
-        // 取消所有调度任务
         if (scheduler != null) {
             if (joinTaskId >= 0) {
                 scheduler.cancelTask(joinTaskId);
@@ -122,22 +106,14 @@ public class GuangDianName extends AbstractRPGPlugin implements Listener {
         }
         
         healthMonitor.stop();
-        rpgCoreListener.unsubscribe();
-        
-        textDisplayManager.clear();
+        nameDisplayManager.clear();
         
         unregisterPlaceholderAPI();
-        
         unregisterRPGCoreService();
         
         for (Player player : Bukkit.getOnlinePlayers()) {
-            healthDisplay.cleanupPlayer(player);
-            titleDisplay.cleanupPlayer(player);
-            textDisplayManager.removeTextDisplay(player);
+            nameDisplayManager.removeAllDisplays(player);
         }
-        
-        healthDisplay.clear();
-        titleDisplay.clear();
         
         getLogger().info("GuangDianName 已关闭");
     }
@@ -149,7 +125,7 @@ public class GuangDianName extends AbstractRPGPlugin implements Listener {
     
     private void registerPlaceholderAPI() {
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            namePlaceholder = new NamePlaceholder(this, titleDisplay);
+            namePlaceholder = new NamePlaceholder(this, nameDisplayManager);
             if (namePlaceholder.register()) {
                 getLogger().info("已注册 PlaceholderAPI 扩展");
             }
@@ -186,9 +162,7 @@ public class GuangDianName extends AbstractRPGPlugin implements Listener {
         if (scheduler != null) {
             joinTaskId = scheduler.runSyncLater(() -> {
                 if (player.isOnline()) {
-                    healthDisplay.initPlayer(player);
-                    titleDisplay.initPlayer(player);
-                    textDisplayManager.createTextDisplay(player);
+                    nameDisplayManager.initPlayer(player);
                 }
             }, 50L);
         }
@@ -197,9 +171,7 @@ public class GuangDianName extends AbstractRPGPlugin implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        healthDisplay.cleanupPlayer(player);
-        titleDisplay.cleanupPlayer(player);
-        textDisplayManager.removeTextDisplay(player);
+        nameDisplayManager.removeAllDisplays(player);
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -208,22 +180,14 @@ public class GuangDianName extends AbstractRPGPlugin implements Listener {
         if (scheduler != null) {
             respawnTaskId = scheduler.runSyncLater(() -> {
                 if (player.isOnline()) {
-                    textDisplayManager.createTextDisplay(player);
+                    nameDisplayManager.initPlayer(player);
                 }
             }, 5L);
         }
     }
     
-    public HealthDisplay getHealthDisplay() {
-        return healthDisplay;
-    }
-    
-    public TitleDisplay getTitleDisplay() {
-        return titleDisplay;
-    }
-    
-    public TextDisplayManager getTextDisplayManager() {
-        return textDisplayManager;
+    public NameDisplayManager getNameDisplayManager() {
+        return nameDisplayManager;
     }
     
     public HealthMonitor getHealthMonitor() {

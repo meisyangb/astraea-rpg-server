@@ -72,7 +72,7 @@ public class QuestLineDetailGUI extends QuestGUI {
 
         // 任务线信息 (slot 13)
         ItemStack infoItem = createQuestLineInfoItem(progress, percent, isComplete);
-        builder.setItem(13, infoItem, null);
+        builder.setItem(13, infoItem);
 
         // 进度显示 (slot 15)
         int filled = percent / 10;
@@ -86,7 +86,7 @@ public class QuestLineDetailGUI extends QuestGUI {
             "<dark_gray>━━━━━━━━━━━━━━━━━━",
             "<gray>已完成: <yellow>" + (progress + 1) + "<gray>/<yellow>" + questLine.getLength()
         ));
-        builder.setItem(15, progressItem, null);
+        builder.setItem(15, progressItem);
 
         // 填充任务 (slot 20-26, 29-35)
         List<String> questIds = questLine.getQuestIds();
@@ -131,7 +131,7 @@ public class QuestLineDetailGUI extends QuestGUI {
                 "<yellow>• 特殊称号",
                 "<dark_gray>━━━━━━━━━━━━━━━━━━"
             ));
-            builder.setItem(40, rewardItem, null);
+            builder.setItem(40, rewardItem);
         }
 
         // ===== 底部导航栏 =====
@@ -152,7 +152,7 @@ public class QuestLineDetailGUI extends QuestGUI {
         builder.setItem(QuestNavigation.SLOT_PREV, nav.createNavFiller());
 
         // 当前位置
-        builder.setItem(QuestNavigation.SLOT_INFO, nav.createLocationIndicator(questLine.getName(), "进度 " + percent + "%"), null);
+        builder.setItem(QuestNavigation.SLOT_INFO, nav.createLocationIndicator(questLine.getName(), "进度 " + percent + "%"));
 
         // 下一页/空位
         builder.setItem(QuestNavigation.SLOT_NEXT, nav.createNavFiller());

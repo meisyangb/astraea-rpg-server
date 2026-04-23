@@ -609,9 +609,8 @@ public class GuangDianItemTrigger extends AbstractRPGPlugin implements Listener,
                 if (soundService != null) {
                     soundService.playSound(player, "minecraft:entity.player.levelup", 0.5f, 1.2f);
                 }
-            } else {
-                player.sendMessage(translateColors("<red>技能 " + skillName + " 不存在或冷却中!</red>"));
             }
+            // 注意：技能不存在或冷却中的消息已由 RPGSkill 发送，这里不再重复发送
         } catch (Exception e) {
             player.sendMessage(translateColors("<red>技能触发失败!</red>"));
             logSevere("触发RPG技能失败: " + e.getMessage(), e);

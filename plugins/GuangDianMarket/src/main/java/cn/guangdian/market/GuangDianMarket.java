@@ -27,8 +27,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 import cn.guangdian.points.GuangDianPoints;
 import cn.guangdian.points.GuangDianPoints.PointsAPI;
 
@@ -37,10 +35,12 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Logger;
 
 public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabCompleter {
 
     private static GuangDianMarket instance;
+    private static final Logger pluginLogger = Logger.getLogger("GuangDianMarket");
     private FileConfiguration config;
     private File dataFile;
     private YamlConfiguration data;
@@ -1222,7 +1222,9 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
                 if (map.containsKey("currencyType")) {
                     try {
                         currencyType = CurrencyType.valueOf((String) map.get("currencyType"));
-                    } catch (Exception ignored) {}
+                    } catch (Exception e) {
+                        pluginLogger.warning("无效的货币类型: " + map.get("currencyType"));
+                    }
                 }
                 
                 return new MarketItem(id, seller, sellerName, item, price, expireTime, currencyType);

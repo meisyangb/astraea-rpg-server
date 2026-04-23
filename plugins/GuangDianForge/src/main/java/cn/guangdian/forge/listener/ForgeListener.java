@@ -205,7 +205,7 @@ public class ForgeListener implements Listener {
                 int have = gui.getMaterialCount(req.getKey());
                 if (have < req.getValue()) {
                     String displayName = recipe.getIngredientDisplayName(req.getKey());
-                    String cleanName = displayName.replaceAll("§[0-9a-fk-or]", "").replaceAll("&[0-9a-fk-or]", "").replaceAll("<[^>]+>", "");
+                    String cleanName = stripMiniMessageTags(displayName);
                     player.sendMessage(Component.text("缺少: " + cleanName + " x" + (req.getValue() - have), NamedTextColor.YELLOW));
                 }
             }
@@ -249,6 +249,15 @@ public class ForgeListener implements Listener {
         // 刷新界面
         gui.updateSuccessRate();
         player.sendMessage(Component.text("成功率: " + (int)(rate * 100) + "%", NamedTextColor.AQUA));
+    }
+
+    /**
+     * 移除字符串中的MiniMessage颜色标签
+     * 支持循环移除嵌套标签
+     */
+    private String stripMiniMessageTags(String text) {
+        if (text == null) return "";
+        return cn.guangdian.rpgcore.util.TextStripper.stripAll(text);
     }
 
     @EventHandler
