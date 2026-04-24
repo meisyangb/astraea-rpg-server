@@ -85,11 +85,8 @@ public class GuangDianClass extends AbstractRPGPlugin {
     @Override
     protected void onPluginDisable() {
         if (placeholder != null) {
-            try {
-                me.clip.placeholderapi.PlaceholderAPI.unregisterExpansion(placeholder);
-            } catch (Exception e) {
-                getLogger().warning("注销占位符时发生错误: " + e.getMessage());
-            }
+            placeholder.unregister();
+            placeholder = null;
         }
         
         if (serviceAdapter != null) {
