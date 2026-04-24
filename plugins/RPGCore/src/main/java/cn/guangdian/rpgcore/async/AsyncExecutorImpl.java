@@ -27,6 +27,7 @@ public class AsyncExecutorImpl implements AsyncExecutor {
     private final ExecutorService executor;
     private final Map<UUID, CompletableFuture<Void>> pendingSaves;
     private final AtomicInteger pendingTaskCount;
+    private final AtomicInteger threadNumber;
     private volatile boolean shutdown = false;
 
     /**
@@ -38,9 +39,13 @@ public class AsyncExecutorImpl implements AsyncExecutor {
     public AsyncExecutorImpl(JavaPlugin plugin, int threadPoolSize) {
         this.plugin = plugin;
         this.logger = plugin.getLogger();
+        this.threadNumber = new AtomicInteger(1);
         this.executor = Executors.newFixedThreadPool(threadPoolSize, r -> {
-            Thread thread = new Thread(r, "RPGCore-Async-" + System.currentTimeMillis());
+            Thread thread = new Thread(r, "RPGCore-Async-" + threadNumber.getAndIncrement());
             thread.setDaemon(true);
+            thread.setUncaughtExceptionHandler((t, ex) -> {
+                logger.log(Level.WARNING, "Async thread " + t.getName() + " crashed", ex);
+            });
             return thread;
         });
         this.pendingSaves = new ConcurrentHashMap<>();

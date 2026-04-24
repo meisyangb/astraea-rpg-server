@@ -277,7 +277,7 @@ public final class GUIManager {
     public void openMenu(@NotNull Player player, @NotNull String menuId) {
         MenuData menuData = menus.get(menuId.toLowerCase());
         if (menuData == null) {
-            player.sendMessage(net.kyori.adventure.text.Component.text("<red>菜单不存在: " + menuId));
+            player.sendMessage(MiniMessageService.getInstance().red("菜单不存在: " + menuId));
             return;
         }
 

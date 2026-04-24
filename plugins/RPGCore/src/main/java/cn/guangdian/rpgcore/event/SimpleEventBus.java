@@ -135,7 +135,10 @@ public class SimpleEventBus implements EventBus {
         
         batchScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
             Thread t = new Thread(r, "RPGCore-EventBus-Batch");
-            t.setDaemon(true);
+            t.setDaemon(false);
+            t.setUncaughtExceptionHandler((thread, ex) -> {
+                logger.log(Level.SEVERE, "[EventBus] Batch processor thread " + thread.getName() + " crashed", ex);
+            });
             return t;
         });
         
@@ -158,6 +161,15 @@ public class SimpleEventBus implements EventBus {
         }
         if (batchScheduler != null) {
             batchScheduler.shutdown();
+            try {
+                if (!batchScheduler.awaitTermination(5, TimeUnit.SECONDS)) {
+                    logger.warning("[EventBus] Batch scheduler did not terminate within timeout, forcing shutdown");
+                    batchScheduler.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                batchScheduler.shutdownNow();
+            }
         }
         
         // 处理剩余事件

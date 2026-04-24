@@ -1,7 +1,7 @@
 # Astraea RPG 代码模板库
 
 > 开发时可直接使用的代码模板
-> **版本: 1.1.0 | 更新: 2026-04-14**
+> **版本: 1.3.0 | 更新: 2026-04-23**
 
 ---
 
@@ -13,39 +13,42 @@
 
 ---
 
-## 1. 插件主类模板
+## 1. 插件主类模板 (v1.3.0 更新)
 
 ```java
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.SyncScheduler;
+import cn.guangdian.rpgcore.api.ServiceRegistry;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.message.MiniMessageService;
+import cn.guangdian.rpgcore.sound.SoundService;
 
 public class MyPlugin extends AbstractRPGPlugin {
 
-    protected RPGCore rpgCore;
-    protected SyncScheduler scheduler;
-    protected ExternalServiceIntegration externalServices;
-    protected MiniMessageService miniMessage;
+    // RPGCore 自动注入的字段 (无需手动初始化)
+    // protected RPGCore rpgCore;
+    // protected SyncScheduler scheduler;
+    // protected ExternalServiceIntegration externalServices;
 
     @Override
     protected void onPluginEnable() {
-        rpgCore = RPGCore.getInstance();
-        scheduler = rpgCore.getScheduler();
-        externalServices = rpgCore.getExternalServices();
-        miniMessage = MiniMessageService.getInstance();
+        // 必须调用 - 初始化通用服务
+        initCommonServices();
+        
+        // 使用 RPGCore 服务
+        ServiceRegistry registry = rpgCore.getServiceRegistry();
+        
         getLogger().info(getPluginName() + " 已启动");
     }
 
     @Override
     protected void onPluginDisable() {
-        if (scheduler != null) {
-            scheduler.cancelAllTasks();
-        }
-        if (serviceAdapter != null) {
-            serviceAdapter.unregister();
-        }
+        // 确保取消所有任务
+        cancelAllTasks();
+        
+        // 清理资源...
+        
         getLogger().info(getPluginName() + " 已关闭");
     }
 
@@ -125,54 +128,86 @@ public class MyPlaceholder extends PlaceholderExpansion {
 
 ---
 
-## 4. 数据处理器模板
+## 4. 数据处理器模板 (v1.3.0 更新)
 
 ```java
 import cn.guangdian.rpgcore.lifecycle.AbstractPlayerDataHandler;
 import cn.guangdian.rpgcore.RPGCore;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 public class MyDataHandler extends AbstractPlayerDataHandler {
 
-    private final MyPlugin plugin;
     private final Map<UUID, PlayerData> dataCache = new ConcurrentHashMap<>();
 
-    public MyDataHandler(MyPlugin plugin) {
+    public MyDataHandler(JavaPlugin plugin) {
         super(plugin);
-        this.plugin = plugin;
-    }
+        // rpgCore 已由父类初始化
+    }.trae/rules/
+├── kaifa.md                           #
 
     @Override
     protected void onPlayerLoad(Player player) {
-        RPGCore rpgCore = RPGCore.getInstance();
-        if (rpgCore == null) return;
-
-        rpgCore.getScheduler().runAsync(() -> {
-            PlayerData data = loadFromDatabase(player.getUniqueId());
-            rpgCore.getScheduler().runSyncLater(() -> {
-                dataCache.put(player.getUniqueId(), data);
-            }, 0L);
-        });
+        // 此方法在异步线程中调用
+        UUID uuid = player.getUniqueId();
+        try {
+            // 从数据库加载数据
+            PlayerData data = loadFromDatabase(uuid);
+            if (data != null) {
+                dataCache.put(uuid, data);
+            }
+        } catch (Exception e) {
+            // 加载失败处理
+            plugin.getLogger().warning("加载 " + player.getName() + " 数据失败: " + e.getMessage());
+        }
     }
 
     @Override
     protected void onPlayerSave(Player player) {
-        PlayerData data = dataCache.remove(player.getUniqueId());
+        // 此方法在异步线程中调用
+        UUID uuid = player.getUniqueId();
+        PlayerData data = dataCache.get(uuid);
         if (data != null) {
-            RPGCore rpgCore = RPGCore.getInstance();
-            if (rpgCore != null) {
-                rpgCore.getScheduler().runAsync(() -> {
-                    saveToDatabase(player.getUniqueId(), data);
-                });
+            try {
+                saveToDatabase(uuid, data);
+                dataCache.remove(uuid); // 清理缓存
+            } catch (Exception e) {
+                plugin.getLogger().warning("保存 " + player.getName() + " 数据失败: " + e.getMessage());
             }
         }
     }
 
-    @Override public int getPriority() { return 100; }
-    @Override public String getHandlerName() { return "MyData"; }
+    @Override
+    public int getPriority() { 
+        return 100; // 数字越大优先级越高
+    }
+    
+    @Override
+    public String getHandlerName() { 
+        return "MyData"; 
+    }
+    
+    @Override
+    public boolean shouldLoad(Player player) {
+        // 可选：根据条件决定是否加载
+        return player.hasPermission("myplugin.use");
+    }
+    
+    @Override
+    public boolean shouldSave(Player player) {
+        // 可选：根据条件决定是否保存
+        return dataCache.containsKey(player.getUniqueId());
+    }
 }
+
+// 注册处理器 (在插件 onPluginEnable 中)
+// new MyDataHandler(this).register();
+
+// 注销处理器 (在插件 onPluginDisable 中)
+// new MyDataHandler(this).unregister();
 ```
 
 ---
@@ -320,4 +355,235 @@ cacheProvider.clear();
 
 ---
 
-*最后更新: 2026-04-14*
+## 10. RPGModule 业务模块模板 (v1.3.0 新增)
+
+```java
+import cn.guangdian.rpgcore.module.RPGModule;
+import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.api.ServiceRegistry;
+import cn.guangdian.rpgcore.message.MiniMessageService;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class MyModule extends RPGModule {
+
+    private final JavaPlugin plugin;
+    private MiniMessageService miniMessage;
+
+    public MyModule(JavaPlugin plugin) {
+        super("MyModule"); // 模块名称
+        this.plugin = plugin;
+    }
+
+    @Override
+    protected void load() {
+        // 加载阶段：初始化配置、注册服务等
+        // 此阶段插件还未启用，适合轻量初始化
+        plugin.getLogger().info("[MyModule] 加载配置...");
+    }
+
+    @Override
+    protected void enable() {
+        // 启用阶段：注册命令、监听器、启动定时任务等
+        miniMessage = MiniMessageService.getInstance();
+        
+        // 注册服务到 RPGCore ServiceRegistry
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            ServiceRegistry registry = rpgCore.getServiceRegistry();
+            registry.registerService(MyModuleService.class, new MyModuleServiceImpl());
+        }
+        
+        // 注册事件监听器
+        // Bukkit.getPluginManager().registerEvents(new MyListener(), plugin);
+        
+        plugin.getLogger().info("[MyModule] 模块已启用");
+    }
+
+    @Override
+    protected void disable() {
+        // 禁用阶段：取消任务、保存数据、清理资源
+        plugin.getLogger().info("[MyModule] 模块已禁用");
+    }
+
+    @Override
+    protected void destroy() {
+        // 销毁阶段：释放数据库连接、关闭文件句柄等
+        // 此方法在模块禁用后调用，用于彻底清理
+    }
+    
+    public boolean isMiniMessageAvailable() {
+        return miniMessage != null;
+    }
+}
+
+// 模块服务接口
+interface MyModuleService {
+    void doSomething();
+}
+
+// 模块服务实现
+class MyModuleServiceImpl implements MyModuleService {
+    @Override
+    public void doSomething() {
+        // 实现逻辑
+    }
+}
+```
+
+---
+
+## 11. 并发安全模板 (v1.3.0 新增)
+
+```java
+import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.concurrency.PlayerLockManager;
+import cn.guangdian.rpgcore.concurrency.LockTimeoutException;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
+
+public class SafeDataManager {
+    
+    private final PlayerLockManager lockManager;
+    private final Map<UUID, PlayerData> cache = new ConcurrentHashMap<>();
+    
+    public SafeDataManager() {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore == null) {
+            throw new IllegalStateException("RPGCore 未初始化");
+        }
+        this.lockManager = rpgCore.getLockManager();
+    }
+    
+    // 单玩家数据修改
+    public void addPoints(UUID playerUUID, int amount) {
+        try {
+            lockManager.executeWithLock(playerUUID, () -> {
+                PlayerData data = cache.computeIfAbsent(playerUUID, 
+                    uuid -> new PlayerData(uuid));
+                data.addPoints(amount);
+            });
+        } catch (LockTimeoutException e) {
+            // 锁超时处理
+            plugin.getLogger().warning("获取玩家 " + playerUUID + " 锁超时");
+        }
+    }
+    
+    // 多玩家数据修改 (转账、交易等)
+    public boolean transferPoints(UUID from, UUID to, int amount) {
+        try {
+            return lockManager.executeWithDualLock(from, to, () -> {
+                PlayerData fromData = cache.get(from);
+                PlayerData toData = cache.get(to);
+                
+                if (fromData == null || toData == null) {
+                    return false;
+                }
+                
+                if (!fromData.hasPoints(amount)) {
+                    return false;
+                }
+                
+                fromData.removePoints(amount);
+                toData.addPoints(amount);
+                return true;
+            });
+        } catch (LockTimeoutException e) {
+            plugin.getLogger().warning("转账操作锁超时");
+            return false;
+        }
+    }
+    
+    // 带返回值的数据读取
+    public int getPoints(UUID playerUUID) {
+        PlayerData data = cache.get(playerUUID);
+        return data != null ? data.getPoints() : 0;
+    }
+}
+```
+
+---
+
+## 12. 事件总线使用模板 (v1.3.0 新增)
+
+```java
+import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.api.EventBus;
+import cn.guangdian.rpgcore.event.EventHandler;
+import cn.guangdian.rpgcore.event.EventPriority;
+import cn.guangdian.rpgcore.event.CoreEvent;
+
+// 自定义事件
+public class MyCustomEvent extends CoreEvent {
+    private final UUID playerId;
+    private final String action;
+    
+    public MyCustomEvent(UUID playerId, String action) {
+        super();
+        this.playerId = playerId;
+        this.action = action;
+    }
+    
+    public UUID getPlayerId() { return playerId; }
+    public String getAction() { return action; }
+}
+
+// 事件发布者
+public class EventPublisher {
+    
+    private final EventBus eventBus;
+    
+    public EventPublisher() {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            eventBus = rpgCore.getEventBus();
+        }
+    }
+    
+    public void publishEvent(UUID playerId, String action) {
+        if (eventBus != null) {
+            eventBus.publish(new MyCustomEvent(playerId, action));
+        }
+    }
+}
+
+// 事件订阅者
+public class EventSubscriber {
+    
+    private final EventBus eventBus;
+    
+    public EventSubscriber() {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            eventBus = rpgCore.getEventBus();
+            registerHandlers();
+        }
+    }
+    
+    private void registerHandlers() {
+        // 注册事件处理器
+        eventBus.registerHandler(MyCustomEvent.class, new EventHandler<>() {
+            @Override
+            public EventPriority getPriority() {
+                return EventPriority.NORMAL;
+            }
+            
+            @Override
+            public void handle(MyCustomEvent event) {
+                // 处理事件逻辑
+                System.out.println("收到事件: " + event.getPlayerId() + " - " + event.getAction());
+            }
+        });
+    }
+    
+    public void unregister() {
+        if (eventBus != null) {
+            eventBus.unregisterHandler(MyCustomEvent.class, handler);
+        }
+    }
+}
+```
+
+---
+
+*最后更新: 2026-04-23*

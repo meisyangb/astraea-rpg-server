@@ -2,6 +2,7 @@ package cn.guangdian.rpgcore.scheduler;
 
 import cn.guangdian.rpgcore.api.SyncScheduler;
 import io.papermc.paper.threadedregions.scheduler.AsyncScheduler;
+import io.papermc.paper.threadedregions.scheduler.GlobalRegionScheduler;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,37 +15,47 @@ public class UnifiedSchedulerImpl implements SyncScheduler {
 
     private final JavaPlugin plugin;
     private final AsyncScheduler asyncScheduler;
+    private final GlobalRegionScheduler globalRegionScheduler;
     private final ConcurrentHashMap<Long, ScheduledTask> asyncTasks = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<Long, org.bukkit.scheduler.BukkitTask> syncTasks = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Long, ScheduledTask> syncTasks = new ConcurrentHashMap<>();
     private final AtomicLong taskIdGenerator = new AtomicLong(0);
     private volatile boolean shutdown = false;
 
     public UnifiedSchedulerImpl(JavaPlugin plugin) {
         this.plugin = plugin;
         this.asyncScheduler = Bukkit.getAsyncScheduler();
+        this.globalRegionScheduler = Bukkit.getGlobalRegionScheduler();
     }
 
     @Override
     public void runSync(Runnable task) {
         if (shutdown) return;
-        Bukkit.getScheduler().runTask(plugin, task);
+        globalRegionScheduler.run(plugin, scheduledTask -> task.run());
     }
 
     @Override
     public long runSyncLater(Runnable task, long delayTicks) {
         if (shutdown) return -1;
-        org.bukkit.scheduler.BukkitTask bukkitTask = Bukkit.getScheduler().runTaskLater(plugin, task, delayTicks);
         long taskId = taskIdGenerator.incrementAndGet();
-        syncTasks.put(taskId, bukkitTask);
+        ScheduledTask scheduledTask = globalRegionScheduler.runDelayed(plugin, scheduledTask1 -> {
+            if (!shutdown) {
+                task.run();
+            }
+        }, delayTicks);
+        syncTasks.put(taskId, scheduledTask);
         return taskId;
     }
 
     @Override
     public long runSyncRepeating(Runnable task, long delayTicks, long periodTicks) {
         if (shutdown) return -1;
-        org.bukkit.scheduler.BukkitTask bukkitTask = Bukkit.getScheduler().runTaskTimer(plugin, task, delayTicks, periodTicks);
         long taskId = taskIdGenerator.incrementAndGet();
-        syncTasks.put(taskId, bukkitTask);
+        ScheduledTask scheduledTask = globalRegionScheduler.runAtFixedRate(plugin, scheduledTask1 -> {
+            if (!shutdown) {
+                task.run();
+            }
+        }, delayTicks, periodTicks);
+        syncTasks.put(taskId, scheduledTask);
         return taskId;
     }
 
@@ -98,7 +109,7 @@ public class UnifiedSchedulerImpl implements SyncScheduler {
             return;
         }
 
-        org.bukkit.scheduler.BukkitTask syncTask = syncTasks.remove(taskId);
+        ScheduledTask syncTask = syncTasks.remove(taskId);
         if (syncTask != null) {
             syncTask.cancel();
         }
@@ -111,7 +122,7 @@ public class UnifiedSchedulerImpl implements SyncScheduler {
         }
         asyncTasks.clear();
 
-        for (org.bukkit.scheduler.BukkitTask task : syncTasks.values()) {
+        for (ScheduledTask task : syncTasks.values()) {
             task.cancel();
         }
         syncTasks.clear();

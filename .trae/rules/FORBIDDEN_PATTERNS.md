@@ -1,7 +1,7 @@
 # Astraea RPG 禁止模式清单
 
 > 所有开发必须遵守的禁止模式，违反将导致代码被拒绝
-> **版本: 1.2.1 | 更新: 2026-04-23**
+> **版本: 1.3.0 | 更新: 2026-04-23**
 
 ---
 
@@ -13,7 +13,7 @@
 
 ---
 
-## 1. 调度器禁止项
+## 1. 调度器禁止项 (v1.3.0 更新)
 
 ### ❌ 禁止 (Bukkit 传统调度器)
 ```java
@@ -28,31 +28,34 @@ Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, task, delay);
 Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, task, delay, period);
 ```
 
-### ✅ 正确 (Paper 1.21.6 AsyncScheduler)
+### ✅ 正确 (Paper 1.21.6 调度器 + RPGCore SyncScheduler)
 ```java
-// 异步任务 - 使用 AsyncScheduler
-Bukkit.getAsyncScheduler().runNow(plugin, scheduledTask -> {
-    // 异步执行的任务
-});
-
-// 异步延迟任务 (毫秒)
-Bukkit.getAsyncScheduler().runDelayed(plugin, scheduledTask -> {
-    // 延迟执行
-}, 5000, java.util.concurrent.TimeUnit.MILLISECONDS);
-
-// 异步定时任务 (毫秒)
-Bukkit.getAsyncScheduler().runAtFixedRate(plugin, scheduledTask -> {
-    // 定期执行
-}, 0, 60000, java.util.concurrent.TimeUnit.MILLISECONDS);
-
-// 同步任务 - 使用 RPGCore SyncScheduler
 RPGCore rpgCore = RPGCore.getInstance();
-SyncScheduler scheduler = rpgCore.getScheduler();
+if (rpgCore != null) {
+    SyncScheduler scheduler = rpgCore.getScheduler();
+    
+    // 异步任务 - 使用 RPGCore SyncScheduler
+    scheduler.runAsync(() -> {
+        // 异步执行的任务
+    });
 
-long taskId = scheduler.runSyncLater(() -> { }, 50L);
-long repeatingId = scheduler.runSyncRepeating(() -> { }, 0L, 20L);
-scheduler.runAsync(() -> { });
-scheduler.cancelTask(taskId);
+    // 异步延迟任务 (毫秒)
+    scheduler.runAsyncDelayed(() -> {
+        // 延迟执行
+    }, 5000, java.util.concurrent.TimeUnit.MILLISECONDS);
+
+    // 同步任务 - 使用 GlobalRegionScheduler
+    scheduler.runSync(() -> { });
+    
+    // 同步延迟任务 (tick)
+    long taskId = scheduler.runSyncLater(() -> { }, 50L);
+    
+    // 同步重复任务 (tick)
+    long repeatingId = scheduler.runSyncRepeating(() -> { }, 0L, 20L);
+    
+    // 取消任务
+    scheduler.cancelTask(taskId);
+}
 ```
 
 ---
@@ -64,12 +67,27 @@ scheduler.cancelTask(taskId);
 Bukkit.getPlugin("RPGCore")
 Bukkit.getPluginManager().getPlugin("RPGCore")
 (RPGCore) Bukkit.getPlugin("RPGCore")
+RPGCore rpgCore = (RPGCore) Bukkit.getPluginManager().getPlugin("RPGCore"); // 强制类型转换
 ```
 
 ### ✅ 正确
 ```java
+// 方式1: 使用静态方法获取
 RPGCore rpgCore = RPGCore.getInstance();
-if (rpgCore != null) { }
+if (rpgCore != null) {
+    // 使用 rpgCore
+}
+
+// 方式2: 在 AbstractRPGPlugin 子类中
+public class MyPlugin extends AbstractRPGPlugin {
+    protected RPGCore rpgCore; // 自动注入
+    
+    @Override
+    protected void onPluginEnable() {
+        // rpgCore 已自动初始化
+        SyncScheduler scheduler = rpgCore.getScheduler();
+    }
+}
 ```
 
 ---
@@ -105,27 +123,43 @@ player.sendActionBar(Component.text("ActionBar消息").color(NamedTextColor.GOLD
 
 ---
 
-## 4. 外部服务调用禁止项
+## 4. 外部服务调用禁止项 (v1.3.0 更新)
 
 ### ❌ 禁止
 ```java
-LuckPermsProvider.get()
-luckPerms.getUserManager().getUser(player.getUniqueId())
-PlaceholderAPI.setPlaceholders(player, text)
-expansion.unregister()
+LuckPermsProvider.get()  // 禁止直接使用 LuckPerms 静态获取
+luckPerms.getUserManager().getUser(player.getUniqueId())  // 未做 null 检查
+PlaceholderAPI.setPlaceholders(player, text)  // 禁止直接调用 PlaceholderAPI
+expansion.unregister()  // 禁止直接注销 PlaceholderExpansion
 ```
 
 ### ✅ 正确
 ```java
+// 方式1: 使用 RPGCore 统一外部服务集成 (推荐)
 RPGCore rpgCore = RPGCore.getInstance();
-ExternalServiceIntegration externalServices = rpgCore.getExternalServices();
+if (rpgCore != null) {
+    ExternalServiceIntegration externalServices = rpgCore.getExternalServices();
+    
+    if (externalServices.isLuckPermsEnabled()) {
+        String prefix = externalServices.getPlayerPrefix(player);
+    }
+    if (externalServices.isPlaceholderAPIEnabled()) {
+        String parsed = externalServices.parsePlaceholders(player, text);
+    }
+}
 
-if (externalServices.isLuckPermsEnabled()) {
-    String prefix = externalServices.getPlayerPrefix(player);
+// 方式2: 直接通过 ServicesManager 获取 (当 RPGCore 不可用时)
+RegisteredServiceProvider<LuckPerms> provider = 
+    Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+if (provider != null) {
+    LuckPerms luckPerms = provider.getProvider();
+    User user = luckPerms.getUserManager().getUser(player.getUniqueId());
+    if (user != null) {
+        // 使用 user
+    }
 }
-if (externalServices.isPlaceholderAPIEnabled()) {
-    String parsed = externalServices.parsePlaceholders(player, text);
-}
+
+// 注销 PlaceholderExpansion (必须使用)
 PlaceholderAPI.unregisterExpansion(expansionInstance);
 ```
 
@@ -150,15 +184,26 @@ String typeId = meta.getPersistentDataContainer().get(typeKey, PersistentDataTyp
 
 ### ❌ 禁止
 ```java
-public class MyPlugin extends JavaPlugin { }
+public class MyPlugin extends JavaPlugin { }  // 禁止直接继承 JavaPlugin
 ```
 
 ### ✅ 正确
 ```java
+// 独立插件必须继承 AbstractRPGPlugin
 public class MyPlugin extends AbstractRPGPlugin {
-    @Override protected void onPluginEnable() { }
-    @Override protected void onPluginDisable() { }
-    @Override protected String getPluginName() { return "MyPlugin"; }
+    @Override 
+    protected void onPluginEnable() {
+        initCommonServices(); // 必须调用
+        // 插件逻辑
+    }
+    @Override 
+    protected void onPluginDisable() {
+        cancelAllTasks(); // 确保取消所有任务
+    }
+    @Override 
+    protected String getPluginName() { 
+        return "MyPlugin"; 
+    }
 }
 ```
 
@@ -386,6 +431,142 @@ String text3 = TextStripper.stripMiniMessageTags(input);// 仅剥离 MiniMessage
 
 **参考文档**:
 - [TextStripper.java](../../plugins/RPGCore/src/main/java/cn/guangdian/rpgcore/util/TextStripper.java)
+
+---
+
+## 14. 数据生命周期管理禁止项 (v1.3.0 新增)
+
+### ❌ 禁止 (在主线程执行数据加载/保存)
+
+```java
+// 禁止: 在 PlayerJoinEvent 中直接执行 IO 操作
+@EventHandler
+public void onPlayerJoin(PlayerJoinEvent event) {
+    Player player = event.getPlayer();
+    // 直接加载数据库
+    PlayerData data = database.load(player.getUniqueId()); // 阻塞主线程！
+    // 或保存
+    database.save(player.getUniqueId(), data); // 阻塞主线程！
+}
+
+// 禁止: 在 PlayerQuitEvent 中同步等待保存完成
+@EventHandler
+public void onPlayerQuit(PlayerQuitEvent event) {
+    CompletableFuture<Void> saveFuture = saveDataAsync(event.getPlayer());
+    saveFuture.join(); // 阻塞主线程等待完成！
+}
+```
+
+### ✅ 正确 (使用 PlayerLifecycleManager 异步处理)
+
+```java
+// 方式1: 继承 AbstractPlayerDataHandler (推荐)
+public class MyDataHandler extends AbstractPlayerDataHandler {
+    
+    public MyDataHandler(JavaPlugin plugin) {
+        super(plugin);
+    }
+    
+    @Override
+    protected void onPlayerLoad(Player player) {
+        // RPGCore 自动在异步线程调用此方法
+        PlayerData data = repository.load(player.getUniqueId()).join();
+        // 数据已在异步线程，可以安全执行 IO
+    }
+    
+    @Override
+    protected void onPlayerSave(Player player) {
+        // RPGCore 自动在异步线程调用此方法
+        repository.save(player.getUniqueId(), dataCache.get(player.getUniqueId()));
+    }
+    
+    @Override
+    public int getPriority() { return 100; }
+    
+    @Override
+    public String getHandlerName() { return "MyData"; }
+}
+
+// 注册处理器
+new MyDataHandler(plugin).register();
+
+// 方式2: 使用 PlayerLifecycleManager 手动管理
+PlayerLifecycleManager lifecycle = rpgCore.getPlayerLifecycle();
+lifecycle.registerHandler(new PlayerDataHandler() {
+    @Override
+    public void onLoad(PlayerDataLoadEvent event) {
+        // 异步加载逻辑
+    }
+    @Override
+    public void onSave(PlayerDataSaveEvent event) {
+        // 异步保存逻辑
+    }
+    // ... 其他方法
+});
+```
+
+**原因**:
+- 主线程阻塞会导致整个服务器 TPS 下降
+- 数据加载/保存必须异步执行
+- PlayerLifecycleManager 自动管理加载顺序和线程安全
+
+---
+
+## 15. 并发安全禁止项 (v1.3.0 新增)
+
+### ❌ 禁止 (不使用锁保护玩家数据)
+
+```java
+// 禁止: 直接读写玩家数据
+@EventHandler
+public void onPlayerDeath(PlayerDeathEvent event) {
+    PlayerData data = cache.get(event.getPlayer().getUniqueId());
+    data.addDeathCount(1); // 多线程并发修改！
+}
+
+// 禁止: 使用 ConcurrentHashMap 替代锁
+private final Map<UUID, PlayerStats> statsCache = new ConcurrentHashMap<>();
+
+// 非原子操作仍然不安全
+PlayerStats stats = statsCache.get(uuid);
+stats.addPoints(100); // 另一个线程可能同时修改！
+```
+
+### ✅ 正确 (使用 PlayerLockManager)
+
+```java
+RPGCore rpgCore = RPGCore.getInstance();
+PlayerLockManager lockManager = rpgCore.getLockManager();
+
+// 方式1: 使用 executeWithLock (推荐 - 自动处理锁获取/释放)
+lockManager.executeWithLock(playerUUID, () -> {
+    PlayerStats stats = statsCache.get(playerUUID);
+    stats.addPoints(100);
+});
+
+// 方式2: 使用 executeWithDualLock (用于转账/交易场景)
+lockManager.executeWithDualLock(fromUUID, toUUID, () -> {
+    PlayerStats from = statsCache.get(fromUUID);
+    PlayerStats to = statsCache.get(toUUID);
+    if (from.hasPoints(amount)) {
+        from.removePoints(amount);
+        to.addPoints(amount);
+    }
+});
+
+// 方式3: 使用 acquireLock 手动管理 (高级场景)
+try (var lock = lockManager.acquireLock(playerUUID)) {
+    // 临界区代码
+} catch (LockTimeoutException e) {
+    // 超时处理
+}
+```
+
+**锁机制保障**:
+- UUID 排序防死锁
+- 超时自动释放 (5秒默认)
+- 线程安全统计
+- 死锁检测与恢复
 
 ---
 
