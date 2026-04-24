@@ -192,7 +192,7 @@ public final class GuangDianCaveFu extends AbstractRPGPlugin {
 
         // 注销 PlaceholderAPI 扩展
         if (placeholderExpansion != null) {
-            PlaceholderAPI.unregisterExpansion(placeholderExpansion);
+            placeholderExpansion.unregister();
             placeholderExpansion = null;
         }
 

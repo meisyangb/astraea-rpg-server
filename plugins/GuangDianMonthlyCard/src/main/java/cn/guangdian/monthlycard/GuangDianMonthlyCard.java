@@ -76,7 +76,7 @@ public class GuangDianMonthlyCard extends AbstractRPGPlugin {
         }
         
         if (placeholder != null) {
-            me.clip.placeholderapi.PlaceholderAPI.unregisterExpansion(placeholder);
+            placeholder.unregister();
         }
         
         getLogger().info("光点月卡插件已禁用!");
