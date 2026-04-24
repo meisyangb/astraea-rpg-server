@@ -7,6 +7,7 @@ import cn.guangdian.cleaner.listener.DropListener;
 import cn.guangdian.cleaner.manager.CleanManager;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.GameLogger;
+import cn.guangdian.rpgcore.command.CommandFramework;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 
 /**
@@ -144,12 +145,16 @@ public class GuangDianCleaner extends AbstractRPGPlugin {
     }
 
     /**
-     * 注册命令
+     * 注册命令 - 使用 RPGCore CommandFramework
      */
     private void registerCommands() {
-        CleanerCommand cleanerCommand = new CleanerCommand(this, configManager, cleanManager);
-        getCommand("gdclean").setExecutor(cleanerCommand);
-        getCommand("gdclean").setTabCompleter(cleanerCommand);
+        CommandFramework framework = CommandFramework.getInstance();
+        if (framework != null) {
+            framework.registerCommand(new CleanerCommand(this, configManager, cleanManager));
+            logInfo("已使用 CommandFramework 注册命令");
+        } else {
+            logSevere("CommandFramework 不可用，命令注册失败");
+        }
     }
 
     /**

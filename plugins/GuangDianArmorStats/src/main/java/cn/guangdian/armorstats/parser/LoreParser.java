@@ -169,8 +169,9 @@ public class LoreParser {
         ATTRIBUTE_PATTERNS.clear();
         for (Map.Entry<String, String> entry : configPatterns.entrySet()) {
             String patternStr = entry.getValue();
-            // 去除颜色代码（支持传统 & 和 MiniMessage 标签），使其与 DIRECT_PATTERNS 保持一致（匹配去除颜色后的文本）
-            patternStr = TextStripper.stripAll(patternStr);
+            // 剥离传统颜色代码（& 和 §），用于MythicMobs物品Lore解析
+            // 注意：属性配置文件通常使用传统颜色格式
+            patternStr = TextStripper.stripLegacy(patternStr);
             ATTRIBUTE_PATTERNS.put(entry.getKey(), Pattern.compile(patternStr));
         }
         initialized = true;
@@ -203,7 +204,8 @@ public class LoreParser {
 
         for (String line : lore) {
             if (mightContainAttributeFast(line)) {
-                String strippedLine = TextStripper.stripAll(line);
+                // 剥离传统颜色代码（& 和 §），用于MythicMobs物品Lore解析
+                String strippedLine = TextStripper.stripLegacy(line);
                 Matcher matcher = COMBINED_ATTRIBUTE_PATTERN.matcher(strippedLine);
                 if (matcher.find()) {
                     return true;
@@ -239,8 +241,9 @@ public class LoreParser {
                 continue;
             }
 
-            // 快速颜色剥离（支持传统 & 和 MiniMessage 标签）
-            String strippedLine = TextStripper.stripAll(line);
+            // 剥离传统颜色代码（& 和 §）
+            // 注意：物品Lore通常使用传统颜色代码，不使用 MiniMessage
+            String strippedLine = TextStripper.stripLegacy(line);
 
 
 
@@ -369,11 +372,11 @@ public class LoreParser {
 
     /**
      * 剥离颜色代码（兼容旧方法，已废弃）
-     * @deprecated 使用 {@link TextStripper#stripAll(String)} 替代
+     * @deprecated 使用 {@link TextStripper#stripLegacy(String)} 替代
      */
     @Deprecated(since = "2.0.0", forRemoval = false)
     public static String stripColorStatic(String input) {
-        return TextStripper.stripAll(input);
+        return TextStripper.stripLegacy(input);
     }
 
     public static int getPatternCount() {
@@ -446,7 +449,8 @@ public class LoreParser {
         }
 
         for (String line : lore) {
-            String strippedLine = TextStripper.stripAll(line);
+            // 剥离传统颜色代码（& 和 §），用于MythicMobs物品Lore解析
+            String strippedLine = TextStripper.stripLegacy(line);
 
             for (Map.Entry<String, Pattern> entry : SKILL_PATTERNS.entrySet()) {
                 Pattern pattern = entry.getValue();

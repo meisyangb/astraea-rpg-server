@@ -98,11 +98,11 @@ public class SmartAttributeDetector {
 
     /**
      * 移除所有颜色代码
-     * @deprecated 使用 {@link TextStripper#stripLegacyColors(String)} 替代
+     * @deprecated 使用 {@link TextStripper#stripLegacy(String)} 替代
      */
     @Deprecated(since = "1.2.1", forRemoval = true)
     private String stripColorCodes(String text) {
-        return TextStripper.stripLegacyColors(text);
+        return TextStripper.stripLegacy(text);
     }
 
     /**

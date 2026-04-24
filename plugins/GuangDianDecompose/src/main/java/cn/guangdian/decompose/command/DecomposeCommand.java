@@ -1,32 +1,53 @@
 package cn.guangdian.decompose.command;
 
 import cn.guangdian.decompose.GuangDianDecompose;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import cn.guangdian.rpgcore.command.BaseCommand;
+import cn.guangdian.rpgcore.command.CommandContext;
+import cn.guangdian.rpgcore.command.CommandInfo;
+import cn.guangdian.rpgcore.command.Description;
+import cn.guangdian.rpgcore.command.SubCommand;
 import org.bukkit.entity.Player;
 
-public class DecomposeCommand implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * 分解命令 - 使用 RPGCore CommandFramework
+ *
+ * @author Astraea RPG Team
+ * @since 1.2.0
+ */
+@CommandInfo(name = "decompose", description = "物品分解", permission = "guangdian.decompose.use")
+public class DecomposeCommand extends BaseCommand {
     private final GuangDianDecompose plugin;
 
     public DecomposeCommand(GuangDianDecompose plugin) {
         this.plugin = plugin;
     }
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage(net.kyori.adventure.text.Component.text("此命令只能由玩家执行!").color(net.kyori.adventure.text.format.NamedTextColor.RED));
-            return true;
-        }
-
-        if (!player.hasPermission("guangdian.decompose.use")) {
-            player.sendMessage(plugin.getConfig().getString("messages.no-permission", "<red>你没有权限使用分解功能!").replace("&", "§"));
-            return true;
-        }
-
+    /**
+     * 打开分解界面
+     */
+    @SubCommand(name = "", playerOnly = true)
+    @Description("打开分解界面")
+    public void openDefault(CommandContext ctx) {
+        Player player = ctx.requirePlayer();
         plugin.getDecomposeGUI().open(player);
-        return true;
+    }
+
+    /**
+     * 打开分解界面
+     */
+    @SubCommand(name = "open", playerOnly = true)
+    @Description("打开分解界面")
+    public void open(CommandContext ctx) {
+        Player player = ctx.requirePlayer();
+        plugin.getDecomposeGUI().open(player);
+    }
+
+    @Override
+    public List<String> onTabComplete(java.lang.reflect.Method subCommandMethod, CommandContext context) {
+        return new ArrayList<>();
     }
 }

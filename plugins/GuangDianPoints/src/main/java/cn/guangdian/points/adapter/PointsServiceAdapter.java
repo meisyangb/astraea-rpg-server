@@ -2,7 +2,6 @@ package cn.guangdian.points.adapter;
 
 import cn.guangdian.points.GuangDianPoints;
 import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
 import cn.guangdian.rpgcore.event.events.PointsTransactionEvent;
 import cn.guangdian.rpgcore.service.api.PointsService;
@@ -13,58 +12,30 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * PointsService 适配器
- * 
- * <p>连接旧的 GuangDianPoints 实现与新的 PointsService 接口，
- * 支持两种运行模式：</p>
- * 
- * <ul>
- *   <li>RPGCore 模式：当 RPGCore 可用时，通过 ServiceRegistry 注册服务，并通过 EventBus 发布事件</li>
- *   <li>独立模式：当 RPGCore 不可用时，使用旧的实现</li>
- * </ul>
- * 
+ *
+ * <p>连接 GuangDianPoints 实现与 PointsService 接口</p>
+ *
  * @author GuangDian
  * @since 1.0.0
  */
 public class PointsServiceAdapter implements PointsService {
 
     private final GuangDianPoints plugin;
-    private final boolean useRPGCore;
-    private EventBus eventBus;
 
     public PointsServiceAdapter(GuangDianPoints plugin) {
         this.plugin = plugin;
-        this.useRPGCore = Bukkit.getPluginManager().isPluginEnabled("RPGCore");
-        
-        // 如果 RPGCore 可用，注册服务
-        if (useRPGCore) {
+
+        // 注册到 RPGCore 服务注册表
+        if (Bukkit.getPluginManager().isPluginEnabled("RPGCore")) {
             try {
                 RPGCore rpgCore = RPGCore.getInstance();
                 ServiceRegistry registry = rpgCore.getServiceRegistry();
-                this.eventBus = rpgCore.getEventBus();
-                
                 registry.registerService(PointsService.class, this);
                 plugin.getLogger().info("已注册到 RPGCore 服务注册表: PointsService");
-                
-                // 订阅其他插件的事件（示例）
-                subscribeToEvents();
             } catch (Exception e) {
                 plugin.getLogger().warning("注册到 RPGCore 失败: " + e.getMessage());
             }
         }
-    }
-
-    /**
-     * 订阅其他插件发布的事件
-     */
-    private void subscribeToEvents() {
-        if (eventBus == null) return;
-        
-        // 订阅公会事件，用于公会点券奖励等
-        // eventBus.subscribe(RpgGuildEvent.class, event -> {
-        //     // 处理公会事件
-        // });
-        
-        plugin.getLogger().info("已订阅 RPGCore 事件系统");
     }
 
     @Override
@@ -74,43 +45,32 @@ public class PointsServiceAdapter implements PointsService {
 
     @Override
     public void setBalance(UUID playerId, long amount, String reason) {
-        long before = plugin.getBalance(playerId);
-        plugin.setBalance(playerId, amount, reason);
-        publishEvent(playerId, PointsTransactionEvent.TransactionType.SET, 
-            amount, before, amount, reason, null);
+        plugin.setBalance(playerId, amount);
+        publishEvent(playerId, PointsTransactionEvent.TransactionType.SET, amount, reason);
     }
 
     @Override
     public void addBalance(UUID playerId, long amount, String reason) {
         long before = plugin.getBalance(playerId);
-        plugin.addBalance(playerId, amount, reason);
-        publishEvent(playerId, PointsTransactionEvent.TransactionType.DEPOSIT, 
-            amount, before, before + amount, reason, null);
+        plugin.addBalance(playerId, amount);
+        publishEvent(playerId, PointsTransactionEvent.TransactionType.DEPOSIT, amount, reason);
     }
 
     @Override
     public boolean removeBalance(UUID playerId, long amount, String reason) {
-        long before = plugin.getBalance(playerId);
         boolean success = plugin.removeBalance(playerId, amount, reason);
         if (success) {
-            publishEvent(playerId, PointsTransactionEvent.TransactionType.WITHDRAW, 
-                amount, before, before - amount, reason, null);
+            publishEvent(playerId, PointsTransactionEvent.TransactionType.WITHDRAW, amount, reason);
         }
         return success;
     }
 
     @Override
     public boolean transfer(UUID from, UUID to, long amount, String reason) {
-        long fromBefore = plugin.getBalance(from);
-        long toBefore = plugin.getBalance(to);
         boolean success = plugin.transferBalance(from, to, amount);
         if (success) {
-            // 发布转出事件
-            publishEvent(from, PointsTransactionEvent.TransactionType.TRANSFER_OUT, 
-                amount, fromBefore, fromBefore - amount, reason, to);
-            // 发布转入事件
-            publishEvent(to, PointsTransactionEvent.TransactionType.TRANSFER_IN, 
-                amount, toBefore, toBefore + amount, reason, from);
+            publishEvent(from, PointsTransactionEvent.TransactionType.TRANSFER_OUT, amount, reason);
+            publishEvent(to, PointsTransactionEvent.TransactionType.TRANSFER_IN, amount, reason);
         }
         return success;
     }
@@ -147,22 +107,23 @@ public class PointsServiceAdapter implements PointsService {
 
     @Override
     public void adminGive(UUID playerId, long amount, UUID admin, String reason) {
-        plugin.addBalance(playerId, amount, "Admin:" + (admin != null ? admin.toString() : "Console") + ":" + reason);
+        addBalance(playerId, amount, "管理员给予: " + admin + " - " + reason);
     }
 
     @Override
     public boolean adminTake(UUID playerId, long amount, UUID admin, String reason) {
-        return plugin.removeBalance(playerId, amount, "Admin:" + (admin != null ? admin.toString() : "Console") + ":" + reason);
+        return removeBalance(playerId, amount, "管理员扣除: " + admin + " - " + reason);
     }
 
     @Override
     public void resetBalance(UUID playerId, String reason) {
-        plugin.setBalance(playerId, plugin.getDefaultBalance(), "Reset:" + reason);
+        plugin.setBalance(playerId, 0);
+        publishEvent(playerId, PointsTransactionEvent.TransactionType.RESET, 0, reason);
     }
 
     @Override
     public long getDefaultBalance() {
-        return plugin.getDefaultBalance();
+        return plugin.getConfig().getLong("default-balance", 0);
     }
 
     @Override
@@ -172,41 +133,23 @@ public class PointsServiceAdapter implements PointsService {
 
     @Override
     public long getTotalCirculation() {
-        long total = 0;
-        for (long balance : plugin.getAllBalances().values()) {
-            total += balance;
-        }
-        return total;
+        return Bukkit.getOnlinePlayers().stream()
+            .mapToLong(p -> plugin.getBalance(p.getUniqueId()))
+            .sum();
     }
 
     /**
-     * 注销服务
-     */
-    public void unregister() {
-        if (useRPGCore) {
-            try {
-                ServiceRegistry registry = RPGCore.getInstance().getServiceRegistry();
-                registry.unregisterService(PointsService.class);
-                plugin.getLogger().info("已从 RPGCore 服务注册表注销: PointsService");
-            } catch (Exception e) {
-                plugin.getLogger().warning("从 RPGCore 注销失败: " + e.getMessage());
-            }
-        }
-    }
-
-    /**
-     * 发布点券交易事件
+     * 发布点券交易事件（使用 Bukkit 事件系统）
      */
     private void publishEvent(UUID playerId, PointsTransactionEvent.TransactionType type,
-                               long amount, long before, long after, String reason, UUID relatedPlayer) {
-        if (eventBus != null) {
-            try {
-                PointsTransactionEvent event = new PointsTransactionEvent(
-                    playerId, type, amount, before, after, reason, relatedPlayer);
-                eventBus.publish(event);
-            } catch (Exception e) {
-                plugin.getLogger().warning("发布事件失败: " + e.getMessage());
-            }
+                               long amount, String reason) {
+        try {
+            long balance = plugin.getBalance(playerId);
+            PointsTransactionEvent event = new PointsTransactionEvent(
+                playerId, type, amount, balance - amount, balance, reason, null);
+            Bukkit.getPluginManager().callEvent(event);
+        } catch (Exception e) {
+            plugin.getLogger().warning("发布事件失败: " + e.getMessage());
         }
     }
 
@@ -214,6 +157,22 @@ public class PointsServiceAdapter implements PointsService {
      * 检查是否使用 RPGCore
      */
     public boolean isUsingRPGCore() {
-        return useRPGCore;
+        return Bukkit.getPluginManager().isPluginEnabled("RPGCore");
+    }
+
+    /**
+     * 注销服务
+     */
+    public void unregister() {
+        if (Bukkit.getPluginManager().isPluginEnabled("RPGCore")) {
+            try {
+                RPGCore rpgCore = RPGCore.getInstance();
+                ServiceRegistry registry = rpgCore.getServiceRegistry();
+                registry.unregisterService(PointsService.class);
+                plugin.getLogger().info("已从 RPGCore 服务注册表注销: PointsService");
+            } catch (Exception e) {
+                plugin.getLogger().warning("从 RPGCore 注销失败: " + e.getMessage());
+            }
+        }
     }
 }

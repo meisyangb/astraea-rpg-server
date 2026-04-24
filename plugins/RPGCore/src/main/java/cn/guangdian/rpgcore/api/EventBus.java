@@ -4,28 +4,32 @@ import cn.guangdian.rpgcore.event.CoreEvent;
 import cn.guangdian.rpgcore.event.EventHandler;
 
 /**
- * 事件总线接口 - 解耦插件间通信
- * 
- * <p>EventBus 提供了一个发布-订阅模式的事件系统，用于模块间的解耦通信。
- * 替代现有的反射调用方式，提供类型安全的事件传递机制。</p>
- * 
- * <h3>使用示例：</h3>
+ * 事件总线接口 - 已废弃
+ *
+ * <p><b>⚠️ 废弃说明：</b></p>
+ * <p>此接口已废弃，建议使用 Bukkit 原生事件系统。</p>
+ * <p>原因：</p>
+ * <ul>
+ *   <li>Bukkit 事件系统成熟稳定，所有插件都支持</li>
+ *   <li>无需额外学习成本</li>
+ *   <li>调试工具完善</li>
+ *   <li>生态兼容性最好</li>
+ * </ul>
+ *
+ * <p><b>迁移方案：</b></p>
  * <pre>{@code
- * // 发布事件
+ * // 旧代码（废弃）
  * eventBus.publish(new PointsChangeEvent(playerId, oldBalance, newBalance));
- * 
- * // 异步发布事件
- * eventBus.publishAsync(new PlayerDataLoadEvent(playerId));
- * 
- * // 订阅事件
- * eventBus.subscribe(PointsChangeEvent.class, event -> {
- *     getLogger().info("玩家 " + event.getPlayerId() + " 余额变化");
- * });
+ *
+ * // 新代码（推荐）
+ * Bukkit.getPluginManager().callEvent(new PointsChangeEvent(playerId, oldBalance, newBalance));
  * }</pre>
- * 
+ *
  * @author GuangDian
  * @since 1.0.0
+ * @deprecated 使用 Bukkit 原生事件系统替代。所有插件间通信应通过 Bukkit.getPluginManager().callEvent() 和 @EventHandler 实现。
  */
+@Deprecated(since = "2.0.0", forRemoval = true)
 public interface EventBus {
 
     /**

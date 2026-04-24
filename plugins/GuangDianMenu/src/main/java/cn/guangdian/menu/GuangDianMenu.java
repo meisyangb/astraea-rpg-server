@@ -1,8 +1,10 @@
 package cn.guangdian.menu;
 
 import cn.guangdian.menu.adapter.MenuServiceAdapter;
+import cn.guangdian.menu.command.GuangDianMenuCommand;
 import cn.guangdian.menu.placeholder.MenuPlaceholder;
 import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.command.CommandFramework;
 import cn.guangdian.rpgcore.gui.GUIManager;
 import cn.guangdian.rpgcore.gui.action.ActionExecutor;
 import cn.guangdian.rpgcore.gui.model.MenuData;
@@ -17,10 +19,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -40,19 +38,19 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
-import java.util.logging.Level;
 
-public class GuangDianMenu extends AbstractRPGPlugin implements Listener, CommandExecutor, TabExecutor {
+/**
+ * 光点菜单插件 - 使用 RPGCore CommandFramework
+ */
+public class GuangDianMenu extends AbstractRPGPlugin implements Listener {
 
     private static GuangDianMenu instance;
     private FileConfiguration config;
@@ -70,6 +68,9 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
     private ExternalServiceIntegration externalServices;
     private BiFunction<String, Player, String> placeholderProcessor;
 
+    // RPGCore CommandFramework
+    private GuangDianMenuCommand adminCommand;
+
     @Override
     protected void onPluginEnable() {
         instance = this;
@@ -85,14 +86,8 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
             getLogger().info("GUIManager 已加载 " + guiManager.getMenuCount() + " 个菜单");
         }
 
-        if (getCommand("menu") != null) {
-            getCommand("menu").setExecutor(this);
-            getCommand("menu").setTabCompleter(this);
-        }
-        if (getCommand("guangdianmenu") != null) {
-            getCommand("guangdianmenu").setExecutor(this);
-            getCommand("guangdianmenu").setTabCompleter(this);
-        }
+        // 初始化命令系统 (使用 RPGCore CommandFramework)
+        initCommandFramework();
 
         getServer().getPluginManager().registerEvents(this, this);
         serviceAdapter = new MenuServiceAdapter(this);
@@ -100,6 +95,40 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new MenuPlaceholder(this).register();
             getLogger().info("已注册PlaceholderAPI扩展!");
+        }
+    }
+
+    /**
+     * 初始化 RPGCore CommandFramework
+     */
+    private void initCommandFramework() {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            CommandFramework framework = CommandFramework.getInstance();
+
+            // 注册 guangdianmenu 管理命令
+            adminCommand = new GuangDianMenuCommand(this);
+            framework.registerCommand(adminCommand);
+
+            getLogger().info("已注册 CommandFramework 命令");
+        } else {
+            // 降级处理：使用传统命令注册
+            getLogger().warning("RPGCore 未加载，使用传统命令注册方式");
+            initLegacyCommands();
+        }
+    }
+
+    /**
+     * 传统命令注册方式 (降级处理)
+     */
+    private void initLegacyCommands() {
+        if (getCommand("menu") != null) {
+            getCommand("menu").setExecutor(new LegacyMenuCommand(this));
+            getCommand("menu").setTabCompleter(new LegacyMenuCommand(this));
+        }
+        if (getCommand("guangdianmenu") != null) {
+            getCommand("guangdianmenu").setExecutor(new LegacyAdminCommand(this));
+            getCommand("guangdianmenu").setTabCompleter(new LegacyAdminCommand(this));
         }
     }
 
@@ -267,7 +296,7 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
         return itemStack;
     }
 
-    private void giveMenuItem(Player player, boolean replaceConfiguredSlot) {
+    public void giveMenuItem(Player player, boolean replaceConfiguredSlot) {
         ItemStack menuItem = createMenuItem();
         int preferredSlot = Math.max(0, Math.min(8, config.getInt("menu-item.inventory-slot", 4)));
         if (replaceConfiguredSlot) {
@@ -559,91 +588,6 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
     private String stripColor(String text) {
         if (text == null) return "";
         return cn.guangdian.rpgcore.util.TextStripper.stripAll(text);
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (command.getName().equalsIgnoreCase("menu")) {
-            if (!(sender instanceof Player player)) {
-                sender.sendMessage("该命令只能由玩家执行!");
-                return true;
-            }
-            if (!player.hasPermission("guangdian.menu.use")) {
-                player.sendMessage(miniMessage.colorize(config.getString("messages.no-permission", "<red>您没有权限执行此操作!")));
-                return true;
-            }
-            String menuName = args.length > 0 ? args[0].toLowerCase() : config.getString("default-menu", "main");
-            openMenu(player, menuName);
-            return true;
-        }
-
-        if (command.getName().equalsIgnoreCase("guangdianmenu")) {
-            if (!sender.hasPermission("guangdian.menu.admin")) {
-                sender.sendMessage(miniMessage.colorize(config.getString("messages.no-permission", "<red>您没有权限执行此操作!")));
-                return true;
-            }
-
-            if (args.length > 0 && args[0].equalsIgnoreCase("reload")) {
-                reloadConfig();
-                config = getConfig();
-                reloadMenus();
-                sender.sendMessage(miniMessage.colorize(config.getString("messages.config-reloaded", "<green>菜单配置已重新加载!")));
-                return true;
-            }
-
-            if (args.length > 0 && args[0].equalsIgnoreCase("give")) {
-                if (args.length >= 2) {
-                    Player target = Bukkit.getPlayerExact(args[1]);
-                    if (target == null) {
-                        sender.sendMessage(miniMessage.colorize("<red>玩家不在线或不存在!"));
-                        return true;
-                    }
-                    giveMenuItem(target, false);
-                    sender.sendMessage(miniMessage.colorize("<green>已发放主菜单物品给玩家: <yellow>" + target.getName()));
-                    return true;
-                }
-
-                if (sender instanceof Player player) {
-                    giveMenuItem(player, false);
-                    sender.sendMessage(miniMessage.colorize("<green>已发放主菜单物品!"));
-                    return true;
-                }
-
-                sender.sendMessage(miniMessage.colorize("<yellow>用法: /guangdianmenu give <玩家>"));
-                return true;
-            }
-
-            sender.sendMessage(miniMessage.colorize("<yellow>用法: /guangdianmenu reload|give [玩家]"));
-            return true;
-        }
-
-        return true;
-    }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (command.getName().equalsIgnoreCase("menu") && args.length == 1) {
-            if (guiManager != null) {
-                return guiManager.getMenuNames().stream()
-                        .filter(name -> name.startsWith(args[0].toLowerCase()))
-                        .collect(Collectors.toList());
-            }
-            return new ArrayList<>();
-        }
-
-        if (command.getName().equalsIgnoreCase("guangdianmenu")) {
-            if (args.length == 1) {
-                List<String> completions = new ArrayList<>();
-                completions.add("reload");
-                completions.add("give");
-                return completions.stream().filter(name -> name.startsWith(args[0].toLowerCase())).collect(Collectors.toList());
-            }
-            if (args.length == 2 && args[0].equalsIgnoreCase("give")) {
-                return Bukkit.getOnlinePlayers().stream().map(Player::getName).filter(name -> name.startsWith(args[1])).collect(Collectors.toList());
-            }
-        }
-
-        return new ArrayList<>();
     }
 
     public static GuangDianMenu getInstance() {

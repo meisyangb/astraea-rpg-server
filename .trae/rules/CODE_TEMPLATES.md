@@ -1,7 +1,7 @@
 # Astraea RPG 代码模板库
 
 > 开发时可直接使用的代码模板
-> **版本: 1.3.0 | 更新: 2026-04-23**
+> **版本: 1.4.0 | 更新: 2026-04-24**
 
 ---
 
@@ -13,7 +13,7 @@
 
 ---
 
-## 1. 插件主类模板 (v1.3.0 更新)
+## 1. 插件主类模板 (v1.4.0 更新)
 
 ```java
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
@@ -23,6 +23,8 @@ import cn.guangdian.rpgcore.api.ServiceRegistry;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.sound.SoundService;
+import cn.guangdian.rpgcore.inject.GuiceSupport;
+import javax.inject.Inject;
 
 public class MyPlugin extends AbstractRPGPlugin {
 
@@ -30,6 +32,10 @@ public class MyPlugin extends AbstractRPGPlugin {
     // protected RPGCore rpgCore;
     // protected SyncScheduler scheduler;
     // protected ExternalServiceIntegration externalServices;
+    
+    // Guice 依赖注入示例
+    @Inject
+    private MyService myService;
 
     @Override
     protected void onPluginEnable() {
@@ -586,4 +592,235 @@ public class EventSubscriber {
 
 ---
 
-*最后更新: 2026-04-23*
+## 13. Guice 依赖注入模板 (v1.4.0 新增)
+
+```java
+import cn.guangdian.rpgcore.inject.GuiceSupport;
+import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import javax.inject.Singleton;
+
+// 方式1: 简单绑定
+public class MyPlugin extends AbstractRPGPlugin {
+    @Inject
+    private MyService myService;
+    
+    @Override
+    protected void onPluginEnable() {
+        initCommonServices();
+        
+        // 使用 Guice 注入成员
+        GuiceSupport.injectMembers(this);
+        
+        // 现在 myService 已自动注入
+        myService.doSomething();
+    }
+}
+
+// 方式2: 使用子注入器
+public class MyPlugin extends AbstractRPGPlugin {
+    @Inject
+    private MyService myService;
+    
+    @Override
+    protected void onPluginEnable() {
+        initCommonServices();
+        
+        // 创建子注入器并注入
+        GuiceSupport.childInjector()
+            .with(new MyModule())
+            .inject(this);
+    }
+}
+
+// 方式3: 使用简单绑定（无需创建 Module）
+public class MyPlugin extends AbstractRPGPlugin {
+    @Override
+    protected void onPluginEnable() {
+        initCommonServices();
+        
+        GuiceSupport.createChildInjector(binder -> {
+            binder.bind(MyService.class).to(MyServiceImpl.class).in(Singleton.class);
+            binder.bind(MyRepository.class).to(MyRepositoryImpl.class).in(Singleton.class);
+        }).injectMembers(this);
+    }
+}
+
+// 自定义 Module
+public class MyModule extends AbstractModule {
+    @Override
+    protected void configure() {
+        bind(MyService.class).to(MyServiceImpl.class).in(Singleton.class);
+        bind(MyRepository.class).to(MyRepositoryImpl.class).in(Singleton.class);
+    }
+}
+
+// 服务接口
+public interface MyService {
+    void doSomething();
+}
+
+// 服务实现
+@Singleton
+public class MyServiceImpl implements MyService {
+    @Inject
+    public MyServiceImpl() {
+    }
+    
+    @Override
+    public void doSomething() {
+        // 实现逻辑
+    }
+}
+```
+
+---
+
+## 14. Configurate 配置管理模板 (v1.4.0 新增)
+
+```java
+import cn.guangdian.rpgcore.config.ConfigurateSupport;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+
+// 1. 定义配置类
+@ConfigSerializable
+public class DatabaseConfig {
+    private String host = "localhost";
+    private int port = 3306;
+    private String username = "root";
+    private String password = "";
+    private String database = "minecraft";
+    
+    // Getters
+    public String getHost() { return host; }
+    public int getPort() { return port; }
+    public String getUsername() { return username; }
+    public String getPassword() { return password; }
+    public String getDatabase() { return database; }
+}
+
+// 2. 在插件中使用
+public class MyPlugin extends AbstractRPGPlugin {
+    private ConfigurateSupport<DatabaseConfig> dbConfig;
+    
+    @Override
+    protected void onPluginEnable() {
+        initCommonServices();
+        
+        // 加载配置
+        dbConfig = ConfigurateSupport.builder(DatabaseConfig.class)
+            .file("database.yml")
+            .defaultResource("database-default.yml")  // 可选：默认配置
+            .autoSave()  // 启用自动保存
+            .build();
+        
+        // 使用配置
+        DatabaseConfig config = dbConfig.get();
+        String host = config.getHost();
+        int port = config.getPort();
+    }
+    
+    public void updateConfig() {
+        // 修改配置
+        dbConfig.update(config -> {
+            // 修改配置值（通过反射，实际应该提供 setter）
+        });
+        
+        // 手动保存
+        dbConfig.save();
+    }
+}
+```
+
+---
+
+## 15. SLF4J 日志模板 (v1.4.0 新增)
+
+```java
+import cn.guangdian.rpgcore.logging.LoggerFactory;
+import org.slf4j.Logger;
+
+public class MyService {
+    // 获取日志记录器
+    private static final Logger logger = LoggerFactory.getLogger(MyService.class);
+    
+    public void doSomething() {
+        // 不同级别的日志
+        logger.trace("跟踪信息");
+        logger.debug("调试信息: {}", someData);
+        logger.info("普通信息: 玩家 {} 执行了命令 {}", playerName, command);
+        logger.warn("警告信息");
+        logger.error("错误信息", exception);
+        
+        // 占位符支持（高性能，仅在需要时计算）
+        logger.info("玩家 {} 在位置 ({}, {}, {}) 触发事件", 
+            player.getName(), 
+            location.getX(), 
+            location.getY(), 
+            location.getZ());
+    }
+}
+```
+
+---
+
+## 16. EventBusSupport 事件总线模板 (v1.4.0 新增)
+
+```java
+import cn.guangdian.rpgcore.event.EventBusSupport;
+import cn.guangdian.rpgcore.event.CoreEvent;
+
+// 1. 定义事件
+public class PlayerLevelUpEvent extends CoreEvent {
+    private final Player player;
+    private final int oldLevel;
+    private final int newLevel;
+    
+    public PlayerLevelUpEvent(Player player, int oldLevel, int newLevel) {
+        this.player = player;
+        this.oldLevel = oldLevel;
+        this.newLevel = newLevel;
+    }
+    
+    // Getters
+    public Player getPlayer() { return player; }
+    public int getOldLevel() { return oldLevel; }
+    public int getNewLevel() { return newLevel; }
+}
+
+// 2. 订阅事件
+public class MyListener {
+    public MyListener() {
+        // 订阅事件（普通优先级）
+        EventBusSupport.subscribe(PlayerLevelUpEvent.class, event -> {
+            Player player = event.getPlayer();
+            player.sendMessage("恭喜升级到 " + event.getNewLevel() + " 级！");
+        });
+        
+        // 订阅事件（指定优先级）
+        EventBusSupport.subscribe(PlayerLevelUpEvent.class, 
+            cn.guangdian.rpgcore.event.EventPriority.HIGH, 
+            event -> {
+                // 高优先级处理
+            });
+    }
+}
+
+// 3. 发布事件
+public class LevelSystem {
+    public void levelUp(Player player, int newLevel) {
+        int oldLevel = getPlayerLevel(player);
+        setPlayerLevel(player, newLevel);
+        
+        // 同步发布
+        EventBusSupport.publish(new PlayerLevelUpEvent(player, oldLevel, newLevel));
+        
+        // 异步发布
+        EventBusSupport.publishAsync(new PlayerLevelUpEvent(player, oldLevel, newLevel));
+    }
+}
+```
+
+---
+
+*最后更新: 2026-04-24*

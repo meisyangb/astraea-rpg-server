@@ -1,11 +1,13 @@
 package cn.guangdian.points;
 
 import cn.guangdian.points.adapter.PointsServiceAdapter;
+import cn.guangdian.points.command.PointsCommand;
 import cn.guangdian.points.lifecycle.PointsDataHandler;
 import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.command.CommandFramework;
 import cn.guangdian.rpgcore.concurrency.LockTimeoutException;
 import cn.guangdian.rpgcore.concurrency.PlayerLockManager;
-import cn.guangdian.rpgcore.message.UnifiedMessageService;
+import cn.guangdian.rpgcore.message.MessageServiceImpl;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.points.monitor.OperationTimer;
 import cn.guangdian.points.monitor.PerformanceMonitor;
@@ -68,7 +70,7 @@ import java.util.logging.Level;
  * @see AbstractRPGPlugin
  * @see MiniMessageService
  */
-public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabCompleter {
+public class GuangDianPoints extends AbstractRPGPlugin implements Listener {
 
     private static GuangDianPoints instance;
     private FileConfiguration config;
@@ -88,8 +90,12 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
     private PointsServiceAdapter serviceAdapter;
     private PointsDataHandler dataHandler;
 
-    // UnifiedMessageService 用于消息颜色处理
-    private UnifiedMessageService msg;
+    // 命令系统
+    private PointsCommand pointsCommand;
+    private boolean usingCommandFramework = false;
+
+    // MessageServiceImpl 用于消息颜色处理
+    private MessageServiceImpl msg;
 
     // 配置选项
     private boolean transactionLogEnabled;
@@ -122,8 +128,8 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
     protected void onPluginEnable() {
         instance = this;
 
-        // 初始化 UnifiedMessageService 用于消息颜色处理
-        msg = UnifiedMessageService.getInstance();
+        // 初始化 MessageServiceImpl 用于消息颜色处理
+        msg = MessageServiceImpl.getInstance();
 
         saveDefaultConfig();
         config = getConfig();
@@ -142,27 +148,40 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
 
     @Override
     protected void onPluginDisable() {
+        // 注销 CommandFramework 命令
+        if (usingCommandFramework && pointsCommand != null) {
+            try {
+                CommandFramework framework = CommandFramework.getInstance();
+                if (framework != null) {
+                    framework.unregisterCommand("points");
+                    getLogger().info("已从 CommandFramework 注销命令");
+                }
+            } catch (Exception e) {
+                getLogger().warning("注销 CommandFramework 命令失败: " + e.getMessage());
+            }
+        }
+
         // 注销 RPGCore 服务
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
         }
-        
+
         if (dataHandler != null) {
             dataHandler.unregister();
         }
-        
+
         saveData();
 
         // 关闭优化组件
         if (transactionLogger != null) {
             transactionLogger.close();
         }
-        
+
         // 取消所有任务
         if (scheduler != null) {
             scheduler.cancelAllTasks();
         }
-        
+
         getLogger().info("光点点卷插件已禁用!");
     }
     
@@ -305,6 +324,7 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
      */
     private void logOptimizationStatus() {
         getLogger().info("========== 优化组件状态 ==========");
+        getLogger().info("命令系统: " + (usingCommandFramework ? "CommandFramework" : "传统Bukkit"));
         getLogger().info("性能监控: " + (performanceMonitor != null && performanceMonitor.isEnabled() ? "已启用" : "未启用"));
         getLogger().info("事务日志: " + (transactionLogger != null ? "已启用" : "未启用"));
         getLogger().info("并发控制: " + (lockManager != null ? "已启用" : "未启用"));
@@ -313,8 +333,17 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
     }
 
     private void registerEvents() {
-        getCommand("points").setTabCompleter(this);
-        
+        // 注册命令系统 - 优先使用 CommandFramework
+        if (registerCommandFramework()) {
+            getLogger().info("命令系统已注册到 RPGCore CommandFramework");
+        } else {
+            // 降级到传统命令处理
+            getCommand("points").setExecutor(this);
+            getCommand("points").setTabCompleter(this);
+            getLogger().warning("RPGCore CommandFramework 不可用，使用传统命令处理");
+        }
+
+        // 注册数据生命周期管理
         if (getServer().getPluginManager().isPluginEnabled("RPGCore")) {
             dataHandler = new PointsDataHandler(this);
             dataHandler.register();
@@ -322,6 +351,34 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
         } else {
             getServer().getPluginManager().registerEvents(this, this);
             getLogger().warning("RPGCore 未启用，使用传统事件监听");
+        }
+    }
+
+    /**
+     * 注册 CommandFramework 命令系统
+     * @return 是否成功注册
+     */
+    private boolean registerCommandFramework() {
+        try {
+            RPGCore rpgCore = RPGCore.getInstance();
+            if (rpgCore == null) {
+                getLogger().warning("RPGCore 未初始化，无法使用 CommandFramework");
+                return false;
+            }
+
+            CommandFramework framework = CommandFramework.getInstance();
+            if (framework == null) {
+                getLogger().warning("CommandFramework 不可用");
+                return false;
+            }
+
+            pointsCommand = new PointsCommand(this);
+            framework.registerCommand(pointsCommand);
+            usingCommandFramework = true;
+            return true;
+        } catch (Exception e) {
+            getLogger().warning("注册 CommandFramework 失败: " + e.getMessage());
+            return false;
         }
     }
 

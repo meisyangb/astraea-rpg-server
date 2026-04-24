@@ -1,6 +1,6 @@
 package cn.guangdian.rpgcore.gui;
 
-import cn.guangdian.rpgcore.message.UnifiedMessageService;
+import cn.guangdian.rpgcore.message.MessageServiceImpl;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -29,7 +29,7 @@ public class GUI implements InventoryHolder {
     private final int size;
     private final Inventory inventory;
     private final Map<Integer, Consumer<InventoryClickEvent>> clickHandlers;
-    private final UnifiedMessageService msg;
+    private final MessageServiceImpl msg;
 
     private boolean updateOnOpen = false;
     private Consumer<Player> openHandler;
@@ -40,7 +40,7 @@ public class GUI implements InventoryHolder {
         this.size = size;
         this.inventory = Bukkit.createInventory(this, size, Component.text(title));
         this.clickHandlers = new HashMap<>();
-        this.msg = UnifiedMessageService.getInstance();
+        this.msg = MessageServiceImpl.getInstance();
     }
 
     GUI(@NotNull String title, int size, @NotNull Inventory externalInventory) {
@@ -48,7 +48,7 @@ public class GUI implements InventoryHolder {
         this.size = size;
         this.inventory = externalInventory;
         this.clickHandlers = new HashMap<>();
-        this.msg = UnifiedMessageService.getInstance();
+        this.msg = MessageServiceImpl.getInstance();
     }
 
     /**

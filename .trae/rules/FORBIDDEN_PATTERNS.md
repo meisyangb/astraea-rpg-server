@@ -1,7 +1,7 @@
 # Astraea RPG 禁止模式清单
 
 > 所有开发必须遵守的禁止模式，违反将导致代码被拒绝
-> **版本: 1.3.0 | 更新: 2026-04-23**
+> **版本: 1.4.1 | 更新: 2026-04-24**
 
 ---
 
@@ -299,7 +299,7 @@ D:\gradle\gradle-9.4.0\bin\gradle.bat build --no-configuration-cache -x test
 
 ---
 
-## 12. RPGCore 统一服务禁止项 (v1.2.0 新增)
+## 12. RPGCore 统一服务禁止项 (v1.4.0 更新)
 
 ### ❌ 禁止 (重复实现 RPGCore 已提供的功能)
 
@@ -312,9 +312,15 @@ private Component colorize(String text) {
 // 禁止: 直接使用 ConcurrentHashMap 存储玩家数据
 private final Map<UUID, PlayerData> cache = new ConcurrentHashMap<>();
 
-// 禁止: 手动加载/保存 YAML 文件
+// 禁止: 手动加载/保存 YAML 文件 (Bukkit API)
 YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
 yaml.save(file);
+
+// 禁止: 使用已废弃的 YamlDataStore (v1.4.0+)
+YamlDataStore store = YamlDataStore.getInstance(); // 已废弃
+
+// 禁止: 使用已废弃的 ServiceInjector (v1.4.0+)
+ServiceInjector.inject(this); // 已废弃
 
 // 禁止: 自己实现冷却管理
 private final Map<UUID, Long> cooldowns = new ConcurrentHashMap<>();
@@ -326,20 +332,42 @@ new MyPlaceholderExpansion().register();
 ### ✅ 正确 (使用 RPGCore 统一服务)
 
 ```java
-// 正确: 使用 UnifiedMessageService
-UnifiedMessageService msg = UnifiedMessageService.getInstance();
-Component component = msg.colorize("&a成功消息");
-msg.sendMessage(player, "&6金色文字");
+// 正确: 使用 MiniMessageService
+MiniMessageService mm = MiniMessageService.getInstance();
+player.sendMessage(mm.green("成功消息"));
 
 // 正确: 继承 PlayerDataService
 public class MyDataService extends PlayerDataService<MyData> {
     // 自动处理缓存、保存、序列化
 }
 
-// 正确: 使用 YamlDataStore
-YamlDataStore store = YamlDataStore.getInstance();
-Map<String, Object> data = store.load(file);
-store.save(file, data);
+// 正确: 使用 ConfigurateSupport (v1.4.0+ 推荐)
+@ConfigSerializable
+public class MyConfig {
+    private String name = "default";
+    // getters...
+}
+
+ConfigurateSupport<MyConfig> config = ConfigurateSupport
+    .builder(MyConfig.class)
+    .file("config.yml")
+    .autoSave()
+    .build();
+MyConfig data = config.get();
+
+// 正确: 使用 GuiceSupport (v1.4.0+ 推荐)
+public class MyPlugin extends AbstractRPGPlugin {
+    @Inject private MyService myService;
+    
+    @Override
+    protected void onPluginEnable() {
+        GuiceSupport.injectMembers(this);
+        // 或使用子注入器
+        GuiceSupport.childInjector()
+            .with(new MyModule())
+            .inject(this);
+    }
+}
 
 // 正确: 使用 CooldownManager
 CooldownManager cooldown = CooldownManager.getInstance();
@@ -348,17 +376,35 @@ cooldown.setCooldown(playerUUID, "action", 10000);
 // 正确: 使用 PlaceholderService
 PlaceholderService placeholder = PlaceholderService.getInstance();
 placeholder.register("my_value", (player, params) -> "value");
+
+// 正确: 使用 LoggerFactory (SLF4J)
+private static final Logger logger = LoggerFactory.getLogger(MyClass.class);
+logger.info("玩家 {} 执行了命令 {}", playerName, command);
+
+// 正确: 使用 EventBusSupport
+EventBusSupport.subscribe(MyEvent.class, event -> {
+    // 处理事件
+});
 ```
+
+**废弃API迁移指南**:
+
+| 废弃API | 替代API | 迁移难度 |
+|--------|--------|---------|
+| `YamlDataStore` | `ConfigurateSupport` | 中 |
+| `ServiceInjector` | `GuiceSupport` | 低 |
+| `ColorUtil` | `MiniMessageService` | 低 |
 
 **原因**: 
 - 避免 2500+ 行重复代码
 - 统一管理,便于维护
 - 内置性能优化和异常处理
 - 符合微内核架构原则
+- 使用成熟库 (Guice, Configurate, SLF4J)
 
 **参考文档**:
 - [UNIFIED_SERVICES_OVERVIEW.md](../docs/RPGCore/UNIFIED_SERVICES_OVERVIEW.md)
-- [ARCHITECTURE_UPGRADE_GUIDE.md](../docs/RPGCore/ARCHITECTURE_UPGRADE_GUIDE.md)
+- [MIGRATION_GUIDE.md](../docs/RPGCore/MIGRATION_GUIDE.md) (v1.4.0+)
 
 ---
 
@@ -407,13 +453,33 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 PlainTextComponentSerializer serializer = PlainTextComponentSerializer.plainText();
 String plainText = serializer.serialize(component);
 
-// 方式2: 使用 RPGCore TextStripper (推荐 - 同时处理 MiniMessage 和传统颜色码)
+// 方式2: 使用 RPGCore TextStripper (推荐 - 职责分离的格式处理)
 import cn.guangdian.rpgcore.util.TextStripper;
 
-String text1 = TextStripper.stripAll(input);           // 剥离所有格式代码
-String text2 = TextStripper.stripLegacyColors(input);  // 仅剥离传统颜色码
-String text3 = TextStripper.stripMiniMessageTags(input);// 仅剥离 MiniMessage 标签
+// 根据插件使用的格式类型选择对应方法：
+
+// 1. MiniMessage 格式 (RPGItem、现代GUI等)
+String text1 = TextStripper.stripMiniMessage(input);     // 仅剥离 <green> 等标签
+
+// 2. 传统颜色格式 (MythicMobs、物品Lore、旧配置等)
+String text2 = TextStripper.stripLegacy(input);          // 仅剥离 & 和 § 颜色码
+
+// 3. 不确定格式或需要兼容两种
+String text3 = TextStripper.stripAll(input);             // 同时处理两种格式
+String text4 = TextStripper.stripSmart(input);           // 自动检测选择
+
+// 4. 快速检测格式类型
+boolean hasMiniMessage = TextStripper.containsMiniMessage(input);
+boolean hasLegacy = TextStripper.containsLegacy(input);
 ```
+
+**使用场景指南**:
+| 场景 | 推荐方法 | 说明 |
+|------|----------|------|
+| RPGItem 物品解析 | `stripMiniMessage()` | RPGItem 使用 MiniMessage 格式 |
+| MythicMobs Lore | `stripLegacy()` | 神话生物使用 & 颜色码 |
+| 通用配置处理 | `stripSmart()` | 自动检测格式类型 |
+| 兼容旧代码 | `stripAll()` | 同时处理两种格式 |
 
 **性能对比**:
 | 方法 | 相对性能 | 代码行数 |
@@ -426,7 +492,8 @@ String text3 = TextStripper.stripMiniMessageTags(input);// 仅剥离 MiniMessage
 **原因**:
 - Adventure API 原生实现，经过高度优化
 - PlainTextComponentSerializer 处理所有 Component 子类型
-- TextStripper 额外处理 & 和 § 传统颜色码
+- TextStripper 职责分离：MiniMessage 和传统颜色分开处理
+- 根据插件实际使用的格式选择对应方法，避免不必要的处理
 - 代码量减少约 80%，可维护性显著提升
 
 **参考文档**:
@@ -570,4 +637,65 @@ try (var lock = lockManager.acquireLock(playerUUID)) {
 
 ---
 
-*最后更新: 2026-04-23*
+---
+
+## 16. 事件系统使用规范 (v2.0.0 新增)
+
+### ❌ 禁止 (使用 RPGCore EventBus)
+
+```java
+// 禁止: 使用 RPGCore EventBus 发布事件
+RPGCore rpgCore = RPGCore.getInstance();
+EventBus eventBus = rpgCore.getEventBus();
+eventBus.publish(new MyEvent());
+
+// 禁止: 继承 RPGCore CoreEvent
+public class MyEvent extends CoreEvent { }
+
+// 禁止: 使用 RPGCore EventHandler 订阅
+eventBus.subscribe(MyEvent.class, handler);
+```
+
+### ✅ 正确 (使用 Bukkit 原生事件)
+
+```java
+// 正确: 继承 Bukkit Event
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+
+public class MyCustomEvent extends Event {
+    private static final HandlerList HANDLERS = new HandlerList();
+    
+    @Override
+    public HandlerList getHandlers() {
+        return HANDLERS;
+    }
+    
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
+}
+
+// 正确: 使用 Bukkit 发布事件
+Bukkit.getPluginManager().callEvent(new MyCustomEvent());
+
+// 正确: 使用 @EventHandler 订阅
+@EventHandler
+public void onMyEvent(MyCustomEvent event) {
+    // 处理事件
+}
+```
+
+**原因**:
+- Bukkit 事件系统成熟稳定，所有插件都支持
+- 无需额外学习成本，开发者熟悉
+- 调试工具完善（/timings 等）
+- 生态兼容性最好
+- RPGCore EventBus 已废弃（since 2.0.0）
+
+**参考文档**:
+- [Bukkit Event API](https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/event/package-summary.html)
+
+---
+
+*最后更新: 2026-04-24*

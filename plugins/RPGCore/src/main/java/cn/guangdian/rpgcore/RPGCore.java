@@ -31,7 +31,10 @@ import cn.guangdian.rpgcore.display.DisplayServiceImpl;
 import cn.guangdian.rpgcore.display.TextDisplayServiceImpl;
 import cn.guangdian.rpgcore.gui.GUIManager;
 import cn.guangdian.rpgcore.event.SimpleEventBus;
+import cn.guangdian.rpgcore.event.MBassadorEventBus;
+import cn.guangdian.rpgcore.config.ConfigurateManager;
 import cn.guangdian.rpgcore.exception.ExceptionHandlerImpl;
+import cn.guangdian.rpgcore.util.JacksonUtils;
 import cn.guangdian.rpgcore.export.DataExporterImpl;
 import cn.guangdian.rpgcore.http.HttpClientImpl;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
@@ -40,7 +43,6 @@ import cn.guangdian.rpgcore.integration.PlaceholderService;
 import cn.guangdian.rpgcore.lifecycle.PlayerLifecycleManager;
 import cn.guangdian.rpgcore.logging.AsyncLogger;
 import cn.guangdian.rpgcore.manager.ItemAttributeManager;
-import cn.guangdian.rpgcore.message.AudienceService;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.message.MessageServiceImpl;
 import cn.guangdian.rpgcore.module.RPGModule;
@@ -58,6 +60,10 @@ import cn.guangdian.rpgcore.service.api.MenuService;
 import cn.guangdian.rpgcore.sound.SoundService;
 import cn.guangdian.rpgcore.storage.UnifiedDataManager;
 import cn.guangdian.rpgcore.util.CooldownManager;
+import cn.guangdian.rpgcore.inject.GuiceSupport;
+import cn.guangdian.rpgcore.inject.RPGCoreModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -114,6 +120,13 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
     private MiniMessageService miniMessageService;
     private ItemAttributeManager itemAttributeManager;
 
+    // 新增：新引入的库管理器
+    private ConfigurateManager configurateManager;
+    private boolean useMBassadorEventBus;
+
+    // Guice 依赖注入
+    private Injector guiceInjector;
+
     private int asyncThreadPoolSize;
     private int cacheMaxSize;
     private Duration cacheDefaultTTL;
@@ -169,6 +182,9 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         if (eventBus instanceof SimpleEventBus seb) {
             seb.clear();
         }
+        if (eventBus instanceof MBassadorEventBus meb) {
+            meb.shutdown();
+        }
         if (serviceRegistry instanceof SimpleServiceRegistry ssr) {
             ssr.clear();
         }
@@ -216,19 +232,32 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         asyncThreadPoolSize = config.getInt("async.thread-pool-size", 4);
         cacheMaxSize = config.getInt("cache.max-size", 2000);
         cacheDefaultTTL = Duration.ofMinutes(config.getLong("cache.default-ttl-minutes", 30));
-        
+
         String modeStr = config.getString("cache.mode", "lightweight").toLowerCase();
         cacheMode = switch (modeStr) {
             case "high_performance", "highperformance" -> Mode.HIGH_PERFORMANCE;
             default -> Mode.LIGHTWEIGHT;
         };
-        
+
         lockTimeoutMs = config.getLong("lock.timeout-ms", 3000);
+
+        // 新库配置
+        useMBassadorEventBus = config.getBoolean("advanced.use-mbassador-eventbus", false);
     }
 
     private void initCoreComponents() {
-        eventBus = new SimpleEventBus(this);
-        getLogger().info("EventBus initialized");
+        // 初始化事件总线（可选择使用 MBassador）
+        if (useMBassadorEventBus) {
+            eventBus = new MBassadorEventBus(getLogger());
+            getLogger().info("EventBus initialized (MBassador)");
+        } else {
+            eventBus = new SimpleEventBus(this);
+            getLogger().info("EventBus initialized (Simple)");
+        }
+
+        // 初始化 Configurate 配置管理器
+        configurateManager = new ConfigurateManager(getLogger(), getDataFolder().toPath());
+        getLogger().info("ConfigurateManager initialized");
 
         serviceRegistry = new SimpleServiceRegistry(this);
         getLogger().info("ServiceRegistry initialized");
@@ -312,13 +341,38 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         
         // 注册其他核心服务到 ServiceRegistry
         serviceRegistry.registerService(MiniMessageService.class, miniMessageService);
-        serviceRegistry.registerService(AudienceService.class, AudienceService.getInstance());
         serviceRegistry.registerService(SoundService.class, SoundService.getInstance());
         serviceRegistry.registerService(CooldownManager.class, CooldownManager.getInstance());
         serviceRegistry.registerService(YamlDataStore.class, YamlDataStore.getInstance());
         serviceRegistry.registerService(CommandFramework.class, CommandFramework.getInstance());
         serviceRegistry.registerService(PlaceholderService.class, PlaceholderService.getInstance());
         getLogger().info("Core services registered to ServiceRegistry");
+
+        // 初始化 Guice 依赖注入
+        initGuice();
+    }
+
+    /**
+     * 初始化 Guice 依赖注入框架
+     */
+    private void initGuice() {
+        try {
+            guiceInjector = Guice.createInjector(new RPGCoreModule(this));
+            GuiceSupport.initialize(this);
+            getLogger().info("Guice 依赖注入框架已初始化");
+        } catch (Exception e) {
+            getLogger().warning("Guice 初始化失败: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取 Guice Injector
+     *
+     * @return Guice Injector 实例
+     */
+    public Injector getGuiceInjector() {
+        return guiceInjector;
     }
 
     private void initDatabase() {
@@ -661,6 +715,33 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
 
     public boolean isDatabaseEnabled() {
         return databaseEnabled && CoreDatabase.isEnabled();
+    }
+
+    /**
+     * 获取 Configurate 配置管理器
+     *
+     * @return ConfigurateManager 实例
+     */
+    public ConfigurateManager getConfigurateManager() {
+        return configurateManager;
+    }
+
+    /**
+     * 获取 Jackson JSON ObjectMapper
+     *
+     * @return Jackson ObjectMapper
+     */
+    public com.fasterxml.jackson.databind.ObjectMapper getJsonMapper() {
+        return cn.guangdian.rpgcore.util.JacksonUtils.getJsonMapper();
+    }
+
+    /**
+     * 获取 Jackson YAML ObjectMapper
+     *
+     * @return YAML ObjectMapper
+     */
+    public com.fasterxml.jackson.databind.ObjectMapper getYamlMapper() {
+        return cn.guangdian.rpgcore.util.JacksonUtils.getYamlMapper();
     }
 
     public void registerModule(RPGModule module) {

@@ -1,8 +1,5 @@
 package cn.guangdian.socket;
 
-import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.api.ServiceRegistry;
-import cn.guangdian.rpgcore.command.CommandFramework;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.socket.command.SocketCommand;
 import cn.guangdian.socket.listener.SocketListener;
@@ -33,7 +30,6 @@ public class GuangDianSocket extends AbstractRPGPlugin {
     private static GuangDianSocket instance;
     private GemStorage gemStorage;
     private SocketService socketService;
-    private CommandFramework commandFramework;
 
     @Override
     protected void onPluginEnable() {
@@ -70,32 +66,13 @@ public class GuangDianSocket extends AbstractRPGPlugin {
     }
     
     /**
-     * 初始化 RPGCore CommandFramework
+     * 注册命令
      */
     private void initCommandFramework() {
-        if (rpgCore != null) {
-            ServiceRegistry registry = rpgCore.getServiceRegistry();
-            if (registry.hasService(CommandFramework.class)) {
-                commandFramework = registry.getService(CommandFramework.class);
-                commandFramework.registerCommand(new SocketCommand(this));
-                getLogger().info("已注册 RPGCore CommandFramework 命令");
-            } else {
-                getLogger().warning("CommandFramework 不可用，使用备用命令注册");
-                registerCommandsFallback();
-            }
-        } else {
-            getLogger().warning("RPGCore 不可用，使用备用命令注册");
-            registerCommandsFallback();
-        }
-    }
-    
-    /**
-     * 备用命令注册（当 RPGCore 不可用时）
-     */
-    private void registerCommandsFallback() {
         org.bukkit.command.PluginCommand socketCmd = getCommand("socket");
         if (socketCmd != null) {
             socketCmd.setExecutor(new SocketCommand(this));
+            getLogger().info("已注册命令");
         }
     }
 

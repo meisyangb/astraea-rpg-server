@@ -1,8 +1,10 @@
 package cn.guangdian.mobhealth;
 
 import cn.guangdian.mobhealth.adapter.MobHealthServiceAdapter;
+import cn.guangdian.mobhealth.command.MobHealthCommand;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
+import cn.guangdian.rpgcore.command.CommandFramework;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.Bukkit;
@@ -45,7 +47,8 @@ public class GuangDianMobHealth extends AbstractRPGPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(this, this);
         Bukkit.getPluginManager().registerEvents(new MobListener(this, displayManager), this);
         
-        getCommand("gdmobhealth").setExecutor(new AdminCommand(this));
+        // 注册命令 - 使用 RPGCore CommandFramework
+        registerCommands();
         
         displayManager.startUpdateTask();
         
@@ -152,5 +155,18 @@ public class GuangDianMobHealth extends AbstractRPGPlugin implements Listener {
 
     public MiniMessageService getMiniMessageService() {
         return miniMessage;
+    }
+
+    /**
+     * 注册命令 - 使用 RPGCore CommandFramework
+     */
+    private void registerCommands() {
+        CommandFramework framework = CommandFramework.getInstance();
+        if (framework != null) {
+            framework.registerCommand(new MobHealthCommand(this));
+            getLogger().info("已使用 CommandFramework 注册命令");
+        } else {
+            getLogger().severe("CommandFramework 不可用，命令注册失败");
+        }
     }
 }

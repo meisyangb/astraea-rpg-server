@@ -23,7 +23,7 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 
-public class GuangDianQuest extends AbstractRPGPlugin {
+public class GuangDianQuest extends AbstractRPGPlugin implements org.bukkit.event.Listener {
 
     private static GuangDianQuest instance;
 
@@ -176,8 +176,9 @@ public class GuangDianQuest extends AbstractRPGPlugin {
     private void registerListeners() {
         questEventListener = new QuestEventListener(this);
         Bukkit.getPluginManager().registerEvents(questEventListener, this);
-        subscribeRPGCoreEvents();
-        
+        // 注册本插件作为事件监听器（用于NPC交互事件）
+        Bukkit.getPluginManager().registerEvents(this, this);
+
         // 注册玩家生命周期处理器
         if (Bukkit.getPluginManager().isPluginEnabled("RPGCore")) {
             dataHandler = new QuestDataHandler(this);
@@ -186,25 +187,14 @@ public class GuangDianQuest extends AbstractRPGPlugin {
         }
     }
 
-    private void subscribeRPGCoreEvents() {
-        try {
-            cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
-            if (rpgCore != null) {
-                cn.guangdian.rpgcore.api.EventBus eventBus = rpgCore.getEventBus();
-                if (eventBus != null) {
-                    eventBus.subscribe(cn.guangdian.rpgcore.event.events.NPCInteractEvent.class, event -> {
-                        if (event instanceof cn.guangdian.rpgcore.event.events.NPCInteractEvent npcEvent) {
-                            org.bukkit.entity.Player player = npcEvent.getPlayer();
-                            String npcId = npcEvent.getNpcId();
-                            if (player != null && questEventListener != null) {
-                                questEventListener.onNPCInteract(npcId, player);
-                            }
-                        }
-                    });
-                }
-            }
-        } catch (Exception e) {
-            getLogger().warning("订阅RPGCore事件失败: " + e.getMessage());
+    /**
+     * NPC交互事件监听（使用 Bukkit 事件系统）
+     * 已迁移：从 RPGCore EventBus 迁移到 Bukkit @EventHandler
+     */
+    @org.bukkit.event.EventHandler
+    public void onNPCInteract(cn.guangdian.rpgcore.event.events.NPCInteractEvent event) {
+        if (questEventListener != null) {
+            questEventListener.onNPCInteract(event.getNpcId(), event.getPlayer());
         }
     }
 

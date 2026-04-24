@@ -970,11 +970,11 @@ public class StatsManager {
 
     /**
      * 移除颜色代码
-     * @deprecated 使用 {@link TextStripper#stripLegacyColors(String)} 替代
+     * @deprecated 使用 {@link TextStripper#stripLegacy(String)} 替代
      */
     @Deprecated(since = "1.2.1", forRemoval = true)
     private String stripColor(String input) {
-        return TextStripper.stripLegacyColors(input);
+        return TextStripper.stripLegacy(input);
     }
 
     public void applyMaxHealth(Player player, PlayerStats stats, double savedHealth, double savedMaxHealth) {

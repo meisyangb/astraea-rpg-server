@@ -1,4 +1,4 @@
-﻿# RPGCore 核心配置
+# RPGCore 核心配置
 
 # ==================== 数据库配置 ====================
 database:
@@ -60,6 +60,13 @@ monitor:
 debug:
   # 是否启用调试模式
   enabled: false
-  
+
   # 是否记录详细日志
   verbose: false
+
+# ==================== 高级配置 ====================
+# 以下配置用于启用实验性功能，请谨慎修改
+advanced:
+  # 是否使用 MBassador 事件总线（高性能，注解驱动）
+  # 注意：启用后需要使用 @Handler 注解订阅事件
+  use-mbassador-eventbus: false

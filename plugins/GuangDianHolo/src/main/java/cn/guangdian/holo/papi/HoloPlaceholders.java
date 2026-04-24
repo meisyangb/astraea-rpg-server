@@ -54,5 +54,9 @@ public class HoloPlaceholders {
     }
 
     public void unregister() {
+        PlaceholderService service = PlaceholderService.getInstance();
+        if (service != null) {
+            service.unregister("gdholo");
+        }
     }
 }

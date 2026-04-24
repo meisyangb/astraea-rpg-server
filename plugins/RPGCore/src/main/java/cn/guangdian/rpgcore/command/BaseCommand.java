@@ -1,6 +1,6 @@
 package cn.guangdian.rpgcore.command;
 
-import cn.guangdian.rpgcore.message.UnifiedMessageService;
+import cn.guangdian.rpgcore.message.MessageServiceImpl;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +40,7 @@ import java.util.List;
  */
 public abstract class BaseCommand {
 
-    protected final UnifiedMessageService msg = UnifiedMessageService.getInstance();
+    protected final MessageServiceImpl msg = MessageServiceImpl.getInstance();
 
     /**
      * 获取子命令方法 (通过注解查找)
@@ -74,11 +74,11 @@ public abstract class BaseCommand {
     public void showHelp(@NotNull CommandSender sender) {
         CommandInfo info = getClass().getAnnotation(CommandInfo.class);
         if (info == null) {
-            msg.sendMessage(sender, "<red>命令配置错误!");
+            msg.sendError(sender, "命令配置错误!");
             return;
         }
 
-        msg.sendMessage(sender, "<gold>========== " + info.description() + " ==========");
+        msg.send(sender, "<gold>========== " + info.description() + " ==========");
 
         for (Method method : getSubCommandMethods()) {
             SubCommand subCmd = method.getAnnotation(SubCommand.class);
@@ -92,10 +92,10 @@ public abstract class BaseCommand {
             String commandText = "<yellow>/" + info.name() + " " + subCmd.name();
             String descriptionText = desc != null ? " <gray>- " + desc.value() : "";
 
-            msg.sendMessage(sender, commandText + descriptionText);
+            msg.send(sender, commandText + descriptionText);
         }
 
-        msg.sendMessage(sender, "<gold>==================================");
+        msg.send(sender, "<gold>==================================");
     }
 
     /**

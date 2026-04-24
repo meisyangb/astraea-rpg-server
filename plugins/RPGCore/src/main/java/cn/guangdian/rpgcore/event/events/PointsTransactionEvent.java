@@ -1,28 +1,37 @@
 package cn.guangdian.rpgcore.event.events;
 
-import cn.guangdian.rpgcore.event.CoreEvent;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 import java.util.UUID;
 
 /**
- * 点券交易事件
- * 
- * <p>当玩家点券余额变化时触发此事件，其他插件可以订阅此事件来做响应处理。</p>
- * 
+ * 点券交易事件 - Bukkit 原生事件
+ *
+ * <p>当玩家点券余额变化时触发此事件，其他插件可以通过 @EventHandler 监听此事件。</p>
+ *
  * <h3>使用示例：</h3>
  * <pre>{@code
- * // 订阅事件
- * eventBus.subscribe(PointsTransactionEvent.class, event -> {
+ * // 监听事件
+ * @EventHandler
+ * public void onPointsTransaction(PointsTransactionEvent event) {
  *     if (event.getTransactionType() == TransactionType.TRANSFER) {
  *         getLogger().info("玩家 " + event.getPlayerId() + " 转账 " + event.getAmount() + " 点券");
  *     }
- * });
+ * }
+ *
+ * // 发布事件
+ * Bukkit.getPluginManager().callEvent(new PointsTransactionEvent(
+ *     playerId, TransactionType.DEPOSIT, amount, before, after, "充值"
+ * ));
  * }</pre>
- * 
+ *
  * @author GuangDian
- * @since 1.0.0
+ * @since 2.0.0
  */
-public class PointsTransactionEvent extends CoreEvent {
+public class PointsTransactionEvent extends Event {
+
+    private static final HandlerList HANDLERS = new HandlerList();
 
     /**
      * 交易类型
@@ -52,7 +61,7 @@ public class PointsTransactionEvent extends CoreEvent {
 
     /**
      * 创建点券交易事件
-     * 
+     *
      * @param playerId 玩家UUID
      * @param transactionType 交易类型
      * @param amount 金额
@@ -60,15 +69,15 @@ public class PointsTransactionEvent extends CoreEvent {
      * @param balanceAfter 变更后余额
      * @param reason 原因
      */
-    public PointsTransactionEvent(UUID playerId, TransactionType transactionType, 
-                                   long amount, long balanceBefore, long balanceAfter, 
+    public PointsTransactionEvent(UUID playerId, TransactionType transactionType,
+                                   long amount, long balanceBefore, long balanceAfter,
                                    String reason) {
         this(playerId, transactionType, amount, balanceBefore, balanceAfter, reason, null);
     }
 
     /**
      * 创建点券交易事件（带关联玩家）
-     * 
+     *
      * @param playerId 玩家UUID
      * @param transactionType 交易类型
      * @param amount 金额
@@ -77,10 +86,9 @@ public class PointsTransactionEvent extends CoreEvent {
      * @param reason 原因
      * @param relatedPlayerId 关联玩家UUID（转账时使用）
      */
-    public PointsTransactionEvent(UUID playerId, TransactionType transactionType, 
-                                   long amount, long balanceBefore, long balanceAfter, 
+    public PointsTransactionEvent(UUID playerId, TransactionType transactionType,
+                                   long amount, long balanceBefore, long balanceAfter,
                                    String reason, UUID relatedPlayerId) {
-        super(false); // 同步事件
         this.playerId = playerId;
         this.transactionType = transactionType;
         this.amount = amount;
@@ -88,6 +96,15 @@ public class PointsTransactionEvent extends CoreEvent {
         this.balanceAfter = balanceAfter;
         this.reason = reason;
         this.relatedPlayerId = relatedPlayerId;
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return HANDLERS;
+    }
+
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
     }
 
     /**
@@ -143,7 +160,7 @@ public class PointsTransactionEvent extends CoreEvent {
      * 检查是否为转账交易
      */
     public boolean isTransfer() {
-        return transactionType == TransactionType.TRANSFER_OUT || 
+        return transactionType == TransactionType.TRANSFER_OUT ||
                transactionType == TransactionType.TRANSFER_IN;
     }
 
@@ -151,7 +168,7 @@ public class PointsTransactionEvent extends CoreEvent {
      * 检查是否为增加余额
      */
     public boolean isDeposit() {
-        return transactionType == TransactionType.DEPOSIT || 
+        return transactionType == TransactionType.DEPOSIT ||
                transactionType == TransactionType.TRANSFER_IN;
     }
 
@@ -159,7 +176,7 @@ public class PointsTransactionEvent extends CoreEvent {
      * 检查是否为扣除余额
      */
     public boolean isWithdraw() {
-        return transactionType == TransactionType.WITHDRAW || 
+        return transactionType == TransactionType.WITHDRAW ||
                transactionType == TransactionType.TRANSFER_OUT;
     }
 

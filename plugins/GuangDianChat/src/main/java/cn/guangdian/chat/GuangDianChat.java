@@ -1,6 +1,9 @@
 package cn.guangdian.chat;
 
+import cn.guangdian.chat.command.ChatCommand;
+import cn.guangdian.chat.command.LegacyChatCommand;
 import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.command.CommandFramework;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
@@ -31,7 +34,16 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
-public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCompleter {
+/**
+ * 光点聊天插件 - GuangDianChat
+ *
+ * <p>提供自定义聊天格式、世界别名、LuckPerms 前缀集成等功能。</p>
+ * <p>使用 RPGCore CommandFramework 作为命令系统。</p>
+ *
+ * @author GuangDian
+ * @since 1.0.0
+ */
+public class GuangDianChat extends AbstractRPGPlugin implements Listener {
 
     private static final Pattern URL_PATTERN = Pattern.compile("(?i)(https?://|www\\.)\\S+");
     private static final int LUCKPERMS_CACHE_DURATION_SECONDS = 30;
@@ -47,6 +59,9 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
     // RPGCore 服务引用 - 优先使用 RPGCore，本地实现作为降级
     private MiniMessageService miniMessage;
     private MiniMessage miniMessageParser;
+
+    // RPGCore CommandFramework
+    private ChatCommand chatCommand;
 
     private static class CachedLuckPermsMeta {
         final String prefix;
@@ -81,7 +96,7 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
 
         loadWorldAliases();
         registerEvents();
-        registerCommands();
+        initCommandFramework();
         startLuckPermsCleanupTask();
 
         // 注册 RPGCore 服务适配器
@@ -125,6 +140,43 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
         }
     }
 
+    /**
+     * 初始化 RPGCore CommandFramework
+     */
+    private void initCommandFramework() {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            try {
+                CommandFramework framework = CommandFramework.getInstance();
+
+                // 注册 gdchat 命令
+                chatCommand = new ChatCommand(this);
+                framework.registerCommand(chatCommand);
+
+                getLogger().info("已注册 CommandFramework 命令");
+            } catch (Exception e) {
+                getLogger().warning("注册 CommandFramework 命令失败: " + e.getMessage());
+                initLegacyCommands();
+            }
+        } else {
+            // 降级处理：使用传统命令注册
+            getLogger().warning("RPGCore 未加载，使用传统命令注册方式");
+            initLegacyCommands();
+        }
+    }
+
+    /**
+     * 传统命令注册方式 (降级处理)
+     */
+    private void initLegacyCommands() {
+        if (getCommand("gdchat") != null) {
+            LegacyChatCommand legacyCommand = new LegacyChatCommand(this);
+            getCommand("gdchat").setExecutor(legacyCommand);
+            getCommand("gdchat").setTabCompleter(legacyCommand);
+            getLogger().info("已注册传统命令处理器");
+        }
+    }
+
     @Override
     protected void onPluginDisable() {
         if (chatServiceAdapter != null) {
@@ -135,12 +187,12 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
         }
         getLogger().info("GuangDianChat disabled.");
     }
-    
+
     @Override
     protected String getPluginName() {
         return "GuangDianChat";
     }
-    
+
     private void startLuckPermsCleanupTask() {
         if (externalServices == null) return;
         scheduler.runAsyncRepeating(() -> {
@@ -150,7 +202,7 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
             );
         }, LUCKPERMS_CACHE_DURATION_SECONDS * 2 * 20L, LUCKPERMS_CACHE_DURATION_SECONDS * 2 * 20L);
     }
-    
+
     /**
      * 刷新玩家缓存
      */
@@ -158,7 +210,10 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
         luckPermsCache.remove(playerId);
     }
 
-    private void loadWorldAliases() {
+    /**
+     * 加载世界别名配置
+     */
+    public void loadWorldAliases() {
         worldAliases.clear();
         ConfigurationSection section = config.getConfigurationSection("world-aliases");
         if (section == null) {
@@ -171,13 +226,6 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
 
     private void registerEvents() {
         Bukkit.getPluginManager().registerEvents(this, this);
-    }
-
-    private void registerCommands() {
-        if (getCommand("gdchat") != null) {
-            getCommand("gdchat").setExecutor(this);
-            getCommand("gdchat").setTabCompleter(this);
-        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -229,7 +277,7 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
         }
 
         event.message(Component.text(decoratedMessage));
-        
+
         event.setCancelled(true);
         Component chatComponent = miniMessage.colorize(format);
         for (Player recipient : player.getWorld().getPlayers()) {
@@ -383,7 +431,7 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
         replaceAll(sb, "%world%", worldName);
         replaceAll(sb, "%online%", String.valueOf(Bukkit.getOnlinePlayers().size()));
         replaceAll(sb, "%max_players%", String.valueOf(Bukkit.getMaxPlayers()));
-        
+
         String prefix = cachedMeta != null ? cachedMeta.prefix : "";
         replaceAll(sb, "%luckperms_prefix%", prefix != null ? prefix : "");
         String suffix = cachedMeta != null && cachedMeta.primaryGroup != null ? cachedMeta.primaryGroup : "default";
@@ -394,7 +442,7 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
         if (externalServices != null && externalServices.isPlaceholderAPIEnabled()) {
             result = externalServices.parsePlaceholders(player, result);
         }
-        
+
         return result;
     }
 
@@ -439,85 +487,7 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
         return cached != null ? cached.primaryGroup : "default";
     }
 
-    /**
-     * 使用 MiniMessage 解析颜色代码
-     * 将 & 颜色代码转换为 MiniMessage 格式
-     */
-    private String color(String input) {
-        if (input == null) return "";
-        // 将传统 & 颜色代码转换为 MiniMessage 格式
-        return input
-            .replace("<black>", "<black>").replace("<dark_blue>", "<dark_blue>")
-            .replace("<dark_green>", "<dark_green>").replace("<dark_aqua>", "<dark_aqua>")
-            .replace("<dark_red>", "<dark_red>").replace("<dark_purple>", "<dark_purple>")
-            .replace("<gold>", "<gold>").replace("<gray>", "<gray>")
-            .replace("<dark_gray>", "<dark_gray>").replace("<blue>", "<blue>")
-            .replace("<green>", "<green>").replace("<aqua>", "<aqua>")
-            .replace("<red>", "<red>").replace("<light_purple>", "<light_purple>")
-            .replace("<yellow>", "<yellow>").replace("<white>", "<white>")
-            .replace("<obfuscated>", "<obfuscated>").replace("<bold>", "<bold>")
-            .replace("<strikethrough>", "<strikethrough>").replace("<underlined>", "<underlined>")
-            .replace("<italic>", "<italic>").replace("<reset>", "<reset>");
-    }
-
-    /**
-     * 发送 MiniMessage 格式的消息给 CommandSender
-     */
-    private void sendMessage(CommandSender sender, String text) {
-        sender.sendMessage(miniMessage.colorize(text));
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!command.getName().equalsIgnoreCase("gdchat")) {
-            return false;
-        }
-
-        if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
-            sendMessage(sender, "<gold>/gdchat reload <gray>Reload config");
-            sendMessage(sender, "<gold>/gdchat info <gray>Plugin info");
-            return true;
-        }
-
-        if (args[0].equalsIgnoreCase("reload")) {
-            if (!sender.hasPermission("guangdian.chat.admin")) {
-                sendMessage(sender, config.getString("messages.no-permission", "<red>No permission."));
-                return true;
-            }
-            reloadConfig();
-            config = getConfig();
-            loadWorldAliases();
-            luckPermsCache.clear();
-            sendMessage(sender, config.getString("messages.config-reloaded", "<green>GuangDianChat reloaded."));
-            return true;
-        }
-
-        if (args[0].equalsIgnoreCase("info")) {
-            sendMessage(sender, "<gold>GuangDianChat <gray>v" + getDescription().getVersion());
-            if (externalServices != null) {
-                sendMessage(sender, "<yellow>External Services: <white>" + externalServices.getExternalServiceStatus());
-            } else {
-                sendMessage(sender, "<yellow>External Services: <red>not connected");
-            }
-            sendMessage(sender, "<yellow>Chat range: <white>" + config.getInt("settings.chat-range", 0));
-            sendMessage(sender, "<yellow>Global prefix: <white>" + config.getString("settings.global-prefix", "!"));
-            sendMessage(sender, "<yellow>LuckPerms cache: <white>" + luckPermsCache.size() + " entries");
-            return true;
-        }
-
-        return true;
-    }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        List<String> completions = new ArrayList<>();
-        if (args.length == 1) {
-            completions.add("reload");
-            completions.add("info");
-            completions.add("help");
-        }
-        return completions;
-    }
+    // ==================== 公共 API 方法 ====================
 
     public static GuangDianChat getInstance() {
         return instance;
@@ -533,5 +503,31 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
 
     public String getGroup(Player player) {
         return getPrimaryGroup(player);
+    }
+
+    /**
+     * 检查外部服务是否可用
+     */
+    public boolean isExternalServicesAvailable() {
+        return externalServices != null;
+    }
+
+    /**
+     * 获取 LuckPerms 缓存大小
+     */
+    public int getLuckPermsCacheSize() {
+        return luckPermsCache.size();
+    }
+
+    /**
+     * 清空 LuckPerms 缓存
+     */
+    public void clearLuckPermsCache() {
+        luckPermsCache.clear();
+    }
+
+    @Override
+    public FileConfiguration getConfig() {
+        return config;
     }
 }

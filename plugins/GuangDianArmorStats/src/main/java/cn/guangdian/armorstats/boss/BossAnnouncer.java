@@ -117,8 +117,8 @@ public class BossAnnouncer implements Listener {
         String bossName = stats.getDisplayName() != null ? stats.getDisplayName() : boss.getCustomName();
         if (bossName == null) bossName = boss.getType().name();
 
-        // 移除颜色代码获取纯文本名称
-        String plainName = TextStripper.stripAll(bossName);
+        // 剥离传统颜色代码（& 和 §），用于MythicMobs BOSS名称显示
+        String plainName = TextStripper.stripLegacy(bossName);
 
         // 发送 Title - 使用 RPGCore MiniMessageService
         Component title = miniMessageParser.deserialize("<green><bold>胜利!");
@@ -155,7 +155,8 @@ public class BossAnnouncer implements Listener {
         String bossName = stats.getDisplayName() != null ? stats.getDisplayName() : boss.getCustomName();
         if (bossName == null) bossName = boss.getType().name();
 
-        String plainName = TextStripper.stripAll(bossName);
+        // 剥离传统颜色代码（& 和 §），用于MythicMobs BOSS名称显示
+        String plainName = TextStripper.stripLegacy(bossName);
 
         String titleText;
         String subtitleText;
@@ -200,7 +201,8 @@ public class BossAnnouncer implements Listener {
         String bossName = stats.getDisplayName() != null ? stats.getDisplayName() : boss.getCustomName();
         if (bossName == null) bossName = boss.getType().name();
 
-        String plainName = TextStripper.stripAll(bossName);
+        // 剥离传统颜色代码（& 和 §），用于MythicMobs BOSS名称显示
+        String plainName = TextStripper.stripLegacy(bossName);
 
         // 使用 RPGCore Scheduler
         if (plugin.isRPGCoreEnabled() && plugin.getRPGCoreScheduler() != null) {

@@ -312,16 +312,11 @@ public class QuestManager {
 
     private void publishQuestEvent(UUID playerId, String questId, String action) {
         try {
-            cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
-            if (rpgCore == null) return;
-            cn.guangdian.rpgcore.api.EventBus eventBus = rpgCore.getEventBus();
-            if (eventBus == null) return;
-
             Quest quest = getQuest(questId);
             String questName = quest != null ? quest.getName() : questId;
             String questType = quest != null ? quest.getType().name() : "UNKNOWN";
 
-            cn.guangdian.rpgcore.event.events.RpgQuestEvent event = null;
+            org.bukkit.event.Event event = null;
             switch (action) {
                 case "ACCEPT" -> event = new cn.guangdian.rpgcore.event.events.RpgQuestEvent.Accept(playerId, questId, questName, questType);
                 case "COMPLETE" -> event = new cn.guangdian.rpgcore.event.events.RpgQuestEvent.Complete(playerId, questId, questName, questType);
@@ -329,7 +324,7 @@ public class QuestManager {
             }
 
             if (event != null) {
-                eventBus.publish(event);
+                org.bukkit.Bukkit.getPluginManager().callEvent(event);
             }
         } catch (Exception e) {
             plugin.getLogger().fine("发布任务事件失败: questId=" + questId + ", action=" + action + ", error=" + e.getMessage());
