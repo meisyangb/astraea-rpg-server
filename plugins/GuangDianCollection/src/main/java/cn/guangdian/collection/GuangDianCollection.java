@@ -54,7 +54,7 @@ public class GuangDianCollection extends AbstractRPGPlugin {
         }
         
         if (placeholder != null) {
-            me.clip.placeholderapi.PlaceholderAPI.unregisterExpansion(placeholder);
+            placeholder.unregister();
         }
         
         getLogger().info("图鉴收集系统已关闭");

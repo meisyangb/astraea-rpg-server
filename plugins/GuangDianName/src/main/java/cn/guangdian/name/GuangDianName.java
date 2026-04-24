@@ -4,6 +4,7 @@ import cn.guangdian.name.adapter.DisplayServiceAdapter;
 import cn.guangdian.name.lifecycle.NameDataHandler;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
+import cn.guangdian.rpgcore.command.CommandFramework;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.Bukkit;
@@ -41,6 +42,7 @@ public class GuangDianName extends AbstractRPGPlugin implements Listener {
     private NamePlaceholder namePlaceholder;
     private DisplayServiceAdapter displayServiceAdapter;
     private MiniMessageService miniMessage;
+    private CommandFramework commandFramework;
     private long joinTaskId = -1;
     private long respawnTaskId = -1;
     

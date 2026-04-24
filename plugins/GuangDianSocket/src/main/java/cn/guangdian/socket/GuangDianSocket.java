@@ -1,12 +1,14 @@
 package cn.guangdian.socket;
 
+import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.api.ServiceRegistry;
+import cn.guangdian.rpgcore.command.CommandFramework;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.socket.command.SocketCommand;
 import cn.guangdian.socket.listener.SocketListener;
 import cn.guangdian.socket.manager.SocketService;
 import cn.guangdian.socket.parser.SocketParser;
 import cn.guangdian.socket.storage.GemStorage;
-import org.bukkit.command.PluginCommand;
 
 /**
  * GuangDianSocket - 宝石镶嵌插件
@@ -31,6 +33,7 @@ public class GuangDianSocket extends AbstractRPGPlugin {
     private static GuangDianSocket instance;
     private GemStorage gemStorage;
     private SocketService socketService;
+    private CommandFramework commandFramework;
 
     @Override
     protected void onPluginEnable() {
@@ -54,11 +57,8 @@ public class GuangDianSocket extends AbstractRPGPlugin {
         // 注册监听器
         getServer().getPluginManager().registerEvents(new SocketListener(this), this);
 
-        // 注册命令
-        PluginCommand socketCmd = getCommand("socket");
-        if (socketCmd != null) {
-            socketCmd.setExecutor(new SocketCommand(this));
-        }
+        // 初始化 RPGCore CommandFramework
+        initCommandFramework();
 
         // 注册服务到 RPGCore
         if (rpgCore != null) {
@@ -67,6 +67,36 @@ public class GuangDianSocket extends AbstractRPGPlugin {
 
         getLogger().info("GuangDianSocket 已启动 - 宝石镶嵌系统就绪");
         getLogger().info("宝石数据存储: PDC (PersistentDataContainer)");
+    }
+    
+    /**
+     * 初始化 RPGCore CommandFramework
+     */
+    private void initCommandFramework() {
+        if (rpgCore != null) {
+            ServiceRegistry registry = rpgCore.getServiceRegistry();
+            if (registry.hasService(CommandFramework.class)) {
+                commandFramework = registry.getService(CommandFramework.class);
+                commandFramework.registerCommand(new SocketCommand(this));
+                getLogger().info("已注册 RPGCore CommandFramework 命令");
+            } else {
+                getLogger().warning("CommandFramework 不可用，使用备用命令注册");
+                registerCommandsFallback();
+            }
+        } else {
+            getLogger().warning("RPGCore 不可用，使用备用命令注册");
+            registerCommandsFallback();
+        }
+    }
+    
+    /**
+     * 备用命令注册（当 RPGCore 不可用时）
+     */
+    private void registerCommandsFallback() {
+        org.bukkit.command.PluginCommand socketCmd = getCommand("socket");
+        if (socketCmd != null) {
+            socketCmd.setExecutor(new SocketCommand(this));
+        }
     }
 
     @Override
