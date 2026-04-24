@@ -126,9 +126,8 @@ public class GuangDianName extends AbstractRPGPlugin implements Listener {
     private void registerPlaceholderAPI() {
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             namePlaceholder = new NamePlaceholder(this, nameDisplayManager);
-            if (namePlaceholder.register()) {
-                getLogger().info("已注册 PlaceholderAPI 扩展");
-            }
+            namePlaceholder.register();
+            getLogger().info("已注册 PlaceholderAPI 扩展");
         }
     }
     

@@ -30,7 +30,6 @@ import org.bukkit.scoreboard.Scoreboard;
 import cn.guangdian.board.adapter.BoardServiceAdapter;
 import cn.guangdian.board.lifecycle.BoardDataHandler;
 import cn.guangdian.board.placeholder.BoardPlaceholder;
-import me.clip.placeholderapi.PlaceholderAPI;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -274,7 +273,7 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
         
         // 注销 PlaceholderAPI 扩展
         if (boardPlaceholder != null) {
-            PlaceholderAPI.unregisterExpansion(boardPlaceholder);
+            boardPlaceholder.unregister();
         }
         
         stopTasks();
