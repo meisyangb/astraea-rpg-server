@@ -190,50 +190,81 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
 
     @Override
     public void onDisable() {
+        // 1. 停止接受新任务
         if (asyncExecutor != null) {
             asyncExecutor.shutdown();
             asyncExecutor.awaitTermination(30, TimeUnit.SECONDS);
         }
 
+        // 2. 清理服务注册表
         if (serviceRegistry instanceof SimpleServiceRegistry ssr) {
             ssr.clear();
         }
+        
+        // 3. 清理缓存
         if (cacheProvider != null) {
             cacheProvider.clear();
         }
+        
+        // 4. 清理离线玩家缓存
+        cn.guangdian.rpgcore.util.OfflinePlayerCache.clearCache();
+        
+        // 5. 释放锁
         if (lockManager != null) {
             lockManager.releaseAllLocks();
         }
+        
+        // 6. 关闭外部服务集成
         if (externalServices instanceof ExternalServiceIntegrationImpl esi) {
             esi.shutdown();
         }
+        
+        // 7. 关闭调度器
         if (scheduler instanceof UnifiedSchedulerImpl usi) {
             usi.shutdown();
         }
+        
+        // 8. 关闭 HTTP 客户端
         if (httpClient instanceof HttpClientImpl hci) {
             hci.shutdown();
         }
+        
+        // 9. 关闭文本显示服务
         if (textDisplayService instanceof TextDisplayServiceImpl tdsi) {
             tdsi.shutdown();
         }
+        
+        // 10. 关闭 GUI 管理器
+        cn.guangdian.rpgcore.gui.GUIManager guiManager = cn.guangdian.rpgcore.gui.GUIManager.getInstance();
+        if (guiManager.isInitialized()) {
+            guiManager.shutdown();
+        }
 
+        // 11. 关闭 BossBar 服务
         AdventureBossBarService.getInstance().shutdown();
 
+        // 12. 停止性能监控
         if (performanceMonitor != null) {
             performanceMonitor.stopReportScheduler();
         }
 
+        // 13. 注销生命周期管理器
         if (lifecycleManager != null) {
             lifecycleManager.unregister();
         }
+        
+        // 14. 保存配置
         if (configManager instanceof ConfigManagerImpl cmi) {
             cmi.saveAll();
         }
 
+        // 15. 关闭数据库连接池
         CoreDatabase.shutdown();
 
+        // 记录关闭信息
         logShutdownInfo();
 
+        // 最后清理实例引用
         instance = null;
         getLogger().info("RPGCore disabled!");
     }
