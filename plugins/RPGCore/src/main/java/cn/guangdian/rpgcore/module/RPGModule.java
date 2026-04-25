@@ -316,9 +316,11 @@ public abstract class RPGModule implements Listener {
 
     /**
      * 获取事件总线
+     * @deprecated 已废弃，使用 {@link cn.guangdian.rpgcore.event.EventPublisher} 替代
      */
-    protected EventBus getEventBus() {
-        return getCore().getEventBus();
+    @Deprecated(since = "2.0.0", forRemoval = true)
+    protected cn.guangdian.rpgcore.api.EventBus getEventBus() {
+        return null;
     }
 
     /**

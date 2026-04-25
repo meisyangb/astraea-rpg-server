@@ -52,16 +52,27 @@ public final class ServerService {
         
         // 延迟重启
         Bukkit.getAsyncScheduler().runDelayed(plugin, (task) -> {
-            // 保存所有数据
-            Bukkit.getScheduler().runTask(plugin, () -> {
-                Bukkit.savePlayers();
-                for (org.bukkit.World world : Bukkit.getWorlds()) {
-                    world.save();
-                }
-                
-                // 执行重启
-                Bukkit.getScheduler().runTask(plugin, this::executeRestart);
-            });
+            // 保存所有数据 - 使用 RPGCore SyncScheduler
+            RPGCore rpgCore = RPGCore.getInstance();
+            if (rpgCore != null) {
+                rpgCore.getScheduler().runSync(() -> {
+                    Bukkit.savePlayers();
+                    for (org.bukkit.World world : Bukkit.getWorlds()) {
+                        world.save();
+                    }
+                    // 执行重启
+                    executeRestart();
+                });
+            } else {
+                // 降级：使用 Bukkit 调度器
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    Bukkit.savePlayers();
+                    for (org.bukkit.World world : Bukkit.getWorlds()) {
+                        world.save();
+                    }
+                    executeRestart();
+                });
+            }
         }, 5, TimeUnit.SECONDS);
     }
     

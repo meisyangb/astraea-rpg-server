@@ -13,6 +13,9 @@ import java.util.regex.Pattern;
 /**
  * 轻量级缓存实现（适用于中小型服务器）
  *
+ * <p><b>⚠️ 已废弃：</b>推荐使用 {@link CaffeineCacheProvider}，Caffeine 是业界成熟的缓存库，
+ * 性能更优、功能更完善（自动过期、LRU、统计、并发安全）。</p>
+ *
  * <p>专为低并发、中小规模场景设计，追求简单高效。</p>
  *
  * <h3>性能特性：</h3>
@@ -32,7 +35,10 @@ import java.util.regex.Pattern;
  *
  * @author GuangDian
  * @since 1.0.0
+ * @deprecated 使用 {@link CaffeineCacheProvider} 替代。Caffeine 提供更好的性能和更完善的功能。
+ * @see CaffeineCacheProvider
  */
+@Deprecated(since = "2.0.0", forRemoval = false)
 public class LightweightCacheProvider implements CacheProvider {
 
     // 单一数据结构 - 无锁读取

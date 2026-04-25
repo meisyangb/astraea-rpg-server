@@ -5,9 +5,12 @@ import cn.guangdian.rpgcore.event.CoreEvent;
 import java.util.UUID;
 
 /**
- * 玩家数据加载事件
+ * 玩家数据加载事件 - RPGCore 基础设施事件
  * 
- * <p>当玩家数据从存储加载完成时触发。</p>
+ * <p>当玩家数据从存储加载完成时触发。这是 RPGCore 的核心基础设施事件，
+ * 用于通知其他模块数据加载状态。</p>
+ * 
+ * <p><strong>注意：</strong>这是 RPGCore 基础设施事件，不应迁移到其他插件。</p>
  * 
  * @author GuangDian
  * @since 1.0.0

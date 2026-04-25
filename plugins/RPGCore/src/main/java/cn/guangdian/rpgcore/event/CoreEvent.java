@@ -1,14 +1,18 @@
 package cn.guangdian.rpgcore.event;
 
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+
 /**
  * 核心事件基类 - 所有 RPGCore 事件的父类
  * 
- * <p>CoreEvent 是 RPGCore 事件系统的核心类，所有自定义事件都应继承此类。
- * 支持异步事件和事件取消。</p>
+ * <p>CoreEvent 继承 Bukkit Event，实现与 Bukkit 事件系统的完全兼容。
+ * 所有自定义事件都应继承此类。</p>
  * 
  * <h3>使用示例：</h3>
  * <pre>{@code
  * public class PointsChangeEvent extends CoreEvent {
+ *     private static final HandlerList HANDLERS = new HandlerList();
  *     private final UUID playerId;
  *     private final long oldBalance;
  *     private final long newBalance;
@@ -20,6 +24,15 @@ package cn.guangdian.rpgcore.event;
  *         this.newBalance = newBalance;
  *     }
  *     
+ *     @Override
+ *     public HandlerList getHandlers() {
+ *         return HANDLERS;
+ *     }
+ *     
+ *     public static HandlerList getHandlerList() {
+ *         return HANDLERS;
+ *     }
+ *     
  *     // getters...
  * }
  * }</pre>
@@ -27,17 +40,14 @@ package cn.guangdian.rpgcore.event;
  * @author GuangDian
  * @since 1.0.0
  */
-public abstract class CoreEvent {
+public abstract class CoreEvent extends Event {
+
+    private static final HandlerList HANDLERS = new HandlerList();
 
     /**
      * 事件是否被取消
      */
     private boolean cancelled = false;
-
-    /**
-     * 是否为异步事件
-     */
-    private final boolean async;
 
     /**
      * 事件时间戳
@@ -57,8 +67,22 @@ public abstract class CoreEvent {
      * @param async 是否为异步事件
      */
     public CoreEvent(boolean async) {
-        this.async = async;
+        super(async);
         this.timestamp = System.currentTimeMillis();
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return HANDLERS;
+    }
+
+    /**
+     * 获取 HandlerList（Bukkit 要求）
+     * 
+     * @return HandlerList 实例
+     */
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
     }
 
     /**
@@ -77,15 +101,6 @@ public abstract class CoreEvent {
      */
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
-    }
-
-    /**
-     * 检查是否为异步事件
-     * 
-     * @return 如果是异步事件返回 true
-     */
-    public boolean isAsync() {
-        return async;
     }
 
     /**
@@ -108,7 +123,7 @@ public abstract class CoreEvent {
 
     @Override
     public String toString() {
-        return String.format("%s{cancelled=%s, async=%s, timestamp=%d}",
-            getEventName(), cancelled, async, timestamp);
+        return String.format("%s{cancelled=%s, timestamp=%d}",
+            getEventName(), cancelled, timestamp);
     }
 }

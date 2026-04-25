@@ -78,8 +78,8 @@ public class RPGCoreModule extends AbstractModule {
         // CacheProvider 由 Provider 提供
         bind(CacheProvider.class).toProvider(() -> rpgCore.getCacheProvider());
 
-        // EventBus 由 Provider 提供
-        bind(EventBus.class).toProvider(() -> rpgCore.getEventBus());
+        // EventBus 已废弃，返回 null
+        // bind(EventBus.class).toProvider(() -> rpgCore.getEventBus());
 
         // ConfigManager 由 Provider 提供
         bind(ConfigManager.class).toProvider(() -> rpgCore.getConfigManager());

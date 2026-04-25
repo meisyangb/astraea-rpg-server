@@ -68,10 +68,12 @@ public final class EventBusSupport {
     /**
      * 获取事件总线
      *
-     * @return 事件总线
+     * @return 事件总线 (已废弃，返回 null)
+     * @deprecated 使用 {@link cn.guangdian.rpgcore.event.EventPublisher} 替代
      */
+    @Deprecated(since = "2.0.0", forRemoval = true)
     public static EventBus getEventBus() {
-        return RPGCore.getInstance().getEventBus();
+        return null;
     }
 
     /**
