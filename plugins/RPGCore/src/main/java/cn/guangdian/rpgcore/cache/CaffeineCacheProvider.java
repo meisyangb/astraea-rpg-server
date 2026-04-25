@@ -16,15 +16,46 @@ public class CaffeineCacheProvider implements CacheProvider {
     private volatile Duration defaultTTL;
 
     public CaffeineCacheProvider(int maxSize, Duration defaultTTL, boolean recordStats) {
+        this(maxSize, defaultTTL, recordStats, false, false, false, Duration.ZERO);
+    }
+
+    public CaffeineCacheProvider(int maxSize, Duration defaultTTL, boolean recordStats,
+                                  boolean weakKeys, boolean weakValues, boolean softValues,
+                                  Duration refreshInterval) {
         this.defaultTTL = defaultTTL;
         this.recordStats = recordStats;
 
         Caffeine<Object, Object> builder = Caffeine.newBuilder()
-                .maximumSize(maxSize)
-                .expireAfterWrite(defaultTTL);
+                .maximumSize(maxSize);
 
+        // 设置过期策略
+        if (defaultTTL != null && !defaultTTL.isZero() && !defaultTTL.isNegative()) {
+            builder.expireAfterWrite(defaultTTL);
+        }
+
+        // 设置刷新间隔
+        if (refreshInterval != null && !refreshInterval.isZero() && !refreshInterval.isNegative()) {
+            builder.refreshAfterWrite(refreshInterval);
+        }
+
+        // 启用统计
         if (recordStats) {
             builder.recordStats();
+        }
+
+        // 启用弱引用键
+        if (weakKeys) {
+            builder.weakKeys();
+        }
+
+        // 启用弱引用值
+        if (weakValues) {
+            builder.weakValues();
+        }
+
+        // 启用软引用值（与弱引用值互斥）
+        if (softValues && !weakValues) {
+            builder.softValues();
         }
 
         this.cache = builder.build();

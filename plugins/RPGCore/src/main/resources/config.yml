@@ -1,21 +1,43 @@
-# RPGCore 核心配置
+﻿# RPGCore 核心配置
+# 版本: 2.0.0
+# 最后更新: 2026-04-25
 
 # ==================== 数据库配置 ====================
 database:
   # 是否启用数据库
   enabled: true
-  
+
   # JDBC 连接 URL
   url: 'jdbc:mysql://localhost:3306/mc_rpg?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8&allowPublicKeyRetrieval=true'
-  
+
   # 数据库用户名
   username: "root"
-  
+
   # 数据库密码
   password: "123456"
-  
-  # 最大连接数（所有插件共享）
-  max-pool-size: 20
+
+  # 连接池配置
+  pool:
+    # 最大连接数（所有插件共享）
+    max-size: 20
+
+    # 最小空闲连接数
+    min-idle: 2
+
+    # 连接超时时间（毫秒）
+    connection-timeout: 30000
+
+    # 空闲连接超时时间（毫秒）
+    idle-timeout: 600000
+
+    # 连接最大生命周期（毫秒）
+    max-lifetime: 1800000
+
+    # 是否启用连接泄漏检测
+    leak-detection-threshold: 60000
+
+    # 连接测试查询
+    connection-test-query: "SELECT 1"
 
 # ==================== 异步执行器配置 ====================
 async:
@@ -23,25 +45,58 @@ async:
   # 建议设置为 CPU 核心数的 2-4 倍
   thread-pool-size: 4
 
+  # 线程池队列容量（0表示无界队列）
+  queue-capacity: 1000
+
+  # 线程保活时间（秒）
+  keep-alive-seconds: 60
+
+  # 是否允许核心线程超时
+  allow-core-thread-timeout: false
+
+  # 线程名称前缀
+  thread-name-prefix: "RPGCore-Async-"
+
 # ==================== 缓存配置 ====================
 cache:
   # 缓存模式
-  # - lightweight: 轻量模式，适用于中小型服务器（在线 < 50，缓存 < 1000）
-  # - high_performance: 高性能模式，适用于大型服务器（在线 > 100，缓存 > 1000）
-  # 
-  # 选择建议：
-  # | 在线玩家数      | 推荐模式           |
-  # |----------------|-------------------|
-  # | < 50           | lightweight       |
-  # | 50-100         | lightweight       |
-  # | > 100          | high_performance  |
-  mode: lightweight
-  
+  # - CAFFEINE: Caffeine 高性能缓存（推荐，适用于所有规模服务器）
+  mode: CAFFEINE
+
   # 缓存最大容量
   max-size: 2000
-  
+
   # 默认缓存过期时间（分钟）
   default-ttl-minutes: 30
+
+  # 是否启用统计信息收集
+  record-stats: true
+
+  # 是否启用弱引用键（有助于垃圾回收）
+  weak-keys: false
+
+  # 是否启用弱引用值
+  weak-values: false
+
+  # 是否启用软引用值（内存不足时优先回收）
+  soft-values: false
+
+  # 刷新间隔（分钟，0表示不自动刷新）
+  refresh-interval-minutes: 0
+
+# ==================== 事件发布器配置 ====================
+event-publisher:
+  # 是否启用性能监控
+  performance-monitoring: true
+
+  # 事件频率限制（每秒最大事件数，0表示不限制）
+  rate-limit: 100
+
+  # 性能警告阈值（毫秒）
+  warning-threshold-ms: 10
+
+  # 严重性能警告阈值（毫秒）
+  critical-threshold-ms: 50
 
 # ==================== 并发控制配置 ====================
 lock:
@@ -52,9 +107,30 @@ lock:
 monitor:
   # 是否启用性能监控
   enabled: true
-  
+
   # 监控数据保留时间（分钟）
   retention-minutes: 60
+
+  # 性能报告输出间隔（分钟，0表示不自动输出）
+  report-interval-minutes: 30
+
+  # 是否启用内存监控
+  memory-monitoring: true
+
+  # 内存警告阈值（MB）
+  memory-warning-threshold-mb: 1024
+
+  # 是否启用TPS监控
+  tps-monitoring: true
+
+  # TPS警告阈值
+  tps-warning-threshold: 18.0
+
+  # 是否记录慢操作（超过阈值的操作）
+  log-slow-operations: true
+
+  # 慢操作阈值（毫秒）
+  slow-operation-threshold-ms: 100
 
 # ==================== 调试配置 ====================
 debug:
@@ -64,9 +140,5 @@ debug:
   # 是否记录详细日志
   verbose: false
 
-# ==================== 高级配置 ====================
-# 以下配置用于启用实验性功能，请谨慎修改
-advanced:
-  # 是否使用 MBassador 事件总线（高性能，注解驱动）
-  # 注意：启用后需要使用 @Handler 注解订阅事件
-  use-mbassador-eventbus: false
+# ==================== 版本信息 ====================
+version: "2.0.0"

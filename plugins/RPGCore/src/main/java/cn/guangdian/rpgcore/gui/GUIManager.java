@@ -76,6 +76,7 @@ public final class GUIManager {
             return;
         }
 
+        // 关闭所有玩家打开的 GUI
         for (Player player : Bukkit.getOnlinePlayers()) {
             GUI gui = listener.getPlayerGUI(player);
             if (gui != null) {
@@ -83,10 +84,15 @@ public final class GUIManager {
             }
         }
 
+        // 清理所有数据
         menus.clear();
         playerOpenMenus.clear();
         listener = null;
         initialized = false;
+        
+        // 清理单例引用，防止类加载器泄漏
+        instance = null;
+        
         logger.info("[GUIManager] 已关闭");
     }
 

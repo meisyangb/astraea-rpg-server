@@ -117,15 +117,20 @@ public class UnifiedSchedulerImpl implements SyncScheduler {
 
     @Override
     public void cancelAllTasks() {
-        for (ScheduledTask task : asyncTasks.values()) {
-            task.cancel();
+        // 使用同步块确保线程安全
+        synchronized (asyncTasks) {
+            for (ScheduledTask task : asyncTasks.values()) {
+                task.cancel();
+            }
+            asyncTasks.clear();
         }
-        asyncTasks.clear();
 
-        for (ScheduledTask task : syncTasks.values()) {
-            task.cancel();
+        synchronized (syncTasks) {
+            for (ScheduledTask task : syncTasks.values()) {
+                task.cancel();
+            }
+            syncTasks.clear();
         }
-        syncTasks.clear();
     }
 
     @Override

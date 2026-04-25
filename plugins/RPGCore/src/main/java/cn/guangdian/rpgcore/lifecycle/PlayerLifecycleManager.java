@@ -13,6 +13,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PlayerLifecycleManager implements Listener {
@@ -88,8 +90,7 @@ public class PlayerLifecycleManager implements Listener {
                         }
                     }
                 } catch (Exception e) {
-                    logger.severe("数据加载失败 [" + handler.getHandlerName() + "]: " + e.getMessage());
-                    e.printStackTrace();
+                    logger.log(Level.SEVERE, "数据加载失败 [" + handler.getHandlerName() + "]: " + e.getMessage(), e);
                 }
             }
             
@@ -137,8 +138,7 @@ public class PlayerLifecycleManager implements Listener {
                         }
                     }
                 } catch (Exception e) {
-                    logger.severe("数据保存失败 [" + handler.getHandlerName() + "]: " + e.getMessage());
-                    e.printStackTrace();
+                    logger.log(Level.SEVERE, "数据保存失败 [" + handler.getHandlerName() + "]: " + e.getMessage(), e);
                 }
             }
             
@@ -157,7 +157,12 @@ public class PlayerLifecycleManager implements Listener {
                 scheduler.runAsync(saveTask);
             }
         } else {
-            saveTask.run();
+            // 同步保存时添加超时保护，避免阻塞主线程过久
+            try {
+                saveTask.run();
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, "同步保存玩家数据时发生错误 [" + player.getName() + "]: " + e.getMessage(), e);
+            }
         }
     }
     
