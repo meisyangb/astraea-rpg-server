@@ -373,8 +373,7 @@ astraea-rpg-server/
 │   ├── world/                      # 世界文件
 │   └── paper-1.21.6.jar            # 服务端核心
 │
-├── tools/                          # 🔧 工具链（不提交）
-│   └── jdk-21.0.10+7/              # JDK 21
+# ❌ tools/                          # 🔧 工具链（已排除，不上传）
 │
 ├── .gitignore                      # Git 忽略配置
 ├── README.md                       # 本文件
