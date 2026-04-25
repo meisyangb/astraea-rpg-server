@@ -1,0 +1,163 @@
+天弃士兵圣剑:
+  Id: 276
+  Display: <aqua>天弃士兵圣剑
+  Lore:
+  - '<dark_aqua>攻击力: <green>60'
+  - <dark_gray>曾是天族士兵的佩剑
+  - <dark_gray>如今已失去圣光
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃战士圣剑:
+  Id: 276
+  Display: <aqua>天弃战士圣剑
+  Lore:
+  - '<dark_aqua>攻击力: <green>75'
+  - <dark_gray>天族战士的荣耀之剑
+  - <dark_gray>被黑暗侵蚀后变得阴冷
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃战将圣剑:
+  Id: 276
+  Display: <light_purple>天弃战将圣剑
+  Lore:
+  - '<dark_aqua>攻击力: <green>90'
+  - <dark_gray>天族战将的指挥之剑
+  - <dark_gray>散发着堕落的气息
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃统领圣剑:
+  Id: 276
+  Display: <dark_purple>天弃统领圣剑
+  Lore:
+  - '<dark_aqua>攻击力: <green>200'
+  - <dark_gray>天族统领的审判之剑
+  - <dark_gray>圣光已逝，黑暗永存
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+呼延觉罗战圣剑:
+  Id: 283
+  Display: <dark_red>呼延觉罗战圣剑
+  Lore:
+  - '<dark_aqua>攻击力: <green>500'
+  - '<dark_aqua>暴击几率: <green>3'
+  - '<dark_aqua>暴击伤害: <green>200'
+  - <dark_gray>呼延觉罗战的佩剑
+  - <dark_gray>曾是天界最神圣的武器
+  - <dark_gray>如今却成为黑暗的象征
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃圣冠:
+  Id: 310
+  Display: <aqua>天弃圣冠
+  Lore:
+  - <dark_gray>天族士兵的头盔
+  - <dark_gray>圣光已逝，只剩空洞
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃圣甲:
+  Id: 311
+  Display: <aqua>天弃圣甲
+  Lore:
+  - <dark_gray>天族士兵的铠甲
+  - <dark_gray>曾被圣光笼罩
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃护腿:
+  Id: 312
+  Display: <aqua>天弃护腿
+  Lore:
+  - <dark_gray>天族士兵的护腿
+  - <dark_gray>残留着神圣的痕迹
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃战靴:
+  Id: 313
+  Display: <aqua>天弃战靴
+  Lore:
+  - <dark_gray>天族士兵的战靴
+  - <dark_gray>踏过无数战场
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃暗冠:
+  Id: 310
+  Display: <dark_purple>天弃暗冠
+  Lore:
+  - <dark_gray>天族统领的冠冕
+  - <dark_gray>被黑暗彻底侵蚀
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃暗甲:
+  Id: 311
+  Display: <dark_purple>天弃暗甲
+  Lore:
+  - <dark_gray>天族统领的铠甲
+  - <dark_gray>散发着堕落的气息
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃暗护腿:
+  Id: 312
+  Display: <dark_purple>天弃暗护腿
+  Lore:
+  - <dark_gray>天族统领的护腿
+  - <dark_gray>黑暗力量在其中涌动
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天弃暗战靴:
+  Id: 313
+  Display: <dark_purple>天弃暗战靴
+  Lore:
+  - <dark_gray>天族统领的战靴
+  - <dark_gray>每一步都踏在绝望之上
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+呼延觉罗战冠:
+  Id: 314
+  Display: <dark_red>呼延觉罗战冠
+  Lore:
+  - <dark_gray>呼延觉罗战的冠冕
+  - <dark_gray>曾是天界的荣耀象征
+  - <dark_gray>如今只剩下无尽的悲愤
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+呼延觉罗战甲:
+  Id: 315
+  Display: <dark_red>呼延觉罗战甲
+  Lore:
+  - <dark_gray>呼延觉罗战的铠甲
+  - <dark_gray>圣光与黑暗交织
+  - <dark_gray>诉说着被遗弃的痛苦
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+呼延觉罗战护腿:
+  Id: 316
+  Display: <dark_red>呼延觉罗战护腿
+  Lore:
+  - <dark_gray>呼延觉罗战的护腿
+  - <dark_gray>承载着千年的悲愤
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+呼延觉罗战战靴:
+  Id: 317
+  Display: <dark_red>呼延觉罗战战靴
+  Lore:
+  - <dark_gray>呼延觉罗战的战靴
+  - <dark_gray>踏遍天弃之城的废墟
+  Options:
+    Unbreakable: true
+    HideAttributes: true

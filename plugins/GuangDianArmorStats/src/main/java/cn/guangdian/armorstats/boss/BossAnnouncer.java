@@ -3,6 +3,7 @@ package cn.guangdian.armorstats.boss;
 import cn.guangdian.armorstats.GuangDianArmorStats;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.sound.SoundService;
+import cn.guangdian.rpgcore.util.TextStripper;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
@@ -116,8 +117,8 @@ public class BossAnnouncer implements Listener {
         String bossName = stats.getDisplayName() != null ? stats.getDisplayName() : boss.getCustomName();
         if (bossName == null) bossName = boss.getType().name();
 
-        // 移除颜色代码获取纯文本名称
-        String plainName = bossName.replaceAll("[&§][0-9a-fk-or]", "");
+        // 剥离传统颜色代码（& 和 §），用于MythicMobs BOSS名称显示
+        String plainName = TextStripper.stripLegacy(bossName);
 
         // 发送 Title - 使用 RPGCore MiniMessageService
         Component title = miniMessageParser.deserialize("<green><bold>胜利!");
@@ -154,7 +155,8 @@ public class BossAnnouncer implements Listener {
         String bossName = stats.getDisplayName() != null ? stats.getDisplayName() : boss.getCustomName();
         if (bossName == null) bossName = boss.getType().name();
 
-        String plainName = bossName.replaceAll("[&§][0-9a-fk-or]", "");
+        // 剥离传统颜色代码（& 和 §），用于MythicMobs BOSS名称显示
+        String plainName = TextStripper.stripLegacy(bossName);
 
         String titleText;
         String subtitleText;
@@ -199,7 +201,8 @@ public class BossAnnouncer implements Listener {
         String bossName = stats.getDisplayName() != null ? stats.getDisplayName() : boss.getCustomName();
         if (bossName == null) bossName = boss.getType().name();
 
-        String plainName = bossName.replaceAll("[&§][0-9a-fk-or]", "");
+        // 剥离传统颜色代码（& 和 §），用于MythicMobs BOSS名称显示
+        String plainName = TextStripper.stripLegacy(bossName);
 
         // 使用 RPGCore Scheduler
         if (plugin.isRPGCoreEnabled() && plugin.getRPGCoreScheduler() != null) {

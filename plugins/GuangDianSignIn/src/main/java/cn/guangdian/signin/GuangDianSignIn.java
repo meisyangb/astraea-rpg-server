@@ -22,6 +22,7 @@ public class GuangDianSignIn extends AbstractRPGPlugin {
         configManager.loadConfig();
         
         dataHandler = new SignInDataHandler(this);
+        dataHandler.initialize();
         if (rpgCore != null) {
             rpgCore.getPlayerLifecycle().registerHandler(dataHandler);
         }
@@ -36,12 +37,8 @@ public class GuangDianSignIn extends AbstractRPGPlugin {
     
     @Override
     protected void onPluginDisable() {
-        if (placeholder != null && externalServices != null && externalServices.isPlaceholderAPIEnabled()) {
-            try {
-                me.clip.placeholderapi.PlaceholderAPI.unregisterExpansion(placeholder);
-            } catch (Exception e) {
-                getLogger().warning("注销占位符失败: " + e.getMessage());
-            }
+        if (placeholder != null) {
+            placeholder.unregister();
         }
         
         if (serviceAdapter != null) {

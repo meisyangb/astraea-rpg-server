@@ -1,0 +1,236 @@
+皮帽:
+  Id: 298
+  Display: <green>皮帽
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+皮甲:
+  Id: 299
+  Display: <green>皮甲
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+皮裤:
+  Id: 300
+  Display: <green>皮裤
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+皮靴:
+  Id: 301
+  Display: <green>皮靴
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+黑皮帽:
+  Id: 298
+  Display: <green>皮帽
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+黑皮甲:
+  Id: 299
+  Display: <green>皮甲
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+皮甲1:
+  Id: 299
+  Display: <green>皮甲
+  Lore:
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+黑皮裤:
+  Id: 300
+  Display: <green>皮裤
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+黑皮靴:
+  Id: 301
+  Display: <green>皮靴
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+锁帽:
+  Id: 302
+  Display: <green>锁帽
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+锁甲:
+  Id: 303
+  Display: <green>锁甲
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+锁裤:
+  Id: 304
+  Display: <green>锁裤
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+锁靴:
+  Id: 305
+  Display: <green>锁靴
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+金帽:
+  Id: 314
+  Display: <green>金帽
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+金甲:
+  Id: 315
+  Display: <green>金甲
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+金裤:
+  Id: 316
+  Display: <green>金裤
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+金靴:
+  Id: 317
+  Display: <green>金靴
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+钻石帽:
+  Id: 310
+  Display: <green>钻石帽
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+钻石甲:
+  Id: 311
+  Display: <green>钻石甲
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+钻石裤:
+  Id: 312
+  Display: <green>钻石裤
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+钻石靴:
+  Id: 313
+  Display: <green>钻石靴
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+钻帽:
+  Id: 310
+  Display: <green>钻帽
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+钻甲:
+  Id: 311
+  Display: <green>钻甲
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+钻裤:
+  Id: 312
+  Display: <green>钻裤
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+钻靴:
+  Id: 313
+  Display: <green>钻靴
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+木剑:
+  Id: 268
+  Display: <green>木剑
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+石剑:
+  Id: 272
+  Display: <green>木剑
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+铁剑:
+  Id: 267
+  Display: <green>木剑
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+金剑:
+  Id: 283
+  Display: <green>木剑
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+钻石剑:
+  Id: 276
+  Display: <green>木剑
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+石斧:
+  Id: 275
+  Display: <green>木剑
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+铁斧:
+  Id: 258
+  Display: <green>木剑
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+金斧:
+  Id: 286
+  Display: <green>木剑
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+钻石斧:
+  Id: 279
+  Display: <green>木剑
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+弓:
+  Id: 261
+  Display: <green>弓
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+铁帽:
+  Id: 306
+  Display: <green>铁帽
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+铁甲:
+  Id: 307
+  Display: <green>铁甲
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+铁裤:
+  Id: 308
+  Display: <green>铁裤
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+铁靴:
+  Id: 309
+  Display: <green>铁靴
+  Options:
+    Unbreakable: true
+    HideAttributes: true

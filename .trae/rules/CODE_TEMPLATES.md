@@ -1,7 +1,7 @@
 # Astraea RPG 代码模板库
 
 > 开发时可直接使用的代码模板
-> **版本: 1.1.0 | 更新: 2026-04-14**
+> **版本: 1.4.0 | 更新: 2026-04-24**
 
 ---
 
@@ -13,39 +13,48 @@
 
 ---
 
-## 1. 插件主类模板
+## 1. 插件主类模板 (v1.4.0 更新)
 
 ```java
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.SyncScheduler;
+import cn.guangdian.rpgcore.api.ServiceRegistry;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.message.MiniMessageService;
+import cn.guangdian.rpgcore.sound.SoundService;
+import cn.guangdian.rpgcore.inject.GuiceSupport;
+import javax.inject.Inject;
 
 public class MyPlugin extends AbstractRPGPlugin {
 
-    protected RPGCore rpgCore;
-    protected SyncScheduler scheduler;
-    protected ExternalServiceIntegration externalServices;
-    protected MiniMessageService miniMessage;
+    // RPGCore 自动注入的字段 (无需手动初始化)
+    // protected RPGCore rpgCore;
+    // protected SyncScheduler scheduler;
+    // protected ExternalServiceIntegration externalServices;
+    
+    // Guice 依赖注入示例
+    @Inject
+    private MyService myService;
 
     @Override
     protected void onPluginEnable() {
-        rpgCore = RPGCore.getInstance();
-        scheduler = rpgCore.getScheduler();
-        externalServices = rpgCore.getExternalServices();
-        miniMessage = MiniMessageService.getInstance();
+        // 必须调用 - 初始化通用服务
+        initCommonServices();
+        
+        // 使用 RPGCore 服务
+        ServiceRegistry registry = rpgCore.getServiceRegistry();
+        
         getLogger().info(getPluginName() + " 已启动");
     }
 
     @Override
     protected void onPluginDisable() {
-        if (scheduler != null) {
-            scheduler.cancelAllTasks();
-        }
-        if (serviceAdapter != null) {
-            serviceAdapter.unregister();
-        }
+        // 确保取消所有任务
+        cancelAllTasks();
+        
+        // 清理资源...
+        
         getLogger().info(getPluginName() + " 已关闭");
     }
 
@@ -125,54 +134,86 @@ public class MyPlaceholder extends PlaceholderExpansion {
 
 ---
 
-## 4. 数据处理器模板
+## 4. 数据处理器模板 (v1.3.0 更新)
 
 ```java
 import cn.guangdian.rpgcore.lifecycle.AbstractPlayerDataHandler;
 import cn.guangdian.rpgcore.RPGCore;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 public class MyDataHandler extends AbstractPlayerDataHandler {
 
-    private final MyPlugin plugin;
     private final Map<UUID, PlayerData> dataCache = new ConcurrentHashMap<>();
 
-    public MyDataHandler(MyPlugin plugin) {
+    public MyDataHandler(JavaPlugin plugin) {
         super(plugin);
-        this.plugin = plugin;
-    }
+        // rpgCore 已由父类初始化
+    }.trae/rules/
+├── kaifa.md                           #
 
     @Override
     protected void onPlayerLoad(Player player) {
-        RPGCore rpgCore = RPGCore.getInstance();
-        if (rpgCore == null) return;
-
-        rpgCore.getScheduler().runAsync(() -> {
-            PlayerData data = loadFromDatabase(player.getUniqueId());
-            rpgCore.getScheduler().runSyncLater(() -> {
-                dataCache.put(player.getUniqueId(), data);
-            }, 0L);
-        });
+        // 此方法在异步线程中调用
+        UUID uuid = player.getUniqueId();
+        try {
+            // 从数据库加载数据
+            PlayerData data = loadFromDatabase(uuid);
+            if (data != null) {
+                dataCache.put(uuid, data);
+            }
+        } catch (Exception e) {
+            // 加载失败处理
+            plugin.getLogger().warning("加载 " + player.getName() + " 数据失败: " + e.getMessage());
+        }
     }
 
     @Override
     protected void onPlayerSave(Player player) {
-        PlayerData data = dataCache.remove(player.getUniqueId());
+        // 此方法在异步线程中调用
+        UUID uuid = player.getUniqueId();
+        PlayerData data = dataCache.get(uuid);
         if (data != null) {
-            RPGCore rpgCore = RPGCore.getInstance();
-            if (rpgCore != null) {
-                rpgCore.getScheduler().runAsync(() -> {
-                    saveToDatabase(player.getUniqueId(), data);
-                });
+            try {
+                saveToDatabase(uuid, data);
+                dataCache.remove(uuid); // 清理缓存
+            } catch (Exception e) {
+                plugin.getLogger().warning("保存 " + player.getName() + " 数据失败: " + e.getMessage());
             }
         }
     }
 
-    @Override public int getPriority() { return 100; }
-    @Override public String getHandlerName() { return "MyData"; }
+    @Override
+    public int getPriority() { 
+        return 100; // 数字越大优先级越高
+    }
+    
+    @Override
+    public String getHandlerName() { 
+        return "MyData"; 
+    }
+    
+    @Override
+    public boolean shouldLoad(Player player) {
+        // 可选：根据条件决定是否加载
+        return player.hasPermission("myplugin.use");
+    }
+    
+    @Override
+    public boolean shouldSave(Player player) {
+        // 可选：根据条件决定是否保存
+        return dataCache.containsKey(player.getUniqueId());
+    }
 }
+
+// 注册处理器 (在插件 onPluginEnable 中)
+// new MyDataHandler(this).register();
+
+// 注销处理器 (在插件 onPluginDisable 中)
+// new MyDataHandler(this).unregister();
 ```
 
 ---
@@ -320,4 +361,466 @@ cacheProvider.clear();
 
 ---
 
-*最后更新: 2026-04-14*
+## 10. RPGModule 业务模块模板 (v1.3.0 新增)
+
+```java
+import cn.guangdian.rpgcore.module.RPGModule;
+import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.api.ServiceRegistry;
+import cn.guangdian.rpgcore.message.MiniMessageService;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class MyModule extends RPGModule {
+
+    private final JavaPlugin plugin;
+    private MiniMessageService miniMessage;
+
+    public MyModule(JavaPlugin plugin) {
+        super("MyModule"); // 模块名称
+        this.plugin = plugin;
+    }
+
+    @Override
+    protected void load() {
+        // 加载阶段：初始化配置、注册服务等
+        // 此阶段插件还未启用，适合轻量初始化
+        plugin.getLogger().info("[MyModule] 加载配置...");
+    }
+
+    @Override
+    protected void enable() {
+        // 启用阶段：注册命令、监听器、启动定时任务等
+        miniMessage = MiniMessageService.getInstance();
+        
+        // 注册服务到 RPGCore ServiceRegistry
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            ServiceRegistry registry = rpgCore.getServiceRegistry();
+            registry.registerService(MyModuleService.class, new MyModuleServiceImpl());
+        }
+        
+        // 注册事件监听器
+        // Bukkit.getPluginManager().registerEvents(new MyListener(), plugin);
+        
+        plugin.getLogger().info("[MyModule] 模块已启用");
+    }
+
+    @Override
+    protected void disable() {
+        // 禁用阶段：取消任务、保存数据、清理资源
+        plugin.getLogger().info("[MyModule] 模块已禁用");
+    }
+
+    @Override
+    protected void destroy() {
+        // 销毁阶段：释放数据库连接、关闭文件句柄等
+        // 此方法在模块禁用后调用，用于彻底清理
+    }
+    
+    public boolean isMiniMessageAvailable() {
+        return miniMessage != null;
+    }
+}
+
+// 模块服务接口
+interface MyModuleService {
+    void doSomething();
+}
+
+// 模块服务实现
+class MyModuleServiceImpl implements MyModuleService {
+    @Override
+    public void doSomething() {
+        // 实现逻辑
+    }
+}
+```
+
+---
+
+## 11. 并发安全模板 (v1.3.0 新增)
+
+```java
+import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.concurrency.PlayerLockManager;
+import cn.guangdian.rpgcore.concurrency.LockTimeoutException;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
+
+public class SafeDataManager {
+    
+    private final PlayerLockManager lockManager;
+    private final Map<UUID, PlayerData> cache = new ConcurrentHashMap<>();
+    
+    public SafeDataManager() {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore == null) {
+            throw new IllegalStateException("RPGCore 未初始化");
+        }
+        this.lockManager = rpgCore.getLockManager();
+    }
+    
+    // 单玩家数据修改
+    public void addPoints(UUID playerUUID, int amount) {
+        try {
+            lockManager.executeWithLock(playerUUID, () -> {
+                PlayerData data = cache.computeIfAbsent(playerUUID, 
+                    uuid -> new PlayerData(uuid));
+                data.addPoints(amount);
+            });
+        } catch (LockTimeoutException e) {
+            // 锁超时处理
+            plugin.getLogger().warning("获取玩家 " + playerUUID + " 锁超时");
+        }
+    }
+    
+    // 多玩家数据修改 (转账、交易等)
+    public boolean transferPoints(UUID from, UUID to, int amount) {
+        try {
+            return lockManager.executeWithDualLock(from, to, () -> {
+                PlayerData fromData = cache.get(from);
+                PlayerData toData = cache.get(to);
+                
+                if (fromData == null || toData == null) {
+                    return false;
+                }
+                
+                if (!fromData.hasPoints(amount)) {
+                    return false;
+                }
+                
+                fromData.removePoints(amount);
+                toData.addPoints(amount);
+                return true;
+            });
+        } catch (LockTimeoutException e) {
+            plugin.getLogger().warning("转账操作锁超时");
+            return false;
+        }
+    }
+    
+    // 带返回值的数据读取
+    public int getPoints(UUID playerUUID) {
+        PlayerData data = cache.get(playerUUID);
+        return data != null ? data.getPoints() : 0;
+    }
+}
+```
+
+---
+
+## 12. 事件总线使用模板 (v1.3.0 新增)
+
+```java
+import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.api.EventBus;
+import cn.guangdian.rpgcore.event.EventHandler;
+import cn.guangdian.rpgcore.event.EventPriority;
+import cn.guangdian.rpgcore.event.CoreEvent;
+
+// 自定义事件
+public class MyCustomEvent extends CoreEvent {
+    private final UUID playerId;
+    private final String action;
+    
+    public MyCustomEvent(UUID playerId, String action) {
+        super();
+        this.playerId = playerId;
+        this.action = action;
+    }
+    
+    public UUID getPlayerId() { return playerId; }
+    public String getAction() { return action; }
+}
+
+// 事件发布者
+public class EventPublisher {
+    
+    private final EventBus eventBus;
+    
+    public EventPublisher() {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            eventBus = rpgCore.getEventBus();
+        }
+    }
+    
+    public void publishEvent(UUID playerId, String action) {
+        if (eventBus != null) {
+            eventBus.publish(new MyCustomEvent(playerId, action));
+        }
+    }
+}
+
+// 事件订阅者
+public class EventSubscriber {
+    
+    private final EventBus eventBus;
+    
+    public EventSubscriber() {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            eventBus = rpgCore.getEventBus();
+            registerHandlers();
+        }
+    }
+    
+    private void registerHandlers() {
+        // 注册事件处理器
+        eventBus.registerHandler(MyCustomEvent.class, new EventHandler<>() {
+            @Override
+            public EventPriority getPriority() {
+                return EventPriority.NORMAL;
+            }
+            
+            @Override
+            public void handle(MyCustomEvent event) {
+                // 处理事件逻辑
+                System.out.println("收到事件: " + event.getPlayerId() + " - " + event.getAction());
+            }
+        });
+    }
+    
+    public void unregister() {
+        if (eventBus != null) {
+            eventBus.unregisterHandler(MyCustomEvent.class, handler);
+        }
+    }
+}
+```
+
+---
+
+## 13. Guice 依赖注入模板 (v1.4.0 新增)
+
+```java
+import cn.guangdian.rpgcore.inject.GuiceSupport;
+import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import javax.inject.Singleton;
+
+// 方式1: 简单绑定
+public class MyPlugin extends AbstractRPGPlugin {
+    @Inject
+    private MyService myService;
+    
+    @Override
+    protected void onPluginEnable() {
+        initCommonServices();
+        
+        // 使用 Guice 注入成员
+        GuiceSupport.injectMembers(this);
+        
+        // 现在 myService 已自动注入
+        myService.doSomething();
+    }
+}
+
+// 方式2: 使用子注入器
+public class MyPlugin extends AbstractRPGPlugin {
+    @Inject
+    private MyService myService;
+    
+    @Override
+    protected void onPluginEnable() {
+        initCommonServices();
+        
+        // 创建子注入器并注入
+        GuiceSupport.childInjector()
+            .with(new MyModule())
+            .inject(this);
+    }
+}
+
+// 方式3: 使用简单绑定（无需创建 Module）
+public class MyPlugin extends AbstractRPGPlugin {
+    @Override
+    protected void onPluginEnable() {
+        initCommonServices();
+        
+        GuiceSupport.createChildInjector(binder -> {
+            binder.bind(MyService.class).to(MyServiceImpl.class).in(Singleton.class);
+            binder.bind(MyRepository.class).to(MyRepositoryImpl.class).in(Singleton.class);
+        }).injectMembers(this);
+    }
+}
+
+// 自定义 Module
+public class MyModule extends AbstractModule {
+    @Override
+    protected void configure() {
+        bind(MyService.class).to(MyServiceImpl.class).in(Singleton.class);
+        bind(MyRepository.class).to(MyRepositoryImpl.class).in(Singleton.class);
+    }
+}
+
+// 服务接口
+public interface MyService {
+    void doSomething();
+}
+
+// 服务实现
+@Singleton
+public class MyServiceImpl implements MyService {
+    @Inject
+    public MyServiceImpl() {
+    }
+    
+    @Override
+    public void doSomething() {
+        // 实现逻辑
+    }
+}
+```
+
+---
+
+## 14. Configurate 配置管理模板 (v1.4.0 新增)
+
+```java
+import cn.guangdian.rpgcore.config.ConfigurateSupport;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+
+// 1. 定义配置类
+@ConfigSerializable
+public class DatabaseConfig {
+    private String host = "localhost";
+    private int port = 3306;
+    private String username = "root";
+    private String password = "";
+    private String database = "minecraft";
+    
+    // Getters
+    public String getHost() { return host; }
+    public int getPort() { return port; }
+    public String getUsername() { return username; }
+    public String getPassword() { return password; }
+    public String getDatabase() { return database; }
+}
+
+// 2. 在插件中使用
+public class MyPlugin extends AbstractRPGPlugin {
+    private ConfigurateSupport<DatabaseConfig> dbConfig;
+    
+    @Override
+    protected void onPluginEnable() {
+        initCommonServices();
+        
+        // 加载配置
+        dbConfig = ConfigurateSupport.builder(DatabaseConfig.class)
+            .file("database.yml")
+            .defaultResource("database-default.yml")  // 可选：默认配置
+            .autoSave()  // 启用自动保存
+            .build();
+        
+        // 使用配置
+        DatabaseConfig config = dbConfig.get();
+        String host = config.getHost();
+        int port = config.getPort();
+    }
+    
+    public void updateConfig() {
+        // 修改配置
+        dbConfig.update(config -> {
+            // 修改配置值（通过反射，实际应该提供 setter）
+        });
+        
+        // 手动保存
+        dbConfig.save();
+    }
+}
+```
+
+---
+
+## 15. SLF4J 日志模板 (v1.4.0 新增)
+
+```java
+import cn.guangdian.rpgcore.logging.LoggerFactory;
+import org.slf4j.Logger;
+
+public class MyService {
+    // 获取日志记录器
+    private static final Logger logger = LoggerFactory.getLogger(MyService.class);
+    
+    public void doSomething() {
+        // 不同级别的日志
+        logger.trace("跟踪信息");
+        logger.debug("调试信息: {}", someData);
+        logger.info("普通信息: 玩家 {} 执行了命令 {}", playerName, command);
+        logger.warn("警告信息");
+        logger.error("错误信息", exception);
+        
+        // 占位符支持（高性能，仅在需要时计算）
+        logger.info("玩家 {} 在位置 ({}, {}, {}) 触发事件", 
+            player.getName(), 
+            location.getX(), 
+            location.getY(), 
+            location.getZ());
+    }
+}
+```
+
+---
+
+## 16. EventBusSupport 事件总线模板 (v1.4.0 新增)
+
+```java
+import cn.guangdian.rpgcore.event.EventBusSupport;
+import cn.guangdian.rpgcore.event.CoreEvent;
+
+// 1. 定义事件
+public class PlayerLevelUpEvent extends CoreEvent {
+    private final Player player;
+    private final int oldLevel;
+    private final int newLevel;
+    
+    public PlayerLevelUpEvent(Player player, int oldLevel, int newLevel) {
+        this.player = player;
+        this.oldLevel = oldLevel;
+        this.newLevel = newLevel;
+    }
+    
+    // Getters
+    public Player getPlayer() { return player; }
+    public int getOldLevel() { return oldLevel; }
+    public int getNewLevel() { return newLevel; }
+}
+
+// 2. 订阅事件
+public class MyListener {
+    public MyListener() {
+        // 订阅事件（普通优先级）
+        EventBusSupport.subscribe(PlayerLevelUpEvent.class, event -> {
+            Player player = event.getPlayer();
+            player.sendMessage("恭喜升级到 " + event.getNewLevel() + " 级！");
+        });
+        
+        // 订阅事件（指定优先级）
+        EventBusSupport.subscribe(PlayerLevelUpEvent.class, 
+            cn.guangdian.rpgcore.event.EventPriority.HIGH, 
+            event -> {
+                // 高优先级处理
+            });
+    }
+}
+
+// 3. 发布事件
+public class LevelSystem {
+    public void levelUp(Player player, int newLevel) {
+        int oldLevel = getPlayerLevel(player);
+        setPlayerLevel(player, newLevel);
+        
+        // 同步发布
+        EventBusSupport.publish(new PlayerLevelUpEvent(player, oldLevel, newLevel));
+        
+        // 异步发布
+        EventBusSupport.publishAsync(new PlayerLevelUpEvent(player, oldLevel, newLevel));
+    }
+}
+```
+
+---
+
+*最后更新: 2026-04-24*

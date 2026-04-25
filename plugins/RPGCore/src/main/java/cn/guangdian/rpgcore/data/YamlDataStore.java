@@ -12,30 +12,43 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * YAML 数据存储工具 - RPGCore 核心工具
+ * YAML 数据存储工具 - 已废弃
  *
- * <p>提供统一的 YAML 文件读写功能，替代各插件重复实现的加载/保存逻辑。</p>
+ * <p><strong>已废弃</strong>：请使用 {@link cn.guangdian.rpgcore.config.ConfigurateSupport} 或
+ * {@link cn.guangdian.rpgcore.config.ConfigurateManager} 替代。</p>
  *
- * <h2>使用示例:</h2>
+ * <p>Configurate 提供类型安全的配置管理，支持自动序列化/反序列化，
+ * 替代手动 Map 操作和 Bukkit YamlConfiguration。</p>
+ *
+ * <h3>迁移示例：</h3>
  * <pre>{@code
+ * // 旧方式（已废弃）
  * YamlDataStore store = YamlDataStore.getInstance();
+ * Map<String, Object> data = store.load(file);
+ * String name = (String) data.get("name");
  *
- * // 保存数据
- * Map<String, Object> data = new HashMap<>();
- * data.put("name", "张三");
- * data.put("level", 10);
- * data.put("balance", 1000L);
- * store.save(new File("data/player.yml"), data);
+ * // 新方式（推荐）
+ * @ConfigSerializable
+ * public class PlayerData {
+ *     private String name;
+ *     private int level;
+ *     // getters...
+ * }
  *
- * // 加载数据
- * Map<String, Object> loaded = store.load(new File("data/player.yml"));
- * String name = (String) loaded.get("name");
- * int level = (int) loaded.get("level");
+ * ConfigurateSupport<PlayerData> config = ConfigurateSupport.builder(PlayerData.class)
+ *     .file("player.yml")
+ *     .build();
+ * PlayerData data = config.get();
+ * String name = data.getName();
  * }</pre>
  *
  * @author Astraea RPG Team
  * @since 1.1.0
+ * @deprecated 使用 {@link cn.guangdian.rpgcore.config.ConfigurateSupport} 替代
+ * @see cn.guangdian.rpgcore.config.ConfigurateManager
+ * @see org.spongepowered.configurate.objectmapping.ConfigSerializable
  */
+@Deprecated(since = "2.0.0", forRemoval = true)
 public final class YamlDataStore {
 
     private static YamlDataStore instance;

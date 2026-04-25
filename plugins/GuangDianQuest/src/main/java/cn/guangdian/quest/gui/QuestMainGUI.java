@@ -144,7 +144,7 @@ public class QuestMainGUI extends QuestGUI {
             "<gray>当前活跃: <yellow>" + activeCount + "<gray>/" + plugin.getMaxActiveQuests(),
             "<dark_gray>━━━━━━━━━━━━━━━━━━"
         ));
-        builder.setItem(22, statsItem, null);
+        builder.setItem(22, statsItem);
 
         // ===== 第四行: 快速操作 =====
         // 追踪按钮

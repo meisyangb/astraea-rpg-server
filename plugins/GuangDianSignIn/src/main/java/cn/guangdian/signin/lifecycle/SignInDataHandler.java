@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.UUID;
@@ -19,11 +21,42 @@ public class SignInDataHandler extends AbstractPlayerDataHandler {
     
     private final GuangDianSignIn plugin;
     private final Map<UUID, PlayerSignInData> dataCache;
+    private boolean tableInitialized = false;
     
     public SignInDataHandler(GuangDianSignIn plugin) {
         super(plugin);
         this.plugin = plugin;
         this.dataCache = new ConcurrentHashMap<>();
+    }
+    
+    public void initialize() {
+        createTable();
+    }
+    
+    private void createTable() {
+        if (!CoreDatabase.isEnabled()) {
+            plugin.getLogger().info("数据库未启用，签到数据将使用内存存储");
+            return;
+        }
+        
+        String sql = """
+            CREATE TABLE IF NOT EXISTS `player_signin` (
+                `player_id` VARCHAR(36) NOT NULL PRIMARY KEY,
+                `last_signin` VARCHAR(10) NOT NULL DEFAULT '',
+                `consecutive_days` INT NOT NULL DEFAULT 0,
+                `total_days` INT NOT NULL DEFAULT 0,
+                INDEX `idx_player_id` (`player_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            """;
+        
+        try (Connection conn = CoreDatabase.getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+            tableInitialized = true;
+            plugin.getLogger().info("签到数据表初始化成功: player_signin");
+        } catch (SQLException e) {
+            plugin.getLogger().warning("创建签到数据表失败: " + e.getMessage());
+        }
     }
     
     @Override
@@ -100,8 +133,9 @@ public class SignInDataHandler extends AbstractPlayerDataHandler {
         
         try (Connection conn = CoreDatabase.getConnection();
              PreparedStatement stmt = conn.prepareStatement(
-                 "INSERT OR REPLACE INTO player_signin (player_id, last_signin, consecutive_days, total_days) VALUES (?, ?, ?, ?)")) {
-            
+                 "INSERT INTO player_signin (player_id, last_signin, consecutive_days, total_days) VALUES (?, ?, ?, ?) " +
+                 "ON DUPLICATE KEY UPDATE last_signin = VALUES(last_signin), consecutive_days = VALUES(consecutive_days), total_days = VALUES(total_days)")) {
+
             stmt.setString(1, playerId.toString());
             stmt.setString(2, data.getLastSignInDate() != null ? data.getLastSignInDate().toString() : "");
             stmt.setInt(3, data.getConsecutiveDays());

@@ -1,0 +1,196 @@
+骸骨巨剑:
+  Id: 283
+  Display: <dark_purple><bold>骸骨巨剑
+  Lore:
+  - <blue>主手武器                 史诗
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>攻击力: <aqua>1200-4500'
+  - '<dark_gray>招架: <aqua>5%'
+  - '<dark_gray>暴击几率: <aqua>10%'
+  - '<dark_gray>暴击伤害: <aqua>75%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - <dark_gray>装备等级： <aqua>20
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - '<dark_gray>评分: <red>1800'
+  - <dark_purple>四阶装备
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+骸骨铠甲:
+  Id: 315
+  Display: <dark_purple><bold>骸骨铠甲
+  Lore:
+  - <aqua>防具                   史诗
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>19000'
+  - '<dark_gray>攻击力: <aqua>150-250'
+  - '<dark_gray>每秒回血: <aqua>45'
+  - <dark_gray>装备等级： <aqua>20
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - '<dark_gray>评分: <red>1800'
+  - <dark_purple>四阶装备
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+骸骨护腿:
+  Id: 316
+  Display: <dark_purple><bold>骸骨护腿
+  Lore:
+  - <aqua>防具                   史诗
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>19000'
+  - '<dark_gray>闪避: <aqua>5%'
+  - <dark_gray>装备等级： <aqua>20
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - '<dark_gray>评分: <red>1800'
+  - <dark_purple>四阶装备
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+骸骨战靴:
+  Id: 317
+  Display: <dark_purple><bold>骸骨战靴
+  Lore:
+  - <aqua>防具                   史诗
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>10%'
+  - '<dark_gray>生命上限: <aqua>19000'
+  - '<dark_gray>移动速度: <aqua>20%'
+  - <dark_gray>装备等级： <aqua>20
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - '<dark_gray>评分: <red>1800'
+  - <dark_purple>四阶装备
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+巫妖之剑:
+  Id: 267
+  Display: <gold><bold>巫妖之剑
+  Lore:
+  - <blue>主手武器                 传说
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>攻击力: <aqua>2200-6500'
+  - '<dark_gray>招架: <aqua>5%'
+  - '<dark_gray>暴击几率: <aqua>10%'
+  - '<dark_gray>暴击伤害: <aqua>200%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - <dark_gray>装备等级： <aqua>20
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - '<dark_gray>评分: <red>3300'
+  - <dark_purple>四阶装备
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+巫妖链甲:
+  Id: 303
+  Display: <gold><bold>巫妖链甲
+  Lore:
+  - <blue>防具                   传说
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>25000'
+  - '<dark_gray>攻击力: <aqua>250-350'
+  - '<dark_gray>每秒回血: <aqua>60'
+  - <dark_gray>装备等级： <aqua>20
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - '<dark_gray>评分: <red>3300'
+  - <dark_purple>四阶装备
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+巫妖链腿:
+  Id: 304
+  Display: <gold><bold>巫妖链腿
+  Lore:
+  - <blue>防具                   传说
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>25000'
+  - '<dark_gray>闪避: <aqua>5%'
+  - <dark_gray>装备等级： <aqua>20
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - '<dark_gray>评分: <red>3300'
+  - <dark_purple>四阶装备
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+巫妖链靴:
+  Id: 305
+  Display: <gold><bold>巫妖链靴
+  Lore:
+  - <blue>防具                   传说
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>10%'
+  - '<dark_gray>生命上限: <aqua>25000'
+  - '<dark_gray>移动速度: <aqua>20%'
+  - <dark_gray>装备等级： <aqua>20
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>25
+  - '<dark_gray>评分: <red>3300'
+  - <dark_purple>四阶装备
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true

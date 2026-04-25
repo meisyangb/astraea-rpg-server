@@ -11,6 +11,7 @@ import cn.guangdian.decompose.manager.DecomposeManager;
 import cn.guangdian.decompose.manager.RuleManager;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
+import cn.guangdian.rpgcore.command.CommandFramework;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.rpgcore.sound.SoundService;
@@ -127,8 +128,14 @@ public class GuangDianDecompose extends AbstractRPGPlugin {
     }
 
     private void registerCommands() {
-        getCommand("decompose").setExecutor(new DecomposeCommand(this));
-        getCommand("decomposeadmin").setExecutor(new DecomposeAdminCommand(this));
+        CommandFramework framework = CommandFramework.getInstance();
+        if (framework != null) {
+            framework.registerCommand(new DecomposeCommand(this));
+            framework.registerCommand(new DecomposeAdminCommand(this));
+            getLogger().info("已使用 CommandFramework 注册命令");
+        } else {
+            getLogger().severe("CommandFramework 不可用，命令注册失败");
+        }
     }
 
     private void registerListeners() {

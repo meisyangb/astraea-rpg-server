@@ -1,0 +1,36 @@
+兵长头盔:
+  Id: 306
+  Display: <green>兵长头盔
+  Lore:
+  - '<dark_aqua>护甲值: <green>20'
+  - '<dark_aqua>伤害反弹: <green>5'
+  - '<dark_aqua>暴击抵抗: <green>300%'
+  - '<dark_aqua>吸血抵抗: <green>40%'
+  - '<gray>暴击抵抗: <aqua>30%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+骑士头盔:
+  Id: 310
+  Display: <green>兵长头盔
+  Lore:
+  - '<dark_aqua>护甲值: <green>20'
+  - '<dark_aqua>伤害反弹: <green>5'
+  - '<dark_aqua>暴击抵抗: <green>400%'
+  - '<dark_aqua>吸血抵抗: <green>50%'
+  - '<gray>暴击抵抗: <aqua>30%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+将领头盔:
+  Id: 310
+  Display: <green>兵长头盔
+  Lore:
+  - '<dark_aqua>护甲值: <green>20'
+  - '<dark_aqua>伤害反弹: <green>5'
+  - '<dark_aqua>暴击抵抗: <green>500%'
+  - '<dark_aqua>吸血抵抗: <green>60%'
+  - '<gray>暴击抵抗: <aqua>30%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true

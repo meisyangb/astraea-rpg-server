@@ -76,19 +76,19 @@ public class QuestDetailGUI extends QuestGUI {
 
         // 任务信息 (slot 11)
         ItemStack infoItem = createQuestInfoItem(isActive, isCompleted, canComplete);
-        builder.setItem(11, infoItem, null);
+        builder.setItem(11, infoItem);
 
         // 任务描述 (slot 13)
         ItemStack descItem = createDescriptionItem();
-        builder.setItem(13, descItem, null);
+        builder.setItem(13, descItem);
 
         // 任务目标 (slot 15)
         ItemStack objectiveItem = createObjectiveItem(isActive, data);
-        builder.setItem(15, objectiveItem, null);
+        builder.setItem(15, objectiveItem);
 
         // 任务奖励 (slot 17)
         ItemStack rewardItem = createRewardItem();
-        builder.setItem(17, rewardItem, null);
+        builder.setItem(17, rewardItem);
 
         // 操作按钮 (slot 22)
         if (isCompleted) {
@@ -98,7 +98,7 @@ public class QuestDetailGUI extends QuestGUI {
                 "<gray>此任务已完成",
                 "<dark_gray>━━━━━━━━━━━━━━━━━━"
             ));
-            builder.setItem(22, completedItem, null);
+            builder.setItem(22, completedItem);
         } else if (canComplete) {
             // 可完成 - 显示完成按钮
             ItemStack completeItem = createItem(Material.GOLD_INGOT, "<gold><bold>⚡ 完成任务", List.of(
@@ -190,7 +190,7 @@ public class QuestDetailGUI extends QuestGUI {
         builder.setItem(QuestNavigation.SLOT_PREV, nav.createNavFiller());
 
         // 当前位置
-        builder.setItem(QuestNavigation.SLOT_INFO, nav.createLocationIndicator(quest.getName(), "任务详情"), null);
+        builder.setItem(QuestNavigation.SLOT_INFO, nav.createLocationIndicator(quest.getName(), "任务详情"));
 
         // 下一页/空位
         builder.setItem(QuestNavigation.SLOT_NEXT, nav.createNavFiller());

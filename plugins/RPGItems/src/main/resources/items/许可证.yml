@@ -1,0 +1,39 @@
+许可证:
+  Id: PAPER
+  Display: <dark_gray><bold>[<aqua><bold>帮派许可证<dark_gray><bold>]
+  Lore:
+  - <dark_aqua>帮派创建许可证
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+帮派经验卷1:
+  Id: PAPER
+  Display: <dark_gray><bold>[<aqua><bold>帮派经验卷<dark_gray><bold>]
+  Lore:
+  - <green>获得25点帮派经验
+  - <gray>拿手中输入/bp jy
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+帮派经验卷2:
+  Id: PAPER
+  Display: <dark_gray><bold>[<aqua><bold>帮派经验卷<dark_gray><bold>]
+  Lore:
+  - <green>获得50点帮派经验
+  - <gray>拿手中输入/bp jy
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+帮派经验卷3:
+  Id: PAPER
+  Display: <dark_gray><bold>[<aqua><bold>帮派经验卷<dark_gray><bold>]
+  Lore:
+  - <green>获得100点帮派经验
+  - <gray>拿手中输入/bp jy
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0

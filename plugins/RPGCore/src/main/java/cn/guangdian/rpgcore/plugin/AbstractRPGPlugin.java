@@ -3,12 +3,16 @@ package cn.guangdian.rpgcore.plugin;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.ExceptionHandler;
 import cn.guangdian.rpgcore.api.SyncScheduler;
+import cn.guangdian.rpgcore.inject.GuiceSupport;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.sound.SoundService;
+import com.google.inject.Injector;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import javax.inject.Inject;
 
 /**
  * 抽象插件基类
@@ -50,17 +54,17 @@ import org.bukkit.plugin.java.JavaPlugin;
  * }</pre>
  */
 public abstract class AbstractRPGPlugin extends JavaPlugin {
-    
-    protected RPGCore rpgCore;
-    protected ExternalServiceIntegration externalServices;
-    protected SyncScheduler scheduler;
+
+    @Inject protected RPGCore rpgCore;
+    @Inject protected ExternalServiceIntegration externalServices;
+    @Inject protected SyncScheduler scheduler;
     protected ExceptionHandler exceptionHandler;
-    
-    // 常用服务 - 由 initCommonServices() 自动初始化
-    protected MiniMessageService miniMessageService;
+
+    // 常用服务 - 由 initCommonServices() 或 Guice 自动初始化
+    @Inject protected MiniMessageService miniMessageService;
     protected MiniMessage miniMessageParser;
-    protected SoundService soundService;
-    
+    @Inject protected SoundService soundService;
+
     private boolean initialized = false;
     
     @Override
@@ -70,7 +74,13 @@ public abstract class AbstractRPGPlugin extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        
+
+        // 使用 Guice 进行依赖注入
+        if (GuiceSupport.isInitialized()) {
+            GuiceSupport.injectMembers(this);
+            getLogger().info("Guice 依赖注入完成");
+        }
+
         try {
             onPluginEnable();
             initialized = true;

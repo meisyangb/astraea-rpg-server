@@ -1,7 +1,7 @@
 # Astraea RPG 任务分类系统
 
 > 本文件是任务分类和路由中心，每次对话都会读取
-> **版本: 1.2.0 | 更新: 2026-04-14**
+> **版本: 1.3.0 | 更新: 2026-04-24**
 
 ---
 
@@ -85,6 +85,7 @@ D:\gradle\gradle-9.4.0\bin\gradle.bat build --no-configuration-cache -x test
 | [.trae/docs/reference/RPGCORE_SERVICES.md](.trae/docs/reference/RPGCORE_SERVICES.md) | RPGCore 核心服务使用指南 |
 | [.trae/docs/reference/VERSION_CONTROL.md](.trae/docs/reference/VERSION_CONTROL.md) | 版本控制规范 |
 | [.trae/docs/reference/RELEASE_CHECKLIST.md](.trae/docs/reference/RELEASE_CHECKLIST.md) | 发布检查清单 |
+| [.trae/docs/reference/MIGRATION_GUIDE.md](.trae/docs/reference/MIGRATION_GUIDE.md) | API 迁移指南 (v1.4.0+) |
 | [.trae/docs/CHANGELOG.md](.trae/docs/CHANGELOG.md) | 更新日志 |
 | [.trae/docs/PROJECT_NAMING.md](.trae/docs/PROJECT_NAMING.md) | 命名规范 |
 
@@ -138,6 +139,10 @@ D:\gradle\gradle-9.4.0\bin\gradle.bat build --no-configuration-cache -x test
 | 插件数量 | 24个 GuangDian* + RPGCore |
 | Adventure | 4.26.1 |
 | Caffeine | 3.1.8 |
+| Guice | 7.0.0 |
+| Configurate | 4.1.2 |
+| SLF4J | 2.0.9 |
+| MBassador | 1.3.2 |
 
 ---
 

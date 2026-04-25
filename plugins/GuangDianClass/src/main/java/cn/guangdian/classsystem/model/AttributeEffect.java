@@ -87,20 +87,20 @@ public class AttributeEffect {
         java.util.List<String> descriptions = new java.util.ArrayList<>();
         if (points <= 0) return descriptions.toArray(new String[0]);
         
-        if (healthPerPoint > 0) descriptions.add("§c生命 +" + (int)(healthPerPoint * points));
-        if (attackPerPoint > 0) descriptions.add("§b攻击 +" + (int)(attackPerPoint * points));
-        if (defensePerPoint > 0) descriptions.add("§a防御 +" + (int)(defensePerPoint * points));
-        if (critChancePerPoint > 0) descriptions.add("§6暴击率 +" + String.format("%.1f%%", critChancePerPoint * points));
-        if (critDamagePerPoint > 0) descriptions.add("§6暴击伤害 +" + String.format("%.1f%%", critDamagePerPoint * points));
-        if (dodgePerPoint > 0) descriptions.add("§b闪避 +" + String.format("%.1f%%", dodgePerPoint * points));
-        if (parryPerPoint > 0) descriptions.add("§e招架 +" + String.format("%.1f%%", parryPerPoint * points));
-        if (armorPerPoint > 0) descriptions.add("§7护甲 +" + String.format("%.1f%%", armorPerPoint * points));
-        if (magicResistPerPoint > 0) descriptions.add("§d魔抗 +" + String.format("%.1f%%", magicResistPerPoint * points));
-        if (lifestealPerPoint > 0) descriptions.add("§c吸血 +" + String.format("%.1f%%", lifestealPerPoint * points));
-        if (healthRegenPerPoint > 0) descriptions.add("§c回血 +" + String.format("%.1f", healthRegenPerPoint * points) + "/秒");
-        if (expBonusPerPoint > 0) descriptions.add("§e经验加成 +" + String.format("%.1f%%", expBonusPerPoint * points));
-        if (moveSpeedPerPoint > 0) descriptions.add("§f移速 +" + String.format("%.1f%%", moveSpeedPerPoint * points));
-        if (accuracyPerPoint > 0) descriptions.add("§f命中 +" + String.format("%.1f%%", accuracyPerPoint * points));
+        if (healthPerPoint > 0) descriptions.add("<red>生命 +" + (int)(healthPerPoint * points));
+        if (attackPerPoint > 0) descriptions.add("<aqua>攻击 +" + (int)(attackPerPoint * points));
+        if (defensePerPoint > 0) descriptions.add("<green>防御 +" + (int)(defensePerPoint * points));
+        if (critChancePerPoint > 0) descriptions.add("<gold>暴击率 +" + String.format("%.1f%%", critChancePerPoint * points));
+        if (critDamagePerPoint > 0) descriptions.add("<gold>暴击伤害 +" + String.format("%.1f%%", critDamagePerPoint * points));
+        if (dodgePerPoint > 0) descriptions.add("<aqua>闪避 +" + String.format("%.1f%%", dodgePerPoint * points));
+        if (parryPerPoint > 0) descriptions.add("<yellow>招架 +" + String.format("%.1f%%", parryPerPoint * points));
+        if (armorPerPoint > 0) descriptions.add("<gray>护甲 +" + String.format("%.1f%%", armorPerPoint * points));
+        if (magicResistPerPoint > 0) descriptions.add("<light_purple>魔抗 +" + String.format("%.1f%%", magicResistPerPoint * points));
+        if (lifestealPerPoint > 0) descriptions.add("<red>吸血 +" + String.format("%.1f%%", lifestealPerPoint * points));
+        if (healthRegenPerPoint > 0) descriptions.add("<red>回血 +" + String.format("%.1f", healthRegenPerPoint * points) + "/秒");
+        if (expBonusPerPoint > 0) descriptions.add("<yellow>经验加成 +" + String.format("%.1f%%", expBonusPerPoint * points));
+        if (moveSpeedPerPoint > 0) descriptions.add("<white>移速 +" + String.format("%.1f%%", moveSpeedPerPoint * points));
+        if (accuracyPerPoint > 0) descriptions.add("<white>命中 +" + String.format("%.1f%%", accuracyPerPoint * points));
         
         return descriptions.toArray(new String[0]);
     }

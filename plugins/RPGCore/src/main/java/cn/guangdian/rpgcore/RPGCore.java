@@ -7,7 +7,6 @@ import cn.guangdian.rpgcore.api.ConfigManager;
 import cn.guangdian.rpgcore.api.ConfigMigrator;
 import cn.guangdian.rpgcore.api.CronScheduler;
 import cn.guangdian.rpgcore.api.DataExporter;
-import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ExceptionHandler;
 import cn.guangdian.rpgcore.api.GameLogger;
 import cn.guangdian.rpgcore.api.HttpClient;
@@ -29,8 +28,10 @@ import cn.guangdian.rpgcore.display.AdventureBossBarService;
 import cn.guangdian.rpgcore.display.DisplayService;
 import cn.guangdian.rpgcore.display.DisplayServiceImpl;
 import cn.guangdian.rpgcore.display.TextDisplayServiceImpl;
-import cn.guangdian.rpgcore.event.SimpleEventBus;
+import cn.guangdian.rpgcore.gui.GUIManager;
+import cn.guangdian.rpgcore.config.ConfigurateManager;
 import cn.guangdian.rpgcore.exception.ExceptionHandlerImpl;
+import cn.guangdian.rpgcore.util.JacksonUtils;
 import cn.guangdian.rpgcore.export.DataExporterImpl;
 import cn.guangdian.rpgcore.http.HttpClientImpl;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
@@ -39,7 +40,6 @@ import cn.guangdian.rpgcore.integration.PlaceholderService;
 import cn.guangdian.rpgcore.lifecycle.PlayerLifecycleManager;
 import cn.guangdian.rpgcore.logging.AsyncLogger;
 import cn.guangdian.rpgcore.manager.ItemAttributeManager;
-import cn.guangdian.rpgcore.message.AudienceService;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.message.MessageServiceImpl;
 import cn.guangdian.rpgcore.module.RPGModule;
@@ -53,9 +53,14 @@ import cn.guangdian.rpgcore.entity.EntityService;
 import cn.guangdian.rpgcore.server.ServerService;
 import cn.guangdian.rpgcore.service.api.MessageService;
 import cn.guangdian.rpgcore.service.api.TextDisplayService;
+import cn.guangdian.rpgcore.service.api.MenuService;
 import cn.guangdian.rpgcore.sound.SoundService;
 import cn.guangdian.rpgcore.storage.UnifiedDataManager;
 import cn.guangdian.rpgcore.util.CooldownManager;
+import cn.guangdian.rpgcore.inject.GuiceSupport;
+import cn.guangdian.rpgcore.inject.RPGCoreModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -86,7 +91,6 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
 
     private static RPGCore instance;
 
-    private EventBus eventBus;
     private ServiceRegistry serviceRegistry;
     private CacheProvider cacheProvider;
     private AsyncExecutor asyncExecutor;
@@ -112,12 +116,38 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
     private MiniMessageService miniMessageService;
     private ItemAttributeManager itemAttributeManager;
 
+    // 新增：新引入的库管理器
+    private ConfigurateManager configurateManager;
+
+    // Guice 依赖注入
+    private Injector guiceInjector;
+
     private int asyncThreadPoolSize;
+    private int asyncQueueCapacity;
+    private long asyncKeepAliveSeconds;
+    private boolean asyncAllowCoreThreadTimeout;
+    private String asyncThreadNamePrefix;
+
     private int cacheMaxSize;
     private Duration cacheDefaultTTL;
     private Mode cacheMode;
+    private boolean cacheRecordStats;
+    private boolean cacheWeakKeys;
+    private boolean cacheWeakValues;
+    private boolean cacheSoftValues;
+    private Duration cacheRefreshInterval;
+
     private long lockTimeoutMs;
     private boolean databaseEnabled;
+
+    // 监控配置
+    private boolean monitorEnabled;
+    private boolean monitorMemory;
+    private boolean monitorTps;
+    private boolean monitorLogSlowOps;
+    private long monitorMemoryThresholdMb;
+    private long monitorSlowOpThresholdMs;
+    private Duration monitorReportInterval;
 
     private final Map<String, RPGModule> modules = new ConcurrentHashMap<>();
 
@@ -164,9 +194,6 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
             asyncExecutor.awaitTermination(30, TimeUnit.SECONDS);
         }
 
-        if (eventBus instanceof SimpleEventBus seb) {
-            seb.clear();
-        }
         if (serviceRegistry instanceof SimpleServiceRegistry ssr) {
             ssr.clear();
         }
@@ -191,6 +218,10 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
 
         AdventureBossBarService.getInstance().shutdown();
 
+        if (performanceMonitor != null) {
+            performanceMonitor.stopReportScheduler();
+        }
+
         if (lifecycleManager != null) {
             lifecycleManager.unregister();
         }
@@ -211,37 +242,76 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         FileConfiguration config = getConfig();
 
         databaseEnabled = config.getBoolean("database.enabled", false);
+
+        // 异步执行器配置
         asyncThreadPoolSize = config.getInt("async.thread-pool-size", 4);
+        asyncQueueCapacity = config.getInt("async.queue-capacity", 1000);
+        asyncKeepAliveSeconds = config.getLong("async.keep-alive-seconds", 60);
+        asyncAllowCoreThreadTimeout = config.getBoolean("async.allow-core-thread-timeout", false);
+        asyncThreadNamePrefix = config.getString("async.thread-name-prefix", "RPGCore-Async-");
+
+        // 缓存配置
         cacheMaxSize = config.getInt("cache.max-size", 2000);
         cacheDefaultTTL = Duration.ofMinutes(config.getLong("cache.default-ttl-minutes", 30));
-        
-        String modeStr = config.getString("cache.mode", "lightweight").toLowerCase();
+
+        String modeStr = config.getString("cache.mode", "caffeine").toLowerCase();
         cacheMode = switch (modeStr) {
             case "high_performance", "highperformance" -> Mode.HIGH_PERFORMANCE;
-            default -> Mode.LIGHTWEIGHT;
+            case "lightweight" -> Mode.LIGHTWEIGHT;
+            default -> Mode.CAFFEINE;
         };
-        
+
+        cacheRecordStats = config.getBoolean("cache.record-stats", true);
+        cacheWeakKeys = config.getBoolean("cache.weak-keys", false);
+        cacheWeakValues = config.getBoolean("cache.weak-values", false);
+        cacheSoftValues = config.getBoolean("cache.soft-values", false);
+        long refreshMinutes = config.getLong("cache.refresh-interval-minutes", 0);
+        cacheRefreshInterval = refreshMinutes > 0 ? Duration.ofMinutes(refreshMinutes) : Duration.ZERO;
+
         lockTimeoutMs = config.getLong("lock.timeout-ms", 3000);
+
+        // 监控配置
+        monitorEnabled = config.getBoolean("monitor.enabled", true);
+        monitorMemory = config.getBoolean("monitor.memory-monitoring", true);
+        monitorTps = config.getBoolean("monitor.tps-monitoring", true);
+        monitorLogSlowOps = config.getBoolean("monitor.log-slow-operations", true);
+        monitorMemoryThresholdMb = config.getLong("monitor.memory-warning-threshold-mb", 1024);
+        monitorSlowOpThresholdMs = config.getLong("monitor.slow-operation-threshold-ms", 100);
+        long reportIntervalMinutes = config.getLong("monitor.report-interval-minutes", 30);
+        monitorReportInterval = reportIntervalMinutes > 0 ? Duration.ofMinutes(reportIntervalMinutes) : Duration.ZERO;
     }
 
     private void initCoreComponents() {
-        eventBus = new SimpleEventBus(this);
-        getLogger().info("EventBus initialized");
+        // 初始化 Configurate 配置管理器
+        configurateManager = new ConfigurateManager(getLogger(), getDataFolder().toPath());
+        getLogger().info("ConfigurateManager initialized");
 
         serviceRegistry = new SimpleServiceRegistry(this);
         getLogger().info("ServiceRegistry initialized");
 
-        cacheProvider = new TTLCacheManager(cacheMaxSize, cacheDefaultTTL, true, cacheMode);
+        cacheProvider = new TTLCacheManager(cacheMaxSize, cacheDefaultTTL, cacheRecordStats,
+            cacheMode, cacheWeakKeys, cacheWeakValues, cacheSoftValues, cacheRefreshInterval);
         getLogger().info("CacheProvider initialized (mode: " + cacheMode + ", maxSize: " + cacheMaxSize + ", TTL: " + cacheDefaultTTL + ")");
 
-        asyncExecutor = new AsyncExecutorImpl(this, asyncThreadPoolSize);
-        getLogger().info("AsyncExecutor initialized (threads: " + asyncThreadPoolSize + ")");
+        asyncExecutor = new AsyncExecutorImpl(this, asyncThreadPoolSize, asyncQueueCapacity,
+            asyncKeepAliveSeconds, asyncAllowCoreThreadTimeout, asyncThreadNamePrefix);
+        getLogger().info("AsyncExecutor initialized (threads: " + asyncThreadPoolSize + ", queue: " + asyncQueueCapacity + ")");
 
         lockManager = new PlayerLockManager(getLogger(), lockTimeoutMs);
         getLogger().info("PlayerLockManager initialized (timeout: " + lockTimeoutMs + "ms)");
 
-        performanceMonitor = new PerformanceMonitor("RPGCore");
-        getLogger().info("PerformanceMonitor initialized");
+        performanceMonitor = new PerformanceMonitor("RPGCore", getLogger());
+        performanceMonitor.setEnabled(monitorEnabled);
+        performanceMonitor.setMemoryMonitoring(monitorMemory);
+        performanceMonitor.setTpsMonitoring(monitorTps);
+        performanceMonitor.setLogSlowOperations(monitorLogSlowOps);
+        performanceMonitor.setMemoryWarningThreshold(monitorMemoryThresholdMb);
+        performanceMonitor.setSlowOperationThreshold(monitorSlowOpThresholdMs);
+        if (!monitorReportInterval.isZero()) {
+            performanceMonitor.setReportInterval(monitorReportInterval);
+            performanceMonitor.startReportScheduler();
+        }
+        getLogger().info("PerformanceMonitor initialized (enabled: " + monitorEnabled + ")");
 
         serviceScanner = new ServiceScanner(this);
         getLogger().info("ServiceScanner initialized");
@@ -297,6 +367,11 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         serviceRegistry.registerService(TextDisplayService.class, textDisplayService);
         getLogger().info("TextDisplayService initialized and registered");
 
+        // 初始化 GUI 管理器
+        GUIManager guiManager = GUIManager.getInstance();
+        guiManager.initialize(this);
+        getLogger().info("GUIManager initialized");
+
         gameLogger = new AsyncLogger();
         getLogger().info("GameLogger (AsyncLogger) initialized");
 
@@ -305,13 +380,38 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         
         // 注册其他核心服务到 ServiceRegistry
         serviceRegistry.registerService(MiniMessageService.class, miniMessageService);
-        serviceRegistry.registerService(AudienceService.class, AudienceService.getInstance());
         serviceRegistry.registerService(SoundService.class, SoundService.getInstance());
         serviceRegistry.registerService(CooldownManager.class, CooldownManager.getInstance());
         serviceRegistry.registerService(YamlDataStore.class, YamlDataStore.getInstance());
         serviceRegistry.registerService(CommandFramework.class, CommandFramework.getInstance());
         serviceRegistry.registerService(PlaceholderService.class, PlaceholderService.getInstance());
         getLogger().info("Core services registered to ServiceRegistry");
+
+        // 初始化 Guice 依赖注入
+        initGuice();
+    }
+
+    /**
+     * 初始化 Guice 依赖注入框架
+     */
+    private void initGuice() {
+        try {
+            guiceInjector = Guice.createInjector(new RPGCoreModule(this));
+            GuiceSupport.initialize(this);
+            getLogger().info("Guice 依赖注入框架已初始化");
+        } catch (Exception e) {
+            getLogger().warning("Guice 初始化失败: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取 Guice Injector
+     *
+     * @return Guice Injector 实例
+     */
+    public Injector getGuiceInjector() {
+        return guiceInjector;
     }
 
     private void initDatabase() {
@@ -520,8 +620,12 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         return instance;
     }
 
-    public EventBus getEventBus() {
-        return eventBus;
+    /**
+     * @deprecated 已废弃，使用 {@link EventPublisher} 替代
+     */
+    @Deprecated(since = "2.0.0", forRemoval = true)
+    public cn.guangdian.rpgcore.api.EventBus getEventBus() {
+        return null;
     }
 
     public ServiceRegistry getServiceRegistry() {
@@ -608,6 +712,10 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         return textDisplayService;
     }
 
+    public MenuService getMenuService() {
+        return serviceRegistry.getService(MenuService.class);
+    }
+
     public GameLogger getGameLogger() {
         return gameLogger;
     }
@@ -650,6 +758,33 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
 
     public boolean isDatabaseEnabled() {
         return databaseEnabled && CoreDatabase.isEnabled();
+    }
+
+    /**
+     * 获取 Configurate 配置管理器
+     *
+     * @return ConfigurateManager 实例
+     */
+    public ConfigurateManager getConfigurateManager() {
+        return configurateManager;
+    }
+
+    /**
+     * 获取 Jackson JSON ObjectMapper
+     *
+     * @return Jackson ObjectMapper
+     */
+    public com.fasterxml.jackson.databind.ObjectMapper getJsonMapper() {
+        return cn.guangdian.rpgcore.util.JacksonUtils.getJsonMapper();
+    }
+
+    /**
+     * 获取 Jackson YAML ObjectMapper
+     *
+     * @return YAML ObjectMapper
+     */
+    public com.fasterxml.jackson.databind.ObjectMapper getYamlMapper() {
+        return cn.guangdian.rpgcore.util.JacksonUtils.getYamlMapper();
     }
 
     public void registerModule(RPGModule module) {

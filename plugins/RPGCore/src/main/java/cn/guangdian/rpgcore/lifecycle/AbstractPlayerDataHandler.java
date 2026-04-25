@@ -15,16 +15,26 @@ public abstract class AbstractPlayerDataHandler implements PlayerDataHandler {
     }
     
     public void register() {
-        if (rpgCore != null) {
-            rpgCore.getPlayerLifecycle().registerHandler(this);
-            plugin.getLogger().info("[PlayerLifecycle] 已注册数据处理器: " + getHandlerName());
+        if (rpgCore == null) {
+            plugin.getLogger().warning("[PlayerLifecycle] RPGCore 实例未初始化，无法注册数据处理器: " + getHandlerName());
+            return;
         }
+        if (rpgCore.getPlayerLifecycle() == null) {
+            plugin.getLogger().warning("[PlayerLifecycle] PlayerLifecycle 未初始化，无法注册数据处理器: " + getHandlerName());
+            return;
+        }
+        rpgCore.getPlayerLifecycle().registerHandler(this);
+        plugin.getLogger().info("[PlayerLifecycle] 已注册数据处理器: " + getHandlerName());
     }
     
     public void unregister() {
-        if (rpgCore != null) {
-            rpgCore.getPlayerLifecycle().unregisterHandler(this);
+        if (rpgCore == null) {
+            return;
         }
+        if (rpgCore.getPlayerLifecycle() == null) {
+            return;
+        }
+        rpgCore.getPlayerLifecycle().unregisterHandler(this);
     }
     
     @Override

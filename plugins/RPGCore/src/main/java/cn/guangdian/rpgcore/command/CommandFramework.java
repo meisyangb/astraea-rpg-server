@@ -1,7 +1,7 @@
 package cn.guangdian.rpgcore.command;
 
 import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.message.UnifiedMessageService;
+import cn.guangdian.rpgcore.message.MessageServiceImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -55,13 +55,13 @@ public final class CommandFramework implements CommandExecutor, TabCompleter {
 
     private final Map<String, BaseCommand> commands;
     private final Logger logger;
-    private final UnifiedMessageService msg;
+    private final MessageServiceImpl msg;
 
     private CommandFramework() {
         this.commands = new HashMap<>();
         RPGCore rpgCore = RPGCore.getInstance();
         this.logger = rpgCore != null ? rpgCore.getLogger() : Logger.getLogger("CommandFramework");
-        this.msg = UnifiedMessageService.getInstance();
+        this.msg = MessageServiceImpl.getInstance();
     }
 
     public static synchronized CommandFramework getInstance() {
@@ -118,7 +118,7 @@ public final class CommandFramework implements CommandExecutor, TabCompleter {
         BaseCommand baseCommand = commands.get(commandName);
 
         if (baseCommand == null) {
-            msg.sendMessage(sender, "<red>未知命令!");
+            msg.sendError(sender, "未知命令!");
             return true;
         }
 
@@ -126,14 +126,14 @@ public final class CommandFramework implements CommandExecutor, TabCompleter {
         CommandInfo info = baseCommand.getClass().getAnnotation(CommandInfo.class);
         if (info != null && !info.permission().isEmpty()) {
             if (!sender.hasPermission(info.permission())) {
-                msg.sendMessage(sender, "<red>没有权限执行此命令!");
+                msg.sendError(sender, "没有权限执行此命令!");
                 return true;
             }
         }
 
         // 检查是否仅玩家可用
         if (info != null && info.playerOnly() && !(sender instanceof Player)) {
-            msg.sendMessage(sender, "<red>此命令只能由玩家执行!");
+            msg.sendError(sender, "此命令只能由玩家执行!");
             return true;
         }
 
@@ -149,7 +149,7 @@ public final class CommandFramework implements CommandExecutor, TabCompleter {
         // 查找子命令
         Method subCommandMethod = baseCommand.getSubCommandMethod(subCommandName);
         if (subCommandMethod == null) {
-            msg.sendMessage(sender, "<red>未知子命令: " + subCommandName);
+            msg.sendError(sender, "未知子命令: " + subCommandName);
             baseCommand.showHelp(sender);
             return true;
         }
@@ -158,25 +158,25 @@ public final class CommandFramework implements CommandExecutor, TabCompleter {
         SubCommand subCmdAnnotation = subCommandMethod.getAnnotation(SubCommand.class);
         if (subCmdAnnotation != null && !subCmdAnnotation.permission().isEmpty()) {
             if (!sender.hasPermission(subCmdAnnotation.permission())) {
-                msg.sendMessage(sender, "<red>没有权限执行此子命令!");
+                msg.sendError(sender, "没有权限执行此子命令!");
                 return true;
             }
         }
 
         // 检查是否仅玩家可用
         if (subCmdAnnotation != null && subCmdAnnotation.playerOnly() && !(sender instanceof Player)) {
-            msg.sendMessage(sender, "<red>此子命令只能由玩家执行!");
+            msg.sendError(sender, "此子命令只能由玩家执行!");
             return true;
         }
 
         // 检查参数数量
         if (subCmdAnnotation != null) {
             if (subArgs.length < subCmdAnnotation.minArgs()) {
-                msg.sendMessage(sender, "<red>参数不足! 需要至少 " + subCmdAnnotation.minArgs() + " 个参数");
+                msg.sendError(sender, "参数不足! 需要至少 " + subCmdAnnotation.minArgs() + " 个参数");
                 return true;
             }
             if (subCmdAnnotation.maxArgs() != -1 && subArgs.length > subCmdAnnotation.maxArgs()) {
-                msg.sendMessage(sender, "<red>参数过多! 最多允许 " + subCmdAnnotation.maxArgs() + " 个参数");
+                msg.sendError(sender, "参数过多! 最多允许 " + subCmdAnnotation.maxArgs() + " 个参数");
                 return true;
             }
         }
@@ -188,11 +188,11 @@ public final class CommandFramework implements CommandExecutor, TabCompleter {
         try {
             subCommandMethod.invoke(baseCommand, context);
         } catch (CommandException e) {
-            msg.sendMessage(sender, "<red>" + e.getMessage());
+            msg.sendError(sender, e.getMessage());
         } catch (Exception e) {
             logger.severe("[CommandFramework] 执行命令失败: /" + commandName + " " + subCommandName);
             e.printStackTrace();
-            msg.sendMessage(sender, "<red>命令执行失败: " + e.getCause().getMessage());
+            msg.sendError(sender, "命令执行失败: " + e.getCause().getMessage());
         }
 
         return true;

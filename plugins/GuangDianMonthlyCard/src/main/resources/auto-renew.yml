@@ -1,0 +1,33 @@
+# GuangDianMonthlyCard - 自动续期配置
+
+# ==================== 基础设置 ====================
+enabled: true
+
+# ==================== 提醒设置 ====================
+reminder:
+  enabled: true
+  days-before: 3                   # 到期前3天提醒
+  interval-hours: 24               # 提醒间隔(小时)
+
+# ==================== 续期折扣 ====================
+discount:
+  enabled: true
+  percent: 10                      # 续期折扣10%
+  
+  # 不同月卡类型的折扣
+  by-card-type:
+    normal: 10
+    premium: 15
+    vip: 20
+
+# ==================== 自动扣费 ====================
+# 注意：自动扣费使用月卡配置的货币类型，不会混用
+auto-deduct:
+  enabled: false                   # 是否自动扣费续期
+
+# ==================== 续期通知 ====================
+messages:
+  reminder: "<yellow>你的<gold>%card%<yellow>将在<red>%days%<yellow>天后到期，请及时续期"
+  success: "<green>你的<gold>%card%<green>已成功续期<yellow>%days%<green>天"
+  failed: "<red>自动续期失败，余额不足"
+  discount: "<green>享受续期折扣<yellow>%discount%%<green>，实际支付<yellow>%price%<green>%currency%"

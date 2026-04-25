@@ -1,0 +1,30 @@
+魔法师皮帽:
+  Id: 298
+  Display: <green>魔法师皮帽
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔法师皮甲:
+  Id: 299
+  Display: <green>魔法师甲
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔法师皮裤:
+  Id: 300
+  Display: <green>魔法师裤
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔法师皮靴:
+  Id: 301
+  Display: <green>魔法师靴
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+魔法师法仗:
+  Id: 280
+  Display: <green>魔法师法仗
+  Options:
+    Unbreakable: true
+    HideAttributes: true

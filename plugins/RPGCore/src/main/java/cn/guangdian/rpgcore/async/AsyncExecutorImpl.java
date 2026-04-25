@@ -27,24 +27,68 @@ public class AsyncExecutorImpl implements AsyncExecutor {
     private final ExecutorService executor;
     private final Map<UUID, CompletableFuture<Void>> pendingSaves;
     private final AtomicInteger pendingTaskCount;
+    private final AtomicInteger threadNumber;
     private volatile boolean shutdown = false;
 
     /**
-     * 创建异步执行器
-     * 
+     * 创建异步执行器（基础配置）
+     *
      * @param plugin 插件实例
      * @param threadPoolSize 线程池大小
      */
     public AsyncExecutorImpl(JavaPlugin plugin, int threadPoolSize) {
+        this(plugin, threadPoolSize, 1000, 60, false, "RPGCore-Async-");
+    }
+
+    /**
+     * 创建异步执行器（完整配置）
+     *
+     * @param plugin 插件实例
+     * @param threadPoolSize 线程池大小
+     * @param queueCapacity 队列容量（0表示无界队列）
+     * @param keepAliveSeconds 线程保活时间（秒）
+     * @param allowCoreThreadTimeout 是否允许核心线程超时
+     * @param threadNamePrefix 线程名称前缀
+     */
+    public AsyncExecutorImpl(JavaPlugin plugin, int threadPoolSize, int queueCapacity,
+                             long keepAliveSeconds, boolean allowCoreThreadTimeout,
+                             String threadNamePrefix) {
         this.plugin = plugin;
         this.logger = plugin.getLogger();
-        this.executor = Executors.newFixedThreadPool(threadPoolSize, r -> {
-            Thread thread = new Thread(r, "RPGCore-Async-" + System.currentTimeMillis());
-            thread.setDaemon(true);
-            return thread;
-        });
+        this.threadNumber = new AtomicInteger(1);
+
+        // 创建有界或无界队列
+        BlockingQueue<Runnable> workQueue = queueCapacity > 0
+            ? new LinkedBlockingQueue<>(queueCapacity)
+            : new LinkedBlockingQueue<>();
+
+        // 创建 ThreadPoolExecutor
+        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(
+            threadPoolSize,  // 核心线程数
+            threadPoolSize,  // 最大线程数
+            keepAliveSeconds, // 保活时间
+            TimeUnit.SECONDS,
+            workQueue,
+            r -> {
+                Thread thread = new Thread(r, threadNamePrefix + threadNumber.getAndIncrement());
+                thread.setDaemon(true);
+                thread.setUncaughtExceptionHandler((t, ex) -> {
+                    logger.log(Level.WARNING, "Async thread " + t.getName() + " crashed", ex);
+                });
+                return thread;
+            },
+            new ThreadPoolExecutor.CallerRunsPolicy() // 拒绝策略：由调用线程执行
+        );
+
+        // 允许核心线程超时
+        threadPool.allowCoreThreadTimeOut(allowCoreThreadTimeout);
+
+        this.executor = threadPool;
         this.pendingSaves = new ConcurrentHashMap<>();
         this.pendingTaskCount = new AtomicInteger(0);
+
+        logger.info("AsyncExecutor initialized with " + threadPoolSize + " threads, " +
+            (queueCapacity > 0 ? "queue capacity: " + queueCapacity : "unbounded queue"));
     }
 
     @Override

@@ -67,7 +67,7 @@ public class DailyQuestGUI extends QuestGUI {
             "<yellow>每日任务会在每天",
             "<yellow>凌晨自动刷新"
         ));
-        builder.setItem(13, infoItem, null);
+        builder.setItem(13, infoItem);
 
         // 进度显示 (slot 15)
         int percent = dailyLimit > 0 ? (dailyCompleted * 100 / dailyLimit) : 0;
@@ -82,7 +82,7 @@ public class DailyQuestGUI extends QuestGUI {
             "<dark_gray>━━━━━━━━━━━━━━━━━━",
             "<gray>已完成: <yellow>" + dailyCompleted + "<gray>/<yellow>" + dailyLimit
         ));
-        builder.setItem(15, progressItem, null);
+        builder.setItem(15, progressItem);
 
         // 填充每日任务 (slot 20-26, 29-35)
         int[] slots = {20, 21, 22, 23, 24, 25, 26, 29, 30, 31, 32, 33, 34, 35};
@@ -120,7 +120,7 @@ public class DailyQuestGUI extends QuestGUI {
         builder.setItem(QuestNavigation.SLOT_PREV, nav.createNavFiller());
 
         // 当前位置
-        builder.setItem(QuestNavigation.SLOT_INFO, nav.createLocationIndicator("每日任务", "今日完成 " + dailyCompleted + "/" + dailyLimit), null);
+        builder.setItem(QuestNavigation.SLOT_INFO, nav.createLocationIndicator("每日任务", "今日完成 " + dailyCompleted + "/" + dailyLimit));
 
         // 下一页/空位
         builder.setItem(QuestNavigation.SLOT_NEXT, nav.createNavFiller());

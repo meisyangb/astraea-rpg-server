@@ -1,9 +1,15 @@
 package cn.guangdian.menu;
 
 import cn.guangdian.menu.adapter.MenuServiceAdapter;
+import cn.guangdian.menu.command.GuangDianMenuCommand;
 import cn.guangdian.menu.placeholder.MenuPlaceholder;
 import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.api.SyncScheduler;
+import cn.guangdian.rpgcore.command.CommandFramework;
+import cn.guangdian.rpgcore.gui.GUIManager;
+import cn.guangdian.rpgcore.gui.action.ActionExecutor;
+import cn.guangdian.rpgcore.gui.model.MenuData;
+import cn.guangdian.rpgcore.gui.model.MenuHolder;
+import cn.guangdian.rpgcore.gui.model.MenuItem;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
@@ -13,10 +19,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -30,44 +32,44 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
-import java.util.logging.Level;
 
-public class GuangDianMenu extends AbstractRPGPlugin implements Listener, CommandExecutor, TabExecutor {
+/**
+ * 光点菜单插件 - 使用 RPGCore CommandFramework
+ */
+public class GuangDianMenu extends AbstractRPGPlugin implements Listener {
 
     private static GuangDianMenu instance;
     private FileConfiguration config;
-    final Map<String, MenuData> menus = new ConcurrentHashMap<>();
     private final Set<String> claimedStarterKit = ConcurrentHashMap.newKeySet();
     private org.bukkit.scoreboard.Objective starterKitObjective;
     private final Map<UUID, String> playerMenus = new ConcurrentHashMap<>();
 
     private NamespacedKey menuItemKey;
     private MenuServiceAdapter serviceAdapter;
+    private GUIManager guiManager;
 
-    // RPGCore 服务引用
     private SoundService soundService;
     private MiniMessageService miniMessage;
     private MiniMessage miniMessageParser;
+    private ExternalServiceIntegration externalServices;
+    private BiFunction<String, Player, String> placeholderProcessor;
+
+    // RPGCore CommandFramework
+    private GuangDianMenuCommand adminCommand;
 
     @Override
     protected void onPluginEnable() {
@@ -76,26 +78,20 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
         config = getConfig();
         menuItemKey = new NamespacedKey(this, "menu_item");
 
-        // 初始化 RPGCore 服务
         initRPGCoreServices();
-
         initStarterKitScoreboard();
-        loadMenus();
 
-        if (getCommand("menu") != null) {
-            getCommand("menu").setExecutor(this);
-            getCommand("menu").setTabCompleter(this);
+        if (guiManager != null) {
+            guiManager.loadMenusFromFolder(this, "menus");
+            getLogger().info("GUIManager 已加载 " + guiManager.getMenuCount() + " 个菜单");
         }
-        if (getCommand("guangdianmenu") != null) {
-            getCommand("guangdianmenu").setExecutor(this);
-            getCommand("guangdianmenu").setTabCompleter(this);
-        }
+
+        // 初始化命令系统 (使用 RPGCore CommandFramework)
+        initCommandFramework();
 
         getServer().getPluginManager().registerEvents(this, this);
-        // 注册RPGCore服务适配器
         serviceAdapter = new MenuServiceAdapter(this);
 
-        // 注册PlaceholderAPI扩展
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new MenuPlaceholder(this).register();
             getLogger().info("已注册PlaceholderAPI扩展!");
@@ -103,45 +99,73 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
     }
 
     /**
-     * 初始化 RPGCore 核心服务
+     * 初始化 RPGCore CommandFramework
      */
-    private void initRPGCoreServices() {
-        if (Bukkit.getPluginManager().isPluginEnabled("RPGCore")) {
-            try {
-                RPGCore rpgCore = RPGCore.getInstance();
-                if (rpgCore != null) {
-                    soundService = rpgCore.getSoundService();
-                    miniMessage = rpgCore.getMiniMessageService();
-                    if (miniMessage != null) {
-                        miniMessageParser = miniMessage.getMiniMessage();
-                    }
-                    getLogger().info("已连接到 RPGCore 服务 (SoundService, MiniMessageService)");
-                }
-            } catch (Exception e) {
-                getLogger().warning("连接 RPGCore 服务失败: " + e.getMessage());
-            }
-        }
+    private void initCommandFramework() {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            CommandFramework framework = CommandFramework.getInstance();
 
-        // 如果 RPGCore 服务不可用，使用本地降级服务
-        if (soundService == null) {
-            soundService = SoundService.getInstance();
+            // 注册 guangdianmenu 管理命令
+            adminCommand = new GuangDianMenuCommand(this);
+            framework.registerCommand(adminCommand);
+
+            getLogger().info("已注册 CommandFramework 命令");
+        } else {
+            // 降级处理：使用传统命令注册
+            getLogger().warning("RPGCore 未加载，使用传统命令注册方式");
+            initLegacyCommands();
         }
-        if (miniMessage == null) {
+    }
+
+    /**
+     * 传统命令注册方式 (降级处理)
+     */
+    private void initLegacyCommands() {
+        if (getCommand("menu") != null) {
+            getCommand("menu").setExecutor(new LegacyMenuCommand(this));
+            getCommand("menu").setTabCompleter(new LegacyMenuCommand(this));
+        }
+        if (getCommand("guangdianmenu") != null) {
+            getCommand("guangdianmenu").setExecutor(new LegacyAdminCommand(this));
+            getCommand("guangdianmenu").setTabCompleter(new LegacyAdminCommand(this));
+        }
+    }
+
+    private void initRPGCoreServices() {
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore != null) {
+            soundService = rpgCore.getSoundService();
+            miniMessage = rpgCore.getMiniMessageService();
+            externalServices = rpgCore.getExternalServices();
+            guiManager = GUIManager.getInstance();
+
+            if (miniMessage != null) {
+                miniMessageParser = miniMessage.getMiniMessage();
+            }
+
+            placeholderProcessor = (text, player) -> processPlaceholders(player, text);
+            guiManager.setDefaultPlaceholderProcessor(placeholderProcessor);
+
+            getLogger().info("已连接到 RPGCore 服务");
+        } else {
+            soundService = SoundService.getInstance();
             miniMessage = MiniMessageService.getInstance();
             miniMessageParser = miniMessage.getMiniMessage();
+            placeholderProcessor = (text, player) -> processPlaceholders(player, text);
+            getLogger().warning("RPGCore 未加载，使用本地服务");
         }
     }
 
     @Override
     protected void onPluginDisable() {
-        menus.clear();
         playerMenus.clear();
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
             serviceAdapter = null;
         }
     }
-    
+
     @Override
     protected String getPluginName() {
         return "GuangDianMenu";
@@ -151,7 +175,7 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
         try {
             org.bukkit.scoreboard.ScoreboardManager manager = Bukkit.getScoreboardManager();
             if (manager == null) return;
-            
+
             org.bukkit.scoreboard.Scoreboard scoreboard = manager.getMainScoreboard();
             starterKitObjective = scoreboard.getObjective("StarterKit");
             if (starterKitObjective == null) {
@@ -179,189 +203,21 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
         }
     }
 
-    private void loadMenus() {
-        menus.clear();
-        
-        // 从主配置文件加载菜单
-        loadMenusFromConfig(config);
-        
-        // 从 menus 文件夹加载菜单
-        File menusFolder = new File(getDataFolder(), "menus");
-        if (!menusFolder.exists()) {
-            menusFolder.mkdirs();
-        }
-        loadMenusFromFolder(menusFolder);
-        
-        getLogger().info("已加载 " + menus.size() + " 个菜单");
-    }
-
-    private void loadMenusFromConfig(FileConfiguration config) {
-        ConfigurationSection menusSection = config.getConfigurationSection("menus");
-        if (menusSection == null) {
-            return;
-        }
-
-        for (String menuName : menusSection.getKeys(false)) {
-            ConfigurationSection menuSection = menusSection.getConfigurationSection(menuName);
-            if (menuSection == null) {
-                continue;
-            }
-
-            MenuData menuData = loadMenuData(menuName, menuSection);
-            if (menuData != null) {
-                menus.put(menuName.toLowerCase(), menuData);
-                getLogger().fine("从主配置加载菜单: " + menuName);
-            }
-        }
-    }
-
-    private void loadMenusFromFolder(File folder) {
-        if (!folder.exists() || !folder.isDirectory()) {
-            return;
-        }
-
-        File[] files = folder.listFiles();
-        if (files == null) {
-            return;
-        }
-
-        for (File file : files) {
-            if (file.isDirectory()) {
-                // 递归加载子文件夹
-                loadMenusFromFolder(file);
-            } else if (file.getName().endsWith(".yml")) {
-                loadMenusFromFile(file);
-            }
-        }
-    }
-
-    private void loadMenusFromFile(File file) {
-        try {
-            org.bukkit.configuration.file.YamlConfiguration yamlConfig = 
-                org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(file);
-            
-            // 支持两种格式：
-            // 1. 直接定义菜单（文件名作为菜单名）
-            // 2. 在 menus: 下定义多个菜单
-            
-            if (yamlConfig.contains("title") && yamlConfig.contains("size")) {
-                // 单菜单格式 - 使用文件名作为菜单名
-                String menuName = file.getName().replace(".yml", "");
-                MenuData menuData = loadMenuData(menuName, yamlConfig);
-                if (menuData != null) {
-                    menus.put(menuName.toLowerCase(), menuData);
-                    getLogger().fine("从文件加载菜单: " + menuName + " (" + file.getPath() + ")");
-                }
-            } else {
-                // 多菜单格式 - 在 menus: 下定义
-                ConfigurationSection menusSection = yamlConfig.getConfigurationSection("menus");
-                if (menusSection != null) {
-                    for (String menuName : menusSection.getKeys(false)) {
-                        ConfigurationSection menuSection = menusSection.getConfigurationSection(menuName);
-                        if (menuSection == null) {
-                            continue;
-                        }
-                        MenuData menuData = loadMenuData(menuName, menuSection);
-                        if (menuData != null) {
-                            menus.put(menuName.toLowerCase(), menuData);
-                            getLogger().fine("从文件加载菜单: " + menuName + " (" + file.getPath() + ")");
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            getLogger().log(Level.WARNING, "加载菜单文件失败: " + file.getPath(), e);
-        }
-    }
-
-    private MenuData loadMenuData(String menuName, ConfigurationSection section) {
-        String title = section.getString("title", "<dark_gray>菜单");
-        int size = section.getInt("size", 27);
-        
-        // 验证 size 必须是 9 的倍数
-        if (size % 9 != 0 || size < 9 || size > 54) {
-            size = 27;
-        }
-        
-        MenuData menuData = new MenuData(title, size);
-        
-        ConfigurationSection itemsSection = section.getConfigurationSection("items");
-        if (itemsSection != null) {
-            for (String itemName : itemsSection.getKeys(false)) {
-                ConfigurationSection itemSection = itemsSection.getConfigurationSection(itemName);
-                if (itemSection == null) {
-                    continue;
-                }
-                MenuItem item = loadMenuItem(itemSection);
-                if (item != null) {
-                    menuData.addItem(itemName, item);
-                }
-            }
-        }
-        
-        return menuData;
-    }
-
-    private MenuItem loadMenuItem(ConfigurationSection section) {
-        Material material;
-        try {
-            material = Material.valueOf(section.getString("material", "STONE").toUpperCase());
-        } catch (IllegalArgumentException e) {
-            material = Material.STONE;
-        }
-
-        List<Integer> slots = new ArrayList<>();
-        Object slotObj = section.get("slot");
-        if (slotObj instanceof Integer integer) {
-            slots.add(integer);
-        } else if (section.isList("slots")) {
-            for (Object value : section.getList("slots")) {
-                if (value instanceof Integer integer) {
-                    slots.add(integer);
-                }
-            }
-        } else if (section.isList("slot")) {
-            for (Object value : section.getList("slot")) {
-                if (value instanceof Integer integer) {
-                    slots.add(integer);
-                }
-            }
-        }
-
-        return new MenuItem(
-                material,
-                section.getString("name", "<white>物品"),
-                section.getStringList("lore"),
-                slots,
-                section.getString("action", ""),
-                section.getStringList("actions"),
-                section.getString("skull", "")
-        );
-    }
-
     public void openMenu(Player player, String menuName) {
-        MenuData menuData = menus.get(menuName.toLowerCase());
-        if (menuData == null) {
-            player.sendMessage(miniMessage.colorize(config.getString("messages.menu-not-found", "<red>菜单不存在!")));
+        if (guiManager != null && guiManager.hasMenu(menuName)) {
+            guiManager.openMenu(player, menuName);
+            playerMenus.put(player.getUniqueId(), menuName.toLowerCase());
+            playClickSound(player);
             return;
         }
 
-        // 使用 MiniMessage 解析标题
-        String titleText = processPlaceholders(player, menuData.getTitle());
-        Component title = miniMessage.colorize(titleText);
-        Inventory inventory = Bukkit.createInventory(new MenuHolder(menuName.toLowerCase()), menuData.getSize(), title);
-        for (MenuItem item : menuData.getItems().values()) {
-            ItemStack itemStack = createItemStack(player, item);
-            for (int slot : item.getSlots()) {
-                if (slot >= 0 && slot < inventory.getSize()) {
-                    inventory.setItem(slot, itemStack);
-                }
-            }
-        }
+        player.sendMessage(miniMessage.colorize(config.getString("messages.menu-not-found", "<red>菜单不存在!")));
+    }
 
-        player.openInventory(inventory);
-        playerMenus.put(player.getUniqueId(), menuName.toLowerCase());
-        playClickSound(player);
+    public void reloadMenus() {
+        if (guiManager != null) {
+            guiManager.reloadMenus(this, "menus");
+        }
     }
 
     private ItemStack createItemStack(Player player, MenuItem item) {
@@ -371,11 +227,32 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
             return itemStack;
         }
 
-        meta.setDisplayName(legacyColor(processPlaceholders(player, item.getName())));
-        meta.setLore(item.getLore().stream().map(line -> legacyColor(processPlaceholders(player, line))).collect(Collectors.toList()));
-        if (item.getMaterial() == Material.PLAYER_HEAD && !item.getSkull().isEmpty() && meta instanceof SkullMeta skullMeta) {
-            skullMeta.setOwner(processPlaceholders(player, item.getSkull()));
+        String name = item.getName();
+        if (placeholderProcessor != null) {
+            name = placeholderProcessor.apply(name, player);
         }
+        meta.displayName(miniMessage.colorize(name));
+
+        List<String> lore = item.getLore();
+        List<Component> loreComponents = lore.stream()
+                .map(line -> {
+                    String processed = placeholderProcessor != null ? placeholderProcessor.apply(line, player) : line;
+                    return miniMessage.colorize(processed);
+                })
+                .collect(Collectors.toList());
+        meta.lore(loreComponents);
+
+        if (item.getMaterial() == Material.PLAYER_HEAD && item.getSkullOwner() != null && !item.getSkullOwner().isEmpty() && meta instanceof SkullMeta skullMeta) {
+            String skullOwner = placeholderProcessor != null ? placeholderProcessor.apply(item.getSkullOwner(), player) : item.getSkullOwner();
+            skullMeta.setOwner(skullOwner);
+        }
+
+        if (item.isGlowing()) {
+            itemStack.addUnsafeEnchantment(org.bukkit.enchantments.Enchantment.UNBREAKING, 1);
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         itemStack.setItemMeta(meta);
         return itemStack;
     }
@@ -400,8 +277,8 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
         String name = section != null ? section.getString("name", "<gold><bold>主菜单") : "<gold><bold>主菜单";
         List<String> lore = section != null ? section.getStringList("lore") : List.of();
 
-        meta.setDisplayName(legacyColor(name));
-        meta.setLore(lore.stream().map(this::legacyColor).collect(Collectors.toList()));
+        meta.displayName(miniMessage.colorize(name));
+        meta.lore(lore.stream().map(l -> miniMessage.colorize(l)).collect(Collectors.toList()));
         meta.setUnbreakable(section == null || section.getBoolean("unbreakable", true));
         meta.getPersistentDataContainer().set(menuItemKey, PersistentDataType.STRING, menuName.toLowerCase());
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ATTRIBUTES);
@@ -419,7 +296,7 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
         return itemStack;
     }
 
-    private void giveMenuItem(Player player, boolean replaceConfiguredSlot) {
+    public void giveMenuItem(Player player, boolean replaceConfiguredSlot) {
         ItemStack menuItem = createMenuItem();
         int preferredSlot = Math.max(0, Math.min(8, config.getInt("menu-item.inventory-slot", 4)));
         if (replaceConfiguredSlot) {
@@ -560,7 +437,9 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
             return;
         }
 
-        MenuData menuData = menus.get(holder.getMenuName());
+        String menuName = holder.getMenuId();
+        MenuData menuData = guiManager != null ? guiManager.getMenu(menuName) : null;
+
         if (menuData == null) {
             return;
         }
@@ -571,40 +450,30 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
         }
 
         MenuItem item = menuData.getItemBySlot(slot);
-        if (item != null) {
-            getLogger().info("[DEBUG] 点击了物品: " + item.getName() + ", action: " + item.getAction() + ", actions: " + item.getActions());
-             if (item.getActions() != null && !item.getActions().isEmpty()) {
-                 getLogger().info("[DEBUG] 执行 actions 列表");
-                 // 检查是否是新手礼包命令
-                 boolean isStarterKit = false;
-                 for (String action : item.getActions()) {
-                     if (action != null && action.contains("阿斯特瑞亚")) {
-                         isStarterKit = true;
-                         break;
-                     }
-                 }
-                 if (isStarterKit) {
-                    if (hasClaimedStarterKit(player)) {
-                        player.sendMessage(miniMessage.colorize("<red>你已领取过新手礼包！"));
-                        return;
-                    }
-                    markStarterKitClaimed(player);
+        if (item != null && item.hasPermission(player)) {
+            List<String> actions = item.getActions();
+            if (actions != null && !actions.isEmpty()) {
+                boolean isStarterKit = actions.stream().anyMatch(a -> a != null && a.contains("阿斯特瑞亚"));
+                if (isStarterKit && hasClaimedStarterKit(player)) {
+                    player.sendMessage(miniMessage.colorize("<red>你已领取过新手礼包！"));
+                    return;
                 }
-                executeActionFromList(player, item.getActions());
-            } else if (item.getAction() != null && !item.getAction().isEmpty()) {
-                getLogger().info("[DEBUG] 执行单个 action");
-                // 检查是否是新手礼包命令
-                boolean isStarterKit = item.getAction().contains("阿斯特瑞亚");
                 if (isStarterKit) {
-                    if (hasClaimedStarterKit(player)) {
-                        player.sendMessage(miniMessage.colorize("<red>你已领取过新手礼包！"));
-                        return;
-                    }
                     markStarterKitClaimed(player);
                 }
-                 executeAction(player, item.getAction());
-             }
-         }
+                executeActions(player, actions);
+            } else if (item.getAction() != null && !item.getAction().isEmpty()) {
+                boolean isStarterKit = item.getAction().contains("阿斯特瑞亚");
+                if (isStarterKit && hasClaimedStarterKit(player)) {
+                    player.sendMessage(miniMessage.colorize("<red>你已领取过新手礼包！"));
+                    return;
+                }
+                if (isStarterKit) {
+                    markStarterKitClaimed(player);
+                }
+                executeAction(player, item.getAction());
+            }
+        }
     }
 
     @EventHandler
@@ -660,74 +529,54 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
             return;
         }
 
+        ActionExecutor executor = new ActionExecutor(player, placeholderProcessor);
+
         if (action.startsWith("menu:")) {
             openMenu(player, action.substring(5));
-        } else if (action.startsWith("command:")) {
-            String cmd = processPlaceholders(player, action.substring(8));
-            executeMultipleCommands(player, cmd, false);
-        } else if (action.startsWith("console:")) {
-            String cmd = processPlaceholders(player, action.substring(8));
-            executeMultipleCommands(player, cmd, true);
         } else if (action.startsWith("message:")) {
-            player.sendMessage(miniMessage.colorize(processPlaceholders(player, action.substring(8))));
+            String message = action.substring(8);
+            if (placeholderProcessor != null) {
+                message = placeholderProcessor.apply(message, player);
+            }
+            player.sendMessage(miniMessage.colorize(message));
         } else if (action.startsWith("close")) {
             player.closeInventory();
         } else {
-             // 没有前缀，默认作为控制台命令处理
-             getLogger().info("[DEBUG] 默认作为控制台命令处理: " + action);
-             String cmd = processPlaceholders(player, action);
-             executeMultipleCommands(player, cmd, true);
-         }
+            executor.execute(action);
+        }
 
         playClickSound(player);
     }
 
-    private void executeActionFromList(Player player, List<String> actions) {
+    private void executeActions(Player player, List<String> actions) {
         if (actions == null || actions.isEmpty()) {
             return;
         }
 
+        ActionExecutor executor = new ActionExecutor(player, placeholderProcessor);
+
         for (String action : actions) {
             if (action != null && !action.isEmpty()) {
-                executeAction(player, action);
-            }
-        }
-    }
-
-    private void executeMultipleCommands(Player player, String commands, boolean isConsole) {
-        getLogger().info("[DEBUG] executeMultipleCommands 收到: " + commands + ", isConsole=" + isConsole);
-        String[] cmds = commands.split("&&");
-        for (String cmd : cmds) {
-            String trimmedCmd = cmd.trim();
-            if (!trimmedCmd.isEmpty()) {
-                // 如果命令以 mm 开头（MythicMobs），通过控制台执行但不添加前缀
-                if (trimmedCmd.toLowerCase().startsWith("mm ")) {
-                    getLogger().info("[DEBUG] MythicMobs 命令通过控制台执行: " + trimmedCmd);
-                    final String mmCmd = trimmedCmd;
-                    scheduler.runSyncLater(() -> {
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), mmCmd);
-                    }, 0L);
-                } else {
-                    // 其他命令正常处理
-                    if (isConsole && !trimmedCmd.toLowerCase().startsWith("console:")) {
-                        trimmedCmd = "console:" + trimmedCmd;
+                if (action.startsWith("menu:")) {
+                    openMenu(player, action.substring(5));
+                } else if (action.startsWith("message:")) {
+                    String message = action.substring(8);
+                    if (placeholderProcessor != null) {
+                        message = placeholderProcessor.apply(message, player);
                     }
-                    getLogger().info("[DEBUG] dispatchCommand: " + trimmedCmd);
-                    final String finalCmd = trimmedCmd;
-                    scheduler.runSyncLater(() -> {
-                        if (isConsole) {
-                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCmd);
-                        } else {
-                            player.performCommand(finalCmd);
-                        }
-                    }, 0L);
+                    player.sendMessage(miniMessage.colorize(message));
+                } else if (action.startsWith("close")) {
+                    player.closeInventory();
+                } else {
+                    executor.execute(action);
                 }
             }
         }
+
+        playClickSound(player);
     }
 
     private void playClickSound(Player player) {
-        // 使用 RPGCore SoundService
         if (soundService != null) {
             String soundName = config.getString("messages.click-sound", "minecraft:block.note_block.pling");
             float volume = (float) config.getDouble("messages.click-volume", 1.0);
@@ -736,315 +585,45 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
         }
     }
 
-    /**
-     * 使用 MiniMessage 解析颜色代码并返回 Component
-     */
-    private Component color(String text) {
-        if (text == null) return Component.empty();
-        return miniMessage.colorize(text);
-    }
-
-    /**
-     * 使用 MiniMessage 解析颜色代码并返回 legacy 格式字符串
-     * 用于 ItemMeta 等需要 String 的 API
-     */
-    private String legacyColor(String text) {
-        if (text == null) return "";
-        // 将 & 颜色代码转换为 MiniMessage 格式，然后序列化为 legacy 格式
-        String miniMessageText = text
-            .replace("<black>", "<black>").replace("<dark_blue>", "<dark_blue>")
-            .replace("<dark_green>", "<dark_green>").replace("<dark_aqua>", "<dark_aqua>")
-            .replace("<dark_red>", "<dark_red>").replace("<dark_purple>", "<dark_purple>")
-            .replace("<gold>", "<gold>").replace("<gray>", "<gray>")
-            .replace("<dark_gray>", "<dark_gray>").replace("<blue>", "<blue>")
-            .replace("<green>", "<green>").replace("<aqua>", "<aqua>")
-            .replace("<red>", "<red>").replace("<light_purple>", "<light_purple>")
-            .replace("<yellow>", "<yellow>").replace("<white>", "<white>")
-            .replace("<obfuscated>", "<obfuscated>").replace("<bold>", "<bold>")
-            .replace("<strikethrough>", "<strikethrough>").replace("<underlined>", "<underlined>")
-            .replace("<italic>", "<italic>").replace("<reset>", "<reset>");
-        Component component = miniMessageParser.deserialize(miniMessageText);
-        return net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(component);
-    }
-
-    /**
-     * 移除文本中的颜色代码
-     * 支持传统 & 颜色代码、§ 颜色代码和 MiniMessage 格式
-     */
     private String stripColor(String text) {
         if (text == null) return "";
-        // 先移除 § 颜色代码
-        String noSection = text.replaceAll("§[0-9a-fk-or]", "");
-        // 再移除 & 颜色代码
-        String noAmpersand = noSection.replaceAll("&[0-9a-fk-or]", "");
-        // 最后尝试解析 MiniMessage 并获取纯文本
-        try {
-            Component component = miniMessageParser.deserialize(noAmpersand);
-            return net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(component);
-        } catch (Exception e) {
-            // 如果解析失败，返回已移除 & 和 § 的文本
-            return noAmpersand.replaceAll("<[^>]+>", "");
-        }
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (command.getName().equalsIgnoreCase("menu")) {
-            if (!(sender instanceof Player player)) {
-                sender.sendMessage("该命令只能由玩家执行!");
-                return true;
-            }
-            if (!player.hasPermission("guangdian.menu.use")) {
-                player.sendMessage(miniMessage.colorize(config.getString("messages.no-permission", "<red>您没有权限执行此操作!")));
-                return true;
-            }
-            String menuName = args.length > 0 ? args[0].toLowerCase() : config.getString("default-menu", "main");
-            openMenu(player, menuName);
-            return true;
-        }
-
-        if (command.getName().equalsIgnoreCase("guangdianmenu")) {
-            if (!sender.hasPermission("guangdian.menu.admin")) {
-                sender.sendMessage(miniMessage.colorize(config.getString("messages.no-permission", "<red>您没有权限执行此操作!")));
-                return true;
-            }
-
-            if (args.length > 0 && args[0].equalsIgnoreCase("reload")) {
-                reloadConfig();
-                config = getConfig();
-                loadMenus();
-                sender.sendMessage(miniMessage.colorize(config.getString("messages.config-reloaded", "<green>菜单配置已重新加载!")));
-                return true;
-            }
-
-            if (args.length > 0 && args[0].equalsIgnoreCase("give")) {
-                if (args.length >= 2) {
-                    Player target = Bukkit.getPlayerExact(args[1]);
-                    if (target == null) {
-                        sender.sendMessage(miniMessage.colorize("<red>玩家不在线或不存在!"));
-                        return true;
-                    }
-                    giveMenuItem(target, false);
-                    sender.sendMessage(miniMessage.colorize("<green>已发放主菜单物品给玩家: <yellow>" + target.getName()));
-                    return true;
-                }
-
-                if (sender instanceof Player player) {
-                    giveMenuItem(player, false);
-                    sender.sendMessage(miniMessage.colorize("<green>已发放主菜单物品!"));
-                    return true;
-                }
-
-                sender.sendMessage(miniMessage.colorize("<yellow>用法: /guangdianmenu give <玩家>"));
-                return true;
-            }
-
-            sender.sendMessage(miniMessage.colorize("<yellow>用法: /guangdianmenu reload|give [玩家]"));
-            return true;
-        }
-
-        return true;
-    }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (command.getName().equalsIgnoreCase("menu") && args.length == 1) {
-            return menus.keySet().stream().filter(name -> name.startsWith(args[0].toLowerCase())).collect(Collectors.toList());
-        }
-
-        if (command.getName().equalsIgnoreCase("guangdianmenu")) {
-            if (args.length == 1) {
-                List<String> completions = new ArrayList<>();
-                completions.add("reload");
-                completions.add("give");
-                return completions.stream().filter(name -> name.startsWith(args[0].toLowerCase())).collect(Collectors.toList());
-            }
-            if (args.length == 2 && args[0].equalsIgnoreCase("give")) {
-                return Bukkit.getOnlinePlayers().stream().map(Player::getName).filter(name -> name.startsWith(args[1])).collect(Collectors.toList());
-            }
-        }
-
-        return new ArrayList<>();
+        return cn.guangdian.rpgcore.util.TextStripper.stripAll(text);
     }
 
     public static GuangDianMenu getInstance() {
         return instance;
     }
 
-    // ==================== 公开API方法（供RPGCore服务调用） ====================
-
-    /**
-     * 打开菜单 - API方法
-     * 
-     * @param player 玩家
-     * @param menuName 菜单名称
-     * @return 是否成功打开
-     */
     public boolean openMenuAPI(Player player, String menuName) {
         if (player == null || menuName == null) return false;
         openMenu(player, menuName);
         return true;
     }
 
-    /**
-     * 检查菜单是否存在 - API方法
-     * 
-     * @param menuName 菜单名称
-     * @return 是否存在
-     */
     public boolean hasMenuAPI(String menuName) {
-        return menuName != null && menus.containsKey(menuName.toLowerCase());
+        return menuName != null && guiManager != null && guiManager.hasMenu(menuName);
     }
 
-    /**
-     * 获取所有菜单名称 - API方法
-     * 
-     * @return 菜单名称列表
-     */
     public List<String> getMenuNamesAPI() {
-        return new ArrayList<>(menus.keySet());
+        if (guiManager != null) {
+            return new ArrayList<>(guiManager.getMenuNames());
+        }
+        return new ArrayList<>();
     }
 
-    /**
-     * 重新加载菜单 - API方法
-     */
     public void reloadMenusAPI() {
-        loadMenus();
+        reloadMenus();
     }
 
-    /**
-     * 获取菜单数量
-     * 
-     * @return 菜单数量
-     */
     public int getMenuCountAPI() {
-        return menus.size();
+        return guiManager != null ? guiManager.getMenuCount() : 0;
     }
 
-    // ==================== Getters ====================
-
-    public Map<String, MenuData> getMenus() {
-        return menus;
+    public GUIManager getGUIManager() {
+        return guiManager;
     }
 
     public String getPlayerMenu(UUID uuid) {
         return playerMenus.get(uuid);
     }
-
-    /**
-     * 获取 MiniMessageService
-     * @return MiniMessageService 实例
-     */
-    public MiniMessageService getMiniMessage() {
-        return miniMessage;
-    }
-
-    /**
-     * 获取 SoundService
-     * @return SoundService 实例
-     */
-    public SoundService getSoundService() {
-        return soundService;
-    }
-
-    private static class MenuHolder implements InventoryHolder {
-        private final String menuName;
-
-        private MenuHolder(String menuName) {
-            this.menuName = menuName;
-        }
-
-        public String getMenuName() {
-            return menuName;
-        }
-
-        @Override
-        public Inventory getInventory() {
-            return null;
-        }
-    }
-
-    private static class MenuData {
-        private final String title;
-        private final int size;
-        private final Map<String, MenuItem> items = new HashMap<>();
-        private final Map<Integer, MenuItem> slotToItem = new HashMap<>();
-
-        private MenuData(String title, int size) {
-            this.title = title;
-            this.size = size;
-        }
-
-        public void addItem(String name, MenuItem item) {
-            items.put(name, item);
-            for (int slot : item.getSlots()) {
-                slotToItem.put(slot, item);
-            }
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public int getSize() {
-            return size;
-        }
-
-        public Map<String, MenuItem> getItems() {
-            return items;
-        }
-
-        public MenuItem getItemBySlot(int slot) {
-            return slotToItem.get(slot);
-        }
-    }
-
-    private static class MenuItem {
-        private final Material material;
-        private final String name;
-        private final List<String> lore;
-        private final List<Integer> slots;
-        private final String action;
-        private final List<String> actions;
-        private final String skull;
-
-        private MenuItem(Material material, String name, List<String> lore, List<Integer> slots, String action, List<String> actions, String skull) {
-            this.material = material;
-            this.name = name;
-            this.lore = lore;
-            this.slots = slots;
-            this.action = action;
-            this.actions = actions;
-            this.skull = skull;
-        }
-
-        public Material getMaterial() {
-            return material;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public List<String> getLore() {
-            return lore;
-        }
-
-        public List<Integer> getSlots() {
-            return slots;
-        }
-
-        public String getAction() {
-            return action;
-        }
-
-        public List<String> getActions() {
-            return actions;
-        }
-
-        public String getSkull() {
-            return skull;
-        }
-    }
-
 }

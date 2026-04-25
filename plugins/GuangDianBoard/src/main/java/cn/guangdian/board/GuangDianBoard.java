@@ -28,9 +28,11 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
 import cn.guangdian.board.adapter.BoardServiceAdapter;
+import cn.guangdian.board.command.BoardCommand;
+import cn.guangdian.board.command.ToggleBoardCommand;
 import cn.guangdian.board.lifecycle.BoardDataHandler;
 import cn.guangdian.board.placeholder.BoardPlaceholder;
-import me.clip.placeholderapi.PlaceholderAPI;
+import cn.guangdian.rpgcore.command.CommandFramework;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -147,8 +149,25 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
             logInfo("已注册 PlaceholderAPI 扩展!");
         }
 
+        // 注册命令 - 使用 RPGCore CommandFramework
+        registerCommands();
+
         logInfo("光点侧边栏插件已启用! 版本: " + getDescription().getVersion());
         logInfo("作者: Gumin | QQ: 2271257344");
+    }
+
+    /**
+     * 注册命令 - 使用 RPGCore CommandFramework
+     */
+    private void registerCommands() {
+        CommandFramework framework = CommandFramework.getInstance();
+        if (framework != null) {
+            framework.registerCommand(new BoardCommand(this));
+            framework.registerCommand(new ToggleBoardCommand(this));
+            logInfo("已使用 CommandFramework 注册命令");
+        } else {
+            logSevere("CommandFramework 不可用，命令注册失败");
+        }
     }
 
     /**
@@ -274,7 +293,7 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
         
         // 注销 PlaceholderAPI 扩展
         if (boardPlaceholder != null) {
-            PlaceholderAPI.unregisterExpansion(boardPlaceholder);
+            boardPlaceholder.unregister();
         }
         
         stopTasks();
@@ -1040,132 +1059,7 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
         requestSmartRefresh(player);
     }
 
-    @Override
-    public boolean onCommand(org.bukkit.command.CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
-        if (command.getName().equalsIgnoreCase("toggleboard")) {
-            if (!(sender instanceof Player)) {
-                sender.sendMessage("该命令只能由玩家执行!");
-                return true;
-            }
-            
-            Player player = (Player) sender;
-            if (!player.hasPermission("guangdian.board.toggle")) {
-                player.sendMessage(miniMessage.colorize(config.getString("messages.no-permission", "<red>您没有权限执行此操作!")));
-                return true;
-            }
-            
-            toggleBoard(player);
-            return true;
-        }
-        
-        if (command.getName().equalsIgnoreCase("gdboard")) {
-            if (args.length == 0) {
-                sendHelp(sender);
-                return true;
-            }
-            
-            switch (args[0].toLowerCase()) {
-                case "reload":
-                    return handleReload(sender);
-                case "toggle":
-                    return handleToggle(sender);
-                case "info":
-                    return handleInfo(sender);
-                case "help":
-                    sendHelp(sender);
-                    return true;
-                default:
-                    sender.sendMessage(miniMessage.colorize("<red>未知的命令! 使用 /gdboard help 查看帮助"));
-                    return true;
-            }
-        }
-        
-        return true;
-    }
 
-    private void sendHelp(org.bukkit.command.CommandSender sender) {
-        sender.sendMessage(miniMessage.colorize("<gold><bold>===== 光点侧边栏插件 ====="));
-        sender.sendMessage(miniMessage.colorize("<yellow>/gdboard reload <gray>- 重新加载配置"));
-        sender.sendMessage(miniMessage.colorize("<yellow>/gdboard toggle <gray>- 切换侧边栏显示"));
-        sender.sendMessage(miniMessage.colorize("<yellow>/gdboard info <gray>- 显示插件信息"));
-        sender.sendMessage(miniMessage.colorize("<yellow>/gdboard help <gray>- 显示帮助信息"));
-        sender.sendMessage(miniMessage.colorize("<yellow>/toggleboard <gray>- 快速切换侧边栏"));
-        sender.sendMessage(miniMessage.colorize("<gray>作者: Gumin | QQ: 2271257344"));
-    }
-
-    private boolean handleReload(org.bukkit.command.CommandSender sender) {
-        if (!sender.hasPermission("guangdian.board.reload")) {
-            sender.sendMessage(miniMessage.colorize(config.getString("messages.no-permission", "<red>您没有权限执行此操作!")));
-            return true;
-        }
-        
-        reloadConfig();
-        config = getConfig();
-        loadWorldAliases();
-        loadStyleSettings();
-        refreshInterval = config.getLong("refresh-interval", 1000L);
-        titleRefreshInterval = config.getLong("title-refresh-interval", 3000L);
-        defaultTitle = config.getString("title", "<gold><bold>光点RPG");
-        titleAnimationEnabled = config.getBoolean("title-animation.enabled", false);
-        titleFrames = config.getStringList("title-animation.frames");
-        cachedMaxLines = Math.max(1, config.getInt("advanced.max-lines", 15));
-        
-        stopTasks();
-        startTasks();
-        
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (shouldShowBoard(player)) {
-                createBoard(player);
-            }
-        }
-        
-        sender.sendMessage(miniMessage.colorize(config.getString("messages.config-reloaded", "<green>侧边栏配置已重新加载!")));
-        return true;
-    }
-
-    private boolean handleToggle(org.bukkit.command.CommandSender sender) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("该命令只能由玩家执行!");
-            return true;
-        }
-        
-        Player player = (Player) sender;
-        if (!player.hasPermission("guangdian.board.toggle")) {
-            player.sendMessage(miniMessage.colorize(config.getString("messages.no-permission", "<red>您没有权限执行此操作!")));
-            return true;
-        }
-        
-        toggleBoard(player);
-        return true;
-    }
-
-    private boolean handleInfo(org.bukkit.command.CommandSender sender) {
-        sender.sendMessage(miniMessage.colorize("<gold><bold>===== 光点侧边栏插件信息 ====="));
-        sender.sendMessage(miniMessage.colorize("<yellow>版本: <white>" + getDescription().getVersion()));
-        sender.sendMessage(miniMessage.colorize("<yellow>作者: <white>Gumin"));
-        sender.sendMessage(miniMessage.colorize("<yellow>QQ: <white>2271257344"));
-        sender.sendMessage(miniMessage.colorize("<yellow>状态: <green>已启用"));
-        sender.sendMessage(miniMessage.colorize("<yellow>刷新间隔: <white>" + refreshInterval + " ms"));
-        sender.sendMessage(miniMessage.colorize("<yellow>标题动画: <white>" + (titleAnimationEnabled ? "启用" : "禁用")));
-        sender.sendMessage(miniMessage.colorize("<yellow>外部服务: <white>" + (externalServices != null ? externalServices.getExternalServiceStatus() : "<red>未初始化")));
-        return true;
-    }
-
-    @Override
-    public List<String> onTabComplete(org.bukkit.command.CommandSender sender, org.bukkit.command.Command command, String alias, String[] args) {
-        List<String> completions = new ArrayList<>();
-        
-        if (command.getName().equalsIgnoreCase("gdboard")) {
-            if (args.length == 1) {
-                completions.add("reload");
-                completions.add("toggle");
-                completions.add("info");
-                completions.add("help");
-            }
-        }
-        
-        return completions;
-    }
 
     public Map<UUID, Boolean> getBoardToggleState() {
         return boardToggleState;

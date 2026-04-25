@@ -166,7 +166,7 @@ public final class ServerService {
         
         // 通知所有玩家
         for (Player player : Bukkit.getOnlinePlayers()) {
-            player.kick(Component.text("§c服务器正在关闭，请稍后再试！"));
+            player.kick(Component.text("服务器正在关闭，请稍后再试！").color(net.kyori.adventure.text.format.NamedTextColor.RED));
         }
         
         // 保存数据

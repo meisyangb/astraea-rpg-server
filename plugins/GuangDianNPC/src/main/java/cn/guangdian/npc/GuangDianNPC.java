@@ -112,7 +112,7 @@ public final class GuangDianNPC extends AbstractRPGPlugin implements Listener, C
         }
 
         if (placeholders != null) {
-            PlaceholderAPI.unregisterExpansion(placeholders);
+            placeholders.unregister();
             placeholders = null;
         }
 

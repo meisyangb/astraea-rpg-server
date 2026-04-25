@@ -62,7 +62,7 @@ public class QuestLineGUI extends QuestGUI {
             "<gray>可获得丰厚奖励",
             "<dark_gray>━━━━━━━━━━━━━━━━━━"
         ));
-        builder.setItem(13, infoItem, null);
+        builder.setItem(13, infoItem);
 
         // 填充任务线 (slot 20-26, 29-35)
         int[] slots = {20, 21, 22, 23, 24, 25, 26, 29, 30, 31, 32, 33, 34, 35};
@@ -99,7 +99,7 @@ public class QuestLineGUI extends QuestGUI {
         builder.setItem(QuestNavigation.SLOT_PREV, nav.createNavFiller());
 
         // 当前位置
-        builder.setItem(QuestNavigation.SLOT_INFO, nav.createLocationIndicator("任务线", "共 " + questLines.size() + " 条"), null);
+        builder.setItem(QuestNavigation.SLOT_INFO, nav.createLocationIndicator("任务线", "共 " + questLines.size() + " 条"));
 
         // 下一页/空位
         builder.setItem(QuestNavigation.SLOT_NEXT, nav.createNavFiller());

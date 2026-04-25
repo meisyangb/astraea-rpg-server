@@ -10,7 +10,9 @@ import cn.guangdian.socket.manager.SocketService;
 import cn.guangdian.socket.util.ItemResolver;
 import cn.guangdian.socket.model.AttributeValue;
 import cn.guangdian.socket.parser.SocketParser;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -453,11 +455,15 @@ public class SocketInlayGUI implements InventoryHolder {
                 ItemStack display = gem.clone();
                 ItemMeta meta = display.getItemMeta();
                 if (meta != null) {
-                    List<String> lore = meta.hasLore() && meta.getLore() != null
-                        ? new ArrayList<>(meta.getLore())
-                        : new ArrayList<>();
-                    lore.add(0, "<gray>--- 已镶嵌 ---");
-                    meta.setLore(lore);
+                    // 使用Component Lore
+                    List<Component> lore = meta.lore();
+                    if (lore == null) {
+                        lore = new ArrayList<>();
+                    } else {
+                        lore = new ArrayList<>(lore);
+                    }
+                    lore.add(0, MiniMessage.miniMessage().deserialize("<gray>--- 已镶嵌 ---"));
+                    meta.lore(lore);
                     display.setItemMeta(meta);
                 }
                 inventory.setItem(GEM_SLOTS[i], display);
@@ -757,15 +763,21 @@ public class SocketInlayGUI implements InventoryHolder {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         if (miniMessage != null) {
-            meta.setDisplayName(miniMessage.legacyColorize(name));
+            // 使用Component API设置displayName
+            meta.displayName(miniMessage.parse(name));
             if (lore != null && lore.length > 0) {
-                List<String> translatedLore = new ArrayList<>();
-                for (String line : lore) translatedLore.add(miniMessage.legacyColorize(line));
-                meta.setLore(translatedLore);
+                List<Component> componentLore = new ArrayList<>();
+                for (String line : lore) {
+                    componentLore.add(miniMessage.parse(line));
+                }
+                meta.lore(componentLore);
             }
         } else {
+            // 回退到旧版API
             meta.setDisplayName(name);
-            if (lore != null && lore.length > 0) meta.setLore(Arrays.asList(lore));
+            if (lore != null && lore.length > 0) {
+                meta.setLore(Arrays.asList(lore));
+            }
         }
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         item.setItemMeta(meta);

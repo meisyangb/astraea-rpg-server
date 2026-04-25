@@ -6,12 +6,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PlayerLifecycleManager implements Listener {
@@ -36,6 +39,7 @@ public class PlayerLifecycleManager implements Listener {
     }
     
     public void unregister() {
+        HandlerList.unregisterAll(this);
         stopAutoSave();
         handlers.clear();
         logger.info("PlayerLifecycleManager 已禁用");
@@ -59,26 +63,42 @@ public class PlayerLifecycleManager implements Listener {
         long startTime = System.currentTimeMillis();
         loadTimes.put(playerId, startTime);
         
-        PlayerDataLoadEvent loadEvent = new PlayerDataLoadEvent(player);
-        
-        for (PlayerDataHandler handler : handlers) {
-            try {
-                if (handler.shouldLoad(player)) {
-                    long handlerStart = System.currentTimeMillis();
-                    handler.onLoad(loadEvent);
-                    long handlerTime = System.currentTimeMillis() - handlerStart;
-                    if (handlerTime > 100) {
-                        logger.warning("[性能] " + handler.getHandlerName() + " 加载耗时: " + handlerTime + "ms");
-                    }
-                }
-            } catch (Exception e) {
-                logger.severe("数据加载失败 [" + handler.getHandlerName() + "]: " + e.getMessage());
-                e.printStackTrace();
-            }
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore == null) {
+            logger.warning("RPGCore instance is null, skipping data load for " + player.getName());
+            return;
         }
         
-        long totalTime = System.currentTimeMillis() - startTime;
-        logger.info("[登录] " + player.getName() + " 数据加载完成 (" + handlers.size() + "个处理器, 耗时" + totalTime + "ms)");
+        SyncScheduler scheduler = rpgCore.getScheduler();
+        if (scheduler == null) {
+            logger.warning("Scheduler is null, skipping data load for " + player.getName());
+            return;
+        }
+        
+        PlayerDataLoadEvent loadEvent = new PlayerDataLoadEvent(player);
+        
+        scheduler.runAsync(() -> {
+            int handlerCount = handlers.size();
+            for (PlayerDataHandler handler : handlers) {
+                try {
+                    if (handler.shouldLoad(player)) {
+                        long handlerStart = System.currentTimeMillis();
+                        handler.onLoad(loadEvent);
+                        long handlerTime = System.currentTimeMillis() - handlerStart;
+                        if (handlerTime > 100) {
+                            logger.warning("[性能] " + handler.getHandlerName() + " 加载耗时: " + handlerTime + "ms");
+                        }
+                    }
+                } catch (Exception e) {
+                    logger.log(Level.SEVERE, "数据加载失败 [" + handler.getHandlerName() + "]: " + e.getMessage(), e);
+                }
+            }
+            
+            long totalTime = System.currentTimeMillis() - startTime;
+            scheduler.runSync(() -> {
+                logger.info("[登录] " + player.getName() + " 数据加载完成 (" + handlerCount + "个处理器, 耗时" + totalTime + "ms)");
+            });
+        });
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
@@ -97,26 +117,53 @@ public class PlayerLifecycleManager implements Listener {
         long startTime = System.currentTimeMillis();
         saveTimes.put(playerId, startTime);
         
-        PlayerDataSaveEvent saveEvent = new PlayerDataSaveEvent(player, async);
-        
-        for (PlayerDataHandler handler : handlers) {
-            try {
-                if (handler.shouldSave(player)) {
-                    long handlerStart = System.currentTimeMillis();
-                    handler.onSave(saveEvent);
-                    long handlerTime = System.currentTimeMillis() - handlerStart;
-                    if (handlerTime > 100) {
-                        logger.warning("[性能] " + handler.getHandlerName() + " 保存耗时: " + handlerTime + "ms");
-                    }
-                }
-            } catch (Exception e) {
-                logger.severe("数据保存失败 [" + handler.getHandlerName() + "]: " + e.getMessage());
-                e.printStackTrace();
-            }
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore == null) {
+            logger.warning("RPGCore instance is null, skipping data save for " + player.getName());
+            return;
         }
         
-        long totalTime = System.currentTimeMillis() - startTime;
-        logger.info("[退出] " + player.getName() + " 数据保存完成 (" + handlers.size() + "个处理器, 耗时" + totalTime + "ms)");
+        PlayerDataSaveEvent saveEvent = new PlayerDataSaveEvent(player, async);
+        
+        Runnable saveTask = () -> {
+            int handlerCount = handlers.size();
+            for (PlayerDataHandler handler : handlers) {
+                try {
+                    if (handler.shouldSave(player)) {
+                        long handlerStart = System.currentTimeMillis();
+                        handler.onSave(saveEvent);
+                        long handlerTime = System.currentTimeMillis() - handlerStart;
+                        if (handlerTime > 100) {
+                            logger.warning("[性能] " + handler.getHandlerName() + " 保存耗时: " + handlerTime + "ms");
+                        }
+                    }
+                } catch (Exception e) {
+                    logger.log(Level.SEVERE, "数据保存失败 [" + handler.getHandlerName() + "]: " + e.getMessage(), e);
+                }
+            }
+            
+            long totalTime = System.currentTimeMillis() - startTime;
+            SyncScheduler scheduler = rpgCore.getScheduler();
+            if (scheduler != null) {
+                scheduler.runSync(() -> {
+                    logger.info("[退出] " + player.getName() + " 数据保存完成 (" + handlerCount + "个处理器, 耗时" + totalTime + "ms)");
+                });
+            }
+        };
+        
+        if (async) {
+            SyncScheduler scheduler = rpgCore.getScheduler();
+            if (scheduler != null) {
+                scheduler.runAsync(saveTask);
+            }
+        } else {
+            // 同步保存时添加超时保护，避免阻塞主线程过久
+            try {
+                saveTask.run();
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, "同步保存玩家数据时发生错误 [" + player.getName() + "]: " + e.getMessage(), e);
+            }
+        }
     }
     
     public void saveAllPlayers(boolean async) {

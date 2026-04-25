@@ -1,0 +1,39 @@
+传承之书-小:
+  Id: 340
+  Display: <gold>传承之书-小
+  Lore:
+  - <yellow>经验书              消耗品
+  - <green>使用后消耗掉
+  - <green>右键使用获得经验
+  - <yellow>远古智贤的传承之书
+  - <yellow>可以获取一定量的经验值
+  - <blue>本书可获得10000经验
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+传承之书-中:
+  Id: 340
+  Display: <gold>传承之书-中
+  Lore:
+  - <yellow>经验书              消耗品
+  - <green>使用后消耗掉
+  - <green>右键使用获得经验
+  - <yellow>远古智贤的传承之书
+  - <yellow>可以获取一定量的经验值
+  - <blue>本书可获得300000经验
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+传承之书-大:
+  Id: 340
+  Display: <gold>传承之书-大
+  Lore:
+  - <yellow>经验书              消耗品
+  - <green>使用后消耗掉
+  - <green>右键使用获得经验
+  - <yellow>远古智贤的传承之书
+  - <yellow>可以获取一定量的经验值
+  - <blue>本书可获得1000000经验
+  Options:
+    Unbreakable: true
+    HideAttributes: true

@@ -28,7 +28,10 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import java.util.logging.Logger;
+
 public class CollectionServiceImpl implements CollectionService {
+    private static final Logger logger = Logger.getLogger("GuangDianCollection");
 
     private final GuangDianCollection plugin;
     private final Map<String, CollectionSet> sets = new ConcurrentHashMap<>();
@@ -405,7 +408,9 @@ public class CollectionServiceImpl implements CollectionService {
                     (float) plugin.getConfigManager().getNotifyVolume(),
                     (float) plugin.getConfigManager().getNotifyPitch());
             }
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+            logger.warning("播放收集音效失败: " + e.getMessage());
+        }
         
         if (category != null && isCategoryComplete(player, entry.getCategoryId())) {
             String completeMsg = plugin.getConfigManager().getMessage("category-complete")

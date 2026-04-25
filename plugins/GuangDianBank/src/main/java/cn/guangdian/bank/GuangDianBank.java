@@ -118,7 +118,7 @@ public class GuangDianBank extends AbstractRPGPlugin {
         }
 
         if (bankPlaceholder != null) {
-            PlaceholderAPI.unregisterExpansion(bankPlaceholder);
+            bankPlaceholder.unregister();
         }
 
         saveData();

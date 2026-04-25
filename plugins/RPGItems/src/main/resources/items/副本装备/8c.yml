@@ -1,0 +1,522 @@
+天启碎片:
+  Id: 410
+  Display: <green>天启碎片
+  Lore:
+  - <dark_gray>[<yellow>材料<dark_gray>]             <dark_gray>[<dark_green>精品<dark_gray>]
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  - <yellow>天启锻造师常用材料
+  - <dark_red><strikethrough><bold>一一一一一一一一
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启徽章:
+  Id: 402
+  Display: <green>天启徽章
+  Lore:
+  - '[<yellow>材料<dark_gray>]                <dark_gray>[<dark_aqua>稀有<dark_gray>]'
+  - <dark_red><strikethrough>－－－－－－－－－－－－
+  - <yellow>天空锻造师用来注入能量的必备材料
+  - <dark_red><strikethrough>－－－－－－－－－－－－
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启:
+  Id: 272
+  Display: <light_purple><bold>天启战刃
+  Lore:
+  - <yellow>近战武器                        上古神器
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_purple>觉醒进度 <gray>✪✪✪
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>攻击力: <aqua>150000-180000'
+  - '<dark_gray>暴击几率: <aqua>10%'
+  - '<dark_gray>暴击伤害: <aqua>250%'
+  - '<dark_gray>吸血几率: <aqua>30%'
+  - '<dark_gray>吸血倍率: <aqua>100%'
+  - '<dark_gray>冰冻: <green>10%'
+  - '<dark_gray>致盲: <green>10%'
+  - <dark_red><strikethrough>一一一武器来源一一一
+  - <yellow><strikethrough>上古神族的武器
+  - <dark_red><strikethrough>一一一神解一一一
+  - <dark_purple>分解后可获得天启魂魄
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>45
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启1:
+  Id: 272
+  Display: <light_purple><bold>天启战刃
+  Lore:
+  - <yellow>近战武器                        上古神器
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪<gray>✪✪
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>攻击力: <aqua>180000-210000'
+  - '<dark_gray>暴击几率: <aqua>15%'
+  - '<dark_gray>暴击伤害: <aqua>300%'
+  - '<dark_gray>吸血几率: <aqua>30%'
+  - '<dark_gray>吸血倍率: <aqua>100%'
+  - '<dark_gray>冰冻: <green>10%'
+  - '<dark_gray>致盲: <green>10%'
+  - <dark_red><strikethrough>一一一武器来源一一一
+  - <yellow><strikethrough>上古神族的武器
+  - <dark_red><strikethrough>一一一神解一一一
+  - <dark_purple>分解后可获得天启魂魄
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>45
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启2:
+  Id: 272
+  Display: <light_purple><bold>天启战刃
+  Lore:
+  - <yellow>近战武器                        上古神器
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪<gray>✪
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>攻击力: <aqua>210000-250000'
+  - '<dark_gray>暴击几率: <aqua>20%'
+  - '<dark_gray>暴击伤害: <aqua>350%'
+  - '<dark_gray>吸血几率: <aqua>30%'
+  - '<dark_gray>吸血倍率: <aqua>100%'
+  - '<dark_gray>冰冻: <green>10%'
+  - '<dark_gray>致盲: <green>10%'
+  - <dark_red><strikethrough>一一一武器来源一一一
+  - <yellow><strikethrough>上古神族的武器
+  - <dark_red><strikethrough>一一一神解一一一
+  - <dark_purple>分解后可获得天启魂魄
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>45
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启3:
+  Id: 272
+  Display: <light_purple><bold>天启觉醒战刃
+  Lore:
+  - <yellow>近战武器                        上古神器
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪✪
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - '<dark_gray>攻击力: <aqua>250000-300000'
+  - '<dark_gray>暴击几率: <aqua>25%'
+  - '<dark_gray>暴击伤害: <aqua>400%'
+  - '<dark_gray>吸血几率: <aqua>50%'
+  - '<dark_gray>吸血倍率: <aqua>100%'
+  - '<dark_gray>冰冻: <green>10%'
+  - '<dark_gray>致盲: <green>10%'
+  - <dark_red><strikethrough>一一一武器来源一一一
+  - <yellow><strikethrough>上古神族的武器
+  - <dark_red><strikethrough>一一一神解一一一
+  - <dark_purple>分解后可获得天启魂魄
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>45
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启头:
+  Id: 302
+  Display: <red><bold>天启头盔
+  Lore:
+  - <yellow>防具                          上古神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <gray>✪✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>天启战士使用的头盔
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>450000'
+  - '<dark_gray>攻击力: <aqua>15000-50000'
+  - '<dark_gray>闪避: <aqua>5%'
+  - '<dark_gray>每秒回血: <aqua>40'
+  - <dark_red><strikethrough>一一一武器来源一一一
+  - <yellow><strikethrough>上古神族的武器
+  - <dark_red><strikethrough>一一一神解一一一
+  - <dark_purple>分解后可获得天启魂魄
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>45
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启头1:
+  Id: 302
+  Display: <red><bold>天启头盔
+  Lore:
+  - <yellow>防具                          上古神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪<gray>✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>天启战士使用的头盔
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>500000'
+  - '<dark_gray>攻击力: <aqua>15000-50000'
+  - '<dark_gray>闪避: <aqua>5%'
+  - '<dark_gray>每秒回血: <aqua>40'
+  - <dark_red><strikethrough>一一一武器来源一一一
+  - <yellow><strikethrough>上古神族的武器
+  - <dark_red><strikethrough>一一一神解一一一
+  - <dark_purple>分解后可获得天启魂魄
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>45
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启头2:
+  Id: 302
+  Display: <red><bold>天启头盔
+  Lore:
+  - <yellow>防具                          上古神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪<gray>✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>天启战士使用的头盔
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>550000'
+  - '<dark_gray>攻击力: <aqua>15000-50000'
+  - '<dark_gray>闪避: <aqua>5%'
+  - '<dark_gray>每秒回血: <aqua>40'
+  - <dark_red><strikethrough>一一一武器来源一一一
+  - <yellow><strikethrough>上古神族的武器
+  - <dark_red><strikethrough>一一一神解一一一
+  - <dark_purple>分解后可获得天启魂魄
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>45
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启头3:
+  Id: 302
+  Display: <red><bold>天启觉醒头盔
+  Lore:
+  - <yellow>防具                          上古神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <yellow>天启战士使用的头盔
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>600000'
+  - '<dark_gray>攻击力: <aqua>15000-50000'
+  - '<dark_gray>闪避: <aqua>5%'
+  - '<dark_gray>每秒回血: <aqua>40'
+  - <dark_red><strikethrough>一一一武器来源一一一
+  - <yellow><strikethrough>上古神族的武器
+  - <dark_red><strikethrough>一一一神解一一一
+  - <dark_purple>分解后可获得天启魂魄
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>45
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_green>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_purple>[<gray>可镶嵌<紫宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启甲:
+  Id: 303
+  Display: <light_purple><bold>天启战甲
+  Lore:
+  - <yellow>防具                          上古神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <gray>✪✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>20%'
+  - '<dark_gray>生命上限: <aqua>450000'
+  - '<dark_gray>攻击力: <aqua>28000-35060'
+  - '<dark_gray>每秒回血: <aqua>100'
+  - <dark_red><strikethrough>一一一武器来源一一一
+  - <yellow><strikethrough>上古神族的武器
+  - <dark_red><strikethrough>一一一神解一一一
+  - <dark_purple>分解后可获得天启魂魄
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>45
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启甲1:
+  Id: 303
+  Display: <light_purple><bold>天启战甲
+  Lore:
+  - <yellow>防具                          上古神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪<gray>✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>20%'
+  - '<dark_gray>生命上限: <aqua>500000'
+  - '<dark_gray>攻击力: <aqua>28000-35060'
+  - '<dark_gray>每秒回血: <aqua>100'
+  - <dark_red><strikethrough>一一一武器来源一一一
+  - <yellow><strikethrough>上古神族的武器
+  - <dark_red><strikethrough>一一一神解一一一
+  - <dark_purple>分解后可获得天启魂魄
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>45
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启甲2:
+  Id: 303
+  Display: <light_purple><bold>天启战甲
+  Lore:
+  - <yellow>防具                          上古神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪<gray>✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>20%'
+  - '<dark_gray>生命上限: <aqua>580000'
+  - '<dark_gray>攻击力: <aqua>28000-35060'
+  - '<dark_gray>每秒回血: <aqua>100'
+  - <dark_red><strikethrough>一一一武器来源一一一
+  - <yellow><strikethrough>上古神族的武器
+  - <dark_red><strikethrough>一一一神解一一一
+  - <dark_purple>分解后可获得天启魂魄
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>45
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启甲3:
+  Id: 303
+  Display: <light_purple><bold>天启觉醒战甲
+  Lore:
+  - <yellow>防具                          上古神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>20%'
+  - '<dark_gray>生命上限: <aqua>620000'
+  - '<dark_gray>攻击力: <aqua>28000-35060'
+  - '<dark_gray>每秒回血: <aqua>100'
+  - <dark_red><strikethrough>一一一武器来源一一一
+  - <yellow><strikethrough>上古神族的武器
+  - <dark_red><strikethrough>一一一神解一一一
+  - <dark_purple>分解后可获得天启魂魄
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>45
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_green>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_purple>[<gray>可镶嵌<紫宝石><dark_aqua>]
+  - <dark_red><strikethrough>一一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启裤:
+  Id: 304
+  Display: <red><bold>天启裤子
+  Lore:
+  - <yellow>防具                          上古神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <gray>✪✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>450000'
+  - '<dark_gray>闪避: <aqua>5%'
+  - <dark_red><strikethrough>一一一武器来源一一一
+  - <yellow><strikethrough>上古神族的武器
+  - <dark_red><strikethrough>一一一神解一一一
+  - <dark_purple>分解后可获得天启魂魄
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>45
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启裤1:
+  Id: 304
+  Display: <red><bold>天启裤子
+  Lore:
+  - <yellow>防具                          上古神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪<gray>✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>500000'
+  - '<dark_gray>闪避: <aqua>5%'
+  - <dark_red><strikethrough>一一一武器来源一一一
+  - <yellow><strikethrough>上古神族的武器
+  - <dark_red><strikethrough>一一一神解一一一
+  - <dark_purple>分解后可获得天启魂魄
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>45
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启裤2:
+  Id: 304
+  Display: <red><bold>天启裤子
+  Lore:
+  - <yellow>防具                          上古神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪<gray>✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>550000'
+  - '<dark_gray>闪避: <aqua>5%'
+  - <dark_red><strikethrough>一一一武器来源一一一
+  - <yellow><strikethrough>上古神族的武器
+  - <dark_red><strikethrough>一一一神解一一一
+  - <dark_purple>分解后可获得天启魂魄
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>45
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启裤3:
+  Id: 304
+  Display: <red><bold>天启觉醒裤子
+  Lore:
+  - <yellow>防具                          上古神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>600000'
+  - '<dark_gray>闪避: <aqua>5%'
+  - <dark_red><strikethrough>一一一武器来源一一一
+  - <yellow><strikethrough>上古神族的武器
+  - <dark_red><strikethrough>一一一神解一一一
+  - <dark_purple>分解后可获得天启魂魄
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>45
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_green>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_purple>[<gray>可镶嵌<紫宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启靴:
+  Id: 305
+  Display: <red><bold>天启靴子
+  Lore:
+  - <yellow>防具                          上古神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <gray>✪✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>450000'
+  - '<dark_gray>闪避: <aqua>5%'
+  - <dark_red><strikethrough>一一一武器来源一一一
+  - <yellow><strikethrough>上古神族的武器
+  - <dark_red><strikethrough>一一一神解一一一
+  - <dark_purple>分解后可获得天启魂魄
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>45
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启靴1:
+  Id: 305
+  Display: <red><bold>天启靴子
+  Lore:
+  - <yellow>防具                          上古神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪<gray>✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>500000'
+  - '<dark_gray>闪避: <aqua>5%'
+  - <dark_red><strikethrough>一一一武器来源一一一
+  - <yellow><strikethrough>上古神族的武器
+  - <dark_red><strikethrough>一一一神解一一一
+  - <dark_purple>分解后可获得天启魂魄
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>45
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启靴2:
+  Id: 305
+  Display: <red><bold>天启靴子
+  Lore:
+  - <yellow>防具                          上古神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪<gray>✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>550000'
+  - '<dark_gray>闪避: <aqua>5%'
+  - <dark_red><strikethrough>一一一武器来源一一一
+  - <yellow><strikethrough>上古神族的武器
+  - <dark_red><strikethrough>一一一神解一一一
+  - <dark_purple>分解后可获得天启魂魄
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>45
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天启靴3:
+  Id: 305
+  Display: <red><bold>天启靴子
+  Lore:
+  - <yellow>防具                          上古神器
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_purple>觉醒进度 <aqua>✪✪✪
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>600000'
+  - '<dark_gray>闪避: <aqua>5%'
+  - <dark_red><strikethrough>一一一武器来源一一一
+  - <yellow><strikethrough>上古神族的武器
+  - <dark_red><strikethrough>一一一神解一一一
+  - <dark_purple>分解后可获得天启魂魄
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <dark_gray>装备等级： <aqua>45
+  - <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_green>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_purple>[<gray>可镶嵌<紫宝石><dark_aqua>]
+  - <dark_red><strikethrough><bold>一一一一一一一一一
+  - <blue>无限耐久
+  Options:
+    Unbreakable: true
+    HideAttributes: true

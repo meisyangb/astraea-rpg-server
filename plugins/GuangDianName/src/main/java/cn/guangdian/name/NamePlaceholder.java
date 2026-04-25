@@ -1,71 +1,54 @@
 package cn.guangdian.name;
 
-import cn.guangdian.rpgcore.util.ColorUtil;
-import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.integration.PlaceholderService;
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
-/**
- * PlaceholderAPI 扩展
- * 
- * 提供占位符：
- * - %gdname_show_title% - 称号显示状态
- * - %gdname_show_guild% - 工会显示状态
- * - %gdname_show_marriage% - 婚姻显示状态
- */
-public class NamePlaceholder extends PlaceholderExpansion {
+public class NamePlaceholder {
 
     private final GuangDianName plugin;
-    private final TitleDisplay titleDisplay;
+    private final NameDisplayManager displayManager;
 
-    public NamePlaceholder(GuangDianName plugin, TitleDisplay titleDisplay) {
+    public NamePlaceholder(GuangDianName plugin, NameDisplayManager displayManager) {
         this.plugin = plugin;
-        this.titleDisplay = titleDisplay;
+        this.displayManager = displayManager;
     }
 
-    @Override
-    public @NotNull String getIdentifier() {
-        return "gdname";
+    public void register() {
+        PlaceholderService service = PlaceholderService.getInstance();
+        if (service == null) return;
+        
+        service.register("gdname", (player, params) -> {
+            if (player == null) return "";
+
+            String result;
+            switch (params.toLowerCase()) {
+                case "show_title":
+                    result = displayManager.getShowTitleStatus(player);
+                    break;
+                case "show_guild":
+                    result = displayManager.getShowGuildStatus(player);
+                    break;
+                case "show_marriage":
+                    result = displayManager.getShowMarriageStatus(player);
+                    break;
+                case "show_health":
+                    result = displayManager.getShowHealthStatus(player);
+                    break;
+                default:
+                    return null;
+            }
+
+            RPGCore rpgCore = RPGCore.getInstance();
+            if (rpgCore != null) {
+                MiniMessageService mm = rpgCore.getMiniMessageService();
+                return mm.serialize(mm.colorize(result));
+            }
+            return result;
+        });
     }
 
-    @Override
-    public @NotNull String getAuthor() {
-        return "GuangDian";
-    }
-
-    @Override
-    public @NotNull String getVersion() {
-        return "1.0.0";
-    }
-
-    @Override
-    public boolean persist() {
-        return true;
-    }
-
-    @Override
-    public boolean canRegister() {
-        return true;
-    }
-
-    @Override
-    public String onPlaceholderRequest(Player player, @NotNull String params) {
-        if (player == null) {
-            return "";
-        }
-
-        switch (params.toLowerCase()) {
-            case "show_title":
-                return ColorUtil.legacyColorize(
-                        titleDisplay.getShowTitleStatus(player));
-            case "show_guild":
-                return ColorUtil.legacyColorize(
-                        titleDisplay.getShowGuildStatus(player));
-            case "show_marriage":
-                return ColorUtil.legacyColorize(
-                        titleDisplay.getShowMarriageStatus(player));
-            default:
-                return null;
-        }
+    public void unregister() {
     }
 }

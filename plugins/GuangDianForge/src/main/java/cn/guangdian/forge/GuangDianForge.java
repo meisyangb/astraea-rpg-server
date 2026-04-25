@@ -15,6 +15,7 @@ import cn.guangdian.forge.placeholder.ForgePlaceholder;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
 import cn.guangdian.rpgcore.api.GameLogger;
+import cn.guangdian.rpgcore.command.CommandFramework;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -86,10 +87,8 @@ public class GuangDianForge extends AbstractRPGPlugin {
         getServer().getPluginManager().registerEvents(new LearnRecipeListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinQuitListener(this), this);
         
-        // 注册命令
-        getCommand("forge").setExecutor(new ForgeCommand(this));
-        getCommand("forgegive").setExecutor(new ForgeGiveCommand(this));
-        getCommand("forgeadmin").setExecutor(new ForgeAdminCommand(this));
+        // 注册命令 - 使用 RPGCore CommandFramework
+        registerCommands();
         
         // 注册 PlaceholderAPI 扩展
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
@@ -258,5 +257,20 @@ public class GuangDianForge extends AbstractRPGPlugin {
             return Optional.of(RPGCore.getInstance().getAsyncExecutor());
         }
         return Optional.empty();
+    }
+
+    /**
+     * 注册命令 - 使用 RPGCore CommandFramework
+     */
+    private void registerCommands() {
+        CommandFramework framework = CommandFramework.getInstance();
+        if (framework != null) {
+            framework.registerCommand(new ForgeCommand(this));
+            framework.registerCommand(new ForgeGiveCommand(this));
+            framework.registerCommand(new ForgeAdminCommand(this));
+            logInfo("已使用 CommandFramework 注册命令");
+        } else {
+            logSevere("CommandFramework 不可用，命令注册失败");
+        }
     }
 }

@@ -1,7 +1,6 @@
 package cn.guangdian.rpgcore.integration;
 
 import net.luckperms.api.LuckPerms;
-import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.NodeType;
 import net.luckperms.api.node.types.PrefixNode;
@@ -42,8 +41,13 @@ public class ExternalServiceIntegrationImpl implements ExternalServiceIntegratio
     private void hookLuckPerms() {
         try {
             if (Bukkit.getPluginManager().isPluginEnabled("LuckPerms")) {
-                luckPerms = LuckPermsProvider.get();
-                logger.info("[ExternalService] LuckPerms hooked successfully");
+                RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+                if (provider != null) {
+                    luckPerms = provider.getProvider();
+                    logger.info("[ExternalService] LuckPerms hooked successfully");
+                } else {
+                    logger.warning("[ExternalService] LuckPerms detected but service provider not found");
+                }
             }
         } catch (Exception e) {
             logger.warning("[ExternalService] Failed to hook LuckPerms: " + e.getMessage());

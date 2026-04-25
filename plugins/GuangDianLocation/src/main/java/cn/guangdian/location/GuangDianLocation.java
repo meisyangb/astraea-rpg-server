@@ -6,7 +6,7 @@ import cn.guangdian.location.service.LocationStorageService;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
 import cn.guangdian.rpgcore.database.CoreDatabase;
-import cn.guangdian.rpgcore.message.UnifiedMessageService;
+import cn.guangdian.rpgcore.message.MessageServiceImpl;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.rpgcore.service.api.LocationService;
 import cn.guangdian.rpgcore.sound.SoundService;
@@ -35,7 +35,7 @@ public class GuangDianLocation extends AbstractRPGPlugin implements CommandExecu
 
     // RPGCore 服务引用
     private SoundService soundService;
-    private UnifiedMessageService msg;
+    private MessageServiceImpl msg;
 
     private int maxLocationsPerPlayer;
     private boolean selectionParticleEnabled;
@@ -115,8 +115,8 @@ public class GuangDianLocation extends AbstractRPGPlugin implements CommandExecu
                 RPGCore rpgCore = RPGCore.getInstance();
                 asyncExecutor = rpgCore.getAsyncExecutor();
                 soundService = rpgCore.getSoundService();
-                msg = UnifiedMessageService.getInstance();
-                getLogger().info("使用 RPGCore 服务 (AsyncExecutor, SoundService, UnifiedMessageService)");
+                msg = MessageServiceImpl.getInstance();
+                getLogger().info("使用 RPGCore 服务 (AsyncExecutor, SoundService, MessageServiceImpl)");
             } catch (Exception e) {
                 getLogger().warning("无法获取 RPGCore 服务: " + e.getMessage());
             }
@@ -127,7 +127,7 @@ public class GuangDianLocation extends AbstractRPGPlugin implements CommandExecu
             soundService = SoundService.getInstance();
         }
         if (msg == null) {
-            msg = UnifiedMessageService.getInstance();
+            msg = MessageServiceImpl.getInstance();
         }
 
         // 创建存储服务
@@ -514,10 +514,10 @@ public class GuangDianLocation extends AbstractRPGPlugin implements CommandExecu
     }
 
     /**
-     * 获取 UnifiedMessageService (兼容旧 API)
-     * @return UnifiedMessageService 实例
+     * 获取 MessageServiceImpl (兼容旧 API)
+     * @return MessageServiceImpl 实例
      */
-    public UnifiedMessageService getUnifiedMessageService() {
+    public MessageServiceImpl getMessageService() {
         return msg;
     }
 }

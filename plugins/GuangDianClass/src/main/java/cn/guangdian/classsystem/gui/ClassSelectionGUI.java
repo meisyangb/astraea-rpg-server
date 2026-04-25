@@ -17,58 +17,58 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClassSelectionGUI {
+public class ClassSelectionGUI extends ClassGUI {
 
-    private final GuangDianClass plugin;
     private final ClassService classService;
     private final ClassManager classManager;
-    private final MiniMessageService msg;
 
     public ClassSelectionGUI(GuangDianClass plugin, ClassService classService, ClassManager classManager) {
-        this.plugin = plugin;
+        super(plugin, null);
         this.classService = classService;
         this.classManager = classManager;
-        this.msg = MiniMessageService.getInstance();
     }
 
     public void open(Player player) {
+        this.player = player;
+        build();
+    }
+
+    @Override
+    public void open() {
+        throw new UnsupportedOperationException("Use open(Player) instead");
+    }
+
+    @Override
+    protected void build() {
         List<GameClass> baseClasses = classManager.getBaseClasses();
 
-        GUIBuilder builder = GUIBuilder.create("§8★ §6选择你的职业 §8★", 6);
+        GUIBuilder builder = GUIBuilder.create("<dark_gray>★ <gold>选择你的职业 <dark_gray>★", 6);
 
-        // 装饰边框
-        ItemStack borderItem = createBorderItem();
-        for (int i = 0; i < 9; i++) {
-            builder.setItem(i, borderItem);
-            builder.setItem(45 + i, borderItem);
-        }
-        for (int i = 1; i < 5; i++) {
-            builder.setItem(i * 9, borderItem);
-            builder.setItem(i * 9 + 8, borderItem);
-        }
+        applyBorder(builder, 6);
 
-        // 标题
         builder.setItem(4, createTitleItem());
 
-        // 显示基础职业
         int[] slots = {20, 22, 24, 30, 32};
         for (int i = 0; i < baseClasses.size() && i < slots.length; i++) {
             GameClass gameClass = baseClasses.get(i);
             int slot = slots[i];
 
             builder.setItem(slot, createClassItem(gameClass), (event) -> {
+                playClickSound();
                 player.closeInventory();
                 if (classService.chooseClass(player, gameClass.getId())) {
-                    player.sendMessage(msg.green("§a§l成功选择职业: §f" + gameClass.getName()));
-                    player.sendMessage(msg.colorize("§7使用 §e/class §7打开职业系统界面"));
+                    playSuccessSound();
+                    player.sendMessage(msg.green("成功选择职业: ").append(msg.white(gameClass.getName())));
+                    player.sendMessage(msg.gray("使用 ").append(msg.yellow("/class")).append(msg.gray(" 打开职业系统界面")));
                 } else {
+                    playErrorSound();
                     player.sendMessage(msg.red("选择职业失败！你可能已经拥有职业。"));
                 }
             });
         }
 
-        // 返回按钮
-        builder.setItem(49, createBackItem(), (event) -> {
+        builder.setItem(49, createBackItem("职业系统"), (event) -> {
+            playClickSound();
             plugin.openMainGUI(player);
         });
 
@@ -76,27 +76,20 @@ public class ClassSelectionGUI {
         gui.open(player);
     }
 
-    private ItemStack createBorderItem() {
-        ItemStack item = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
-        ItemMeta meta = item.getItemMeta();
-        meta.displayName(Component.text(" "));
-        item.setItemMeta(meta);
-        return item;
-    }
-
     private ItemStack createTitleItem() {
         ItemStack item = new ItemStack(Material.NETHER_STAR);
         ItemMeta meta = item.getItemMeta();
 
-        meta.displayName(Component.text("§6§l选择你的职业")
+        meta.displayName(msg.gold("选择你的职业")
+            .decoration(TextDecoration.BOLD, true)
             .decoration(TextDecoration.ITALIC, false));
 
         List<Component> lore = new ArrayList<>();
-        lore.add(Component.text(""));
-        lore.add(Component.text("§7请选择一个职业开始你的冒险"));
-        lore.add(Component.text("§7每个职业都有独特的属性和技能"));
-        lore.add(Component.text(""));
-        lore.add(Component.text("§e点击职业图标进行选择"));
+        lore.add(Component.empty());
+        lore.add(msg.gray("请选择一个职业开始你的冒险"));
+        lore.add(msg.gray("每个职业都有独特的属性和技能"));
+        lore.add(Component.empty());
+        lore.add(msg.yellow("点击职业图标进行选择"));
 
         meta.lore(lore);
         item.setItemMeta(meta);
@@ -108,96 +101,56 @@ public class ClassSelectionGUI {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
 
-        meta.displayName(Component.text("§a§l" + gameClass.getName())
+        meta.displayName(msg.green(gameClass.getName())
+            .decoration(TextDecoration.BOLD, true)
             .decoration(TextDecoration.ITALIC, false));
 
         List<Component> lore = new ArrayList<>();
-        lore.add(Component.text(""));
-        lore.add(Component.text("§7类型: §f" + getClassTypeName(gameClass.getClassType())));
-        lore.add(Component.text(""));
-        lore.add(Component.text("§7描述:"));
-        lore.add(Component.text("§f" + gameClass.getDescription()));
-        lore.add(Component.text(""));
+        lore.add(Component.empty());
+        lore.add(msg.gray("类型: ").append(msg.white(getClassTypeName(gameClass.getClassType()))));
+        lore.add(Component.empty());
+        lore.add(msg.gray("描述:"));
+        lore.add(msg.white(gameClass.getDescription()));
+        lore.add(Component.empty());
 
-        // 基础属性
-        lore.add(Component.text("§6基础属性:"));
+        lore.add(msg.gold("基础属性:"));
         if (gameClass.getStats().containsKey("health")) {
-            lore.add(Component.text("§7  生命: §c" + gameClass.getStats().get("health").intValue()));
+            lore.add(msg.gray("  生命: ").append(msg.red(String.valueOf(gameClass.getStats().get("health").intValue()))));
         }
         if (gameClass.getStats().containsKey("attack")) {
-            lore.add(Component.text("§7  攻击: §c" + gameClass.getStats().get("attack").intValue()));
+            lore.add(msg.gray("  攻击: ").append(msg.red(String.valueOf(gameClass.getStats().get("attack").intValue()))));
         }
         if (gameClass.getStats().containsKey("defense")) {
-            lore.add(Component.text("§7  防御: §c" + gameClass.getStats().get("defense").intValue()));
+            lore.add(msg.gray("  防御: ").append(msg.red(String.valueOf(gameClass.getStats().get("defense").intValue()))));
         }
         if (gameClass.getStats().containsKey("mana")) {
-            lore.add(Component.text("§7  法力: §c" + gameClass.getStats().get("mana").intValue()));
+            lore.add(msg.gray("  法力: ").append(msg.red(String.valueOf(gameClass.getStats().get("mana").intValue()))));
         }
 
-        // 技能
         if (!gameClass.getSkills().isEmpty()) {
-            lore.add(Component.text(""));
-            lore.add(Component.text("§6初始技能:"));
+            lore.add(Component.empty());
+            lore.add(msg.gold("初始技能:"));
             for (String skill : gameClass.getSkills()) {
-                lore.add(Component.text("§7  - §f" + skill));
+                lore.add(msg.gray("  - ").append(msg.white(skill)));
             }
         }
 
-        // 转职路线
         if (!gameClass.getNextClasses().isEmpty()) {
-            lore.add(Component.text(""));
-            lore.add(Component.text("§6可转职为:"));
+            lore.add(Component.empty());
+            lore.add(msg.gold("可转职为:"));
             for (String nextClassId : gameClass.getNextClasses()) {
                 GameClass nextClass = classManager.getClass(nextClassId);
                 if (nextClass != null) {
-                    lore.add(Component.text("§7  → §f" + nextClass.getName()));
+                    lore.add(msg.gray("  → ").append(msg.white(nextClass.getName())));
                 }
             }
         }
 
-        lore.add(Component.text(""));
-        lore.add(Component.text("§e§l点击选择此职业"));
+        lore.add(Component.empty());
+        lore.add(msg.yellow("点击选择此职业").decoration(TextDecoration.BOLD, true));
 
         meta.lore(lore);
         item.setItemMeta(meta);
         return item;
-    }
-
-    private ItemStack createBackItem() {
-        ItemStack item = new ItemStack(Material.ARROW);
-        ItemMeta meta = item.getItemMeta();
-
-        meta.displayName(Component.text("§c§l返回")
-            .decoration(TextDecoration.ITALIC, false));
-
-        List<Component> lore = new ArrayList<>();
-        lore.add(Component.text(""));
-        lore.add(Component.text("§7返回主菜单"));
-
-        meta.lore(lore);
-        item.setItemMeta(meta);
-        return item;
-    }
-
-    private Material getClassMaterial(String classType) {
-        return switch (classType.toUpperCase()) {
-            case "WARRIOR" -> Material.IRON_SWORD;
-            case "MAGE" -> Material.BLAZE_ROD;
-            case "ARCHER" -> Material.BOW;
-            case "ASSASSIN" -> Material.NETHERITE_SWORD;
-            case "PRIEST" -> Material.TOTEM_OF_UNDYING;
-            default -> Material.BOOK;
-        };
-    }
-
-    private String getClassTypeName(String classType) {
-        return switch (classType.toUpperCase()) {
-            case "WARRIOR" -> "战士系";
-            case "MAGE" -> "法师系";
-            case "ARCHER" -> "弓箭手系";
-            case "ASSASSIN" -> "刺客系";
-            case "PRIEST" -> "牧师系";
-            default -> "未知";
-        };
     }
 }

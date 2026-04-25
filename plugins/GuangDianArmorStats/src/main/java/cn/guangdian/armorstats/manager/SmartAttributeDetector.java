@@ -2,6 +2,7 @@ package cn.guangdian.armorstats.manager;
 
 import cn.guangdian.armorstats.data.AttributeValue;
 import cn.guangdian.armorstats.parser.LoreParser;
+import cn.guangdian.rpgcore.util.TextStripper;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -97,11 +98,11 @@ public class SmartAttributeDetector {
 
     /**
      * 移除所有颜色代码
+     * @deprecated 使用 {@link TextStripper#stripLegacy(String)} 替代
      */
+    @Deprecated(since = "1.2.1", forRemoval = true)
     private String stripColorCodes(String text) {
-        if (text == null) return "";
-        // 移除 § 和 & 后面的颜色代码字符
-        return text.replaceAll("[&§][0-9a-fk-or]", "");
+        return TextStripper.stripLegacy(text);
     }
 
     /**

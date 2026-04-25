@@ -1,0 +1,238 @@
+天空碎片:
+  Id: NETHERITE_SCRAP
+  Display: <green>天空碎片
+  Lore:
+  - <dark_gray>[<yellow>材料<dark_gray>]             <dark_gray>[<dark_green>精品<dark_gray>]
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天族遗物残页:
+  Id: PAPER
+  Display: <yellow>天族遗物残页
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天空圣剑:
+  Id: IRON_SWORD
+  Display: <gold>天空圣剑
+  Lore:
+  - <aqua>主手武器                <dark_gray>[<dark_purple>史诗<dark_gray>]
+  - '<dark_gray>暴击几率: <aqua>10%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天空圣剑一星:
+  Id: IRON_SWORD
+  Display: <gold>天空圣剑
+  Lore:
+  - <aqua>主手武器                <dark_gray>[<dark_purple>史诗<dark_gray>]
+  - '<dark_gray>暴击几率: <aqua>10%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>40%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天空圣剑二星:
+  Id: IRON_SWORD
+  Display: <gold>天空圣剑
+  Lore:
+  - <aqua>主手武器                <dark_gray>[<dark_purple>史诗<dark_gray>]
+  - '<dark_gray>暴击几率: <aqua>10%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>50%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天空圣剑三星:
+  Id: IRON_SWORD
+  Display: <gold>天空圣剑
+  Lore:
+  - <aqua>主手武器                <dark_gray>[<dark_purple>史诗<dark_gray>]
+  - <dark_gray>命中几率：<aqua>6%
+  - '<dark_gray>暴击几率: <aqua>10%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>50%'
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <blue>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天空战盔:
+  Id: LEATHER_HELMET
+  Display: <gold>天空战盔
+  Lore:
+  - <dark_gray>[<aqua>防具<dark_gray>]                 <dark_gray>[<dark_purple>史诗<dark_gray>]
+  - '<dark_gray>护甲强度: <aqua>10%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天空战盔一星:
+  Id: LEATHER_HELMET
+  Display: <gold>天空战盔
+  Lore:
+  - <dark_gray>[<aqua>防具<dark_gray>]                 <dark_gray>[<dark_purple>史诗<dark_gray>]
+  - '<dark_gray>护甲强度: <aqua>10%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天空战盔二星:
+  Id: LEATHER_HELMET
+  Display: <gold>天空战盔
+  Lore:
+  - <dark_gray>[<aqua>防具<dark_gray>]                 <dark_gray>[<dark_purple>史诗<dark_gray>]
+  - '<dark_gray>护甲强度: <aqua>10%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天空战盔三星:
+  Id: LEATHER_HELMET
+  Display: <gold>天空战盔
+  Lore:
+  - <dark_gray>[<aqua>防具<dark_gray>]                 <dark_gray>[<dark_purple>史诗<dark_gray>]
+  - '<dark_gray>护甲强度: <aqua>10%'
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天空战甲:
+  Id: LEATHER_CHESTPLATE
+  Display: <gold>天空战甲
+  Lore:
+  - <dark_gray>[<aqua>防具<dark_gray>]                 <dark_gray>[<dark_purple>史诗<dark_gray>]
+  - '<dark_gray>护甲强度: <aqua>12%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天空战甲一星:
+  Id: LEATHER_CHESTPLATE
+  Display: <gold>天空战甲
+  Lore:
+  - <dark_gray>[<aqua>防具<dark_gray>]                 <dark_gray>[<dark_purple>史诗<dark_gray>]
+  - '<dark_gray>护甲强度: <aqua>12%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天空战甲二星:
+  Id: LEATHER_CHESTPLATE
+  Display: <gold>天空战甲
+  Lore:
+  - <dark_gray>[<aqua>防具<dark_gray>]                 <dark_gray>[<dark_purple>史诗<dark_gray>]
+  - '<dark_gray>护甲强度: <aqua>12%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天空战甲三星:
+  Id: LEATHER_CHESTPLATE
+  Display: <gold>天空战甲
+  Lore:
+  - <dark_gray>[<aqua>防具<dark_gray>]                 <dark_gray>[<dark_purple>史诗<dark_gray>]
+  - '<dark_gray>护甲强度: <aqua>12%'
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天空战胫:
+  Id: LEATHER_LEGGINGS
+  Display: <gold>天空战胫
+  Lore:
+  - <dark_gray>[<aqua>防具<dark_gray>]                 <dark_gray>[<dark_purple>史诗<dark_gray>]
+  - '<dark_gray>护甲强度: <aqua>11%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天空战胫一星:
+  Id: LEATHER_LEGGINGS
+  Display: <gold>天空战胫
+  Lore:
+  - <dark_gray>[<aqua>防具<dark_gray>]                 <dark_gray>[<dark_purple>史诗<dark_gray>]
+  - '<dark_gray>护甲强度: <aqua>11%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天空战胫二星:
+  Id: LEATHER_LEGGINGS
+  Display: <gold>天空战胫
+  Lore:
+  - <dark_gray>[<aqua>防具<dark_gray>]                 <dark_gray>[<dark_purple>史诗<dark_gray>]
+  - '<dark_gray>护甲强度: <aqua>11%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天空战胫三星:
+  Id: LEATHER_LEGGINGS
+  Display: <gold>天空战胫
+  Lore:
+  - <dark_gray>[<aqua>防具<dark_gray>]                 <dark_gray>[<dark_purple>史诗<dark_gray>]
+  - '<dark_gray>护甲强度: <aqua>11%'
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天空战靴:
+  Id: LEATHER_BOOTS
+  Display: <gold>天空战靴
+  Lore:
+  - <dark_gray>[<aqua>防具<dark_gray>]                 <dark_gray>[<dark_purple>史诗<dark_gray>]
+  - '<dark_gray>护甲强度: <aqua>10%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天空战靴一星:
+  Id: LEATHER_BOOTS
+  Display: <gold>天空战靴
+  Lore:
+  - <dark_gray>[<aqua>防具<dark_gray>]                 <dark_gray>[<dark_purple>史诗<dark_gray>]
+  - '<dark_gray>护甲强度: <aqua>10%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天空战靴二星:
+  Id: LEATHER_BOOTS
+  Display: <gold>天空战靴
+  Lore:
+  - <dark_gray>[<aqua>防具<dark_gray>]                 <dark_gray>[<dark_purple>史诗<dark_gray>]
+  - '<dark_gray>护甲强度: <aqua>10%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+天空战靴三星:
+  Id: LEATHER_BOOTS
+  Display: <gold>天空战靴
+  Lore:
+  - <dark_gray>[<aqua>防具<dark_gray>]                 <dark_gray>[<dark_purple>史诗<dark_gray>]
+  - '<dark_gray>护甲强度: <aqua>10%'
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]
+  - <yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]
+  - <dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+  Options:
+    Unbreakable: true
+    HideAttributes: true

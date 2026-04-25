@@ -8,12 +8,14 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Method;
+import java.util.logging.Logger;
 
 /**
  * MythicMobs物品集成Hook (用于GuangDianArmorStats)
  */
 public class MythicMobsHook {
     
+    private static final Logger logger = Logger.getLogger("GuangDianArmorStats");
     private static MythicMobsHook instance;
     private boolean enabled = false;
     private Object itemManager;
@@ -32,7 +34,7 @@ public class MythicMobsHook {
     private void init() {
         Plugin plugin = Bukkit.getPluginManager().getPlugin("MythicMobs");
         if (plugin == null || !plugin.isEnabled()) {
-            Bukkit.getLogger().info("[GuangDianArmorStats] MythicMobs 未安装，跳过物品集成");
+            logger.info("[GuangDianArmorStats] MythicMobs 未安装，跳过物品集成");
             return;
         }
         
@@ -47,9 +49,9 @@ public class MythicMobsHook {
             getItemStackMethod = itemManager.getClass().getMethod("getItemStack", String.class);
             
             enabled = true;
-            Bukkit.getLogger().info("[GuangDianArmorStats] MythicMobs 物品集成已启用");
+            logger.info("[GuangDianArmorStats] MythicMobs 物品集成已启用");
         } catch (Exception e) {
-            Bukkit.getLogger().warning("[GuangDianArmorStats] MythicMobs 物品集成失败: " + e.getMessage());
+            logger.warning("[GuangDianArmorStats] MythicMobs 物品集成失败: " + e.getMessage());
         }
     }
     
@@ -64,7 +66,6 @@ public class MythicMobsHook {
         if (item == null || !item.hasItemMeta()) return false;
         
         ItemMeta meta = item.getItemMeta();
-        // 新版本使用 mythicmobs:type，旧版本使用 mythicmobs:item
         NamespacedKey typeKey = new NamespacedKey("mythicmobs", "type");
         NamespacedKey itemKey = new NamespacedKey("mythicmobs", "item");
         return meta.getPersistentDataContainer().has(typeKey, PersistentDataType.STRING) ||
@@ -79,12 +80,10 @@ public class MythicMobsHook {
         
         ItemMeta meta = item.getItemMeta();
         
-        // 优先检查 mythicmobs:type（新版本）
         NamespacedKey typeKey = new NamespacedKey("mythicmobs", "type");
         String typeId = meta.getPersistentDataContainer().get(typeKey, PersistentDataType.STRING);
         if (typeId != null) return typeId;
         
-        // 回退到 mythicmobs:item（旧版本）
         NamespacedKey itemKey = new NamespacedKey("mythicmobs", "item");
         return meta.getPersistentDataContainer().get(itemKey, PersistentDataType.STRING);
     }

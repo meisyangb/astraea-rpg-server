@@ -76,36 +76,36 @@ public class RaidBoard {
         int line = 15;
 
         String phaseText = switch (instance.getCurrentPhase()) {
-            case WAITING -> "§f等待中";
-            case INFILTRATION -> "§e潜入阶段";
-            case SEARCH -> "§b搜索阶段";
-            case COMBAT -> "§c战斗阶段";
-            case EXTRACTION -> "§a撤离阶段";
-            case COMPLETED -> "§a已完成";
-            case FAILED -> "§c失败";
+            case WAITING -> "<white>等待中";
+            case INFILTRATION -> "<yellow>潜入阶段";
+            case SEARCH -> "<aqua>搜索阶段";
+            case COMBAT -> "<red>战斗阶段";
+            case EXTRACTION -> "<green>撤离阶段";
+            case COMPLETED -> "<green>已完成";
+            case FAILED -> "<red>失败";
         };
 
-        objective.getScore("§f阶段: " + phaseText).setScore(line--);
+        objective.getScore("<white>阶段: " + phaseText).setScore(line--);
 
         long elapsed = (System.currentTimeMillis() - instance.getStartTime()) / 1000;
         int remaining = instance.getRaid().getTotalTimeLimit() - (int) elapsed;
         int mins = remaining / 60;
         int secs = remaining % 60;
-        objective.getScore("§f时间: §b" + String.format("%02d:%02d", mins, secs)).setScore(line--);
+        objective.getScore("<white>时间: <aqua>" + String.format("%02d:%02d", mins, secs)).setScore(line--);
 
         objective.getScore("").setScore(line--);
 
-        objective.getScore("§f情报: §e" + instance.getCollectedIntel()).setScore(line--);
-        objective.getScore("§f击杀: §c" + instance.getKillCount()).setScore(line--);
+        objective.getScore("<white>情报: <yellow>" + instance.getCollectedIntel()).setScore(line--);
+        objective.getScore("<white>击杀: <red>" + instance.getKillCount()).setScore(line--);
 
         long aliveCount = instance.getTeam().getMembers().stream()
             .filter(p -> p.getState() == cn.guangdian.raid.model.RaidPlayerState.ALIVE)
             .count();
-        objective.getScore("§f存活: §a" + aliveCount + "/" + instance.getTeam().size()).setScore(line--);
+        objective.getScore("<white>存活: <green>" + aliveCount + "/" + instance.getTeam().size()).setScore(line--);
 
         if (instance.getCurrentPhase() == RaidPhaseType.EXTRACTION) {
             objective.getScore("  ").setScore(line--);
-            objective.getScore("§a§l撤离点已激活!").setScore(line--);
+            objective.getScore("<green><bold>撤离点已激活!").setScore(line--);
         }
     }
 

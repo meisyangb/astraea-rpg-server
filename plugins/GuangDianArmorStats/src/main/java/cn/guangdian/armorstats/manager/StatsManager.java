@@ -13,6 +13,7 @@ import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
 import cn.guangdian.rpgcore.concurrency.PlayerLockManager;
 import cn.guangdian.rpgcore.concurrency.LockTimeoutException;
+import cn.guangdian.rpgcore.util.TextStripper;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
@@ -969,10 +970,11 @@ public class StatsManager {
 
     /**
      * 移除颜色代码
+     * @deprecated 使用 {@link TextStripper#stripLegacy(String)} 替代
      */
+    @Deprecated(since = "1.2.1", forRemoval = true)
     private String stripColor(String input) {
-        if (input == null) return "";
-        return input.replaceAll("[&§][0-9a-fk-or]", "");
+        return TextStripper.stripLegacy(input);
     }
 
     public void applyMaxHealth(Player player, PlayerStats stats, double savedHealth, double savedMaxHealth) {

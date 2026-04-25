@@ -1,10 +1,13 @@
 package cn.guangdian.market;
 
 import cn.guangdian.market.adapter.MarketServiceAdapter;
+import cn.guangdian.market.command.MarketCommand;
 import cn.guangdian.market.gui.MarketGUI;
 import cn.guangdian.market.lifecycle.MarketDataHandler;
 import cn.guangdian.market.placeholder.MarketPlaceholder;
 import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.api.ServiceRegistry;
+import cn.guangdian.rpgcore.command.CommandFramework;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.rpgcore.sound.SoundService;
@@ -27,8 +30,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 import cn.guangdian.points.GuangDianPoints;
 import cn.guangdian.points.GuangDianPoints.PointsAPI;
 
@@ -37,10 +38,12 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Logger;
 
 public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabCompleter {
 
     private static GuangDianMarket instance;
+    private static final Logger pluginLogger = Logger.getLogger("GuangDianMarket");
     private FileConfiguration config;
     private File dataFile;
     private YamlConfiguration data;
@@ -68,6 +71,8 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
     // RPGCore 服务引用
     private SoundService soundService;
     private MiniMessageService miniMessage;
+    private CommandFramework commandFramework;
+    private MarketCommand marketCommand;
 
     @Override
     protected void onPluginEnable() {
@@ -75,10 +80,13 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
 
         saveDefaultConfig();
         config = getConfig();
-        
+
         // 初始化 RPGCore 服务
         initRPGCoreServices();
-        
+
+        // 初始化命令系统
+        initCommandFramework();
+
         loadData();
         loadSettings();
         registerEvents();
@@ -198,6 +206,36 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
         }
     }
 
+    /**
+     * 初始化命令框架
+     */
+    private void initCommandFramework() {
+        if (rpgCore != null) {
+            ServiceRegistry registry = rpgCore.getServiceRegistry();
+            if (registry.hasService(CommandFramework.class)) {
+                commandFramework = registry.getService(CommandFramework.class);
+                marketCommand = new MarketCommand(this);
+                commandFramework.registerCommand(marketCommand);
+                getLogger().info("已注册 RPGCore CommandFramework 命令");
+            } else {
+                getLogger().warning("CommandFramework 不可用，使用备用命令注册");
+                registerCommandsFallback();
+            }
+        } else {
+            getLogger().warning("RPGCore 不可用，使用备用命令注册");
+            registerCommandsFallback();
+        }
+    }
+
+    /**
+     * 备用命令注册（当 RPGCore CommandFramework 不可用时）
+     */
+    private void registerCommandsFallback() {
+        getCommand("market").setExecutor(this);
+        getCommand("market").setTabCompleter(this);
+        getLogger().info("已注册备用命令处理器");
+    }
+
     private void loadSettings() {
         transactionFee = config.getLong("settings.transaction-fee", 0);
         feePercent = config.getDouble("settings.fee-percent", 5.0);
@@ -208,7 +246,7 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
 
     private void registerEvents() {
         getServer().getPluginManager().registerEvents(this, this);
-        getCommand("market").setTabCompleter(this);
+        // 命令注册移至 initCommandFramework() 方法
     }
 
     private void startTasks() {
@@ -1222,7 +1260,9 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
                 if (map.containsKey("currencyType")) {
                     try {
                         currencyType = CurrencyType.valueOf((String) map.get("currencyType"));
-                    } catch (Exception ignored) {}
+                    } catch (Exception e) {
+                        pluginLogger.warning("无效的货币类型: " + map.get("currencyType"));
+                    }
                 }
                 
                 return new MarketItem(id, seller, sellerName, item, price, expireTime, currencyType);

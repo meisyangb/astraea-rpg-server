@@ -102,9 +102,8 @@ public class ItemCommand implements CommandExecutor, TabCompleter {
         // 重载配置
         plugin.getConfigManager().reload();
 
-        // 重新加载物品注册表
-        itemRegistry.clear();
-        itemRegistry.loadFromConfig(plugin.getConfigManager().getItemConfig());
+        // 重新加载物品注册表（从所有配置文件）
+        itemRegistry.loadFromConfigs(plugin.getConfigManager().getAllConfigs());
 
         sender.sendMessage(miniMessage.green("RPGItems 配置已重载"));
         sender.sendMessage(miniMessage.colorize("<gray>已加载 <gold>" + itemRegistry.getItemCount() + " <gray>个物品"));

@@ -9,12 +9,12 @@ import org.bukkit.entity.Player;
 public class ToggleCommand implements CommandExecutor {
 
     private final GuangDianName plugin;
-    private final TitleDisplay titleDisplay;
+    private final NameDisplayManager displayManager;
     private final MiniMessageService miniMessage;
 
-    public ToggleCommand(GuangDianName plugin, TitleDisplay titleDisplay) {
+    public ToggleCommand(GuangDianName plugin, NameDisplayManager displayManager) {
         this.plugin = plugin;
-        this.titleDisplay = titleDisplay;
+        this.displayManager = displayManager;
         this.miniMessage = plugin.getMiniMessageService();
     }
 
@@ -44,6 +44,9 @@ public class ToggleCommand implements CommandExecutor {
             case "marriage":
                 handleToggleMarriage(player);
                 break;
+            case "health":
+                handleToggleHealth(player);
+                break;
             case "status":
                 handleStatus(player);
                 break;
@@ -63,29 +66,37 @@ public class ToggleCommand implements CommandExecutor {
     }
 
     private void handleToggleTitle(Player player) {
-        boolean newState = titleDisplay.toggleTitle(player);
+        boolean newState = displayManager.toggleTitle(player);
         String status = newState ? "<green>开启" : "<red>关闭";
         sendMessage(player, "<yellow>[头顶显示] <gray>称号显示已" + status);
     }
 
     private void handleToggleGuild(Player player) {
-        boolean newState = plugin.getTextDisplayManager().toggleShowGuild(player);
+        boolean newState = displayManager.toggleGuild(player);
         String status = newState ? "<green>开启" : "<red>关闭";
         sendMessage(player, "<yellow>[头顶显示] <gray>工会显示已" + status);
     }
 
     private void handleToggleMarriage(Player player) {
-        boolean newState = titleDisplay.toggleMarriage(player);
+        boolean newState = displayManager.toggleMarriage(player);
         String status = newState ? "<green>开启" : "<red>关闭";
         sendMessage(player, "<yellow>[头顶显示] <gray>婚姻显示已" + status);
     }
 
+    private void handleToggleHealth(Player player) {
+        boolean newState = displayManager.toggleHealth(player);
+        String status = newState ? "<green>开启" : "<red>关闭";
+        sendMessage(player, "<yellow>[头顶显示] <gray>血量显示已" + status);
+    }
+
     private void handleStatus(Player player) {
-        String titleStatus = titleDisplay.getShowTitleStatus(player);
-        String guildStatus = plugin.getTextDisplayManager().isShowGuild(player) ? "<green>开启" : "<red>关闭";
-        String marriageStatus = titleDisplay.getShowMarriageStatus(player);
+        String titleStatus = displayManager.getShowTitleStatus(player);
+        String guildStatus = displayManager.getShowGuildStatus(player);
+        String marriageStatus = displayManager.getShowMarriageStatus(player);
+        String healthStatus = displayManager.getShowHealthStatus(player);
 
         sendMessage(player, "<gold>===== 头顶显示状态 =====");
+        sendMessage(player, "<yellow>血量显示: " + healthStatus);
         sendMessage(player, "<yellow>称号显示: " + titleStatus);
         sendMessage(player, "<yellow>工会显示: " + guildStatus);
         sendMessage(player, "<yellow>婚姻显示: " + marriageStatus);
@@ -93,6 +104,7 @@ public class ToggleCommand implements CommandExecutor {
 
     private void sendHelp(Player player) {
         sendMessage(player, "<gold>===== 头顶显示帮助 =====");
+        sendMessage(player, "<yellow>/gdnametoggle health <gray>- 切换血量显示");
         sendMessage(player, "<yellow>/gdnametoggle title <gray>- 切换称号显示");
         sendMessage(player, "<yellow>/gdnametoggle guild <gray>- 切换工会显示");
         sendMessage(player, "<yellow>/gdnametoggle marriage <gray>- 切换婚姻显示");

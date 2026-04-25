@@ -1,0 +1,104 @@
+# GuangDianMonthlyCard - 月卡类型配置
+
+# ==================== 普通月卡 ====================
+normal:
+  name: "<yellow>普通月卡"
+  description: "<gray>基础月卡，每日领取点券奖励"
+  duration: 30                     # 持续时间(天)
+  price: 1000
+  currency: "points"               # points/money
+  
+  # 每日奖励
+  daily:
+    points: 50
+    money: 0
+    items: []
+    commands: []
+  
+  # 特权加成
+  boost:
+    exp: 1.1                       # 经验加成(1.1 = +10%)
+    drop: 1.05                     # 掉落加成
+  
+  # 累计奖励
+  milestones:
+    7:
+      points: 200
+      money: 500
+      commands: []
+    14:
+      points: 500
+      money: 1500
+      commands: []
+    21:
+      points: 1000
+      money: 3000
+      commands: []
+    30:
+      points: 2000
+      money: 8000
+      commands: []
+
+# ==================== 高级月卡 ====================
+premium:
+  name: "<aqua>高级月卡"
+  description: "<gray>高级月卡，更多奖励和特权"
+  duration: 30
+  price: 3000
+  currency: "points"
+  
+  daily:
+    points: 100
+    money: 100
+    items: []
+    commands: []
+  
+  boost:
+    exp: 1.2
+    drop: 1.1
+  
+  milestones:
+    7:
+      points: 500
+      money: 1500
+    14:
+      points: 1000
+      money: 4000
+    21:
+      points: 2000
+      money: 8000
+    30:
+      points: 5000
+      money: 20000
+
+# ==================== 至尊月卡 ====================
+vip:
+  name: "<light_purple>至尊月卡"
+  description: "<gray>至尊月卡，最丰厚的奖励"
+  duration: 30
+  price: 10000
+  currency: "points"
+  
+  daily:
+    points: 300
+    money: 500
+    items: []
+    commands: []
+  
+  boost:
+    exp: 1.5
+    drop: 1.2
+  
+  milestones:
+    7:
+      points: 1000
+      money: 3000
+    14:
+      points: 2000
+      money: 8000
+    21:
+      points: 5000
+      money: 15000
+    30:
+      points: 10000
+      money: 50000

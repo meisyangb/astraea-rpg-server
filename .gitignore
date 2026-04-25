@@ -88,3 +88,4 @@ desktop.ini
 *.key
 *.pem
 .env
+.preferences

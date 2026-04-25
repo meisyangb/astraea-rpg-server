@@ -36,8 +36,8 @@ public class SkillParser {
         }
 
         for (String line : lore) {
-            // 使用 TextStripper 支持 MiniMessage 标签和传统颜色代码
-            String plainLine = TextStripper.stripAll(line);
+            // 剥离传统颜色代码（& 和 §），用于MythicMobs物品Lore解析
+            String plainLine = TextStripper.stripLegacy(line);
 
             // 尝试匹配旧格式
             Matcher nameMatcher = SKILL_NAME_PATTERN.matcher(plainLine);
@@ -98,8 +98,8 @@ public class SkillParser {
         }
 
         for (String line : lore) {
-            // 使用 TextStripper 支持 MiniMessage 标签和传统颜色代码
-            String plainLine = TextStripper.stripAll(line);
+            // 剥离传统颜色代码（& 和 §），用于MythicMobs物品Lore解析
+            String plainLine = TextStripper.stripLegacy(line);
 
             Matcher typeMatcher = SKILL_TYPE_PATTERN.matcher(plainLine);
             if (typeMatcher.find()) {

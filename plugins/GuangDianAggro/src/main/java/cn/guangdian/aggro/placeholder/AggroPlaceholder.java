@@ -2,12 +2,10 @@ package cn.guangdian.aggro.placeholder;
 
 import cn.guangdian.aggro.GuangDianAggro;
 import cn.guangdian.aggro.manager.AggroManager;
-import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.entity.LivingEntity;
+import cn.guangdian.rpgcore.integration.PlaceholderService;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
-public class AggroPlaceholder extends PlaceholderExpansion {
+public class AggroPlaceholder {
 
     private final GuangDianAggro plugin;
     private final AggroManager aggroManager;
@@ -17,48 +15,34 @@ public class AggroPlaceholder extends PlaceholderExpansion {
         this.aggroManager = aggroManager;
     }
 
-    @Override
-    public @NotNull String getIdentifier() {
-        return "gdaggro";
+    public void register() {
+        PlaceholderService service = PlaceholderService.getInstance();
+        if (service == null) return;
+        
+        service.register("gdaggro", (player, params) -> {
+            if (player == null) return "";
+
+            String[] args = params.split("_", 2);
+            String action = args[0];
+
+            switch (action.toLowerCase()) {
+                case "top":
+                    return getTopAggroTarget(args);
+                case "value":
+                    return getAggroValue(player, args);
+                case "rank":
+                    return getAggroRank(player, args);
+                case "total":
+                    return getTotalAggro(args);
+                case "has":
+                    return hasAggro(player, args);
+                default:
+                    return "";
+            }
+        });
     }
 
-    @Override
-    public @NotNull String getAuthor() {
-        return "Astraea RPG Team";
-    }
-
-    @Override
-    public @NotNull String getVersion() {
-        return "1.0.0";
-    }
-
-    @Override
-    public boolean persist() {
-        return true;
-    }
-
-    @Override
-    public String onPlaceholderRequest(Player player, @NotNull String params) {
-        if (player == null) return "";
-
-        String[] args = params.split("_", 2);
-        String action = args[0];
-
-        switch (action.toLowerCase()) {
-            case "top":
-                return getTopAggroTarget(args);
-            case "value":
-                return getAggroValue(player, args);
-            case "rank":
-                return getAggroRank(player, args);
-            case "total":
-                return getTotalAggro(args);
-            case "has":
-                return hasAggro(player, args);
-            default:
-                return "";
-        }
-    }
+    public void unregister() {}
 
     private String getTopAggroTarget(String[] args) {
         return "";

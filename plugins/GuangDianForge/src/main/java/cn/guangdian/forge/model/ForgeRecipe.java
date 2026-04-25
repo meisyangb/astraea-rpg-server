@@ -134,11 +134,12 @@ public class ForgeRecipe {
     }
 
     /**
-     * 移除字符串中的旧版颜色代码
+     * 移除字符串中的MiniMessage颜色标签
+     * 支持循环移除嵌套标签
      */
     private String stripColorCodes(String text) {
         if (text == null) return "";
-        return text.replaceAll("§[0-9a-fk-or]", "").replaceAll("&[0-9a-fk-or]", "");
+        return cn.guangdian.rpgcore.util.TextStripper.stripAll(text);
     }
 
     /**

@@ -1,8 +1,6 @@
 package cn.guangdian.name.adapter;
 
 import cn.guangdian.name.GuangDianName;
-import cn.guangdian.name.HealthDisplay;
-import cn.guangdian.name.TitleDisplay;
 import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
 import cn.guangdian.rpgcore.event.events.PlayerStatsChangedEvent;
@@ -11,7 +9,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
-import java.util.logging.Level;
 
 /**
  * DisplayService 服务适配器
@@ -79,38 +76,26 @@ public class DisplayServiceAdapter implements DisplayService {
 
     @Override
     public String getPrefix(Player player) {
-        TitleDisplay titleDisplay = plugin.getTitleDisplay();
-        if (titleDisplay == null) {
-            return "";
-        }
-        return titleDisplay.getPrefix(player);
+        // 全TextDisplay版本，前缀通过TextDisplay显示
+        return "";
     }
 
     @Override
     public String getSuffix(Player player) {
-        TitleDisplay titleDisplay = plugin.getTitleDisplay();
-        if (titleDisplay == null) {
-            return "";
-        }
-        return titleDisplay.getSuffix(player);
+        // 全TextDisplay版本，后缀通过TextDisplay显示
+        return "";
     }
 
     @Override
     public Object getDisplayData(UUID playerId) {
-        // 返回玩家的显示配置数据
-        TitleDisplay titleDisplay = plugin.getTitleDisplay();
-        if (titleDisplay == null) {
-            return null;
-        }
-        
         Player player = Bukkit.getPlayer(playerId);
         if (player == null) {
             return null;
         }
         
         return new DisplayData(
-            getPrefix(player),
-            getSuffix(player),
+            "",
+            "",
             getRPGHealth(player),
             isDisplayEnabled(playerId)
         );
@@ -122,20 +107,8 @@ public class DisplayServiceAdapter implements DisplayService {
             return;
         }
         
-        // 更新血量显示
-        HealthDisplay healthDisplay = plugin.getHealthDisplay();
-        if (healthDisplay != null) {
-            healthDisplay.updateHealth(player);
-        }
-        
-        // 更新称号显示
-        TitleDisplay titleDisplay = plugin.getTitleDisplay();
-        if (titleDisplay != null) {
-            titleDisplay.updateDisplay(player);
-        }
-        
-        // 更新TextDisplay（工会等）
-        plugin.getTextDisplayManager().updatePlayerTextDisplay(player);
+        // 更新所有TextDisplay显示
+        plugin.getNameDisplayManager().updateDisplays(player);
     }
 
     @Override
@@ -147,55 +120,38 @@ public class DisplayServiceAdapter implements DisplayService {
 
     @Override
     public void clearDisplayCache(UUID playerId) {
-        TitleDisplay titleDisplay = plugin.getTitleDisplay();
-        if (titleDisplay != null) {
-            Player player = Bukkit.getPlayer(playerId);
-            if (player != null) {
-                titleDisplay.cleanupPlayer(player);
-            }
-        }
-        
-        HealthDisplay healthDisplay = plugin.getHealthDisplay();
-        if (healthDisplay != null) {
-            Player player = Bukkit.getPlayer(playerId);
-            if (player != null) {
-                healthDisplay.cleanupPlayer(player);
-            }
+        Player player = Bukkit.getPlayer(playerId);
+        if (player != null) {
+            plugin.getNameDisplayManager().removeAllDisplays(player);
         }
     }
 
     @Override
     public void setDisplayEnabled(Player player, boolean enabled) {
-        TitleDisplay titleDisplay = plugin.getTitleDisplay();
-        if (titleDisplay != null) {
-            titleDisplay.setDisplayEnabled(player, enabled);
-        }
+        plugin.getNameDisplayManager().setDisplayEnabled(player, enabled);
     }
 
     @Override
     public boolean isDisplayEnabled(UUID playerId) {
-        TitleDisplay titleDisplay = plugin.getTitleDisplay();
-        if (titleDisplay == null) {
-            return true; // 默认启用
+        Player player = Bukkit.getPlayer(playerId);
+        if (player == null) {
+            return true;
         }
-        return titleDisplay.isDisplayEnabled(playerId);
+        return plugin.getNameDisplayManager().isDisplayEnabled(playerId);
     }
 
     @Override
     public int getRPGHealth(Player player) {
-        HealthDisplay healthDisplay = plugin.getHealthDisplay();
-        if (healthDisplay == null) {
-            // 返回原版血量作为后备
-            return (int) player.getHealth();
+        if (player == null) {
+            return 0;
         }
-        return healthDisplay.getRPGHealth(player);
+        // 返回原版血量
+        return (int) Math.ceil(player.getHealth());
     }
 
     @Override
     public boolean isAvailable() {
-        return plugin.isEnabled() && 
-               plugin.getTitleDisplay() != null && 
-               plugin.getHealthDisplay() != null;
+        return plugin.isEnabled() && plugin.getNameDisplayManager() != null;
     }
     
     /**

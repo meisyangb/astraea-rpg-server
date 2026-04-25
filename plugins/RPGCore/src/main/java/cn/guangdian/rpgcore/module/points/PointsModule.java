@@ -138,10 +138,15 @@ public class PointsModule extends RPGModule implements PointsService {
 
     @Override
     public void setBalance(UUID playerId, long amount, String reason) {
+        PlayerPointsData data = getOrCreateData(playerId);
+        if (data == null) {
+            logWarning("Failed to set balance: no data for " + playerId);
+            return;
+        }
+        
         PlayerLockManager lockManager = getLockManager();
         try {
             lockManager.executeWithLock(playerId, () -> {
-                PlayerPointsData data = getOrCreateData(playerId);
                 data.setBalance(amount);
             });
         } catch (LockTimeoutException e) {
@@ -151,10 +156,15 @@ public class PointsModule extends RPGModule implements PointsService {
 
     @Override
     public void addBalance(UUID playerId, long amount, String reason) {
+        PlayerPointsData data = getOrCreateData(playerId);
+        if (data == null) {
+            logWarning("Failed to add balance: no data for " + playerId);
+            return;
+        }
+        
         PlayerLockManager lockManager = getLockManager();
         try {
             lockManager.executeWithLock(playerId, () -> {
-                PlayerPointsData data = getOrCreateData(playerId);
                 data.addBalance(amount);
             });
         } catch (LockTimeoutException e) {
@@ -164,10 +174,15 @@ public class PointsModule extends RPGModule implements PointsService {
 
     @Override
     public boolean removeBalance(UUID playerId, long amount, String reason) {
+        PlayerPointsData data = getOrCreateData(playerId);
+        if (data == null) {
+            logWarning("Failed to remove balance: no data for " + playerId);
+            return false;
+        }
+        
         PlayerLockManager lockManager = getLockManager();
         try {
             return lockManager.executeWithLock(playerId, () -> {
-                PlayerPointsData data = getOrCreateData(playerId);
                 return data.removeBalance(amount);
             });
         } catch (LockTimeoutException e) {
@@ -180,12 +195,16 @@ public class PointsModule extends RPGModule implements PointsService {
     public boolean transfer(UUID from, UUID to, long amount, String reason) {
         if (amount <= 0) return false;
         
+        PlayerPointsData fromData = getOrCreateData(from);
+        PlayerPointsData toData = getOrCreateData(to);
+        if (fromData == null || toData == null) {
+            logWarning("Failed to transfer: no data for " + from + " or " + to);
+            return false;
+        }
+        
         PlayerLockManager lockManager = getLockManager();
         try {
             return lockManager.executeWithDualLock(from, to, () -> {
-                PlayerPointsData fromData = getOrCreateData(from);
-                PlayerPointsData toData = getOrCreateData(to);
-                
                 if (!fromData.hasBalance(amount)) {
                     return false;
                 }
@@ -285,7 +304,12 @@ public class PointsModule extends RPGModule implements PointsService {
     private PlayerPointsData getOrCreateData(UUID playerId) {
         PlayerPointsData data = repository.getFromCache(playerId);
         if (data == null) {
-            data = repository.load(playerId).join();
+            try {
+                data = repository.load(playerId).join();
+            } catch (Exception e) {
+                logWarning("Failed to load data for " + playerId + ": " + e.getMessage());
+                return null;
+            }
         }
         return data;
     }

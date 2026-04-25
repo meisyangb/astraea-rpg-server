@@ -72,7 +72,7 @@ public final class GuangDianHolo extends AbstractRPGPlugin {
         }
         
         if (placeholders != null) {
-            PlaceholderAPI.unregisterExpansion(placeholders);
+            placeholders.unregister();
             placeholders = null;
         }
 
@@ -114,9 +114,8 @@ public final class GuangDianHolo extends AbstractRPGPlugin {
     private void hookPlaceholderAPI() {
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             placeholders = new HoloPlaceholders(this);
-            if (placeholders.register()) {
-                getLogger().info("PlaceholderAPI 扩展已注册");
-            }
+            placeholders.register();
+            getLogger().info("PlaceholderAPI 扩展已注册");
         }
     }
 
