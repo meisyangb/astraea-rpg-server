@@ -4,10 +4,10 @@ import cn.guangdian.armorstats.GuangDianArmorStats;
 import cn.guangdian.armorstats.manager.HealthManager;
 import cn.guangdian.armorstats.manager.StatsManager;
 import cn.guangdian.armorstats.manager.BossBarManager;
+import cn.guangdian.armorstats.event.PlayerFullHealthEvent;
+import cn.guangdian.armorstats.event.PlayerHealthChangedEvent;
+import cn.guangdian.armorstats.event.PlayerStatsChangedEvent;
 import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.event.events.PlayerFullHealthEvent;
-import cn.guangdian.rpgcore.event.events.PlayerHealthChangedEvent;
-import cn.guangdian.rpgcore.event.events.PlayerStatsChangedEvent;
 import cn.guangdian.rpgcore.lifecycle.AbstractPlayerDataHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
@@ -54,9 +54,6 @@ public class ArmorStatsDataHandler extends AbstractPlayerDataHandler {
     }
     
     private void publishHealthEvents(Player player) {
-        RPGCore rpgCore = RPGCore.getInstance();
-        if (rpgCore == null) return;
-        
         double maxHealth = player.getAttribute(Attribute.MAX_HEALTH).getValue();
         double currentHealth = player.getHealth();
         
@@ -67,7 +64,7 @@ public class ArmorStatsDataHandler extends AbstractPlayerDataHandler {
             0, 0,
             0, 0
         );
-        rpgCore.getEventBus().publish(statsEvent);
+        Bukkit.getPluginManager().callEvent(statsEvent);
         
         if (currentHealth >= maxHealth) {
             PlayerFullHealthEvent fullHealthEvent = new PlayerFullHealthEvent(
@@ -76,7 +73,7 @@ public class ArmorStatsDataHandler extends AbstractPlayerDataHandler {
                 maxHealth,
                 PlayerFullHealthEvent.FullHealthReason.LOGIN
             );
-            rpgCore.getEventBus().publish(fullHealthEvent);
+            Bukkit.getPluginManager().callEvent(fullHealthEvent);
         } else {
             PlayerHealthChangedEvent healthEvent = new PlayerHealthChangedEvent(
                 player.getUniqueId(),
@@ -86,7 +83,7 @@ public class ArmorStatsDataHandler extends AbstractPlayerDataHandler {
                 maxHealth,
                 PlayerHealthChangedEvent.ChangeReason.OTHER
             );
-            rpgCore.getEventBus().publish(healthEvent);
+            Bukkit.getPluginManager().callEvent(healthEvent);
         }
     }
     

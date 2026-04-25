@@ -201,33 +201,29 @@ public class RegenTask implements Runnable {
      * 发布血量变化事件
      */
     private void publishHealthChangedEvent(Player player, double oldHealth, double newHealth, double maxHealth) {
-        if (cn.guangdian.rpgcore.RPGCore.getInstance() == null) return;
-        
-        cn.guangdian.rpgcore.event.events.PlayerHealthChangedEvent healthEvent = 
-            new cn.guangdian.rpgcore.event.events.PlayerHealthChangedEvent(
+        cn.guangdian.armorstats.event.PlayerHealthChangedEvent healthEvent = 
+            new cn.guangdian.armorstats.event.PlayerHealthChangedEvent(
                 player.getUniqueId(),
                 player.getName(),
                 oldHealth,
                 newHealth,
                 maxHealth,
-                cn.guangdian.rpgcore.event.events.PlayerHealthChangedEvent.ChangeReason.REGEN
+                cn.guangdian.armorstats.event.PlayerHealthChangedEvent.ChangeReason.REGEN
             );
-        cn.guangdian.rpgcore.RPGCore.getInstance().getEventBus().publish(healthEvent);
+        org.bukkit.Bukkit.getPluginManager().callEvent(healthEvent);
     }
     
     /**
      * 发布满血事件
      */
     private void publishFullHealthEvent(Player player, double maxHealth) {
-        if (cn.guangdian.rpgcore.RPGCore.getInstance() == null) return;
-        
-        cn.guangdian.rpgcore.event.events.PlayerFullHealthEvent fullHealthEvent = 
-            new cn.guangdian.rpgcore.event.events.PlayerFullHealthEvent(
+        cn.guangdian.armorstats.event.PlayerFullHealthEvent fullHealthEvent = 
+            new cn.guangdian.armorstats.event.PlayerFullHealthEvent(
                 player.getUniqueId(),
                 player.getName(),
                 maxHealth,
-                cn.guangdian.rpgcore.event.events.PlayerFullHealthEvent.FullHealthReason.REGEN
+                cn.guangdian.armorstats.event.PlayerFullHealthEvent.FullHealthReason.REGEN
             );
-        cn.guangdian.rpgcore.RPGCore.getInstance().getEventBus().publish(fullHealthEvent);
+        org.bukkit.Bukkit.getPluginManager().callEvent(fullHealthEvent);
     }
 }

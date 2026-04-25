@@ -6,10 +6,9 @@ import cn.guangdian.armorstats.manager.StatsManager;
 import cn.guangdian.armorstats.data.AttributeValue;
 import cn.guangdian.armorstats.data.PlayerStats;
 import cn.guangdian.armorstats.parser.LoreParser;
+import cn.guangdian.armorstats.event.PlayerStatsChangedEvent;
 import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
-import cn.guangdian.rpgcore.event.events.PlayerStatsChangedEvent;
 import cn.guangdian.rpgcore.monitor.OperationTimer;
 import cn.guangdian.rpgcore.monitor.PerformanceMonitor;
 import cn.guangdian.rpgcore.service.api.AttributeParseService;
@@ -37,7 +36,6 @@ public class ArmorStatsServiceAdapter implements StatsService, SkillService, Att
 
     private final GuangDianArmorStats plugin;
     private final boolean useRPGCore;
-    private EventBus eventBus;
     private PerformanceMonitor performanceMonitor;
     private Logger logger;
 
@@ -50,7 +48,6 @@ public class ArmorStatsServiceAdapter implements StatsService, SkillService, Att
             try {
                 RPGCore rpgCore = RPGCore.getInstance();
                 ServiceRegistry registry = rpgCore.getServiceRegistry();
-                this.eventBus = rpgCore.getEventBus();
                 this.performanceMonitor = rpgCore.getPerformanceMonitor();
                 
                 registry.registerService(StatsService.class, this);
@@ -114,10 +111,6 @@ public class ArmorStatsServiceAdapter implements StatsService, SkillService, Att
                                           double oldHealth, double newHealth,
                                           double oldAttack, double newAttack,
                                           double oldDefense, double newDefense) {
-        if (eventBus == null) {
-            return;
-        }
-        
         // 检查是否有属性变化
         if (oldHealth != newHealth || oldAttack != newAttack || oldDefense != newDefense) {
             PlayerStatsChangedEvent event = new PlayerStatsChangedEvent(
@@ -128,7 +121,7 @@ public class ArmorStatsServiceAdapter implements StatsService, SkillService, Att
                 oldDefense, newDefense
             );
             
-            eventBus.publish(event);
+            Bukkit.getPluginManager().callEvent(event);
             logger.fine("Published PlayerStatsChangedEvent for " + player.getName());
         }
     }
