@@ -510,84 +510,142 @@ public class SafeDataManager {
 
 ---
 
-## 12. 事件总线使用模板 (v1.3.0 新增)
+## 12. 事件系统模板 (v2.0.0 更新)
+
+> **架构**: Bukkit 事件 + RPGCore EventPublisher 管控层
+> 
+> **原则**: 底层使用 Bukkit 事件系统，可选使用 EventPublisher 获得管控能力
+
+### 12.1 自定义事件定义（继承 Bukkit Event）
 
 ```java
-import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.api.EventBus;
-import cn.guangdian.rpgcore.event.EventHandler;
-import cn.guangdian.rpgcore.event.EventPriority;
-import cn.guangdian.rpgcore.event.CoreEvent;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+import org.bukkit.entity.Player;
 
-// 自定义事件
-public class MyCustomEvent extends CoreEvent {
-    private final UUID playerId;
-    private final String action;
+// 自定义事件 - 继承 Bukkit Event
+public class PlayerLevelUpEvent extends Event {
+    private static final HandlerList HANDLERS = new HandlerList();
     
-    public MyCustomEvent(UUID playerId, String action) {
+    private final Player player;
+    private final int oldLevel;
+    private final int newLevel;
+    
+    public PlayerLevelUpEvent(Player player, int oldLevel, int newLevel) {
         super();
-        this.playerId = playerId;
-        this.action = action;
+        this.player = player;
+        this.oldLevel = oldLevel;
+        this.newLevel = newLevel;
     }
     
-    public UUID getPlayerId() { return playerId; }
-    public String getAction() { return action; }
+    // Getters
+    public Player getPlayer() { return player; }
+    public int getOldLevel() { return oldLevel; }
+    public int getNewLevel() { return newLevel; }
+    
+    @Override
+    public HandlerList getHandlers() {
+        return HANDLERS;
+    }
+    
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
+}
+```
+
+### 12.2 发布事件（推荐：使用 EventPublisher 管控层）
+
+```java
+import cn.guangdian.rpgcore.event.EventPublisher;
+import org.bukkit.Bukkit;
+
+public class LevelSystem {
+    
+    public void levelUp(Player player, int newLevel) {
+        int oldLevel = getPlayerLevel(player);
+        setPlayerLevel(player, newLevel);
+        
+        // 推荐: 使用 EventPublisher（带管控：监控、限流、日志）
+        EventPublisher.publish(new PlayerLevelUpEvent(player, oldLevel, newLevel));
+        
+        // 异步发布（非关键事件）
+        EventPublisher.publishAsync(new PlayerLevelUpEvent(player, oldLevel, newLevel));
+        
+        // 延迟发布
+        EventPublisher.publishLater(new PlayerLevelUpEvent(player, oldLevel, newLevel), 20L);
+    }
+}
+```
+
+### 12.3 发布事件（备选：直接使用 Bukkit）
+
+```java
+import org.bukkit.Bukkit;
+
+public class LevelSystem {
+    
+    public void levelUp(Player player, int newLevel) {
+        int oldLevel = getPlayerLevel(player);
+        setPlayerLevel(player, newLevel);
+        
+        // 备选: 直接使用 Bukkit（缺少 RPGCore 管控功能）
+        Bukkit.getPluginManager().callEvent(
+            new PlayerLevelUpEvent(player, oldLevel, newLevel)
+        );
+    }
+}
+```
+
+### 12.4 订阅事件（标准 Bukkit 方式）
+
+```java
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class LevelListener implements Listener {
+    
+    public LevelListener(JavaPlugin plugin) {
+        // 注册监听器
+        Bukkit.getPluginManager().registerEvents(this, plugin);
+    }
+    
+    // 订阅事件（普通优先级）
+    @EventHandler
+    public void onPlayerLevelUp(PlayerLevelUpEvent event) {
+        Player player = event.getPlayer();
+        player.sendMessage("恭喜从 " + event.getOldLevel() + " 级升级到 " + event.getNewLevel() + " 级！");
+    }
+    
+    // 订阅事件（指定优先级）
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onPlayerLevelUpHighPriority(PlayerLevelUpEvent event) {
+        // 高优先级处理（先执行）
+    }
+    
+    // 监听取消事件
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerLevelUpMonitor(PlayerLevelUpEvent event) {
+        // 仅监听，不修改（最后执行）
+    }
+}
+```
+
+### 12.5 旧代码兼容（EventBus 代理模式）
+
+```java
+// 旧代码仍可运行（EventBus 已改为 Bukkit 代理）
+RPGCore rpgCore = RPGCore.getInstance();
+if (rpgCore != null) {
+    EventBus eventBus = rpgCore.getEventBus();
+    // 这会代理到 Bukkit 事件系统
+    eventBus.publish(new PlayerLevelUpEvent(player, oldLevel, newLevel));
 }
 
-// 事件发布者
-public class EventPublisher {
-    
-    private final EventBus eventBus;
-    
-    public EventPublisher() {
-        RPGCore rpgCore = RPGCore.getInstance();
-        if (rpgCore != null) {
-            eventBus = rpgCore.getEventBus();
-        }
-    }
-    
-    public void publishEvent(UUID playerId, String action) {
-        if (eventBus != null) {
-            eventBus.publish(new MyCustomEvent(playerId, action));
-        }
-    }
-}
-
-// 事件订阅者
-public class EventSubscriber {
-    
-    private final EventBus eventBus;
-    
-    public EventSubscriber() {
-        RPGCore rpgCore = RPGCore.getInstance();
-        if (rpgCore != null) {
-            eventBus = rpgCore.getEventBus();
-            registerHandlers();
-        }
-    }
-    
-    private void registerHandlers() {
-        // 注册事件处理器
-        eventBus.registerHandler(MyCustomEvent.class, new EventHandler<>() {
-            @Override
-            public EventPriority getPriority() {
-                return EventPriority.NORMAL;
-            }
-            
-            @Override
-            public void handle(MyCustomEvent event) {
-                // 处理事件逻辑
-                System.out.println("收到事件: " + event.getPlayerId() + " - " + event.getAction());
-            }
-        });
-    }
-    
-    public void unregister() {
-        if (eventBus != null) {
-            eventBus.unregisterHandler(MyCustomEvent.class, handler);
-        }
-    }
-}
+// 建议迁移到新 API
+EventPublisher.publish(new PlayerLevelUpEvent(player, oldLevel, newLevel));
 ```
 
 ---
@@ -764,63 +822,228 @@ public class MyService {
 
 ---
 
-## 16. EventBusSupport 事件总线模板 (v1.4.0 新增)
+## 16. 自定义事件定义模板 (v2.0.0 新增)
+
+> **重要**: 业务事件应该定义在对应的业务插件中，而不是 RPGCore。
+> 参考: [FORBIDDEN_PATTERNS.md 第17章](./FORBIDDEN_PATTERNS.md)
+
+### 16.1 基础事件模板
 
 ```java
-import cn.guangdian.rpgcore.event.EventBusSupport;
-import cn.guangdian.rpgcore.event.CoreEvent;
+package cn.guangdian.myplugin.event;
 
-// 1. 定义事件
-public class PlayerLevelUpEvent extends CoreEvent {
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+
+/**
+ * 玩家XX事件
+ * 
+ * <p>当玩家...时触发此事件。</p>
+ * 
+ * @author GuangDian
+ * @since 1.0.0
+ */
+public class MyCustomEvent extends Event {
+
+    private static final HandlerList HANDLERS = new HandlerList();
+    
     private final Player player;
-    private final int oldLevel;
-    private final int newLevel;
-    
-    public PlayerLevelUpEvent(Player player, int oldLevel, int newLevel) {
+    private final String data;
+    private final long timestamp;
+
+    /**
+     * 创建事件
+     * 
+     * @param player 玩家
+     * @param data 数据
+     */
+    public MyCustomEvent(Player player, String data) {
+        super(!Bukkit.isPrimaryThread()); // 自动检测异步
         this.player = player;
-        this.oldLevel = oldLevel;
-        this.newLevel = newLevel;
+        this.data = data;
+        this.timestamp = System.currentTimeMillis();
     }
-    
-    // Getters
-    public Player getPlayer() { return player; }
-    public int getOldLevel() { return oldLevel; }
-    public int getNewLevel() { return newLevel; }
-}
 
-// 2. 订阅事件
-public class MyListener {
-    public MyListener() {
-        // 订阅事件（普通优先级）
-        EventBusSupport.subscribe(PlayerLevelUpEvent.class, event -> {
-            Player player = event.getPlayer();
-            player.sendMessage("恭喜升级到 " + event.getNewLevel() + " 级！");
-        });
-        
-        // 订阅事件（指定优先级）
-        EventBusSupport.subscribe(PlayerLevelUpEvent.class, 
-            cn.guangdian.rpgcore.event.EventPriority.HIGH, 
-            event -> {
-                // 高优先级处理
-            });
+    public Player getPlayer() {
+        return player;
     }
-}
 
-// 3. 发布事件
-public class LevelSystem {
-    public void levelUp(Player player, int newLevel) {
-        int oldLevel = getPlayerLevel(player);
-        setPlayerLevel(player, newLevel);
-        
-        // 同步发布
-        EventBusSupport.publish(new PlayerLevelUpEvent(player, oldLevel, newLevel));
-        
-        // 异步发布
-        EventBusSupport.publishAsync(new PlayerLevelUpEvent(player, oldLevel, newLevel));
+    public String getData() {
+        return data;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return HANDLERS;
+    }
+
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
     }
 }
 ```
 
+### 16.2 带枚举的复杂事件模板
+
+```java
+package cn.guangdian.myplugin.event;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+
+import java.util.UUID;
+
+/**
+ * 交易事件
+ * 
+ * <p>当玩家进行交易时触发。</p>
+ * 
+ * @author GuangDian
+ * @since 1.0.0
+ */
+public class TransactionEvent extends Event {
+
+    private static final HandlerList HANDLERS = new HandlerList();
+    
+    private final UUID playerId;
+    private final TransactionType type;
+    private final double amount;
+    private final String reason;
+
+    /**
+     * 交易类型
+     */
+    public enum TransactionType {
+        DEPOSIT,    // 存入
+        WITHDRAW,   // 取出
+        TRANSFER,   // 转账
+        SET         // 设置
+    }
+
+    public TransactionEvent(UUID playerId, TransactionType type, double amount, String reason) {
+        super(!Bukkit.isPrimaryThread());
+        this.playerId = playerId;
+        this.type = type;
+        this.amount = amount;
+        this.reason = reason;
+    }
+
+    public UUID getPlayerId() { return playerId; }
+    public TransactionType getType() { return type; }
+    public double getAmount() { return amount; }
+    public String getReason() { return reason; }
+
+    public boolean isDeposit() {
+        return type == TransactionType.DEPOSIT;
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return HANDLERS;
+    }
+
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
+}
+```
+
+### 16.3 事件发布与订阅
+
+```java
+// ============ 发布事件 ============
+
+// 方式1: 使用 EventPublisher (推荐，带管控)
+import cn.guangdian.rpgcore.event.EventPublisher;
+
+EventPublisher.publish(new MyCustomEvent(player, "data"));
+
+// 方式2: 直接使用 Bukkit
+import org.bukkit.Bukkit;
+
+Bukkit.getPluginManager().callEvent(new MyCustomEvent(player, "data"));
+
+// ============ 订阅事件 ============
+
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+
+public class MyListener implements Listener {
+    
+    // 标准订阅
+    @EventHandler
+    public void onMyCustomEvent(MyCustomEvent event) {
+        Player player = event.getPlayer();
+        String data = event.getData();
+        // 处理事件
+    }
+    
+    // 指定优先级 (HIGH 先执行)
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onMyCustomEventHigh(MyCustomEvent event) {
+        // 高优先级处理
+    }
+    
+    // 仅监听，不修改 (MONITOR 最后执行)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onMyCustomEventMonitor(MyCustomEvent event) {
+        // 仅监听，不修改事件状态
+    }
+}
+
+// 注册监听器
+Bukkit.getPluginManager().registerEvents(new MyListener(), plugin);
+```
+
+### 16.4 跨插件订阅事件
+
+```java
+// 订阅其他插件的事件
+@EventHandler
+public void onPlayerLevelUp(cn.guangdian.classsystem.event.PlayerLevelUpEvent event) {
+    Player player = event.getPlayer();
+    int newLevel = event.getNewLevel();
+    
+    // 处理升级奖励
+    if (newLevel % 10 == 0) {
+        player.sendMessage("恭喜达到 " + newLevel + " 级！");
+    }
+}
+
+@EventHandler
+public void onPointsTransaction(cn.guangdian.points.event.PointsTransactionEvent event) {
+    UUID playerId = event.getPlayerId();
+    long amount = event.getAmount();
+    
+    // 记录大额交易
+    if (amount > 10000) {
+        logger.info("玩家 {} 进行大额交易: {}", playerId, amount);
+    }
+}
+```
+
+### 16.5 事件设计最佳实践
+
+| 实践 | 说明 | 示例 |
+|------|------|------|
+| **继承 Event** | 必须继承 Bukkit Event | `public class MyEvent extends Event` |
+| **HandlerList** | 必须定义静态 HandlerList | `private static final HandlerList HANDLERS` |
+| **构造函数** | 调用 super() 指定异步状态 | `super(!Bukkit.isPrimaryThread())` |
+| **不可变性** | 事件字段尽量用 final | `private final Player player` |
+| **Getter 方法** | 提供完整 getter | `getPlayer()`, `getAmount()` |
+| **文档注释** | 清晰的 Javadoc | `@param`, `@since` |
+| **包位置** | 放在插件 event 包下 | `cn.guangdian.myplugin.event` |
+
 ---
 
-*最后更新: 2026-04-24*
+*最后更新: 2026-04-25*
+*版本: 1.6.0*

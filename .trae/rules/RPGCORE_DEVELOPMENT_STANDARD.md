@@ -1,7 +1,7 @@
 # RPGCore 开发核心标准
 
 > 本规范适用于所有基于 RPGCore 的二次开发与扩展
-> **版本: 1.1.0 | 更新: 2026-04-23**
+> **版本: 2.0.0 | 更新: 2026-04-25**
 
 ---
 
@@ -51,6 +51,58 @@
 **必须**遵循：应用层 → 服务层 → 核心层 → 集成层 → 基础设施层
 **禁止**：下层依赖上层，同层直接依赖（通过服务注册表）
 
+### 1.3 模块统一封装原则
+
+> **核心判断标准**：
+> - 封装能带来明显价值 → 统一
+> - 封装只是换个名字 → 不统一
+> - 封装增加复杂度 → 不统一
+
+#### ✅ 需要统一封装的模块
+
+| 模块 | 价值分析 | 封装收益 |
+|------|----------|----------|
+| **SyncScheduler** | 屏蔽 Bukkit/Paper API 差异 | 统一调度接口，跨版本兼容 |
+| **ExternalServiceIntegration** | 统一第三方插件访问 | 隔离 LuckPerms/Vault/PlaceholderAPI 依赖 |
+| **MiniMessageService** | 简化 Adventure API | `mm.green("成功")` vs `Component.text(...)` |
+| **PlayerLockManager** | 玩家级别细粒度锁 | UUID 排序防死锁、超时释放、双锁操作 |
+| **PlayerLifecycleManager** | 异步加载/保存玩家数据 | 避免主线程阻塞，自动保存 |
+| **ItemAttributeProvider** | 多插件贡献物品属性 | 开闭原则，GuangDianSocket/Forge 等可扩展 |
+| **CooldownManager** | 统一冷却管理 | 避免各插件重复实现 `Map<UUID, Long>` |
+| **ConfigurateSupport** | 类型安全配置 | Builder 模式，自动加载/保存 |
+| **GUIManager** | 统一 GUI 管理 | YAML 配置、占位符处理、自动注册 |
+| **CommandFramework** | 注解驱动命令 | `@SubCommand` 自动注册、权限检查、Tab 补全 |
+| **ServiceRegistry** | 服务注册与发现 | 运行时服务发现，解耦插件依赖 |
+| **GuiceSupport** | 依赖注入支持 | `@Inject` 自动注入，子注入器 |
+
+#### ❌ 不需要统一封装的模块
+
+| 模块 | 原因 | 建议 |
+|------|------|------|
+| **EventBus** | Bukkit 事件系统已足够简单 | **已废弃**，使用 Bukkit 原生事件 |
+| **CacheProvider** | Caffeine API 已很简洁 | 直接使用 Caffeine |
+| **LightweightCacheProvider** | 手写实现不如 Caffeine | **已废弃** |
+| **HighPerformanceCacheProvider** | 手写实现不如 Caffeine | **已废弃** |
+| **ServiceInjector** | 反射注入功能有限 | **已废弃**，使用 GuiceSupport |
+| **GameLogger** | SLF4J 已是标准 | 直接使用 SLF4J |
+| **HttpClient** | Java 11+ HttpClient 已很好用 | 无需封装 |
+| **CronScheduler** | 使用场景有限 | 按需实现 |
+| **AuditLog** | 只有 1 个实现 | 过早抽象，按需实现 |
+
+#### 封装决策流程
+
+```
+需要封装新模块？
+    ↓
+是否解决实际痛点？
+    ├─ 否 → 不封装
+    └─ 是 → 是否比原生 API 更简洁？
+              ├─ 否 → 不封装
+              └─ 是 → 是否有多个实现需求？
+                        ├─ 否 → 不封装（过早抽象）
+                        └─ 是 → 封装
+```
+
 ---
 
 ## 二、RPGCore 公共 API 完整参考
@@ -64,33 +116,33 @@
 RPGCore rpgCore = RPGCore.getInstance();
 ```
 
-| 方法 | 返回类型 | 用途 |
-|------|----------|------|
-| `getScheduler()` | `SyncScheduler` | 统一调度器（同步/异步任务） |
-| `getEventBus()` | `EventBus` | 发布-订阅事件系统 |
-| `getServiceRegistry()` | `ServiceRegistry` | 服务注册与发现 |
-| `getCacheProvider()` | `CacheProvider` | Caffeine 缓存管理 |
-| `getLockManager()` | `PlayerLockManager` | 玩家级并发锁 |
-| `getPlayerLifecycle()` | `PlayerLifecycleManager` | 玩家数据生命周期管理 |
-| `getExternalServices()` | `ExternalServiceIntegration` | LuckPerms/Vault/PAPI 集成 |
-| `getMiniMessageService()` | `MiniMessageService` | MiniMessage 消息服务 |
-| `getTextDisplayService()` | `TextDisplayService` | TextDisplay 全息图服务 |
-| `getMenuService()` | `MenuService` | YAML 驱动菜单服务 |
-| `getMessageService()` | `MessageService` | 统一消息服务 |
-| `getSoundService()` | `SoundService` | 音效服务 |
-| `getCooldownManager()` | `CooldownManager` | 冷却时间管理 |
-| `getGameLogger()` | `GameLogger` | 异步日志服务 |
-| `getConfigManager()` | `ConfigManager` | 统一配置管理 |
-| `getHttpClient()` | `HttpClient` | HTTP 客户端 |
-| `getCronScheduler()` | `CronScheduler` | Cron 表达式定时任务 |
-| `getConfigMigrator()` | `ConfigMigrator` | 配置版本迁移 |
-| `getAuditLog()` | `AuditLog` | 操作审计日志 |
-| `getDataExporter()` | `DataExporter` | 数据导出 |
-| `getPerformanceMonitor()` | `PerformanceMonitor` | 性能监控 |
-| `getExceptionHandler()` | `ExceptionHandler` | 异常处理 |
-| `getItemAttributeManager()` | `ItemAttributeManager` | 物品属性管理 |
-| `getEntityManager()` | `EntityService` | 实体服务 |
-| `getServerService()` | `ServerService` | 服务器服务 |
+| 方法 | 返回类型 | 用途 | 状态 |
+|------|----------|------|------|
+| `getScheduler()` | `SyncScheduler` | 统一调度器（同步/异步任务） | ✅ 推荐 |
+| `getEventBus()` | `EventBus` | 发布-订阅事件系统 | ❌ **已废弃** |
+| `getServiceRegistry()` | `ServiceRegistry` | 服务注册与发现 | ✅ 推荐 |
+| `getCacheProvider()` | `CacheProvider` | Caffeine 缓存管理 | ⚠️ 直接用 Caffeine |
+| `getLockManager()` | `PlayerLockManager` | 玩家级并发锁 | ✅ 推荐 |
+| `getPlayerLifecycle()` | `PlayerLifecycleManager` | 玩家数据生命周期管理 | ✅ 推荐 |
+| `getExternalServices()` | `ExternalServiceIntegration` | LuckPerms/Vault/PAPI 集成 | ✅ 推荐 |
+| `getMiniMessageService()` | `MiniMessageService` | MiniMessage 消息服务 | ✅ 推荐 |
+| `getTextDisplayService()` | `TextDisplayService` | TextDisplay 全息图服务 | ✅ 推荐 |
+| `getMenuService()` | `MenuService` | YAML 驱动菜单服务 | ✅ 推荐 |
+| `getMessageService()` | `MessageService` | 统一消息服务 | ✅ 推荐 |
+| `getSoundService()` | `SoundService` | 音效服务 | ✅ 推荐 |
+| `getCooldownManager()` | `CooldownManager` | 冷却时间管理 | ✅ 推荐 |
+| `getGameLogger()` | `GameLogger` | 异步日志服务 | ⚠️ 推荐 SLF4J |
+| `getConfigManager()` | `ConfigManager` | 统一配置管理 | ⚠️ 推荐 ConfigurateSupport |
+| `getHttpClient()` | `HttpClient` | HTTP 客户端 | ⚠️ 按需使用 |
+| `getCronScheduler()` | `CronScheduler` | Cron 表达式定时任务 | ⚠️ 按需使用 |
+| `getConfigMigrator()` | `ConfigMigrator` | 配置版本迁移 | ✅ 推荐 |
+| `getAuditLog()` | `AuditLog` | 操作审计日志 | ⚠️ 按需使用 |
+| `getDataExporter()` | `DataExporter` | 数据导出 | ⚠️ 按需使用 |
+| `getPerformanceMonitor()` | `PerformanceMonitor` | 性能监控 | ⚠️ 按需使用 |
+| `getExceptionHandler()` | `ExceptionHandler` | 异常处理 | ✅ 推荐 |
+| `getItemAttributeManager()` | `ItemAttributeManager` | 物品属性管理 | ✅ 推荐 |
+| `getEntityManager()` | `EntityService` | 实体服务 | ✅ 推荐 |
+| `getServerService()` | `ServerService` | 服务器服务 | ✅ 推荐 |
 
 ### 2.2 SyncScheduler - 统一调度器
 
@@ -110,23 +162,29 @@ RPGCore rpgCore = RPGCore.getInstance();
 
 **返回**: `runSyncLater/runAsyncLater/runSyncRepeating/runAsyncRepeating` 返回 `long` 任务 ID
 
-### 2.3 EventBus - 事件总线
+### 2.3 EventBus - 事件总线（已废弃）
 
-**获取方式**: `rpgCore.getEventBus()`
+> **⚠️ 已废弃（since 2.0.0）**：请使用 Bukkit 原生事件系统。
+> 
+> **替代方案**：`Bukkit.getPluginManager().callEvent(event)` + `@EventHandler`
+
+**获取方式**: ~~`rpgCore.getEventBus()`~~
 
 | 方法 | 说明 |
 |------|------|
-| `publish(T event)` | 同步发布事件 |
-| `publishAsync(T event)` | 异步发布事件 |
-| `subscribe(Class<T>, EventHandler<T>)` | 订阅事件 |
-| `unsubscribe(EventHandler<?>)` | 取消订阅 |
-| `unsubscribeAll(Class<T>)` | 取消某类型所有订阅 |
-| `hasSubscribers(Class<T>)` | 是否有订阅者 |
-| `getSubscriberCount(Class<T>)` | 获取订阅者数量 |
+| `publish(T event)` | ~~同步发布事件~~ ❌ 已废弃 |
+| `publishAsync(T event)` | ~~异步发布事件~~ ❌ 已废弃 |
+| `subscribe(Class<T>, EventHandler<T>)` | ~~订阅事件~~ ❌ 已废弃 |
+| `unsubscribe(EventHandler<?>)` | ~~取消订阅~~ ❌ 已废弃 |
+| `unsubscribeAll(Class<T>)` | ~~取消某类型所有订阅~~ ❌ 已废弃 |
+| `hasSubscribers(Class<T>)` | ~~是否有订阅者~~ ❌ 已废弃 |
+| `getSubscriberCount(Class<T>)` | ~~获取订阅者数量~~ ❌ 已废弃 |
 
 ### 2.4 CacheProvider - 缓存服务
 
-**获取方式**: `rpgCore.getCacheProvider()`
+> **推荐**：直接使用 Caffeine 缓存库，无需通过 CacheProvider 封装。
+
+**获取方式**: `rpgCore.getCacheProvider()` 或直接使用 `Caffeine.newBuilder().build()`
 
 | 方法 | 说明 |
 |------|------|
@@ -140,6 +198,22 @@ RPGCore rpgCore = RPGCore.getInstance();
 | `clear()` | 清空所有缓存 |
 | `size()` | 获取缓存大小 |
 | `containsKey(String key)` | 检查键是否存在 |
+
+**推荐用法**：
+```java
+// ✅ 推荐 - 直接使用 Caffeine
+Cache<String, Object> cache = Caffeine.newBuilder()
+    .maximumSize(1000)
+    .expireAfterWrite(Duration.ofMinutes(30))
+    .build();
+
+// ✅ 推荐 - 使用 TTLCacheManager 的 CAFFEINE 模式
+CacheProvider cache = new TTLCacheManager(2000, Duration.ofMinutes(30), true, TTLCacheManager.Mode.CAFFEINE);
+
+// ❌ 禁止 - 已废弃的模式
+TTLCacheManager.Mode.LIGHTWEIGHT      // 已废弃
+TTLCacheManager.Mode.HIGH_PERFORMANCE // 已废弃
+```
 
 ### 2.5 PlayerLockManager - 并发锁
 
@@ -222,7 +296,9 @@ RPGCore 自动注册以下服务，子插件可通过 `getServiceRegistry().getS
 | `TextDisplayService` | `rpgCore.getTextDisplayService()` | TextDisplay 全息图 |
 | `MessageService` | `rpgCore.getMessageService()` | 统一消息服务 |
 
-### 2.10 自定义事件（可通过 EventBus 发布/订阅）
+### 2.10 自定义事件（使用 Bukkit 原生事件）
+
+> **重要**：所有自定义事件应继承 `org.bukkit.event.Event`，而非 `CoreEvent`。
 
 RPGCore 定义了以下自定义事件，子插件可发布或订阅：
 
@@ -253,6 +329,18 @@ RPGCore 定义了以下自定义事件，子插件可发布或订阅：
 | `RpgSkillLearnEvent` | 技能学习事件 |
 | `RpgSkillPointEvent` | 技能点事件 |
 | `RpgSkillUpgradeEvent` | 技能升级事件 |
+
+**使用方式**：
+```java
+// 发布事件
+Bukkit.getPluginManager().callEvent(new RpgLevelUpEvent(player, oldLevel, newLevel));
+
+// 订阅事件
+@EventHandler
+public void onLevelUp(RpgLevelUpEvent event) {
+    // 处理事件
+}
+```
 
 ---
 
@@ -451,24 +539,53 @@ lockManager.executeWithDualLock(fromUUID, toUUID, () -> {
 
 ## 💾 六、缓存使用规范
 
-### 6.1 使用 Caffeine 缓存
-```java
-CacheProvider cacheProvider = rpgCore.getCacheProvider();
+> **推荐**：直接使用 Caffeine 缓存库，它是业界最佳实践。
 
-// 获取加载缓存
-LoadingCache<String, Object> cache = cacheProvider.getLoadingCache(
-    "myCache",
-    key -> loadFromDatabase(key)
-);
+### 6.1 使用 Caffeine 缓存（推荐）
+
+```java
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
+
+// 创建缓存
+Cache<String, Object> cache = Caffeine.newBuilder()
+    .maximumSize(1000)
+    .expireAfterWrite(Duration.ofMinutes(30))
+    .recordStats()
+    .build();
+
+// 创建自动加载缓存
+LoadingCache<String, PlayerData> loadingCache = Caffeine.newBuilder()
+    .maximumSize(1000)
+    .expireAfterWrite(Duration.ofMinutes(30))
+    .build(key -> loadFromDatabase(key));
 
 // 使用
-Object value = cache.get("key");
-
-// 失效
+Object value = cache.getIfPresent("key");
+cache.put("key", value);
 cache.invalidate("key");
 ```
 
-### 6.2 缓存策略
+### 6.2 使用 TTLCacheManager（Caffeine 模式）
+
+```java
+import cn.guangdian.rpgcore.cache.TTLCacheManager;
+
+// ✅ 正确 - 使用 CAFFEINE 模式
+CacheProvider cache = new TTLCacheManager(
+    2000, 
+    Duration.ofMinutes(30), 
+    true, 
+    TTLCacheManager.Mode.CAFFEINE
+);
+
+// ❌ 禁止 - 已废弃的模式
+TTLCacheManager.Mode.LIGHTWEIGHT      // 已废弃
+TTLCacheManager.Mode.HIGH_PERFORMANCE // 已废弃
+```
+
+### 6.3 缓存策略
 - **短期缓存** (1-5分钟)：临时数据、频繁变化数据
 - **中期缓存** (5-30分钟)：玩家配置、权限数据
 - **长期缓存** (30+分钟)：静态数据、不变化数据
@@ -477,28 +594,195 @@ cache.invalidate("key");
 
 ## 📢 七、事件通信规范
 
-### 7.1 使用 EventBus
-```java
-// 发布事件
-EventBus eventBus = rpgCore.getEventBus();
-eventBus.publish(new MyCustomEvent(player, data));
+> **架构**：采用 "Bukkit 事件 + RPGCore 管控层" 方案
+> 
+> **原则**：
+> - 底层：使用 Bukkit 原生事件系统（保证生态兼容）
+> - 管控层：使用 RPGCore EventPublisher（统一管控）
 
-// 订阅事件
-eventBus.registerHandler(MyCustomEvent.class, event -> {
+### 7.1 使用 EventPublisher 发布事件（推荐）
+
+```java
+import cn.guangdian.rpgcore.event.EventPublisher;
+
+// 1. 定义事件（继承 Bukkit Event）
+public class MyCustomEvent extends org.bukkit.event.Event {
+    private static final HandlerList HANDLERS = new HandlerList();
+    
+    private final Player player;
+    private final Object data;
+    
+    public MyCustomEvent(Player player, Object data) {
+        this.player = player;
+        this.data = data;
+    }
+    
+    public Player getPlayer() { return player; }
+    public Object getData() { return data; }
+    
+    @Override
+    public HandlerList getHandlers() { return HANDLERS; }
+    public static HandlerList getHandlerList() { return HANDLERS; }
+}
+
+// 2. 发布事件（使用 EventPublisher 管控层）
+EventPublisher.publish(new MyCustomEvent(player, data));
+
+// 3. 异步发布（非关键事件）
+EventPublisher.publishAsync(new MyCustomEvent(player, data));
+
+// 4. 延迟发布
+EventPublisher.publishLater(new MyCustomEvent(player, data), 20L); // 延迟1秒
+
+// 5. 批量发布（高频场景）
+List<Event> events = Arrays.asList(event1, event2, event3);
+EventPublisher.publishBatch(events);
+
+// 6. 订阅事件（标准 Bukkit 方式）
+@EventHandler(priority = EventPriority.NORMAL)
+public void onMyCustomEvent(MyCustomEvent event) {
     // 处理逻辑
-});
-```
-
-### 7.2 事件优先级
-```java
-public enum EventPriority {
-    LOWEST,   // -2 最低
-    LOW,      // -1 较低
-    NORMAL,   // 0  默认
-    HIGH,     // +1 较高
-    HIGHEST   // +2 最高
 }
 ```
+
+### 7.2 EventPublisher 管控能力
+
+```java
+// 统一日志记录
+// 自动记录所有事件发布日志
+
+// 性能监控
+// 自动检测慢事件（>10ms警告，>50ms严重警告）
+
+// 频率限制
+EventPublisher.setRateLimit(PlayerStatsChangedEvent.class, 100); // 每秒最多100次
+
+// 批量模式
+EventPublisher.beginBatch();
+// ... 发布多个事件
+EventPublisher.endBatch(); // 统一发布，自动合并同类事件
+
+// 获取统计
+Map<Class<? extends Event>, EventPublisher.EventStats> stats = EventPublisher.getStatsSnapshot();
+int totalPublished = EventPublisher.getTotalPublished();
+```
+
+### 7.3 事件拦截器（高级功能）
+
+```java
+import cn.guangdian.rpgcore.event.EventInterceptor;
+
+EventInterceptor interceptor = new EventInterceptor();
+
+// 添加过滤器
+interceptor.addFilter(PlayerStatsChangedEvent.class, event -> {
+    // 返回 false 拦截该事件
+    return event.getPlayer().hasPermission("rpg.stats.track");
+});
+
+// 添加事件转换器
+interceptor.addTransformer(PlayerStatsChangedEvent.class, event -> {
+    // 转换或增强事件
+    return new EnhancedStatsEvent(event);
+});
+
+// 黑名单/白名单
+interceptor.addToBlacklist(SomeEvent.class);
+interceptor.enableWhitelist();
+interceptor.addToWhitelist(AllowedEvent.class);
+```
+
+### 7.4 性能监控
+
+```java
+import cn.guangdian.rpgcore.event.EventPerformanceMonitor;
+
+EventPerformanceMonitor monitor = new EventPerformanceMonitor();
+
+// 记录事件性能
+monitor.recordEventPerformance(event, durationNs);
+
+// 生成性能报告
+String report = monitor.generateReport();
+// 输出：
+// ========== RPGCore 事件性能报告 ==========
+// 【总体统计】
+//   总事件数: 10000
+//   慢事件数: 50
+//   严重慢事件数: 5
+// 
+// 【事件性能排名】
+//   PlayerStatsChangedEvent    平均: 2.50ms  最大: 15.20ms
+//   PlayerHealthChangedEvent   平均: 1.20ms  最大: 8.50ms
+```
+
+### 7.5 事件优先级
+```java
+@EventHandler(priority = EventPriority.LOWEST)   // 最先执行
+@EventHandler(priority = EventPriority.NORMAL)   // 默认
+@EventHandler(priority = EventPriority.HIGHEST)  // 最后执行
+@EventHandler(priority = EventPriority.MONITOR)  // 仅监听，不修改
+```
+
+### 7.6 废弃的 EventBus（禁止使用）
+
+```java
+// ❌ 禁止 - EventBus 已废弃
+EventBus eventBus = rpgCore.getEventBus();
+eventBus.publish(new MyCustomEvent(player, data));
+eventBus.subscribe(MyCustomEvent.class, handler);
+
+// ✅ 正确 - 使用 EventPublisher 管控层
+EventPublisher.publish(new MyCustomEvent(player, data));
+
+// ✅ 备选 - 直接使用 Bukkit（不推荐，缺少管控）
+Bukkit.getPluginManager().callEvent(new MyCustomEvent(player, data));
+```
+
+### 7.7 架构对比
+
+| 方案 | 生态兼容 | 管控能力 | 维护成本 | 推荐度 |
+|------|----------|----------|----------|--------|
+| 纯 Bukkit 事件 | ✅ | ❌ | 低 | ⭐⭐⭐ |
+| 纯自定义 EventBus | ❌ | ✅ | 高 | ❌ |
+| **Bukkit + EventPublisher 管控** | ✅ | ✅ | 中 | ⭐⭐⭐⭐⭐ |
+
+### 7.8 事件位置变更（v2.0.0 重要更新）
+
+**⚠️ 以下事件已从 RPGCore 迁移到对应插件：**
+
+| 原事件（RPGCore） | 新事件（插件） | 状态 |
+|-------------------|----------------|------|
+| `RpgLevelUpEvent` | `cn.guangdian.classsystem.event.PlayerLevelUpEvent` | 已迁移 |
+| `RpgSkillCastEvent` | `cn.guangdian.armorstats.event.SkillCastEvent` | 已迁移 |
+| `NPCInteractEvent` | `cn.guangdian.npc.event.NPCInteractEvent` | 已迁移 |
+| `NPCCreatedEvent` | `cn.guangdian.npc.event.NPCCreatedEvent` | 已迁移 |
+| `HologramCreatedEvent` | `cn.guangdian.holo.event.HologramCreatedEvent` | 已迁移 |
+| `HologramDeletedEvent` | `cn.guangdian.holo.event.HologramDeletedEvent` | 已迁移 |
+
+**迁移示例：**
+```java
+// ❌ 旧代码（仍可用但已废弃）
+import cn.guangdian.rpgcore.event.events.RpgLevelUpEvent;
+
+@EventHandler
+public void onLevelUp(RpgLevelUpEvent event) {
+    // ...
+}
+
+// ✅ 新代码（推荐）
+import cn.guangdian.classsystem.event.PlayerLevelUpEvent;
+
+@EventHandler
+public void onLevelUp(PlayerLevelUpEvent event) {
+    // ...
+}
+```
+
+**设计原则：**
+- RPGCore 只保留**核心基础设施事件**（数据加载、保存、经济交易等）
+- 各插件自己定义**业务事件**（升级、技能、NPC交互等）
+- 通过 Bukkit 事件系统实现跨插件通信
 
 ---
 
@@ -566,9 +850,13 @@ migrator.migrate(configFile, targetVersion);
 ### 10.2 批量处理
 高并发场景使用批量处理减少竞争：
 ```java
-EventBus 内置批量处理器
-- batch-size: 10-100
-- batch-interval-ms: 50ms
+// 使用 SyncScheduler 批量处理
+List<Task> batch = new ArrayList<>();
+scheduler.runAsync(() -> {
+    for (Task task : batch) {
+        processTask(task);
+    }
+});
 ```
 
 ### 10.3 资源释放
@@ -587,15 +875,42 @@ protected void onPluginDisable() {
 
 ## 📝 十一、日志与监控
 
-### 11.1 日志级别
+> **推荐**：使用 SLF4J 日志框架，它是 Java 日志标准。
+
+### 11.1 使用 SLF4J（推荐）
+
 ```java
-logger.info("普通信息");      // 重要事件
-logger.warning("警告信息");   // 可恢复异常
-logger.severe("错误信息");    // 严重错误
-logger.fine("调试信息");      // 开发调试
+import cn.guangdian.rpgcore.logging.LoggerFactory;
+import org.slf4j.Logger;
+
+public class MyService {
+    private static final Logger logger = LoggerFactory.getLogger(MyService.class);
+    
+    public void doSomething() {
+        logger.info("普通信息");      // 重要事件
+        logger.warn("警告信息");      // 可恢复异常
+        logger.error("错误信息");     // 严重错误
+        logger.debug("调试信息");     // 开发调试
+        
+        // 占位符支持（高性能）
+        logger.info("玩家 {} 执行了命令 {}", playerName, command);
+    }
+}
 ```
 
-### 11.2 性能监控
+### 11.2 废弃的 GameLogger（不推荐）
+
+```java
+// ❌ 不推荐 - GameLogger 功能有限
+GameLogger logger = rpgCore.getGameLogger();
+logger.info("消息");
+
+// ✅ 推荐 - 使用 SLF4J
+Logger logger = LoggerFactory.getLogger(MyClass.class);
+logger.info("消息");
+```
+
+### 11.3 性能监控
 ```java
 PerformanceMonitor monitor = rpgCore.getPerformanceMonitor();
 
@@ -635,25 +950,30 @@ RPGCore  ──不依赖──>  子插件
 
 #### 服务通信模式
 ```
-子插件 A  ──发布事件──>  EventBus  ──订阅事件──>  子插件 B
+子插件 A  ──发布事件──>  Bukkit Event  ──@EventHandler──>  子插件 B
 子插件 A  ──注册服务──>  ServiceRegistry  ──获取服务──>  子插件 B
 ```
+
+> **注意**：RPGCore EventBus 已废弃（since 2.0.0），请使用 Bukkit 原生事件系统。
 
 ### 15.2 接口调用规范
 
 #### 必须使用 RPGCore 服务
-| 功能 | 禁止实现 | 必须使用 |
-|------|----------|----------|
-| 调度任务 | `BukkitRunnable`, `Bukkit.getScheduler()` | `rpgCore.getScheduler()` |
-| 玩家数据 | 自行实现缓存 | `AbstractPlayerDataHandler` |
-| 并发控制 | `synchronized`, `ReentrantLock` | `rpgCore.getLockManager()` |
-| 消息发送 | `ChatColor`, `§` 符号 | `MiniMessageService` |
-| 缓存管理 | `ConcurrentHashMap` | `rpgCore.getCacheProvider()` |
-| 配置管理 | 手动读取 YAML | `rpgCore.getConfigManager()` |
-| 外部集成 | `LuckPermsProvider.get()` | `rpgCore.getExternalServices()` |
-| 日志记录 | `System.out`, `Bukkit.getLogger()` | `rpgCore.getGameLogger()` |
-| 命令注册 | `onCommand()` | `CommandFramework` |
-| 占位符 | 直接创建 `PlaceholderExpansion` | `PlaceholderService` |
+
+| 功能 | 禁止实现 | 必须使用 | 说明 |
+|------|----------|----------|------|
+| 调度任务 | `BukkitRunnable`, `Bukkit.getScheduler()` | `rpgCore.getScheduler()` | 屏蔽 Bukkit/Paper 差异 |
+| 玩家数据 | 自行实现缓存 | `AbstractPlayerDataHandler` | 异步加载/保存 |
+| 并发控制 | `synchronized`, `ReentrantLock` | `rpgCore.getLockManager()` | UUID 排序防死锁 |
+| 消息发送 | `ChatColor`, `§` 符号 | `MiniMessageService` | Adventure API 封装 |
+| 缓存管理 | `ConcurrentHashMap` | `Caffeine` 或 `TTLCacheManager.Mode.CAFFEINE` | ~~CacheProvider~~ 直接用 Caffeine |
+| 配置管理 | 手动读取 YAML | `ConfigurateSupport` | 类型安全配置 |
+| 外部集成 | `LuckPermsProvider.get()` | `rpgCore.getExternalServices()` | 统一外部服务访问 |
+| 日志记录 | `System.out`, `Bukkit.getLogger()` | `SLF4J` (`LoggerFactory.getLogger()`) | ~~GameLogger~~ 使用 SLF4J |
+| 命令注册 | `onCommand()` | `CommandFramework` | 注解驱动 |
+| 占位符 | 直接创建 `PlaceholderExpansion` | `PlaceholderService` | 统一注册管理 |
+| 事件系统 | `rpgCore.getEventBus()` | `Bukkit.getPluginManager().callEvent()` | **EventBus 已废弃** |
+| 依赖注入 | `ServiceInjector.inject()` | `GuiceSupport.injectMembers()` | **ServiceInjector 已废弃** |
 
 #### 服务获取顺序
 ```java
@@ -748,27 +1068,40 @@ import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
 import cn.guangdian.rpgcore.message.MiniMessageService;
+import cn.guangdian.rpgcore.inject.GuiceSupport;
+import cn.guangdian.rpgcore.logging.LoggerFactory;
+import org.slf4j.Logger;
+import javax.inject.Inject;
 
 public class GuangDianXXX extends AbstractRPGPlugin {
+
+    private static final Logger logger = LoggerFactory.getLogger(GuangDianXXX.class);
+    
+    // Guice 依赖注入示例
+    @Inject
+    private XXXService xxxService;
 
     @Override
     protected void onPluginEnable() {
         // 1. 必须调用 - 初始化通用服务
         initCommonServices();
         
-        // 2. 注册数据处理器（如果需要）
+        // 2. Guice 依赖注入
+        GuiceSupport.injectMembers(this);
+        
+        // 3. 注册数据处理器（如果需要）
         new XXXDataHandler(this).register();
         
-        // 3. 注册服务（如果提供）
+        // 4. 注册服务（如果提供）
         ServiceRegistry registry = rpgCore.getServiceRegistry();
         registry.registerService(XXXService.class, new XXXServiceImpl());
         
-        // 4. 注册命令
+        // 5. 注册命令
         CommandFramework command = rpgCore.getServiceRegistry()
             .getService(CommandFramework.class);
         command.registerCommand(new XXXCommand());
         
-        getLogger().info(getPluginName() + " 已启动");
+        logger.info(getPluginName() + " 已启动");
     }
 
     @Override
@@ -783,7 +1116,7 @@ public class GuangDianXXX extends AbstractRPGPlugin {
         // 3. 注销数据处理器
         // XXXDataHandler.unregister();
         
-        getLogger().info(getPluginName() + " 已关闭");
+        logger.info(getPluginName() + " 已关闭");
     }
 
     @Override
@@ -795,17 +1128,40 @@ public class GuangDianXXX extends AbstractRPGPlugin {
 
 ### 15.6 跨插件通信
 
-#### 方式1：事件总线（推荐）
-```java
-// 插件 A 发布事件
-EventBus eventBus = rpgCore.getEventBus();
-eventBus.publish(new XXXCompletedEvent(playerUUID, result));
+#### 方式1：Bukkit 原生事件（推荐）
 
-// 插件 B 订阅事件
-eventBus.subscribe(XXXCompletedEvent.class, event -> {
+```java
+// 1. 定义事件（继承 Bukkit Event）
+public class XXXCompletedEvent extends org.bukkit.event.Event {
+    private static final HandlerList HANDLERS = new HandlerList();
+    
+    private final UUID playerUUID;
+    private final Object result;
+    
+    public XXXCompletedEvent(UUID playerUUID, Object result) {
+        this.playerUUID = playerUUID;
+        this.result = result;
+    }
+    
+    public UUID getPlayerUUID() { return playerUUID; }
+    public Object getResult() { return result; }
+    
+    @Override
+    public HandlerList getHandlers() { return HANDLERS; }
+    public static HandlerList getHandlerList() { return HANDLERS; }
+}
+
+// 2. 插件 A 发布事件
+Bukkit.getPluginManager().callEvent(new XXXCompletedEvent(playerUUID, result));
+
+// 3. 插件 B 订阅事件
+@EventHandler
+public void onXXXCompleted(XXXCompletedEvent event) {
     // 处理事件
-});
+}
 ```
+
+> **废弃方式**：~~`rpgCore.getEventBus().publish()`~~ 已废弃，请使用 Bukkit 原生事件。
 
 #### 方式2：服务注册表
 ```java
@@ -866,6 +1222,14 @@ if (externalServices.isLuckPermsEnabled()) {
 } else {
     prefix = "";
 }
+
+// 缓存降级 - 直接使用 Caffeine
+Cache<String, Object> cache;
+if (rpgCore != null) {
+    cache = Caffeine.newBuilder().maximumSize(1000).build();
+} else {
+    cache = Caffeine.newBuilder().maximumSize(100).build();
+}
 ```
 
 ---
@@ -880,4 +1244,4 @@ if (externalServices.isLuckPermsEnabled()) {
 ---
 
 *本规范由 RPGCore 团队维护*
-*最后更新: 2026-04-23*
+*最后更新: 2026-04-25*

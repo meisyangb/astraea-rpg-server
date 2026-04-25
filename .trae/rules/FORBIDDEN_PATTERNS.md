@@ -246,7 +246,7 @@ logger.severe("错误");
 
 ---
 
-## 9. 缓存服务禁止项
+## 9. 缓存服务禁止项 (v2.0.0 更新)
 
 ### ❌ 禁止 (ConcurrentHashMap 简单缓存)
 ```java
@@ -254,7 +254,16 @@ Map<String, Object> cache = new ConcurrentHashMap<>();
 cache.put(key, value);
 ```
 
-### ✅ 正确 (Caffeine)
+### ❌ 禁止 (使用已废弃的缓存实现)
+```java
+// 禁止: LightweightCacheProvider 和 HighPerformanceCacheProvider 已废弃
+new LightweightCacheProvider(maxSize, ttl, recordStats);
+new HighPerformanceCacheProvider(maxSize, ttl, recordStats);
+TTLCacheManager.Mode.LIGHTWEIGHT;
+TTLCacheManager.Mode.HIGH_PERFORMANCE;
+```
+
+### ✅ 正确 (Caffeine - 推荐)
 ```java
 RPGCore rpgCore = RPGCore.getInstance();
 CacheProvider cacheProvider = rpgCore.getCacheProvider();
@@ -264,6 +273,9 @@ LoadingCache<String, Object> cache = cacheProvider.getLoadingCache("myCache",
 
 Object value = cache.get(key);
 cache.invalidate(key);
+
+// 或直接使用 TTLCacheManager 的 Caffeine 模式
+CacheProvider cache = new TTLCacheManager(2000, Duration.ofMinutes(30), true, TTLCacheManager.Mode.CAFFEINE);
 ```
 
 ---
@@ -639,24 +651,77 @@ try (var lock = lockManager.acquireLock(playerUUID)) {
 
 ---
 
-## 16. 事件系统使用规范 (v2.0.0 新增)
+## 16. 事件系统使用规范 (v2.0.0 更新)
 
-### ❌ 禁止 (使用 RPGCore EventBus)
+### 架构说明
+
+RPGCore 2.0.0+ 采用 **"Bukkit 事件 + RPGCore 管控层"** 架构：
+
+```
+┌─────────────────────────────────────────┐
+│         Bukkit 原生事件系统              │ ← 底层统一使用 Bukkit
+│    Bukkit.getPluginManager().callEvent() │
+└─────────────────────────────────────────┘
+              ↑
+┌─────────────────────────────────────────┐
+│      EventPublisher 管控层（可选）        │ ← RPGCore 增值功能
+│    - 性能监控  - 频率限制  - 日志记录      │
+└─────────────────────────────────────────┘
+              ↑
+┌─────────────────────────────────────────┐
+│    旧代码: eventBus.publish()           │ ← 代理到 Bukkit
+│    新代码: EventPublisher.publish()     │ ← 推荐
+│    备选: Bukkit.getPluginManager()      │ ← 标准
+└─────────────────────────────────────────┘
+```
+
+### ❌ 不推荐 (旧版 EventBus API)
 
 ```java
-// 禁止: 使用 RPGCore EventBus 发布事件
+// 不推荐: 使用 RPGCore EventBus 发布事件（已改为 Bukkit 代理）
 RPGCore rpgCore = RPGCore.getInstance();
 EventBus eventBus = rpgCore.getEventBus();
 eventBus.publish(new MyEvent());
 
-// 禁止: 继承 RPGCore CoreEvent
-public class MyEvent extends CoreEvent { }
-
-// 禁止: 使用 RPGCore EventHandler 订阅
+// 不推荐: 使用 RPGCore EventHandler 订阅（仍可用但建议迁移）
 eventBus.subscribe(MyEvent.class, handler);
 ```
 
-### ✅ 正确 (使用 Bukkit 原生事件)
+### ✅ 推荐 (使用 EventPublisher 管控层)
+
+```java
+import cn.guangdian.rpgcore.event.EventPublisher;
+
+// 推荐: 使用 EventPublisher 发布事件（带管控）
+EventPublisher.publish(new MyCustomEvent(player, data));
+
+// 推荐: 异步发布（非关键事件）
+EventPublisher.publishAsync(new MyCustomEvent(player, data));
+
+// 推荐: 延迟发布
+EventPublisher.publishLater(new MyCustomEvent(player, data), 20L);
+
+// 推荐: 使用 @EventHandler 订阅（标准 Bukkit 方式）
+@EventHandler
+public void onMyEvent(MyCustomEvent event) {
+    // 处理事件
+}
+```
+
+### ✅ 备选 (直接使用 Bukkit)
+
+```java
+// 备选: 直接使用 Bukkit（缺少 RPGCore 管控功能）
+Bukkit.getPluginManager().callEvent(new MyCustomEvent(player, data));
+
+// 订阅方式相同
+@EventHandler
+public void onMyEvent(MyCustomEvent event) {
+    // 处理事件
+}
+```
+
+### 自定义事件定义
 
 ```java
 // 正确: 继承 Bukkit Event
@@ -665,6 +730,16 @@ import org.bukkit.event.HandlerList;
 
 public class MyCustomEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
+    private final Player player;
+    private final Object data;
+    
+    public MyCustomEvent(Player player, Object data) {
+        this.player = player;
+        this.data = data;
+    }
+    
+    public Player getPlayer() { return player; }
+    public Object getData() { return data; }
     
     @Override
     public HandlerList getHandlers() {
@@ -675,27 +750,287 @@ public class MyCustomEvent extends Event {
         return HANDLERS;
     }
 }
+```
 
-// 正确: 使用 Bukkit 发布事件
-Bukkit.getPluginManager().callEvent(new MyCustomEvent());
+### 迁移指南
 
-// 正确: 使用 @EventHandler 订阅
-@EventHandler
-public void onMyEvent(MyCustomEvent event) {
-    // 处理事件
+| 旧代码 (EventBus) | 新代码 (EventPublisher) | 说明 |
+|-------------------|-------------------------|------|
+| `eventBus.publish(event)` | `EventPublisher.publish(event)` | 推荐，带管控 |
+| `eventBus.publish(event)` | `Bukkit.getPluginManager().callEvent(event)` | 备选，标准 Bukkit |
+| `eventBus.subscribe(Event.class, handler)` | `@EventHandler public void onEvent(Event e)` | 标准 Bukkit 注解 |
+| `extends CoreEvent` | `extends Event` | 继承 Bukkit Event |
+
+**重要说明**:
+- EventBus 在 2.0.0 中已改造为 Bukkit 代理模式，旧代码仍可运行
+- 新代码建议使用 EventPublisher 获得管控能力（监控、限流、日志）
+- CoreEvent 已改为继承 Bukkit Event，与所有插件兼容
+
+**参考文档**:
+- [Bukkit Event API](https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/event/package-summary.html)
+- [RPGCORE_DEVELOPMENT_STANDARD.md](./RPGCORE_DEVELOPMENT_STANDARD.md) 第7章
+
+---
+
+## 17. 事件位置规范 (v2.0.0 新增)
+
+### 架构原则
+
+RPGCore 2.0.0+ 采用 **"基础设施事件在 Core，业务事件在插件"** 的架构：
+
+```
+RPGCore (基础设施)
+├── PlayerDataLoadEvent      ✅ 保留
+├── PlayerDataSaveEvent      ✅ 保留
+├── ModuleEnableEvent        ✅ 保留
+└── ...
+
+GuangDianArmorStats (业务插件)
+├── PlayerStatsChangedEvent  ✅ 业务事件
+├── PlayerHealthChangedEvent ✅ 业务事件
+├── PlayerFullHealthEvent    ✅ 业务事件
+└── ...
+
+GuangDianPoints (业务插件)
+├── PointsTransactionEvent   ✅ 业务事件
+└── ...
+```
+
+### ❌ 禁止 (在 RPGCore 定义业务事件)
+
+```java
+// 禁止: 在 RPGCore 中定义业务相关事件
+package cn.guangdian.rpgcore.event.events;
+
+public class PlayerLevelUpEvent extends Event { }  // 应该在 GuangDianClass
+public class PointsTransactionEvent extends Event { }  // 应该在 GuangDianPoints
+public class GuildCreateEvent extends Event { }  // 应该在 GuangDianGuild
+```
+
+### ✅ 正确 (业务事件定义在对应插件)
+
+```java
+// 正确: 业务事件定义在对应插件中
+
+// GuangDianClass 插件
+package cn.guangdian.classsystem.event;
+
+public class PlayerLevelUpEvent extends Event {
+    private final Player player;
+    private final int oldLevel;
+    private final int newLevel;
+    
+    public PlayerLevelUpEvent(Player player, int oldLevel, int newLevel) {
+        super(!Bukkit.isPrimaryThread());
+        this.player = player;
+        this.oldLevel = oldLevel;
+        this.newLevel = newLevel;
+    }
+    // ... getters
+}
+
+// GuangDianPoints 插件
+package cn.guangdian.points.event;
+
+public class PointsTransactionEvent extends Event {
+    private final UUID playerId;
+    private final TransactionType type;
+    private final long amount;
+    
+    public PointsTransactionEvent(UUID playerId, TransactionType type, long amount) {
+        super(!Bukkit.isPrimaryThread());
+        this.playerId = playerId;
+        this.type = type;
+        this.amount = amount;
+    }
+    // ... getters
 }
 ```
 
+### 事件分类指南
+
+| 事件类型 | 归属 | 示例 |
+|---------|------|------|
+| **数据生命周期** | RPGCore | PlayerDataLoadEvent, PlayerDataSaveEvent |
+| **模块管理** | RPGCore | ModuleEnableEvent |
+| **属性/血量** | GuangDianArmorStats | PlayerStatsChangedEvent, PlayerHealthChangedEvent |
+| **等级/经验** | GuangDianClass | PlayerLevelUpEvent, PlayerExpChangeEvent |
+| **经济/交易** | GuangDianPoints/Market | PointsTransactionEvent, EconomyTransactionEvent |
+| **公会** | GuangDianGuild | GuildEvent, GuildCreateEvent |
+| **任务** | GuangDianQuest | QuestEvent, QuestCompleteEvent |
+| **NPC** | GuangDianNPC | NPCInteractEvent, NPCCreatedEvent |
+| **全息图** | GuangDianHolo | HologramCreatedEvent, HologramDeletedEvent |
+| **世界** | GuangDianWorld | WorldCreatedEvent, WorldDeletedEvent |
+
+### 跨插件通信
+
+```java
+// 方式1: 订阅其他插件的事件（推荐）
+@EventHandler
+public void onPlayerLevelUp(cn.guangdian.classsystem.event.PlayerLevelUpEvent event) {
+    // 处理升级事件
+    Player player = event.getPlayer();
+    int newLevel = event.getNewLevel();
+    // ...
+}
+
+// 方式2: 使用 ServiceRegistry 直接调用
+RPGCore rpgCore = RPGCore.getInstance();
+if (rpgCore != null) {
+    ServiceRegistry registry = rpgCore.getServiceRegistry();
+    LevelService levelService = registry.getService(LevelService.class);
+    if (levelService != null) {
+        int level = levelService.getPlayerLevel(player);
+    }
+}
+```
+
+### 废弃事件迁移指南
+
+RPGCore 中的业务事件已标记为 `@Deprecated`，请按以下方式迁移：
+
+| 废弃事件 (RPGCore) | 新事件位置 | 迁移难度 |
+|-------------------|-----------|---------|
+| `RpgLevelUpEvent` | `cn.guangdian.classsystem.event.PlayerLevelUpEvent` | 低 |
+| `PointsTransactionEvent` | `cn.guangdian.points.event.PointsTransactionEvent` | 低 |
+| `RpgEconomyTransactionEvent` | `cn.guangdian.market.event.EconomyTransactionEvent` | 低 |
+| `PlayerStatsChangedEvent` | `cn.guangdian.armorstats.event.PlayerStatsChangedEvent` | 低 |
+| `PlayerHealthChangedEvent` | `cn.guangdian.armorstats.event.PlayerHealthChangedEvent` | 低 |
+| `PlayerFullHealthEvent` | `cn.guangdian.armorstats.event.PlayerFullHealthEvent` | 低 |
+| `RpgGuildEvent` | `cn.guangdian.guild.event.GuildEvent` | 低 |
+| `RpgQuestEvent` | `cn.guangdian.quest.event.QuestEvent` | 低 |
+| `NPCInteractEvent` | `cn.guangdian.npc.event.NPCInteractEvent` | 低 |
+| `NPCCreatedEvent` | `cn.guangdian.npc.event.NPCCreatedEvent` | 低 |
+| `HologramCreatedEvent` | `cn.guangdian.holo.event.HologramCreatedEvent` | 低 |
+| `HologramDeletedEvent` | `cn.guangdian.holo.event.HologramDeletedEvent` | 低 |
+| `WorldCreatedEvent` | `cn.guangdian.world.event.WorldCreatedEvent` | 低 |
+| `WorldDeletedEvent` | `cn.guangdian.world.event.WorldDeletedEvent` | 低 |
+
 **原因**:
-- Bukkit 事件系统成熟稳定，所有插件都支持
-- 无需额外学习成本，开发者熟悉
-- 调试工具完善（/timings 等）
-- 生态兼容性最好
-- RPGCore EventBus 已废弃（since 2.0.0）
+- 符合微内核架构原则：RPGCore 只提供基础设施
+- 业务插件自治：每个插件管理自己的事件
+- 减少 RPGCore 体积：避免核心膨胀
+- 明确职责边界：事件归属清晰
+
+---
+
+## 18. 插件依赖架构决策 (v2.0.0 新增)
+
+### 架构方案对比
+
+| 维度 | 方案A: RPGCore 集中 | 方案B: 插件自治+依赖 (推荐) | 方案C: 反射零依赖 |
+|------|-------------------|---------------------------|----------------|
+| **架构纯度** | ❌ 违反微内核 | ✅ 符合微内核 | ✅ 符合微内核 |
+| **代码复杂度** | ✅ 简单 | ✅ 简单 | ❌ 复杂 |
+| **类型安全** | ✅ 安全 | ✅ 安全 | ❌ 不安全 |
+| **可维护性** | ❌ RPGCore 膨胀 | ✅ 职责清晰 | ❌ 难调试 |
+| **成熟服案例** | ❌ 少见 | ✅ 主流 | ❌ 罕见 |
+
+### 推荐方案：插件自治 + 编译期依赖
+
+**决策理由：**
+
+1. **符合成熟商业服实践**
+   - Hypixel、Mineplex 等大型服务器都采用插件自治架构
+   - RPGCore 只提供基础设施（数据生命周期、模块管理、ServiceRegistry）
+
+2. **依赖关系显式化是优点**
+   ```
+   GuangDianBoard 依赖 GuangDianArmorStats
+   ↓
+   说明：Board 需要 ArmorStats 的数据
+   ↓
+   这是合理的业务依赖，应该显式声明
+   ```
+
+3. **避免过度设计**
+   - 反射方案增加了复杂度，收益不大
+   - 集中管理导致 RPGCore 成为"上帝类"
+
+### 依赖关系分层
+
+```
+RPGCore (基础设施层)
+    ↓ 所有插件都依赖
+GuangDianArmorStats / GuangDianPoints / GuangDianClass (核心业务层)
+    ↓ 显示/界面插件依赖
+GuangDianBoard / GuangDianName / GuangDianTab (界面展示层)
+```
+
+### 实现规范
+
+**1. build.gradle 声明依赖**
+
+```gradle
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+    compileOnly project(':plugins:RPGCore')
+    compileOnly project(':plugins:GuangDianArmorStats')  // 为了事件
+    compileOnly files('../GuangDianArmorStats/libs/PlaceholderAPI.jar')
+}
+```
+
+**2. 代码中检查插件是否启用**
+
+```java
+public BoardServiceAdapter(GuangDianBoard plugin) {
+    this.plugin = plugin;
+    
+    // 检查依赖插件是否启用
+    boolean armorStatsEnabled = Bukkit.getPluginManager()
+        .isPluginEnabled("GuangDianArmorStats");
+    
+    if (armorStatsEnabled) {
+        Bukkit.getPluginManager().registerEvents(this, plugin);
+        logger.info("已订阅 PlayerStatsChangedEvent");
+    } else {
+        logger.warning("GuangDianArmorStats 未启用，功能受限");
+    }
+}
+```
+
+**3. 事件订阅标准写法**
+
+```java
+@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+public void onPlayerStatsChanged(PlayerStatsChangedEvent event) {
+    // Bukkit 自动处理：如果 ArmorStats 未启用，此监听器不会注册
+    UUID playerId = event.getPlayerId();
+    // 处理...
+}
+```
+
+### 跨层通信方式选择
+
+| 场景 | 推荐方式 | 示例 |
+|------|---------|------|
+| **状态变更通知** | Bukkit Event | 属性变化、等级提升 |
+| **数据查询** | ServiceRegistry | 获取玩家当前属性 |
+| **复杂操作** | Service 接口 | 转账、创建公会 |
+| **配置读取** | 直接访问 | 读取其他插件配置 |
+
+### 禁止：反射方案
+
+```java
+// ❌ 禁止：使用反射避免依赖
+@EventHandler
+public void onEvent(Event event) {
+    if (event.getClass().getName().equals("...PlayerStatsChangedEvent")) {
+        // 反射获取数据，失去类型安全
+    }
+}
+
+// ✅ 正确：显式依赖，类型安全
+@EventHandler
+public void onPlayerStatsChanged(PlayerStatsChangedEvent event) {
+    UUID playerId = event.getPlayerId();  // 类型安全
+}
+```
 
 **参考文档**:
+- [RPGCORE_DEVELOPMENT_STANDARD.md](./RPGCORE_DEVELOPMENT_STANDARD.md) 第7章
 - [Bukkit Event API](https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/event/package-summary.html)
 
 ---
 
-*最后更新: 2026-04-24*
+*最后更新: 2026-04-25*
