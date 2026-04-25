@@ -153,8 +153,6 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
 
     @Override
     public void onEnable() {
-        instance = this;
-
         loadConfiguration();
 
         initCoreComponents();
@@ -164,6 +162,9 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         registerCommands();
 
         registerListeners();
+
+        // 所有初始化完成后再设置实例，确保其他插件获取到的是完全初始化的实例
+        instance = this;
 
         // 延迟刷新外部服务状态（等待所有插件加载完成）
         scheduleExternalServicesRefresh();
@@ -282,21 +283,62 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
     }
 
     private void initCoreComponents() {
-        // 初始化 Configurate 配置管理器
+        // 1. 初始化基础设施层
+        initInfrastructure();
+
+        // 2. 初始化数据层
+        initDataLayer();
+
+        // 3. 初始化服务层
+        initServiceLayer();
+
+        // 4. 初始化展示层
+        initPresentationLayer();
+
+        // 5. 初始化工具层
+        initUtilityLayer();
+
+        // 6. 初始化 Guice 依赖注入
+        initGuice();
+    }
+
+    /**
+     * 初始化基础设施层
+     */
+    private void initInfrastructure() {
         configurateManager = new ConfigurateManager(getLogger(), getDataFolder().toPath());
         getLogger().info("ConfigurateManager initialized");
 
         serviceRegistry = new SimpleServiceRegistry(this);
         getLogger().info("ServiceRegistry initialized");
 
-        cacheProvider = new TTLCacheManager(cacheMaxSize, cacheDefaultTTL, cacheRecordStats,
-            cacheMode, cacheWeakKeys, cacheWeakValues, cacheSoftValues, cacheRefreshInterval);
-        getLogger().info("CacheProvider initialized (mode: " + cacheMode + ", maxSize: " + cacheMaxSize + ", TTL: " + cacheDefaultTTL + ")");
-
         asyncExecutor = new AsyncExecutorImpl(this, asyncThreadPoolSize, asyncQueueCapacity,
             asyncKeepAliveSeconds, asyncAllowCoreThreadTimeout, asyncThreadNamePrefix);
         getLogger().info("AsyncExecutor initialized (threads: " + asyncThreadPoolSize + ", queue: " + asyncQueueCapacity + ")");
 
+        scheduler = new UnifiedSchedulerImpl(this);
+        getLogger().info("UnifiedScheduler initialized");
+    }
+
+    /**
+     * 初始化数据层
+     */
+    private void initDataLayer() {
+        cacheProvider = new TTLCacheManager(cacheMaxSize, cacheDefaultTTL, cacheRecordStats,
+            cacheMode, cacheWeakKeys, cacheWeakValues, cacheSoftValues, cacheRefreshInterval);
+        getLogger().info("CacheProvider initialized (mode: " + cacheMode + ", maxSize: " + cacheMaxSize + ", TTL: " + cacheDefaultTTL + ")");
+
+        dataManager = new UnifiedDataManager(this);
+        getLogger().info("UnifiedDataManager initialized");
+
+        configManager = new ConfigManagerImpl(this);
+        getLogger().info("ConfigManager initialized");
+    }
+
+    /**
+     * 初始化服务层
+     */
+    private void initServiceLayer() {
         lockManager = new PlayerLockManager(getLogger(), lockTimeoutMs);
         getLogger().info("PlayerLockManager initialized (timeout: " + lockTimeoutMs + "ms)");
 
@@ -319,21 +361,9 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         externalServices = new ExternalServiceIntegrationImpl(this);
         getLogger().info("ExternalServices: " + externalServices.getExternalServiceStatus());
 
-        scheduler = new UnifiedSchedulerImpl(this);
-        getLogger().info("UnifiedScheduler initialized");
-
         lifecycleManager = new PlayerLifecycleManager(this);
         lifecycleManager.register();
         getLogger().info("PlayerLifecycleManager initialized and registered");
-
-        displayService = new DisplayServiceImpl(this);
-        getLogger().info("DisplayService initialized");
-
-        dataManager = new UnifiedDataManager(this);
-        getLogger().info("UnifiedDataManager initialized");
-
-        configManager = new ConfigManagerImpl(this);
-        getLogger().info("ConfigManager initialized");
 
         exceptionHandler = new ExceptionHandlerImpl(this);
         getLogger().info("ExceptionHandler initialized");
@@ -355,6 +385,14 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
 
         dataExporter = new DataExporterImpl(this);
         getLogger().info("DataExporter initialized");
+    }
+
+    /**
+     * 初始化展示层
+     */
+    private void initPresentationLayer() {
+        displayService = new DisplayServiceImpl(this);
+        getLogger().info("DisplayService initialized");
 
         miniMessageService = MiniMessageService.getInstance();
         getLogger().info("MiniMessageService initialized");
@@ -367,18 +405,22 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         serviceRegistry.registerService(TextDisplayService.class, textDisplayService);
         getLogger().info("TextDisplayService initialized and registered");
 
-        // 初始化 GUI 管理器
         GUIManager guiManager = GUIManager.getInstance();
         guiManager.initialize(this);
         getLogger().info("GUIManager initialized");
+    }
 
+    /**
+     * 初始化工具层
+     */
+    private void initUtilityLayer() {
         gameLogger = new AsyncLogger();
         getLogger().info("GameLogger (AsyncLogger) initialized");
 
         itemAttributeManager = new ItemAttributeManager(this);
         getLogger().info("ItemAttributeManager initialized");
-        
-        // 注册其他核心服务到 ServiceRegistry
+
+        // 注册核心服务到 ServiceRegistry
         serviceRegistry.registerService(MiniMessageService.class, miniMessageService);
         serviceRegistry.registerService(SoundService.class, SoundService.getInstance());
         serviceRegistry.registerService(CooldownManager.class, CooldownManager.getInstance());
@@ -386,9 +428,6 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         serviceRegistry.registerService(CommandFramework.class, CommandFramework.getInstance());
         serviceRegistry.registerService(PlaceholderService.class, PlaceholderService.getInstance());
         getLogger().info("Core services registered to ServiceRegistry");
-
-        // 初始化 Guice 依赖注入
-        initGuice();
     }
 
     /**
