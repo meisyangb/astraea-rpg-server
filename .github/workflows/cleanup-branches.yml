@@ -1,0 +1,20 @@
+name: Cleanup Old Branches
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0'  # 每周日运行
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Delete merged branches
+        run: |
+          git fetch --prune
+          git branch -r --merged origin/main | grep -v "HEAD\|main\|master" | sed 's/origin\//:/' | xargs -r git push origin
