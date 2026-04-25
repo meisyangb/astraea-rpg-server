@@ -1,17 +1,24 @@
-# Astraea RPG - Git Ignore Configuration
-# 只提交核心源码，排除所有依赖和构建产物
-# Last Updated: 2026-04-10
+# Astraea RPG Server - Git Ignore Configuration
+# 版本: 2.0.0 | 更新: 2026-04-26
+# 说明: 排除大依赖和构建产物，只提交核心源码
 
 # ============================================
 # 核心目录说明
 # ============================================
 # ✅ 提交: plugins/     - 插件源码
-# ✅ 提交: .trae/       - AI助手配置
+# ✅ 提交: .trae/       - AI助手配置和规则
 # ✅ 提交: scripts/     - 脚本工具
-# ❌ 排除: server/      - 服务端运行文件
-# ❌ 排除: tools/       - JDK等工具
-# ❌ 排除: gradle/      - Gradle wrapper(可选提交)
+# ✅ 提交: tools/       - 工具脚本(不含JDK)
+# ❌ 排除: server/*.jar - 服务端核心
+# ❌ 排除: server/libraries/ - 服务端库文件
+# ❌ 排除: server/world*/ - 世界数据文件
+# ❌ 排除: server/*/region/ - 区块数据
+# ❌ 排除: server/*/data/ - 世界数据
+# ❌ 排除: server/*/poi/ - POI数据
+# ❌ 排除: server/*.dat - 数据文件
 # ❌ 排除: build/       - 构建输出
+# ❌ 排除: */build/     - 各插件构建输出
+# ❌ 排除: */libs/      - 本地jar依赖
 
 # ============================================
 # Java / Gradle 构建产物
@@ -22,9 +29,12 @@
 *.ear
 .gradle/
 build/
+*/build/
 !gradle/wrapper/gradle-wrapper.jar
 gradle-app.setting
 .gradletasknamecache
+out/
+*/out/
 
 # ============================================
 # IDE 配置
@@ -38,21 +48,67 @@ gradle-app.setting
 .classpath
 .project
 .settings/
+*.sublime-*
 
 # ============================================
-# 服务端运行文件 (不提交)
+# 服务端运行文件 (排除大文件)
 # ============================================
-server/*
-!server/.gitkeep
+# 服务端核心和库
+server/*.jar
+server/libraries/
+server/versions/
+server/cache/
+server/logs/
+
+# 世界数据文件 (非常大)
+server/world/
+server/world_nether/
+server/world_the_end/
+server/rpg/
+server/spawn/
+server/gsslc/
+server/FB1/
+server/FB3/
+server/CaveFuWorld/
+server/*/region/
+server/*/data/
+server/*/poi/
+server/*/playerdata/
+server/*/stats/
+server/*/advancements/
+server/*/datapacks/
+server/*.dat
+server/*.dat_old
+server/*.mca
+server/session.lock
+server/usercache.json
+
+# 保留服务端配置
+!server/eula.txt
+!server/server.properties
+!server/bukkit.yml
+!server/spigot.yml
+!server/paper-global.yml
+!server/paper-world-defaults.yml
+!server/commands.yml
+!server/permissions.yml
+!server/whitelist.json
+!server/ops.json
+!server/banned-*.json
+!server/wepif.yml
+!server/help.yml
+!server/jvm-args.txt
+!server/start.bat
+!server/start.ps1
 
 # ============================================
-# 工具链 (不提交)
+# 工具链 (排除JDK，保留脚本)
 # ============================================
-tools/*
-!tools/.gitkeep
+tools/jdk*/
+tools/jre*/
 
 # ============================================
-# 客户端 (不提交)
+# 客户端 (排除)
 # ============================================
 客户端/
 
@@ -62,6 +118,8 @@ tools/*
 *.db
 *.sqlite
 *.sqlite3
+*.ldb
+*.mdb
 database/*.db
 database/*.sqlite
 
@@ -73,7 +131,11 @@ logs/
 *.tmp
 *.temp
 *.swp
+*.swo
+*~
 *.bak
+*.old
+*.orig
 
 # ============================================
 # 操作系统文件
@@ -81,11 +143,33 @@ logs/
 .DS_Store
 Thumbs.db
 desktop.ini
+*.lnk
 
 # ============================================
 # 敏感信息
 # ============================================
 *.key
 *.pem
+*.p12
+*.pfx
 .env
+.env.local
 .preferences
+secrets.yml
+secrets.properties
+
+# ============================================
+# 测试和覆盖率报告
+# ============================================
+test-output/
+htmlReport/
+*.exec
+jacoco/
+
+# ============================================
+# 其他
+# ============================================
+build_output.txt
+*.hprof
+hs_err_pid*
+replay_pid*
