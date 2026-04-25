@@ -6,14 +6,13 @@ import cn.guangdian.rpgcore.message.MiniMessageService;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.logging.Level;
 
 public class ActionExecutor {
 
@@ -122,18 +121,26 @@ public class ActionExecutor {
         for (String part : parts) {
             String trimmed = part.trim();
             if (trimmed.isEmpty()) continue;
+            // 使用 RPGCore SyncScheduler 执行命令
+            RPGCore rpgCore = RPGCore.getInstance();
+            Runnable commandTask;
             if (trimmed.toLowerCase(Locale.ROOT).startsWith("mm ")) {
-                Bukkit.getScheduler().runTask(JavaPlugin.getPlugin(RPGCore.class), () ->
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), trimmed)
-                );
+                commandTask = () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), trimmed);
             } else {
-                Bukkit.getScheduler().runTask(JavaPlugin.getPlugin(RPGCore.class), () -> {
+                commandTask = () -> {
                     if (asConsole) {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), trimmed);
                     } else {
                         player.performCommand(trimmed);
                     }
-                });
+                };
+            }
+
+            if (rpgCore != null) {
+                rpgCore.getScheduler().runSync(commandTask);
+            } else {
+                // 降级：使用 Paper GlobalRegionScheduler
+                Bukkit.getGlobalRegionScheduler().run(RPGCore.getInstance(), scheduledTask -> commandTask.run());
             }
         }
     }
@@ -144,6 +151,8 @@ public class ActionExecutor {
             Component component = miniMessage.colorize(message);
             player.sendMessage(component);
         } else {
+            // 降级：使用 Bukkit 原生方法，但记录警告
+            Bukkit.getLogger().log(Level.WARNING, "[ActionExecutor] MiniMessageService 不可用，使用原始消息格式");
             player.sendMessage(message);
         }
     }
@@ -158,8 +167,19 @@ public class ActionExecutor {
         if (rpgCore != null && rpgCore.getSoundService() != null) {
             String[] parts = soundConfig.split(" ");
             String soundName = parts[0];
-            float volume = parts.length > 1 ? Float.parseFloat(parts[1]) : 1.0f;
-            float pitch = parts.length > 2 ? Float.parseFloat(parts[2]) : 1.0f;
+            float volume = 1.0f;
+            float pitch = 1.0f;
+            try {
+                if (parts.length > 1) {
+                    volume = Float.parseFloat(parts[1]);
+                }
+                if (parts.length > 2) {
+                    pitch = Float.parseFloat(parts[2]);
+                }
+            } catch (NumberFormatException e) {
+                Bukkit.getLogger().log(Level.WARNING, "[ActionExecutor] 无效的音效参数: " + soundConfig + " - " + e.getMessage());
+                return;
+            }
             rpgCore.getSoundService().playSound(player, soundName, volume, pitch);
         }
     }

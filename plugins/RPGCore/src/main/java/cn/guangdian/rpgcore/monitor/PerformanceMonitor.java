@@ -1,29 +1,40 @@
 package cn.guangdian.rpgcore.monitor;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * 性能监控器
- * 
- * <p>提供操作计时和性能指标收集功能。</p>
- * 
+ *
+ * <p>提供操作计时和性能指标收集功能，支持内存监控、TPS监控、慢操作记录等。</p>
+ *
  * <h3>使用示例：</h3>
  * <pre>{@code
  * // 使用 try-with-resources 自动计时
  * try (OperationTimer timer = monitor.startOperation("loadPlayerData")) {
  *     // 业务逻辑
  * } // 自动记录耗时
- * 
+ *
  * // 手动记录指标
  * monitor.recordMetric("cacheHitRate", 0.85);
- * 
+ *
  * // 生成报告
  * PerformanceReport report = monitor.generateReport();
  * }</pre>
- * 
+ *
  * @author GuangDian
  * @since 1.0.0
  */
@@ -32,16 +43,43 @@ public class PerformanceMonitor {
     private final String name;
     private final AtomicBoolean enabled;
     private final Map<String, PerformanceMetrics> metricsMap;
+    private final Logger logger;
+
+    // 监控配置
+    private final AtomicBoolean memoryMonitoring = new AtomicBoolean(true);
+    private final AtomicBoolean tpsMonitoring = new AtomicBoolean(true);
+    private final AtomicBoolean logSlowOperations = new AtomicBoolean(true);
+    private final AtomicLong memoryWarningThresholdMb = new AtomicLong(1024);
+    private final AtomicLong slowOperationThresholdMs = new AtomicLong(100);
+    private final AtomicReference<Duration> reportInterval = new AtomicReference<>(Duration.ofMinutes(30));
+
+    // 内存监控
+    private final MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+    private final AtomicLong lastMemoryWarningTime = new AtomicLong(0);
+
+    // 报告定时任务
+    private ScheduledExecutorService reportScheduler;
 
     /**
      * 创建性能监控器
-     * 
+     *
      * @param name 监控器名称
      */
     public PerformanceMonitor(String name) {
+        this(name, Logger.getLogger("RPGCore.PerformanceMonitor"));
+    }
+
+    /**
+     * 创建性能监控器（带日志）
+     *
+     * @param name 监控器名称
+     * @param logger 日志记录器
+     */
+    public PerformanceMonitor(String name, Logger logger) {
         this.name = name;
         this.enabled = new AtomicBoolean(true);
         this.metricsMap = new ConcurrentHashMap<>();
+        this.logger = logger;
     }
 
     /**
@@ -59,7 +97,7 @@ public class PerformanceMonitor {
 
     /**
      * 记录操作完成
-     * 
+     *
      * @param operationName 操作名称
      * @param durationMs 耗时（毫秒）
      */
@@ -68,6 +106,12 @@ public class PerformanceMonitor {
             return;
         }
         getOrCreateMetrics(operationName).record(durationMs);
+
+        // 检查是否为慢操作
+        if (logSlowOperations.get() && durationMs > slowOperationThresholdMs.get()) {
+            logger.log(Level.WARNING, String.format("[慢操作] %s 耗时 %d ms (阈值: %d ms)",
+                operationName, durationMs, slowOperationThresholdMs.get()));
+        }
     }
 
     /**
@@ -134,7 +178,7 @@ public class PerformanceMonitor {
 
     /**
      * 设置启用状态
-     * 
+     *
      * @param enabled 是否启用
      */
     public void setEnabled(boolean enabled) {
@@ -150,7 +194,7 @@ public class PerformanceMonitor {
 
     /**
      * 获取指定操作的指标
-     * 
+     *
      * @param operationName 操作名称
      * @return 性能指标，如果不存在返回 null
      */
@@ -163,6 +207,141 @@ public class PerformanceMonitor {
      */
     public java.util.Set<String> getOperationNames() {
         return metricsMap.keySet();
+    }
+
+    // ==================== 配置方法 ====================
+
+    /**
+     * 设置内存监控启用状态
+     */
+    public void setMemoryMonitoring(boolean enabled) {
+        this.memoryMonitoring.set(enabled);
+    }
+
+    /**
+     * 设置TPS监控启用状态
+     */
+    public void setTpsMonitoring(boolean enabled) {
+        this.tpsMonitoring.set(enabled);
+    }
+
+    /**
+     * 设置慢操作记录启用状态
+     */
+    public void setLogSlowOperations(boolean enabled) {
+        this.logSlowOperations.set(enabled);
+    }
+
+    /**
+     * 设置内存警告阈值（MB）
+     */
+    public void setMemoryWarningThreshold(long thresholdMb) {
+        this.memoryWarningThresholdMb.set(thresholdMb);
+    }
+
+    /**
+     * 设置慢操作阈值（毫秒）
+     */
+    public void setSlowOperationThreshold(long thresholdMs) {
+        this.slowOperationThresholdMs.set(thresholdMs);
+    }
+
+    /**
+     * 设置报告输出间隔
+     */
+    public void setReportInterval(Duration interval) {
+        this.reportInterval.set(interval);
+        restartReportScheduler();
+    }
+
+    // ==================== 监控方法 ====================
+
+    /**
+     * 检查内存使用情况
+     */
+    public void checkMemory() {
+        if (!enabled.get() || !memoryMonitoring.get()) {
+            return;
+        }
+
+        MemoryUsage heapUsage = memoryMXBean.getHeapMemoryUsage();
+        long usedMb = heapUsage.getUsed() / 1024 / 1024;
+        long maxMb = heapUsage.getMax() / 1024 / 1024;
+
+        long threshold = memoryWarningThresholdMb.get();
+        long currentTime = System.currentTimeMillis();
+        long lastWarning = lastMemoryWarningTime.get();
+
+        // 每分钟最多警告一次
+        if (usedMb > threshold && (currentTime - lastWarning) > 60000) {
+            lastMemoryWarningTime.set(currentTime);
+            logger.log(Level.WARNING, String.format(
+                "[内存警告] 堆内存使用: %d MB / %d MB (阈值: %d MB)",
+                usedMb, maxMb, threshold));
+        }
+    }
+
+    /**
+     * 记录TPS（应由外部调用，传入计算好的TPS）
+     *
+     * @param tps 当前TPS
+     */
+    public void recordTps(double tps) {
+        if (!enabled.get() || !tpsMonitoring.get()) {
+            return;
+        }
+
+        recordMetric("tps", tps);
+
+        // TPS低于阈值时警告
+        if (tps < 18.0) {
+            logger.log(Level.WARNING, String.format("[TPS警告] 当前TPS: %.2f (阈值: 18.0)", tps));
+        }
+    }
+
+    /**
+     * 启动报告定时任务
+     */
+    public void startReportScheduler() {
+        if (reportScheduler != null && !reportScheduler.isShutdown()) {
+            return;
+        }
+
+        Duration interval = reportInterval.get();
+        if (interval.isZero() || interval.isNegative()) {
+            return;
+        }
+
+        reportScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
+            Thread thread = new Thread(r, "RPGCore-PerformanceReport");
+            thread.setDaemon(true);
+            return thread;
+        });
+
+        reportScheduler.scheduleAtFixedRate(() -> {
+            if (enabled.get()) {
+                PerformanceReport report = generateReport();
+                logger.log(Level.INFO, "[性能报告]\\n" + report.toString());
+            }
+        }, interval.toMinutes(), interval.toMinutes(), TimeUnit.MINUTES);
+
+        logger.log(Level.INFO, "性能报告定时任务已启动，间隔: " + interval.toMinutes() + " 分钟");
+    }
+
+    /**
+     * 停止报告定时任务
+     */
+    public void stopReportScheduler() {
+        if (reportScheduler != null) {
+            reportScheduler.shutdown();
+            reportScheduler = null;
+            logger.log(Level.INFO, "性能报告定时任务已停止");
+        }
+    }
+
+    private void restartReportScheduler() {
+        stopReportScheduler();
+        startReportScheduler();
     }
 
     private PerformanceMetrics getOrCreateMetrics(String name) {
