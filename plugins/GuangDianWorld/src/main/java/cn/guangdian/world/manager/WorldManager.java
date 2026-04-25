@@ -1,7 +1,7 @@
 package cn.guangdian.world.manager;
 
-import cn.guangdian.rpgcore.event.events.WorldCreatedEvent;
-import cn.guangdian.rpgcore.event.events.WorldDeletedEvent;
+import cn.guangdian.world.event.WorldCreatedEvent;
+import cn.guangdian.world.event.WorldDeletedEvent;
 import cn.guangdian.world.GuangDianWorld;
 import cn.guangdian.world.model.GDWorld;
 import cn.guangdian.world.storage.ConfigManager;
@@ -194,9 +194,9 @@ public class WorldManager {
             plugin.getCacheProvider().put("world:" + name, gdWorld);
         }
 
-        if (plugin.getEventBus() != null) {
-            plugin.getEventBus().publish(new WorldCreatedEvent(name, environment, null));
-        }
+        // 发布世界创建事件（使用 Bukkit 事件系统）
+        WorldCreatedEvent event = new WorldCreatedEvent(name, environment, null);
+        Bukkit.getPluginManager().callEvent(event);
 
         plugin.getLogger().info("已创建世界: " + name);
         return gdWorld;
@@ -226,9 +226,9 @@ public class WorldManager {
             plugin.getCacheProvider().invalidate("world:" + worldName);
         }
 
-        if (plugin.getEventBus() != null) {
-            plugin.getEventBus().publish(new WorldDeletedEvent(worldName));
-        }
+        // 发布世界删除事件（使用 Bukkit 事件系统）
+        WorldDeletedEvent event = new WorldDeletedEvent(worldName, null);
+        Bukkit.getPluginManager().callEvent(event);
 
         plugin.getLogger().info("已删除世界: " + worldName);
         return true;

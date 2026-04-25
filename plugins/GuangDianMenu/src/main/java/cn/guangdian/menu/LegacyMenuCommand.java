@@ -1,5 +1,6 @@
 package cn.guangdian.menu;
 
+import cn.guangdian.rpgcore.message.MiniMessageService;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,20 +17,22 @@ import java.util.stream.Collectors;
 public class LegacyMenuCommand implements CommandExecutor, TabCompleter {
 
     private final GuangDianMenu plugin;
+    private final MiniMessageService miniMessage;
 
     public LegacyMenuCommand(GuangDianMenu plugin) {
         this.plugin = plugin;
+        this.miniMessage = MiniMessageService.getInstance();
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage("该命令只能由玩家执行!");
+            sender.sendMessage(miniMessage.red("该命令只能由玩家执行!"));
             return true;
         }
 
         if (!player.hasPermission("guangdian.menu.use")) {
-            player.sendMessage("§c您没有权限执行此操作!");
+            player.sendMessage(miniMessage.red("您没有权限执行此操作!"));
             return true;
         }
 

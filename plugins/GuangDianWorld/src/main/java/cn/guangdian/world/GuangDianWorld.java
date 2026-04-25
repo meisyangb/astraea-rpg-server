@@ -3,7 +3,6 @@ package cn.guangdian.world;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
 import cn.guangdian.rpgcore.api.CacheProvider;
-import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.world.adapter.WorldServiceAdapter;
@@ -29,7 +28,6 @@ public final class GuangDianWorld extends AbstractRPGPlugin {
     // RPGCore 服务 - 通过父类获取
     private AsyncExecutor asyncExecutor;
     private CacheProvider cacheProvider;
-    private EventBus eventBus;
     private ServiceRegistry serviceRegistry;
 
     @Override
@@ -47,7 +45,6 @@ public final class GuangDianWorld extends AbstractRPGPlugin {
         RPGCore core = getRPGCore();
         this.asyncExecutor = core.getAsyncExecutor();
         this.cacheProvider = core.getCacheProvider();
-        this.eventBus = core.getEventBus();
         this.serviceRegistry = core.getServiceRegistry();
 
         getLogger().info("已连接到 RPGCore");
@@ -132,10 +129,6 @@ public final class GuangDianWorld extends AbstractRPGPlugin {
 
     public CacheProvider getCacheProvider() {
         return cacheProvider;
-    }
-
-    public EventBus getEventBus() {
-        return eventBus;
     }
 
     public ServiceRegistry getServiceRegistry() {

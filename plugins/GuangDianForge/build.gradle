@@ -9,6 +9,7 @@ plugins {
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
     compileOnly project(':plugins:RPGCore')
+    compileOnly project(':plugins:GuangDianClass')
     compileOnly files('libs/MythicMobs.jar')
     compileOnly files('../GuangDianArmorStats/libs/PlaceholderAPI.jar')
 }

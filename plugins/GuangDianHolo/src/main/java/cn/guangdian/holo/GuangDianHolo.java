@@ -3,7 +3,6 @@ package cn.guangdian.holo;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
 import cn.guangdian.rpgcore.api.CacheProvider;
-import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.holo.adapter.HoloServiceAdapter;
@@ -28,7 +27,6 @@ public final class GuangDianHolo extends AbstractRPGPlugin {
     private RPGCore rpgCore;
     private AsyncExecutor asyncExecutor;
     private CacheProvider cacheProvider;
-    private EventBus eventBus;
     private ServiceRegistry serviceRegistry;
 
     @Override
@@ -104,7 +102,6 @@ public final class GuangDianHolo extends AbstractRPGPlugin {
         this.rpgCore = core;
         this.asyncExecutor = core.getAsyncExecutor();
         this.cacheProvider = core.getCacheProvider();
-        this.eventBus = core.getEventBus();
         this.serviceRegistry = core.getServiceRegistry();
         
         getLogger().info("已连接到 RPGCore");
@@ -149,10 +146,6 @@ public final class GuangDianHolo extends AbstractRPGPlugin {
 
     public CacheProvider getCacheProvider() {
         return cacheProvider;
-    }
-
-    public EventBus getEventBus() {
-        return eventBus;
     }
 
     public ServiceRegistry getServiceRegistry() {

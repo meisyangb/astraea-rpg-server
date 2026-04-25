@@ -56,8 +56,8 @@ public class QuestProgressManager {
             String questName = quest != null ? quest.getName() : questId;
             String questType = quest != null ? quest.getType().name() : "UNKNOWN";
 
-            cn.guangdian.rpgcore.event.events.RpgQuestEvent.Progress event =
-                new cn.guangdian.rpgcore.event.events.RpgQuestEvent.Progress(
+            cn.guangdian.quest.event.QuestEvent.Progress event =
+                new cn.guangdian.quest.event.QuestEvent.Progress(
                     playerId, questId, questName, questType, objectiveIndex, currentProgress, requiredProgress);
             org.bukkit.Bukkit.getPluginManager().callEvent(event);
         } catch (Exception ignored) {}

@@ -1,13 +1,15 @@
 package cn.guangdian.tab.adapter;
 
 import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
-import cn.guangdian.rpgcore.event.events.PlayerStatsChangedEvent;
+import cn.guangdian.armorstats.event.PlayerStatsChangedEvent;
 import cn.guangdian.rpgcore.service.api.TabService;
 import cn.guangdian.tab.GuangDianTab;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,11 +23,10 @@ import java.util.logging.Logger;
  * @author GuangDian
  * @since 1.0.0
  */
-public class TabServiceAdapter implements TabService {
+public class TabServiceAdapter implements TabService, Listener {
 
     private final GuangDianTab plugin;
     private final boolean useRPGCore;
-    private EventBus eventBus;
     private Logger logger;
 
     private boolean autoUpdateOnTitleChange = true;
@@ -41,14 +42,14 @@ public class TabServiceAdapter implements TabService {
             try {
                 RPGCore rpgCore = RPGCore.getInstance();
                 ServiceRegistry registry = rpgCore.getServiceRegistry();
-                this.eventBus = rpgCore.getEventBus();
 
                 // 注册服务
                 registry.registerService(TabService.class, this);
                 logger.info("已注册到 RPGCore: TabService");
 
-                // 订阅称号变化事件
-                subscribeToEvents();
+                // 注册事件监听器
+                Bukkit.getPluginManager().registerEvents(this, plugin);
+                logger.info("已订阅 Bukkit Event: PlayerStatsChangedEvent");
 
             } catch (Exception e) {
                 logger.warning("注册到 RPGCore 失败: " + e.getMessage());
@@ -56,16 +57,12 @@ public class TabServiceAdapter implements TabService {
         }
     }
 
-    private void subscribeToEvents() {
-        if (eventBus != null) {
-            eventBus.subscribe(PlayerStatsChangedEvent.class, event -> {
-                UUID playerId = event.getPlayerId();
-                Player player = Bukkit.getPlayer(playerId);
-                if (player != null && player.isOnline()) {
-                    refreshTabName(player);
-                }
-            });
-            logger.info("已订阅 PlayerStatsChangedEvent (事件驱动模式)");
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerStatsChanged(PlayerStatsChangedEvent event) {
+        UUID playerId = event.getPlayerId();
+        Player player = Bukkit.getPlayer(playerId);
+        if (player != null && player.isOnline()) {
+            refreshTabName(player);
         }
     }
 
@@ -92,25 +89,14 @@ public class TabServiceAdapter implements TabService {
 
     @Override
     public void refreshTabName(Player player) {
-        // 强制更新该玩家的Tab显示
-        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
-        if (rpgCore != null) {
-            rpgCore.getScheduler().runSyncLater(() -> {
-                plugin.updatePlayerTab(player);
-                plugin.updateHeaderFooter(player);
-            }, 1L);
-        }
+        String tabName = getTabName(player);
+        player.playerListName(net.kyori.adventure.text.Component.text(tabName));
     }
 
     @Override
     public void refreshAllTabNames() {
-        // 强制更新所有玩家的Tab显示
-        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
-        if (rpgCore != null) {
-            rpgCore.getScheduler().runSyncLater(() -> {
-                plugin.refreshAll();
-                plugin.updateAllHeadersAndFooters();
-            }, 1L);
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            refreshTabName(player);
         }
     }
 
@@ -121,10 +107,8 @@ public class TabServiceAdapter implements TabService {
         } else {
             customNames.put(playerId, customName);
         }
-
-        // 立即更新显示
         Player player = Bukkit.getPlayer(playerId);
-        if (player != null && player.isOnline()) {
+        if (player != null) {
             refreshTabName(player);
         }
     }
@@ -137,23 +121,18 @@ public class TabServiceAdapter implements TabService {
     @Override
     public void setAutoUpdateOnTitleChange(boolean enabled) {
         this.autoUpdateOnTitleChange = enabled;
-        if (enabled && eventBus != null) {
-            subscribeToEvents();
-        }
     }
 
     @Override
     public void setAutoUpdateOnGuildChange(boolean enabled) {
         this.autoUpdateOnGuildChange = enabled;
-        // 公会变化监听可以在这里添加
     }
 
     @Override
     public void clearCache(UUID playerId) {
         customNames.remove(playerId);
-        // 触发重新计算
         Player player = Bukkit.getPlayer(playerId);
-        if (player != null && player.isOnline()) {
+        if (player != null) {
             refreshTabName(player);
         }
     }
@@ -176,27 +155,5 @@ public class TabServiceAdapter implements TabService {
                 logger.warning("从 RPGCore 注销失败: " + e.getMessage());
             }
         }
-        customNames.clear();
-    }
-
-    /**
-     * 检查是否使用 RPGCore
-     */
-    public boolean isUsingRPGCore() {
-        return useRPGCore;
-    }
-
-    /**
-     * 检查是否启用称号自动更新
-     */
-    public boolean isAutoUpdateOnTitleChange() {
-        return autoUpdateOnTitleChange;
-    }
-
-    /**
-     * 检查是否启用公会自动更新
-     */
-    public boolean isAutoUpdateOnGuildChange() {
-        return autoUpdateOnGuildChange;
     }
 }

@@ -2,7 +2,6 @@ package cn.guangdian.chat.adapter;
 
 import cn.guangdian.chat.GuangDianChat;
 import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.message.MiniMessageService;
@@ -26,7 +25,6 @@ public class ChatServiceAdapter implements ChatService {
 
     private final GuangDianChat plugin;
     private final boolean useRPGCore;
-    private EventBus eventBus;
     private Logger logger;
     private boolean chatFormattingEnabled = true;
     private ExternalServiceIntegration externalServices;
@@ -42,7 +40,6 @@ public class ChatServiceAdapter implements ChatService {
             try {
                 RPGCore rpgCore = RPGCore.getInstance();
                 ServiceRegistry registry = rpgCore.getServiceRegistry();
-                this.eventBus = rpgCore.getEventBus();
                 this.externalServices = rpgCore.getExternalServices();
                 this.miniMessage = rpgCore.getMiniMessageService();
 

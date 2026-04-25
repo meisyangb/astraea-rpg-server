@@ -3,12 +3,11 @@ package cn.guangdian.world.adapter;
 import cn.guangdian.world.GuangDianWorld;
 import cn.guangdian.world.api.WorldAPI;
 import cn.guangdian.world.model.GDWorld;
+import cn.guangdian.world.event.WorldCreatedEvent;
+import cn.guangdian.world.event.WorldDeletedEvent;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
-import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
-import cn.guangdian.rpgcore.event.events.WorldCreatedEvent;
-import cn.guangdian.rpgcore.event.events.WorldDeletedEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -21,10 +20,10 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * 世界服务适配器
- * 
+ *
  * <p>统一 WorldAPI 与 RPGCore 服务层的集成，
- * 支持 EventBus 事件发布和 AsyncExecutor 异步操作。</p>
- * 
+ * 支持 AsyncExecutor 异步操作。</p>
+ *
  * @author GuangDian
  * @since 1.0.0
  */
@@ -33,7 +32,6 @@ public class WorldServiceAdapter implements WorldAPI {
     private final GuangDianWorld plugin;
     private final WorldAPI delegate;
     private final boolean useRPGCore;
-    private EventBus eventBus;
     private AsyncExecutor asyncExecutor;
 
     public WorldServiceAdapter(GuangDianWorld plugin, WorldAPI delegate) {
@@ -45,9 +43,8 @@ public class WorldServiceAdapter implements WorldAPI {
             try {
                 RPGCore rpgCore = RPGCore.getInstance();
                 ServiceRegistry registry = rpgCore.getServiceRegistry();
-                this.eventBus = rpgCore.getEventBus();
                 this.asyncExecutor = rpgCore.getAsyncExecutor();
-                
+
                 // 注册服务
                 registry.registerService(WorldAPI.class, this);
                 plugin.getLogger().info("已注册到 RPGCore: WorldAPI (通过 ServiceAdapter)");
@@ -95,12 +92,13 @@ public class WorldServiceAdapter implements WorldAPI {
     @Override
     public GDWorld createWorld(String name, World.Environment environment) {
         GDWorld world = delegate.createWorld(name, environment);
-        
-        // 发布世界创建事件
-        if (world != null && eventBus != null) {
-            eventBus.publish(new WorldCreatedEvent(name, environment, null));
+
+        // 发布世界创建事件（使用 Bukkit 事件系统）
+        if (world != null) {
+            WorldCreatedEvent event = new WorldCreatedEvent(name, environment, null);
+            Bukkit.getPluginManager().callEvent(event);
         }
-        
+
         return world;
     }
 
@@ -128,17 +126,21 @@ public class WorldServiceAdapter implements WorldAPI {
 
     @Override
     public boolean deleteWorld(String name) {
-        // 发布世界删除事件（删除前）
-        if (eventBus != null) {
-            eventBus.publish(new WorldDeletedEvent(name));
+        // 获取世界信息用于事件
+        GDWorld world = delegate.getWorld(name);
+
+        // 发布世界删除事件（删除前，使用 Bukkit 事件系统）
+        if (world != null) {
+            WorldDeletedEvent event = new WorldDeletedEvent(name, null);
+            Bukkit.getPluginManager().callEvent(event);
         }
-        
+
         boolean result = delegate.deleteWorld(name);
-        
+
         if (result) {
             saveAsync();
         }
-        
+
         return result;
     }
 
@@ -220,10 +222,6 @@ public class WorldServiceAdapter implements WorldAPI {
 
     public boolean isUsingRPGCore() {
         return useRPGCore;
-    }
-
-    public Optional<EventBus> getEventBus() {
-        return Optional.ofNullable(eventBus);
     }
 
     public Optional<AsyncExecutor> getAsyncExecutor() {

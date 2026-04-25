@@ -3,11 +3,10 @@ package cn.guangdian.forge.adapter;
 import cn.guangdian.forge.GuangDianForge;
 import cn.guangdian.forge.model.ForgeRecipe;
 import cn.guangdian.forge.model.PlayerForgeData;
+import cn.guangdian.classsystem.event.PlayerLevelUpEvent;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
-import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
-import cn.guangdian.rpgcore.event.events.RpgLevelUpEvent;
 import cn.guangdian.rpgcore.service.api.ForgeService;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -31,20 +30,18 @@ public class ForgeServiceAdapter implements ForgeService {
 
     private final GuangDianForge plugin;
     private final boolean useRPGCore;
-    private EventBus eventBus;
     private AsyncExecutor asyncExecutor;
 
     public ForgeServiceAdapter(GuangDianForge plugin) {
         this.plugin = plugin;
         this.useRPGCore = Bukkit.getPluginManager().isPluginEnabled("RPGCore");
-        
+
         if (useRPGCore) {
             try {
                 RPGCore rpgCore = RPGCore.getInstance();
                 ServiceRegistry registry = rpgCore.getServiceRegistry();
-                this.eventBus = rpgCore.getEventBus();
                 this.asyncExecutor = rpgCore.getAsyncExecutor();
-                
+
                 registry.registerService(ForgeService.class, this);
                 plugin.getLogger().info("已注册到 RPGCore: ForgeService");
             } catch (Exception e) {
@@ -77,16 +74,15 @@ public class ForgeServiceAdapter implements ForgeService {
         plugin.getPlayerDataManager().checkLevelUp(data);
         
         // 发布升级事件
-        if (data.getForgeLevel() > oldLevel && eventBus != null) {
+        if (data.getForgeLevel() > oldLevel) {
             Player player = Bukkit.getPlayer(playerId);
             if (player != null) {
-                RpgLevelUpEvent event = new RpgLevelUpEvent(
+                PlayerLevelUpEvent event = new PlayerLevelUpEvent(
                     player,
                     oldLevel,
-                    data.getForgeLevel(),
-                    "forge"
+                    data.getForgeLevel()
                 );
-                eventBus.publish(event);
+                Bukkit.getPluginManager().callEvent(event);
             }
         }
     }
@@ -211,13 +207,6 @@ public class ForgeServiceAdapter implements ForgeService {
      */
     public boolean isUsingRPGCore() {
         return useRPGCore;
-    }
-
-    /**
-     * 获取 EventBus (供其他组件使用)
-     */
-    public Optional<EventBus> getEventBus() {
-        return Optional.ofNullable(eventBus);
     }
 
     /**

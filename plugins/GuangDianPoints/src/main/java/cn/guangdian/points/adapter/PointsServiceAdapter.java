@@ -3,7 +3,7 @@ package cn.guangdian.points.adapter;
 import cn.guangdian.points.GuangDianPoints;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
-import cn.guangdian.rpgcore.event.events.PointsTransactionEvent;
+import cn.guangdian.points.event.PointsTransactionEvent;
 import cn.guangdian.rpgcore.service.api.PointsService;
 import org.bukkit.Bukkit;
 

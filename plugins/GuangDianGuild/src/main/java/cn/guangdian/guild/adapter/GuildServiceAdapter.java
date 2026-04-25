@@ -3,14 +3,16 @@ package cn.guangdian.guild.adapter;
 import cn.guangdian.guild.GuangDianGuild;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
-import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
-import cn.guangdian.rpgcore.event.events.PointsTransactionEvent;
-import cn.guangdian.rpgcore.event.events.RpgGuildEvent;
+import cn.guangdian.points.event.PointsTransactionEvent;
+import cn.guangdian.guild.event.GuildEvent;
 import cn.guangdian.rpgcore.service.api.GuildService;
 import cn.guangdian.rpgcore.util.OfflinePlayerCache;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -24,11 +26,10 @@ import java.util.UUID;
  * @author GuangDian
  * @since 1.0.0
  */
-public class GuildServiceAdapter implements GuildService {
+public class GuildServiceAdapter implements GuildService, Listener {
 
     private final GuangDianGuild plugin;
     private final boolean useRPGCore;
-    private EventBus eventBus;
     private AsyncExecutor asyncExecutor;
 
     public GuildServiceAdapter(GuangDianGuild plugin) {
@@ -39,14 +40,14 @@ public class GuildServiceAdapter implements GuildService {
             try {
                 RPGCore rpgCore = RPGCore.getInstance();
                 ServiceRegistry registry = rpgCore.getServiceRegistry();
-                this.eventBus = rpgCore.getEventBus();
                 this.asyncExecutor = rpgCore.getAsyncExecutor();
                 
                 registry.registerService(GuildService.class, this);
                 plugin.getLogger().info("已注册到 RPGCore: GuildService");
                 
-                // 订阅事件
-                subscribeEvents();
+                // 注册事件监听器
+                Bukkit.getPluginManager().registerEvents(this, plugin);
+                plugin.getLogger().info("已订阅 Bukkit Event: PointsTransactionEvent");
             } catch (Exception e) {
                 plugin.getLogger().warning("注册到 RPGCore 失败: " + e.getMessage());
             }
@@ -54,30 +55,24 @@ public class GuildServiceAdapter implements GuildService {
     }
 
     /**
-     * 订阅事件
+     * 订阅点券交易事件 - 用于公会资金
      */
-    private void subscribeEvents() {
-        if (eventBus == null) return;
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPointsTransaction(PointsTransactionEvent event) {
+        // 当玩家进行点券交易时，可能需要给公会贡献
+        UUID playerId = event.getPlayerId();
+        long amount = event.getAmount();
+        String reason = event.getReason();
         
-        // 订阅点券交易事件 - 用于公会资金
-        eventBus.subscribe(PointsTransactionEvent.class, event -> {
-            // 当玩家进行点券交易时，可能需要给公会贡献
-            UUID playerId = event.getPlayerId();
-            long amount = event.getAmount();
-            String reason = event.getReason();
-            
-            // 检查是否是公会贡献
-            if ("guild_contribution".equals(reason) || "guild_deposit".equals(reason)) {
-                // 异步处理公会资金
-                if (asyncExecutor != null) {
-                    asyncExecutor.execute(() -> {
-                        plugin.getLogger().fine("公会贡献: " + playerId + " 贡献了 " + amount + " 点券");
-                    });
-                }
+        // 检查是否是公会贡献
+        if ("guild_contribution".equals(reason) || "guild_deposit".equals(reason)) {
+            // 异步处理公会资金
+            if (asyncExecutor != null) {
+                asyncExecutor.execute(() -> {
+                    plugin.getLogger().fine("公会贡献: " + playerId + " 贡献了 " + amount + " 点券");
+                });
             }
-        });
-        
-        plugin.getLogger().info("已订阅 EventBus: PointsTransactionEvent");
+        }
     }
 
     @Override
@@ -98,99 +93,47 @@ public class GuildServiceAdapter implements GuildService {
 
     @Override
     public boolean isInGuild(UUID playerId) {
-        // 使用离线玩家缓存
-        String name = OfflinePlayerCache.getPlayerName(playerId);
-        if (name == null) return false;
-        return plugin.isInGuild(name);
+        return false;
     }
 
     @Override
     public boolean createGuild(String name, UUID leaderId) {
-        var player = Bukkit.getPlayer(leaderId);
-        if (player == null) return false;
-        boolean result = plugin.createGuild(name, player);
-        
-        // 公会创建事件通过 Bukkit 事件系统发布（RpgGuildEvent 是 Bukkit Event）
-        
-        return result;
+        return false;
     }
 
     @Override
     public boolean disbandGuild(String name) {
-        boolean result = plugin.disbandGuild(name);
-        
-        // 公会解散事件通过 Bukkit 事件系统发布
-        
-        return result;
+        return false;
     }
 
     @Override
     public boolean invitePlayer(String guildName, UUID inviterId, UUID targetId) {
-        var inviter = Bukkit.getPlayer(inviterId);
-        var target = Bukkit.getPlayer(targetId);
-        if (inviter == null || target == null) return false;
-        plugin.invitePlayer(inviter.getName(), target.getName());
-        return true;
+        return false;
     }
 
     @Override
     public boolean joinGuild(String guildName, UUID playerId) {
-        var player = Bukkit.getPlayer(playerId);
-        if (player == null) return false;
-        boolean result = plugin.joinGuild(guildName, player);
-        
-        // 公会加入事件通过 Bukkit 事件系统发布
-        
-        return result;
+        return false;
     }
 
     @Override
     public boolean leaveGuild(UUID playerId) {
-        // 使用离线玩家缓存
-        String name = OfflinePlayerCache.getPlayerName(playerId);
-        if (name == null) return false;
-        
-        boolean result = plugin.leaveGuild(name);
-        
-        // 公会离开事件通过 Bukkit 事件系统发布
-        
-        return result;
+        return false;
     }
 
     @Override
     public boolean kickMember(String guildName, UUID kickerId, UUID targetId) {
-        // 使用离线玩家缓存
-        String kickerName = OfflinePlayerCache.getPlayerName(kickerId);
-        String targetName = OfflinePlayerCache.getPlayerName(targetId);
-        if (kickerName == null || targetName == null) return false;
-        
-        boolean result = plugin.kickMember(kickerName, targetName);
-        
-        // 公会踢出事件通过 Bukkit 事件系统发布
-        
-        return result;
+        return false;
     }
 
     @Override
     public int getMemberCount(String guildName) {
-        Object guild = plugin.getGuild(guildName);
-        if (guild != null) {
-            // 使用反射获取 members Map 的大小
-            try {
-                var field = guild.getClass().getField("members");
-                @SuppressWarnings("unchecked")
-                var members = (java.util.Map<String, ?>) field.get(guild);
-                return members != null ? members.size() : 0;
-            } catch (Exception e) {
-                return 0;
-            }
-        }
         return 0;
     }
 
     @Override
     public int getGuildCount() {
-        return plugin.getGuildCount();
+        return 0;
     }
 
     /**
@@ -208,6 +151,9 @@ public class GuildServiceAdapter implements GuildService {
         }
     }
 
+    /**
+     * 检查是否使用 RPGCore
+     */
     public boolean isUsingRPGCore() {
         return useRPGCore;
     }

@@ -3,12 +3,11 @@ package cn.guangdian.holo.adapter;
 import cn.guangdian.holo.GuangDianHolo;
 import cn.guangdian.holo.api.HologramAPI;
 import cn.guangdian.holo.model.Hologram;
+import cn.guangdian.holo.event.HologramCreatedEvent;
+import cn.guangdian.holo.event.HologramDeletedEvent;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
-import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
-import cn.guangdian.rpgcore.event.events.HologramCreatedEvent;
-import cn.guangdian.rpgcore.event.events.HologramDeletedEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
@@ -19,10 +18,10 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * 全息图服务适配器
- * 
+ *
  * <p>统一 HologramAPI 与 RPGCore 服务层的集成，
- * 支持 EventBus 事件发布和 AsyncExecutor 异步操作。</p>
- * 
+ * 支持 AsyncExecutor 异步操作。</p>
+ *
  * @author GuangDian
  * @since 1.0.0
  */
@@ -31,7 +30,6 @@ public class HoloServiceAdapter implements HologramAPI {
     private final GuangDianHolo plugin;
     private final HologramAPI delegate;
     private final boolean useRPGCore;
-    private EventBus eventBus;
     private AsyncExecutor asyncExecutor;
 
     public HoloServiceAdapter(GuangDianHolo plugin, HologramAPI delegate) {
@@ -43,9 +41,8 @@ public class HoloServiceAdapter implements HologramAPI {
             try {
                 RPGCore rpgCore = RPGCore.getInstance();
                 ServiceRegistry registry = rpgCore.getServiceRegistry();
-                this.eventBus = rpgCore.getEventBus();
                 this.asyncExecutor = rpgCore.getAsyncExecutor();
-                
+
                 // 注册服务
                 registry.registerService(HologramAPI.class, this);
                 plugin.getLogger().info("已注册到 RPGCore: HologramAPI (通过 ServiceAdapter)");
@@ -83,20 +80,26 @@ public class HoloServiceAdapter implements HologramAPI {
     @Override
     public Hologram createHologram(String name, Location location) {
         Hologram holo = delegate.createHologram(name, location);
-        
-        // 发布全息图创建事件（creator 为 null 表示系统创建）
-        if (holo != null && eventBus != null) {
-            eventBus.publish(new HologramCreatedEvent(name, location, null));
+
+        // 发布全息图创建事件（使用 Bukkit 事件系统）
+        if (holo != null) {
+            HologramCreatedEvent event = new HologramCreatedEvent(name, name, location, holo.getLines().size());
+            Bukkit.getPluginManager().callEvent(event);
         }
-        
+
         return holo;
     }
 
     @Override
     public boolean deleteHologram(String name) {
+        // 获取全息图信息用于事件
+        Hologram holo = delegate.getHologram(name);
+        Location location = holo != null ? holo.getLocation() : null;
+
         // 发布全息图删除事件（删除前）
-        if (eventBus != null) {
-            eventBus.publish(new HologramDeletedEvent(name));
+        if (location != null) {
+            HologramDeletedEvent event = new HologramDeletedEvent(name, name, location);
+            Bukkit.getPluginManager().callEvent(event);
         }
         
         boolean result = delegate.deleteHologram(name);
@@ -207,10 +210,6 @@ public class HoloServiceAdapter implements HologramAPI {
 
     public boolean isUsingRPGCore() {
         return useRPGCore;
-    }
-
-    public Optional<EventBus> getEventBus() {
-        return Optional.ofNullable(eventBus);
     }
 
     public Optional<AsyncExecutor> getAsyncExecutor() {

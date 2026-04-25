@@ -318,9 +318,9 @@ public class QuestManager {
 
             org.bukkit.event.Event event = null;
             switch (action) {
-                case "ACCEPT" -> event = new cn.guangdian.rpgcore.event.events.RpgQuestEvent.Accept(playerId, questId, questName, questType);
-                case "COMPLETE" -> event = new cn.guangdian.rpgcore.event.events.RpgQuestEvent.Complete(playerId, questId, questName, questType);
-                case "ABANDON" -> event = new cn.guangdian.rpgcore.event.events.RpgQuestEvent.Abandon(playerId, questId, questName, questType);
+                case "ACCEPT" -> event = new cn.guangdian.quest.event.QuestEvent.Accept(playerId, questId, questName, questType);
+                case "COMPLETE" -> event = new cn.guangdian.quest.event.QuestEvent.Complete(playerId, questId, questName, questType);
+                case "ABANDON" -> event = new cn.guangdian.quest.event.QuestEvent.Abandon(playerId, questId, questName, questType);
             }
 
             if (event != null) {

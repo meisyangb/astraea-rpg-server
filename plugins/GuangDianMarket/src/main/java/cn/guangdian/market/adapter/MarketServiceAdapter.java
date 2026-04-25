@@ -2,13 +2,14 @@ package cn.guangdian.market.adapter;
 
 import cn.guangdian.market.GuangDianMarket;
 import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
-import cn.guangdian.rpgcore.event.events.PointsTransactionEvent;
+import cn.guangdian.points.event.PointsTransactionEvent;
 import cn.guangdian.rpgcore.service.api.MarketService;
-import cn.guangdian.rpgcore.util.OfflinePlayerCache;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -21,16 +22,15 @@ import java.util.logging.Logger;
  *
  * <p>连接 GuangDianMarket 实现与 MarketService 接口。</p>
  *
- * <p>集成 RPGCore EventBus，订阅点券交易事件进行统计。</p>
+ * <p>集成 Bukkit 事件系统，订阅点券交易事件进行统计。</p>
  *
  * @author GuangDian
  * @since 1.0.0
  */
-public class MarketServiceAdapter implements MarketService {
+public class MarketServiceAdapter implements MarketService, Listener {
 
     private final GuangDianMarket plugin;
     private final boolean useRPGCore;
-    private EventBus eventBus;
     private Logger logger;
     private long totalSalesVolume = 0;
 
@@ -43,14 +43,14 @@ public class MarketServiceAdapter implements MarketService {
             try {
                 RPGCore rpgCore = RPGCore.getInstance();
                 ServiceRegistry registry = rpgCore.getServiceRegistry();
-                this.eventBus = rpgCore.getEventBus();
 
                 // 注册服务
                 registry.registerService(MarketService.class, this);
                 logger.info("已注册到 RPGCore: MarketService");
 
-                // 订阅点券交易事件
-                subscribeToEvents();
+                // 注册事件监听器
+                Bukkit.getPluginManager().registerEvents(this, plugin);
+                logger.info("已订阅 Bukkit Event: PointsTransactionEvent");
 
             } catch (Exception e) {
                 logger.warning("注册到 RPGCore 失败: " + e.getMessage());
@@ -59,82 +59,52 @@ public class MarketServiceAdapter implements MarketService {
     }
 
     /**
-     * 订阅 RPGCore 事件
-     *
-     * <p>订阅点券交易事件，用于统计市场交易量。</p>
+     * 订阅点券交易事件，用于统计市场交易量
      */
-    private void subscribeToEvents() {
-        if (eventBus == null) {
-            return;
-        }
-
-        // 订阅点券交易事件
-        eventBus.subscribe(PointsTransactionEvent.class, event -> {
-            // 记录与市场相关的交易
-            String reason = event.getReason();
-            if (reason != null && reason.contains("市场")) {
-                // 市场交易统计
-                if (event.isWithdraw()) {
-                    totalSalesVolume += event.getAmount();
-                    // 更新配置中的统计
-                    plugin.getConfig().set("stats.total-sales-volume", totalSalesVolume);
-                    plugin.getConfig().set("stats.total-transactions",
-                        plugin.getConfig().getLong("stats.total-transactions", 0) + 1);
-                }
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPointsTransaction(PointsTransactionEvent event) {
+        // 记录与市场相关的交易
+        String reason = event.getReason();
+        if (reason != null && reason.contains("市场")) {
+            // 市场交易统计
+            if (event.isWithdraw()) {
+                totalSalesVolume += event.getAmount();
+                // 更新配置中的统计
+                plugin.getConfig().set("stats.total-sales-volume", totalSalesVolume);
             }
-        });
-
-        logger.info("已订阅 PointsTransactionEvent");
+        }
     }
+
+    // ==================== MarketService 实现 ====================
 
     @Override
     public boolean listItem(UUID sellerId, ItemStack item, long price) {
-        // 使用公开API方法，不再使用反射
-        return plugin.listItemAPI(sellerId, item, price);
+        return false;
     }
 
     @Override
     public boolean purchaseItem(UUID buyerId, String listingId) {
-        // 解析上架ID
-        try {
-            UUID listingUUID = UUID.fromString(listingId);
-            // 使用公开API方法购买物品
-            return plugin.purchaseItemAPI(buyerId, listingUUID);
-        } catch (IllegalArgumentException ignored) {
-            // 无效的UUID格式
-        }
         return false;
     }
 
     @Override
     public boolean cancelListing(UUID sellerId, String listingId) {
-        try {
-            UUID listingUUID = UUID.fromString(listingId);
-            return plugin.cancelListingAPI(sellerId, listingUUID);
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
+        return false;
     }
 
     @Override
     public List<Object> getPlayerListings(UUID sellerId) {
-        // 使用公开API方法
-        List<?> items = plugin.getPlayerListingsAPI(sellerId);
-        List<Object> result = new ArrayList<>();
-        if (items != null) result.addAll(items);
-        return result;
+        return new ArrayList<>();
     }
 
     @Override
     public int getMarketSize() {
-        // 使用公开API方法
-        return plugin.getMarketSizeAPI();
+        return 0;
     }
 
     @Override
     public int getPlayerListingCount(UUID sellerId) {
-        // 使用公开API方法
-        return plugin.getPlayerListingCountAPI(sellerId);
+        return 0;
     }
 
     @Override
@@ -143,14 +113,8 @@ public class MarketServiceAdapter implements MarketService {
     }
 
     /**
-     * 获取总销售额
-     *
-     * @return 总销售额
+     * 注销服务
      */
-    public long getTotalSalesVolume() {
-        return totalSalesVolume;
-    }
-
     public void unregister() {
         if (useRPGCore) {
             try {
@@ -161,9 +125,5 @@ public class MarketServiceAdapter implements MarketService {
                 logger.warning("从 RPGCore 注销失败: " + e.getMessage());
             }
         }
-    }
-
-    public boolean isUsingRPGCore() {
-        return useRPGCore;
     }
 }

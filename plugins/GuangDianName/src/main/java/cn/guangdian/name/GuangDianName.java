@@ -210,7 +210,7 @@ public class GuangDianName extends AbstractRPGPlugin implements Listener {
         if (rpgCore != null) {
             ServiceRegistry serviceRegistry = rpgCore.getServiceRegistry();
             if (serviceRegistry != null) {
-                displayServiceAdapter = new DisplayServiceAdapter(this, serviceRegistry, rpgCore.getEventBus());
+                displayServiceAdapter = new DisplayServiceAdapter(this, serviceRegistry);
                 displayServiceAdapter.register();
             }
         }

@@ -3,13 +3,14 @@ package cn.guangdian.cleaner.command;
 import cn.guangdian.cleaner.GuangDianCleaner;
 import cn.guangdian.cleaner.config.ConfigManager;
 import cn.guangdian.cleaner.manager.CleanManager;
+import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.command.BaseCommand;
 import cn.guangdian.rpgcore.command.CommandContext;
 import cn.guangdian.rpgcore.command.CommandInfo;
 import cn.guangdian.rpgcore.command.Description;
 import cn.guangdian.rpgcore.command.SubCommand;
-import cn.guangdian.rpgcore.message.AudienceService;
 import cn.guangdian.rpgcore.message.MiniMessageService;
+import cn.guangdian.rpgcore.service.api.MessageService;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 
@@ -30,22 +31,27 @@ public class CleanerCommand extends BaseCommand {
     private final ConfigManager configManager;
     private final CleanManager cleanManager;
     private final MiniMessageService miniMessage;
-    private final AudienceService audienceService;
+    private final MessageService messageService;
 
     public CleanerCommand(GuangDianCleaner plugin, ConfigManager configManager, CleanManager cleanManager) {
         this.plugin = plugin;
         this.configManager = configManager;
         this.cleanManager = cleanManager;
         this.miniMessage = MiniMessageService.getInstance();
-        this.audienceService = AudienceService.getInstance();
+        RPGCore rpgCore = RPGCore.getInstance();
+        this.messageService = rpgCore != null ? rpgCore.getMessageService() : null;
     }
 
     /**
      * 发送消息给发送者
      */
     private void send(CommandSender sender, String message) {
-        Component component = miniMessage.parse(message);
-        audienceService.sendMessage(sender, component);
+        if (messageService != null) {
+            messageService.send(sender, message);
+        } else {
+            Component component = miniMessage.parse(message);
+            sender.sendMessage(component);
+        }
     }
 
     /**

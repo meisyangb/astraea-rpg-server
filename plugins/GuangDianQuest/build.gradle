@@ -10,6 +10,7 @@ dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
     compileOnly project(':plugins:RPGCore')
     compileOnly project(':plugins:GuangDianPoints')
+    compileOnly project(':plugins:GuangDianNPC')
     compileOnly files('../GuangDianArmorStats/libs/PlaceholderAPI.jar')
     compileOnly 'net.luckperms:api:5.4'
 }

@@ -189,10 +189,9 @@ public class GuangDianQuest extends AbstractRPGPlugin implements org.bukkit.even
 
     /**
      * NPC交互事件监听（使用 Bukkit 事件系统）
-     * 已迁移：从 RPGCore EventBus 迁移到 Bukkit @EventHandler
      */
     @org.bukkit.event.EventHandler
-    public void onNPCInteract(cn.guangdian.rpgcore.event.events.NPCInteractEvent event) {
+    public void onNPCInteract(cn.guangdian.npc.event.NPCInteractEvent event) {
         if (questEventListener != null) {
             questEventListener.onNPCInteract(event.getNpcId(), event.getPlayer());
         }
