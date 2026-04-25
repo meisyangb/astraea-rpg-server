@@ -185,17 +185,9 @@ server/plugins/*/libs/
 server/plugins/*/lib/
 
 # ============================================
-# 工具链 (排除JDK和大文件，保留脚本)
+# 工具链 (全部排除)
 # ============================================
-tools/jdk*/
-tools/jre*/
-tools/gradle*/
-tools/apache-maven*/
-tools/*.zip
-tools/*.tar.gz
-tools/*.tar
-tools/*.7z
-tools/*.rar
+tools/
 
 # ============================================
 # 客户端 (排除)
