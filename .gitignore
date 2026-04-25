@@ -1,24 +1,20 @@
 # Astraea RPG Server - Git Ignore Configuration
-# 版本: 2.0.0 | 更新: 2026-04-26
+# 版本: 2.0.1 | 更新: 2026-04-26
 # 说明: 排除大依赖和构建产物，只提交核心源码
 
 # ============================================
 # 核心目录说明
 # ============================================
-# ✅ 提交: plugins/     - 插件源码
-# ✅ 提交: .trae/       - AI助手配置和规则
-# ✅ 提交: scripts/     - 脚本工具
-# ✅ 提交: tools/       - 工具脚本(不含JDK)
-# ❌ 排除: server/*.jar - 服务端核心
-# ❌ 排除: server/libraries/ - 服务端库文件
-# ❌ 排除: server/world*/ - 世界数据文件
-# ❌ 排除: server/*/region/ - 区块数据
-# ❌ 排除: server/*/data/ - 世界数据
-# ❌ 排除: server/*/poi/ - POI数据
-# ❌ 排除: server/*.dat - 数据文件
-# ❌ 排除: build/       - 构建输出
-# ❌ 排除: */build/     - 各插件构建输出
-# ❌ 排除: */libs/      - 本地jar依赖
+# ✅ 提交: plugins/           - 插件源码
+# ✅ 提交: .trae/             - AI助手配置和规则
+# ✅ 提交: scripts/           - 脚本工具
+# ✅ 提交: tools/             - 工具脚本(不含JDK)
+# ✅ 提交: server/            - 服务端配置(不含核心和世界数据)
+# ❌ 排除: server/*.jar       - 服务端核心
+# ❌ 排除: server/libraries/  - 服务端库文件
+# ❌ 排除: build/             - 构建输出
+# ❌ 排除: */build/           - 各插件构建输出
+# ❌ 排除: */libs/           - 本地jar依赖
 
 # ============================================
 # Java / Gradle 构建产物
@@ -32,9 +28,14 @@ build/
 */build/
 !gradle/wrapper/gradle-wrapper.jar
 gradle-app.setting
-.gradletasknamecache
-out/
-*/out/
+.gradle/
+.gradle.lock
+gradle-app.setting
+.gradle-lock.json
+gradlew
+gradlew.bat
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
 
 # ============================================
 # IDE 配置
@@ -49,12 +50,18 @@ out/
 .project
 .settings/
 *.sublime-*
+*.orig
 
 # ============================================
-# 服务端运行文件 (排除大文件)
+# 服务端核心文件 (排除)
 # ============================================
-# 服务端核心和库
+# 服务端 jar
 server/*.jar
+server/paper-*.jar
+server/Paper-*.jar
+server/*.tgz
+
+# 服务端库和运行时
 server/libraries/
 server/versions/
 server/cache/
@@ -68,8 +75,25 @@ server/rpg/
 server/spawn/
 server/gsslc/
 server/FB1/
+server/FB2/
 server/FB3/
+server/FB4/
+server/FB5/
+server/FB6/
+server/FB7/
+server/FB8/
+server/F1/
+server/F2/
+server/F3/
+server/F4/
+server/F5/
+server/F6/
+server/F7/
+server/F8/
+server/DemonLands/
 server/CaveFuWorld/
+server/qq/
+server/sc/
 server/*/region/
 server/*/data/
 server/*/poi/
@@ -77,13 +101,19 @@ server/*/playerdata/
 server/*/stats/
 server/*/advancements/
 server/*/datapacks/
+server/*/entities/
 server/*.dat
 server/*.dat_old
 server/*.mca
 server/session.lock
 server/usercache.json
+server/ops.json.bak
+server/permissions.yml.bak
+server/whitelist.json.bak
+server/bukkit.yml.bak
+server/spigot.yml.bak
 
-# 保留服务端配置
+# 保留服务端配置文件
 !server/eula.txt
 !server/server.properties
 !server/bukkit.yml
@@ -102,10 +132,70 @@ server/usercache.json
 !server/start.ps1
 
 # ============================================
-# 工具链 (排除JDK，保留脚本)
+# 服务端插件 (排除运行时数据)
+# ============================================
+# 所有 jar 文件
+server/plugins/*.jar
+server/plugins/*/*.jar
+server/plugins/*/*/*.jar
+server/plugins/*/*/*/*.jar
+
+# Paper 重新映射文件
+server/plugins/.paper-remapped/
+
+# 备份文件夹
+server/plugins/backup/
+server/plugins/backup_color_convert/
+server/plugins/backup_migration/
+server/plugins/*/backup/
+server/plugins/*/backups/
+server/plugins/*/*_backup/
+server/plugins/*/*-backup/
+server/plugins/*/*.backup
+server/plugins/*/*_bak/
+server/plugins/*/*.bak
+
+# 用户数据文件夹
+server/plugins/*/userdata/
+server/plugins/*/*.db
+server/plugins/*/*.db-*
+server/plugins/*/transactions.log
+
+# 其他插件运行时数据
+server/plugins/*/cache/
+server/plugins/*/logs/
+server/plugins/*/data/
+server/plugins/spark/activity.json
+server/plugins/spark/config.json
+server/plugins/spark/tmp-client/
+
+# LibsDisguises 用户数据
+server/plugins/LibsDisguises/SavedSkins/
+server/plugins/LibsDisguises/Skins/
+
+# MythicMobs 日志
+server/plugins/MythicMobs/metrics/
+
+# LuckPerms 缓存
+server/plugins/LuckPerms/luckperms-h2-*
+server/plugins/LuckPerms/contexts.json
+
+# 插件 libs 目录
+server/plugins/*/libs/
+server/plugins/*/lib/
+
+# ============================================
+# 工具链 (排除JDK和大文件，保留脚本)
 # ============================================
 tools/jdk*/
 tools/jre*/
+tools/gradle*/
+tools/apache-maven*/
+tools/*.zip
+tools/*.tar.gz
+tools/*.tar
+tools/*.7z
+tools/*.rar
 
 # ============================================
 # 客户端 (排除)
@@ -120,6 +210,8 @@ tools/jre*/
 *.sqlite3
 *.ldb
 *.mdb
+*.db-shm
+*.db-wal
 database/*.db
 database/*.sqlite
 
@@ -136,6 +228,8 @@ logs/
 *.bak
 *.old
 *.orig
+*.swp
+*.swo
 
 # ============================================
 # 操作系统文件
