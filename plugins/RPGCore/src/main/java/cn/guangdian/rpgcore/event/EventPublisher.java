@@ -2,15 +2,20 @@ package cn.guangdian.rpgcore.event;
 
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.SyncScheduler;
+import cn.guangdian.rpgcore.context.PluginContext;
 import cn.guangdian.rpgcore.logging.LoggerFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.Plugin;
 import org.slf4j.Logger;
 
+import java.lang.StackWalker.StackFrame;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 /**
@@ -55,6 +60,9 @@ public class EventPublisher {
     private static final int DEFAULT_RATE_LIMIT = 100; // 每秒最多100个事件
     private static final Map<Class<? extends Event>, Integer> rateLimits = new ConcurrentHashMap<>();
 
+    // 被禁止发布事件的插件列表
+    private static final Set<String> BLOCKED_PLUGINS = ConcurrentHashMap.newKeySet();
+
     // 事件统计
     private static final Map<Class<? extends Event>, EventStats> eventStats = new ConcurrentHashMap<>();
     private static final AtomicInteger totalPublished = new AtomicInteger(0);
@@ -62,6 +70,10 @@ public class EventPublisher {
     // 批量处理队列
     private static final Map<Class<? extends Event>, List<Event>> batchQueues = new ConcurrentHashMap<>();
     private static volatile boolean batchMode = false;
+
+    // 高频事件快速路径缓存
+    private static final Set<Class<? extends Event>> fastPathEvents = ConcurrentHashMap.newKeySet();
+    private static final AtomicLong fastPathThreshold = new AtomicLong(1000); // 1μs
 
     /**
      * 发布事件（标准方式）
@@ -78,36 +90,79 @@ public class EventPublisher {
 
         Class<? extends Event> eventType = event.getClass();
 
+        // 快速路径：高频系统事件直接发布，跳过管控
+        if (fastPathEvents.contains(eventType)) {
+            publishFastPath(event);
+            return;
+        }
+
+        // 管控检查
+        if (!prePublishChecks(event, eventType)) {
+            return;
+        }
+
+        // 执行发布并监控性能
+        doPublishWithMonitoring(event, eventType);
+    }
+
+    /**
+     * 快速路径发布（跳过管控）
+     */
+    private static void publishFastPath(Event event) {
+        try {
+            Bukkit.getPluginManager().callEvent(event);
+            totalPublished.incrementAndGet();
+        } catch (Exception e) {
+            logger.error("事件发布异常: {}", event.getEventName(), e);
+        }
+    }
+
+    /**
+     * 发布前检查（权限、频率限制、批量模式）
+     */
+    private static boolean prePublishChecks(Event event, Class<? extends Event> eventType) {
         // 1. 权限检查
         if (!checkPermission(event)) {
             logger.debug("事件发布被拒绝: {}", event.getEventName());
-            return;
+            return false;
         }
 
         // 2. 频率限制检查
         if (!checkRateLimit(eventType)) {
             logger.warn("事件频率超限: {}，已丢弃", event.getEventName());
-            return;
+            return false;
         }
 
         // 3. 批量模式检查
         if (batchMode && isBatchable(eventType)) {
             addToBatch(event);
-            return;
+            return false;
         }
 
-        // 4. 性能监控
+        return true;
+    }
+
+    /**
+     * 执行发布并监控性能
+     */
+    private static void doPublishWithMonitoring(Event event, Class<? extends Event> eventType) {
         long startTime = System.nanoTime();
 
         try {
-            // 5. 发布到 Bukkit
             Bukkit.getPluginManager().callEvent(event);
 
-            // 6. 记录统计
-            recordStats(eventType, System.nanoTime() - startTime);
+            long durationNs = System.nanoTime() - startTime;
 
-            // 7. 性能告警
-            checkPerformance(event, System.nanoTime() - startTime);
+            // 记录统计
+            recordStats(eventType, durationNs);
+
+            // 性能告警
+            checkPerformance(event, durationNs);
+
+            // 自动快速路径优化
+            if (durationNs < fastPathThreshold.get()) {
+                fastPathEvents.add(eventType);
+            }
 
         } catch (Exception e) {
             logger.error("事件发布异常: {}", event.getEventName(), e);
@@ -260,9 +315,30 @@ public class EventPublisher {
     // ==================== 私有方法 ====================
 
     private static boolean checkPermission(Event event) {
-        // TODO: 实现权限检查逻辑
-        // 可以检查事件来源、插件权限等
+        String eventName = event.getEventName();
+        
+        if (isSystemEvent(eventName)) {
+            return true;
+        }
+
+        String pluginName = PluginContext.getCurrentPluginName();
+        
+        if (pluginName == null || "Unknown".equals(pluginName)) {
+            logger.debug("无法获取事件发布者插件名称，允许发布系统事件: {}", eventName);
+            return true;
+        }
+
+        if (BLOCKED_PLUGINS.contains(pluginName)) {
+            logger.warn("插件 {} 被禁止发布事件，拒绝发布: {}", pluginName, eventName);
+            return false;
+        }
+
         return true;
+    }
+
+    private static boolean isSystemEvent(String eventName) {
+        return eventName.startsWith("org.bukkit.event") ||
+               eventName.startsWith("cn.guangdian.rpgcore.event");
     }
 
     private static boolean checkRateLimit(Class<? extends Event> eventType) {
@@ -285,7 +361,9 @@ public class EventPublisher {
     }
 
     private static boolean isBatchable(Class<? extends Event> eventType) {
-        // 可批量处理的事件类型
+        if (eventType.isAnnotationPresent(Batchable.class)) {
+            return true;
+        }
         return eventType.getSimpleName().contains("Stats") ||
                eventType.getSimpleName().contains("Health");
     }
@@ -295,7 +373,9 @@ public class EventPublisher {
     }
 
     private static boolean isMergeable(Class<? extends Event> eventType) {
-        // 可合并的事件类型
+        if (eventType.isAnnotationPresent(Mergeable.class)) {
+            return true;
+        }
         return eventType.getSimpleName().contains("StatsChanged") ||
                eventType.getSimpleName().contains("HealthChanged");
     }
@@ -306,9 +386,51 @@ public class EventPublisher {
             return null;
         }
 
-        // 简化策略：只保留最后一个事件
-        // 实际项目中可以根据事件类型实现更复杂的合并逻辑
-        return events.get(events.size() - 1);
+        if (events.size() == 1) {
+            return events.get(0);
+        }
+
+        Event lastEvent = events.get(events.size() - 1);
+
+        if (type.getSimpleName().contains("StatsChanged") ||
+            type.getSimpleName().contains("HealthChanged")) {
+            return new MergedStatsEvent(lastEvent, events.size());
+        }
+
+        return lastEvent;
+    }
+
+    private static class MergedStatsEvent extends Event {
+        private static final HandlerList HANDLERS = new HandlerList();
+        private final Event originalEvent;
+        private final int mergedCount;
+
+        public MergedStatsEvent(Event originalEvent, int mergedCount) {
+            super(!Bukkit.isPrimaryThread());
+            this.originalEvent = originalEvent;
+            this.mergedCount = mergedCount;
+        }
+
+        public Event getOriginalEvent() {
+            return originalEvent;
+        }
+
+        public int getMergedCount() {
+            return mergedCount;
+        }
+
+        public String getOriginalEventName() {
+            return originalEvent.getEventName();
+        }
+
+        @Override
+        public HandlerList getHandlers() {
+            return HANDLERS;
+        }
+
+        public static HandlerList getHandlerList() {
+            return HANDLERS;
+        }
     }
 
     private static void recordStats(Class<? extends Event> eventType, long durationNs) {

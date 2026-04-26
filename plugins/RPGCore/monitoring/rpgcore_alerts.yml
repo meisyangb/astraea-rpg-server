@@ -1,0 +1,87 @@
+# RPGCore 告警规则
+#
+# 定义 RPGCore 相关的告警规则
+
+groups:
+  - name: rpgcore_alerts
+    interval: 30s
+    rules:
+      # 内存使用告警
+      - alert: RPGCoreHighMemoryUsage
+        expr: rpgcore_jvm_memory_used_bytes{area="heap"} / rpgcore_jvm_memory_max_bytes{area="heap"} > 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "RPGCore 内存使用率过高"
+          description: "RPGCore 堆内存使用率超过 80%，当前: {{ $value | humanizePercentage }}"
+
+      # 事件处理时间告警
+      - alert: RPGCoreSlowEventProcessing
+        expr: rpgcore_events_duration_seconds_sum / rpgcore_events_duration_seconds_count > 0.01
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "RPGCore 事件处理时间过长"
+          description: "事件平均处理时间超过 10ms，当前: {{ $value | humanizeDuration }}"
+
+      # 数据库连接泄漏告警
+      - alert: RPGCoreDatabaseConnectionLeak
+        expr: rpgcore_database_connections_leaked > 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "检测到数据库连接泄漏"
+          description: "已检测到 {{ $value }} 个连接泄漏，请立即检查"
+
+      # 锁超时告警
+      - alert: RPGCoreLockTimeouts
+        expr: rate(rpgcore_locks_timeouts[5m]) > 1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "玩家锁超时频繁"
+          description: "过去 5 分钟内锁超时频率: {{ $value }}/秒"
+
+      # 缓存命中率低告警
+      - alert: RPGCoreLowCacheHitRate
+        expr: rpgcore_cache_hit_rate < 0.7
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "缓存命中率过低"
+          description: "缓存命中率低于 70%，当前: {{ $value | humanizePercentage }}"
+
+      # 异步任务队列满告警
+      - alert: RPGCoreAsyncQueueFull
+        expr: rpgcore_async_pending_tasks > 900
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "异步任务队列接近满载"
+          description: "异步任务队列中有 {{ $value }} 个待处理任务"
+
+      # TPS 下降告警
+      - alert: RPGCoreLowTPS
+        expr: rpgcore_server_tps < 18
+        for: 3m
+        labels:
+          severity: warning
+        annotations:
+          summary: "服务器 TPS 过低"
+          description: "服务器 TPS 低于 18，当前: {{ $value }}"
+
+      # GC 时间过长告警
+      - alert: RPGCoreHighGCTime
+        expr: rate(rpgcore_jvm_gc_time_seconds_sum[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "GC 时间占比过高"
+          description: "过去 5 分钟 GC 时间占比: {{ $value | humanizePercentage }}"

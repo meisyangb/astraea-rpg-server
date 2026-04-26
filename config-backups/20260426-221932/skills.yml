@@ -1,0 +1,499 @@
+# ========================================
+# 技能配置 (工业级重构)
+# ========================================
+# 定义装备上的技能
+#
+# 技能类型 (type):
+#   - active: 主动技能 (右键触发)
+#   - damage_trigger: 被动技能 (攻击时有几率触发)
+#   - on_hit: 被击中时触发
+#   - passive: 被动技能 (持续生效)
+#
+# 技能属性:
+#   - trigger_chance: 触发概率 (0-100)
+#   - range: 技能范围 (格)
+#   - damage_mult: 伤害倍率 (相对于攻击力)
+#   - cooldown: 冷却时间 (秒)
+#   - effect: 特效类型 (fire/lightning/ice/poison/heal/explosion/magic)
+#   - duration: 持续时间 (秒, 用于DOT和状态效果)
+#   - heal_percent: 治疗百分比 (0-100, 基于最大生命值)
+#   - status_effects: 状态效果列表 (poison/slowness/blindness/weakness/wither等)
+#   - mana_cost: 法力消耗 (预留)
+#   - true_damage: 是否真实伤害 (无视防御)
+#   - pvp_only: 是否仅PVP生效
+#   - dot: 是否持续伤害 (需要duration)
+#
+# 技能分层:
+#   - 新手级: 低伤害/低冷却, 1-20级装备
+#   - 进阶级: 中伤害/中冷却, 20-50级装备
+#   - 传说级: 高伤害/长冷却, 50+级装备
+#   - 神话级: 极高伤害/超长冷却, 终极装备
+# ========================================
+
+skills:
+  # ═══════════════════════════════════════
+  # 新手级技能 (1-20级装备)
+  # ═══════════════════════════════════════
+
+  # ─── 被动触发技能 ───
+  烈焰打击:
+    type: damage_trigger
+    trigger_chance: 15
+    range: 3.0
+    damage_mult: 0.8
+    cooldown: 0
+    effect: fire
+    status_effects:
+      - "wither"
+    duration: 3
+
+  冰霜之触:
+    type: damage_trigger
+    trigger_chance: 10
+    range: 3.0
+    damage_mult: 0.6
+    cooldown: 0
+    effect: ice
+    status_effects:
+      - "slowness"
+    duration: 3
+
+  毒刃:
+    type: damage_trigger
+    trigger_chance: 12
+    range: 3.0
+    damage_mult: 0.5
+    cooldown: 0
+    effect: poison
+    status_effects:
+      - "poison"
+    duration: 4
+    dot: true
+
+  # ─── 主动技能 ───
+  火球术:
+    type: active
+    range: 6.0
+    damage_mult: 1.5
+    cooldown: 15
+    effect: fire
+
+  闪电打击:
+    type: active
+    range: 5.0
+    damage_mult: 1.2
+    cooldown: 20
+    effect: lightning
+
+  治愈之光:
+    type: active
+    range: 0
+    damage_mult: 0
+    cooldown: 30
+    effect: heal
+    heal_percent: 15
+
+  # ─── 受击触发 ───
+  荆棘护甲:
+    type: on_hit
+    trigger_chance: 20
+    range: 3.0
+    damage_mult: 0.3
+    cooldown: 5
+    effect: magic
+
+  # ═══════════════════════════════════════
+  # 进阶级技能 (20-50级装备)
+  # ═══════════════════════════════════════
+
+  # ─── 被动触发技能 ───
+  毁灭烈焰:
+    type: damage_trigger
+    trigger_chance: 20
+    range: 4.0
+    damage_mult: 1.0
+    cooldown: 0
+    effect: fire
+    status_effects:
+      - "wither"
+    duration: 4
+
+  炽焰荆棘:
+    type: damage_trigger
+    trigger_chance: 15
+    range: 3.0
+    damage_mult: 1.0
+    cooldown: 0
+    effect: fire
+
+  寒冰领域:
+    type: damage_trigger
+    trigger_chance: 12
+    range: 5.0
+    damage_mult: 0.8
+    cooldown: 0
+    effect: ice
+    status_effects:
+      - "slowness"
+      - "weakness"
+    duration: 4
+
+  剧毒蔓延:
+    type: damage_trigger
+    trigger_chance: 10
+    range: 4.0
+    damage_mult: 0.6
+    cooldown: 0
+    effect: poison
+    status_effects:
+      - "poison"
+    duration: 5
+    dot: true
+
+  生命汲取:
+    type: damage_trigger
+    trigger_chance: 15
+    range: 3.0
+    damage_mult: 0.8
+    cooldown: 0
+    effect: magic
+    heal_percent: 5
+
+  # ─── 主动技能 ───
+  狂暴闪电:
+    type: active
+    range: 8.0
+    damage_mult: 1.5
+    cooldown: 15
+    effect: lightning
+    status_effects:
+      - "slowness"
+    duration: 2
+
+  冰霜新星:
+    type: active
+    range: 6.0
+    damage_mult: 1.2
+    cooldown: 20
+    effect: ice
+    status_effects:
+      - "slowness"
+    duration: 4
+
+  暗影步:
+    type: active
+    range: 0
+    damage_mult: 0
+    cooldown: 25
+    effect: magic
+    heal_percent: 10
+    status_effects:
+      - "speed"
+      - "invisibility"
+    duration: 3
+
+  爆裂火球:
+    type: active
+    range: 8.0
+    damage_mult: 2.0
+    cooldown: 20
+    effect: explosion
+
+  # ─── 受击触发 ───
+  反击风暴:
+    type: on_hit
+    trigger_chance: 15
+    range: 4.0
+    damage_mult: 0.8
+    cooldown: 8
+    effect: lightning
+
+  铁壁:
+    type: on_hit
+    trigger_chance: 20
+    range: 0
+    damage_mult: 0
+    cooldown: 10
+    effect: magic
+    status_effects:
+      - "resistance"
+    duration: 3
+
+  # ═══════════════════════════════════════
+  # 传说级技能 (50+级装备)
+  # ═══════════════════════════════════════
+
+  # ─── 被动触发技能 ───
+  雷神之怒:
+    type: damage_trigger
+    trigger_chance: 25
+    range: 12.0
+    damage_mult: 1.5
+    cooldown: 0
+    effect: lightning
+    status_effects:
+      - "slowness"
+    duration: 3
+
+  地狱烈焰:
+    type: damage_trigger
+    trigger_chance: 18
+    range: 6.0
+    damage_mult: 1.5
+    cooldown: 0
+    effect: fire
+    status_effects:
+      - "wither"
+    duration: 5
+    dot: true
+
+  暴风雪:
+    type: damage_trigger
+    trigger_chance: 15
+    range: 8.0
+    damage_mult: 1.2
+    cooldown: 0
+    effect: ice
+    status_effects:
+      - "slowness"
+      - "weakness"
+      - "mining_fatigue"
+    duration: 5
+
+  死亡之触:
+    type: damage_trigger
+    trigger_chance: 8
+    range: 3.0
+    damage_mult: 2.0
+    cooldown: 0
+    effect: poison
+    status_effects:
+      - "wither"
+      - "poison"
+    duration: 6
+    dot: true
+
+  战意高昂:
+    type: damage_trigger
+    trigger_chance: 20
+    range: 3.0
+    damage_mult: 1.0
+    cooldown: 0
+    effect: magic
+    heal_percent: 8
+
+  # ─── 主动技能 ───
+  天罚:
+    type: active
+    range: 10.0
+    damage_mult: 2.5
+    cooldown: 30
+    effect: lightning
+    status_effects:
+      - "slowness"
+      - "weakness"
+    duration: 4
+
+  陨石坠落:
+    type: active
+    range: 10.0
+    damage_mult: 3.0
+    cooldown: 45
+    effect: explosion
+    status_effects:
+      - "slowness"
+    duration: 3
+
+  绝对零度:
+    type: active
+    range: 8.0
+    damage_mult: 2.0
+    cooldown: 35
+    effect: ice
+    status_effects:
+      - "slowness"
+      - "weakness"
+      - "mining_fatigue"
+    duration: 6
+
+  治愈波:
+    type: active
+    range: 0
+    damage_mult: 0
+    cooldown: 40
+    effect: heal
+    heal_percent: 25
+    status_effects:
+      - "regeneration"
+    duration: 5
+
+  # ─── 受击触发 ───
+  雷霆反击:
+    type: on_hit
+    trigger_chance: 15
+    range: 6.0
+    damage_mult: 1.5
+    cooldown: 10
+    effect: lightning
+
+  不屈意志:
+    type: on_hit
+    trigger_chance: 10
+    range: 0
+    damage_mult: 0
+    cooldown: 30
+    effect: heal
+    heal_percent: 15
+
+  # ═══════════════════════════════════════
+  # 神话级技能 (终极装备)
+  # ═══════════════════════════════════════
+
+  # ─── 被动触发技能 ───
+  诸神黄昏:
+    type: damage_trigger
+    trigger_chance: 15
+    range: 15.0
+    damage_mult: 2.0
+    cooldown: 0
+    effect: explosion
+    status_effects:
+      - "wither"
+      - "slowness"
+      - "weakness"
+    duration: 5
+
+  永恒烈焰:
+    type: damage_trigger
+    trigger_chance: 20
+    range: 8.0
+    damage_mult: 2.0
+    cooldown: 0
+    effect: fire
+    status_effects:
+      - "wither"
+    duration: 8
+    dot: true
+
+  虚空吞噬:
+    type: damage_trigger
+    trigger_chance: 10
+    range: 5.0
+    damage_mult: 3.0
+    cooldown: 0
+    effect: magic
+    true_damage: true
+
+  不死鸟之魂:
+    type: damage_trigger
+    trigger_chance: 15
+    range: 3.0
+    damage_mult: 1.0
+    cooldown: 0
+    effect: fire
+    heal_percent: 12
+
+  # ─── 主动技能 ───
+  末日审判:
+    type: active
+    range: 15.0
+    damage_mult: 4.0
+    cooldown: 60
+    effect: explosion
+    status_effects:
+      - "wither"
+      - "slowness"
+      - "weakness"
+    duration: 6
+
+  神罚:
+    type: active
+    range: 12.0
+    damage_mult: 3.5
+    cooldown: 45
+    effect: lightning
+    true_damage: true
+
+  冰封世界:
+    type: active
+    range: 12.0
+    damage_mult: 2.5
+    cooldown: 50
+    effect: ice
+    status_effects:
+      - "slowness"
+      - "weakness"
+      - "mining_fatigue"
+      - "blindness"
+    duration: 8
+
+  复活:
+    type: active
+    range: 0
+    damage_mult: 0
+    cooldown: 120
+    effect: heal
+    heal_percent: 50
+    status_effects:
+      - "regeneration"
+      - "resistance"
+      - "absorption"
+    duration: 10
+
+  # ─── 受击触发 ───
+  天罚反击:
+    type: on_hit
+    trigger_chance: 10
+    range: 8.0
+    damage_mult: 2.0
+    cooldown: 15
+    effect: lightning
+    true_damage: true
+
+  不灭之躯:
+    type: on_hit
+    trigger_chance: 8
+    range: 0
+    damage_mult: 0
+    cooldown: 60
+    effect: heal
+    heal_percent: 30
+    status_effects:
+      - "resistance"
+      - "absorption"
+    duration: 5
+
+  # ═══════════════════════════════════════
+  # PVP专用技能
+  # ═══════════════════════════════════════
+
+  破甲打击:
+    type: damage_trigger
+    trigger_chance: 15
+    range: 3.0
+    damage_mult: 1.5
+    cooldown: 0
+    effect: magic
+    pvp_only: true
+    status_effects:
+      - "weakness"
+    duration: 4
+
+  致命一击:
+    type: damage_trigger
+    trigger_chance: 8
+    range: 3.0
+    damage_mult: 3.0
+    cooldown: 0
+    effect: explosion
+    pvp_only: true
+
+  战场恢复:
+    type: on_hit
+    trigger_chance: 15
+    range: 0
+    damage_mult: 0
+    cooldown: 20
+    effect: heal
+    heal_percent: 10
+    pvp_only: true

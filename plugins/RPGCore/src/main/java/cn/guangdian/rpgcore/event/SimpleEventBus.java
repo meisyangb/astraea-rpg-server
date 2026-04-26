@@ -66,8 +66,8 @@ public class SimpleEventBus implements EventBus {
                     Bukkit.getPluginManager().callEvent(event);
                 });
             } else {
-                // 降级：使用 Bukkit 调度器
-                Bukkit.getScheduler().runTask(plugin, () -> {
+                // 降级：使用 Bukkit 异步调度器
+                Bukkit.getAsyncScheduler().runNow(plugin, task -> {
                     Bukkit.getPluginManager().callEvent(event);
                 });
             }
@@ -102,6 +102,9 @@ public class SimpleEventBus implements EventBus {
 
         // 使用 EventExecutor 适配 RPGCore EventHandler 到 Bukkit
         EventExecutor executor = (listener1, event) -> {
+            if (!(event instanceof CoreEvent coreEvent)) {
+                return;
+            }
             if (eventType.isInstance(event)) {
                 try {
                     @SuppressWarnings("unchecked")

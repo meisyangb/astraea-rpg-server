@@ -1,14 +1,19 @@
 ---
 name: minecraft-rpg-architect
-version: 2.3.0
-updated: 2026-04-14
+version: 2.4.0
+updated: 2026-04-26
 changelog:
+  - version: 2.4.0
+    date: 2026-04-26
+    changes:
+      - "文档整合：合并 FORBIDDEN_PATTERNS + CODE_TEMPLATES → DEVELOPMENT_GUIDE.md"
+      - "文档整合：合并 RPGCORE_SERVICES + MIGRATION_GUIDE → RPGCORE_API_REFERENCE.md"
+      - "更新所有文档引用链接"
   - version: 2.3.0
     date: 2026-04-14
     changes:
       - "新增 RPGCore 核心服务：SoundService, ServerService, EntityService"
       - "添加 Paper 1.21.6 弃用 API 的封装方案"
-      - "更新文档链接：添加 RPGCORE_SERVICES.md"
   - version: 2.2.0
     date: 2026-04-14
     changes:
@@ -435,7 +440,7 @@ boolean success = entityService.teleportSafely(entity, location);
 boolean inRange = entityService.isInRange(entity1, entity2, 10.0);
 ```
 
-**详细文档**: [.trae/docs/reference/RPGCORE_SERVICES.md](../../docs/reference/RPGCORE_SERVICES.md)
+**详细文档**: [.trae/docs/reference/RPGCORE_API_REFERENCE.md](../../docs/reference/RPGCORE_API_REFERENCE.md)
 
 ---
 

@@ -1,8 +1,10 @@
-﻿# RPGCore 核心配置
+# RPGCore 核心配置
 # 版本: 2.0.0
 # 最后更新: 2026-04-25
 
 # ==================== 数据库配置 ====================
+# 安全提示：建议使用环境变量 RPGCORE_DB_USERNAME 和 RPGCORE_DB_PASSWORD 存储数据库凭证
+# 而不是明文写在配置文件中。环境变量优先级高于配置文件。
 database:
   # 是否启用数据库
   enabled: true
@@ -10,10 +12,10 @@ database:
   # JDBC 连接 URL
   url: 'jdbc:mysql://localhost:3306/mc_rpg?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8&allowPublicKeyRetrieval=true'
 
-  # 数据库用户名
+  # 数据库用户名（如设置环境变量 RPGCORE_DB_USERNAME 则优先使用环境变量）
   username: "root"
 
-  # 数据库密码
+  # 数据库密码（如设置环境变量 RPGCORE_DB_PASSWORD 则优先使用环境变量）
   password: "123456"
 
   # 连接池配置
@@ -72,13 +74,18 @@ cache:
   # 是否启用统计信息收集
   record-stats: true
 
-  # 是否启用弱引用键（有助于垃圾回收）
+  # 是否启用弱引用键（有助于垃圾回收，但可能导致缓存意外失效）
+  # 警告：启用后，当 JVM 进行垃圾回收时，缓存可能被清空
+  # 生产环境建议保持 false，除非遇到内存压力问题
   weak-keys: false
 
-  # 是否启用弱引用值
+  # 是否启用弱引用值（同上，值可能被 GC 回收）
+  # 警告：数据可能在 TTL 之前就被回收，导致缓存命中率降低
   weak-values: false
 
-  # 是否启用软引用值（内存不足时优先回收）
+  # 是否启用软引用值（内存不足时优先回收，比弱引用更温和）
+  # 警告：在内存紧张时，软引用值会被优先回收
+  # 适用于读多写少且允许丢失的缓存场景
   soft-values: false
 
   # 刷新间隔（分钟，0表示不自动刷新）

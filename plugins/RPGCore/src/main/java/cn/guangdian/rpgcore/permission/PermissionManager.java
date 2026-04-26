@@ -72,6 +72,15 @@ public class PermissionManager {
      * 检查玩家是否有权限
      */
     public boolean hasPermission(Player player, String node) {
+        if (node == null || node.isEmpty()) {
+            return false;
+        }
+        
+        // 验证权限节点不包含路径穿越字符
+        if (node.contains("..") || node.contains("//")) {
+            return false;
+        }
+        
         String fullPath = permissions.containsKey(node) ? node : prefix + "." + node;
         return player.hasPermission(fullPath);
     }

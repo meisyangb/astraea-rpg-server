@@ -4,7 +4,6 @@ import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
-import org.spongepowered.configurate.objectmapping.ObjectMapper;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.File;
@@ -129,8 +128,7 @@ public class ConfigurateManager {
 
         CommentedConfigurationNode root = loader.load();
 
-        ObjectMapper<T> mapper = ObjectMapper.factory().get(clazz);
-        T config = mapper.load(root);
+        T config = root.get(clazz);
 
         // 缓存配置
         configCache.put(fileName, new ConfigEntry<>(config, path, format, clazz));
@@ -175,8 +173,7 @@ public class ConfigurateManager {
         ConfigurationLoader<CommentedConfigurationNode> loader = createLoader(entry.path, entry.format);
         CommentedConfigurationNode root = loader.createNode();
 
-        ObjectMapper<T> mapper = ObjectMapper.factory().get(entry.clazz);
-        mapper.save(config, root);
+        root.set(config);
 
         loader.save(root);
         logger.fine("Saved config: " + fileName);

@@ -1,8 +1,14 @@
 package cn.guangdian.rpgcore.monitoring;
 
 import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.api.AsyncExecutor;
 import cn.guangdian.rpgcore.api.CacheStats;
 import cn.guangdian.rpgcore.api.CacheProvider;
+import cn.guangdian.rpgcore.concurrency.PlayerLockManager;
+import cn.guangdian.rpgcore.concurrency.LockStats;
+import cn.guangdian.rpgcore.database.CoreDatabase;
+import cn.guangdian.rpgcore.database.LeakDetectionConnectionWrapper;
+import cn.guangdian.rpgcore.event.EventPublisher;
 import cn.guangdian.rpgcore.monitor.PerformanceMonitor;
 import cn.guangdian.rpgcore.monitor.PerformanceMetrics;
 
@@ -41,6 +47,10 @@ public class MetricsExporter {
         exportJVMMetrics(out);
         exportCacheMetrics(out);
         exportPerformanceMetrics(out);
+        exportEventMetrics(out);
+        exportDatabaseMetrics(out);
+        exportLockMetrics(out);
+        exportAsyncMetrics(out);
 
         return writer.toString();
     }
@@ -198,5 +208,74 @@ public class MetricsExporter {
         if (mb > 0) return String.format("%.2f MB", bytes / 1024.0 / 1024.0);
         if (kb > 0) return String.format("%.2f KB", bytes / 1024.0);
         return bytes + " B";
+    }
+
+    private void exportEventMetrics(PrintWriter out) {
+        out.println("# HELP " + METRIC_PREFIX + "events_total Total events published");
+        out.println("# TYPE " + METRIC_PREFIX + "events_total counter");
+        out.println(METRIC_PREFIX + "events_total " + EventPublisher.getTotalPublished());
+        
+        out.println("# HELP " + METRIC_PREFIX + "events_types Number of event types tracked");
+        out.println("# TYPE " + METRIC_PREFIX + "events_types gauge");
+        out.println(METRIC_PREFIX + "events_types " + EventPublisher.getStatsSnapshot().size());
+    }
+
+    private void exportDatabaseMetrics(PrintWriter out) {
+        if (CoreDatabase.isEnabled()) {
+            out.println("# HELP " + METRIC_PREFIX + "database_enabled Database connection pool enabled");
+            out.println("# TYPE " + METRIC_PREFIX + "database_enabled gauge");
+            out.println(METRIC_PREFIX + "database_enabled 1");
+            
+            out.println("# HELP " + METRIC_PREFIX + "database_connections_active Active database connections");
+            out.println("# TYPE " + METRIC_PREFIX + "database_connections_active gauge");
+            
+            out.println("# HELP " + METRIC_PREFIX + "database_connections_leaked Detected connection leaks");
+            out.println("# TYPE " + METRIC_PREFIX + "database_connections_leaked counter");
+            out.println(METRIC_PREFIX + "database_connections_leaked " + LeakDetectionConnectionWrapper.getTotalLeaksDetected());
+            
+            out.println("# HELP " + METRIC_PREFIX + "database_connections_tracked Tracked connections");
+            out.println("# TYPE " + METRIC_PREFIX + "database_connections_tracked gauge");
+            out.println(METRIC_PREFIX + "database_connections_tracked " + LeakDetectionConnectionWrapper.getActiveConnectionCount());
+        } else {
+            out.println("# HELP " + METRIC_PREFIX + "database_enabled Database connection pool enabled");
+            out.println("# TYPE " + METRIC_PREFIX + "database_enabled gauge");
+            out.println(METRIC_PREFIX + "database_enabled 0");
+        }
+    }
+
+    private void exportLockMetrics(PrintWriter out) {
+        PlayerLockManager lockManager = rpgCore.getLockManager();
+        if (lockManager != null) {
+            LockStats stats = lockManager.getStats();
+            
+            out.println("# HELP " + METRIC_PREFIX + "locks_total Total lock acquisitions");
+            out.println("# TYPE " + METRIC_PREFIX + "locks_total counter");
+            out.println(METRIC_PREFIX + "locks_total " + stats.getAcquireCount());
+            
+            out.println("# HELP " + METRIC_PREFIX + "locks_timeouts Total lock timeouts");
+            out.println("# TYPE " + METRIC_PREFIX + "locks_timeouts counter");
+            out.println(METRIC_PREFIX + "locks_timeouts " + stats.getTimeoutCount());
+            
+            out.println("# HELP " + METRIC_PREFIX + "locks_active Active lock count");
+            out.println("# TYPE " + METRIC_PREFIX + "locks_active gauge");
+            out.println(METRIC_PREFIX + "locks_active " + lockManager.getLockCount());
+        }
+    }
+
+    private void exportAsyncMetrics(PrintWriter out) {
+        AsyncExecutor asyncExecutor = rpgCore.getAsyncExecutor();
+        if (asyncExecutor != null) {
+            out.println("# HELP " + METRIC_PREFIX + "async_pending_tasks Pending async tasks");
+            out.println("# TYPE " + METRIC_PREFIX + "async_pending_tasks gauge");
+            out.println(METRIC_PREFIX + "async_pending_tasks " + asyncExecutor.getPendingTaskCount());
+            
+            out.println("# HELP " + METRIC_PREFIX + "async_active_threads Active async threads");
+            out.println("# TYPE " + METRIC_PREFIX + "async_active_threads gauge");
+            out.println(METRIC_PREFIX + "async_active_threads " + asyncExecutor.getActiveThreadCount());
+            
+            out.println("# HELP " + METRIC_PREFIX + "async_pool_size Async thread pool size");
+            out.println("# TYPE " + METRIC_PREFIX + "async_pool_size gauge");
+            out.println(METRIC_PREFIX + "async_pool_size " + asyncExecutor.getPoolSize());
+        }
     }
 }

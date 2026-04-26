@@ -13,6 +13,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class UnifiedSchedulerImpl implements SyncScheduler {
 
+    private static final long MS_PER_TICK = 50L;
+
     private final JavaPlugin plugin;
     private final AsyncScheduler asyncScheduler;
     private final GlobalRegionScheduler globalRegionScheduler;
@@ -30,7 +32,11 @@ public class UnifiedSchedulerImpl implements SyncScheduler {
     @Override
     public void runSync(Runnable task) {
         if (shutdown) return;
-        globalRegionScheduler.run(plugin, scheduledTask -> task.run());
+        globalRegionScheduler.run(plugin, scheduledTask -> {
+            if (!shutdown) {
+                task.run();
+            }
+        });
     }
 
     @Override
@@ -39,7 +45,11 @@ public class UnifiedSchedulerImpl implements SyncScheduler {
         long taskId = taskIdGenerator.incrementAndGet();
         ScheduledTask scheduledTask = globalRegionScheduler.runDelayed(plugin, scheduledTask1 -> {
             if (!shutdown) {
-                task.run();
+                try {
+                    task.run();
+                } finally {
+                    syncTasks.remove(taskId);
+                }
             }
         }, delayTicks);
         syncTasks.put(taskId, scheduledTask);
@@ -65,7 +75,11 @@ public class UnifiedSchedulerImpl implements SyncScheduler {
         long taskId = taskIdGenerator.incrementAndGet();
         ScheduledTask scheduledTask = asyncScheduler.runNow(plugin, scheduledTask1 -> {
             if (!shutdown) {
-                task.run();
+                try {
+                    task.run();
+                } finally {
+                    asyncTasks.remove(taskId);
+                }
             }
         });
         asyncTasks.put(taskId, scheduledTask);
@@ -76,10 +90,14 @@ public class UnifiedSchedulerImpl implements SyncScheduler {
     public long runAsyncLater(Runnable task, long delayTicks) {
         if (shutdown) return -1;
         long taskId = taskIdGenerator.incrementAndGet();
-        long delayMs = delayTicks * 50;
+        long delayMs = delayTicks * MS_PER_TICK;
         ScheduledTask scheduledTask = asyncScheduler.runDelayed(plugin, scheduledTask1 -> {
             if (!shutdown) {
-                task.run();
+                try {
+                    task.run();
+                } finally {
+                    asyncTasks.remove(taskId);
+                }
             }
         }, delayMs, TimeUnit.MILLISECONDS);
         asyncTasks.put(taskId, scheduledTask);
@@ -90,8 +108,8 @@ public class UnifiedSchedulerImpl implements SyncScheduler {
     public long runAsyncRepeating(Runnable task, long delayTicks, long periodTicks) {
         if (shutdown) return -1;
         long taskId = taskIdGenerator.incrementAndGet();
-        long delayMs = delayTicks * 50;
-        long periodMs = periodTicks * 50;
+        long delayMs = delayTicks * MS_PER_TICK;
+        long periodMs = periodTicks * MS_PER_TICK;
         ScheduledTask scheduledTask = asyncScheduler.runAtFixedRate(plugin, scheduledTask1 -> {
             if (!shutdown) {
                 task.run();
@@ -117,20 +135,13 @@ public class UnifiedSchedulerImpl implements SyncScheduler {
 
     @Override
     public void cancelAllTasks() {
-        // 使用同步块确保线程安全
-        synchronized (asyncTasks) {
-            for (ScheduledTask task : asyncTasks.values()) {
-                task.cancel();
-            }
-            asyncTasks.clear();
-        }
+        // ConcurrentHashMap 支持安全的遍历和删除，无需同步块
+        // 使用 forEach 避免 ConcurrentModificationException
+        asyncTasks.forEach((id, task) -> task.cancel());
+        asyncTasks.clear();
 
-        synchronized (syncTasks) {
-            for (ScheduledTask task : syncTasks.values()) {
-                task.cancel();
-            }
-            syncTasks.clear();
-        }
+        syncTasks.forEach((id, task) -> task.cancel());
+        syncTasks.clear();
     }
 
     @Override

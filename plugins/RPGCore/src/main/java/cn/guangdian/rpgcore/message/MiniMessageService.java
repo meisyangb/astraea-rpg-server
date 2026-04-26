@@ -153,116 +153,72 @@ public final class MiniMessageService {
         return legacySectionSerializer.serialize(component);
     }
 
+    private @NotNull Component coloredText(@NotNull String text, @NotNull NamedTextColor color) {
+        return (text == null || text.isEmpty()) ? Component.empty() : Component.text(text).color(color);
+    }
+
     public @NotNull Component green(@NotNull String text) {
-        if (text == null || text.isEmpty()) {
-            return Component.empty();
-        }
-        return Component.text(text).color(NamedTextColor.GREEN);
+        return coloredText(text, NamedTextColor.GREEN);
     }
 
     public @NotNull Component red(@NotNull String text) {
-        if (text == null || text.isEmpty()) {
-            return Component.empty();
-        }
-        return Component.text(text).color(NamedTextColor.RED);
+        return coloredText(text, NamedTextColor.RED);
     }
 
     public @NotNull Component yellow(@NotNull String text) {
-        if (text == null || text.isEmpty()) {
-            return Component.empty();
-        }
-        return Component.text(text).color(NamedTextColor.YELLOW);
+        return coloredText(text, NamedTextColor.YELLOW);
     }
 
     public @NotNull Component gold(@NotNull String text) {
-        if (text == null || text.isEmpty()) {
-            return Component.empty();
-        }
-        return Component.text(text).color(NamedTextColor.GOLD);
+        return coloredText(text, NamedTextColor.GOLD);
     }
 
     public @NotNull Component gray(@NotNull String text) {
-        if (text == null || text.isEmpty()) {
-            return Component.empty();
-        }
-        return Component.text(text).color(NamedTextColor.GRAY);
+        return coloredText(text, NamedTextColor.GRAY);
     }
 
     public @NotNull Component aqua(@NotNull String text) {
-        if (text == null || text.isEmpty()) {
-            return Component.empty();
-        }
-        return Component.text(text).color(NamedTextColor.AQUA);
+        return coloredText(text, NamedTextColor.AQUA);
     }
 
     public @NotNull Component white(@NotNull String text) {
-        if (text == null || text.isEmpty()) {
-            return Component.empty();
-        }
-        return Component.text(text).color(NamedTextColor.WHITE);
+        return coloredText(text, NamedTextColor.WHITE);
     }
 
     public @NotNull Component blue(@NotNull String text) {
-        if (text == null || text.isEmpty()) {
-            return Component.empty();
-        }
-        return Component.text(text).color(NamedTextColor.BLUE);
+        return coloredText(text, NamedTextColor.BLUE);
     }
 
     public @NotNull Component darkBlue(@NotNull String text) {
-        if (text == null || text.isEmpty()) {
-            return Component.empty();
-        }
-        return Component.text(text).color(NamedTextColor.DARK_BLUE);
+        return coloredText(text, NamedTextColor.DARK_BLUE);
     }
 
     public @NotNull Component darkGreen(@NotNull String text) {
-        if (text == null || text.isEmpty()) {
-            return Component.empty();
-        }
-        return Component.text(text).color(NamedTextColor.DARK_GREEN);
+        return coloredText(text, NamedTextColor.DARK_GREEN);
     }
 
     public @NotNull Component darkRed(@NotNull String text) {
-        if (text == null || text.isEmpty()) {
-            return Component.empty();
-        }
-        return Component.text(text).color(NamedTextColor.DARK_RED);
+        return coloredText(text, NamedTextColor.DARK_RED);
     }
 
     public @NotNull Component darkPurple(@NotNull String text) {
-        if (text == null || text.isEmpty()) {
-            return Component.empty();
-        }
-        return Component.text(text).color(NamedTextColor.DARK_PURPLE);
+        return coloredText(text, NamedTextColor.DARK_PURPLE);
     }
 
     public @NotNull Component lightPurple(@NotNull String text) {
-        if (text == null || text.isEmpty()) {
-            return Component.empty();
-        }
-        return Component.text(text).color(NamedTextColor.LIGHT_PURPLE);
+        return coloredText(text, NamedTextColor.LIGHT_PURPLE);
     }
 
     public @NotNull Component darkGray(@NotNull String text) {
-        if (text == null || text.isEmpty()) {
-            return Component.empty();
-        }
-        return Component.text(text).color(NamedTextColor.DARK_GRAY);
+        return coloredText(text, NamedTextColor.DARK_GRAY);
     }
 
     public @NotNull Component darkAqua(@NotNull String text) {
-        if (text == null || text.isEmpty()) {
-            return Component.empty();
-        }
-        return Component.text(text).color(NamedTextColor.DARK_AQUA);
+        return coloredText(text, NamedTextColor.DARK_AQUA);
     }
 
     public @NotNull Component black(@NotNull String text) {
-        if (text == null || text.isEmpty()) {
-            return Component.empty();
-        }
-        return Component.text(text).color(NamedTextColor.BLACK);
+        return coloredText(text, NamedTextColor.BLACK);
     }
 
     public @NotNull Component hex(@NotNull String text, int rgb) {

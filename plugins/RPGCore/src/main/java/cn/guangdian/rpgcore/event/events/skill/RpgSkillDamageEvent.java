@@ -11,34 +11,17 @@ import java.util.UUID;
 
 /**
  * 技能伤害事件
- * 
+ *
  * <p>当技能造成伤害时触发。</p>
- * 
- * <h3>使用示例：</h3>
- * <pre>{@code
- * @EventHandler
- * public void onSkillDamage(RpgSkillDamageEvent event) {
- *     Player caster = event.getCaster();
- *     LivingEntity target = event.getTarget();
- *     String skillId = event.getSkillId();
- *     
- *     // 修改伤害
- *     if (skillId.equals("fireball")) {
- *         // 火球术额外伤害
- *         event.setDamage(event.getDamage() * 1.5);
- *     }
- *     
- *     // 暴击检测
- *     if (event.isCritical()) {
- *         event.setDamage(event.getDamage() * 2.0);
- *         caster.sendMessage("§c暴击!");
- *     }
- * }
- * }</pre>
- * 
+ *
+ * <p><strong>已废弃</strong>：业务事件应定义在对应的业务插件中，而不是 RPGCore。
+ * 请迁移到 GuangDianClass 插件中的 {@code cn.guangdian.classsystem.event.SkillDamageEvent}。</p>
+ *
  * @author GuangDian
  * @since 1.0.0
+ * @deprecated 业务事件已迁移到对应插件。请使用 GuangDianClass 插件中的 SkillDamageEvent。
  */
+@Deprecated(since = "2.0.0", forRemoval = true)
 public class RpgSkillDamageEvent extends Event implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();

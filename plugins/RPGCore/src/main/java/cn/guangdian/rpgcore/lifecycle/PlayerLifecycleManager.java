@@ -12,8 +12,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,9 +22,10 @@ public class PlayerLifecycleManager implements Listener {
     
     private final RPGCore plugin;
     private final Logger logger;
-    private final List<PlayerDataHandler> handlers = new ArrayList<>();
+    private final List<PlayerDataHandler> handlers = new CopyOnWriteArrayList<>();
     private final Map<UUID, Long> loadTimes = new ConcurrentHashMap<>();
     private final Map<UUID, Long> saveTimes = new ConcurrentHashMap<>();
+    // 使用 RPGCore 统一的 AsyncExecutor 替代独立线程池
     private long autoSaveTask = -1;
     private long autoSaveInterval = 5 * 60 * 20L;
     
@@ -79,6 +81,9 @@ public class PlayerLifecycleManager implements Listener {
         
         scheduler.runAsync(() -> {
             int handlerCount = handlers.size();
+            List<String> failedHandlers = new ArrayList<>();
+            int successCount = 0;
+            
             for (PlayerDataHandler handler : handlers) {
                 try {
                     if (handler.shouldLoad(player)) {
@@ -88,15 +93,24 @@ public class PlayerLifecycleManager implements Listener {
                         if (handlerTime > 100) {
                             logger.warning("[性能] " + handler.getHandlerName() + " 加载耗时: " + handlerTime + "ms");
                         }
+                        successCount++;
                     }
                 } catch (Exception e) {
+                    failedHandlers.add(handler.getHandlerName());
                     logger.log(Level.SEVERE, "数据加载失败 [" + handler.getHandlerName() + "]: " + e.getMessage(), e);
                 }
             }
             
             long totalTime = System.currentTimeMillis() - startTime;
+            final int finalSuccessCount = successCount;
+            final List<String> finalFailedHandlers = failedHandlers;
+            
             scheduler.runSync(() -> {
-                logger.info("[登录] " + player.getName() + " 数据加载完成 (" + handlerCount + "个处理器, 耗时" + totalTime + "ms)");
+                if (finalFailedHandlers.isEmpty()) {
+                    logger.info("[登录] " + player.getName() + " 数据加载完成 (" + finalSuccessCount + "/" + handlerCount + "个处理器, 耗时" + totalTime + "ms)");
+                } else {
+                    logger.warning("[登录] " + player.getName() + " 数据加载部分失败 (" + finalSuccessCount + "/" + handlerCount + "个处理器成功, 失败: " + String.join(", ", finalFailedHandlers) + ", 耗时" + totalTime + "ms)");
+                }
             });
         });
     }
@@ -127,6 +141,9 @@ public class PlayerLifecycleManager implements Listener {
         
         Runnable saveTask = () -> {
             int handlerCount = handlers.size();
+            List<String> failedHandlers = new ArrayList<>();
+            int successCount = 0;
+            
             for (PlayerDataHandler handler : handlers) {
                 try {
                     if (handler.shouldSave(player)) {
@@ -136,34 +153,50 @@ public class PlayerLifecycleManager implements Listener {
                         if (handlerTime > 100) {
                             logger.warning("[性能] " + handler.getHandlerName() + " 保存耗时: " + handlerTime + "ms");
                         }
+                        successCount++;
                     }
                 } catch (Exception e) {
+                    failedHandlers.add(handler.getHandlerName());
                     logger.log(Level.SEVERE, "数据保存失败 [" + handler.getHandlerName() + "]: " + e.getMessage(), e);
                 }
             }
             
             long totalTime = System.currentTimeMillis() - startTime;
+            final int finalSuccessCount = successCount;
+            final List<String> finalFailedHandlers = failedHandlers;
+            
             SyncScheduler scheduler = rpgCore.getScheduler();
             if (scheduler != null) {
                 scheduler.runSync(() -> {
-                    logger.info("[退出] " + player.getName() + " 数据保存完成 (" + handlerCount + "个处理器, 耗时" + totalTime + "ms)");
+                    if (finalFailedHandlers.isEmpty()) {
+                        logger.info("[退出] " + player.getName() + " 数据保存完成 (" + finalSuccessCount + "/" + handlerCount + "个处理器, 耗时" + totalTime + "ms)");
+                    } else {
+                        logger.warning("[退出] " + player.getName() + " 数据保存部分失败 (" + finalSuccessCount + "/" + handlerCount + "个处理器成功, 失败: " + String.join(", ", finalFailedHandlers) + ", 耗时" + totalTime + "ms)");
+                    }
                 });
             }
         };
         
         if (async) {
+            // 异步保存（推荐）
             SyncScheduler scheduler = rpgCore.getScheduler();
             if (scheduler != null) {
                 scheduler.runAsync(saveTask);
             }
         } else {
-            // 同步保存时添加超时保护，避免阻塞主线程过久
+            // 同步保存（仅用于服务器关闭）
+            // 不阻塞主线程，直接在当前线程执行
             try {
                 saveTask.run();
             } catch (Exception e) {
-                logger.log(Level.SEVERE, "同步保存玩家数据时发生错误 [" + player.getName() + "]: " + e.getMessage(), e);
+                logger.log(Level.SEVERE, "保存玩家数据时发生错误 [" + player.getName() + "]: " + e.getMessage(), e);
             }
         }
+    }
+    
+    public void shutdown() {
+        // 使用 RPGCore 统一的 AsyncExecutor 管理线程，无需单独关闭线程池
+        logger.info("PlayerLifecycleManager shutdown complete");
     }
     
     public void saveAllPlayers(boolean async) {

@@ -108,8 +108,17 @@ public class CoreDatabase {
 
         String jdbcUrl = config.getString("database.url",
             "jdbc:mysql://localhost:3306/mc_rpg?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8");
-        String username = config.getString("database.username", "root");
-        String password = config.getString("database.password", "");
+        
+        // 优先从环境变量获取数据库凭证，提高安全性
+        String username = System.getenv("RPGCORE_DB_USERNAME");
+        if (username == null || username.isEmpty()) {
+            username = config.getString("database.username", "root");
+        }
+        
+        String password = System.getenv("RPGCORE_DB_PASSWORD");
+        if (password == null || password.isEmpty()) {
+            password = config.getString("database.password", "");
+        }
 
         // 支持新的连接池配置路径
         int maxPoolSize = config.getInt("database.pool.max-size",
@@ -206,9 +215,16 @@ public class CoreDatabase {
     }
 
     /**
-     * 获取数据库连接
+     * 获取数据库连接（带泄漏检测）
      * 
-     * @return 数据库连接
+     * <p><b>重要：必须使用 try-with-resources 确保连接关闭！</b></p>
+     * <pre>{@code
+     * try (Connection conn = CoreDatabase.getConnection()) {
+     *     // 执行数据库操作
+     * }
+     * }</pre>
+     * 
+     * @return 数据库连接（自动包装泄漏检测）
      * @throws SQLException 如果获取连接失败
      * @throws IllegalStateException 如果连接池未初始化
      */
@@ -216,11 +232,62 @@ public class CoreDatabase {
         if (!enabled || sharedPool == null) {
             throw new IllegalStateException("CoreDatabase 未初始化或已关闭");
         }
-        return sharedPool.getConnection();
+        
+        Connection rawConnection = sharedPool.getConnection();
+        
+        return new LeakDetectionConnectionWrapper(rawConnection);
+    }
+    
+    /**
+     * 执行数据库操作（自动管理连接）
+     * 
+     * <p>推荐使用此方法，自动管理连接生命周期，避免连接泄漏。</p>
+     * <pre>{@code
+     * List<PlayerData> players = CoreDatabase.executeWithConnection(conn -> {
+     *     PreparedStatement stmt = conn.prepareStatement("SELECT * FROM players");
+     *     ResultSet rs = stmt.executeQuery();
+     *     // 处理结果集
+     *     return players;
+     * });
+     * }</pre>
+     * 
+     * @param operation 数据库操作
+     * @param <T> 返回类型
+     * @return 操作结果
+     * @throws SQLException 数据库异常
+     */
+    public static <T> T executeWithConnection(ConnectionOperation<T> operation) throws SQLException {
+        try (Connection conn = getConnection()) {
+            return operation.execute(conn);
+        }
+    }
+    
+    /**
+     * 数据库操作函数式接口
+     */
+    @FunctionalInterface
+    public interface ConnectionOperation<T> {
+        T execute(Connection conn) throws SQLException;
     }
 
     /**
      * 异步获取数据库连接
+     * 
+     * <p>返回的 CompletableFuture 可能包含以下异常：</p>
+     * <ul>
+     *   <li>{@link ConnectionAcquisitionException} - 获取连接失败</li>
+     *   <li>{@link IllegalStateException} - 连接池未初始化</li>
+     * </ul>
+     * 
+     * <p>使用示例：</p>
+     * <pre>{@code
+     * getConnectionAsync()
+     *     .thenAccept(conn -> { /* 使用连接 *\/ })
+     *     .exceptionally(ex -> {
+     *         logger.error("获取连接失败", ex);
+     *         return null;
+     *     });
+     * }</pre>
      * 
      * @return 包含连接的 CompletableFuture
      */
@@ -229,9 +296,15 @@ public class CoreDatabase {
             try {
                 return getConnection();
             } catch (SQLException e) {
-                throw new RuntimeException("异步获取数据库连接失败", e);
+                throw new ConnectionAcquisitionException("异步获取数据库连接失败", e);
             }
         });
+    }
+
+    public static class ConnectionAcquisitionException extends RuntimeException {
+        public ConnectionAcquisitionException(String message, Throwable cause) {
+            super(message, cause);
+        }
     }
 
     /**

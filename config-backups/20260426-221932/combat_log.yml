@@ -1,0 +1,40 @@
+﻿# ========================================
+# 战斗日志配置
+# ========================================
+# 控制战斗信息的显示
+# 使用 MiniMessage 格式 (<color> 替代 <red>olor)
+# ========================================
+
+# 是否启用战斗日志
+enabled: true
+
+# 显示类型开关
+show_pve: true
+show_pvp: true
+show_crit: true
+show_dodge: true
+show_parry: true
+show_lifesteal: true
+show_status: true
+show_skill: true
+
+# 消息冷却时间 (毫秒)
+# 防止刷屏
+message_cooldown: 500
+
+# 消息格式
+# 占位符: %attacker%, %target%, %damage%, %defender%, %amount%, %skill%, %player%
+format:
+  damage: '<red>[战斗] <yellow>%attacker% <white>对 <yellow>%target% <white>造成了 <red>%damage% <white>伤害'
+  crit: '<red>[战斗] <yellow>%attacker% <white>对 <yellow>%target% <white>造成了 <dark_red><bold>%damage% <red><bold>暴击<white>伤害!'
+  pvp_damage: '<red>[PVP] <yellow>%attacker% <white>对 <yellow>%target% <white>造成了 <red>%damage% <white>伤害'
+  pvp_crit: '<red>[PVP] <yellow>%attacker% <white>对 <yellow>%target% <white>造成了 <dark_red><bold>%damage% <red><bold>暴击<white>伤害!'
+  dodge: '<aqua>[闪避] <yellow>%defender% <white>闪避了攻击!'
+  parry: '<yellow>[招架] <yellow>%defender% <white>招架了攻击!'
+  reflect: '<red>[反弹] <yellow>%defender% <white>反弹了 <red>%damage% <white>伤害!'
+  lifesteal: '<red>[吸血] <yellow>%player% <white>恢复了 <red>%amount% <white>生命值!'
+  poison: '<green>[中毒] <yellow>%attacker% <white>使 <yellow>%target% <white>中毒!'
+  freeze: '<aqua>[冰冻] <yellow>%attacker% <white>冻结了 <yellow>%target%<white>!'
+  blind: '<dark_gray>[致盲] <yellow>%attacker% <white>致盲了 <yellow>%target%<white>!'
+  skill_damage: '<light_purple>[技能] <yellow>%skill% <white>对 <yellow>%target% <white>造成了 <red>%damage% <white>伤害!'
+  skill_heal: '<green>[治疗] <yellow>%skill% <white>恢复了 <red>%amount% <white>生命值!'

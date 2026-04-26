@@ -10,46 +10,28 @@ import java.util.UUID;
 
 /**
  * 技能释放事件
- * 
+ *
  * <p>当玩家释放技能时触发。此事件可被取消，取消后技能不会释放。</p>
- * 
- * <h3>使用示例：</h3>
+ *
+ * <p><strong>已废弃</strong>：业务事件应定义在对应的业务插件中，而不是 RPGCore。
+ * 请迁移到 GuangDianClass 插件中的 {@code cn.guangdian.classsystem.event.SkillCastEvent}。</p>
+ *
+ * <h3>迁移示例：</h3>
  * <pre>{@code
- * // 发布事件
- * RpgSkillCastEvent event = new RpgSkillCastEvent(player, "fireball", "火球术", 50, 60000);
- * event.setSkillLevel(5); // 设置技能等级
- * Bukkit.getPluginManager().callEvent(event);
- * 
- * if (!event.isCancelled()) {
- *     // 执行技能逻辑
- *     castFireball(player, event.getSkillLevel());
- *     // 触发冷却
- *     startCooldown(player, event.getSkillId(), event.getCooldownMs());
- * }
- * 
- * // 订阅事件
- * @EventHandler(priority = EventPriority.NORMAL)
- * public void onSkillCast(RpgSkillCastEvent event) {
- *     Player caster = event.getCaster();
- *     String skillId = event.getSkillId();
- *     
- *     // 检查玩家是否在安全区域
- *     if (isInSafeZone(caster.getLocation())) {
- *         event.setCancelled(true);
- *         caster.sendMessage("§c安全区域内无法使用技能!");
- *         return;
- *     }
- *     
- *     // 修改冷却时间
- *     if (caster.hasPermission("skill.cooldown.reduce")) {
- *         event.setCooldownMs(event.getCooldownMs() / 2);
- *     }
- * }
+ * // 旧代码（已废弃）
+ * RpgSkillCastEvent event = new RpgSkillCastEvent(player, skillId, skillName, manaCost, cooldownMs);
+ *
+ * // 新代码（推荐）
+ * // 在 GuangDianClass 插件中定义 SkillCastEvent
+ * SkillCastEvent event = new SkillCastEvent(player, skillId, skillName, manaCost, cooldownMs);
+ * EventPublisher.publish(event);
  * }</pre>
- * 
+ *
  * @author GuangDian
  * @since 1.0.0
+ * @deprecated 业务事件已迁移到对应插件。请使用 GuangDianClass 插件中的 SkillCastEvent。
  */
+@Deprecated(since = "2.0.0", forRemoval = true)
 public class RpgSkillCastEvent extends Event implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();

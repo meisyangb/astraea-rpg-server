@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -78,7 +79,6 @@ public abstract class PlayerDataService<T> {
     protected final File dataFolder;
 
     private Long autoSaveTaskId = null;
-    private boolean shutdownHookRegistered = false;
 
     /**
      * 构造函数
@@ -236,11 +236,9 @@ public abstract class PlayerDataService<T> {
                 }
             } catch (Exception e) {
                 logger.severe("[PlayerDataService] " + serviceName + " 自动保存失败: " + e.getMessage());
-                e.printStackTrace();
+                logger.log(Level.SEVERE, "自动保存异常详情", e);
             }
         }, intervalTicks, intervalTicks);
-
-        registerShutdownHook();
 
         logger.info("[PlayerDataService] " + serviceName + " 自动保存已启动 (间隔: " + (intervalTicks / 20) + "秒)");
     }
@@ -316,23 +314,14 @@ public abstract class PlayerDataService<T> {
      * 获取玩家数据文件路径
      */
     protected @NotNull File getPlayerDataFile(@NotNull UUID playerId) {
+        // 验证 serviceName 不包含路径穿越字符
+        if (serviceName.contains("..") || serviceName.contains("/") || serviceName.contains("\\")) {
+            throw new IllegalArgumentException("Invalid service name: " + serviceName);
+        }
         return new File(dataFolder, serviceName + "/" + playerId.toString() + ".yml");
     }
 
     // ==================== 内部方法 ====================
-
-    private void registerShutdownHook() {
-        if (shutdownHookRegistered) {
-            return;
-        }
-
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            logger.info("[PlayerDataService] " + serviceName + " 正在关闭...");
-            saveAll();
-        }, serviceName + "-shutdown-hook"));
-
-        shutdownHookRegistered = true;
-    }
 
     /**
      * 获取统计信息

@@ -4,10 +4,12 @@ import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
 import cn.guangdian.rpgcore.concurrency.LockTimeoutException;
 import cn.guangdian.rpgcore.concurrency.PlayerLockManager;
+import cn.guangdian.rpgcore.event.EventPublisher;
 import cn.guangdian.rpgcore.event.events.PlayerDataLoadEvent;
 import cn.guangdian.rpgcore.event.events.PlayerDataSaveEvent;
 import cn.guangdian.rpgcore.module.RPGModule;
 import cn.guangdian.rpgcore.service.api.PointsService;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -102,11 +104,11 @@ public class PointsModule extends RPGModule implements PointsService {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        
+
         // 异步加载玩家数据
         loadPlayerData(player.getUniqueId()).thenAccept(data -> {
             // 发布数据加载事件
-            getEventBus().publish(new PlayerDataLoadEvent(player.getUniqueId(), "Points", data));
+            EventPublisher.publish(new PlayerDataLoadEvent(player.getUniqueId(), "Points", data));
         });
     }
 
@@ -114,16 +116,16 @@ public class PointsModule extends RPGModule implements PointsService {
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         UUID playerId = player.getUniqueId();
-        
+
         // 保存数据
         PlayerPointsData data = repository.getFromCache(playerId);
         if (data != null) {
             getAsyncExecutor().submitPlayerSave(playerId, () -> {
                 repository.save(playerId, data).join();
-                getEventBus().publish(new PlayerDataSaveEvent(playerId, "Points", data));
+                EventPublisher.publish(new PlayerDataSaveEvent(playerId, "Points", data));
             });
         }
-        
+
         // 清理缓存
         repository.invalidate(playerId);
     }

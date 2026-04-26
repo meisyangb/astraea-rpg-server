@@ -10,28 +10,17 @@ import java.util.UUID;
 
 /**
  * 技能升级事件
- * 
+ *
  * <p>当玩家升级技能时触发。</p>
- * 
- * <h3>使用示例：</h3>
- * <pre>{@code
- * @EventHandler
- * public void onSkillUpgrade(RpgSkillUpgradeEvent event) {
- *     Player player = event.getPlayer();
- *     String skillId = event.getSkillId();
- *     int oldLevel = event.getOldLevel();
- *     int newLevel = event.getNewLevel();
- *     
- *     // 广播技能升级消息
- *     if (newLevel >= 10) {
- *         Bukkit.broadcastMessage(player.getName() + " 的 " + event.getSkillName() + " 达到 " + newLevel + " 级!");
- *     }
- * }
- * }</pre>
- * 
+ *
+ * <p><strong>已废弃</strong>：业务事件应定义在对应的业务插件中，而不是 RPGCore。
+ * 请迁移到 GuangDianClass 插件中的 {@code cn.guangdian.classsystem.event.SkillUpgradeEvent}。</p>
+ *
  * @author GuangDian
  * @since 1.0.0
+ * @deprecated 业务事件已迁移到对应插件。请使用 GuangDianClass 插件中的 SkillUpgradeEvent。
  */
+@Deprecated(since = "2.0.0", forRemoval = true)
 public class RpgSkillUpgradeEvent extends Event implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();

@@ -2,6 +2,8 @@ package cn.guangdian.rpgcore.module.armorstats;
 
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
+import cn.guangdian.rpgcore.concurrency.LockTimeoutException;
+import cn.guangdian.rpgcore.concurrency.PlayerLockManager;
 import cn.guangdian.rpgcore.module.RPGModule;
 import cn.guangdian.rpgcore.service.api.SkillService;
 import cn.guangdian.rpgcore.service.api.StatsService;
@@ -225,8 +227,16 @@ public class ArmorStatsModule extends RPGModule implements StatsService, SkillSe
 
     @Override
     public boolean learnSkill(UUID playerId, String skillId) {
-        Set<String> skills = playerSkillsCache.computeIfAbsent(playerId, k -> new HashSet<>());
-        return skills.add(skillId.toLowerCase());
+        PlayerLockManager lockManager = getLockManager();
+        try {
+            return lockManager.executeWithLock(playerId, () -> {
+                Set<String> skills = playerSkillsCache.computeIfAbsent(playerId, k -> new HashSet<>());
+                return skills.add(skillId.toLowerCase());
+            });
+        } catch (LockTimeoutException e) {
+            logWarning("Failed to learn skill due to lock timeout: " + playerId);
+            return false;
+        }
     }
 
     @Override
@@ -243,20 +253,28 @@ public class ArmorStatsModule extends RPGModule implements StatsService, SkillSe
 
     @Override
     public boolean forgetSkill(UUID playerId, String skillId, boolean refund) {
-        Set<String> skills = playerSkillsCache.get(playerId);
-        if (skills == null || !skills.remove(skillId.toLowerCase())) return false;
-        
-        if (refund) {
-            int level = getSkillLevel(playerId, skillId);
-            int refundPoints = getUpgradeCost(skillId, 0) * level;
-            addSkillPoints(playerId, refundPoints, "refund:" + skillId);
+        PlayerLockManager lockManager = getLockManager();
+        try {
+            return lockManager.executeWithLock(playerId, () -> {
+                Set<String> skills = playerSkillsCache.get(playerId);
+                if (skills == null || !skills.remove(skillId.toLowerCase())) return false;
+
+                if (refund) {
+                    int level = getSkillLevel(playerId, skillId);
+                    int refundPoints = getUpgradeCost(skillId, 0) * level;
+                    addSkillPoints(playerId, refundPoints, "refund:" + skillId);
+                }
+
+                // 清除等级
+                Map<String, Integer> levels = skillLevelsCache.get(playerId);
+                if (levels != null) levels.remove(skillId.toLowerCase());
+
+                return true;
+            });
+        } catch (LockTimeoutException e) {
+            logWarning("Failed to forget skill due to lock timeout: " + playerId);
+            return false;
         }
-        
-        // 清除等级
-        Map<String, Integer> levels = skillLevelsCache.get(playerId);
-        if (levels != null) levels.remove(skillId.toLowerCase());
-        
-        return true;
     }
 
     @Override
@@ -270,9 +288,17 @@ public class ArmorStatsModule extends RPGModule implements StatsService, SkillSe
     @Override
     public boolean setSkillLevel(UUID playerId, String skillId, int level) {
         if (!hasSkill(playerId, skillId)) return false;
-        Map<String, Integer> levels = skillLevelsCache.computeIfAbsent(playerId, k -> new HashMap<>());
-        levels.put(skillId.toLowerCase(), Math.max(1, level));
-        return true;
+        PlayerLockManager lockManager = getLockManager();
+        try {
+            return lockManager.executeWithLock(playerId, () -> {
+                Map<String, Integer> levels = skillLevelsCache.computeIfAbsent(playerId, k -> new HashMap<>());
+                levels.put(skillId.toLowerCase(), Math.max(1, level));
+                return true;
+            });
+        } catch (LockTimeoutException e) {
+            logWarning("Failed to set skill level due to lock timeout: " + playerId);
+            return false;
+        }
     }
 
     @Override
@@ -320,8 +346,16 @@ public class ArmorStatsModule extends RPGModule implements StatsService, SkillSe
 
     @Override
     public void setCooldown(UUID playerId, String skillId, long cooldownMs) {
-        Map<String, Long> cooldowns = skillCooldowns.computeIfAbsent(playerId, k -> new HashMap<>());
-        cooldowns.put(skillId.toLowerCase(), System.currentTimeMillis() + cooldownMs);
+        PlayerLockManager lockManager = getLockManager();
+        try {
+            lockManager.executeWithLock(playerId, () -> {
+                Map<String, Long> cooldowns = skillCooldowns.computeIfAbsent(playerId, k -> new HashMap<>());
+                cooldowns.put(skillId.toLowerCase(), System.currentTimeMillis() + cooldownMs);
+                return null;
+            });
+        } catch (LockTimeoutException e) {
+            logWarning("Failed to set cooldown due to lock timeout: " + playerId);
+        }
     }
 
     @Override
@@ -371,7 +405,15 @@ public class ArmorStatsModule extends RPGModule implements StatsService, SkillSe
 
     @Override
     public void setSkillPoints(UUID playerId, int points) {
-        skillPointsCache.put(playerId, Math.max(0, points));
+        PlayerLockManager lockManager = getLockManager();
+        try {
+            lockManager.executeWithLock(playerId, () -> {
+                skillPointsCache.put(playerId, Math.max(0, points));
+                return null;
+            });
+        } catch (LockTimeoutException e) {
+            logWarning("Failed to set skill points due to lock timeout: " + playerId);
+        }
     }
 
     @Override

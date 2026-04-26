@@ -217,4 +217,12 @@ public class ServiceInjector {
     public static boolean isInitialized() {
         return injector != null;
     }
+
+    /**
+     * 清理注入器（插件禁用时调用）
+     */
+    public static synchronized void cleanup() {
+        injector = null;
+        LOGGER.info("ServiceInjector cleaned up");
+    }
 }

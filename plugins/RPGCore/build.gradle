@@ -116,11 +116,17 @@ compileJava {
 test {
     useJUnitPlatform()
     
-    // 禁用测试 worker 进程，避免 ClassNotFoundException
-    forkEvery = 0
+    testLogging {
+        events "passed", "skipped", "failed"
+        showExceptions true
+        showCauses true
+        showStackTraces true
+    }
     
-    // 或者使用以下配置
-    // maxParallelForks = 1
+    reports {
+        html.required = true
+        junitXml.required = true
+    }
 }
 
 // 普通 JAR 配置

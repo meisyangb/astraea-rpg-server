@@ -64,9 +64,9 @@ public class AsyncExecutorImpl implements AsyncExecutor {
 
         // 创建 ThreadPoolExecutor
         ThreadPoolExecutor threadPool = new ThreadPoolExecutor(
-            threadPoolSize,  // 核心线程数
-            threadPoolSize,  // 最大线程数
-            keepAliveSeconds, // 保活时间
+            threadPoolSize,
+            threadPoolSize,
+            keepAliveSeconds,
             TimeUnit.SECONDS,
             workQueue,
             r -> {
@@ -77,7 +77,10 @@ public class AsyncExecutorImpl implements AsyncExecutor {
                 });
                 return thread;
             },
-            new ThreadPoolExecutor.CallerRunsPolicy() // 拒绝策略：由调用线程执行
+            (r, executor) -> {
+                logger.warning("异步任务队列已满，拒绝执行任务 (队列容量: " + queueCapacity + ", 活跃线程: " + executor.getActiveCount() + ")");
+                throw new RejectedExecutionException("异步任务队列已满，无法接受新任务");
+            }
         );
 
         // 允许核心线程超时
@@ -191,19 +194,26 @@ public class AsyncExecutorImpl implements AsyncExecutor {
             long startTime = System.currentTimeMillis();
             long timeoutMillis = unit.toMillis(timeout);
 
-            while (!pendingSaves.isEmpty() && 
-                   (System.currentTimeMillis() - startTime) < timeoutMillis) {
-                Thread.sleep(50);
+            // 使用 CompletableFuture 等待所有 pendingSaves 完成，避免忙等待
+            if (!pendingSaves.isEmpty()) {
+                CompletableFuture<Void> allSaves = CompletableFuture.allOf(
+                    pendingSaves.values().toArray(new CompletableFuture[0])
+                );
+                try {
+                    allSaves.get(timeoutMillis, TimeUnit.MILLISECONDS);
+                } catch (Exception e) {
+                    logger.warning("Some player saves did not complete within timeout: " + 
+                        pendingSaves.size() + " pending");
+                }
             }
 
-            if (!pendingSaves.isEmpty()) {
-                logger.warning("Some player saves did not complete within timeout: " + 
-                    pendingSaves.size() + " pending");
+            long remainingMillis = timeoutMillis - (System.currentTimeMillis() - startTime);
+            if (remainingMillis <= 0) {
+                return executor.isTerminated();
             }
 
             // 等待线程池终止
-            return executor.awaitTermination(timeoutMillis - (System.currentTimeMillis() - startTime), 
-                TimeUnit.MILLISECONDS);
+            return executor.awaitTermination(remainingMillis, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             return false;

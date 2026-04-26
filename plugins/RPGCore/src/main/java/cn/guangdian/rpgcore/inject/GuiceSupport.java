@@ -86,6 +86,14 @@ public final class GuiceSupport {
     }
 
     /**
+     * 清理根注入器（插件禁用时调用）
+     */
+    public static synchronized void cleanup() {
+        ROOT_INJECTOR.set(null);
+        ServiceInjector.cleanup();
+    }
+
+    /**
      * 创建子注入器
      *
      * @param modules 额外的模块

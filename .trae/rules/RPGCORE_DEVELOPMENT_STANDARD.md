@@ -1236,8 +1236,8 @@ if (rpgCore != null) {
 
 ## �📚 十六、参考文档
 
-- [FORBIDDEN_PATTERNS.md](./FORBIDDEN_PATTERNS.md) - 禁止模式清单
-- [CODE_TEMPLATES.md](./CODE_TEMPLATES.md) - 代码模板库
+- [DEVELOPMENT_GUIDE.md](./DEVELOPMENT_GUIDE.md) - 开发指南（禁止模式+代码模板）
+- [RPGCORE_API_REFERENCE.md](../docs/reference/RPGCORE_API_REFERENCE.md) - API 参考手册
 - [RPGCore API 文档](../../plugins/RPGCore/src/main/java/cn/guangdian/rpgcore/api/) - API 接口定义
 - [kaifa.md](./kaifa.md) - 任务分类与路由
 

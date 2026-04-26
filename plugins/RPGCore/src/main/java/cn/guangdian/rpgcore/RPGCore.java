@@ -71,6 +71,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -89,7 +90,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter {
 
-    private static RPGCore instance;
+    private static volatile RPGCore instance;
+
+    private volatile boolean isInitializing = false;
+    private volatile boolean fullyInitialized = false;
 
     private ServiceRegistry serviceRegistry;
     private CacheProvider cacheProvider;
@@ -122,12 +126,6 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
     // Guice 依赖注入
     private Injector guiceInjector;
 
-    private int asyncThreadPoolSize;
-    private int asyncQueueCapacity;
-    private long asyncKeepAliveSeconds;
-    private boolean asyncAllowCoreThreadTimeout;
-    private String asyncThreadNamePrefix;
-
     private int cacheMaxSize;
     private Duration cacheDefaultTTL;
     private Mode cacheMode;
@@ -139,6 +137,12 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
 
     private long lockTimeoutMs;
     private boolean databaseEnabled;
+
+    private int asyncThreadPoolSize;
+    private int asyncQueueCapacity;
+    private long asyncKeepAliveSeconds;
+    private boolean asyncAllowCoreThreadTimeout;
+    private String asyncThreadNamePrefix;
 
     // 监控配置
     private boolean monitorEnabled;
@@ -153,25 +157,47 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
 
     @Override
     public void onEnable() {
-        loadConfiguration();
+        isInitializing = true;
 
-        initCoreComponents();
+        try {
+            loadConfiguration();
 
-        initDatabase();
+            initCoreComponents();
 
-        registerCommands();
+            initDatabase();
 
-        registerListeners();
+            registerCommands();
 
-        // 所有初始化完成后再设置实例，确保其他插件获取到的是完全初始化的实例
-        instance = this;
+            registerListeners();
 
-        // 延迟刷新外部服务状态（等待所有插件加载完成）
-        scheduleExternalServicesRefresh();
+            // 核心组件全部初始化完成后，再暴露实例引用
+            // 避免其他线程获取到未完全初始化的实例
+            instance = this;
+            isInitializing = false;
+            fullyInitialized = true;
 
-        logStartupInfo();
+            // 延迟刷新外部服务状态（等待所有插件加载完成）
+            scheduleExternalServicesRefresh();
 
-        getLogger().info("RPGCore v" + getDescription().getVersion() + " enabled!");
+            logStartupInfo();
+
+            getLogger().info("RPGCore v" + getDescription().getVersion() + " enabled!");
+        } catch (Exception e) {
+            getLogger().severe("RPGCore 初始化失败: " + e.getMessage());
+            getLogger().log(java.util.logging.Level.SEVERE, "初始化异常详情", e);
+            instance = null;
+            isInitializing = false;
+            throw e;
+        }
+    }
+
+    /**
+     * 检查 RPGCore 是否正在初始化中
+     * 
+     * @return 如果正在初始化返回 true
+     */
+    public boolean isInitializing() {
+        return isInitializing;
     }
 
     /**
@@ -196,77 +222,112 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
             asyncExecutor.awaitTermination(30, TimeUnit.SECONDS);
         }
 
-        // 2. 清理服务注册表
+        // 2. 保存所有数据（统一数据保存管理）
+        saveAllPlayerData();
+
+        // 3. 清理服务注册表
         if (serviceRegistry instanceof SimpleServiceRegistry ssr) {
             ssr.clear();
         }
         
-        // 3. 清理缓存
+        // 4. 清理缓存
         if (cacheProvider != null) {
             cacheProvider.clear();
         }
         
-        // 4. 清理离线玩家缓存
+        // 5. 清理离线玩家缓存
         cn.guangdian.rpgcore.util.OfflinePlayerCache.clearCache();
         
-        // 5. 释放锁
+        // 6. 释放锁
         if (lockManager != null) {
             lockManager.releaseAllLocks();
         }
         
-        // 6. 关闭外部服务集成
+        // 7. 关闭外部服务集成
         if (externalServices instanceof ExternalServiceIntegrationImpl esi) {
             esi.shutdown();
         }
         
-        // 7. 关闭调度器
+        // 8. 关闭调度器
         if (scheduler instanceof UnifiedSchedulerImpl usi) {
             usi.shutdown();
         }
         
-        // 8. 关闭 HTTP 客户端
+        // 9. 关闭 HTTP 客户端
         if (httpClient instanceof HttpClientImpl hci) {
             hci.shutdown();
         }
         
-        // 9. 关闭文本显示服务
+        // 10. 关闭文本显示服务
         if (textDisplayService instanceof TextDisplayServiceImpl tdsi) {
             tdsi.shutdown();
         }
         
-        // 10. 关闭 GUI 管理器
+        // 11. 关闭 GUI 管理器
         cn.guangdian.rpgcore.gui.GUIManager guiManager = cn.guangdian.rpgcore.gui.GUIManager.getInstance();
         if (guiManager.isInitialized()) {
             guiManager.shutdown();
         }
 
-        // 11. 关闭 BossBar 服务
+        // 12. 关闭 BossBar 服务
         AdventureBossBarService.getInstance().shutdown();
 
-        // 12. 停止性能监控
+        // 13. 停止性能监控
         if (performanceMonitor != null) {
             performanceMonitor.stopReportScheduler();
         }
 
-        // 13. 注销生命周期管理器
+        // 14. 注销生命周期管理器
         if (lifecycleManager != null) {
             lifecycleManager.unregister();
+            lifecycleManager.shutdown();
         }
         
-        // 14. 保存配置
+        // 15. 保存配置
         if (configManager instanceof ConfigManagerImpl cmi) {
             cmi.saveAll();
         }
 
-        // 15. 关闭数据库连接池
+        // 16. 关闭数据库连接池
         CoreDatabase.shutdown();
+
+        // 17. 清理 Guice 注入器（防止内存泄漏）
+        GuiceSupport.cleanup();
 
         // 记录关闭信息
         logShutdownInfo();
 
         // 最后清理实例引用
+        fullyInitialized = false;
         instance = null;
         getLogger().info("RPGCore disabled!");
+    }
+
+    /**
+     * 统一保存所有玩家数据（避免重复保存）
+     */
+    private void saveAllPlayerData() {
+        getLogger().info("正在保存玩家数据...");
+        
+        // 1. 触发 PlayerLifecycleManager 保存所有在线玩家数据
+        if (lifecycleManager != null) {
+            try {
+                lifecycleManager.saveAllPlayers(true);
+            } catch (Exception e) {
+                getLogger().log(java.util.logging.Level.SEVERE, "PlayerLifecycleManager 保存数据失败", e);
+            }
+        }
+        
+        // 2. 保存统一数据管理器中的数据
+        if (dataManager != null) {
+            try {
+                dataManager.saveAll();
+            } catch (Exception e) {
+                getLogger().log(java.util.logging.Level.SEVERE, "UnifiedDataManager 保存数据失败", e);
+            }
+        }
+        
+        getLogger().info("玩家数据保存完成");
     }
 
     private void loadConfiguration() {
@@ -275,18 +336,25 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
 
         databaseEnabled = config.getBoolean("database.enabled", false);
 
-        // 异步执行器配置
-        asyncThreadPoolSize = config.getInt("async.thread-pool-size", 4);
-        asyncQueueCapacity = config.getInt("async.queue-capacity", 1000);
-        asyncKeepAliveSeconds = config.getLong("async.keep-alive-seconds", 60);
+        asyncThreadPoolSize = Math.max(1, Math.min(32, config.getInt("async.thread-pool-size", 4)));
+        asyncQueueCapacity = Math.max(0, config.getInt("async.queue-capacity", 1000));
+        asyncKeepAliveSeconds = Math.max(10, config.getLong("async.keep-alive-seconds", 60));
         asyncAllowCoreThreadTimeout = config.getBoolean("async.allow-core-thread-timeout", false);
         asyncThreadNamePrefix = config.getString("async.thread-name-prefix", "RPGCore-Async-");
+        
+        if (asyncThreadNamePrefix == null || asyncThreadNamePrefix.isEmpty()) {
+            asyncThreadNamePrefix = "RPGCore-Async-";
+        }
 
-        // 缓存配置
-        cacheMaxSize = config.getInt("cache.max-size", 2000);
-        cacheDefaultTTL = Duration.ofMinutes(config.getLong("cache.default-ttl-minutes", 30));
+        cacheMaxSize = Math.max(100, Math.min(100000, config.getInt("cache.max-size", 2000)));
+        cacheDefaultTTL = Duration.ofMinutes(Math.max(1, config.getLong("cache.default-ttl-minutes", 30)));
 
         String modeStr = config.getString("cache.mode", "caffeine").toLowerCase();
+        if (!Arrays.asList("caffeine", "lightweight", "high_performance", "highperformance").contains(modeStr)) {
+            getLogger().warning("无效的缓存模式: " + modeStr + ", 使用默认值 caffeine");
+            modeStr = "caffeine";
+        }
+        
         cacheMode = switch (modeStr) {
             case "high_performance", "highperformance" -> Mode.HIGH_PERFORMANCE;
             case "lightweight" -> Mode.LIGHTWEIGHT;
@@ -297,20 +365,29 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
         cacheWeakKeys = config.getBoolean("cache.weak-keys", false);
         cacheWeakValues = config.getBoolean("cache.weak-values", false);
         cacheSoftValues = config.getBoolean("cache.soft-values", false);
-        long refreshMinutes = config.getLong("cache.refresh-interval-minutes", 0);
+        long refreshMinutes = Math.max(0, config.getLong("cache.refresh-interval-minutes", 0));
         cacheRefreshInterval = refreshMinutes > 0 ? Duration.ofMinutes(refreshMinutes) : Duration.ZERO;
 
-        lockTimeoutMs = config.getLong("lock.timeout-ms", 3000);
+        lockTimeoutMs = Math.max(100, Math.min(60000, config.getLong("lock.timeout-ms", 3000)));
 
-        // 监控配置
         monitorEnabled = config.getBoolean("monitor.enabled", true);
         monitorMemory = config.getBoolean("monitor.memory-monitoring", true);
         monitorTps = config.getBoolean("monitor.tps-monitoring", true);
         monitorLogSlowOps = config.getBoolean("monitor.log-slow-operations", true);
-        monitorMemoryThresholdMb = config.getLong("monitor.memory-warning-threshold-mb", 1024);
-        monitorSlowOpThresholdMs = config.getLong("monitor.slow-operation-threshold-ms", 100);
-        long reportIntervalMinutes = config.getLong("monitor.report-interval-minutes", 30);
+        monitorMemoryThresholdMb = Math.max(256, config.getLong("monitor.memory-warning-threshold-mb", 1024));
+        monitorSlowOpThresholdMs = Math.max(10, config.getLong("monitor.slow-operation-threshold-ms", 100));
+        long reportIntervalMinutes = Math.max(0, config.getLong("monitor.report-interval-minutes", 30));
         monitorReportInterval = reportIntervalMinutes > 0 ? Duration.ofMinutes(reportIntervalMinutes) : Duration.ZERO;
+        
+        if (asyncThreadPoolSize != config.getInt("async.thread-pool-size", 4)) {
+            getLogger().warning("异步线程池大小已调整为有效范围: " + asyncThreadPoolSize);
+        }
+        if (cacheMaxSize != config.getInt("cache.max-size", 2000)) {
+            getLogger().warning("缓存最大容量已调整为有效范围: " + cacheMaxSize);
+        }
+        if (lockTimeoutMs != config.getLong("lock.timeout-ms", 3000)) {
+            getLogger().warning("锁超时时间已调整为有效范围: " + lockTimeoutMs + "ms");
+        }
     }
 
     private void initCoreComponents() {
@@ -338,17 +415,11 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
      */
     private void initInfrastructure() {
         configurateManager = new ConfigurateManager(getLogger(), getDataFolder().toPath());
-        getLogger().info("ConfigurateManager initialized");
-
         serviceRegistry = new SimpleServiceRegistry(this);
-        getLogger().info("ServiceRegistry initialized");
-
         asyncExecutor = new AsyncExecutorImpl(this, asyncThreadPoolSize, asyncQueueCapacity,
             asyncKeepAliveSeconds, asyncAllowCoreThreadTimeout, asyncThreadNamePrefix);
-        getLogger().info("AsyncExecutor initialized (threads: " + asyncThreadPoolSize + ", queue: " + asyncQueueCapacity + ")");
-
         scheduler = new UnifiedSchedulerImpl(this);
-        getLogger().info("UnifiedScheduler initialized");
+        getLogger().info("基础设施层初始化完成 (AsyncPool: " + asyncThreadPoolSize + "线程, 队列: " + asyncQueueCapacity + ")");
     }
 
     /**
@@ -357,13 +428,9 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
     private void initDataLayer() {
         cacheProvider = new TTLCacheManager(cacheMaxSize, cacheDefaultTTL, cacheRecordStats,
             cacheMode, cacheWeakKeys, cacheWeakValues, cacheSoftValues, cacheRefreshInterval);
-        getLogger().info("CacheProvider initialized (mode: " + cacheMode + ", maxSize: " + cacheMaxSize + ", TTL: " + cacheDefaultTTL + ")");
-
         dataManager = new UnifiedDataManager(this);
-        getLogger().info("UnifiedDataManager initialized");
-
         configManager = new ConfigManagerImpl(this);
-        getLogger().info("ConfigManager initialized");
+        getLogger().info("数据层初始化完成 (缓存: " + cacheMode + "/" + cacheMaxSize + ", TTL: " + cacheDefaultTTL.toMinutes() + "分钟)");
     }
 
     /**
@@ -371,8 +438,6 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
      */
     private void initServiceLayer() {
         lockManager = new PlayerLockManager(getLogger(), lockTimeoutMs);
-        getLogger().info("PlayerLockManager initialized (timeout: " + lockTimeoutMs + "ms)");
-
         performanceMonitor = new PerformanceMonitor("RPGCore", getLogger());
         performanceMonitor.setEnabled(monitorEnabled);
         performanceMonitor.setMemoryMonitoring(monitorMemory);
@@ -384,38 +449,18 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
             performanceMonitor.setReportInterval(monitorReportInterval);
             performanceMonitor.startReportScheduler();
         }
-        getLogger().info("PerformanceMonitor initialized (enabled: " + monitorEnabled + ")");
-
         serviceScanner = new ServiceScanner(this);
-        getLogger().info("ServiceScanner initialized");
-
         externalServices = new ExternalServiceIntegrationImpl(this);
-        getLogger().info("ExternalServices: " + externalServices.getExternalServiceStatus());
-
         lifecycleManager = new PlayerLifecycleManager(this);
         lifecycleManager.register();
-        getLogger().info("PlayerLifecycleManager initialized and registered");
-
         exceptionHandler = new ExceptionHandlerImpl(this);
-        getLogger().info("ExceptionHandler initialized");
-
         httpClient = new HttpClientImpl(this);
-        getLogger().info("HttpClient initialized");
-
         rateLimiter = new RateLimiterImpl(this);
-        getLogger().info("RateLimiter initialized");
-
         cronScheduler = new CronSchedulerImpl(this);
-        getLogger().info("CronScheduler initialized");
-
         configMigrator = new ConfigMigratorImpl(this);
-        getLogger().info("ConfigMigrator initialized");
-
         auditLog = new AuditLogImpl(this);
-        getLogger().info("AuditLog initialized");
-
         dataExporter = new DataExporterImpl(this);
-        getLogger().info("DataExporter initialized");
+        getLogger().info("服务层初始化完成 (" + getActiveServiceCount() + "个组件, 监控: " + (monitorEnabled ? "启用" : "禁用") + ")");
     }
 
     /**
@@ -423,22 +468,14 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
      */
     private void initPresentationLayer() {
         displayService = new DisplayServiceImpl(this);
-        getLogger().info("DisplayService initialized");
-
         miniMessageService = MiniMessageService.getInstance();
-        getLogger().info("MiniMessageService initialized");
-
         messageService = new MessageServiceImpl();
         serviceRegistry.registerService(MessageService.class, messageService);
-        getLogger().info("MessageService initialized and registered");
-
         textDisplayService = new TextDisplayServiceImpl(this);
         serviceRegistry.registerService(TextDisplayService.class, textDisplayService);
-        getLogger().info("TextDisplayService initialized and registered");
-
         GUIManager guiManager = GUIManager.getInstance();
         guiManager.initialize(this);
-        getLogger().info("GUIManager initialized");
+        getLogger().info("展示层初始化完成");
     }
 
     /**
@@ -446,19 +483,34 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
      */
     private void initUtilityLayer() {
         gameLogger = new AsyncLogger();
-        getLogger().info("GameLogger (AsyncLogger) initialized");
-
         itemAttributeManager = new ItemAttributeManager(this);
-        getLogger().info("ItemAttributeManager initialized");
-
-        // 注册核心服务到 ServiceRegistry
         serviceRegistry.registerService(MiniMessageService.class, miniMessageService);
         serviceRegistry.registerService(SoundService.class, SoundService.getInstance());
         serviceRegistry.registerService(CooldownManager.class, CooldownManager.getInstance());
         serviceRegistry.registerService(YamlDataStore.class, YamlDataStore.getInstance());
         serviceRegistry.registerService(CommandFramework.class, CommandFramework.getInstance());
         serviceRegistry.registerService(PlaceholderService.class, PlaceholderService.getInstance());
-        getLogger().info("Core services registered to ServiceRegistry");
+        getLogger().info("工具层初始化完成");
+    }
+
+    /**
+     * 计算活跃服务组件数量
+     */
+    private int getActiveServiceCount() {
+        int count = 0;
+        if (lockManager != null) count++;
+        if (performanceMonitor != null) count++;
+        if (serviceScanner != null) count++;
+        if (externalServices != null) count++;
+        if (lifecycleManager != null) count++;
+        if (exceptionHandler != null) count++;
+        if (httpClient != null) count++;
+        if (rateLimiter != null) count++;
+        if (cronScheduler != null) count++;
+        if (configMigrator != null) count++;
+        if (auditLog != null) count++;
+        if (dataExporter != null) count++;
+        return count;
     }
 
     /**
@@ -471,7 +523,10 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
             getLogger().info("Guice 依赖注入框架已初始化");
         } catch (Exception e) {
             getLogger().warning("Guice 初始化失败: " + e.getMessage());
-            e.printStackTrace();
+            getLogger().info("详细异常信息: ");
+            for (StackTraceElement element : e.getStackTrace()) {
+                getLogger().info("  at " + element.toString());
+            }
         }
     }
 
@@ -557,9 +612,29 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
                     sender.sendMessage(miniMessageService.red("没有权限!"));
                     return true;
                 }
+                if (!fullyInitialized) {
+                    sender.sendMessage(miniMessageService.yellow("RPGCore 尚未完全初始化，请稍后再试"));
+                    return true;
+                }
                 reloadConfig();
                 loadConfiguration();
+                
+                // 刷新依赖配置的服务
+                if (performanceMonitor != null) {
+                    performanceMonitor.setLogSlowOperations(monitorLogSlowOps);
+                    performanceMonitor.setMemoryWarningThreshold(monitorMemoryThresholdMb);
+                    performanceMonitor.setSlowOperationThreshold(monitorSlowOpThresholdMs);
+                }
+                if (cacheProvider != null) {
+                    cacheProvider.setDefaultTTL(cacheDefaultTTL);
+                    cacheProvider.setMaxSize(cacheMaxSize);
+                }
+                if (lockManager != null) {
+                    lockManager.setDefaultTimeout(lockTimeoutMs);
+                }
+                
                 sender.sendMessage(miniMessageService.green("配置已重新加载!"));
+                sender.sendMessage(miniMessageService.yellow("注意: 部分配置需要重启服务器才能生效"));
             }
             case "services" -> sendServicesList(sender);
             case "modules" -> sendModulesList(sender);
@@ -691,11 +766,30 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
     }
 
     /**
-     * @deprecated 已废弃，使用 {@link EventPublisher} 替代
+     * 检查 RPGCore 是否完全初始化
+     * 
+     * @return 如果完全初始化返回 true
+     */
+    public boolean isFullyInitialized() {
+        return fullyInitialized && instance != null;
+    }
+
+    /**
+     * 获取 EventBus 实例（过渡期兼容方案）
+     *
+     * <p><b>⚠️ 此方法已废弃，将在未来版本移除。</b></p>
+     * <p>请迁移到以下方案：</p>
+     * <ul>
+     *   <li>{@link cn.guangdian.rpgcore.event.EventPublisher#publish(org.bukkit.event.Event)}</li>
+     *   <li>{@code Bukkit.getPluginManager().callEvent(Event)}</li>
+     * </ul>
+     *
+     * @return EventBus 代理实例
+     * @deprecated 使用 {@link cn.guangdian.rpgcore.event.EventPublisher} 或 Bukkit 原生事件系统替代
      */
     @Deprecated(since = "2.0.0", forRemoval = true)
     public cn.guangdian.rpgcore.api.EventBus getEventBus() {
-        return null;
+        return new cn.guangdian.rpgcore.event.EventBusProxy();
     }
 
     public ServiceRegistry getServiceRegistry() {

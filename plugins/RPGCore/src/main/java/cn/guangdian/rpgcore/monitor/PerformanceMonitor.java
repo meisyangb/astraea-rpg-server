@@ -9,12 +9,15 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.bukkit.Bukkit;
 
 /**
  * 性能监控器
@@ -59,6 +62,7 @@ public class PerformanceMonitor {
 
     // 报告定时任务
     private ScheduledExecutorService reportScheduler;
+    private ScheduledFuture<?> reportTask;
 
     /**
      * 创建性能监控器
@@ -318,8 +322,20 @@ public class PerformanceMonitor {
             return thread;
         });
 
-        reportScheduler.scheduleAtFixedRate(() -> {
+        reportTask = reportScheduler.scheduleAtFixedRate(() -> {
             if (enabled.get()) {
+                // 自动采集 TPS
+                if (tpsMonitoring.get()) {
+                    try {
+                        double tps = Bukkit.getTPS()[0];
+                        recordTps(tps);
+                    } catch (Exception e) {
+                        logger.log(Level.FINE, "TPS 采集失败: " + e.getMessage());
+                    }
+                }
+                // 自动检查内存
+                checkMemory();
+                
                 PerformanceReport report = generateReport();
                 logger.log(Level.INFO, "[性能报告]\\n" + report.toString());
             }
@@ -332,8 +348,23 @@ public class PerformanceMonitor {
      * 停止报告定时任务
      */
     public void stopReportScheduler() {
+        // 先取消任务
+        if (reportTask != null) {
+            reportTask.cancel(false);
+            reportTask = null;
+        }
+        
+        // 再关闭线程池
         if (reportScheduler != null) {
             reportScheduler.shutdown();
+            try {
+                if (!reportScheduler.awaitTermination(5, TimeUnit.SECONDS)) {
+                    reportScheduler.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                reportScheduler.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
             reportScheduler = null;
             logger.log(Level.INFO, "性能报告定时任务已停止");
         }

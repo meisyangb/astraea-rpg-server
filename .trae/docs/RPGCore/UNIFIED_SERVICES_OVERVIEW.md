@@ -276,7 +276,7 @@ placeholder.register("points_balance", (player, params) -> {
 - [x] 创建 `PlaceholderService`
 - [ ] 迁移 GuangDianPoints (示例插件)
 - [ ] 编写迁移指南文档
-- [ ] 更新 FORBIDDEN_PATTERNS.md
+- [x] 更新 DEVELOPMENT_GUIDE.md
 
 ### Phase 2: 完善服务框架 (2-4周)
 
@@ -324,8 +324,8 @@ placeholder.register("points_balance", (player, params) -> {
 ## 🔗 相关文档
 
 - [架构升级指南](./ARCHITECTURE_UPGRADE_GUIDE.md) - 详细的迁移步骤
-- [FORBIDDEN_PATTERNS.md](../../rules/FORBIDDEN_PATTERNS.md) - 禁止模式清单
-- [CODE_TEMPLATES.md](../../rules/CODE_TEMPLATES.md) - 代码模板库
+- [DEVELOPMENT_GUIDE.md](../../rules/DEVELOPMENT_GUIDE.md) - 开发指南（禁止模式+代码模板）
+- [RPGCORE_API_REFERENCE.md](../reference/RPGCORE_API_REFERENCE.md) - API 参考手册
 - [Paper 1.21.6 特性审查](../FIXES/2026/04/paper-1.21.6-feature-review.md)
 
 ---

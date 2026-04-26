@@ -13,6 +13,7 @@ public class CaffeineCacheProvider implements CacheProvider {
 
     private final Cache<String, Object> cache;
     private final boolean recordStats;
+    private final int maxSize;
     private volatile Duration defaultTTL;
 
     public CaffeineCacheProvider(int maxSize, Duration defaultTTL, boolean recordStats) {
@@ -22,6 +23,7 @@ public class CaffeineCacheProvider implements CacheProvider {
     public CaffeineCacheProvider(int maxSize, Duration defaultTTL, boolean recordStats,
                                   boolean weakKeys, boolean weakValues, boolean softValues,
                                   Duration refreshInterval) {
+        this.maxSize = maxSize;
         this.defaultTTL = defaultTTL;
         this.recordStats = recordStats;
 
@@ -125,7 +127,7 @@ public class CaffeineCacheProvider implements CacheProvider {
         long evictionCount = stats.evictionCount();
         long size = cache.estimatedSize();
 
-        return new CacheStats(hitCount, missCount, evictionCount, size, 0);
+        return new CacheStats(hitCount, missCount, evictionCount, size, maxSize);
     }
 
     @Override

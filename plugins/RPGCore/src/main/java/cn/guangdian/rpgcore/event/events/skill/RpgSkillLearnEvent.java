@@ -10,32 +10,17 @@ import java.util.UUID;
 
 /**
  * 技能学习事件
- * 
+ *
  * <p>当玩家学习新技能时触发。</p>
- * 
- * <h3>使用示例：</h3>
- * <pre>{@code
- * // 发布事件
- * RpgSkillLearnEvent event = new RpgSkillLearnEvent(player, skillId, skillName, cost);
- * Bukkit.getPluginManager().callEvent(event);
- * 
- * if (!event.isCancelled()) {
- *     // 执行学习逻辑
- *     teachSkill(player, skillId);
- * }
- * 
- * // 订阅事件
- * @EventHandler
- * public void onSkillLearn(RpgSkillLearnEvent event) {
- *     Player player = event.getPlayer();
- *     String skillId = event.getSkillId();
- *     // 处理学习后逻辑，如发送消息、更新UI等
- * }
- * }</pre>
- * 
+ *
+ * <p><strong>已废弃</strong>：业务事件应定义在对应的业务插件中，而不是 RPGCore。
+ * 请迁移到 GuangDianClass 插件中的 {@code cn.guangdian.classsystem.event.SkillLearnEvent}。</p>
+ *
  * @author GuangDian
  * @since 1.0.0
+ * @deprecated 业务事件已迁移到对应插件。请使用 GuangDianClass 插件中的 SkillLearnEvent。
  */
+@Deprecated(since = "2.0.0", forRemoval = true)
 public class RpgSkillLearnEvent extends Event implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();

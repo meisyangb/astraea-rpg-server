@@ -13,6 +13,7 @@ import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
 import cn.guangdian.rpgcore.concurrency.PlayerLockManager;
 import cn.guangdian.rpgcore.concurrency.LockTimeoutException;
+import cn.guangdian.rpgcore.logging.LoggerFactory;
 import cn.guangdian.rpgcore.util.TextStripper;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -24,13 +25,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.slf4j.Logger;
 
 import java.time.Duration;
 import java.util.*;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Level;
 
 /**
  * 玩家属性管理器
@@ -40,6 +41,8 @@ import java.util.logging.Level;
  * - AsyncExecutor: 统一异步执行器
  */
 public class StatsManager {
+
+    private static final Logger logger = LoggerFactory.getLogger(StatsManager.class);
 
     private final Map<UUID, PlayerStats> playerStatsMap = new ConcurrentHashMap<>();
     private final Map<UUID, List<String>> playerSkillsMap = new ConcurrentHashMap<>();
@@ -111,9 +114,9 @@ public class StatsManager {
         initRPGCoreComponents();
         
         loadConfig();
-        plugin.getLogger().info("StatsManager initialized with RPGCore framework");
+        logger.info("StatsManager initialized with RPGCore framework");
     }
-    
+
     /**
      * 初始化 RPGCore 框架组件
      */
@@ -122,9 +125,9 @@ public class StatsManager {
         if (RPGCore.getInstance() != null) {
             this.lockManager = RPGCore.getInstance().getLockManager();
             this.asyncExecutor = RPGCore.getInstance().getAsyncExecutor();
-            plugin.getLogger().info("已连接 RPGCore 框架: PlayerLockManager, AsyncExecutor");
+            logger.info("已连接 RPGCore 框架: PlayerLockManager, AsyncExecutor");
         } else {
-            plugin.getLogger().warning("RPGCore 不可用，创建本地锁管理器");
+            logger.warn("RPGCore 不可用，创建本地锁管理器");
             // 创建本地锁管理器作为降级方案
             this.lockManager = new PlayerLockManager(plugin.getLogger(), 3000);
         }

@@ -1,0 +1,183 @@
+# RPGCore Grafana 监控面板配置
+#
+# 导入此 JSON 到 Grafana 创建 RPGCore 监控面板
+
+{
+  "dashboard": {
+    "title": "RPGCore 监控面板",
+    "uid": "rpgcore-dashboard",
+    "tags": ["minecraft", "rpgcore", "astraea"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 1,
+    "refresh": "10s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "JVM 内存使用",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+        "targets": [
+          {
+            "expr": "rpgcore_jvm_memory_used_bytes{area=\"heap\"}",
+            "legendFormat": "堆内存使用",
+            "refId": "A"
+          },
+          {
+            "expr": "rpgcore_jvm_memory_max_bytes{area=\"heap\"}",
+            "legendFormat": "堆内存最大",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {"format": "bytes", "label": "内存"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 2,
+        "title": "事件处理性能",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+        "targets": [
+          {
+            "expr": "rate(rpgcore_events_total[1m])",
+            "legendFormat": "事件发布速率",
+            "refId": "A"
+          },
+          {
+            "expr": "rate(rpgcore_events_duration_seconds_sum[1m]) / rate(rpgcore_events_duration_seconds_count[1m])",
+            "legendFormat": "平均处理时间",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {"format": "ops", "label": "事件/秒"},
+          {"format": "s", "label": "时间"}
+        ]
+      },
+      {
+        "id": 3,
+        "title": "数据库连接池",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+        "targets": [
+          {
+            "expr": "rpgcore_database_connections_active",
+            "legendFormat": "活跃连接",
+            "refId": "A"
+          },
+          {
+            "expr": "rpgcore_database_connections_leaked",
+            "legendFormat": "泄漏连接",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {"format": "short", "label": "连接数"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 4,
+        "title": "玩家锁统计",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+        "targets": [
+          {
+            "expr": "rate(rpgcore_locks_total[1m])",
+            "legendFormat": "锁获取速率",
+            "refId": "A"
+          },
+          {
+            "expr": "rate(rpgcore_locks_timeouts[1m])",
+            "legendFormat": "锁超时速率",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {"format": "ops", "label": "操作/秒"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 5,
+        "title": "缓存命中率",
+        "type": "gauge",
+        "gridPos": {"h": 8, "w": 6, "x": 0, "y": 16},
+        "targets": [
+          {
+            "expr": "rpgcore_cache_hit_rate",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "fieldOptions": {
+            "calcs": ["lastNotNull"],
+            "defaults": {
+              "max": 1,
+              "min": 0,
+              "unit": "percentunit"
+            }
+          }
+        }
+      },
+      {
+        "id": 6,
+        "title": "异步任务队列",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 6, "x": 6, "y": 16},
+        "targets": [
+          {
+            "expr": "rpgcore_async_pending_tasks",
+            "legendFormat": "待处理任务",
+            "refId": "A"
+          },
+          {
+            "expr": "rpgcore_async_active_threads",
+            "legendFormat": "活跃线程",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {"format": "short", "label": "数量"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 7,
+        "title": "服务器 TPS",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16},
+        "targets": [
+          {
+            "expr": "rpgcore_server_tps",
+            "legendFormat": "TPS",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {"format": "short", "label": "TPS", "max": 20, "min": 0},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 8,
+        "title": "GC 统计",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24},
+        "targets": [
+          {
+            "expr": "rate(rpgcore_jvm_gc_collection_seconds_sum[5m])",
+            "legendFormat": "{{gc}} GC 时间",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {"format": "s", "label": "时间"},
+          {"format": "short"}
+        ]
+      }
+    ]
+  }
+}

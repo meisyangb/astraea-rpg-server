@@ -77,8 +77,16 @@ public abstract class AbstractRPGPlugin extends JavaPlugin {
 
         // 使用 Guice 进行依赖注入
         if (GuiceSupport.isInitialized()) {
-            GuiceSupport.injectMembers(this);
-            getLogger().info("Guice 依赖注入完成");
+            try {
+                GuiceSupport.injectMembers(this);
+                getLogger().info("Guice 依赖注入完成");
+            } catch (Exception e) {
+                getLogger().warning("Guice 依赖注入失败: " + e.getMessage());
+                getLogger().log(java.util.logging.Level.WARNING, "注入异常详情", e);
+                // 注入失败不阻止插件启动，使用降级方案
+            }
+        } else {
+            getLogger().warning("Guice 未初始化，跳过依赖注入");
         }
 
         try {
@@ -87,7 +95,7 @@ public abstract class AbstractRPGPlugin extends JavaPlugin {
             getLogger().info(getPluginName() + " v" + getDescription().getVersion() + " 已启动");
         } catch (Exception e) {
             getLogger().severe("启动失败: " + e.getMessage());
-            e.printStackTrace();
+            getLogger().log(java.util.logging.Level.SEVERE, "启动异常详情", e);
             getServer().getPluginManager().disablePlugin(this);
         }
     }
@@ -108,27 +116,40 @@ public abstract class AbstractRPGPlugin extends JavaPlugin {
     }
     
     private boolean hookRPGCore() {
-        var plugin = Bukkit.getPluginManager().getPlugin("RPGCore");
-        if (plugin instanceof RPGCore core) {
+        RPGCore core = RPGCore.getInstance();
+        if (core != null && core.isFullyInitialized()) {
             this.rpgCore = core;
             this.externalServices = core.getExternalServices();
             this.scheduler = core.getScheduler();
             this.exceptionHandler = new cn.guangdian.rpgcore.exception.ExceptionHandlerImpl(this);
-            
+
             if (this.externalServices == null) {
                 getLogger().warning("[RPGCore Hook] externalServices is null, attempting direct access...");
                 this.externalServices = core.getExternalServices();
             }
-            
+
             if (this.externalServices != null) {
                 getLogger().info("[RPGCore Hook] Successfully hooked: " + getPluginName());
                 getLogger().info("[RPGCore Hook] ExternalServices status: " + this.externalServices.getExternalServiceStatus());
             } else {
                 getLogger().severe("[RPGCore Hook] Failed to get ExternalServices!");
             }
-            
+
             return true;
         }
+
+        // 降级：尝试从 PluginManager 获取（兼容旧代码）
+        var plugin = Bukkit.getPluginManager().getPlugin("RPGCore");
+        if (plugin instanceof RPGCore fallbackCore && fallbackCore.isFullyInitialized()) {
+            getLogger().warning("[RPGCore Hook] RPGCore.getInstance() returned null, using fallback via PluginManager");
+            this.rpgCore = fallbackCore;
+            this.externalServices = fallbackCore.getExternalServices();
+            this.scheduler = fallbackCore.getScheduler();
+            this.exceptionHandler = new cn.guangdian.rpgcore.exception.ExceptionHandlerImpl(this);
+            return true;
+        }
+
+        getLogger().severe("[RPGCore Hook] RPGCore is not available or not fully initialized!");
         return false;
     }
     

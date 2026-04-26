@@ -1,16 +1,12 @@
 ---
-id: mem-fix-scheduler-migration
-type: memory
-category: fixes
+id: fix-scheduler-migration
+type: fix
+category: scheduler
 title: "调度器迁移修复方案"
 description: "BukkitRunnable 和 Bukkit.getScheduler() 迁移到 RPGCore SyncScheduler 的完整方案"
 date: 2026-04-10
 version: 1.0.0
 tags: [fix, scheduler, migration, bukkitrunnable, syncscheduler, pattern]
-related:
-  - log-2026-04-10-scheduler-migration
-  - mem-pattern-scheduler-usage
-  - doc-skill-minecraft-rpg-architect
 status: published
 ---
 
@@ -199,12 +195,6 @@ protected void onPluginDisable() {
 - [ ] 任务ID已保存（如需单独取消）
 - [ ] `onDisable()` 中调用了 `cancelAllTasks()`
 - [ ] 检查了 `scheduler != null`
-
----
-
-## 相关日志
-
-- [2026-04-10 调度器迁移日志](../../logs/categories/migration/2026-04-10-scheduler-migration.md)
 
 ---
 

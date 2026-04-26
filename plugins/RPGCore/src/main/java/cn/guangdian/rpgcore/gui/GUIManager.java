@@ -36,6 +36,7 @@ public final class GUIManager {
     private boolean initialized = false;
     private Logger logger;
     private Plugin plugin;
+    private MiniMessageService miniMessageService;
     private final Map<String, MenuData> menus;
     private final Map<UUID, String> playerOpenMenus;
     private BiFunction<String, Player, String> defaultPlaceholderProcessor;
@@ -45,11 +46,24 @@ public final class GUIManager {
         this.playerOpenMenus = new ConcurrentHashMap<>();
     }
 
-    public static synchronized GUIManager getInstance() {
-        if (instance == null) {
-            instance = new GUIManager();
+    /**
+     * 获取 GUIManager 单例实例
+     *
+     * <p>使用双重检查锁定（DCL）实现线程安全的延迟初始化。</p>
+     *
+     * @return GUIManager 实例
+     */
+    public static GUIManager getInstance() {
+        GUIManager result = instance;
+        if (result == null) {
+            synchronized (GUIManager.class) {
+                result = instance;
+                if (result == null) {
+                    instance = result = new GUIManager();
+                }
+            }
         }
-        return instance;
+        return result;
     }
 
     public void initialize(@NotNull RPGCore plugin) {
@@ -60,6 +74,7 @@ public final class GUIManager {
 
         this.plugin = plugin;
         this.logger = plugin.getLogger();
+        this.miniMessageService = plugin.getMiniMessageService();
 
         listener = new GUIListener();
         PluginManager pm = plugin.getServer().getPluginManager();
@@ -283,12 +298,12 @@ public final class GUIManager {
     public void openMenu(@NotNull Player player, @NotNull String menuId) {
         MenuData menuData = menus.get(menuId.toLowerCase());
         if (menuData == null) {
-            player.sendMessage(MiniMessageService.getInstance().red("菜单不存在: " + menuId));
+            player.sendMessage(miniMessageService.red("菜单不存在: " + menuId));
             return;
         }
 
         String processedTitle = processDefaultPlaceholders(menuData.getTitle(), player);
-        Component title = MiniMessageService.getInstance().colorize(processedTitle);
+        Component title = miniMessageService.colorize(processedTitle);
 
         MenuHolder holder = new MenuHolder(menuData.getId());
         Inventory inventory = Bukkit.createInventory(holder, menuData.getSize(), title);
