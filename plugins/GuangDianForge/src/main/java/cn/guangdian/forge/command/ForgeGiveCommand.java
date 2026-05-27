@@ -3,82 +3,54 @@ package cn.guangdian.forge.command;
 import cn.guangdian.forge.GuangDianForge;
 import cn.guangdian.forge.listener.LearnRecipeListener;
 import cn.guangdian.forge.model.ForgeRecipe;
-import cn.guangdian.rpgcore.command.BaseCommand;
-import cn.guangdian.rpgcore.command.CommandContext;
-import cn.guangdian.rpgcore.command.CommandInfo;
-import cn.guangdian.rpgcore.command.Description;
-import cn.guangdian.rpgcore.command.SubCommand;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
- * 锻造图纸给予命令 - 使用 RPGCore CommandFramework
- *
- * @author Astraea RPG Team
- * @since 1.2.0
+ * /forgegive 命令 - 给予图纸书
  */
-@CommandInfo(name = "forgegive", description = "给予锻造图纸", permission = "guangdian.forge.admin")
-public class ForgeGiveCommand extends BaseCommand {
+public class ForgeGiveCommand implements CommandExecutor {
     private final GuangDianForge plugin;
 
     public ForgeGiveCommand(GuangDianForge plugin) {
         this.plugin = plugin;
     }
 
-    /**
-     * 给予图纸书
-     */
-    @SubCommand(name = "", minArgs = 2)
-    @Description("给予玩家图纸书")
-    public void giveDefault(CommandContext ctx) {
-        String targetName = ctx.getStringArg(0);
-        String recipeId = ctx.getStringArg(1).toLowerCase();
-
-        Player target = Bukkit.getPlayer(targetName);
-        if (target == null) {
-            ctx.sendError("玩家不在线!");
-            return;
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!sender.hasPermission("guangdian.forge.admin")) {
+            sender.sendMessage(Component.text("没有权限!", NamedTextColor.RED));
+            return true;
         }
-
+        
+        if (args.length < 2) {
+            sender.sendMessage(Component.text("用法: /forgegive <玩家> <图纸ID>", NamedTextColor.RED));
+            return true;
+        }
+        
+        Player target = Bukkit.getPlayer(args[0]);
+        if (target == null) {
+            sender.sendMessage(Component.text("玩家不在线!", NamedTextColor.RED));
+            return true;
+        }
+        
+        String recipeId = args[1].toLowerCase();
         ForgeRecipe recipe = plugin.getRecipeManager().getRecipe(recipeId);
         if (recipe == null) {
-            ctx.sendError("图纸不存在: " + recipeId);
-            return;
+            sender.sendMessage(Component.text("图纸不存在: " + recipeId, NamedTextColor.RED));
+            return true;
         }
-
+        
         ItemStack book = LearnRecipeListener.createRecipeBook(recipe, plugin);
         target.getInventory().addItem(book);
-        target.sendMessage(msg.colorize("<green>你获得了一张图纸: " + recipe.getDisplayName()));
-        ctx.sendSuccess("已给予 " + target.getName() + " 图纸: " + recipe.getDisplayName());
-    }
-
-    @Override
-    public List<String> onTabComplete(java.lang.reflect.Method subCommandMethod, CommandContext context) {
-        List<String> completions = new ArrayList<>();
-
-        if (context.getArgCount() == 1) {
-            // 玩家名称补全
-            String partial = context.getStringArgOrDefault(0, "").toLowerCase();
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player.getName().toLowerCase().startsWith(partial)) {
-                    completions.add(player.getName());
-                }
-            }
-        } else if (context.getArgCount() == 2) {
-            // 图纸ID补全
-            String partial = context.getStringArgOrDefault(1, "").toLowerCase();
-            for (ForgeRecipe recipe : plugin.getRecipeManager().getAllRecipes()) {
-                if (recipe.getId().toLowerCase().startsWith(partial)) {
-                    completions.add(recipe.getId());
-                }
-            }
-        }
-
-        return completions;
+        target.sendMessage(Component.text("你获得了一张图纸: " + recipe.getDisplayName(), NamedTextColor.GREEN));
+        sender.sendMessage(Component.text("已给予 " + target.getName() + " 图纸: " + recipe.getDisplayName(), NamedTextColor.GREEN));
+        return true;
     }
 }

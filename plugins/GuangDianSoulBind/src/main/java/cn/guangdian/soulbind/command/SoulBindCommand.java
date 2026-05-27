@@ -1,10 +1,10 @@
 package cn.guangdian.soulbind.command;
 
-import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.soulbind.GuangDianSoulBind;
 import cn.guangdian.soulbind.api.SoulBindService;
 import cn.guangdian.soulbind.manager.ConfigManager;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -23,13 +23,11 @@ public class SoulBindCommand implements CommandExecutor, TabCompleter {
     private final GuangDianSoulBind plugin;
     private final SoulBindService service;
     private final ConfigManager config;
-    private final MiniMessageService miniMessage;
 
     public SoulBindCommand(GuangDianSoulBind plugin) {
         this.plugin = plugin;
         this.service = plugin.getService();
         this.config = plugin.getConfigManager();
-        this.miniMessage = MiniMessageService.getInstance();
     }
 
     @Override
@@ -168,7 +166,7 @@ public class SoulBindCommand implements CommandExecutor, TabCompleter {
 
     private void sendMessage(CommandSender sender, String message) {
         if (message == null || message.isEmpty()) return;
-        Component component = miniMessage.colorize(message);
+        Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
         sender.sendMessage(component);
     }
 

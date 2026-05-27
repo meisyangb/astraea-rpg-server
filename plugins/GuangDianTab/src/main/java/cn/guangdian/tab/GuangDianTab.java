@@ -2,27 +2,27 @@ package cn.guangdian.tab;
 
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.SyncScheduler;
-import cn.guangdian.rpgcore.command.CommandFramework;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.tab.adapter.TabServiceAdapter;
-import cn.guangdian.tab.command.TabCommand;
 import cn.guangdian.tab.placeholder.TabPlaceholder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.ArrayList;
@@ -35,12 +35,11 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class GuangDianTab extends AbstractRPGPlugin implements Listener {
+public class GuangDianTab extends AbstractRPGPlugin implements Listener, TabCompleter {
 
     private static GuangDianTab instance;
     private TabServiceAdapter tabServiceAdapter;
-    private TabCommand tabCommand;
-
+    
     private long refreshTaskId = -1;
     private long headerFooterTaskId = -1;
 
@@ -90,9 +89,6 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener {
 
     @Override
     protected void onPluginDisable() {
-        // 注销命令
-        unregisterCommands();
-
         // 注销 RPGCore 服务适配器
         if (tabServiceAdapter != null) {
             tabServiceAdapter.unregister();
@@ -111,7 +107,7 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener {
         }
         getLogger().info("GuangDianTab disabled.");
     }
-
+    
     @Override
     protected String getPluginName() {
         return "GuangDianTab";
@@ -136,88 +132,14 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener {
     }
 
     private void registerCommands() {
-        // 使用 CommandFramework 注册命令
-        RPGCore rpgCore = RPGCore.getInstance();
-        if (rpgCore != null) {
-            try {
-                CommandFramework framework = CommandFramework.getInstance();
-                tabCommand = new TabCommand(this);
-                framework.registerCommand(tabCommand);
-                getLogger().info("已使用 CommandFramework 注册命令");
-            } catch (Exception e) {
-                getLogger().warning("CommandFramework 注册失败，使用降级方案: " + e.getMessage());
-                registerFallbackCommands();
-            }
-        } else {
-            getLogger().warning("RPGCore 不可用，使用降级命令方案");
-            registerFallbackCommands();
-        }
-    }
-
-    private void unregisterCommands() {
-        if (tabCommand != null) {
-            RPGCore rpgCore = RPGCore.getInstance();
-            if (rpgCore != null) {
-                try {
-                    CommandFramework framework = CommandFramework.getInstance();
-                    framework.unregisterCommand("gdtab");
-                } catch (Exception e) {
-                    getLogger().warning("注销命令失败: " + e.getMessage());
-                }
-            }
-        }
-    }
-
-    private void registerFallbackCommands() {
-        // 降级方案：使用传统 Bukkit 命令
         if (getCommand("gdtab") != null) {
-            getCommand("gdtab").setExecutor(new FallbackCommandExecutor(this));
-            getCommand("gdtab").setTabCompleter(new FallbackTabCompleter());
+            getCommand("gdtab").setExecutor(this);
+            getCommand("gdtab").setTabCompleter(this);
         }
         if (getCommand("tablist") != null) {
-            getCommand("tablist").setExecutor(new FallbackCommandExecutor(this));
+            getCommand("tablist").setExecutor(this);
         }
     }
-
-    // ==================== 公共方法供命令类使用 ====================
-
-    public void restartTasks() {
-        if (scheduler != null) {
-            if (refreshTaskId >= 0) {
-                scheduler.cancelTask(refreshTaskId);
-            }
-            if (headerFooterTaskId >= 0) {
-                scheduler.cancelTask(headerFooterTaskId);
-            }
-        }
-        startTasks();
-    }
-
-    public long getRefreshTicks() {
-        return refreshTicks;
-    }
-
-    public long getHeaderFooterTicks() {
-        return headerFooterTicks;
-    }
-
-    public ExternalServiceIntegration getExternalServices() {
-        return externalServices;
-    }
-
-    public int getCachedNamesCount() {
-        return lastNames.size();
-    }
-
-    public int getCachedHeadersCount() {
-        return lastHeaders.size();
-    }
-
-    public int getCachedFootersCount() {
-        return lastFooters.size();
-    }
-
-    // ==================== 内部方法 ====================
 
     private PlayerCache getOrCreateCache(Player player) {
         long expireMs = config.getLong("cache.expire-ms", 30000L);
@@ -253,7 +175,7 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(this, this);
     }
 
-    public void loadFormats() {
+    private void loadFormats() {
         refreshTicks = Math.max(1L, config.getLong("refresh-interval", 1000L) / 50L);
         headerFooterTicks = Math.max(1L, config.getLong("header.refresh-interval", 1000L) / 50L);
 
@@ -294,7 +216,7 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener {
             getLogger().warning("Scheduler not available, tasks not started");
             return;
         }
-
+        
         refreshTaskId = scheduler.runSyncRepeating(() -> {
             cachedTps.set(new CachedTps(Bukkit.getTPS()));
             refreshAll();
@@ -605,13 +527,13 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener {
         if (input == null || input.isEmpty()) {
             return "";
         }
-
+        
         // 如果 miniMessage 服务不可用，使用简单的字符替换
         if (miniMessage == null) {
             getLogger().warning("MiniMessageService 不可用，使用降级处理");
             return simpleMiniMessageToLegacy(input);
         }
-
+        
         try {
             // 使用 RPGCore MiniMessageService 将 MiniMessage 转换为 legacy 格式
             String result = miniMessage.legacyColorize(input);
@@ -626,7 +548,7 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener {
             return simpleMiniMessageToLegacy(input);
         }
     }
-
+    
     /**
      * 简单的 MiniMessage 到 legacy 格式转换（降级方案）
      */
@@ -695,12 +617,101 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onWorldChange(PlayerChangedWorldEvent event) {
-        Player player = event.getPlayer();
-        scheduler.runSyncLater(() -> {
-            updatePlayerTab(player);
-            updateHeaderFooter(player);
-        }, 1L);
+    public void onMove(PlayerMoveEvent event) {
+        if (event.getTo() == null) {
+            return;
+        }
+        if (!event.getFrom().getWorld().equals(event.getTo().getWorld())) {
+            Player player = event.getPlayer();
+            scheduler.runSyncLater(() -> {
+                updatePlayerTab(player);
+                updateHeaderFooter(player);
+            }, 1L);
+        }
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (command.getName().equalsIgnoreCase("tablist")) {
+            sendInfo(sender);
+            return true;
+        }
+
+        if (!command.getName().equalsIgnoreCase("gdtab")) {
+            return false;
+        }
+
+        if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
+            sendHelp(sender);
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("reload")) {
+            if (!sender.hasPermission("guangdian.tab.reload")) {
+                sender.sendMessage(translate(config.getString("messages.no-permission", "<red>No permission.")));
+                return true;
+            }
+            reloadConfig();
+            config = getConfig();
+            loadFormats();
+            if (scheduler != null) {
+                if (refreshTaskId >= 0) {
+                    scheduler.cancelTask(refreshTaskId);
+                }
+                if (headerFooterTaskId >= 0) {
+                    scheduler.cancelTask(headerFooterTaskId);
+                }
+            }
+            startTasks();
+            refreshAll();
+            updateAllHeadersAndFooters();
+            sender.sendMessage(translate(config.getString("messages.config-reloaded", "<green>GuangDianTab reloaded.")));
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("info")) {
+            sendInfo(sender);
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("cache")) {
+            sender.sendMessage(translate("<yellow>Cached names: <white>" + lastNames.size()));
+            sender.sendMessage(translate("<yellow>Cached headers: <white>" + lastHeaders.size()));
+            sender.sendMessage(translate("<yellow>Cached footers: <white>" + lastFooters.size()));
+            return true;
+        }
+
+        sendHelp(sender);
+        return true;
+    }
+
+    private void sendHelp(CommandSender sender) {
+        sender.sendMessage(translate("<gold>/gdtab reload <gray>Reload config"));
+        sender.sendMessage(translate("<gold>/gdtab info <gray>Plugin info"));
+        sender.sendMessage(translate("<gold>/gdtab cache <gray>Cache info"));
+    }
+
+    private void sendInfo(CommandSender sender) {
+        sender.sendMessage(translate("<gold>GuangDianTab <gray>v" + getDescription().getVersion()));
+        sender.sendMessage(translate("<yellow>Refresh: <white>" + (refreshTicks * 50L) + "ms"));
+        sender.sendMessage(translate("<yellow>Header/Footer: <white>" + (headerFooterTicks * 50L) + "ms"));
+        if (externalServices != null) {
+            sender.sendMessage(translate("<yellow>External Services: <white>" + externalServices.getExternalServiceStatus()));
+        } else {
+            sender.sendMessage(translate("<yellow>External Services: <red>not connected"));
+        }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        List<String> completions = new ArrayList<>();
+        if (args.length == 1) {
+            completions.add("reload");
+            completions.add("info");
+            completions.add("cache");
+            completions.add("help");
+        }
+        return completions;
     }
 
     public static GuangDianTab getInstance() {

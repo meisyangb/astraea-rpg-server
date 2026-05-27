@@ -28,7 +28,7 @@ public class RaidCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(net.kyori.adventure.text.Component.text("该命令只能由玩家执行").color(net.kyori.adventure.text.format.NamedTextColor.RED));
+            sender.sendMessage("§c该命令只能由玩家执行");
             return true;
         }
 

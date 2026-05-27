@@ -13,22 +13,18 @@ import java.util.function.Supplier;
  *
  * <h3>可用模式：</h3>
  * <ul>
- *   <li><b>caffeine</b> - 推荐模式，使用 Caffeine 库（业界最佳实践）</li>
- *   <li><b>lightweight</b> - 轻量模式，已废弃，适用于中小型服务器</li>
- *   <li><b>high_performance</b> - 高性能模式，已废弃，适用于大型服务器</li>
+ *   <li><b>lightweight</b> - 轻量模式，适用于中小型服务器（默认）</li>
+ *   <li><b>high_performance</b> - 高性能模式，适用于大型服务器</li>
  * </ul>
- *
- * <h3>推荐配置：</h3>
- * <pre>{@code
- * // 推荐使用 Caffeine 模式
- * CacheProvider cache = new TTLCacheManager(2000, Duration.ofMinutes(30), true, Mode.CAFFEINE);
- * }</pre>
  *
  * <h3>选择建议：</h3>
  * <table border="1">
  *   <tr><th>场景</th><th>推荐模式</th></tr>
- *   <tr><td>所有场景</td><td>caffeine（推荐）</td></tr>
- *   <tr><td>向后兼容</td><td>lightweight 或 high_performance</td></tr>
+ *   <tr><td>在线玩家 &lt; 50</td><td>lightweight</td></tr>
+ *   <tr><td>在线玩家 50-100</td><td>lightweight 或 high_performance</td></tr>
+ *   <tr><td>在线玩家 &gt; 100</td><td>high_performance</td></tr>
+ *   <tr><td>缓存条目 &lt; 1000</td><td>lightweight</td></tr>
+ *   <tr><td>缓存条目 &gt; 1000</td><td>high_performance</td></tr>
  * </table>
  *
  * @author GuangDian
@@ -41,28 +37,23 @@ public class TTLCacheManager implements CacheProvider {
      */
     public enum Mode {
         /**
-         * Caffeine 模式 - 推荐
+         * 轻量模式 - 适用于中小型服务器
          * <ul>
-         *   <li>业界成熟的缓存库</li>
-         *   <li>高性能、低延迟</li>
-         *   <li>完善的 TTL、LRU、统计功能</li>
-         *   <li>线程安全</li>
+         *   <li>无锁读取</li>
+         *   <li>简单淘汰</li>
+         *   <li>低内存占用</li>
          * </ul>
          */
-        CAFFEINE,
-
-        /**
-         * 轻量模式 - 已废弃
-         * @deprecated 使用 {@link #CAFFEINE} 替代
-         */
-        @Deprecated(since = "2.0.0", forRemoval = false)
         LIGHTWEIGHT,
 
         /**
-         * 高性能模式 - 已废弃
-         * @deprecated 使用 {@link #CAFFEINE} 替代
+         * 高性能模式 - 适用于大型服务器
+         * <ul>
+         *   <li>O(1) LRU淘汰</li>
+         *   <li>Pattern缓存</li>
+         *   <li>增量清理</li>
+         * </ul>
          */
-        @Deprecated(since = "2.0.0", forRemoval = false)
         HIGH_PERFORMANCE
     }
 
@@ -71,10 +62,10 @@ public class TTLCacheManager implements CacheProvider {
     private final Mode mode;
 
     /**
-     * 创建缓存管理器（默认 Caffeine 模式 - 推荐）
+     * 创建缓存管理器（默认轻量模式）
      */
     public TTLCacheManager(int maxSize, Duration defaultTTL, boolean recordStats) {
-        this(maxSize, defaultTTL, recordStats, Mode.CAFFEINE);
+        this(maxSize, defaultTTL, recordStats, Mode.LIGHTWEIGHT);
     }
 
     /**
@@ -86,31 +77,9 @@ public class TTLCacheManager implements CacheProvider {
      * @param mode 缓存模式
      */
     public TTLCacheManager(int maxSize, Duration defaultTTL, boolean recordStats, Mode mode) {
-        this(maxSize, defaultTTL, recordStats, mode, false, false, false, Duration.ZERO);
-    }
-
-    /**
-     * 创建缓存管理器（完整配置）
-     *
-     * @param maxSize 最大缓存大小
-     * @param defaultTTL 默认过期时间
-     * @param recordStats 是否记录统计
-     * @param mode 缓存模式
-     * @param weakKeys 是否启用弱引用键
-     * @param weakValues 是否启用弱引用值
-     * @param softValues 是否启用软引用值
-     * @param refreshInterval 刷新间隔
-     */
-    public TTLCacheManager(int maxSize, Duration defaultTTL, boolean recordStats, Mode mode,
-                           boolean weakKeys, boolean weakValues, boolean softValues,
-                           Duration refreshInterval) {
         this.mode = mode;
 
         switch (mode) {
-            case CAFFEINE:
-                this.delegate = new CaffeineCacheProvider(maxSize, defaultTTL, recordStats,
-                    weakKeys, weakValues, softValues, refreshInterval);
-                break;
             case HIGH_PERFORMANCE:
                 this.delegate = new HighPerformanceCacheProvider(maxSize, defaultTTL, recordStats);
                 break;
@@ -122,10 +91,10 @@ public class TTLCacheManager implements CacheProvider {
     }
 
     /**
-     * 创建缓存管理器（默认配置，Caffeine 模式）
+     * 创建缓存管理器（默认配置，轻量模式）
      */
     public TTLCacheManager() {
-        this(1000, Duration.ofMinutes(30), true, Mode.CAFFEINE);
+        this(1000, Duration.ofMinutes(30), true, Mode.LIGHTWEIGHT);
     }
 
     /**

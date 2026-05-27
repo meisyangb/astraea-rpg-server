@@ -5,7 +5,7 @@ import cn.guangdian.forge.model.ForgeRecipe;
 import cn.guangdian.forge.model.PlayerForgeData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -25,7 +25,6 @@ public class RecipeSelectGUI implements InventoryHolder {
     private final GuangDianForge plugin;
     private final Player player;
     private final Inventory inventory;
-    private final MiniMessage miniMessage;
     
     private static final int SIZE = 27;
     private int pageIndex = 0;
@@ -33,7 +32,6 @@ public class RecipeSelectGUI implements InventoryHolder {
     public RecipeSelectGUI(GuangDianForge plugin, Player player) {
         this.plugin = plugin;
         this.player = player;
-        this.miniMessage = plugin.getMiniMessageParser();
         this.inventory = Bukkit.createInventory(this, SIZE, 
             Component.text("锻造图纸", NamedTextColor.GOLD));
     }
@@ -101,8 +99,9 @@ public class RecipeSelectGUI implements InventoryHolder {
         
         ItemMeta meta = item.getItemMeta();
         
-        // 使用MiniMessage解析显示名称
-        meta.displayName(miniMessage.deserialize(recipe.getDisplayName()));
+        // 使用Legacy序列化器处理&颜色代码
+        meta.displayName(LegacyComponentSerializer.legacyAmpersand()
+            .deserialize(recipe.getDisplayName()));
         
         List<Component> lore = new ArrayList<>();
         lore.add(Component.text("等级要求: " + recipe.getRequiredForgeLevel(), NamedTextColor.GRAY));
@@ -112,8 +111,8 @@ public class RecipeSelectGUI implements InventoryHolder {
         
         recipe.getIngredients().forEach((key, amt) -> {
             String displayName = recipe.getIngredientDisplayName(key);
-            // 使用MiniMessage解析材料名称
-            lore.add(miniMessage.deserialize("  " + displayName + " x" + amt));
+            // 使用Legacy序列化器处理§颜色代码
+            lore.add(LegacyComponentSerializer.legacySection().deserialize("  " + displayName + " x" + amt));
         });
         
         lore.add(Component.empty());

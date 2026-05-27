@@ -4,10 +4,8 @@ import cn.guangdian.collection.GuangDianCollection;
 import cn.guangdian.collection.api.CollectionService;
 import cn.guangdian.collection.model.*;
 import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.api.ServiceRegistry;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.service.api.PointsService;
-import cn.guangdian.rpgitems.api.RPGItemsAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -28,20 +26,14 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import java.util.logging.Logger;
-
 public class CollectionServiceImpl implements CollectionService {
-    private static final Logger logger = Logger.getLogger("GuangDianCollection");
-
+    
     private final GuangDianCollection plugin;
     private final Map<String, CollectionSet> sets = new ConcurrentHashMap<>();
     private final Map<String, CollectionCategory> categories = new ConcurrentHashMap<>();
     private final Map<UUID, PlayerCollectionData> playerDataCache = new ConcurrentHashMap<>();
-
+    
     private File playerDataFolder;
-
-    // RPGCore 服务引用（通过 ServiceRegistry 获取）
-    private RPGItemsAPI rpgItemsAPI;
     
     private static final NamespacedKey MYTHIC_TYPE_KEY = new NamespacedKey("mythicmobs", "type");
     private static final NamespacedKey MYTHIC_OLD_KEY = new NamespacedKey("mythicmobs", "item");
@@ -52,34 +44,7 @@ public class CollectionServiceImpl implements CollectionService {
         if (!playerDataFolder.exists()) {
             playerDataFolder.mkdirs();
         }
-        initializeRPGCoreServices();
         loadData();
-    }
-
-    /**
-     * 初始化 RPGCore 服务（通过 ServiceRegistry 解耦）
-     */
-    private void initializeRPGCoreServices() {
-        RPGCore rpgCore = RPGCore.getInstance();
-        if (rpgCore == null) {
-            plugin.getLogger().warning("RPGCore 未加载，RPGItems 集成功能不可用");
-            return;
-        }
-
-        ServiceRegistry serviceRegistry = rpgCore.getServiceRegistry();
-        if (serviceRegistry == null) {
-            plugin.getLogger().warning("ServiceRegistry 不可用，RPGItems 集成功能不可用");
-            return;
-        }
-
-        // 通过 ServiceRegistry 获取 RPGItemsAPI（解耦方式）
-        java.util.Optional<RPGItemsAPI> apiOpt = serviceRegistry.getOptionalService(RPGItemsAPI.class);
-        if (apiOpt.isPresent()) {
-            this.rpgItemsAPI = apiOpt.get();
-            plugin.getLogger().info("RPGItems 集成已启用（通过 ServiceRegistry）");
-        } else {
-            plugin.getLogger().info("RPGItems 服务未注册，RPGItems 集成功能不可用");
-        }
     }
     
     private void loadData() {
@@ -170,14 +135,9 @@ public class CollectionServiceImpl implements CollectionService {
             String fullId = category.getId() + "." + entryId;
             String typeStr = entrySection.getString("type", "VANILLA");
             
-            CollectionEntry.EntryType entryType;
-            if (typeStr.equals("MYTHICMOBS")) {
-                entryType = CollectionEntry.EntryType.MYTHICMOBS_ITEM;
-            } else if (typeStr.equals("RPGITEMS")) {
-                entryType = CollectionEntry.EntryType.RPGITEMS_ITEM;
-            } else {
-                entryType = CollectionEntry.EntryType.VANILLA_ITEM;
-            }
+            CollectionEntry.EntryType entryType = typeStr.equals("MYTHICMOBS") 
+                ? CollectionEntry.EntryType.MYTHICMOBS_ITEM 
+                : CollectionEntry.EntryType.VANILLA_ITEM;
             
             CollectionEntry entry = new CollectionEntry(
                 fullId, 
@@ -196,10 +156,8 @@ public class CollectionServiceImpl implements CollectionService {
                 } catch (IllegalArgumentException e) {
                     entry.setMaterial(Material.STONE);
                 }
-            } else if (entryType == CollectionEntry.EntryType.MYTHICMOBS_ITEM) {
+            } else {
                 entry.setMythicId(entrySection.getString("mythic-id", ""));
-            } else if (entryType == CollectionEntry.EntryType.RPGITEMS_ITEM) {
-                entry.setRpgItemId(entrySection.getString("rpg-item-id", ""));
             }
             
             ConfigurationSection rewardSection = entrySection.getConfigurationSection("reward");
@@ -308,8 +266,6 @@ public class CollectionServiceImpl implements CollectionService {
                 return matchesVanillaItem(entry, item);
             case MYTHICMOBS_ITEM:
                 return matchesMythicMobsItem(entry, item);
-            case RPGITEMS_ITEM:
-                return matchesRPGItemsItem(entry, item);
             default:
                 return false;
         }
@@ -327,24 +283,6 @@ public class CollectionServiceImpl implements CollectionService {
         if (mythicId == null) return false;
         
         return mythicId.equals(entry.getMythicId());
-    }
-    
-    private boolean matchesRPGItemsItem(CollectionEntry entry, ItemStack item) {
-        if (entry.getRpgItemId() == null || entry.getRpgItemId().isEmpty()) return false;
-        
-        String rpgItemId = getRPGItemsId(item);
-        if (rpgItemId == null) return false;
-        
-        return rpgItemId.equals(entry.getRpgItemId());
-    }
-    
-    private String getRPGItemsId(ItemStack item) {
-        if (item == null) return null;
-
-        // 使用通过 ServiceRegistry 获取的 RPGItemsAPI（解耦方式）
-        if (rpgItemsAPI == null) return null;
-
-        return rpgItemsAPI.getItemId(item).orElse(null);
     }
     
     private String getMythicMobsId(ItemStack item) {
@@ -408,9 +346,7 @@ public class CollectionServiceImpl implements CollectionService {
                     (float) plugin.getConfigManager().getNotifyVolume(),
                     (float) plugin.getConfigManager().getNotifyPitch());
             }
-        } catch (Exception e) {
-            logger.warning("播放收集音效失败: " + e.getMessage());
-        }
+        } catch (Exception ignored) {}
         
         if (category != null && isCategoryComplete(player, entry.getCategoryId())) {
             String completeMsg = plugin.getConfigManager().getMessage("category-complete")

@@ -1,7 +1,7 @@
 package cn.guangdian.rpgcore.command;
 
 import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.message.MessageServiceImpl;
+import cn.guangdian.rpgcore.message.UnifiedMessageService;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -51,30 +51,24 @@ import java.util.logging.Logger;
  */
 public final class CommandFramework implements CommandExecutor, TabCompleter {
 
-    private static volatile CommandFramework instance;
+    private static CommandFramework instance;
 
     private final Map<String, BaseCommand> commands;
     private final Logger logger;
-    private final MessageServiceImpl msg;
+    private final UnifiedMessageService msg;
 
     private CommandFramework() {
         this.commands = new HashMap<>();
         RPGCore rpgCore = RPGCore.getInstance();
         this.logger = rpgCore != null ? rpgCore.getLogger() : Logger.getLogger("CommandFramework");
-        this.msg = MessageServiceImpl.getInstance();
+        this.msg = UnifiedMessageService.getInstance();
     }
 
-    public static CommandFramework getInstance() {
-        CommandFramework result = instance;
-        if (result == null) {
-            synchronized (CommandFramework.class) {
-                result = instance;
-                if (result == null) {
-                    instance = result = new CommandFramework();
-                }
-            }
+    public static synchronized CommandFramework getInstance() {
+        if (instance == null) {
+            instance = new CommandFramework();
         }
-        return result;
+        return instance;
     }
 
     /**
@@ -88,13 +82,6 @@ public final class CommandFramework implements CommandExecutor, TabCompleter {
         }
 
         String commandName = info.name().toLowerCase();
-        
-        // 验证命令名称安全性
-        if (!isValidCommandName(commandName)) {
-            logger.severe("[CommandFramework] 命令名称包含非法字符: " + commandName);
-            return;
-        }
-        
         commands.put(commandName, command);
 
         // 注册到 Bukkit (Paper 1.21.6 兼容)
@@ -109,26 +96,6 @@ public final class CommandFramework implements CommandExecutor, TabCompleter {
                 logger.warning("[CommandFramework] 未在 plugin.yml 中找到命令: " + commandName);
             }
         }
-    }
-
-    /**
-     * 验证命令名称安全性
-     */
-    private boolean isValidCommandName(String name) {
-        if (name == null || name.isEmpty()) {
-            return false;
-        }
-        // 只允许字母、数字和下划线
-        return name.matches("^[a-zA-Z0-9_]+$");
-    }
-
-    /**
-     * 验证子命令方法签名
-     */
-    private boolean isValidSubCommandMethod(Method method) {
-        // 方法必须是 public，返回 void，参数为 CommandContext
-        Class<?>[] params = method.getParameterTypes();
-        return params.length == 1 && params[0] == CommandContext.class;
     }
 
     /**
@@ -151,7 +118,7 @@ public final class CommandFramework implements CommandExecutor, TabCompleter {
         BaseCommand baseCommand = commands.get(commandName);
 
         if (baseCommand == null) {
-            msg.sendError(sender, "未知命令!");
+            msg.sendMessage(sender, "<red>未知命令!");
             return true;
         }
 
@@ -159,14 +126,14 @@ public final class CommandFramework implements CommandExecutor, TabCompleter {
         CommandInfo info = baseCommand.getClass().getAnnotation(CommandInfo.class);
         if (info != null && !info.permission().isEmpty()) {
             if (!sender.hasPermission(info.permission())) {
-                msg.sendError(sender, "没有权限执行此命令!");
+                msg.sendMessage(sender, "<red>没有权限执行此命令!");
                 return true;
             }
         }
 
         // 检查是否仅玩家可用
         if (info != null && info.playerOnly() && !(sender instanceof Player)) {
-            msg.sendError(sender, "此命令只能由玩家执行!");
+            msg.sendMessage(sender, "<red>此命令只能由玩家执行!");
             return true;
         }
 
@@ -182,15 +149,8 @@ public final class CommandFramework implements CommandExecutor, TabCompleter {
         // 查找子命令
         Method subCommandMethod = baseCommand.getSubCommandMethod(subCommandName);
         if (subCommandMethod == null) {
-            msg.sendError(sender, "未知子命令: " + subCommandName);
+            msg.sendMessage(sender, "<red>未知子命令: " + subCommandName);
             baseCommand.showHelp(sender);
-            return true;
-        }
-
-        // 验证子命令方法签名安全性
-        if (!isValidSubCommandMethod(subCommandMethod)) {
-            msg.sendError(sender, "子命令实现异常，请联系管理员");
-            logger.severe("[CommandFramework] 子命令方法签名无效: /" + commandName + " " + subCommandName);
             return true;
         }
 
@@ -198,25 +158,25 @@ public final class CommandFramework implements CommandExecutor, TabCompleter {
         SubCommand subCmdAnnotation = subCommandMethod.getAnnotation(SubCommand.class);
         if (subCmdAnnotation != null && !subCmdAnnotation.permission().isEmpty()) {
             if (!sender.hasPermission(subCmdAnnotation.permission())) {
-                msg.sendError(sender, "没有权限执行此子命令!");
+                msg.sendMessage(sender, "<red>没有权限执行此子命令!");
                 return true;
             }
         }
 
         // 检查是否仅玩家可用
         if (subCmdAnnotation != null && subCmdAnnotation.playerOnly() && !(sender instanceof Player)) {
-            msg.sendError(sender, "此子命令只能由玩家执行!");
+            msg.sendMessage(sender, "<red>此子命令只能由玩家执行!");
             return true;
         }
 
         // 检查参数数量
         if (subCmdAnnotation != null) {
             if (subArgs.length < subCmdAnnotation.minArgs()) {
-                msg.sendError(sender, "参数不足! 需要至少 " + subCmdAnnotation.minArgs() + " 个参数");
+                msg.sendMessage(sender, "<red>参数不足! 需要至少 " + subCmdAnnotation.minArgs() + " 个参数");
                 return true;
             }
             if (subCmdAnnotation.maxArgs() != -1 && subArgs.length > subCmdAnnotation.maxArgs()) {
-                msg.sendError(sender, "参数过多! 最多允许 " + subCmdAnnotation.maxArgs() + " 个参数");
+                msg.sendMessage(sender, "<red>参数过多! 最多允许 " + subCmdAnnotation.maxArgs() + " 个参数");
                 return true;
             }
         }
@@ -228,11 +188,11 @@ public final class CommandFramework implements CommandExecutor, TabCompleter {
         try {
             subCommandMethod.invoke(baseCommand, context);
         } catch (CommandException e) {
-            msg.sendError(sender, e.getMessage());
+            msg.sendMessage(sender, "<red>" + e.getMessage());
         } catch (Exception e) {
             logger.severe("[CommandFramework] 执行命令失败: /" + commandName + " " + subCommandName);
-            logger.log(java.util.logging.Level.SEVERE, "命令执行异常详情", e);
-            msg.sendError(sender, "命令执行失败，请联系管理员");
+            e.printStackTrace();
+            msg.sendMessage(sender, "<red>命令执行失败: " + e.getCause().getMessage());
         }
 
         return true;

@@ -1,6 +1,6 @@
 package cn.guangdian.rpgcore.command;
 
-import cn.guangdian.rpgcore.message.MessageServiceImpl;
+import cn.guangdian.rpgcore.message.UnifiedMessageService;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -36,12 +36,12 @@ public final class CommandContext {
 
     private final CommandSender sender;
     private final String[] args;
-    private final MessageServiceImpl msg;
+    private final UnifiedMessageService msg;
 
     public CommandContext(@NotNull CommandSender sender, @NotNull String[] args) {
         this.sender = sender;
         this.args = args;
-        this.msg = MessageServiceImpl.getInstance();
+        this.msg = UnifiedMessageService.getInstance();
     }
 
     // ==================== 基本信息 ====================
@@ -188,35 +188,35 @@ public final class CommandContext {
      * 发送消息给命令发送者
      */
     public void sendMessage(@NotNull String message) {
-        msg.send(sender, message);
+        msg.sendMessage(sender, message);
     }
 
     /**
      * 发送消息给指定玩家
      */
     public void sendTo(@NotNull Player player, @NotNull String message) {
-        msg.send(player, message);
+        msg.sendMessage(player, message);
     }
 
     /**
      * 发送错误消息
      */
     public void sendError(@NotNull String message) {
-        msg.sendError(sender, message);
+        msg.sendMessage(sender, "<red>" + message);
     }
 
     /**
      * 发送成功消息
      */
     public void sendSuccess(@NotNull String message) {
-        msg.sendSuccess(sender, message);
+        msg.sendMessage(sender, "<green>" + message);
     }
 
     /**
      * 发送警告消息
      */
     public void sendWarning(@NotNull String message) {
-        msg.sendWarning(sender, message);
+        msg.sendMessage(sender, "<yellow>" + message);
     }
 
     /**

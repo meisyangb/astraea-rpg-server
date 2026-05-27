@@ -2,8 +2,6 @@ package cn.guangdian.auth;
 
 import cn.guangdian.auth.adapter.AuthServiceAdapter;
 import cn.guangdian.auth.command.AuthCommands;
-import cn.guangdian.auth.config.AuthConfigurateManager;
-import cn.guangdian.auth.data.AuthDataHandler;
 import cn.guangdian.auth.data.AuthDataManager;
 import cn.guangdian.auth.handler.AuthPacketHandler;
 import cn.guangdian.auth.handler.SessionManager;
@@ -12,14 +10,12 @@ import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
 import cn.guangdian.rpgcore.api.GameLogger;
 import cn.guangdian.rpgcore.database.CoreDatabase;
-import cn.guangdian.rpgcore.logging.LoggerFactory;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.slf4j.Logger;
 
 import java.io.File;
 
@@ -42,17 +38,13 @@ import java.io.File;
  */
 public class GuangDianAuth extends AbstractRPGPlugin {
 
-    private static final Logger logger = LoggerFactory.getLogger(GuangDianAuth.class);
-
     private static GuangDianAuth instance;
     private AuthDataManager dataManager;
     private SessionManager sessionManager;
     private AuthPacketHandler packetHandler;
     private AuthConfig authConfig;
-    private AuthConfigurateManager configurateManager;
-    private AuthDataHandler authDataHandler;
     private AuthServiceAdapter serviceAdapter;
-
+    
     // RPGCore 服务
     private GameLogger gameLogger;
     private AsyncExecutor asyncExecutor;
@@ -78,33 +70,24 @@ public class GuangDianAuth extends AbstractRPGPlugin {
         saveDefaultConfig();
         authConfig = new AuthConfig(new File(getDataFolder(), "config.yml"));
         authConfig.load();
-
-        // 初始化 Configurate 配置管理器
-        configurateManager = new AuthConfigurateManager(this);
-        configurateManager.load();
-
+        
         dataManager = new AuthDataManager(this);
         dataManager.initialize();
-
+        
         sessionManager = new SessionManager(this);
-
-        // 初始化 AbstractPlayerDataHandler
-        authDataHandler = new AuthDataHandler(this, dataManager, sessionManager);
-        authDataHandler.register();
-
+        
         packetHandler = new AuthPacketHandler(this);
         packetHandler.register();
-
+        
         AuthCommands commands = new AuthCommands(this);
         commands.registerAll();
-
+        
         getServer().getPluginManager().registerEvents(new AuthListener(this), this);
-
+        
         serviceAdapter = new AuthServiceAdapter(this);
-
-        logger.info("GuangDianAuth 已启动 - 独立登录系统已激活");
-        logger.info("注册玩家数: {}", dataManager.getRegisteredCount());
-        logger.info("Configurate 配置管理: {}", configurateManager.isConfigurateAvailable() ? "已启用" : "降级模式");
+        
+        logInfo("GuangDianAuth 已启动 - 独立登录系统已激活");
+        logInfo("注册玩家数: " + dataManager.getRegisteredCount());
     }
     
     /**
@@ -126,25 +109,20 @@ public class GuangDianAuth extends AbstractRPGPlugin {
     protected void onPluginDisable() {
         // 取消所有调度任务
         cancelAllTasks();
-
-        // 注销 AbstractPlayerDataHandler
-        if (authDataHandler != null) {
-            authDataHandler.unregister();
-        }
-
+        
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
         }
-
+        
         if (packetHandler != null) {
             packetHandler.unregister();
         }
-
+        
         if (sessionManager != null) {
             sessionManager.saveAll();
         }
-
-        logger.info("GuangDianAuth 已关闭");
+        
+        logInfo("GuangDianAuth 已关闭");
     }
 
     @Override
@@ -230,10 +208,6 @@ public class GuangDianAuth extends AbstractRPGPlugin {
 
     public AuthConfig getAuthConfig() {
         return authConfig;
-    }
-
-    public AuthConfigurateManager getConfigurateManager() {
-        return configurateManager;
     }
 
     public boolean isRegistered(String playerName) {

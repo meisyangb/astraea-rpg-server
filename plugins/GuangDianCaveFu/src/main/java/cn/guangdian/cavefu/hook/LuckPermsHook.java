@@ -7,15 +7,14 @@ import net.luckperms.api.model.group.Group;
 import net.luckperms.api.node.Node;
 import net.luckperms.api.node.types.InheritanceNode;
 import net.luckperms.api.node.types.PermissionNode;
+import org.bukkit.Bukkit;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 import net.luckperms.api.context.ImmutableContextSet;
 
 public class LuckPermsHook {
-    private static final Logger logger = Logger.getLogger("GuangDianCaveFu");
     private final String worldName;
     private LuckPerms luckPerms;
     private boolean enabled = false;
@@ -59,7 +58,7 @@ public class LuckPermsHook {
                 enabled = luckPerms != null;
             }
         } catch (Exception e) {
-            logger.warning("[洞府] LuckPerms 初始化失败: " + e.getMessage());
+            Bukkit.getLogger().warning("[洞府] LuckPerms 初始化失败: " + e.getMessage());
         }
     }
 
@@ -81,7 +80,7 @@ public class LuckPermsHook {
                     defaultGroup.data().add(node);
                 }
                 luckPerms.getGroupManager().saveGroup(defaultGroup);
-                logger.info("[洞府] 已为 default 组添加洞府世界权限，共 " + CAVE_WORLD_PERMISSIONS.size() + " 个");
+                Bukkit.getLogger().info("[洞府] 已为 default 组添加洞府世界权限，共 " + CAVE_WORLD_PERMISSIONS.size() + " 个");
             }
 
             Collection<Group> groups = luckPerms.getGroupManager().getLoadedGroups();
@@ -94,9 +93,9 @@ public class LuckPermsHook {
                 luckPerms.getGroupManager().saveGroup(group);
             }
 
-            logger.info("[洞府] 已为世界 " + worldName + " 配置权限继承，共处理 " + groups.size() + " 个权限组");
+            Bukkit.getLogger().info("[洞府] 已为世界 " + worldName + " 配置权限继承，共处理 " + groups.size() + " 个权限组");
         } catch (Exception e) {
-            logger.warning("[洞府] 配置权限继承失败: " + e.getMessage());
+            Bukkit.getLogger().warning("[洞府] 配置权限继承失败: " + e.getMessage());
         }
     }
 
@@ -128,7 +127,7 @@ public class LuckPermsHook {
             }
             return true;
         } catch (Exception e) {
-            logger.warning("[洞府] 检查权限配置失败: " + e.getMessage());
+            Bukkit.getLogger().warning("[洞府] 检查权限配置失败: " + e.getMessage());
             return false;
         }
     }

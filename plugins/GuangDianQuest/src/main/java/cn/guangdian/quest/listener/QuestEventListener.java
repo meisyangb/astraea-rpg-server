@@ -1,7 +1,6 @@
 package cn.guangdian.quest.listener;
 
 import cn.guangdian.quest.GuangDianQuest;
-import cn.guangdian.quest.integration.PluginIntegration;
 import cn.guangdian.quest.model.PlayerQuestData;
 import cn.guangdian.quest.model.Quest;
 import cn.guangdian.quest.model.QuestObjective;
@@ -20,7 +19,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Method;
-import java.util.Optional;
 import java.util.UUID;
 
 public class QuestEventListener implements Listener {
@@ -85,16 +83,6 @@ public class QuestEventListener implements Listener {
             return true;
         }
 
-        // 检查 GuangDianMobs
-        PluginIntegration integration = plugin.getPluginIntegration();
-        if (integration != null && integration.isGuangDianMobsAvailable()) {
-            Optional<String> mobId = integration.getGuangDianMobId(entity);
-            if (mobId.isPresent() && mobId.get().equalsIgnoreCase(target)) {
-                return true;
-            }
-        }
-
-        // 检查 MythicMobs (向后兼容)
         if (mythicMobsAvailable && isMythicMob(entity)) {
             String mythicId = getMythicMobId(entity);
             if (mythicId != null && mythicId.equalsIgnoreCase(target)) {
@@ -165,30 +153,12 @@ public class QuestEventListener implements Listener {
             for (int i = 0; i < quest.getObjectiveCount(); i++) {
                 QuestObjective obj = quest.getObjective(i);
                 if (obj.getType() == QuestObjective.ObjectiveType.COLLECT) {
-                    if (matchesCollectTarget(item, obj.getTarget())) {
+                    if (item.getType().name().equalsIgnoreCase(obj.getTarget())) {
                         plugin.getProgressManager().incrementProgress(playerId, questId, i, item.getAmount());
                     }
                 }
             }
         }
-    }
-
-    private boolean matchesCollectTarget(ItemStack item, String target) {
-        // 检查原版物品
-        if (item.getType().name().equalsIgnoreCase(target)) {
-            return true;
-        }
-
-        // 检查 RPGItems
-        PluginIntegration integration = plugin.getPluginIntegration();
-        if (integration != null && integration.isRPGItemsAvailable()) {
-            Optional<String> itemId = integration.getRPGItemId(item);
-            if (itemId.isPresent() && itemId.get().equalsIgnoreCase(target)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

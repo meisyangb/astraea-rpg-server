@@ -4,7 +4,6 @@ import cn.guangdian.battlepass.GuangDianBattlePass;
 import cn.guangdian.battlepass.hook.MythicMobsHook;
 import cn.guangdian.battlepass.model.ExpTrigger;
 import cn.guangdian.battlepass.model.PlayerBattlePass;
-import cn.guangdian.rpgcore.message.MiniMessageService;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -18,27 +17,25 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ExpTriggerManager {
-
+    
     private final GuangDianBattlePass plugin;
-    private final MiniMessageService miniMessage;
     private final Map<String, ExpTrigger> triggers;
     private final Map<UUID, Map<String, Long>> cooldowns;
     private final Map<UUID, Map<String, Integer>> dailyCounts;
     private File triggersFile;
     private YamlConfiguration triggersConfig;
-
+    
     public ExpTriggerManager(GuangDianBattlePass plugin) {
         this.plugin = plugin;
-        this.miniMessage = MiniMessageService.getInstance();
         this.triggers = new ConcurrentHashMap<>();
         this.cooldowns = new ConcurrentHashMap<>();
         this.dailyCounts = new ConcurrentHashMap<>();
-
+        
         MythicMobsHook.checkMythicMobs();
         if (MythicMobsHook.isMythicMobsEnabled()) {
             plugin.getLogger().info("已检测到 MythicMobs，启用自定义怪物支持");
         }
-
+        
         loadTriggers();
     }
     
@@ -171,10 +168,8 @@ public class ExpTriggerManager {
         }
         
         plugin.getBattlePassManager().addExp(playerId, trigger.getExpAmount());
-
-        player.sendMessage(miniMessage.green("[战令] ")
-            .append(miniMessage.yellow("获得 " + trigger.getExpAmount() + " 经验 "))
-            .append(miniMessage.colorize("<gray>(" + trigger.getTriggerId() + ")")));
+        
+        player.sendMessage("§a[战令] §e获得 " + trigger.getExpAmount() + " 经验 §7(" + trigger.getTriggerId() + ")");
     }
     
     public void resetDailyCounts() {

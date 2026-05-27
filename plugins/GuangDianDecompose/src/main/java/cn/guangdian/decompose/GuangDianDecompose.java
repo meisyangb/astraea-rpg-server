@@ -5,13 +5,11 @@ import cn.guangdian.decompose.command.DecomposeAdminCommand;
 import cn.guangdian.decompose.command.DecomposeCommand;
 import cn.guangdian.decompose.gui.DecomposeGUI;
 import cn.guangdian.decompose.hook.MythicMobsHook;
-import cn.guangdian.decompose.hook.RPGItemsHook;
 import cn.guangdian.decompose.listener.DecomposeListener;
 import cn.guangdian.decompose.manager.DecomposeManager;
 import cn.guangdian.decompose.manager.RuleManager;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
-import cn.guangdian.rpgcore.command.CommandFramework;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import cn.guangdian.rpgcore.sound.SoundService;
@@ -23,7 +21,6 @@ public class GuangDianDecompose extends AbstractRPGPlugin {
     private static GuangDianDecompose instance;
     private RPGCore rpgCore;
     private MythicMobsHook mythicMobsHook;
-    private RPGItemsHook rpgItemsHook;
     private RuleManager ruleManager;
     private DecomposeManager decomposeManager;
     private DecomposeGUI decomposeGUI;
@@ -49,7 +46,6 @@ public class GuangDianDecompose extends AbstractRPGPlugin {
         saveDefaultRules();
 
         mythicMobsHook = new MythicMobsHook();
-        rpgItemsHook = new RPGItemsHook();
         ruleManager = new RuleManager(this);
         decomposeManager = new DecomposeManager(this);
         decomposeGUI = new DecomposeGUI(this);
@@ -128,14 +124,8 @@ public class GuangDianDecompose extends AbstractRPGPlugin {
     }
 
     private void registerCommands() {
-        CommandFramework framework = CommandFramework.getInstance();
-        if (framework != null) {
-            framework.registerCommand(new DecomposeCommand(this));
-            framework.registerCommand(new DecomposeAdminCommand(this));
-            getLogger().info("已使用 CommandFramework 注册命令");
-        } else {
-            getLogger().severe("CommandFramework 不可用，命令注册失败");
-        }
+        getCommand("decompose").setExecutor(new DecomposeCommand(this));
+        getCommand("decomposeadmin").setExecutor(new DecomposeAdminCommand(this));
     }
 
     private void registerListeners() {
@@ -158,10 +148,6 @@ public class GuangDianDecompose extends AbstractRPGPlugin {
 
     public MythicMobsHook getMythicMobsHook() {
         return mythicMobsHook;
-    }
-
-    public RPGItemsHook getRPGItemsHook() {
-        return rpgItemsHook;
     }
 
     public RuleManager getRuleManager() {

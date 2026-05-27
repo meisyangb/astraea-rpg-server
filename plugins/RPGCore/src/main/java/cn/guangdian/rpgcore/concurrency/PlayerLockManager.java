@@ -1,8 +1,5 @@
 package cn.guangdian.rpgcore.concurrency;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -39,7 +36,7 @@ public class PlayerLockManager {
 
     private final Logger logger;
     private final ConcurrentHashMap<UUID, ReentrantLock> locks;
-    private volatile long defaultTimeoutMs;
+    private final long defaultTimeoutMs;
     private final LockStats stats;
 
     /**
@@ -180,75 +177,27 @@ public class PlayerLockManager {
     }
 
     /**
-     * 设置默认锁超时时间
-     * 
-     * @param defaultTimeoutMs 新的超时时间（毫秒）
-     */
-    public void setDefaultTimeout(long defaultTimeoutMs) {
-        this.defaultTimeoutMs = defaultTimeoutMs;
-    }
-
-    /**
      * 释放玩家锁（仅在玩家退出时调用）
      * 
      * @param playerId 玩家UUID
      */
     public void releaseLock(UUID playerId) {
-        ReentrantLock lock = locks.get(playerId);
-        if (lock != null) {
-            if (lock.isHeldByCurrentThread()) {
-                lock.unlock();
-            }
-            locks.remove(playerId);
+        ReentrantLock lock = locks.remove(playerId);
+        if (lock != null && lock.isHeldByCurrentThread()) {
+            lock.unlock();
         }
     }
 
     /**
-     * 释放所有锁（仅在插件禁用时调用）
-     *
-     * <p><b>警告：</b>此方法会强制释放所有锁，可能导致数据不一致！</p>
+     * 释放所有锁
      */
     public void releaseAllLocks() {
-        logger.warning("[PlayerLockManager] 开始强制释放所有玩家锁，当前锁数量: " + locks.size());
-
-        int releasedCount = 0;
-        int heldCount = 0;
-        int totalHoldCount = 0;
-
-        // 遍历所有锁，释放当前线程持有的锁
-        for (Map.Entry<UUID, ReentrantLock> entry : locks.entrySet()) {
-            UUID playerId = entry.getKey();
-            ReentrantLock lock = entry.getValue();
-
-            // 释放当前线程持有的所有层级
-            int holdCount = 0;
-            while (lock.isHeldByCurrentThread()) {
+        for (ReentrantLock lock : locks.values()) {
+            if (lock.isHeldByCurrentThread()) {
                 lock.unlock();
-                releasedCount++;
-                holdCount++;
-            }
-
-            if (holdCount > 0) {
-                logger.info("[PlayerLockManager] 释放玩家 " + playerId + " 的锁，层级数: " + holdCount);
-            }
-
-            // 记录被其他线程持有的锁
-            if (lock.isLocked()) {
-                heldCount++;
-                totalHoldCount += lock.getHoldCount();
-                logger.warning("[PlayerLockManager] 玩家 " + playerId + " 的锁被其他线程持有，持有数: " + lock.getHoldCount());
             }
         }
-
-        // 直接清空锁映射（强制清理，不等待其他线程）
         locks.clear();
-
-        if (heldCount > 0) {
-            logger.warning("[PlayerLockManager] 已强制释放所有玩家锁 (本线程释放: " + releasedCount +
-                ", 其他线程持有锁数: " + heldCount + ", 其他线程持有层级: " + totalHoldCount + ")");
-        } else {
-            logger.info("[PlayerLockManager] 已释放所有玩家锁 (释放层级: " + releasedCount + ")");
-        }
     }
 
     /**
@@ -258,19 +207,6 @@ public class PlayerLockManager {
      */
     public void cleanup(UUID playerId) {
         locks.remove(playerId);
-    }
-
-    /**
-     * 清理不再使用的锁（定期调用）
-     * 只清理未被持有且长时间未使用的锁
-     */
-    public void cleanupUnusedLocks() {
-        locks.entrySet().removeIf(entry -> {
-            ReentrantLock lock = entry.getValue();
-            // 只清理未被持有的锁
-            return !lock.isLocked() && !lock.hasQueuedThreads();
-        });
-        logger.fine("Cleaned up unused locks, remaining: " + locks.size());
     }
 
     /**
@@ -288,16 +224,7 @@ public class PlayerLockManager {
     }
 
     private ReentrantLock getOrCreateLock(UUID playerId) {
-        ReentrantLock lock = locks.get(playerId);
-        if (lock == null) {
-            ReentrantLock newLock = new ReentrantLock(true);
-            ReentrantLock existing = locks.putIfAbsent(playerId, newLock);
-            if (existing != null) {
-                return existing;
-            }
-            return newLock;
-        }
-        return lock;
+        return locks.computeIfAbsent(playerId, k -> new ReentrantLock(true));
     }
 
     private boolean tryLock(ReentrantLock lock, long timeoutMs) throws InterruptedException {

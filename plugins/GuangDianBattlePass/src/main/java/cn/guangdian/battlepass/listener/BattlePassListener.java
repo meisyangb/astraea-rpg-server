@@ -4,7 +4,6 @@ import cn.guangdian.battlepass.GuangDianBattlePass;
 import cn.guangdian.battlepass.hook.MythicMobsHook;
 import cn.guangdian.battlepass.model.BattlePassTask;
 import cn.guangdian.battlepass.model.PlayerBattlePass;
-import cn.guangdian.rpgcore.message.MiniMessageService;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -23,13 +22,11 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class BattlePassListener implements Listener {
-
+    
     private final GuangDianBattlePass plugin;
-    private final MiniMessageService miniMessage;
-
+    
     public BattlePassListener(GuangDianBattlePass plugin) {
         this.plugin = plugin;
-        this.miniMessage = MiniMessageService.getInstance();
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -155,12 +152,11 @@ public class BattlePassListener implements Listener {
     private void checkTaskCompletion(Player player, PlayerBattlePass bp, String taskType) {
         BattlePassTask task = plugin.getRewardManager().getTask(taskType);
         if (task == null) return;
-
+        
         int progress = bp.getTaskProgress(taskType);
         if (progress >= task.getRequiredAmount()) {
             plugin.getBattlePassManager().addExp(player.getUniqueId(), task.getExpReward());
-            player.sendMessage(miniMessage.green("完成任务: " + task.getTaskName())
-                .append(miniMessage.colorize(" <gray>(+" + task.getExpReward() + " 经验)")));
+            player.sendMessage("§a完成任务: " + task.getTaskName() + " §7(+" + task.getExpReward() + " 经验)");
             bp.setTaskProgress(taskType, 0);
         }
     }

@@ -102,7 +102,7 @@ public class RaidAdminCommand implements CommandExecutor, TabCompleter {
 
     private void handleTp(CommandSender sender, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(net.kyori.adventure.text.Component.text("该命令只能由玩家执行").color(net.kyori.adventure.text.format.NamedTextColor.RED));
+            sender.sendMessage("§c该命令只能由玩家执行");
             return;
         }
 

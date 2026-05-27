@@ -14,7 +14,7 @@ dependencies:
 commands:
   gdmm:
     description: GuangDianMobs 管理命令
-    usage: /gdmm <spawn/kill/reload/list/migrate>
+    usage: /gdmm <spawn/kill/reload/list>
     permission: guangdianmobs.admin
   gdmsp:
     description: GuangDianMobs 刷新点管理命令
@@ -27,7 +27,4 @@ permissions:
     default: op
   guangdianmobs.spawn:
     description: 允许使用刷新点命令
-    default: op
-  gdmm.migrate:
-    description: 允许迁移 MythicMobs 配置
     default: op

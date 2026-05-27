@@ -271,7 +271,7 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
             }
             startTrade(player, target);
         } else {
-            sendTradeRequestInternal(player, target);
+            sendTradeRequest(player, target);
         }
         
         event.setCancelled(true);
@@ -283,6 +283,35 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
             return request;
         }
         return null;
+    }
+
+    private void sendTradeRequest(Player sender, Player target) {
+        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+        long taskId = -1;
+        if (rpgCore != null) {
+            taskId = rpgCore.getScheduler().runSyncLater(() -> {
+                TradeRequest req = pendingRequests.remove(sender.getUniqueId());
+                if (req != null) {
+                    sender.sendMessage(getPrefix().append(getMessage("request-timeout")));
+                    if (target.isOnline()) {
+                        target.sendMessage(getPrefix().append(getMessage("request-timeout")));
+                    }
+                }
+            }, requestTimeout * 20L);
+        }
+
+        TradeRequest request = new TradeRequest(sender.getUniqueId(), target.getUniqueId(), taskId);
+        pendingRequests.put(sender.getUniqueId(), request);
+        requestCooldowns.put(sender.getUniqueId(), System.currentTimeMillis() / 1000);
+
+        sender.sendMessage(getPrefix().append(getMessage("request-sent", "player", target.getName())));
+        sender.sendMessage(getPrefix().append(miniMessage.gray("蹲下右键对方可接受交易")));
+
+        target.sendMessage(getPrefix().append(getMessage("request-received", "player", sender.getName())));
+        target.sendMessage(getPrefix().append(miniMessage.gray("蹲下右键对方接受交易")));
+        target.sendMessage(getPrefix().append(miniMessage.gray("或等待 ")).append(miniMessage.red(String.valueOf(requestTimeout))).append(miniMessage.gray(" 秒自动拒绝")));
+        
+        target.playSound(target.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
     }
 
     private void startTrade(Player player1, Player player2) {
@@ -1006,111 +1035,5 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
             breathingFrame = (breathingFrame + 1) % BREATHING_COLORS.length;
         }
         public static Material[] getBreathingColors() { return BREATHING_COLORS; }
-    }
-
-    // ==================== TradeService 接口实现方法 ====================
-
-    /**
-     * 检查玩家是否在交易中 - TradeService 接口实现
-     */
-    public boolean isInTrade(UUID playerId) {
-        return isInTradeAPI(playerId);
-    }
-
-    /**
-     * 获取交易伙伴 - TradeService 接口实现
-     */
-    public UUID getTradePartner(UUID playerId) {
-        return getTradePartnerAPI(playerId);
-    }
-
-    /**
-     * 发送交易请求 - TradeService 接口实现
-     */
-    public boolean sendTradeRequest(Player requester, Player target) {
-        if (isInTrade(requester) || isInTrade(target)) {
-            return false;
-        }
-        sendTradeRequestInternal(requester, target);
-        return true;
-    }
-
-    /**
-     * 接受交易请求 - TradeService 接口实现
-     * 查找来自任何玩家的待处理请求并接受
-     */
-    public boolean acceptTradeRequest(Player player) {
-        // 查找指向该玩家的待处理请求
-        for (TradeRequest request : pendingRequests.values()) {
-            if (request.getTarget().equals(player.getUniqueId())) {
-                Player requester = org.bukkit.Bukkit.getPlayer(request.getRequester());
-                if (requester != null && requester.isOnline()) {
-                    pendingRequests.remove(request.getRequester());
-                    cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
-                    if (rpgCore != null) {
-                        rpgCore.getScheduler().cancelTask(request.getTaskId());
-                    }
-                    startTrade(player, requester);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 拒绝交易请求 - TradeService 接口实现
-     * 查找来自任何玩家的待处理请求并拒绝
-     */
-    public void denyTradeRequest(Player player) {
-        // 查找指向该玩家的待处理请求
-        for (Map.Entry<UUID, TradeRequest> entry : pendingRequests.entrySet()) {
-            TradeRequest request = entry.getValue();
-            if (request.getTarget().equals(player.getUniqueId())) {
-                Player requester = org.bukkit.Bukkit.getPlayer(request.getRequester());
-                pendingRequests.remove(entry.getKey());
-                cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
-                if (rpgCore != null) {
-                    rpgCore.getScheduler().cancelTask(request.getTaskId());
-                }
-                if (requester != null && requester.isOnline()) {
-                    requester.sendMessage(getPrefix().append(getMessage("request-denied", "player", player.getName())));
-                }
-                player.sendMessage(getPrefix().append(getMessage("deny-success", "player", requester != null ? requester.getName() : "未知")));
-                return;
-            }
-        }
-    }
-
-    /**
-     * 内部方法：发送交易请求
-     */
-    private void sendTradeRequestInternal(Player sender, Player target) {
-        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
-        long taskId = -1;
-        if (rpgCore != null) {
-            taskId = rpgCore.getScheduler().runSyncLater(() -> {
-                TradeRequest req = pendingRequests.remove(sender.getUniqueId());
-                if (req != null) {
-                    sender.sendMessage(getPrefix().append(getMessage("request-timeout")));
-                    if (target.isOnline()) {
-                        target.sendMessage(getPrefix().append(getMessage("request-timeout")));
-                    }
-                }
-            }, requestTimeout * 20L);
-        }
-
-        TradeRequest request = new TradeRequest(sender.getUniqueId(), target.getUniqueId(), taskId);
-        pendingRequests.put(sender.getUniqueId(), request);
-        requestCooldowns.put(sender.getUniqueId(), System.currentTimeMillis() / 1000);
-
-        sender.sendMessage(getPrefix().append(getMessage("request-sent", "player", target.getName())));
-        sender.sendMessage(getPrefix().append(miniMessage.gray("蹲下右键对方可接受交易")));
-
-        target.sendMessage(getPrefix().append(getMessage("request-received", "player", sender.getName())));
-        target.sendMessage(getPrefix().append(miniMessage.gray("蹲下右键对方接受交易")));
-        target.sendMessage(getPrefix().append(miniMessage.gray("或等待 ")).append(miniMessage.red(String.valueOf(requestTimeout))).append(miniMessage.gray(" 秒自动拒绝")));
-
-        target.playSound(target.getLocation(), org.bukkit.Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
     }
 }

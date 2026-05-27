@@ -1,0 +1,141 @@
+# ========================================
+# RPGItems 物品配置
+# 支持 MiniMessage 格式
+# 技能绑定使用 RPGSkill 的技能ID
+# ========================================
+
+items:
+  # 神器示例 - 绑定 RPGSkill 技能
+  星芒裁决之刃:
+    material: DIAMOND_SWORD
+    version: 1
+    display-name: "<gradient:#FFD700:#FF8C00>★ 星芒裁决之刃 ★"
+    lore:
+      - "<dark_gray>近战武器 <gray>|</gray> <light_purple>亚神器"
+      - "<dark_red><strikethrough>━━━━━━━━━━━━━━━"
+      - "<dark_gray>觉醒进度 <blue>✪✪✪</blue><gray>✪✪"
+      - "<dark_red><strikethrough>━━━━━━━━━━━━━━━"
+      - "<yellow>星辉纪元坠落的星辰之剑"
+      - "<yellow>承载着古老星灵的永恒意志"
+      - ""
+      - "<gray>右键点击: <green>释放星陨冲击"
+
+    attributes:
+      attack:
+        name: "攻击力"
+        type: RANGE
+        min: 11700
+        max: 24180
+        format: "<dark_gray>%s: <aqua>%s"
+      crit_chance:
+        name: "暴击几率"
+        type: PERCENTAGE
+        min: 5
+        format: "<dark_gray>%s: <aqua>%s%%"
+      crit_damage:
+        name: "暴击伤害"
+        type: PERCENTAGE
+        min: 75
+        format: "<dark_gray>%s: <aqua>%s%%"
+
+    # 技能绑定 - 使用 RPGSkill 的技能ID
+    skills:
+      - id: "星陨冲击"
+        trigger: RIGHT_CLICK
+
+    options:
+      unbreakable: true
+      hide-attributes: true
+      custom-model-data: 1001
+
+  # 防具示例 - 绑定被动技能
+  曙光天穹头盔:
+    material: DIAMOND_HELMET
+    version: 1
+    display-name: "<red>★ 曙光天穹头盔 ★"
+    lore:
+      - "<dark_gray>防具 <gray>|</gray> <light_purple>亚神器"
+      - "<dark_red><strikethrough>━━━━━━━━━━━━━━━"
+      - "<yellow>曙光守护者铸造的圣器"
+      - ""
+      - "<gray>被攻击时: <green>触发黎明炽焰"
+
+    attributes:
+      armor:
+        name: "护甲强度"
+        type: PERCENTAGE
+        min: 15
+        format: "<dark_gray>%s: <aqua>%s%%"
+      health:
+        name: "生命上限"
+        type: FIXED
+        min: 97500
+        format: "<dark_gray>%s: <aqua>%s"
+
+    # 技能绑定 - 被动技能
+    skills:
+      - id: "黎明炽焰"
+        trigger: ON_DAMAGE_TAKEN
+
+    options:
+      unbreakable: true
+      hide-attributes: true
+
+  # 治疗法杖
+  救赎之光法杖:
+    material: BLAZE_ROD
+    version: 1
+    display-name: "<green>✦ 救赎之光法杖 ✦"
+    lore:
+      - "<dark_gray>法杖 <gray>|</gray> <aqua>史诗"
+      - "<dark_green><strikethrough>━━━━━━━━━━━━━━━"
+      - "<green>蕴含生命魔法的神圣法杖"
+      - ""
+      - "<gray>右键点击: <green>释放救赎之光"
+
+    attributes:
+      magic_power:
+        name: "法术强度"
+        type: FIXED
+        min: 500
+        format: "<dark_gray>%s: <aqua>%s"
+
+    skills:
+      - id: "救赎之光"
+        trigger: RIGHT_CLICK
+
+    options:
+      unbreakable: true
+      hide-attributes: true
+      custom-model-data: 1002
+
+  # 刺客匕首
+  暗影之牙:
+    material: IRON_SWORD
+    version: 1
+    display-name: "<dark_purple>☠ 暗影之牙 ☠"
+    lore:
+      - "<dark_gray>匕首 <gray>|</gray> <dark_purple>稀有"
+      - "<dark_purple><strikethrough>━━━━━━━━━━━━━━━"
+      - "<gray>攻击时: <green>触发致死斩击"
+
+    attributes:
+      attack:
+        name: "攻击力"
+        type: RANGE
+        min: 5000
+        max: 8000
+        format: "<dark_gray>%s: <aqua>%s"
+      crit_chance:
+        name: "暴击几率"
+        type: PERCENTAGE
+        min: 15
+        format: "<dark_gray>%s: <aqua>%s%%"
+
+    skills:
+      - id: "致死斩击"
+        trigger: ON_HIT
+
+    options:
+      unbreakable: true
+      hide-attributes: true

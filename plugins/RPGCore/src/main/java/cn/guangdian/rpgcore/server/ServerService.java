@@ -2,7 +2,6 @@ package cn.guangdian.rpgcore.server;
 
 import cn.guangdian.rpgcore.RPGCore;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -47,32 +46,21 @@ public final class ServerService {
         
         // 通知所有玩家
         for (Player player : Bukkit.getOnlinePlayers()) {
-            player.sendMessage(Component.text("服务器将在 5 秒后重启，请做好准备！", NamedTextColor.RED));
+            player.sendMessage(Component.text("§c服务器将在 5 秒后重启，请做好准备！"));
         }
         
         // 延迟重启
         Bukkit.getAsyncScheduler().runDelayed(plugin, (task) -> {
-            // 保存所有数据 - 使用 RPGCore SyncScheduler
-            RPGCore rpgCore = RPGCore.getInstance();
-            if (rpgCore != null) {
-                rpgCore.getScheduler().runSync(() -> {
-                    Bukkit.savePlayers();
-                    for (org.bukkit.World world : Bukkit.getWorlds()) {
-                        world.save();
-                    }
-                    // 执行重启
-                    executeRestart();
-                });
-            } else {
-                // 降级：使用 Bukkit 调度器
-                Bukkit.getScheduler().runTask(plugin, () -> {
-                    Bukkit.savePlayers();
-                    for (org.bukkit.World world : Bukkit.getWorlds()) {
-                        world.save();
-                    }
-                    executeRestart();
-                });
-            }
+            // 保存所有数据
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                Bukkit.savePlayers();
+                for (org.bukkit.World world : Bukkit.getWorlds()) {
+                    world.save();
+                }
+                
+                // 执行重启
+                Bukkit.getScheduler().runTask(plugin, this::executeRestart);
+            });
         }, 5, TimeUnit.SECONDS);
     }
     
@@ -177,7 +165,7 @@ public final class ServerService {
         
         // 通知所有玩家
         for (Player player : Bukkit.getOnlinePlayers()) {
-            player.kick(Component.text("服务器正在关闭，请稍后再试！").color(net.kyori.adventure.text.format.NamedTextColor.RED));
+            player.kick(Component.text("§c服务器正在关闭，请稍后再试！"));
         }
         
         // 保存数据

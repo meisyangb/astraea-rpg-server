@@ -5,7 +5,6 @@ import cn.guangdian.forge.command.ForgeCommand;
 import cn.guangdian.forge.command.ForgeGiveCommand;
 import cn.guangdian.forge.command.ForgeAdminCommand;
 import cn.guangdian.forge.hook.MythicMobsHook;
-import cn.guangdian.forge.hook.RPGItemsHook;
 import cn.guangdian.forge.listener.ForgeListener;
 import cn.guangdian.forge.listener.LearnRecipeListener;
 import cn.guangdian.forge.listener.PlayerJoinQuitListener;
@@ -15,7 +14,6 @@ import cn.guangdian.forge.placeholder.ForgePlaceholder;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
 import cn.guangdian.rpgcore.api.GameLogger;
-import cn.guangdian.rpgcore.command.CommandFramework;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -46,7 +44,6 @@ public class GuangDianForge extends AbstractRPGPlugin {
     private PlayerDataManager playerDataManager;
     private ForgeServiceAdapter serviceAdapter;
     private MythicMobsHook mythicMobsHook;
-    private RPGItemsHook rpgItemsHook;
     private boolean useRPGCore;
     
     // RPGCore 服务
@@ -70,9 +67,6 @@ public class GuangDianForge extends AbstractRPGPlugin {
         // 初始化 MythicMobs Hook
         mythicMobsHook = new MythicMobsHook();
         mythicMobsHook.init();
-
-        // 初始化 RPGItems Hook
-        rpgItemsHook = new RPGItemsHook();
         
         recipeManager = new RecipeManager(this);
         recipeManager.loadRecipes();
@@ -87,8 +81,10 @@ public class GuangDianForge extends AbstractRPGPlugin {
         getServer().getPluginManager().registerEvents(new LearnRecipeListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinQuitListener(this), this);
         
-        // 注册命令 - 使用 RPGCore CommandFramework
-        registerCommands();
+        // 注册命令
+        getCommand("forge").setExecutor(new ForgeCommand(this));
+        getCommand("forgegive").setExecutor(new ForgeGiveCommand(this));
+        getCommand("forgeadmin").setExecutor(new ForgeAdminCommand(this));
         
         // 注册 PlaceholderAPI 扩展
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
@@ -102,9 +98,6 @@ public class GuangDianForge extends AbstractRPGPlugin {
         }
         if (mythicMobsHook.isEnabled()) {
             logInfo("MythicMobs 物品集成已启用");
-        }
-        if (rpgItemsHook.isEnabled()) {
-            logInfo("RPGItems 物品集成已启用");
         }
     }
     
@@ -242,7 +235,6 @@ public class GuangDianForge extends AbstractRPGPlugin {
     public PlayerDataManager getPlayerDataManager() { return playerDataManager; }
     public ForgeServiceAdapter getServiceAdapter() { return serviceAdapter; }
     public MythicMobsHook getMythicMobsHook() { return mythicMobsHook; }
-    public RPGItemsHook getRPGItemsHook() { return rpgItemsHook; }
     
     /**
      * 检查是否使用 RPGCore
@@ -257,20 +249,5 @@ public class GuangDianForge extends AbstractRPGPlugin {
             return Optional.of(RPGCore.getInstance().getAsyncExecutor());
         }
         return Optional.empty();
-    }
-
-    /**
-     * 注册命令 - 使用 RPGCore CommandFramework
-     */
-    private void registerCommands() {
-        CommandFramework framework = CommandFramework.getInstance();
-        if (framework != null) {
-            framework.registerCommand(new ForgeCommand(this));
-            framework.registerCommand(new ForgeGiveCommand(this));
-            framework.registerCommand(new ForgeAdminCommand(this));
-            logInfo("已使用 CommandFramework 注册命令");
-        } else {
-            logSevere("CommandFramework 不可用，命令注册失败");
-        }
     }
 }

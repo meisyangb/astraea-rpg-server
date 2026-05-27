@@ -57,7 +57,7 @@ public class ExtractionManager {
         loc.add(0, 3, 0);
 
         TextDisplay display = world.spawn(loc, TextDisplay.class);
-        display.text(Component.text("撤离点").color(NamedTextColor.GREEN));
+        display.setText("§a撤离点");
         display.setBillboard(Display.Billboard.CENTER);
         display.setViewRange(50f);
 
@@ -110,13 +110,13 @@ public class ExtractionManager {
         int remaining = point.getExtractionTime() - progress.getSeconds();
 
         String text = switch (remaining) {
-            case 10 -> "<green><bold>10秒后撤离";
-            case 5 -> "<yellow><bold>5秒后撤离";
-            case 4 -> "<yellow><bold>4秒后撤离";
-            case 3 -> "<red><bold>3秒后撤离";
-            case 2 -> "<red><bold>2秒后撤离";
-            case 1 -> "<dark_red><bold>1秒后撤离";
-            default -> "<aqua><bold>" + remaining + "秒后撤离";
+            case 10 -> "§a§l10秒后撤离";
+            case 5 -> "§e§l5秒后撤离";
+            case 4 -> "§e§l4秒后撤离";
+            case 3 -> "§c§l3秒后撤离";
+            case 2 -> "§c§l2秒后撤离";
+            case 1 -> "§4§l1秒后撤离";
+            default -> "§b§l" + remaining + "秒后撤离";
         };
 
         player.sendActionBar(Component.text(text));

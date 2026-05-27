@@ -22,7 +22,8 @@ public class SimpleServiceRegistry implements ServiceRegistry {
 
     private final Logger logger;
     private final JavaPlugin plugin;
-    private final ConcurrentHashMap<Class<?>, ServiceEntry<?>> services;
+    private final Map<Class<?>, ServiceEntry<?>> services;
+    private final Object lock = new Object();
 
     /**
      * 创建服务注册表
@@ -47,37 +48,38 @@ public class SimpleServiceRegistry implements ServiceRegistry {
             priority = ServicePriority.NORMAL;
         }
 
-        final ServicePriority finalPriority = priority;
-        final boolean[] registered = {false};
-        
-        services.compute(serviceClass, (key, existing) -> {
-            if (existing != null && existing.priority.getLevel() >= finalPriority.getLevel()) {
-                logger.fine("Service " + serviceClass.getSimpleName() + 
-                    " already registered with higher or equal priority, skipping");
-                return existing;
+        synchronized (lock) {
+            // 检查是否已存在
+            ServiceEntry<?> existing = services.get(serviceClass);
+            if (existing != null) {
+                // 比较优先级
+                if (existing.priority.getLevel() >= priority.getLevel()) {
+                    logger.fine("Service " + serviceClass.getSimpleName() + 
+                        " already registered with higher or equal priority, skipping");
+                    return;
+                }
             }
-            
-            registered[0] = true;
-            return new ServiceEntry<>(implementation, finalPriority);
-        });
 
-        // 只有在成功注册时才注册到 Bukkit
-        if (registered[0]) {
+            // 注册到内部注册表
+            services.put(serviceClass, new ServiceEntry<>(implementation, priority));
+
+            // 同时注册到 Bukkit ServicesManager
             try {
-                org.bukkit.plugin.ServicePriority bukkitPriority = mapPriority(finalPriority);
+                // 映射优先级：RPGCore的NORMAL -> Bukkit的Normal
+                org.bukkit.plugin.ServicePriority bukkitPriority = mapPriority(priority);
                 Bukkit.getServicesManager().register(
                     serviceClass, 
                     implementation, 
                     plugin, 
                     bukkitPriority
                 );
-                
-                logger.info("Registered service: " + serviceClass.getSimpleName() + 
-                    " (priority: " + finalPriority + ")");
             } catch (Exception e) {
                 logger.log(Level.WARNING, "Failed to register service to Bukkit ServicesManager", e);
             }
         }
+
+        logger.info("Registered service: " + serviceClass.getSimpleName() + 
+            " (priority: " + priority + ")");
     }
 
     @Override
@@ -98,9 +100,8 @@ public class SimpleServiceRegistry implements ServiceRegistry {
             if (bukkitService != null) {
                 return bukkitService;
             }
-        } catch (IllegalStateException e) {
-            // Bukkit 服务管理器未就绪
-            logger.log(Level.FINE, "Bukkit ServicesManager not ready", e);
+        } catch (Exception ignored) {
+            // Bukkit 服务不可用
         }
 
         throw new IllegalStateException("Service not found: " + serviceClass.getSimpleName());
@@ -124,9 +125,8 @@ public class SimpleServiceRegistry implements ServiceRegistry {
             if (bukkitService != null) {
                 return Optional.of(bukkitService);
             }
-        } catch (IllegalStateException e) {
-            // Bukkit 服务管理器未就绪
-            logger.log(Level.FINE, "Bukkit ServicesManager not ready", e);
+        } catch (Exception ignored) {
+            // Bukkit 服务不可用
         }
 
         return Optional.empty();
@@ -145,9 +145,7 @@ public class SimpleServiceRegistry implements ServiceRegistry {
         // 检查 Bukkit ServicesManager
         try {
             return Bukkit.getServicesManager().isProvidedFor(serviceClass);
-        } catch (IllegalStateException e) {
-            // Bukkit 服务管理器未就绪
-            logger.log(Level.FINE, "Bukkit ServicesManager not ready", e);
+        } catch (Exception ignored) {
             return false;
         }
     }
@@ -158,16 +156,19 @@ public class SimpleServiceRegistry implements ServiceRegistry {
             return;
         }
 
-        ServiceEntry<?> entry = services.remove(serviceClass);
+        synchronized (lock) {
+            ServiceEntry<?> entry = services.remove(serviceClass);
+            
+            if (entry != null) {
+                // 从 Bukkit ServicesManager 注销
+                try {
+                    Bukkit.getServicesManager().unregisterAll(plugin);
+                } catch (Exception e) {
+                    logger.log(Level.WARNING, "Failed to unregister service from Bukkit ServicesManager", e);
+                }
 
-        if (entry != null) {
-            try {
-                Bukkit.getServicesManager().unregister(entry.implementation);
-            } catch (Exception e) {
-                logger.log(Level.WARNING, "Failed to unregister service from Bukkit ServicesManager", e);
+                logger.info("Unregistered service: " + serviceClass.getSimpleName());
             }
-
-            logger.info("Unregistered service: " + serviceClass.getSimpleName());
         }
     }
 
@@ -178,12 +179,15 @@ public class SimpleServiceRegistry implements ServiceRegistry {
 
     @Override
     public void clear() {
-        services.clear();
-        
-        try {
-            Bukkit.getServicesManager().unregisterAll(plugin);
-        } catch (Exception e) {
-            logger.log(Level.WARNING, "Failed to clear services from Bukkit ServicesManager", e);
+        synchronized (lock) {
+            services.clear();
+            
+            // 从 Bukkit ServicesManager 注销所有
+            try {
+                Bukkit.getServicesManager().unregisterAll(plugin);
+            } catch (Exception e) {
+                logger.log(Level.WARNING, "Failed to clear services from Bukkit ServicesManager", e);
+            }
         }
 
         logger.info("Cleared all registered services");

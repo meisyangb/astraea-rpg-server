@@ -17,20 +17,10 @@ public class GameClass {
     private Map<String, Double> stats;
     private List<String> skills;
     
-    private String classType;
-    private List<AttributeType> availableAttributes;
-    private Map<AttributeType, AttributeEffect> attributeEffects;
-    private int pointsPerLevel;
-    private Map<Integer, Integer> bonusAtTiers;
-    
     public GameClass() {
         this.nextClasses = new ArrayList<>();
         this.stats = new HashMap<>();
         this.skills = new ArrayList<>();
-        this.availableAttributes = new ArrayList<>();
-        this.attributeEffects = new HashMap<>();
-        this.bonusAtTiers = new HashMap<>();
-        this.pointsPerLevel = 3;
     }
     
     public String getId() {
@@ -103,58 +93,6 @@ public class GameClass {
     
     public void setSkills(List<String> skills) {
         this.skills = skills != null ? skills : new ArrayList<>();
-    }
-    
-    public String getClassType() {
-        return classType;
-    }
-    
-    public void setClassType(String classType) {
-        this.classType = classType;
-    }
-    
-    public List<AttributeType> getAvailableAttributes() {
-        return availableAttributes;
-    }
-    
-    public void setAvailableAttributes(List<AttributeType> availableAttributes) {
-        this.availableAttributes = availableAttributes != null ? availableAttributes : new ArrayList<>();
-    }
-    
-    public Map<AttributeType, AttributeEffect> getAttributeEffects() {
-        return attributeEffects;
-    }
-    
-    public void setAttributeEffects(Map<AttributeType, AttributeEffect> attributeEffects) {
-        this.attributeEffects = attributeEffects != null ? attributeEffects : new HashMap<>();
-    }
-    
-    public AttributeEffect getAttributeEffect(AttributeType type) {
-        return attributeEffects.get(type);
-    }
-    
-    public boolean hasAttribute(AttributeType type) {
-        return availableAttributes.contains(type);
-    }
-    
-    public int getPointsPerLevel() {
-        return pointsPerLevel;
-    }
-    
-    public void setPointsPerLevel(int pointsPerLevel) {
-        this.pointsPerLevel = pointsPerLevel;
-    }
-    
-    public Map<Integer, Integer> getBonusAtTiers() {
-        return bonusAtTiers;
-    }
-    
-    public void setBonusAtTiers(Map<Integer, Integer> bonusAtTiers) {
-        this.bonusAtTiers = bonusAtTiers != null ? bonusAtTiers : new HashMap<>();
-    }
-    
-    public int getBonusAtTier(int tier) {
-        return bonusAtTiers.getOrDefault(tier, 0);
     }
     
     public String getAdvancementName() {

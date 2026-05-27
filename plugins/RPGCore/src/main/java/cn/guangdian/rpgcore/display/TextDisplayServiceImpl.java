@@ -3,7 +3,6 @@ package cn.guangdian.rpgcore.display;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.service.api.TextDisplayService;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -32,16 +31,6 @@ public class TextDisplayServiceImpl implements TextDisplayService {
     public TextDisplayServiceImpl(RPGCore plugin) {
         this.plugin = plugin;
         this.logger = plugin.getLogger();
-        startCleanupTask();
-    }
-
-    private void startCleanupTask() {
-        RPGCore rpgCore = RPGCore.getInstance();
-        if (rpgCore != null) {
-            rpgCore.getScheduler().runAsyncRepeating(() -> {
-                cleanupInvalidHolograms();
-            }, 300000 / 50, 300000 / 50); // 每5分钟清理一次 (tick 转换)
-        }
     }
 
     @Override

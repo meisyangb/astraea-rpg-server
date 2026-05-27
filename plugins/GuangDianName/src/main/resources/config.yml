@@ -1,48 +1,42 @@
 ﻿# GuangDianName 配置文件
-# 玩家头顶显示插件 - 全TextDisplay版本
-# 使用 MiniMessage 格式 (<color> 替代 §)
+# 玩家头顶显示插件 - 血量、称号、工会、婚姻（三行显示）
+# 使用 MiniMessage 格式 (<color> 替代 <red>olor)
 #
-# 显示层级（从下到上，靠近头部）：
-# - 第1行：血量
-# - 第2行：称号 + 玩家名 + 婚姻
-# - 第3行：工会
+# 显示层级：
+# - 第1行：工会（TextDisplay实体骑在玩家头上）
+# - 第2行：称号 + 玩家名 + 婚姻（Team Prefix/Suffix）
+# - 第3行：血量（Below Name）
 
-# ==================== 显示总开关 ====================
-display:
-  # 是否启用显示
-  enabled: true
-  
-  # 是否启用血量显示
-  health-enabled: true
-  # 是否启用称号显示
-  title-enabled: true
-  # 是否启用工会显示
-  guild-enabled: true
-  
-  # 默认显示设置
+# ==================== 血量显示 ====================
+# 血量显示名称（显示在玩家名字下方）
+# 使用 MiniMessage 格式
+display-name: "<red>❤"
+
+# ==================== 头顶显示设置 ====================
+title-display:
+  # 默认是否显示称号
   default-show-title: true
+  # 默认是否显示工会
   default-show-guild: true
+  # 默认是否显示婚姻
   default-show-marriage: true
-  default-show-health: true
-  
-  # 血量显示格式 (%d 会被替换为血量值)
-  # 使用 MiniMessage 格式
-  health-format: "<red>❤ %d"
-  
-  # 称号+玩家名+婚姻显示格式
-  # 使用 MiniMessage 格式
-  
-  # 婚姻显示格式 (%s 会被替换为伴侣名)
-  marriage-format: "<light_purple> ♥%s"
   
   # 工会显示格式 (%s 会被替换为工会名)
-  guild-format: "<dark_aqua>[%s]"
+  # 使用 MiniMessage 格式
+  guild-format: "<dark_aqua>[%s<dark_aqua>]"
   
-  # 显示高度设置（相对于玩家头部的偏移，单位：格）
-  # 数值越小越靠近头部
-  health-height: 0.3
-  title-height: 0.6
-  guild-height: 0.9
+  # 是否启用工会TextDisplay显示（第1行）
+  # 使用1.19.4+的text_display实体，性能最优
+  guild-textdisplay-enabled: true
+  
+  # 工会显示高度（格）
+  # 默认2.8，可根据需要调整
+  # 更高：3.0-3.5，更低：2.5-2.7
+  guild-display-height: 2.8
+  
+  # 婚姻显示格式 (%s 会被替换为伴侣名)
+  # 使用 MiniMessage 格式
+  marriage-format: "<light_purple>♥%s"
 
 # ==================== 调试设置 ====================
 debug: false

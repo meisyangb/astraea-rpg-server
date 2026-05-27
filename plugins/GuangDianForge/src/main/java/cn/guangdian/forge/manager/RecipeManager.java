@@ -71,24 +71,20 @@ public class RecipeManager {
             plugin.getLogger().warning("图纸 " + id + " 没有配置材料!");
         }
         
-        // 解析结果 - 支持 MythicMobs 或 RPGItems 物品
+        // 解析结果 - 必须是 MythicMobs 物品
         ConfigurationSection resultSection = rs.getConfigurationSection("result");
         String resultMythicMobsItem = null;
-        String resultRPGItem = null;
-
+        
         if (resultSection != null) {
             resultMythicMobsItem = resultSection.getString("mythicmobs-item");
-            resultRPGItem = resultSection.getString("rpg-item");
-
-            // 尝试旧的配置格式
             if (resultMythicMobsItem == null || resultMythicMobsItem.isEmpty()) {
+                // 尝试旧的配置格式
                 resultMythicMobsItem = resultSection.getString("item");
             }
         }
-
-        if ((resultMythicMobsItem == null || resultMythicMobsItem.isEmpty()) &&
-            (resultRPGItem == null || resultRPGItem.isEmpty())) {
-            throw new IllegalArgumentException("图纸 " + id + " 必须配置 result.mythicmobs-item 或 result.rpg-item");
+        
+        if (resultMythicMobsItem == null || resultMythicMobsItem.isEmpty()) {
+            throw new IllegalArgumentException("图纸 " + id + " 必须配置 result.mythicmobs-item");
         }
         
         // 解析图纸信息
@@ -103,7 +99,7 @@ public class RecipeManager {
             isBlueprintBook = blueprintSection.getBoolean("is-book", true);
         }
         
-        return new ForgeRecipe(id, name, requiredLevel, ingredients, resultMythicMobsItem, resultRPGItem,
+        return new ForgeRecipe(id, name, requiredLevel, ingredients, resultMythicMobsItem,
                               baseRate, blueprintDisplay, blueprintLore, isBlueprintBook);
     }
 

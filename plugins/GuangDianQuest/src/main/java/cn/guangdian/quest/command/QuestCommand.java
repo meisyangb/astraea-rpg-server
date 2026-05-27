@@ -1,7 +1,6 @@
 package cn.guangdian.quest.command;
 
 import cn.guangdian.quest.GuangDianQuest;
-import cn.guangdian.quest.gui.*;
 import cn.guangdian.quest.model.PlayerQuestData;
 import cn.guangdian.quest.model.Quest;
 import cn.guangdian.quest.model.QuestObjective;
@@ -28,19 +27,13 @@ public class QuestCommand implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            // 无参数时打开GUI菜单
-            if (sender instanceof Player player) {
-                new QuestMainGUI(plugin, player).open();
-            } else {
-                sendHelp(sender);
-            }
+            sendHelp(sender);
             return true;
         }
 
         String subCommand = args[0].toLowerCase();
 
         switch (subCommand) {
-            case "gui" -> handleGUI(sender, args);
             case "list" -> handleList(sender, args);
             case "accept" -> handleAccept(sender, args);
             case "abandon" -> handleAbandon(sender, args);
@@ -55,29 +48,6 @@ public class QuestCommand implements CommandExecutor, TabExecutor {
         }
 
         return true;
-    }
-
-    private void handleGUI(CommandSender sender, String[] args) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage("该命令只能由玩家执行！");
-            return;
-        }
-
-        if (args.length < 2) {
-            // 默认打开主菜单
-            new QuestMainGUI(plugin, player).open();
-            return;
-        }
-
-        String guiType = args[1].toLowerCase();
-        switch (guiType) {
-            case "main" -> new QuestMainGUI(plugin, player).open();
-            case "active" -> new QuestListGUI(plugin, player, QuestListGUI.ListType.ACTIVE).open();
-            case "available" -> new QuestListGUI(plugin, player, QuestListGUI.ListType.AVAILABLE).open();
-            case "daily" -> new DailyQuestGUI(plugin, player).open();
-            case "questline" -> new QuestLineGUI(plugin, player).open();
-            default -> new QuestMainGUI(plugin, player).open();
-        }
     }
 
     private void handleList(CommandSender sender, String[] args) {
@@ -381,21 +351,14 @@ public class QuestCommand implements CommandExecutor, TabExecutor {
 
     private void sendHelp(CommandSender sender) {
         sender.sendMessage(color("<yellow>========== 任务命令帮助 =========="));
-        sender.sendMessage(color("<yellow>/quest <gray>- 打开任务GUI菜单"));
-        sender.sendMessage(color("<yellow>/quest gui <gray>- 打开任务GUI菜单"));
-        sender.sendMessage(color("<yellow>/quest gui main <gray>- 打开主菜单"));
-        sender.sendMessage(color("<yellow>/quest gui active <gray>- 打开进行中任务"));
-        sender.sendMessage(color("<yellow>/quest gui available <gray>- 打开可接取任务"));
-        sender.sendMessage(color("<yellow>/quest gui daily <gray>- 打开每日任务"));
-        sender.sendMessage(color("<yellow>/quest gui questline <gray>- 打开任务线"));
-        sender.sendMessage(color("<yellow>/quest list <gray>- 查看任务列表(文字)"));
+        sender.sendMessage(color("<yellow>/quest list <gray>- 查看任务列表"));
         sender.sendMessage(color("<yellow>/quest accept <ID> <gray>- 接取任务"));
         sender.sendMessage(color("<yellow>/quest abandon <ID> <gray>- 放弃任务"));
         sender.sendMessage(color("<yellow>/quest complete <ID> <gray>- 完成任务"));
         sender.sendMessage(color("<yellow>/quest info <ID> <gray>- 查看任务详情"));
-        sender.sendMessage(color("<yellow>/quest daily <gray>- 查看每日任务(文字)"));
+        sender.sendMessage(color("<yellow>/quest daily <gray>- 查看每日任务"));
         sender.sendMessage(color("<yellow>/quest track <gray>- 追踪任务进度"));
-        sender.sendMessage(color("<yellow>/quest questline <gray>- 查看任务线(文字)"));
+        sender.sendMessage(color("<yellow>/quest questline <gray>- 查看任务线"));
         if (sender.hasPermission("guangdian.quest.admin")) {
             sender.sendMessage(color("<yellow>/quest reload <gray>- 重载配置"));
             sender.sendMessage(color("<yellow>/quest resetdaily <gray>- 重置每日任务"));
@@ -428,27 +391,24 @@ public class QuestCommand implements CommandExecutor, TabExecutor {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {
-            List<String> subs = new ArrayList<>(Arrays.asList("gui", "list", "accept", "abandon", "complete", "info", "daily", "track", "questline"));
+            List<String> subs = new ArrayList<>(Arrays.asList("list", "accept", "abandon", "complete", "info", "daily", "track", "questline"));
             if (sender.hasPermission("guangdian.quest.admin")) {
                 subs.addAll(Arrays.asList("reload", "resetdaily"));
             }
             completions.addAll(subs);
         } else if (args.length == 2) {
             String subCommand = args[0].toLowerCase();
-            switch (subCommand) {
-                case "gui" -> completions.addAll(Arrays.asList("main", "active", "available", "daily", "questline"));
-                case "accept" -> {
-                    if (sender instanceof Player player) {
-                        completions.addAll(plugin.getQuestManager().getAvailableQuests(player.getUniqueId()));
-                    }
+            if (subCommand.equals("accept")) {
+                if (sender instanceof Player player) {
+                    completions.addAll(plugin.getQuestManager().getAvailableQuests(player.getUniqueId()));
                 }
-                case "abandon", "complete" -> {
-                    if (sender instanceof Player player) {
-                        PlayerQuestData data = plugin.getProgressManager().getPlayerData(player.getUniqueId());
-                        completions.addAll(data.getActiveQuestIds());
-                    }
+            } else if (subCommand.equals("abandon") || subCommand.equals("complete")) {
+                if (sender instanceof Player player) {
+                    PlayerQuestData data = plugin.getProgressManager().getPlayerData(player.getUniqueId());
+                    completions.addAll(data.getActiveQuestIds());
                 }
-                case "info" -> completions.addAll(plugin.getQuestRepository().getAllQuests().stream()
+            } else if (subCommand.equals("info")) {
+                completions.addAll(plugin.getQuestRepository().getAllQuests().stream()
                     .map(Quest::getId).collect(Collectors.toList()));
             }
         }

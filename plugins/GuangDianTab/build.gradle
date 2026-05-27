@@ -15,7 +15,6 @@ repositories {
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
     compileOnly project(':plugins:RPGCore')
-    compileOnly project(':plugins:GuangDianArmorStats')
     compileOnly files('../GuangDianArmorStats/libs/PlaceholderAPI.jar')
     compileOnly files('libs/LuckPerms.jar')
     compileOnly files('libs/Vault.jar')

@@ -1,11 +1,11 @@
 package cn.guangdian.soulbind.listener;
 
-import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.soulbind.GuangDianSoulBind;
 import cn.guangdian.soulbind.api.SoulBindService;
 import cn.guangdian.soulbind.hook.MythicMobsHook;
 import cn.guangdian.soulbind.manager.ConfigManager;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -29,14 +29,12 @@ public class SoulBindListener implements Listener {
     private final SoulBindService service;
     private final ConfigManager config;
     private final MythicMobsHook mythicMobsHook;
-    private final MiniMessageService miniMessage;
 
     public SoulBindListener(GuangDianSoulBind plugin) {
         this.plugin = plugin;
         this.service = plugin.getService();
         this.config = plugin.getConfigManager();
         this.mythicMobsHook = plugin.getMythicMobsHook();
-        this.miniMessage = MiniMessageService.getInstance();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -166,7 +164,7 @@ public class SoulBindListener implements Listener {
     private void sendMessage(Player player, String messageKey) {
         String message = config.getMessage(messageKey);
         if (message != null && !message.isEmpty()) {
-            Component component = miniMessage.colorize(message);
+            Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
             player.sendMessage(component);
         }
     }

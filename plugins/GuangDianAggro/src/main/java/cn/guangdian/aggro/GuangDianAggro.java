@@ -8,6 +8,7 @@ import cn.guangdian.aggro.placeholder.AggroPlaceholder;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.GameLogger;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 
 /**
@@ -82,7 +83,7 @@ public class GuangDianAggro extends AbstractRPGPlugin {
     @Override
     protected void onPluginDisable() {
         if (placeholder != null) {
-            placeholder.unregister();
+            PlaceholderAPI.unregisterExpansion(placeholder);
             placeholder = null;
         }
 

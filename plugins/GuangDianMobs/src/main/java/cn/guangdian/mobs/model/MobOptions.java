@@ -17,18 +17,7 @@ public class MobOptions {
     private String bossBarColor = "RED";        // Boss血条颜色
     private String bossBarStyle = "SOLID";      // Boss血条样式
 
-    // MythicMobs 新增支持
-    private boolean preventSunBurn = false;     // 防止阳光燃烧
-    private boolean invisible = false;          // 隐形
-    private int noDamageTicks = 0;              // 无敌时间(tick)
-    private boolean despawn = true;             // 是否自然消失
-
-    // 伪装配置
-    private DisguiseSettings disguise;          // 伪装设置
-
-    public MobOptions() {
-        this.disguise = new DisguiseSettings();
-    }
+    public MobOptions() {}
 
     // Getters and Setters
     public boolean isAlwaysShowName() { return alwaysShowName; }
@@ -60,42 +49,4 @@ public class MobOptions {
 
     public String getBossBarStyle() { return bossBarStyle; }
     public void setBossBarStyle(String bossBarStyle) { this.bossBarStyle = bossBarStyle; }
-
-    // MythicMobs 新增 Getter/Setter
-    public boolean isPreventSunBurn() { return preventSunBurn; }
-    public void setPreventSunBurn(boolean preventSunBurn) { this.preventSunBurn = preventSunBurn; }
-
-    public boolean isInvisible() { return invisible; }
-    public void setInvisible(boolean invisible) { this.invisible = invisible; }
-
-    public int getNoDamageTicks() { return noDamageTicks; }
-    public void setNoDamageTicks(int noDamageTicks) { this.noDamageTicks = noDamageTicks; }
-
-    public boolean isDespawn() { return despawn; }
-    public void setDespawn(boolean despawn) { this.despawn = despawn; }
-
-    public DisguiseSettings getDisguise() { return disguise; }
-    public void setDisguise(DisguiseSettings disguise) { this.disguise = disguise; }
-
-    /**
-     * 伪装设置
-     */
-    public static class DisguiseSettings {
-        private boolean enabled = false;        // 是否启用伪装
-        private String type = "ZOMBIE";         // 伪装成的实体类型
-        private String playerName = null;       // 伪装成玩家时的名称
-        private String skin = null;             // 伪装成玩家时的皮肤
-
-        public boolean isEnabled() { return enabled; }
-        public void setEnabled(boolean enabled) { this.enabled = enabled; }
-
-        public String getType() { return type; }
-        public void setType(String type) { this.type = type; }
-
-        public String getPlayerName() { return playerName; }
-        public void setPlayerName(String playerName) { this.playerName = playerName; }
-
-        public String getSkin() { return skin; }
-        public void setSkin(String skin) { this.skin = skin; }
-    }
 }

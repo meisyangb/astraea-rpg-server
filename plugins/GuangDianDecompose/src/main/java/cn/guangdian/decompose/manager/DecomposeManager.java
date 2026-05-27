@@ -28,27 +28,12 @@ public class DecomposeManager {
             return DecomposeResult.failure("无效的物品!");
         }
 
-        String itemId = null;
-
-        // 先检查 MythicMobs 物品
         String mythicId = plugin.getMythicMobsHook().getMythicItemId(item);
-        if (mythicId != null) {
-            itemId = mythicId;
+        if (mythicId == null) {
+            return DecomposeResult.failure(plugin.getConfig().getString("messages.not-mythic-item", "此物品无法分解!"));
         }
 
-        // 再检查 RPGItems 物品
-        if (itemId == null && plugin.getRPGItemsHook() != null && plugin.getRPGItemsHook().isEnabled()) {
-            String rpgId = plugin.getRPGItemsHook().getRPGItemId(item);
-            if (rpgId != null) {
-                itemId = rpgId;
-            }
-        }
-
-        if (itemId == null) {
-            return DecomposeResult.failure(plugin.getConfig().getString("messages.not-decomposable-item", "此物品无法分解!"));
-        }
-
-        DecomposeRule rule = plugin.getRuleManager().getRule(itemId);
+        DecomposeRule rule = plugin.getRuleManager().getRule(mythicId);
         if (rule == null) {
             return DecomposeResult.failure(plugin.getConfig().getString("messages.no-decompose-rule", "该装备没有配置分解规则!"));
         }
@@ -102,13 +87,6 @@ public class DecomposeManager {
     private ItemStack createRewardItem(DecomposeRule.MaterialReward material) {
         if (material.isMythicItem()) {
             return plugin.getMythicMobsHook().getMythicItem(material.getItemId(), material.getAmount());
-        } else if (material.isRPGItem()) {
-            if (plugin.getRPGItemsHook() != null && plugin.getRPGItemsHook().isEnabled()) {
-                return plugin.getRPGItemsHook().getRPGItem(material.getItemId(), material.getAmount());
-            } else {
-                plugin.getLogger().warning("RPGItems 未加载，无法获取物品: " + material.getItemId());
-                return null;
-            }
         } else if (material.isVanillaItem()) {
             try {
                 Material mat = Material.valueOf(material.getItemId().toUpperCase());

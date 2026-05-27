@@ -13,14 +13,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class HealthMonitor implements Runnable {
     
     private final JavaPlugin plugin;
-    private final NameDisplayManager displayManager;
     private SyncScheduler scheduler;
     private long taskId = -1;
     private boolean enabled = false;
     
-    public HealthMonitor(JavaPlugin plugin, NameDisplayManager displayManager) {
+    public HealthMonitor(JavaPlugin plugin) {
         this.plugin = plugin;
-        this.displayManager = displayManager;
         hookScheduler();
     }
     

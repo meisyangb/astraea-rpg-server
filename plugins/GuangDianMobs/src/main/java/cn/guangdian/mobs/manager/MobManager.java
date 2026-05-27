@@ -130,44 +130,7 @@ public class MobManager {
             mobOptions.setShowBossBar(options.getBoolean("show-boss-bar", false));
             mobOptions.setBossBarColor(options.getString("boss-bar-color", "RED"));
             mobOptions.setBossBarStyle(options.getString("boss-bar-style", "SOLID"));
-
-            // MythicMobs 新增选项
-            mobOptions.setPreventSunBurn(options.getBoolean("prevent-sun-burn", false));
-            mobOptions.setInvisible(options.getBoolean("invisible", false));
-            mobOptions.setNoDamageTicks(options.getInt("no-damage-ticks", 0));
-            mobOptions.setDespawn(options.getBoolean("despawn", true));
-
-            // 加载伪装设置
-            ConfigurationSection disguiseSection = options.getConfigurationSection("disguise");
-            if (disguiseSection != null) {
-                MobOptions.DisguiseSettings disguise = new MobOptions.DisguiseSettings();
-                disguise.setEnabled(disguiseSection.getBoolean("enabled", false));
-                disguise.setType(disguiseSection.getString("type", "ZOMBIE"));
-                disguise.setPlayerName(disguiseSection.getString("player-name"));
-                disguise.setSkin(disguiseSection.getString("skin"));
-                mobOptions.setDisguise(disguise);
-            }
-
             mob.setOptions(mobOptions);
-        }
-
-        // 加载击杀消息
-        mob.setKillMessages(section.getStringList("kill-messages"));
-
-        // 加载命令掉落
-        ConfigurationSection commandDropsSection = section.getConfigurationSection("command-drops");
-        if (commandDropsSection != null) {
-            List<CustomMob.CommandDrop> commandDrops = new ArrayList<>();
-            for (String key : commandDropsSection.getKeys(false)) {
-                ConfigurationSection dropSection = commandDropsSection.getConfigurationSection(key);
-                if (dropSection != null) {
-                    String command = dropSection.getString("command", "");
-                    double chance = dropSection.getDouble("chance", 1.0);
-                    String target = dropSection.getString("target", "@trigger");
-                    commandDrops.add(new CustomMob.CommandDrop(command, chance, target));
-                }
-            }
-            mob.setCommandDrops(commandDrops);
         }
 
         // 加载装备
@@ -330,20 +293,6 @@ public class MobManager {
         if (entity instanceof Slime slime && options.getSize() > 0) {
             slime.setSize(options.getSize());
         }
-
-        // 设置隐形
-        if (options.isInvisible()) {
-            entity.addPotionEffect(new org.bukkit.potion.PotionEffect(
-                org.bukkit.potion.PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, false, false));
-        }
-
-        // 设置无敌时间
-        if (options.getNoDamageTicks() > 0) {
-            entity.setNoDamageTicks(options.getNoDamageTicks());
-        }
-
-        // 设置是否消失
-        entity.setRemoveWhenFarAway(options.isDespawn());
 
         // 设置装备
         EntityEquipment equipment = entity.getEquipment();

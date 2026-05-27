@@ -10,9 +10,7 @@ import cn.guangdian.socket.manager.SocketService;
 import cn.guangdian.socket.util.ItemResolver;
 import cn.guangdian.socket.model.AttributeValue;
 import cn.guangdian.socket.parser.SocketParser;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -455,15 +453,11 @@ public class SocketInlayGUI implements InventoryHolder {
                 ItemStack display = gem.clone();
                 ItemMeta meta = display.getItemMeta();
                 if (meta != null) {
-                    // 使用Component Lore
-                    List<Component> lore = meta.lore();
-                    if (lore == null) {
-                        lore = new ArrayList<>();
-                    } else {
-                        lore = new ArrayList<>(lore);
-                    }
-                    lore.add(0, MiniMessage.miniMessage().deserialize("<gray>--- 已镶嵌 ---"));
-                    meta.lore(lore);
+                    List<String> lore = meta.hasLore() && meta.getLore() != null
+                        ? new ArrayList<>(meta.getLore())
+                        : new ArrayList<>();
+                    lore.add(0, "<gray>--- 已镶嵌 ---");
+                    meta.setLore(lore);
                     display.setItemMeta(meta);
                 }
                 inventory.setItem(GEM_SLOTS[i], display);
@@ -482,12 +476,17 @@ public class SocketInlayGUI implements InventoryHolder {
 
     private ItemStack createEquipmentPreview() {
         ItemStack preview = equipmentItem.clone();
-        
+        ItemMeta meta = preview.getItemMeta();
+        if (meta == null) return preview;
+
+        List<String> lore = meta.hasLore() && meta.getLore() != null
+            ? new ArrayList<>(meta.getLore())
+            : new ArrayList<>();
         List<ItemStack> allGems = collectAllGems();
         Map<String, AttributeValue> allAttrs = collectAllGemAttributes(allGems);
-        
-        SocketParser.applyInlay(preview, allGems, allAttrs);
-        
+        lore = SocketParser.replaceSocketWithInlay(lore, allGems, allAttrs);
+        meta.setLore(lore);
+        preview.setItemMeta(meta);
         return preview;
     }
 
@@ -763,21 +762,15 @@ public class SocketInlayGUI implements InventoryHolder {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         if (miniMessage != null) {
-            // 使用Component API设置displayName
-            meta.displayName(miniMessage.parse(name));
+            meta.setDisplayName(miniMessage.legacyColorize(name));
             if (lore != null && lore.length > 0) {
-                List<Component> componentLore = new ArrayList<>();
-                for (String line : lore) {
-                    componentLore.add(miniMessage.parse(line));
-                }
-                meta.lore(componentLore);
+                List<String> translatedLore = new ArrayList<>();
+                for (String line : lore) translatedLore.add(miniMessage.legacyColorize(line));
+                meta.setLore(translatedLore);
             }
         } else {
-            // 回退到旧版API
             meta.setDisplayName(name);
-            if (lore != null && lore.length > 0) {
-                meta.setLore(Arrays.asList(lore));
-            }
+            if (lore != null && lore.length > 0) meta.setLore(Arrays.asList(lore));
         }
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         item.setItemMeta(meta);

@@ -1,20 +1,16 @@
 name: RPGCore
-version: 2.0.0
+version: 1.0.0
 main: cn.guangdian.rpgcore.RPGCore
 api-version: '1.21'
 description: 光点RPG服务器核心框架
 author: GuangDian
 website: https://guangdian.cn
 
-# Folia 支持标记 - 支持区域化多线程
-folia-supported: true
-
 # Paper插件库依赖
 libraries:
   - com.zaxxer:HikariCP:5.1.0
   - org.slf4j:slf4j-api:2.0.9
   - org.slf4j:slf4j-simple:2.0.9
-  - com.github.ben-manes.caffeine:caffeine:3.1.8
 
 # 软依赖 - 可选的外部插件
 softdepend:
@@ -25,10 +21,9 @@ softdepend:
 # 提供的服务API
 provides:
   - cn.guangdian.rpgcore.api.ServiceRegistry
+  - cn.guangdian.rpgcore.api.EventBus
   - cn.guangdian.rpgcore.api.CacheProvider
   - cn.guangdian.rpgcore.api.AsyncExecutor
-  - cn.guangdian.rpgcore.api.SyncScheduler
-  - cn.guangdian.rpgcore.event.EventPublisher
 
 # 加载顺序 - 在其他插件之前加载
 load: STARTUP

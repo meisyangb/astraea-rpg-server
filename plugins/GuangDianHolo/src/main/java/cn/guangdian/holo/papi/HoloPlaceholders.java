@@ -2,10 +2,11 @@ package cn.guangdian.holo.papi;
 
 import cn.guangdian.holo.GuangDianHolo;
 import cn.guangdian.holo.model.Hologram;
-import cn.guangdian.rpgcore.integration.PlaceholderService;
+import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.NotNull;
 
-public class HoloPlaceholders {
+public class HoloPlaceholders extends PlaceholderExpansion {
 
     private final GuangDianHolo plugin;
 
@@ -13,17 +14,33 @@ public class HoloPlaceholders {
         this.plugin = plugin;
     }
 
-    public void register() {
-        PlaceholderService service = PlaceholderService.getInstance();
-        if (service == null) return;
-        
-        service.register("gdholo", (player, params) -> {
-            return switch (params.toLowerCase()) {
-                case "count" -> String.valueOf(plugin.getHologramManager().getHologramCount());
-                case "list" -> String.join(", ", plugin.getHologramManager().getHologramNames());
-                default -> handleHoloSpecificPlaceholder(params);
-            };
-        });
+    @Override
+    public @NotNull String getIdentifier() {
+        return "gdholo";
+    }
+
+    @Override
+    public @NotNull String getAuthor() {
+        return "GuangDian";
+    }
+
+    @Override
+    public @NotNull String getVersion() {
+        return plugin.getDescription().getVersion();
+    }
+
+    @Override
+    public boolean persist() {
+        return true;
+    }
+
+    @Override
+    public String onRequest(OfflinePlayer player, @NotNull String params) {
+        return switch (params.toLowerCase()) {
+            case "count" -> String.valueOf(plugin.getHologramManager().getHologramCount());
+            case "list" -> String.join(", ", plugin.getHologramManager().getHologramNames());
+            default -> handleHoloSpecificPlaceholder(params);
+        };
     }
 
     private String handleHoloSpecificPlaceholder(String params) {
@@ -51,12 +68,5 @@ public class HoloPlaceholders {
         }
 
         return null;
-    }
-
-    public void unregister() {
-        PlaceholderService service = PlaceholderService.getInstance();
-        if (service != null) {
-            service.unregister("gdholo");
-        }
     }
 }

@@ -10,34 +10,31 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 统一调度器助手
- *
+ * 
  * <p>为所有插件提供统一的任务调度接口，自动使用 RPGCore AsyncExecutor 或降级到 Bukkit Scheduler。</p>
- *
+ * 
  * <h3>使用示例:</h3>
  * <pre>{@code
  * // 异步执行
  * UnifiedScheduler.runAsync(plugin, () -> {
  *     // 异步任务
  * });
- *
+ * 
  * // 定时异步任务
  * UnifiedScheduler.runAsyncTimer(plugin, () -> {
  *     // 定时清理任务
  * }, 20L, 1200L); // 延迟1秒，每分钟执行
- *
+ * 
  * // 带返回值的异步任务
  * CompletableFuture<String> future = UnifiedScheduler.supplyAsync(plugin, () -> {
  *     return "结果";
  * });
  * }</pre>
- *
+ * 
  * @author GuangDian
  * @since 1.0.0
  */
 public final class UnifiedScheduler {
-
-    /** 每 tick 的毫秒数 */
-    public static final long MILLIS_PER_TICK = 50L;
 
     private UnifiedScheduler() {}
 
@@ -101,9 +98,9 @@ public final class UnifiedScheduler {
     public static void runAsyncLater(Plugin plugin, Runnable task, long delay) {
         AsyncExecutor executor = getAsyncExecutor();
         if (executor != null) {
-            Bukkit.getAsyncScheduler().runDelayed(plugin, scheduledTask -> executor.execute(task), delay * MILLIS_PER_TICK, java.util.concurrent.TimeUnit.MILLISECONDS);
+            Bukkit.getAsyncScheduler().runDelayed(plugin, scheduledTask -> executor.execute(task), delay * 50, java.util.concurrent.TimeUnit.MILLISECONDS);
         } else {
-            Bukkit.getAsyncScheduler().runDelayed(plugin, scheduledTask -> task.run(), delay * MILLIS_PER_TICK, java.util.concurrent.TimeUnit.MILLISECONDS);
+            Bukkit.getAsyncScheduler().runDelayed(plugin, scheduledTask -> task.run(), delay * 50, java.util.concurrent.TimeUnit.MILLISECONDS);
         }
     }
 
@@ -118,15 +115,15 @@ public final class UnifiedScheduler {
     public static void runAsyncTimer(Plugin plugin, Runnable task, long delay, long period) {
         AsyncExecutor executor = getAsyncExecutor();
         if (executor != null) {
-            Bukkit.getAsyncScheduler().runAtFixedRate(plugin, scheduledTask -> executor.execute(task), delay * MILLIS_PER_TICK, period * MILLIS_PER_TICK, java.util.concurrent.TimeUnit.MILLISECONDS);
+            Bukkit.getAsyncScheduler().runAtFixedRate(plugin, scheduledTask -> executor.execute(task), delay * 50, period * 50, java.util.concurrent.TimeUnit.MILLISECONDS);
         } else {
-            Bukkit.getAsyncScheduler().runAtFixedRate(plugin, scheduledTask -> task.run(), delay * MILLIS_PER_TICK, period * MILLIS_PER_TICK, java.util.concurrent.TimeUnit.MILLISECONDS);
+            Bukkit.getAsyncScheduler().runAtFixedRate(plugin, scheduledTask -> task.run(), delay * 50, period * 50, java.util.concurrent.TimeUnit.MILLISECONDS);
         }
     }
 
     /**
      * 同步执行任务（主线程）
-     *
+     * 
      * @param plugin 插件实例
      * @param task 任务
      */
@@ -134,52 +131,31 @@ public final class UnifiedScheduler {
         if (Bukkit.isPrimaryThread()) {
             task.run();
         } else {
-            // 优先使用 RPGCore SyncScheduler
-            RPGCore rpgCore = RPGCore.getInstance();
-            if (rpgCore != null) {
-                rpgCore.getScheduler().runSync(task);
-            } else {
-                // 降级：使用 Bukkit 调度器
-                Bukkit.getScheduler().runTask(plugin, task);
-            }
+            Bukkit.getScheduler().runTask(plugin, task);
         }
     }
 
     /**
      * 延迟同步执行任务
-     *
+     * 
      * @param plugin 插件实例
      * @param task 任务
      * @param delay 延迟（ticks）
      */
     public static void runSyncLater(Plugin plugin, Runnable task, long delay) {
-        // 优先使用 RPGCore SyncScheduler
-        RPGCore rpgCore = RPGCore.getInstance();
-        if (rpgCore != null) {
-            rpgCore.getScheduler().runSyncLater(task, delay);
-        } else {
-            // 降级：使用 Bukkit 调度器
-            Bukkit.getScheduler().runTaskLater(plugin, task, delay);
-        }
+        Bukkit.getScheduler().runTaskLater(plugin, task, delay);
     }
 
     /**
      * 定时同步执行任务
-     *
+     * 
      * @param plugin 插件实例
      * @param task 任务
      * @param delay 延迟（ticks）
      * @param period 周期（ticks）
      */
     public static void runSyncTimer(Plugin plugin, Runnable task, long delay, long period) {
-        // 优先使用 RPGCore SyncScheduler
-        RPGCore rpgCore = RPGCore.getInstance();
-        if (rpgCore != null) {
-            rpgCore.getScheduler().runSyncRepeating(task, delay, period);
-        } else {
-            // 降级：使用 Bukkit 调度器
-            Bukkit.getScheduler().runTaskTimer(plugin, task, delay, period);
-        }
+        Bukkit.getScheduler().runTaskTimer(plugin, task, delay, period);
     }
 
     /**

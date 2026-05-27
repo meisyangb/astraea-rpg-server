@@ -1,12 +1,11 @@
 package cn.guangdian.rpgcore.gui;
 
-import cn.guangdian.rpgcore.message.MessageServiceImpl;
+import cn.guangdian.rpgcore.message.UnifiedMessageService;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,13 +22,13 @@ import java.util.function.Consumer;
  * @author Astraea RPG Team
  * @since 1.1.0
  */
-public class GUI implements InventoryHolder {
+public final class GUI {
 
     private final String title;
     private final int size;
     private final Inventory inventory;
     private final Map<Integer, Consumer<InventoryClickEvent>> clickHandlers;
-    private final MessageServiceImpl msg;
+    private final UnifiedMessageService msg;
 
     private boolean updateOnOpen = false;
     private Consumer<Player> openHandler;
@@ -38,17 +37,9 @@ public class GUI implements InventoryHolder {
     GUI(@NotNull String title, int size) {
         this.title = title;
         this.size = size;
-        this.inventory = Bukkit.createInventory(this, size, Component.text(title));
+        this.inventory = Bukkit.createInventory(null, size, Component.text(title));
         this.clickHandlers = new HashMap<>();
-        this.msg = MessageServiceImpl.getInstance();
-    }
-
-    GUI(@NotNull String title, int size, @NotNull Inventory externalInventory) {
-        this.title = title;
-        this.size = size;
-        this.inventory = externalInventory;
-        this.clickHandlers = new HashMap<>();
-        this.msg = MessageServiceImpl.getInstance();
+        this.msg = UnifiedMessageService.getInstance();
     }
 
     /**
@@ -117,14 +108,6 @@ public class GUI implements InventoryHolder {
         if (updateOnOpen && openHandler != null) {
             openHandler.accept(player);
         }
-
-        // 注册到 GUIListener
-        GUIManager guiManager = GUIManager.getInstance();
-        if (guiManager.isInitialized()) {
-            GUIListener listener = (GUIListener) guiManager.getListener();
-            listener.registerPlayerGUI(player, this);
-        }
-
         player.openInventory(inventory);
     }
 
@@ -147,22 +130,10 @@ public class GUI implements InventoryHolder {
             return; // 点击了玩家背包
         }
 
-        // 取消所有在 GUI 内的点击操作（防止物品移动）
-        event.setCancelled(true);
-
-        // 如果有点击处理器，执行它
         Consumer<InventoryClickEvent> handler = clickHandlers.get(slot);
         if (handler != null) {
+            event.setCancelled(true); // 默认取消点击
             handler.accept(event);
-        }
-    }
-
-    /**
-     * 设置点击处理器
-     */
-    public void setClickHandler(int slot, @Nullable Consumer<InventoryClickEvent> handler) {
-        if (handler != null) {
-            clickHandlers.put(slot, handler);
         }
     }
 
@@ -184,7 +155,6 @@ public class GUI implements InventoryHolder {
         return size;
     }
 
-    @Override
     public @NotNull Inventory getInventory() {
         return inventory;
     }

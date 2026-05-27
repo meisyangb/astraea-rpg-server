@@ -1,13 +1,14 @@
 package cn.guangdian.points.placeholder;
 
 import cn.guangdian.points.GuangDianPoints;
-import cn.guangdian.rpgcore.integration.PlaceholderService;
+import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class PointsPlaceholder {
+public class PointsPlaceholder extends PlaceholderExpansion {
 
     private final GuangDianPoints plugin;
 
@@ -15,58 +16,71 @@ public class PointsPlaceholder {
         this.plugin = plugin;
     }
 
-    public void register() {
-        PlaceholderService service = PlaceholderService.getInstance();
-        if (service == null) return;
-        
-        service.register("gdpoints", (player, params) -> {
-            if (player == null) return "";
-            
-            UUID uuid = player.getUniqueId();
-            long balance = plugin.getBalance(uuid);
-            
-            switch (params.toLowerCase()) {
-                case "balance":
-                    return String.valueOf(balance);
-                case "balance_formatted":
-                    return formatNumber(balance);
-                case "balance_万":
-                    return String.format("%.1f", balance / 10000.0);
-                case "balance_亿":
-                    return String.format("%.2f", balance / 100000000.0);
-                case "rank":
-                    return String.valueOf(getPlayerRank(uuid));
-                case "rank_formatted":
-                    return formatRank(getPlayerRank(uuid));
-                case "top_1":
-                    return getTopPlayerName(0);
-                case "top_2":
-                    return getTopPlayerName(1);
-                case "top_3":
-                    return getTopPlayerName(2);
-                case "top_1_balance":
-                    return formatNumber(getTopPlayerBalance(0));
-                case "top_2_balance":
-                    return formatNumber(getTopPlayerBalance(1));
-                case "top_3_balance":
-                    return formatNumber(getTopPlayerBalance(2));
-                default:
-                    if (params.startsWith("top_")) {
-                        try {
-                            int index = Integer.parseInt(params.substring(4)) - 1;
-                            if (index >= 0 && index < 10) {
-                                return getTopPlayerName(index);
-                            }
-                        } catch (NumberFormatException e) {
-                            // ignore
-                        }
-                    }
-                    return String.valueOf(balance);
-            }
-        });
+    @Override
+    public @NotNull String getIdentifier() {
+        return "gdpoints";
     }
 
-    public void unregister() {
+    @Override
+    public @NotNull String getAuthor() {
+        return "Gumin";
+    }
+
+    @Override
+    public @NotNull String getVersion() {
+        return plugin.getDescription().getVersion();
+    }
+
+    @Override
+    public boolean persist() {
+        return true;
+    }
+
+    @Override
+    public String onRequest(OfflinePlayer player, @NotNull String params) {
+        if (player == null) return "";
+        
+        UUID uuid = player.getUniqueId();
+        long balance = plugin.getBalance(uuid);
+        
+        switch (params.toLowerCase()) {
+            case "balance":
+                return String.valueOf(balance);
+            case "balance_formatted":
+                return formatNumber(balance);
+            case "balance_万":
+                return String.format("%.1f", balance / 10000.0);
+            case "balance_亿":
+                return String.format("%.2f", balance / 100000000.0);
+            case "rank":
+                return String.valueOf(getPlayerRank(uuid));
+            case "rank_formatted":
+                return formatRank(getPlayerRank(uuid));
+            case "top_1":
+                return getTopPlayerName(0);
+            case "top_2":
+                return getTopPlayerName(1);
+            case "top_3":
+                return getTopPlayerName(2);
+            case "top_1_balance":
+                return formatNumber(getTopPlayerBalance(0));
+            case "top_2_balance":
+                return formatNumber(getTopPlayerBalance(1));
+            case "top_3_balance":
+                return formatNumber(getTopPlayerBalance(2));
+            default:
+                if (params.startsWith("top_")) {
+                    try {
+                        int index = Integer.parseInt(params.substring(4)) - 1;
+                        if (index >= 0 && index < 10) {
+                            return getTopPlayerName(index);
+                        }
+                    } catch (NumberFormatException e) {
+                        // ignore
+                    }
+                }
+                return String.valueOf(balance);
+        }
     }
 
     private int getPlayerRank(UUID uuid) {
@@ -82,10 +96,10 @@ public class PointsPlaceholder {
     }
 
     private String formatRank(int rank) {
-        if (rank == 1) return "<gold>🥇第1名";
-        if (rank == 2) return "<gray>🥈第2名";
-        if (rank == 3) return "<red>🥉第3名";
-        return "<yellow>第" + rank + "名";
+        if (rank == 1) return "§6🥇第1名";
+        if (rank == 2) return "§7🥈第2名";
+        if (rank == 3) return "§c🥉第3名";
+        return "§e第" + rank + "名";
     }
 
     private String getTopPlayerName(int index) {
@@ -97,9 +111,9 @@ public class PointsPlaceholder {
         if (index < sorted.size()) {
             UUID topUuid = sorted.get(index).getKey();
             OfflinePlayer topPlayer = plugin.getServer().getOfflinePlayer(topUuid);
-            return topPlayer.getName() != null ? topPlayer.getName() : "<red>未知";
+            return topPlayer.getName() != null ? topPlayer.getName() : "§c未知";
         }
-        return "<gray>-";
+        return "§7-";
     }
 
     private long getTopPlayerBalance(int index) {

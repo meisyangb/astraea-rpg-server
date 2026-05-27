@@ -4,7 +4,9 @@ import cn.guangdian.cavefu.GuangDianCaveFu;
 import cn.guangdian.cavefu.cave.Cave;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
+import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
+import cn.guangdian.rpgcore.event.events.RpgMobKillEvent;
 import cn.guangdian.rpgcore.service.api.CaveService;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -13,10 +15,10 @@ import java.util.UUID;
 
 /**
  * 洞府服务适配器
- *
+ * 
  * <p>连接 GuangDianCaveFu 与 RPGCore 服务层，
- * 支持 AsyncExecutor 异步操作。</p>
- *
+ * 支持 EventBus 事件订阅和 AsyncExecutor 异步操作。</p>
+ * 
  * @author GuangDian
  * @since 1.0.0
  */
@@ -24,6 +26,7 @@ public class CaveServiceAdapter implements CaveService {
 
     private final GuangDianCaveFu plugin;
     private final boolean useRPGCore;
+    private EventBus eventBus;
     private AsyncExecutor asyncExecutor;
 
     public CaveServiceAdapter(GuangDianCaveFu plugin) {
@@ -34,11 +37,12 @@ public class CaveServiceAdapter implements CaveService {
             try {
                 RPGCore rpgCore = RPGCore.getInstance();
                 ServiceRegistry registry = rpgCore.getServiceRegistry();
+                this.eventBus = rpgCore.getEventBus();
                 this.asyncExecutor = rpgCore.getAsyncExecutor();
-
+                
                 registry.registerService(CaveService.class, this);
                 plugin.getLogger().info("已注册到 RPGCore: CaveService");
-
+                
                 // 订阅怪物击杀事件 - 用于副本怪物击杀统计
                 subscribeEvents();
             } catch (Exception e) {
@@ -169,6 +173,10 @@ public class CaveServiceAdapter implements CaveService {
 
     public boolean isUsingRPGCore() {
         return useRPGCore;
+    }
+
+    public EventBus getEventBus() {
+        return eventBus;
     }
 
     public AsyncExecutor getAsyncExecutor() {

@@ -71,21 +71,7 @@ public class MonthlyCardType {
     public String getCurrencyType() {
         return currencyType;
     }
-
-    /**
-     * 获取货币类型（别名）
-     */
-    public String getCurrency() {
-        return currencyType;
-    }
-
-    /**
-     * 获取时长（别名）
-     */
-    public int getDuration() {
-        return durationDays;
-    }
-
+    
     public void setCurrencyType(String currencyType) {
         this.currencyType = currencyType;
     }
@@ -120,29 +106,23 @@ public class MonthlyCardType {
         }
         return dailyRewards.get(day - 1);
     }
-
-    /**
-     * 获取某一天的奖励（别名）
-     */
-    public DailyReward getReward(int day) {
-        return getRewardForDay(day);
-    }
     
     public static MonthlyCardType fromConfig(String id, ConfigurationSection section) {
         MonthlyCardType type = new MonthlyCardType(id);
-        type.setDisplayName(section.getString("name", id));
+        type.setDisplayName(section.getString("display-name", id));
         type.setDescription(section.getString("description", ""));
-        type.setDurationDays(section.getInt("duration", 30));
+        type.setDurationDays(section.getInt("duration-days", 30));
         type.setPrice(section.getLong("price", 0));
-        type.setCurrencyType(section.getString("currency", "points"));
+        type.setCurrencyType(section.getString("currency-type", "points"));
         
-        // 从daily节点读取每日奖励
-        ConfigurationSection dailySection = section.getConfigurationSection("daily");
-        if (dailySection != null) {
-            DailyReward reward = DailyReward.fromConfig(dailySection);
-            // 为每一天创建相同的奖励（简化处理）
-            for (int i = 0; i < type.getDurationDays(); i++) {
-                type.getDailyRewards().add(reward);
+        ConfigurationSection rewardsSection = section.getConfigurationSection("daily-rewards");
+        if (rewardsSection != null) {
+            for (String dayKey : rewardsSection.getKeys(false)) {
+                ConfigurationSection daySection = rewardsSection.getConfigurationSection(dayKey);
+                if (daySection != null) {
+                    DailyReward reward = DailyReward.fromConfig(daySection);
+                    type.getDailyRewards().add(reward);
+                }
             }
         }
         

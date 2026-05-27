@@ -2,6 +2,7 @@ package cn.guangdian.dropcontrol.adapter;
 
 import cn.guangdian.dropcontrol.GuangDianDropControl;
 import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
 import cn.guangdian.rpgcore.service.api.DropControlService;
 import org.bukkit.Bukkit;
@@ -22,6 +23,7 @@ public class DropControlServiceAdapter implements DropControlService {
 
     private final GuangDianDropControl plugin;
     private final boolean useRPGCore;
+    private EventBus eventBus;
 
     public DropControlServiceAdapter(GuangDianDropControl plugin) {
         this.plugin = plugin;
@@ -31,6 +33,7 @@ public class DropControlServiceAdapter implements DropControlService {
             try {
                 RPGCore rpgCore = RPGCore.getInstance();
                 ServiceRegistry registry = rpgCore.getServiceRegistry();
+                this.eventBus = rpgCore.getEventBus();
 
                 registry.registerService(DropControlService.class, this);
                 plugin.getLogger().info("已注册到 RPGCore: DropControlService");

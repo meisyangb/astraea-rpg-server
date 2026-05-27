@@ -78,26 +78,6 @@ public class DailyReward {
     public boolean hasAnyReward() {
         return points > 0 || money > 0 || !items.isEmpty() || !commands.isEmpty();
     }
-
-    /**
-     * 获取奖励描述
-     */
-    public String getDescription() {
-        StringBuilder sb = new StringBuilder();
-        if (points > 0) {
-            sb.append(points).append(" 点券 ");
-        }
-        if (money > 0) {
-            sb.append(money).append(" 游戏币 ");
-        }
-        if (!items.isEmpty()) {
-            sb.append(items.size()).append(" 个物品 ");
-        }
-        if (sb.length() == 0) {
-            return "无奖励";
-        }
-        return sb.toString().trim();
-    }
     
     public static DailyReward fromConfig(ConfigurationSection section) {
         DailyReward reward = new DailyReward();

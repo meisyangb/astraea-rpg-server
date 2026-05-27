@@ -14,14 +14,28 @@ import java.util.UUID;
  *
  * <p>当玩家的技能点发生变化时触发。</p>
  *
- * <p><strong>已废弃</strong>：业务事件应定义在对应的业务插件中，而不是 RPGCore。
- * 请迁移到 GuangDianClass 插件中的 {@code cn.guangdian.classsystem.event.SkillPointEvent}。</p>
+ * <h3>使用示例：</h3>
+ * <pre>{@code
+ * @EventHandler
+ * public void onSkillPointChange(RpgSkillPointEvent event) {
+ *     Player player = event.getPlayer();
+ *     int oldPoints = event.getOldPoints();
+ *     int newPoints = event.getNewPoints();
  *
+ *     // 显示技能点变化
+ *     MiniMessageService mm = MiniMessageService.getInstance();
+ *     player.sendMessage(mm.green("技能点: " + oldPoints + " → " + newPoints));
+ *
+ *     // 广播技能点成就
+ *     if (newPoints >= 100) {
+ *         Bukkit.broadcastMessage(mm.gold(player.getName() + " 达到了 100 技能点!"));
+ *     }
+ * }
+ * }</pre>
+ * 
  * @author GuangDian
  * @since 1.0.0
- * @deprecated 业务事件已迁移到对应插件。请使用 GuangDianClass 插件中的 SkillPointEvent。
  */
-@Deprecated(since = "2.0.0", forRemoval = true)
 public class RpgSkillPointEvent extends Event implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();

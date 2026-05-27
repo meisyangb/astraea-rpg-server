@@ -37,32 +37,6 @@ public class ItemRegistry {
         }
     }
 
-    /**
-     * 从多个配置文件加载物品
-     */
-    public void loadFromConfigs(List<org.bukkit.configuration.file.FileConfiguration> configs) {
-        items.clear();
-        int totalItems = 0;
-
-        for (org.bukkit.configuration.file.FileConfiguration config : configs) {
-            if (config == null) continue;
-
-            for (String itemId : config.getKeys(false)) {
-                // 跳过注释行
-                if (itemId.startsWith("#")) continue;
-
-                ConfigurationSection itemConfig = config.getConfigurationSection(itemId);
-                if (itemConfig == null) continue;
-
-                ItemTemplate item = parseItemTemplate(itemId, itemConfig);
-                if (item != null) {
-                    items.put(itemId, item);
-                    totalItems++;
-                }
-            }
-        }
-    }
-
     private ItemTemplate parseItemTemplate(String id, ConfigurationSection config) {
         try {
             // 基础信息 - 兼容 Id 字段（MythicMobs 格式）

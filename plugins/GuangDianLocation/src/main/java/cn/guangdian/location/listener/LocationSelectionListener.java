@@ -2,7 +2,7 @@ package cn.guangdian.location.listener;
 
 import cn.guangdian.location.GuangDianLocation;
 import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.message.MessageServiceImpl;
+import cn.guangdian.rpgcore.message.UnifiedMessageService;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -82,7 +82,7 @@ public class LocationSelectionListener implements Listener {
         showSelectionEffect(player, targetLocation);
 
         // 提示玩家输入名称
-        MessageServiceImpl msg = MessageServiceImpl.getInstance();
+        UnifiedMessageService msg = UnifiedMessageService.getInstance();
         player.sendMessage(msg.colorize("<gold>===== 坐标点选择 ====="));
         player.sendMessage(msg.colorize("<yellow>你选中了一个位置:"));
         player.sendMessage(msg.colorize("<gray>世界: <white>" + targetLocation.getWorld().getName()));
@@ -121,7 +121,7 @@ public class LocationSelectionListener implements Listener {
             RPGCore rpgCore = RPGCore.getInstance();
             if (rpgCore != null) {
                 rpgCore.getScheduler().runSync(() ->
-                    player.sendMessage(plugin.getMessageService().colorize("<red>输入超时，坐标选择已取消。")));
+                    player.sendMessage(plugin.getUnifiedMessageService().colorize("<red>输入超时，坐标选择已取消。")));
             }
             return;
         }
@@ -135,7 +135,7 @@ public class LocationSelectionListener implements Listener {
             RPGCore rpgCore = RPGCore.getInstance();
             if (rpgCore != null) {
                 rpgCore.getScheduler().runSync(() ->
-                    player.sendMessage(plugin.getMessageService().colorize("<yellow>已取消本次坐标选择。")));
+                    player.sendMessage(plugin.getUnifiedMessageService().colorize("<yellow>已取消本次坐标选择。")));
             }
             return;
         }
@@ -146,7 +146,7 @@ public class LocationSelectionListener implements Listener {
             RPGCore rpgCore = RPGCore.getInstance();
             if (rpgCore != null) {
                 rpgCore.getScheduler().runSync(() ->
-                    player.sendMessage(plugin.getMessageService().colorize("<red>坐标名称无效！名称只能包含字母、数字、下划线、中文，长度2-32个字符。")));
+                    player.sendMessage(plugin.getUnifiedMessageService().colorize("<red>坐标名称无效！名称只能包含字母、数字、下划线、中文，长度2-32个字符。")));
             }
             return;
         }

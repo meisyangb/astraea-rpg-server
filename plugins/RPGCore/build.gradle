@@ -19,7 +19,6 @@ repositories {
 dependencies {
     // Paper API
     compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
-    testImplementation 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
 
     // 外部插件 API - 从本地文件加载
     compileOnly name: 'PlaceholderAPI'
@@ -33,19 +32,8 @@ dependencies {
     // Caffeine 缓存
     implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
 
-    // JSON/YAML 处理 - Jackson (替换 Gson)
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.16.1'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1'
-
-    // 配置管理 - Configurate (仅 YAML)
-    implementation 'org.spongepowered:configurate-core:4.1.2'
-    implementation 'org.spongepowered:configurate-yaml:4.1.2'
-
-    // 高性能事件总线 - MBassador
-    implementation 'net.engio:mbassador:1.3.2'
-
-    // 日志
+    // 其他依赖
+    implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'org.slf4j:slf4j-api:2.0.9'
 
     // HTTP客户端 - OkHttp
@@ -54,12 +42,9 @@ dependencies {
     // Cron调度器 - Cron4J
     implementation 'it.sauronsoftware.cron4j:cron4j:2.2.5'
 
-    // Google Guice - 依赖注入框架
-    implementation 'com.google.inject:guice:7.0.0'
-
     // 单元测试
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
     testImplementation 'org.mockito:mockito-core:5.8.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.8.0'
     testImplementation 'org.assertj:assertj-core:3.24.2'
@@ -77,69 +62,29 @@ java {
 compileJava {
     options.encoding = 'UTF-8'
     options.compilerArgs += ['-parameters']
-    
-    // 废弃API报告配置
-    options.deprecation = true  // 显示废弃警告
-    
-    // 构建时输出废弃API摘要
-    doFirst {
-        println "============================================================"
-        println "  RPGCore Build - Deprecated API Usage Report"
-        println "============================================================"
-        println ""
-        println "  Deprecated APIs (still usable but will be removed):"
-        println ""
-        println "  1. YamlDataStore -> ConfigurateSupport"
-        println "     Location: data/YamlDataStore.java"
-        println "     Replace : config/ConfigurateSupport.java"
-        println ""
-        println "  2. ServiceInjector -> GuiceSupport"
-        println "     Location: inject/ServiceInjector.java"
-        println "     Replace : inject/GuiceSupport.java"
-        println ""
-        println "  3. ColorUtil -> MiniMessageService"
-        println "     Location: util/ColorUtil.java"
-        println "     Replace : message/MiniMessageService.java"
-        println ""
-        println "  4. Missing @Deprecated annotation on:"
-        println "     - ConfigurateSupport"
-        println "     - EventBusSupport"
-        println "     - LoggerFactory"
-        println "     - RPGCoreModule"
-        println ""
-        println "  Note: Deprecated APIs remain functional for backward compatibility"
-        println "  Migration Guide: .trae/docs/reference/MIGRATION_GUIDE.md"
-        println "============================================================"
-    }
 }
 
 test {
     useJUnitPlatform()
-    
-    testLogging {
-        events "passed", "skipped", "failed"
-        showExceptions true
-        showCauses true
-        showStackTraces true
-    }
-    
-    reports {
-        html.required = true
-        junitXml.required = true
-    }
+    enabled = true
+}
+
+// 启用测试编译
+compileTestJava {
+    enabled = true
 }
 
 // 普通 JAR 配置
 jar {
     archiveClassifier.set('')
     archiveFileName = "RPGCore-${version}.jar"
-
+    
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
-
+    
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
+    
     manifest {
         attributes(
             'Main-Class': 'cn.guangdian.rpgcore.RPGCore',
@@ -156,15 +101,10 @@ shadowJar {
 
     // 重定位第三方库
     relocate 'com.zaxxer.hikari', 'cn.guangdian.rpgcore.libs.hikari'
-    relocate 'com.fasterxml.jackson', 'cn.guangdian.rpgcore.libs.jackson'
-    relocate 'org.spongepowered.configurate', 'cn.guangdian.rpgcore.libs.configurate'
-    relocate 'net.engio.mbassador', 'cn.guangdian.rpgcore.libs.mbassador'
+    relocate 'com.google.gson', 'cn.guangdian.rpgcore.libs.gson'
     relocate 'okhttp3', 'cn.guangdian.rpgcore.libs.okhttp3'
     relocate 'okio', 'cn.guangdian.rpgcore.libs.okio'
     relocate 'it.sauronsoftware.cron4j', 'cn.guangdian.rpgcore.libs.cron4j'
-    relocate 'com.google.inject', 'cn.guangdian.rpgcore.libs.guice'
-    relocate 'javax.inject', 'cn.guangdian.rpgcore.libs.javax.inject'
-    relocate 'aopalliance', 'cn.guangdian.rpgcore.libs.aopalliance'
 
     // 禁用 minimize 避免ASM兼容问题
     minimize {

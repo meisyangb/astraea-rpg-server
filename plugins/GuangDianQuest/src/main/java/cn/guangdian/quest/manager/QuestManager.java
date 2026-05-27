@@ -197,9 +197,7 @@ public class QuestManager {
                     return;
                 }
             }
-        } catch (Exception e) {
-            plugin.getLogger().fine("通过RPGCore发放积分失败，尝试备用方法: " + e.getMessage());
-        }
+        } catch (Exception ignored) {}
 
         if (Bukkit.getPluginManager().isPluginEnabled("GuangDianPoints")) {
             try {
@@ -210,9 +208,7 @@ public class QuestManager {
                     java.lang.reflect.Method addMethod = api.getClass().getMethod("addBalance", UUID.class, long.class);
                     addMethod.invoke(api, playerId, (long) amount);
                 }
-            } catch (Exception e) {
-                plugin.getLogger().fine("通过GuangDianPoints发放积分失败: " + e.getMessage());
-            }
+            } catch (Exception ignored) {}
         }
     }
 
@@ -312,23 +308,26 @@ public class QuestManager {
 
     private void publishQuestEvent(UUID playerId, String questId, String action) {
         try {
+            cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+            if (rpgCore == null) return;
+            cn.guangdian.rpgcore.api.EventBus eventBus = rpgCore.getEventBus();
+            if (eventBus == null) return;
+
             Quest quest = getQuest(questId);
             String questName = quest != null ? quest.getName() : questId;
             String questType = quest != null ? quest.getType().name() : "UNKNOWN";
 
-            org.bukkit.event.Event event = null;
+            cn.guangdian.rpgcore.event.events.RpgQuestEvent event = null;
             switch (action) {
-                case "ACCEPT" -> event = new cn.guangdian.quest.event.QuestEvent.Accept(playerId, questId, questName, questType);
-                case "COMPLETE" -> event = new cn.guangdian.quest.event.QuestEvent.Complete(playerId, questId, questName, questType);
-                case "ABANDON" -> event = new cn.guangdian.quest.event.QuestEvent.Abandon(playerId, questId, questName, questType);
+                case "ACCEPT" -> event = new cn.guangdian.rpgcore.event.events.RpgQuestEvent.Accept(playerId, questId, questName, questType);
+                case "COMPLETE" -> event = new cn.guangdian.rpgcore.event.events.RpgQuestEvent.Complete(playerId, questId, questName, questType);
+                case "ABANDON" -> event = new cn.guangdian.rpgcore.event.events.RpgQuestEvent.Abandon(playerId, questId, questName, questType);
             }
 
             if (event != null) {
-                org.bukkit.Bukkit.getPluginManager().callEvent(event);
+                eventBus.publish(event);
             }
-        } catch (Exception e) {
-            plugin.getLogger().fine("发布任务事件失败: questId=" + questId + ", action=" + action + ", error=" + e.getMessage());
-        }
+        } catch (Exception ignored) {}
     }
 
     public boolean canComplete(UUID playerId, String questId) {

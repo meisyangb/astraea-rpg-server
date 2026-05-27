@@ -2,14 +2,12 @@ package cn.guangdian.board.adapter;
 
 import cn.guangdian.board.GuangDianBoard;
 import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
-import cn.guangdian.armorstats.event.PlayerStatsChangedEvent;
+import cn.guangdian.rpgcore.event.events.PlayerStatsChangedEvent;
 import cn.guangdian.rpgcore.service.api.BoardService;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +23,11 @@ import java.util.logging.Logger;
  * @author GuangDian
  * @since 1.0.0
  */
-public class BoardServiceAdapter implements BoardService, Listener {
+public class BoardServiceAdapter implements BoardService {
 
     private final GuangDianBoard plugin;
     private final boolean useRPGCore;
+    private EventBus eventBus;
     private Logger logger;
     private boolean autoUpdateOnStatsChange = true;
 
@@ -41,14 +40,14 @@ public class BoardServiceAdapter implements BoardService, Listener {
             try {
                 RPGCore rpgCore = RPGCore.getInstance();
                 ServiceRegistry registry = rpgCore.getServiceRegistry();
+                this.eventBus = rpgCore.getEventBus();
                 
                 // 注册服务
                 registry.registerService(BoardService.class, this);
                 logger.info("已注册到 RPGCore: BoardService");
                 
-                // 注册事件监听器
-                Bukkit.getPluginManager().registerEvents(this, plugin);
-                logger.info("已订阅 PlayerStatsChangedEvent (脏标记模式)");
+                // 订阅属性变化事件
+                subscribeToEvents();
                 
             } catch (Exception e) {
                 logger.warning("注册到 RPGCore 失败: " + e.getMessage());
@@ -57,19 +56,27 @@ public class BoardServiceAdapter implements BoardService, Listener {
     }
 
     /**
-     * 订阅属性变化事件 - 高性能优化版
+     * 订阅RPGCore事件 - 高性能优化版
      * 
      * 优化特性:
      * 1. 使用脏标记替代立即刷新
      * 2. 批量处理事件，减少刷新频率
      */
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onPlayerStatsChanged(PlayerStatsChangedEvent event) {
-        if (autoUpdateOnStatsChange) {
-            // 高性能优化: 只标记脏，不立即刷新
-            // 定时任务会检查脏标记并刷新
-            plugin.markDirty(event.getPlayerId());
+    private void subscribeToEvents() {
+        if (eventBus == null) {
+            return;
         }
+        
+        // 订阅属性变化事件，标记玩家为脏
+        eventBus.subscribe(PlayerStatsChangedEvent.class, event -> {
+            if (autoUpdateOnStatsChange) {
+                // 高性能优化: 只标记脏，不立即刷新
+                // 定时任务会检查脏标记并刷新
+                plugin.markDirty(event.getPlayerId());
+            }
+        });
+        
+        logger.info("已订阅 PlayerStatsChangedEvent (脏标记模式)");
     }
 
     // ==================== BoardService 实现 ====================

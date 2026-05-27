@@ -6,6 +6,7 @@ import cn.guangdian.socket.listener.SocketListener;
 import cn.guangdian.socket.manager.SocketService;
 import cn.guangdian.socket.parser.SocketParser;
 import cn.guangdian.socket.storage.GemStorage;
+import org.bukkit.command.PluginCommand;
 
 /**
  * GuangDianSocket - 宝石镶嵌插件
@@ -53,8 +54,11 @@ public class GuangDianSocket extends AbstractRPGPlugin {
         // 注册监听器
         getServer().getPluginManager().registerEvents(new SocketListener(this), this);
 
-        // 初始化 RPGCore CommandFramework
-        initCommandFramework();
+        // 注册命令
+        PluginCommand socketCmd = getCommand("socket");
+        if (socketCmd != null) {
+            socketCmd.setExecutor(new SocketCommand(this));
+        }
 
         // 注册服务到 RPGCore
         if (rpgCore != null) {
@@ -63,17 +67,6 @@ public class GuangDianSocket extends AbstractRPGPlugin {
 
         getLogger().info("GuangDianSocket 已启动 - 宝石镶嵌系统就绪");
         getLogger().info("宝石数据存储: PDC (PersistentDataContainer)");
-    }
-    
-    /**
-     * 注册命令
-     */
-    private void initCommandFramework() {
-        org.bukkit.command.PluginCommand socketCmd = getCommand("socket");
-        if (socketCmd != null) {
-            socketCmd.setExecutor(new SocketCommand(this));
-            getLogger().info("已注册命令");
-        }
     }
 
     @Override

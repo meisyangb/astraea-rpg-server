@@ -82,8 +82,7 @@ public class ExceptionHandlerImpl implements ExceptionHandler {
         
         if (player != null && player.isOnline()) {
             MiniMessageService mm = MiniMessageService.getInstance();
-            player.sendMessage(mm.red("操作失败，请联系管理员"));
-            logger.log(level, "向玩家 " + player.getName() + " 隐藏异常详情 [" + context + "]: " + throwable.getMessage());
+            player.sendMessage(mm.red("发生错误: " + throwable.getMessage()));
         }
     }
     

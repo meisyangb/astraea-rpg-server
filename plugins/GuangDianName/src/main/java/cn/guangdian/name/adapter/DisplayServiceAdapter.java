@@ -1,17 +1,17 @@
 package cn.guangdian.name.adapter;
 
 import cn.guangdian.name.GuangDianName;
-import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.name.HealthDisplay;
+import cn.guangdian.name.TitleDisplay;
+import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
-import cn.guangdian.armorstats.event.PlayerStatsChangedEvent;
+import cn.guangdian.rpgcore.event.events.PlayerStatsChangedEvent;
 import cn.guangdian.rpgcore.service.api.DisplayService;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 
 import java.util.UUID;
+import java.util.logging.Level;
 
 /**
  * DisplayService 服务适配器
@@ -29,14 +29,16 @@ import java.util.UUID;
  * @author GuangDian
  * @since 1.0.0
  */
-public class DisplayServiceAdapter implements DisplayService, Listener {
+public class DisplayServiceAdapter implements DisplayService {
 
     private final GuangDianName plugin;
     private final ServiceRegistry serviceRegistry;
+    private final EventBus eventBus;
     
-    public DisplayServiceAdapter(GuangDianName plugin, ServiceRegistry serviceRegistry) {
+    public DisplayServiceAdapter(GuangDianName plugin, ServiceRegistry serviceRegistry, EventBus eventBus) {
         this.plugin = plugin;
         this.serviceRegistry = serviceRegistry;
+        this.eventBus = eventBus;
     }
     
     /**
@@ -44,20 +46,27 @@ public class DisplayServiceAdapter implements DisplayService, Listener {
      */
     public void register() {
         serviceRegistry.registerService(DisplayService.class, this);
-        Bukkit.getPluginManager().registerEvents(this, plugin);
+        subscribeToEvents();
         plugin.getLogger().info("[DisplayServiceAdapter] 已注册 DisplayService 到 RPGCore");
     }
     
     /**
-     * 订阅属性变化事件，实现事件驱动更新
+     * 订阅 RPGCore 事件，实现事件驱动更新
      */
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onPlayerStatsChanged(PlayerStatsChangedEvent event) {
-        UUID playerId = event.getPlayerId();
-        Player player = Bukkit.getPlayer(playerId);
-        if (player != null && player.isOnline()) {
-            updatePlayerDisplay(player);
+    private void subscribeToEvents() {
+        if (eventBus == null) {
+            return;
         }
+        
+        eventBus.subscribe(PlayerStatsChangedEvent.class, event -> {
+            UUID playerId = event.getPlayerId();
+            Player player = Bukkit.getPlayer(playerId);
+            if (player != null && player.isOnline()) {
+                updatePlayerDisplay(player);
+            }
+        });
+        
+        plugin.getLogger().info("[DisplayServiceAdapter] 已订阅 PlayerStatsChangedEvent (事件驱动模式)");
     }
     
     /**
@@ -70,23 +79,63 @@ public class DisplayServiceAdapter implements DisplayService, Listener {
 
     @Override
     public String getPrefix(Player player) {
-        return "";
+        TitleDisplay titleDisplay = plugin.getTitleDisplay();
+        if (titleDisplay == null) {
+            return "";
+        }
+        return titleDisplay.getPrefix(player);
     }
 
     @Override
     public String getSuffix(Player player) {
-        return "";
+        TitleDisplay titleDisplay = plugin.getTitleDisplay();
+        if (titleDisplay == null) {
+            return "";
+        }
+        return titleDisplay.getSuffix(player);
     }
 
     @Override
     public Object getDisplayData(UUID playerId) {
-        return null;
+        // 返回玩家的显示配置数据
+        TitleDisplay titleDisplay = plugin.getTitleDisplay();
+        if (titleDisplay == null) {
+            return null;
+        }
+        
+        Player player = Bukkit.getPlayer(playerId);
+        if (player == null) {
+            return null;
+        }
+        
+        return new DisplayData(
+            getPrefix(player),
+            getSuffix(player),
+            getRPGHealth(player),
+            isDisplayEnabled(playerId)
+        );
     }
 
     @Override
     public void updatePlayerDisplay(Player player) {
-        // 更新玩家头顶显示
-        plugin.getNameDisplayManager().updateDisplays(player);
+        if (player == null || !player.isOnline()) {
+            return;
+        }
+        
+        // 更新血量显示
+        HealthDisplay healthDisplay = plugin.getHealthDisplay();
+        if (healthDisplay != null) {
+            healthDisplay.updateHealth(player);
+        }
+        
+        // 更新称号显示
+        TitleDisplay titleDisplay = plugin.getTitleDisplay();
+        if (titleDisplay != null) {
+            titleDisplay.updateDisplay(player);
+        }
+        
+        // 更新TextDisplay（工会等）
+        plugin.getTextDisplayManager().updatePlayerTextDisplay(player);
     }
 
     @Override
@@ -98,26 +147,71 @@ public class DisplayServiceAdapter implements DisplayService, Listener {
 
     @Override
     public void clearDisplayCache(UUID playerId) {
-        // 清理缓存
+        TitleDisplay titleDisplay = plugin.getTitleDisplay();
+        if (titleDisplay != null) {
+            Player player = Bukkit.getPlayer(playerId);
+            if (player != null) {
+                titleDisplay.cleanupPlayer(player);
+            }
+        }
+        
+        HealthDisplay healthDisplay = plugin.getHealthDisplay();
+        if (healthDisplay != null) {
+            Player player = Bukkit.getPlayer(playerId);
+            if (player != null) {
+                healthDisplay.cleanupPlayer(player);
+            }
+        }
     }
 
     @Override
     public void setDisplayEnabled(Player player, boolean enabled) {
-        // 切换显示状态
+        TitleDisplay titleDisplay = plugin.getTitleDisplay();
+        if (titleDisplay != null) {
+            titleDisplay.setDisplayEnabled(player, enabled);
+        }
     }
 
     @Override
     public boolean isDisplayEnabled(UUID playerId) {
-        return true;
+        TitleDisplay titleDisplay = plugin.getTitleDisplay();
+        if (titleDisplay == null) {
+            return true; // 默认启用
+        }
+        return titleDisplay.isDisplayEnabled(playerId);
     }
 
     @Override
     public int getRPGHealth(Player player) {
-        return (int) player.getHealth();
+        HealthDisplay healthDisplay = plugin.getHealthDisplay();
+        if (healthDisplay == null) {
+            // 返回原版血量作为后备
+            return (int) player.getHealth();
+        }
+        return healthDisplay.getRPGHealth(player);
     }
 
     @Override
     public boolean isAvailable() {
-        return true;
+        return plugin.isEnabled() && 
+               plugin.getTitleDisplay() != null && 
+               plugin.getHealthDisplay() != null;
+    }
+    
+    /**
+     * 显示数据封装类
+     */
+    public static class DisplayData {
+        public final String prefix;
+        public final String suffix;
+        public final int rpgHealth;
+        public final boolean displayEnabled;
+        
+        public DisplayData(String prefix, String suffix, int rpgHealth, boolean displayEnabled) {
+            this.prefix = prefix;
+            this.suffix = suffix;
+            this.rpgHealth = rpgHealth;
+            this.displayEnabled = displayEnabled;
+        }
     }
 }

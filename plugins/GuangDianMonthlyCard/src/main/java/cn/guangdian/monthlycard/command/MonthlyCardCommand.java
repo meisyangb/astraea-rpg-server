@@ -30,13 +30,9 @@ public class MonthlyCardCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            if (sender instanceof Player) {
-                plugin.getMonthlyCardGUI().openMainMenu((Player) sender);
-                return true;
-            }
             return handleInfo(sender);
         }
-
+        
         switch (args[0].toLowerCase()) {
             case "info":
                 return handleInfo(sender);

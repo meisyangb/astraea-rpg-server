@@ -1,14 +1,16 @@
 package cn.guangdian.dropcontrol;
 
 import cn.guangdian.dropcontrol.adapter.DropControlServiceAdapter;
-import cn.guangdian.dropcontrol.command.DropControlCommand;
 import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.command.CommandFramework;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,7 +24,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class GuangDianDropControl extends AbstractRPGPlugin implements Listener {
+public class GuangDianDropControl extends AbstractRPGPlugin implements Listener, CommandExecutor, TabExecutor {
 
     private static GuangDianDropControl instance;
     private FileConfiguration config;
@@ -65,8 +67,8 @@ public class GuangDianDropControl extends AbstractRPGPlugin implements Listener 
             getLogger().info("已集成 RPGCore 服务系统!");
         }
 
-        // 注册命令 - 使用 RPGCore CommandFramework
-        registerCommands();
+        getCommand("gddrop").setExecutor(this);
+        getCommand("gddrop").setTabCompleter(this);
         getServer().getPluginManager().registerEvents(this, this);
 
         getLogger().info("光点丢弃控制插件已启用! 版本: " + getDescription().getVersion());
@@ -162,21 +164,8 @@ public class GuangDianDropControl extends AbstractRPGPlugin implements Listener 
         }
     }
 
-    /**
-     * 注册命令 - 使用 RPGCore CommandFramework
-     */
-    private void registerCommands() {
-        CommandFramework framework = CommandFramework.getInstance();
-        if (framework != null) {
-            framework.registerCommand(new DropControlCommand(this));
-            getLogger().info("已使用 CommandFramework 注册命令");
-        } else {
-            getLogger().severe("CommandFramework 不可用，命令注册失败");
-        }
-    }
-
-    // 保留旧方法用于兼容
-    private boolean onCommandLegacy(org.bukkit.command.CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
             // 无参数时，给玩家显示帮助或自己的状态
             if (sender.hasPermission("gddrop.admin")) {
@@ -317,7 +306,31 @@ public class GuangDianDropControl extends AbstractRPGPlugin implements Listener 
         return true;
     }
 
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        List<String> completions = new ArrayList<>();
 
+        if (args.length == 1) {
+            // 普通玩家可以看到 toggle 和 status
+            if (sender.hasPermission("gddrop.use")) {
+                completions.add("toggle");
+                completions.add("status");
+            }
+            // 管理员可以看到所有命令
+            if (sender.hasPermission("gddrop.admin")) {
+                completions.add("enable");
+                completions.add("disable");
+                completions.add("player");
+                completions.add("reload");
+            }
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("player") && sender.hasPermission("gddrop.admin")) {
+            for (Player online : Bukkit.getOnlinePlayers()) {
+                completions.add(online.getName());
+            }
+        }
+
+        return completions;
+    }
 
     /**
      * 使用 MiniMessage 解析颜色代码

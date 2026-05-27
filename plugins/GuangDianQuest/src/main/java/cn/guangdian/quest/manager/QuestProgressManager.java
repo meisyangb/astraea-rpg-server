@@ -52,14 +52,19 @@ public class QuestProgressManager {
 
     private void publishProgressEvent(UUID playerId, String questId, int objectiveIndex, int currentProgress, int requiredProgress) {
         try {
+            cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+            if (rpgCore == null) return;
+            cn.guangdian.rpgcore.api.EventBus eventBus = rpgCore.getEventBus();
+            if (eventBus == null) return;
+
             Quest quest = questManager.getQuest(questId);
             String questName = quest != null ? quest.getName() : questId;
             String questType = quest != null ? quest.getType().name() : "UNKNOWN";
 
-            cn.guangdian.quest.event.QuestEvent.Progress event =
-                new cn.guangdian.quest.event.QuestEvent.Progress(
+            cn.guangdian.rpgcore.event.events.RpgQuestEvent.Progress event =
+                new cn.guangdian.rpgcore.event.events.RpgQuestEvent.Progress(
                     playerId, questId, questName, questType, objectiveIndex, currentProgress, requiredProgress);
-            org.bukkit.Bukkit.getPluginManager().callEvent(event);
+            eventBus.publish(event);
         } catch (Exception ignored) {}
     }
 }

@@ -1,16 +1,15 @@
 package cn.guangdian.rpgcore.config;
 
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,123 +29,83 @@ class ConfigManagerTest {
     }
 
     @Test
-    @DisplayName("测试配置文件创建")
-    void testConfigFileCreation() throws IOException {
+    @DisplayName("测试获取不存在的配置返回默认值")
+    void testGetStringWithDefault() throws IOException {
+        // 创建空的配置文件
         File configFile = new File(dataFolder, "test.yml");
+        configFile.createNewFile();
         
-        // 创建文件
-        assertTrue(configFile.createNewFile());
-        assertTrue(configFile.exists());
-    }
-
-    @Test
-    @DisplayName("测试Properties配置")
-    void testPropertiesConfig() throws IOException {
-        File configFile = new File(dataFolder, "test.properties");
-        
-        // 写入配置
-        Properties props = new Properties();
-        props.setProperty("database.host", "localhost");
-        props.setProperty("database.port", "3306");
-        
-        try (FileWriter writer = new FileWriter(configFile)) {
-            props.store(writer, "Test Config");
-        }
-        
-        // 读取配置
-        Properties loaded = new Properties();
-        loaded.load(Files.newInputStream(configFile.toPath()));
-        
-        assertEquals("localhost", loaded.getProperty("database.host"));
-        assertEquals("3306", loaded.getProperty("database.port"));
-    }
-
-    @Test
-    @DisplayName("测试配置默认值")
-    void testDefaultValues() {
-        Properties props = new Properties();
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         
         // 测试默认值
-        String value = props.getProperty("nonexistent.key", "default_value");
+        String value = config.getString("nonexistent.key", "default_value");
         assertEquals("default_value", value);
     }
 
     @Test
-    @DisplayName("测试整数解析")
-    void testIntegerParsing() {
-        Properties props = new Properties();
-        props.setProperty("number", "42");
+    @DisplayName("测试获取整数配置")
+    void testGetInt() throws IOException {
+        File configFile = new File(dataFolder, "test.yml");
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        config.set("number", 42);
+        config.save(configFile);
         
-        int value = Integer.parseInt(props.getProperty("number", "0"));
-        assertEquals(42, value);
-        
-        // 测试默认值
-        int defaultValue = Integer.parseInt(props.getProperty("nonexistent", "100"));
-        assertEquals(100, defaultValue);
+        config = YamlConfiguration.loadConfiguration(configFile);
+        assertEquals(42, config.getInt("number"));
+        assertEquals(100, config.getInt("nonexistent", 100));
     }
 
     @Test
-    @DisplayName("测试布尔值解析")
-    void testBooleanParsing() {
-        Properties props = new Properties();
-        props.setProperty("enabled", "true");
+    @DisplayName("测试获取布尔配置")
+    void testGetBoolean() throws IOException {
+        File configFile = new File(dataFolder, "test.yml");
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        config.set("enabled", true);
+        config.save(configFile);
         
-        boolean value = Boolean.parseBoolean(props.getProperty("enabled", "false"));
-        assertTrue(value);
-        
-        // 测试默认值
-        boolean defaultValue = Boolean.parseBoolean(props.getProperty("nonexistent", "false"));
-        assertFalse(defaultValue);
+        config = YamlConfiguration.loadConfiguration(configFile);
+        assertTrue(config.getBoolean("enabled"));
+        assertFalse(config.getBoolean("nonexistent", false));
     }
 
     @Test
-    @DisplayName("测试配置热重载")
+    @DisplayName("测试热重载配置")
     void testReloadConfig() throws IOException {
-        File configFile = new File(dataFolder, "reload.properties");
+        File configFile = new File(dataFolder, "reload.yml");
         
         // 初始写入
-        Properties props = new Properties();
-        props.setProperty("value", "initial");
-        try (FileWriter writer = new FileWriter(configFile)) {
-            props.store(writer, "Initial");
-        }
+        YamlConfiguration config = new YamlConfiguration();
+        config.set("value", "initial");
+        config.save(configFile);
         
-        // 读取
-        Properties loaded = new Properties();
-        loaded.load(Files.newInputStream(configFile.toPath()));
-        assertEquals("initial", loaded.getProperty("value"));
+        // 加载
+        config = YamlConfiguration.loadConfiguration(configFile);
+        assertEquals("initial", config.getString("value"));
         
         // 外部修改
-        Properties newProps = new Properties();
-        newProps.setProperty("value", "updated");
-        try (FileWriter writer = new FileWriter(configFile)) {
-            newProps.store(writer, "Updated");
-        }
+        YamlConfiguration newConfig = new YamlConfiguration();
+        newConfig.set("value", "updated");
+        newConfig.save(configFile);
         
         // 重新加载
-        loaded.load(Files.newInputStream(configFile.toPath()));
-        assertEquals("updated", loaded.getProperty("value"));
+        config = YamlConfiguration.loadConfiguration(configFile);
+        assertEquals("updated", config.getString("value"));
     }
 
     @Test
-    @DisplayName("测试嵌套路径解析")
-    void testNestedPaths() {
-        Properties props = new Properties();
-        props.setProperty("database.host", "localhost");
-        props.setProperty("database.port", "3306");
-        props.setProperty("database.credentials.username", "root");
+    @DisplayName("测试嵌套配置路径")
+    void testNestedPaths() throws IOException {
+        File configFile = new File(dataFolder, "nested.yml");
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         
-        assertEquals("localhost", props.getProperty("database.host"));
-        assertEquals("3306", props.getProperty("database.port"));
-        assertEquals("root", props.getProperty("database.credentials.username"));
-    }
-
-    @Test
-    @DisplayName("测试配置文件路径")
-    void testConfigFilePath() {
-        File configFile = new File(dataFolder, "config.yml");
+        config.set("database.host", "localhost");
+        config.set("database.port", 3306);
+        config.set("database.credentials.username", "root");
+        config.save(configFile);
         
-        assertEquals("config.yml", configFile.getName());
-        assertEquals(dataFolder.getAbsolutePath(), configFile.getParentFile().getAbsolutePath());
+        config = YamlConfiguration.loadConfiguration(configFile);
+        assertEquals("localhost", config.getString("database.host"));
+        assertEquals(3306, config.getInt("database.port"));
+        assertEquals("root", config.getString("database.credentials.username"));
     }
 }

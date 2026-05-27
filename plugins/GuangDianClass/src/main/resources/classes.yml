@@ -5,7 +5,6 @@ classes:
     name: "新手"
     tier: 1
     advancement: 0
-    class-type: "NOVICE"
     description: "初入阿斯特瑞亚大陆的冒险者"
     next-classes:
       - "warrior"
@@ -19,33 +18,11 @@ classes:
       defense: 5
       mana: 50
     skills: []
-    available-attributes:
-      - "strength"
-      - "vitality"
-      - "agility"
-      - "intelligence"
-      - "luck"
-    attribute-effects:
-      strength:
-        attack-per-point: 1.0
-      vitality:
-        health-per-point: 10.0
-        defense-per-point: 0.5
-      agility:
-        dodge-per-point: 0.3
-        move-speed-per-point: 0.2
-      intelligence:
-        crit-damage-per-point: 0.5
-      luck:
-        crit-chance-per-point: 0.3
-    level-up:
-      points-per-level: 3
     
   warrior:
     name: "战士"
     tier: 1
     advancement: 0
-    class-type: "WARRIOR"
     description: "近战物理输出，拥有强大的生存能力"
     next-classes:
       - "knight"
@@ -57,35 +34,11 @@ classes:
     skills:
       - "slash"
       - "shield_bash"
-    available-attributes:
-      - "strength"
-      - "vitality"
-      - "parry"
-      - "armor"
-    attribute-effects:
-      strength:
-        attack-per-point: 2.0
-        crit-damage-per-point: 0.5
-      vitality:
-        health-per-point: 20.0
-        defense-per-point: 1.0
-      parry:
-        parry-per-point: 0.5
-      armor:
-        armor-per-point: 1.0
-    level-up:
-      points-per-level: 3
-      bonus-at-tiers:
-        3: 10
-        6: 20
-        8: 30
-        9: 50
       
   knight:
     name: "骑士"
     tier: 3
     advancement: 1
-    class-type: "WARRIOR"
     description: "一转职业 - 骑乘战斗的勇者"
     requires-class: "warrior"
     next-classes:
@@ -98,33 +51,11 @@ classes:
     skills:
       - "charge"
       - "mounted_combat"
-    available-attributes:
-      - "strength"
-      - "vitality"
-      - "parry"
-      - "armor"
-      - "health_regen"
-    attribute-effects:
-      strength:
-        attack-per-point: 2.5
-        crit-damage-per-point: 0.5
-      vitality:
-        health-per-point: 25.0
-        defense-per-point: 1.2
-      parry:
-        parry-per-point: 0.6
-      armor:
-        armor-per-point: 1.2
-      health_regen:
-        health-regen-per-point: 0.5
-    level-up:
-      points-per-level: 4
       
   paladin:
     name: "圣骑士"
     tier: 6
     advancement: 2
-    class-type: "WARRIOR"
     description: "二转职业 - 神圣力量的守护者"
     requires-class: "knight"
     next-classes:
@@ -138,36 +69,11 @@ classes:
       - "holy_strike"
       - "divine_shield"
       - "healing_aura"
-    available-attributes:
-      - "strength"
-      - "vitality"
-      - "parry"
-      - "armor"
-      - "health_regen"
-      - "lifesteal"
-    attribute-effects:
-      strength:
-        attack-per-point: 3.0
-        crit-damage-per-point: 0.6
-      vitality:
-        health-per-point: 30.0
-        defense-per-point: 1.5
-      parry:
-        parry-per-point: 0.7
-      armor:
-        armor-per-point: 1.5
-      health_regen:
-        health-regen-per-point: 0.8
-      lifesteal:
-        lifesteal-per-point: 0.3
-    level-up:
-      points-per-level: 5
       
   dragon_knight:
     name: "龙骑士"
     tier: 8
     advancement: 3
-    class-type: "WARRIOR"
     description: "三转职业 - 与龙缔结契约的战士"
     requires-class: "paladin"
     next-classes:
@@ -181,39 +87,11 @@ classes:
       - "dragon_breath"
       - "dragon_flight"
       - "dragon_slash"
-    available-attributes:
-      - "strength"
-      - "vitality"
-      - "parry"
-      - "armor"
-      - "health_regen"
-      - "lifesteal"
-      - "crit_damage"
-    attribute-effects:
-      strength:
-        attack-per-point: 4.0
-        crit-damage-per-point: 0.8
-      vitality:
-        health-per-point: 40.0
-        defense-per-point: 2.0
-      parry:
-        parry-per-point: 0.8
-      armor:
-        armor-per-point: 2.0
-      health_regen:
-        health-regen-per-point: 1.0
-      lifesteal:
-        lifesteal-per-point: 0.4
-      crit_damage:
-        crit-damage-per-point: 1.0
-    level-up:
-      points-per-level: 6
       
   divine_dragon_knight:
     name: "神圣龙骑士"
     tier: 9
     advancement: 4
-    class-type: "WARRIOR"
     description: "神级职业 - 超越凡人的龙之化身"
     requires-class: "dragon_knight"
     next-classes: []
@@ -226,42 +104,11 @@ classes:
       - "divine_dragon_form"
       - "apocalypse_breath"
       - "eternal_guardian"
-    available-attributes:
-      - "strength"
-      - "vitality"
-      - "parry"
-      - "armor"
-      - "health_regen"
-      - "lifesteal"
-      - "crit_damage"
-      - "magic_resist"
-    attribute-effects:
-      strength:
-        attack-per-point: 5.0
-        crit-damage-per-point: 1.0
-      vitality:
-        health-per-point: 50.0
-        defense-per-point: 2.5
-      parry:
-        parry-per-point: 1.0
-      armor:
-        armor-per-point: 2.5
-      health_regen:
-        health-regen-per-point: 1.5
-      lifesteal:
-        lifesteal-per-point: 0.5
-      crit_damage:
-        crit-damage-per-point: 1.5
-      magic_resist:
-        magic-resist-per-point: 1.0
-    level-up:
-      points-per-level: 8
       
   mage:
     name: "法师"
     tier: 1
     advancement: 0
-    class-type: "MAGE"
     description: "掌控元素之力的施法者"
     next-classes:
       - "elementalist"
@@ -273,34 +120,11 @@ classes:
     skills:
       - "fireball"
       - "ice_shield"
-    available-attributes:
-      - "intelligence"
-      - "vitality"
-      - "crit_damage"
-      - "magic_resist"
-    attribute-effects:
-      intelligence:
-        crit-damage-per-point: 1.0
-        attack-per-point: 1.5
-      vitality:
-        health-per-point: 10.0
-      crit_damage:
-        crit-damage-per-point: 1.5
-      magic_resist:
-        magic-resist-per-point: 1.0
-    level-up:
-      points-per-level: 3
-      bonus-at-tiers:
-        3: 10
-        6: 20
-        8: 30
-        9: 50
       
   elementalist:
     name: "元素师"
     tier: 3
     advancement: 1
-    class-type: "MAGE"
     description: "一转职业 - 精通元素魔法"
     requires-class: "mage"
     next-classes:
@@ -313,30 +137,11 @@ classes:
     skills:
       - "elemental_fury"
       - "elemental_shield"
-    available-attributes:
-      - "intelligence"
-      - "vitality"
-      - "crit_damage"
-      - "magic_resist"
-      - "scorch"
-    attribute-effects:
-      intelligence:
-        crit-damage-per-point: 1.2
-        attack-per-point: 2.0
-      vitality:
-        health-per-point: 12.0
-      crit_damage:
-        crit-damage-per-point: 1.8
-      magic_resist:
-        magic-resist-per-point: 1.2
-    level-up:
-      points-per-level: 4
       
   archmage:
     name: "大法师"
     tier: 6
     advancement: 2
-    class-type: "MAGE"
     description: "二转职业 - 魔法的大师"
     requires-class: "elementalist"
     next-classes:
@@ -350,32 +155,11 @@ classes:
       - "meteor"
       - "time_stop"
       - "mana_shield"
-    available-attributes:
-      - "intelligence"
-      - "vitality"
-      - "crit_damage"
-      - "magic_resist"
-      - "lifesteal"
-    attribute-effects:
-      intelligence:
-        crit-damage-per-point: 1.5
-        attack-per-point: 2.5
-      vitality:
-        health-per-point: 15.0
-      crit_damage:
-        crit-damage-per-point: 2.0
-      magic_resist:
-        magic-resist-per-point: 1.5
-      lifesteal:
-        lifesteal-per-point: 0.3
-    level-up:
-      points-per-level: 5
       
   sage:
     name: "贤者"
     tier: 8
     advancement: 3
-    class-type: "MAGE"
     description: "三转职业 - 智慧的化身"
     requires-class: "archmage"
     next-classes:
@@ -389,35 +173,11 @@ classes:
       - "arcane_burst"
       - "dimension_rift"
       - "wisdom_blessing"
-    available-attributes:
-      - "intelligence"
-      - "vitality"
-      - "crit_damage"
-      - "magic_resist"
-      - "lifesteal"
-      - "exp_bonus"
-    attribute-effects:
-      intelligence:
-        crit-damage-per-point: 2.0
-        attack-per-point: 3.0
-      vitality:
-        health-per-point: 20.0
-      crit_damage:
-        crit-damage-per-point: 2.5
-      magic_resist:
-        magic-resist-per-point: 2.0
-      lifesteal:
-        lifesteal-per-point: 0.4
-      exp_bonus:
-        exp-bonus-per-point: 0.5
-    level-up:
-      points-per-level: 6
       
   divine_sage:
     name: "神圣贤者"
     tier: 9
     advancement: 4
-    class-type: "MAGE"
     description: "神级职业 - 掌握宇宙真理"
     requires-class: "sage"
     next-classes: []
@@ -430,38 +190,11 @@ classes:
       - "cosmic_annihilation"
       - "reality_rewrite"
       - "omniscience"
-    available-attributes:
-      - "intelligence"
-      - "vitality"
-      - "crit_damage"
-      - "magic_resist"
-      - "lifesteal"
-      - "exp_bonus"
-      - "health_regen"
-    attribute-effects:
-      intelligence:
-        crit-damage-per-point: 2.5
-        attack-per-point: 4.0
-      vitality:
-        health-per-point: 25.0
-      crit_damage:
-        crit-damage-per-point: 3.0
-      magic_resist:
-        magic-resist-per-point: 2.5
-      lifesteal:
-        lifesteal-per-point: 0.5
-      exp_bonus:
-        exp-bonus-per-point: 0.8
-      health_regen:
-        health-regen-per-point: 1.0
-    level-up:
-      points-per-level: 8
       
   archer:
     name: "弓箭手"
     tier: 1
     advancement: 0
-    class-type: "ARCHER"
     description: "远程物理输出，精准致命"
     next-classes:
       - "ranger"
@@ -473,35 +206,11 @@ classes:
     skills:
       - "aimed_shot"
       - "arrow_rain"
-    available-attributes:
-      - "agility"
-      - "luck"
-      - "accuracy"
-      - "dodge"
-    attribute-effects:
-      agility:
-        dodge-per-point: 0.5
-        move-speed-per-point: 0.3
-        attack-per-point: 1.0
-      luck:
-        crit-chance-per-point: 0.5
-      accuracy:
-        accuracy-per-point: 0.5
-      dodge:
-        dodge-per-point: 0.8
-    level-up:
-      points-per-level: 3
-      bonus-at-tiers:
-        3: 10
-        6: 20
-        8: 30
-        9: 50
       
   ranger:
     name: "游侠"
     tier: 3
     advancement: 1
-    class-type: "ARCHER"
     description: "一转职业 - 森林的守护者"
     requires-class: "archer"
     next-classes:
@@ -515,33 +224,11 @@ classes:
       - "multi_shot"
       - "trap"
       - "nature_bond"
-    available-attributes:
-      - "agility"
-      - "luck"
-      - "accuracy"
-      - "dodge"
-      - "move_speed"
-    attribute-effects:
-      agility:
-        dodge-per-point: 0.6
-        move-speed-per-point: 0.4
-        attack-per-point: 1.5
-      luck:
-        crit-chance-per-point: 0.6
-      accuracy:
-        accuracy-per-point: 0.6
-      dodge:
-        dodge-per-point: 1.0
-      move_speed:
-        move-speed-per-point: 0.5
-    level-up:
-      points-per-level: 4
       
   sniper:
     name: "神射手"
     tier: 6
     advancement: 2
-    class-type: "ARCHER"
     description: "二转职业 - 百发百中的射手"
     requires-class: "ranger"
     next-classes:
@@ -555,36 +242,11 @@ classes:
       - "piercing_arrow"
       - "shadow_shot"
       - "eagle_eye"
-    available-attributes:
-      - "agility"
-      - "luck"
-      - "accuracy"
-      - "dodge"
-      - "move_speed"
-      - "crit_damage"
-    attribute-effects:
-      agility:
-        dodge-per-point: 0.7
-        move-speed-per-point: 0.5
-        attack-per-point: 2.0
-      luck:
-        crit-chance-per-point: 0.7
-      accuracy:
-        accuracy-per-point: 0.7
-      dodge:
-        dodge-per-point: 1.2
-      move_speed:
-        move-speed-per-point: 0.6
-      crit_damage:
-        crit-damage-per-point: 1.0
-    level-up:
-      points-per-level: 5
       
   demon_hunter:
     name: "猎魔人"
     tier: 8
     advancement: 3
-    class-type: "ARCHER"
     description: "三转职业 - 狩猎邪恶的专家"
     requires-class: "sniper"
     next-classes:
@@ -598,39 +260,11 @@ classes:
       - "demon_slayer"
       - "holy_arrow"
       - "hunters_mark"
-    available-attributes:
-      - "agility"
-      - "luck"
-      - "accuracy"
-      - "dodge"
-      - "move_speed"
-      - "crit_damage"
-      - "lifesteal"
-    attribute-effects:
-      agility:
-        dodge-per-point: 0.8
-        move-speed-per-point: 0.6
-        attack-per-point: 2.5
-      luck:
-        crit-chance-per-point: 0.8
-      accuracy:
-        accuracy-per-point: 0.8
-      dodge:
-        dodge-per-point: 1.5
-      move_speed:
-        move-speed-per-point: 0.7
-      crit_damage:
-        crit-damage-per-point: 1.2
-      lifesteal:
-        lifesteal-per-point: 0.3
-    level-up:
-      points-per-level: 6
       
   divine_demon_hunter:
     name: "神圣猎魔人"
     tier: 9
     advancement: 4
-    class-type: "ARCHER"
     description: "神级职业 - 诸神的猎手"
     requires-class: "demon_hunter"
     next-classes: []
@@ -643,40 +277,11 @@ classes:
       - "godslayer_arrow"
       - "celestial_hunt"
       - "divine_judgment"
-    available-attributes:
-      - "agility"
-      - "luck"
-      - "accuracy"
-      - "dodge"
-      - "move_speed"
-      - "crit_damage"
-      - "lifesteal"
-      - "crit_chance"
-    attribute-effects:
-      agility:
-        dodge-per-point: 1.0
-        move-speed-per-point: 0.8
-        attack-per-point: 3.0
-      luck:
-        crit-chance-per-point: 1.0
-      accuracy:
-        accuracy-per-point: 1.0
-      dodge:
-        dodge-per-point: 2.0
-      move_speed:
-        move-speed-per-point: 1.0
-      crit_damage:
-        crit-damage-per-point: 1.5
-      lifesteal:
-        lifesteal-per-point: 0.4
-    level-up:
-      points-per-level: 8
       
   assassin:
     name: "刺客"
     tier: 1
     advancement: 0
-    class-type: "ASSASSIN"
     description: "暗影中的杀手，一击致命"
     next-classes:
       - "shadow_dancer"
@@ -688,38 +293,11 @@ classes:
     skills:
       - "backstab"
       - "stealth"
-    available-attributes:
-      - "agility"
-      - "luck"
-      - "crit_damage"
-      - "lifesteal"
-      - "dodge"
-    attribute-effects:
-      agility:
-        dodge-per-point: 0.6
-        move-speed-per-point: 0.4
-        attack-per-point: 1.5
-      luck:
-        crit-chance-per-point: 0.5
-      crit_damage:
-        crit-damage-per-point: 1.0
-      lifesteal:
-        lifesteal-per-point: 0.3
-      dodge:
-        dodge-per-point: 0.8
-    level-up:
-      points-per-level: 3
-      bonus-at-tiers:
-        3: 10
-        6: 20
-        8: 30
-        9: 50
       
   shadow_dancer:
     name: "影舞者"
     tier: 3
     advancement: 1
-    class-type: "ASSASSIN"
     description: "一转职业 - 暗影中的舞者"
     requires-class: "assassin"
     next-classes:
@@ -733,36 +311,11 @@ classes:
       - "shadow_step"
       - "blade_dance"
       - "smoke_bomb"
-    available-attributes:
-      - "agility"
-      - "luck"
-      - "crit_damage"
-      - "lifesteal"
-      - "dodge"
-      - "move_speed"
-    attribute-effects:
-      agility:
-        dodge-per-point: 0.8
-        move-speed-per-point: 0.5
-        attack-per-point: 2.0
-      luck:
-        crit-chance-per-point: 0.6
-      crit_damage:
-        crit-damage-per-point: 1.2
-      lifesteal:
-        lifesteal-per-point: 0.4
-      dodge:
-        dodge-per-point: 1.0
-      move_speed:
-        move-speed-per-point: 0.5
-    level-up:
-      points-per-level: 4
       
   shadow_master:
     name: "暗影大师"
     tier: 6
     advancement: 2
-    class-type: "ASSASSIN"
     description: "二转职业 - 暗影的主宰"
     requires-class: "shadow_dancer"
     next-classes:
@@ -776,37 +329,11 @@ classes:
       - "shadow_clone"
       - "darkness_embrace"
       - "assassinate"
-    available-attributes:
-      - "agility"
-      - "luck"
-      - "crit_damage"
-      - "lifesteal"
-      - "dodge"
-      - "move_speed"
-      - "crit_chance"
-    attribute-effects:
-      agility:
-        dodge-per-point: 1.0
-        move-speed-per-point: 0.6
-        attack-per-point: 2.5
-      luck:
-        crit-chance-per-point: 0.8
-      crit_damage:
-        crit-damage-per-point: 1.5
-      lifesteal:
-        lifesteal-per-point: 0.5
-      dodge:
-        dodge-per-point: 1.2
-      move_speed:
-        move-speed-per-point: 0.6
-    level-up:
-      points-per-level: 5
       
   reaper:
     name: "死神"
     tier: 8
     advancement: 3
-    class-type: "ASSASSIN"
     description: "三转职业 - 收割灵魂的存在"
     requires-class: "shadow_master"
     next-classes:
@@ -820,40 +347,11 @@ classes:
       - "soul_harvest"
       - "death_mark"
       - "reaper_scythe"
-    available-attributes:
-      - "agility"
-      - "luck"
-      - "crit_damage"
-      - "lifesteal"
-      - "dodge"
-      - "move_speed"
-      - "crit_chance"
-      - "health_regen"
-    attribute-effects:
-      agility:
-        dodge-per-point: 1.2
-        move-speed-per-point: 0.7
-        attack-per-point: 3.0
-      luck:
-        crit-chance-per-point: 1.0
-      crit_damage:
-        crit-damage-per-point: 2.0
-      lifesteal:
-        lifesteal-per-point: 0.6
-      dodge:
-        dodge-per-point: 1.5
-      move_speed:
-        move-speed-per-point: 0.8
-      health_regen:
-        health-regen-per-point: 0.5
-    level-up:
-      points-per-level: 6
       
   divine_reaper:
     name: "神圣死神"
     tier: 9
     advancement: 4
-    class-type: "ASSASSIN"
     description: "神级职业 - 生死的裁决者"
     requires-class: "reaper"
     next-classes: []
@@ -866,43 +364,11 @@ classes:
       - "divine_death"
       - "soul_annihilation"
       - "final_judgment"
-    available-attributes:
-      - "agility"
-      - "luck"
-      - "crit_damage"
-      - "lifesteal"
-      - "dodge"
-      - "move_speed"
-      - "crit_chance"
-      - "health_regen"
-      - "parry"
-    attribute-effects:
-      agility:
-        dodge-per-point: 1.5
-        move-speed-per-point: 1.0
-        attack-per-point: 4.0
-      luck:
-        crit-chance-per-point: 1.2
-      crit_damage:
-        crit-damage-per-point: 2.5
-      lifesteal:
-        lifesteal-per-point: 0.8
-      dodge:
-        dodge-per-point: 2.0
-      move_speed:
-        move-speed-per-point: 1.0
-      health_regen:
-        health-regen-per-point: 1.0
-      parry:
-        parry-per-point: 0.5
-    level-up:
-      points-per-level: 8
       
   priest:
     name: "牧师"
     tier: 1
     advancement: 0
-    class-type: "PRIEST"
     description: "神圣之力的使用者，治疗与辅助"
     next-classes:
       - "cleric"
@@ -914,35 +380,11 @@ classes:
     skills:
       - "heal"
       - "blessing"
-    available-attributes:
-      - "intelligence"
-      - "vitality"
-      - "health_regen"
-      - "exp_bonus"
-    attribute-effects:
-      intelligence:
-        crit-damage-per-point: 0.5
-        attack-per-point: 0.5
-      vitality:
-        health-per-point: 15.0
-        defense-per-point: 0.5
-      health_regen:
-        health-regen-per-point: 0.5
-      exp_bonus:
-        exp-bonus-per-point: 0.5
-    level-up:
-      points-per-level: 3
-      bonus-at-tiers:
-        3: 10
-        6: 20
-        8: 30
-        9: 50
       
   cleric:
     name: "祭司"
     tier: 3
     advancement: 1
-    class-type: "PRIEST"
     description: "一转职业 - 神圣仪式的主持者"
     requires-class: "priest"
     next-classes:
@@ -956,33 +398,11 @@ classes:
       - "group_heal"
       - "sanctuary"
       - "divine_light"
-    available-attributes:
-      - "intelligence"
-      - "vitality"
-      - "health_regen"
-      - "exp_bonus"
-      - "magic_resist"
-    attribute-effects:
-      intelligence:
-        crit-damage-per-point: 0.6
-        attack-per-point: 0.8
-      vitality:
-        health-per-point: 18.0
-        defense-per-point: 0.8
-      health_regen:
-        health-regen-per-point: 0.8
-      exp_bonus:
-        exp-bonus-per-point: 0.6
-      magic_resist:
-        magic-resist-per-point: 0.8
-    level-up:
-      points-per-level: 4
       
   high_priest:
     name: "大祭司"
     tier: 6
     advancement: 2
-    class-type: "PRIEST"
     description: "二转职业 - 神明的代言人"
     requires-class: "cleric"
     next-classes:
@@ -996,36 +416,11 @@ classes:
       - "resurrection"
       - "divine_protection"
       - "holy_nova"
-    available-attributes:
-      - "intelligence"
-      - "vitality"
-      - "health_regen"
-      - "exp_bonus"
-      - "magic_resist"
-      - "lifesteal"
-    attribute-effects:
-      intelligence:
-        crit-damage-per-point: 0.8
-        attack-per-point: 1.0
-      vitality:
-        health-per-point: 22.0
-        defense-per-point: 1.0
-      health_regen:
-        health-regen-per-point: 1.0
-      exp_bonus:
-        exp-bonus-per-point: 0.8
-      magic_resist:
-        magic-resist-per-point: 1.0
-      lifesteal:
-        lifesteal-per-point: 0.3
-    level-up:
-      points-per-level: 5
       
   saint:
     name: "圣者"
     tier: 8
     advancement: 3
-    class-type: "PRIEST"
     description: "三转职业 - 圣洁的化身"
     requires-class: "high_priest"
     next-classes:
@@ -1039,39 +434,11 @@ classes:
       - "mass_resurrection"
       - "divine_intervention"
       - "holy_sanctuary"
-    available-attributes:
-      - "intelligence"
-      - "vitality"
-      - "health_regen"
-      - "exp_bonus"
-      - "magic_resist"
-      - "lifesteal"
-      - "armor"
-    attribute-effects:
-      intelligence:
-        crit-damage-per-point: 1.0
-        attack-per-point: 1.2
-      vitality:
-        health-per-point: 28.0
-        defense-per-point: 1.2
-      health_regen:
-        health-regen-per-point: 1.2
-      exp_bonus:
-        exp-bonus-per-point: 1.0
-      magic_resist:
-        magic-resist-per-point: 1.2
-      lifesteal:
-        lifesteal-per-point: 0.4
-      armor:
-        armor-per-point: 0.8
-    level-up:
-      points-per-level: 6
       
   divine_saint:
     name: "神圣圣者"
     tier: 9
     advancement: 4
-    class-type: "PRIEST"
     description: "神级职业 - 诸神的使者"
     requires-class: "saint"
     next-classes: []
@@ -1084,33 +451,3 @@ classes:
       - "divine_miracle"
       - "eternal_life"
       - "god_blessing"
-    available-attributes:
-      - "intelligence"
-      - "vitality"
-      - "health_regen"
-      - "exp_bonus"
-      - "magic_resist"
-      - "lifesteal"
-      - "armor"
-      - "parry"
-    attribute-effects:
-      intelligence:
-        crit-damage-per-point: 1.2
-        attack-per-point: 1.5
-      vitality:
-        health-per-point: 35.0
-        defense-per-point: 1.5
-      health_regen:
-        health-regen-per-point: 1.5
-      exp_bonus:
-        exp-bonus-per-point: 1.2
-      magic_resist:
-        magic-resist-per-point: 1.5
-      lifesteal:
-        lifesteal-per-point: 0.5
-      armor:
-        armor-per-point: 1.0
-      parry:
-        parry-per-point: 0.5
-    level-up:
-      points-per-level: 8

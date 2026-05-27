@@ -5,7 +5,6 @@ import cn.guangdian.cavefu.config.ConfigManager;
 import cn.guangdian.cavefu.permission.PermissionType;
 import cn.guangdian.cavefu.storage.DataManager;
 import cn.guangdian.cavefu.world.CaveWorldManager;
-import cn.guangdian.rpgcore.message.MiniMessageService;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -19,21 +18,12 @@ public class CaveManager {
     private final ConfigManager configManager;
     private final DataManager dataManager;
     private final CaveWorldManager worldManager;
-    private final MiniMessageService miniMessage;
 
     public CaveManager(GuangDianCaveFu plugin) {
         this.plugin = plugin;
         this.configManager = plugin.getConfigManager();
         this.dataManager = plugin.getDataManager();
         this.worldManager = plugin.getWorldManager();
-        this.miniMessage = plugin.getMiniMessageService();
-    }
-
-    /**
-     * 使用 MiniMessage 发送消息
-     */
-    private void sendMessage(Player player, String text) {
-        player.sendMessage(miniMessage.colorize(text));
     }
 
     /**
@@ -76,7 +66,7 @@ public class CaveManager {
         for (UUID memberUuid : cave.getMembers().keySet()) {
             Player member = plugin.getServer().getPlayer(memberUuid);
             if (member != null) {
-                sendMessage(member, configManager.getMessage("cave-deleted"));
+                member.sendMessage(configManager.getMessage("cave-deleted"));
             }
         }
 

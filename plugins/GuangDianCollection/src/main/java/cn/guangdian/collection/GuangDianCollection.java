@@ -8,8 +8,8 @@ import cn.guangdian.collection.gui.CollectionGUIListener;
 import cn.guangdian.collection.papi.CollectionPlaceholder;
 import cn.guangdian.collection.service.CollectionServiceImpl;
 import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.command.CommandFramework;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
+import org.bukkit.command.PluginCommand;
 
 public class GuangDianCollection extends AbstractRPGPlugin {
     
@@ -54,7 +54,7 @@ public class GuangDianCollection extends AbstractRPGPlugin {
         }
         
         if (placeholder != null) {
-            placeholder.unregister();
+            me.clip.placeholderapi.PlaceholderAPI.unregisterExpansion(placeholder);
         }
         
         getLogger().info("图鉴收集系统已关闭");
@@ -71,13 +71,11 @@ public class GuangDianCollection extends AbstractRPGPlugin {
     }
     
     private void registerCommands() {
-        // 使用 RPGCore CommandFramework 注册命令
-        CommandFramework framework = CommandFramework.getInstance();
-        if (framework != null) {
-            framework.registerCommand(new CollectionCommand(this, collectionService, guiListener));
-            getLogger().info("已使用 CommandFramework 注册命令");
-        } else {
-            getLogger().severe("CommandFramework 不可用，命令注册失败");
+        PluginCommand cmd = getCommand("collection");
+        if (cmd != null) {
+            CollectionCommand command = new CollectionCommand(this, collectionService, guiListener);
+            cmd.setExecutor(command);
+            cmd.setTabCompleter(command);
         }
     }
     

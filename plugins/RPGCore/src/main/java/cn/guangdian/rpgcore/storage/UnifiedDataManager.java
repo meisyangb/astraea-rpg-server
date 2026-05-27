@@ -1,7 +1,6 @@
 package cn.guangdian.rpgcore.storage;
 
 import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.api.AsyncExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -66,20 +65,9 @@ public class UnifiedDataManager {
         };
         
         if (async) {
-            AsyncExecutor asyncExecutor = plugin.getAsyncExecutor();
-            if (asyncExecutor != null) {
-                asyncExecutor.execute(saveTask);
-            } else {
-                saveTask.run();
-            }
+            Bukkit.getAsyncScheduler().runNow(plugin, scheduledTask -> saveTask.run());
         } else {
             saveTask.run();
-        }
-    }
-    
-    public void saveAll() {
-        for (UUID playerId : playerDataCache.keySet()) {
-            savePlayerData(playerId, false);
         }
     }
     

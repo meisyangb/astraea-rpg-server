@@ -2,25 +2,20 @@ package cn.guangdian.classsystem;
 
 import cn.guangdian.classsystem.adapter.ClassServiceAdapter;
 import cn.guangdian.classsystem.api.ClassService;
-import cn.guangdian.classsystem.command.ClassCommandFramework;
-import cn.guangdian.classsystem.command.ClassAdminCommandFramework;
+import cn.guangdian.classsystem.command.ClassCommand;
 import cn.guangdian.classsystem.data.ClassDataHandler;
-import cn.guangdian.rpgcore.command.CommandFramework;
-import cn.guangdian.classsystem.gui.ClassAdvanceGUI;
-import cn.guangdian.classsystem.gui.ClassInfoGUI;
-import cn.guangdian.classsystem.gui.ClassMainGUI;
-import cn.guangdian.classsystem.gui.ClassSelectionGUI;
-import cn.guangdian.classsystem.gui.ClassAttributeGUI;
+import cn.guangdian.classsystem.gui.AttributeGUI;
+import cn.guangdian.classsystem.gui.GUIListener;
 import cn.guangdian.classsystem.manager.AttributeManager;
 import cn.guangdian.classsystem.manager.ClassManager;
 import cn.guangdian.classsystem.manager.ExpManager;
 import cn.guangdian.classsystem.model.PlayerClassData;
 import cn.guangdian.classsystem.placeholder.ClassPlaceholder;
 import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.command.CommandFramework;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class GuangDianClass extends AbstractRPGPlugin {
     
@@ -32,12 +27,8 @@ public class GuangDianClass extends AbstractRPGPlugin {
     private ClassDataHandler dataHandler;
     private ClassServiceAdapter serviceAdapter;
     private ClassPlaceholder placeholder;
-    private ClassAttributeGUI attributeGUI;
-    private ClassMainGUI mainGUI;
-    private ClassSelectionGUI selectionGUI;
-    private ClassAdvanceGUI advanceGUI;
-    private ClassInfoGUI infoGUI;
-
+    private GUIListener guiListener;
+    
     private String defaultClassId;
     
     @Override
@@ -59,13 +50,9 @@ public class GuangDianClass extends AbstractRPGPlugin {
         
         serviceAdapter = new ClassServiceAdapter(this, classManager, expManager, dataHandler);
         
-        attributeGUI = new ClassAttributeGUI(this, serviceAdapter, classManager);
-        mainGUI = new ClassMainGUI(this, serviceAdapter);
-        selectionGUI = new ClassSelectionGUI(this, serviceAdapter, classManager);
-        advanceGUI = new ClassAdvanceGUI(this, serviceAdapter, classManager);
-        infoGUI = new ClassInfoGUI(this, serviceAdapter, classManager);
-        // 注意: InventoryDragEvent 由 RPGCore 的 GUIListener 统一处理
-
+        guiListener = new GUIListener();
+        getServer().getPluginManager().registerEvents(guiListener, this);
+        
         registerCommands();
         
         registerPlaceholder();
@@ -82,14 +69,17 @@ public class GuangDianClass extends AbstractRPGPlugin {
         getLogger().info("GuangDianClass 职业系统已启动!");
         getLogger().info("阶位系统: 1阶 - 9阶");
         getLogger().info("转职系统: 3阶一转 / 6阶二转 / 8阶三转 / 9阶神级");
-        getLogger().info("属性点系统: 职业差异化属性加成");
+        getLogger().info("属性点系统: 力量/体质/敏捷/智力/幸运");
     }
     
     @Override
     protected void onPluginDisable() {
         if (placeholder != null) {
-            placeholder.unregister();
-            placeholder = null;
+            try {
+                me.clip.placeholderapi.PlaceholderAPI.unregisterExpansion(placeholder);
+            } catch (Exception e) {
+                getLogger().warning("注销占位符时发生错误: " + e.getMessage());
+            }
         }
         
         if (serviceAdapter != null) {
@@ -113,55 +103,19 @@ public class GuangDianClass extends AbstractRPGPlugin {
         return "GuangDianClass";
     }
     
-    private ClassCommandFramework classCommand;
-    private ClassAdminCommandFramework classAdminCommand;
-
     private void registerCommands() {
-        // 使用 RPGCore CommandFramework 注册命令
-        RPGCore rpgCore = RPGCore.getInstance();
-        if (rpgCore != null) {
-            CommandFramework framework = CommandFramework.getInstance();
-
-            // 注册主命令
-            classCommand = new ClassCommandFramework(this, serviceAdapter, classManager, expManager, attributeManager);
-            framework.registerCommand(classCommand);
-
-            // 注册管理员命令
-            classAdminCommand = new ClassAdminCommandFramework(this, serviceAdapter, classManager, attributeManager);
-            framework.registerCommand(classAdminCommand);
-
-            getLogger().info("已注册命令到 RPGCore CommandFramework");
-        } else {
-            // 降级处理：使用传统命令注册
-            getLogger().warning("RPGCore 未加载，使用传统命令注册方式");
-            registerLegacyCommands();
+        ClassCommand commandHandler = new ClassCommand(this, serviceAdapter, classManager, expManager, attributeManager);
+        
+        var classCmd = getCommand("class");
+        if (classCmd != null) {
+            classCmd.setExecutor(commandHandler);
+            classCmd.setTabCompleter(commandHandler);
         }
-    }
-
-    /**
-     * 传统命令注册方式 (降级处理)
-     */
-    private void registerLegacyCommands() {
-        if (getCommand("class") != null) {
-            getCommand("class").setExecutor((sender, command, label, args) -> {
-                sender.sendMessage("§cRPGCore 未加载，职业系统功能受限！");
-                return true;
-            });
-        }
-        if (getCommand("classadmin") != null) {
-            getCommand("classadmin").setExecutor((sender, command, label, args) -> {
-                if (!sender.hasPermission("guangdian.class.admin")) {
-                    sender.sendMessage("§c您没有权限执行此操作！");
-                    return true;
-                }
-                if (args.length > 0 && args[0].equalsIgnoreCase("reload")) {
-                    reloadConfig();
-                    sender.sendMessage("§a配置已重新加载！");
-                    return true;
-                }
-                sender.sendMessage("§e用法: /classadmin reload");
-                return true;
-            });
+        
+        var adminCmd = getCommand("classadmin");
+        if (adminCmd != null) {
+            adminCmd.setExecutor(commandHandler);
+            adminCmd.setTabCompleter(commandHandler);
         }
     }
     
@@ -186,24 +140,10 @@ public class GuangDianClass extends AbstractRPGPlugin {
         }
     }
     
-    public void openMainGUI(Player player) {
-        mainGUI.open(player);
-    }
-
-    public void openClassSelectionGUI(Player player) {
-        selectionGUI.open(player);
-    }
-
-    public void openClassAdvanceGUI(Player player) {
-        advanceGUI.open(player);
-    }
-
-    public void openClassInfoGUI(Player player) {
-        infoGUI.open(player);
-    }
-
     public void openAttributeGUI(Player player) {
-        attributeGUI.open(player);
+        AttributeGUI gui = new AttributeGUI(this, attributeManager, player);
+        guiListener.registerGUI(player, gui);
+        gui.open();
     }
     
     public static GuangDianClass getInstance() {

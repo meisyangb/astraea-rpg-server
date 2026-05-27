@@ -111,49 +111,37 @@ public class ForgeGUI implements InventoryHolder {
     }
     
     /**
-     * 更新结果预览 - 支持 MythicMobs 和 RPGItems 物品
+     * 更新结果预览 - 只显示 MythicMobs 物品
      */
     public void updateResultPreview() {
-        ItemStack result = null;
-        String resultType = recipe.getResultType();
-
-        if ("mythicmobs".equals(resultType)) {
-            MythicMobsHook hook = plugin.getMythicMobsHook();
-            if (hook != null && hook.isEnabled()) {
-                result = hook.getMythicItem(recipe.getResultMythicMobsItem());
-            }
+        ItemStack result;
+        
+        MythicMobsHook hook = plugin.getMythicMobsHook();
+        if (hook != null && hook.isEnabled()) {
+            result = hook.getMythicItem(recipe.getResultMythicMobsItem());
             if (result == null) {
-                result = createErrorItem("MythicMobs物品不存在", recipe.getResultMythicMobsItem(), "MythicMobs");
-            }
-        } else if ("rpgitems".equals(resultType)) {
-            cn.guangdian.forge.hook.RPGItemsHook hook = plugin.getRPGItemsHook();
-            if (hook != null && hook.isEnabled()) {
-                result = hook.getRPGItem(recipe.getResultRPGItem());
-            }
-            if (result == null) {
-                result = createErrorItem("RPGItems物品不存在", recipe.getResultRPGItem(), "RPGItems");
+                // MythicMobs物品获取失败，显示错误提示
+                result = new ItemStack(Material.BEDROCK);
+                ItemMeta meta = result.getItemMeta();
+                meta.displayName(Component.text("MythicMobs物品不存在", NamedTextColor.RED));
+                List<Component> lore = new ArrayList<>();
+                lore.add(Component.text("物品ID: " + recipe.getResultMythicMobsItem(), NamedTextColor.GRAY));
+                lore.add(Component.text("请检查 MythicMobs 配置", NamedTextColor.YELLOW));
+                meta.lore(lore);
+                result.setItemMeta(meta);
             }
         } else {
-            result = createErrorItem("未配置结果物品", null, null);
+            // MythicMobs未启用，显示错误提示
+            result = new ItemStack(Material.BEDROCK);
+            ItemMeta meta = result.getItemMeta();
+            meta.displayName(Component.text("需要 MythicMobs 支持", NamedTextColor.RED));
+            List<Component> lore = new ArrayList<>();
+            lore.add(Component.text("请确保 MythicMobs 已安装", NamedTextColor.YELLOW));
+            meta.lore(lore);
+            result.setItemMeta(meta);
         }
-
+        
         inventory.setItem(RESULT_SLOT, result);
-    }
-
-    private ItemStack createErrorItem(String errorTitle, String itemId, String pluginName) {
-        ItemStack errorItem = new ItemStack(Material.BEDROCK);
-        ItemMeta meta = errorItem.getItemMeta();
-        meta.displayName(Component.text(errorTitle, NamedTextColor.RED));
-        List<Component> lore = new ArrayList<>();
-        if (itemId != null) {
-            lore.add(Component.text("物品ID: " + itemId, NamedTextColor.GRAY));
-        }
-        if (pluginName != null) {
-            lore.add(Component.text("请检查 " + pluginName + " 配置", NamedTextColor.YELLOW));
-        }
-        meta.lore(lore);
-        errorItem.setItemMeta(meta);
-        return errorItem;
     }
     
     public void updateSuccessRate() {
@@ -187,12 +175,7 @@ public class ForgeGUI implements InventoryHolder {
         // 显示结果物品
         lore.add(Component.empty());
         lore.add(Component.text("锻造结果:", NamedTextColor.GOLD));
-        String resultType = recipe.getResultType();
-        if ("mythicmobs".equals(resultType)) {
-            lore.add(Component.text(recipe.getResultMythicMobsItem(), NamedTextColor.LIGHT_PURPLE));
-        } else if ("rpgitems".equals(resultType)) {
-            lore.add(Component.text(recipe.getResultRPGItem(), NamedTextColor.AQUA));
-        }
+        lore.add(Component.text(recipe.getResultMythicMobsItem(), NamedTextColor.LIGHT_PURPLE));
         
         meta.lore(lore);
         rateItem.setItemMeta(meta);
@@ -211,31 +194,27 @@ public class ForgeGUI implements InventoryHolder {
     }
     
     /**
-     * 获取指定材料数量（支持 MythicMobs 和 RPGItems）
+     * 获取指定材料数量（通过 MythicMobs ID 匹配）
      */
     public int getMaterialCount(String ingredientKey) {
         int count = 0;
-        MythicMobsHook mmHook = plugin.getMythicMobsHook();
-        cn.guangdian.forge.hook.RPGItemsHook rpgHook = plugin.getRPGItemsHook();
+        MythicMobsHook hook = plugin.getMythicMobsHook();
         boolean debug = plugin.getConfig().getBoolean("debug", false);
-
+        
         if (debug) {
             plugin.getLogger().info("[调试] 检查材料: " + ingredientKey);
         }
-
-        String lowerKey = ingredientKey.toLowerCase();
-        boolean isRPGItem = lowerKey.startsWith("rpg:") || lowerKey.startsWith("rpgitems:");
-
+        
         for (int slot : MATERIAL_SLOTS) {
             ItemStack item = inventory.getItem(slot);
             if (item == null || item.getType() == Material.AIR) continue;
-
+            
             // 调试模式：打印物品的 PDC 内容
             if (debug && item.hasItemMeta()) {
                 var pdc = item.getItemMeta().getPersistentDataContainer();
                 plugin.getLogger().info("[调试] 槽位 " + slot + " 物品类型: " + item.getType());
                 plugin.getLogger().info("[调试] 槽位 " + slot + " PDC Keys: " + pdc.getKeys());
-
+                
                 // 检查 mythicmobs:type key
                 NamespacedKey mmKey = new NamespacedKey("mythicmobs", "type");
                 if (pdc.has(mmKey, PersistentDataType.STRING)) {
@@ -243,31 +222,22 @@ public class ForgeGUI implements InventoryHolder {
                     plugin.getLogger().info("[调试] 槽位 " + slot + " MythicMobs ID: " + id);
                 }
             }
-
-            // 根据材料类型选择匹配方式
+            
+            // 使用 MythicMobs ID 匹配
             boolean matches = false;
-            if (isRPGItem) {
-                // RPGItems 匹配
-                String itemId = ingredientKey.substring(ingredientKey.indexOf(':') + 1);
-                if (rpgHook != null && rpgHook.isEnabled()) {
-                    matches = rpgHook.isRPGItem(item, itemId);
-                }
-            } else {
-                // MythicMobs 或原版匹配
-                if (mmHook != null && mmHook.isEnabled()) {
-                    matches = mmHook.matchesConfig(item, ingredientKey);
-                }
+            if (hook != null && hook.isEnabled()) {
+                matches = hook.matchesConfig(item, ingredientKey);
             }
-
+            
             if (debug) {
                 plugin.getLogger().info("[调试] 槽位 " + slot + " 匹配结果: " + matches);
             }
-
+            
             if (matches) {
                 count += item.getAmount();
             }
         }
-
+        
         if (debug) {
             plugin.getLogger().info("[调试] 材料 " + ingredientKey + " 总数: " + count);
         }
@@ -279,45 +249,33 @@ public class ForgeGUI implements InventoryHolder {
      */
     public void consumeMaterials() {
         Map<String, Integer> required = new HashMap<>(recipe.getIngredients());
-        MythicMobsHook mmHook = plugin.getMythicMobsHook();
-        cn.guangdian.forge.hook.RPGItemsHook rpgHook = plugin.getRPGItemsHook();
-
+        MythicMobsHook hook = plugin.getMythicMobsHook();
+        
         for (int slot : MATERIAL_SLOTS) {
             ItemStack item = inventory.getItem(slot);
             if (item == null || item.getType() == Material.AIR) continue;
-
+            
             // 找到匹配的材料需求
             String matchedKey = null;
             for (String key : required.keySet()) {
                 boolean matches = false;
-                String lowerKey = key.toLowerCase();
-                boolean isRPGItem = lowerKey.startsWith("rpg:") || lowerKey.startsWith("rpgitems:");
-
-                if (isRPGItem) {
-                    // RPGItems 匹配
-                    String itemId = key.substring(key.indexOf(':') + 1);
-                    if (rpgHook != null && rpgHook.isEnabled()) {
-                        matches = rpgHook.isRPGItem(item, itemId);
-                    }
-                } else {
-                    // MythicMobs 或原版匹配
-                    if (mmHook != null && mmHook.isEnabled()) {
-                        matches = mmHook.matchesConfig(item, key);
-                    }
+                
+                if (hook != null && hook.isEnabled()) {
+                    matches = hook.matchesConfig(item, key);
                 }
-
+                
                 if (matches && required.get(key) > 0) {
                     matchedKey = key;
                     break;
                 }
             }
-
+            
             if (matchedKey != null) {
                 int need = required.get(matchedKey);
                 int take = Math.min(need, item.getAmount());
                 item.setAmount(item.getAmount() - take);
                 required.put(matchedKey, need - take);
-
+                
                 if (item.getAmount() <= 0) {
                     inventory.setItem(slot, new ItemStack(Material.AIR));
                 }

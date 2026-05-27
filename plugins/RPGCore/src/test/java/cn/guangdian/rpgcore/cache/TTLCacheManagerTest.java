@@ -91,8 +91,8 @@ class TTLCacheManagerTest {
     }
 
     @Test
-    @DisplayName("容量满时缓存淘汰")
-    void testCapacityEviction() {
+    @DisplayName("LRU淘汰策略")
+    void testLRUEviction() {
         TTLCacheManager smallCache = new TTLCacheManager(3, Duration.ofMinutes(5), true);
         
         smallCache.put("key1", "value1");

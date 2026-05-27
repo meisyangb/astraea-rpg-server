@@ -2,7 +2,6 @@ package cn.guangdian.quest;
 
 import cn.guangdian.quest.adapter.QuestServiceAdapter;
 import cn.guangdian.quest.command.QuestCommand;
-import cn.guangdian.quest.integration.PluginIntegration;
 import cn.guangdian.quest.lifecycle.QuestDataHandler;
 import cn.guangdian.quest.listener.QuestEventListener;
 import cn.guangdian.quest.manager.DailyQuestManager;
@@ -23,7 +22,7 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 
-public class GuangDianQuest extends AbstractRPGPlugin implements org.bukkit.event.Listener {
+public class GuangDianQuest extends AbstractRPGPlugin {
 
     private static GuangDianQuest instance;
 
@@ -35,7 +34,6 @@ public class GuangDianQuest extends AbstractRPGPlugin implements org.bukkit.even
     private QuestLineManager questLineManager;
     private QuestServiceAdapter serviceAdapter;
     private QuestDataHandler dataHandler;
-    private PluginIntegration pluginIntegration;
 
     // RPGCore 服务引用
     private MiniMessageService miniMessage;
@@ -72,9 +70,6 @@ public class GuangDianQuest extends AbstractRPGPlugin implements org.bukkit.even
         registerPlaceholderAPI();
 
         serviceAdapter = new QuestServiceAdapter(this);
-
-        // 初始化插件集成 (GuangDianMobs, RPGItems)
-        pluginIntegration = new PluginIntegration(this);
 
         startAutoSave();
 
@@ -176,9 +171,8 @@ public class GuangDianQuest extends AbstractRPGPlugin implements org.bukkit.even
     private void registerListeners() {
         questEventListener = new QuestEventListener(this);
         Bukkit.getPluginManager().registerEvents(questEventListener, this);
-        // 注册本插件作为事件监听器（用于NPC交互事件）
-        Bukkit.getPluginManager().registerEvents(this, this);
-
+        subscribeRPGCoreEvents();
+        
         // 注册玩家生命周期处理器
         if (Bukkit.getPluginManager().isPluginEnabled("RPGCore")) {
             dataHandler = new QuestDataHandler(this);
@@ -187,13 +181,25 @@ public class GuangDianQuest extends AbstractRPGPlugin implements org.bukkit.even
         }
     }
 
-    /**
-     * NPC交互事件监听（使用 Bukkit 事件系统）
-     */
-    @org.bukkit.event.EventHandler
-    public void onNPCInteract(cn.guangdian.npc.event.NPCInteractEvent event) {
-        if (questEventListener != null) {
-            questEventListener.onNPCInteract(event.getNpcId(), event.getPlayer());
+    private void subscribeRPGCoreEvents() {
+        try {
+            cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
+            if (rpgCore != null) {
+                cn.guangdian.rpgcore.api.EventBus eventBus = rpgCore.getEventBus();
+                if (eventBus != null) {
+                    eventBus.subscribe(cn.guangdian.rpgcore.event.events.NPCInteractEvent.class, event -> {
+                        if (event instanceof cn.guangdian.rpgcore.event.events.NPCInteractEvent npcEvent) {
+                            org.bukkit.entity.Player player = npcEvent.getPlayer();
+                            String npcId = npcEvent.getNpcId();
+                            if (player != null && questEventListener != null) {
+                                questEventListener.onNPCInteract(npcId, player);
+                            }
+                        }
+                    });
+                }
+            }
+        } catch (Exception e) {
+            getLogger().warning("订阅RPGCore事件失败: " + e.getMessage());
         }
     }
 
@@ -304,7 +310,6 @@ public class GuangDianQuest extends AbstractRPGPlugin implements org.bukkit.even
     public QuestLineManager getQuestLineManager() { return questLineManager; }
     public QuestServiceAdapter getServiceAdapter() { return serviceAdapter; }
     public ExternalServiceIntegration getExternalServices() { return externalServices; }
-    public PluginIntegration getPluginIntegration() { return pluginIntegration; }
     public int getMaxActiveQuests() { return maxActiveQuests; }
     public int getDailyQuestLimit() { return dailyQuestLimit; }
     public int getAutoSaveInterval() { return autoSaveInterval; }

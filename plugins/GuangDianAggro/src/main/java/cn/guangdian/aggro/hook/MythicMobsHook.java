@@ -7,11 +7,8 @@ import org.bukkit.plugin.Plugin;
 import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 public class MythicMobsHook {
-
-    private static final Logger logger = Logger.getLogger("GuangDianAggro");
 
     private boolean enabled = false;
     private Object mythicBukkit;

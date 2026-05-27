@@ -1,7 +1,7 @@
 package cn.guangdian.holo.manager;
 
-import cn.guangdian.holo.event.HologramCreatedEvent;
-import cn.guangdian.holo.event.HologramDeletedEvent;
+import cn.guangdian.rpgcore.event.events.HologramCreatedEvent;
+import cn.guangdian.rpgcore.event.events.HologramDeletedEvent;
 import cn.guangdian.holo.GuangDianHolo;
 import cn.guangdian.holo.model.Hologram;
 import cn.guangdian.holo.storage.ConfigManager;
@@ -119,9 +119,9 @@ public class HologramManager {
             plugin.getCacheProvider().put("holo:" + name, holo);
         }
 
-        // 发布全息图创建事件（使用 Bukkit 事件系统）
-        HologramCreatedEvent event = new HologramCreatedEvent(name, name, location, holo.getLines().size());
-        Bukkit.getPluginManager().callEvent(event);
+        if (plugin.getEventBus() != null) {
+            plugin.getEventBus().publish(new HologramCreatedEvent(name, location, null));
+        }
 
         return holo;
     }
@@ -144,9 +144,9 @@ public class HologramManager {
             plugin.getCacheProvider().invalidate("holo:" + name);
         }
 
-        // 发布全息图删除事件（使用 Bukkit 事件系统）
-        HologramDeletedEvent event = new HologramDeletedEvent(name, name, holo.getLocation());
-        Bukkit.getPluginManager().callEvent(event);
+        if (plugin.getEventBus() != null) {
+            plugin.getEventBus().publish(new HologramDeletedEvent(name));
+        }
 
         return true;
     }

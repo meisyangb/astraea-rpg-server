@@ -1,8 +1,6 @@
 package cn.guangdian.mobs.command;
 
 import cn.guangdian.mobs.GuangDianMobs;
-import cn.guangdian.mobs.migration.MigrationReport;
-import cn.guangdian.mobs.migration.MythicMobsMigrator;
 import cn.guangdian.mobs.model.CustomMob;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import org.bukkit.Location;
@@ -13,7 +11,6 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,7 +38,6 @@ public class MobCommand implements CommandExecutor, TabCompleter {
             case "kill" -> handleKill(sender, args);
             case "reload" -> handleReload(sender);
             case "list" -> handleList(sender);
-            case "migrate" -> handleMigrate(sender, args);
             default -> sendHelp(sender);
         }
 
@@ -163,67 +159,6 @@ public class MobCommand implements CommandExecutor, TabCompleter {
     }
 
     /**
-     * 处理迁移命令
-     */
-    private void handleMigrate(CommandSender sender, String[] args) {
-        MiniMessageService mm = MiniMessageService.getInstance();
-
-        if (!sender.hasPermission("gdmm.migrate")) {
-            sender.sendMessage(mm.red("你没有权限使用此命令"));
-            return;
-        }
-
-        if (args.length < 2) {
-            sender.sendMessage(mm.colorize("<red>用法: /gdmm migrate <mobs|skills|spawners|all>"));
-            return;
-        }
-
-        String type = args[1].toLowerCase();
-        MythicMobsMigrator migrator = new MythicMobsMigrator(plugin);
-
-        sender.sendMessage(mm.yellow("开始迁移 MythicMobs 配置..."));
-
-        switch (type) {
-            case "mobs" -> migrator.migrateMobs();
-            case "skills" -> migrator.migrateSkills();
-            case "spawners" -> migrator.migrateSpawners();
-            case "all" -> migrator.migrateAll();
-            default -> {
-                sender.sendMessage(mm.red("未知的迁移类型: " + type));
-                return;
-            }
-        }
-
-        MigrationReport report = migrator.getReport();
-
-        sender.sendMessage(mm.green("========== 迁移完成 =========="));
-        sender.sendMessage(mm.colorize("<gray>怪物: <white>" + report.getMobsMigrated() + " 个"));
-        sender.sendMessage(mm.colorize("<gray>技能: <white>" + report.getSkillsMigrated() + " 个"));
-        sender.sendMessage(mm.colorize("<gray>刷新点: <white>" + report.getSpawnersMigrated() + " 个"));
-
-        if (report.hasWarnings()) {
-            sender.sendMessage(mm.yellow("警告 (" + report.getWarnings().size() + " 个):"));
-            for (String warning : report.getWarnings()) {
-                sender.sendMessage(mm.colorize("<yellow>  - " + warning));
-            }
-        }
-
-        if (report.hasErrors()) {
-            sender.sendMessage(mm.red("错误 (" + report.getErrors().size() + " 个):"));
-            for (MigrationReport.MigrationError error : report.getErrors()) {
-                sender.sendMessage(mm.colorize("<red>  - [" + error.category + "] " + error.name + ": " + error.message));
-            }
-        }
-
-        // 显示输出文件位置
-        File dataFolder = plugin.getDataFolder();
-        sender.sendMessage(mm.colorize("<green>输出文件:"));
-        sender.sendMessage(mm.colorize("<gray>  - <white>" + new File(dataFolder, "mobs_migrated.yml").getPath()));
-        sender.sendMessage(mm.colorize("<gray>  - <white>" + new File(dataFolder, "skills_migrated.yml").getPath()));
-        sender.sendMessage(mm.colorize("<gray>  - <white>" + new File(dataFolder, "spawnpoints_migrated.yml").getPath()));
-    }
-
-    /**
      * 发送帮助信息
      */
     private void sendHelp(CommandSender sender) {
@@ -234,7 +169,6 @@ public class MobCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage(mm.colorize("<gray>/gdmm kill [怪物ID] [半径] <white>- 清除怪物"));
         sender.sendMessage(mm.colorize("<gray>/gdmm reload <white>- 重载配置"));
         sender.sendMessage(mm.colorize("<gray>/gdmm list <white>- 列出所有怪物"));
-        sender.sendMessage(mm.colorize("<gray>/gdmm migrate <mobs|skills|spawners|all> <white>- 迁移 MythicMobs 配置"));
     }
 
     @Override
@@ -246,17 +180,11 @@ public class MobCommand implements CommandExecutor, TabCompleter {
             completions.add("kill");
             completions.add("reload");
             completions.add("list");
-            completions.add("migrate");
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("spawn") || args[0].equalsIgnoreCase("kill")) {
                 completions.addAll(plugin.getMobManager().getAllMobs().stream()
                     .map(CustomMob::getId)
                     .collect(Collectors.toList()));
-            } else if (args[0].equalsIgnoreCase("migrate")) {
-                completions.add("mobs");
-                completions.add("skills");
-                completions.add("spawners");
-                completions.add("all");
             }
         }
 

@@ -4,6 +4,7 @@ import cn.guangdian.cleaner.GuangDianCleaner;
 import cn.guangdian.cleaner.manager.CleanManager;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
+import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
 import cn.guangdian.rpgcore.service.api.CleanerService;
 import org.bukkit.Bukkit;
@@ -31,6 +32,7 @@ public class CleanerServiceAdapter implements CleanerService {
     private final CleanManager cleanManager;
     private final boolean useRPGCore;
     private AsyncExecutor asyncExecutor;
+    private EventBus eventBus;
     private final AtomicLong totalCleanedCount = new AtomicLong(0);
 
     public CleanerServiceAdapter(GuangDianCleaner plugin, CleanManager cleanManager) {
@@ -43,6 +45,7 @@ public class CleanerServiceAdapter implements CleanerService {
                 RPGCore rpgCore = RPGCore.getInstance();
                 ServiceRegistry registry = rpgCore.getServiceRegistry();
                 this.asyncExecutor = rpgCore.getAsyncExecutor();
+                this.eventBus = rpgCore.getEventBus();
 
                 registry.registerService(CleanerService.class, this);
                 plugin.getLogger().info("已注册到 RPGCore: CleanerService");

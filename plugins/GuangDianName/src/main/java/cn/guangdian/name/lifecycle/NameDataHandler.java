@@ -1,7 +1,9 @@
 package cn.guangdian.name.lifecycle;
 
 import cn.guangdian.name.GuangDianName;
-import cn.guangdian.name.NameDisplayManager;
+import cn.guangdian.name.HealthDisplay;
+import cn.guangdian.name.TitleDisplay;
+import cn.guangdian.name.TextDisplayManager;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.lifecycle.AbstractPlayerDataHandler;
 import org.bukkit.entity.Player;
@@ -9,13 +11,18 @@ import org.bukkit.entity.Player;
 public class NameDataHandler extends AbstractPlayerDataHandler {
     
     private final GuangDianName plugin;
-    private final NameDisplayManager displayManager;
+    private final HealthDisplay healthDisplay;
+    private final TitleDisplay titleDisplay;
+    private final TextDisplayManager textDisplayManager;
     private long loadTaskId = -1;
     
-    public NameDataHandler(GuangDianName plugin, NameDisplayManager displayManager) {
+    public NameDataHandler(GuangDianName plugin, HealthDisplay healthDisplay, 
+                           TitleDisplay titleDisplay, TextDisplayManager textDisplayManager) {
         super(plugin);
         this.plugin = plugin;
-        this.displayManager = displayManager;
+        this.healthDisplay = healthDisplay;
+        this.titleDisplay = titleDisplay;
+        this.textDisplayManager = textDisplayManager;
     }
     
     @Override
@@ -24,7 +31,9 @@ public class NameDataHandler extends AbstractPlayerDataHandler {
         if (rpgCore != null) {
             loadTaskId = rpgCore.getScheduler().runSyncLater(() -> {
                 if (player.isOnline()) {
-                    displayManager.initPlayer(player);
+                    healthDisplay.initPlayer(player);
+                    titleDisplay.initPlayer(player);
+                    textDisplayManager.createTextDisplay(player);
                 }
             }, 50L);
         }
@@ -40,7 +49,9 @@ public class NameDataHandler extends AbstractPlayerDataHandler {
             }
             loadTaskId = -1;
         }
-        displayManager.removeAllDisplays(player);
+        healthDisplay.cleanupPlayer(player);
+        titleDisplay.cleanupPlayer(player);
+        textDisplayManager.removeTextDisplay(player);
     }
     
     @Override

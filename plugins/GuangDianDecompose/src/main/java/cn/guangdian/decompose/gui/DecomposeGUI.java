@@ -163,7 +163,7 @@ public class DecomposeGUI implements InventoryHolder {
             clearPreview(player, gui);
             player.sendMessage(result.getMessage().replace("&", "§"));
         } else {
-            player.sendMessage(net.kyori.adventure.text.Component.text(result.getMessage()).color(net.kyori.adventure.text.format.NamedTextColor.RED));
+            player.sendMessage("§c" + result.getMessage());
         }
 
         return result;

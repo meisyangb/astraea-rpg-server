@@ -1,6 +1,7 @@
 package cn.guangdian.rpgcore.integration;
 
 import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.NodeType;
 import net.luckperms.api.node.types.PrefixNode;
@@ -13,9 +14,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class ExternalServiceIntegrationImpl implements ExternalServiceIntegration {
@@ -27,42 +25,12 @@ public class ExternalServiceIntegrationImpl implements ExternalServiceIntegratio
     private Economy economy;
     private boolean placeholderAPIEnabled;
     
-    private final ConcurrentHashMap<java.util.UUID, CacheEntry<User>> userCache = new ConcurrentHashMap<>();
-    private final long cacheTtlMs = 5 * 60 * 1000; // 5分钟过期
-    private final ScheduledExecutorService cleanupExecutor;
-
+    private final ConcurrentHashMap<java.util.UUID, User> userCache = new ConcurrentHashMap<>();
+    
     public ExternalServiceIntegrationImpl(JavaPlugin plugin) {
         this.plugin = plugin;
         this.logger = plugin.getLogger();
-        this.cleanupExecutor = Executors.newSingleThreadScheduledExecutor(r -> {
-            Thread thread = new Thread(r, "RPGCore-UserCache-Cleanup");
-            thread.setDaemon(true);
-            return thread;
-        });
-        startCleanupTask();
         hookAll();
-    }
-
-    private void startCleanupTask() {
-        cleanupExecutor.scheduleAtFixedRate(() -> {
-            long now = System.currentTimeMillis();
-            int removed = 0;
-            for (var entry : userCache.entrySet()) {
-                if (entry.getValue().isExpired(now, cacheTtlMs)) {
-                    userCache.remove(entry.getKey());
-                    removed++;
-                }
-            }
-            if (removed > 0) {
-                logger.fine("[ExternalService] 清理 LuckPerms 用户缓存: " + removed + " 个");
-            }
-        }, cacheTtlMs, cacheTtlMs, TimeUnit.MILLISECONDS);
-    }
-
-    private record CacheEntry<T>(T value, long timestamp) {
-        boolean isExpired(long now, long ttlMs) {
-            return (now - timestamp) > ttlMs;
-        }
     }
     
     private void hookAll() {
@@ -74,13 +42,8 @@ public class ExternalServiceIntegrationImpl implements ExternalServiceIntegratio
     private void hookLuckPerms() {
         try {
             if (Bukkit.getPluginManager().isPluginEnabled("LuckPerms")) {
-                RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-                if (provider != null) {
-                    luckPerms = provider.getProvider();
-                    logger.info("[ExternalService] LuckPerms hooked successfully");
-                } else {
-                    logger.warning("[ExternalService] LuckPerms detected but service provider not found");
-                }
+                luckPerms = LuckPermsProvider.get();
+                logger.info("[ExternalService] LuckPerms hooked successfully");
             }
         } catch (Exception e) {
             logger.warning("[ExternalService] Failed to hook LuckPerms: " + e.getMessage());
@@ -125,19 +88,10 @@ public class ExternalServiceIntegrationImpl implements ExternalServiceIntegratio
     @Override
     public Optional<User> getLuckPermsUser(Player player) {
         if (luckPerms == null) return Optional.empty();
-
-        java.util.UUID uuid = player.getUniqueId();
-        CacheEntry<User> entry = userCache.get(uuid);
-        long now = System.currentTimeMillis();
-
-        if (entry != null && !entry.isExpired(now, cacheTtlMs)) {
-            return Optional.ofNullable(entry.value());
-        }
-
-        User user = luckPerms.getUserManager().getUser(uuid);
-        if (user != null) {
-            userCache.put(uuid, new CacheEntry<>(user, now));
-        }
+        
+        User user = userCache.computeIfAbsent(player.getUniqueId(), 
+            uuid -> luckPerms.getUserManager().getUser(uuid));
+        
         return Optional.ofNullable(user);
     }
     
@@ -252,15 +206,6 @@ public class ExternalServiceIntegrationImpl implements ExternalServiceIntegratio
     
     public void shutdown() {
         clearAllUserCache();
-        cleanupExecutor.shutdown();
-        try {
-            if (!cleanupExecutor.awaitTermination(5, TimeUnit.SECONDS)) {
-                cleanupExecutor.shutdownNow();
-            }
-        } catch (InterruptedException e) {
-            cleanupExecutor.shutdownNow();
-            Thread.currentThread().interrupt();
-        }
         luckPerms = null;
         economy = null;
     }

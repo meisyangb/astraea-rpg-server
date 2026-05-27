@@ -210,7 +210,7 @@ public class SchedulerManager {
         plugin.getLogger().info("定时清理掉落物: 清除 " + items + " 个物品");
         
         if (items > 0) {
-            Bukkit.broadcast(net.kyori.adventure.text.Component.text("[系统] 已清理 " + items + " 个地面掉落物").color(net.kyori.adventure.text.format.NamedTextColor.GREEN));
+            Bukkit.broadcastMessage("§a[系统] 已清理 " + items + " 个地面掉落物");
         }
     }
     

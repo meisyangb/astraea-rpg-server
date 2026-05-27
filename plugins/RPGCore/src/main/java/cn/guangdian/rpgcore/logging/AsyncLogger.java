@@ -250,21 +250,6 @@ public class AsyncLogger implements GameLogger {
     }
 
     private String buildStructuredLog(String level, String event, Map<String, Object> data) {
-        try {
-            com.fasterxml.jackson.databind.ObjectMapper mapper = cn.guangdian.rpgcore.util.JacksonUtils.getJsonMapper();
-            java.util.Map<String, Object> logMap = new java.util.LinkedHashMap<>();
-            logMap.put("timestamp", TIME_FORMATTER.format(Instant.now()));
-            logMap.put("level", level);
-            logMap.put("event", event);
-            logMap.put("data", data);
-            return mapper.writeValueAsString(logMap);
-        } catch (Exception e) {
-            // 降级：手动拼接
-            return fallbackBuildStructuredLog(level, event, data);
-        }
-    }
-
-    private String fallbackBuildStructuredLog(String level, String event, Map<String, Object> data) {
         StringBuilder sb = new StringBuilder();
         sb.append("{");
         sb.append("\"timestamp\":\"").append(TIME_FORMATTER.format(Instant.now())).append("\",");

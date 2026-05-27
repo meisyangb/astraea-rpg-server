@@ -216,7 +216,7 @@ public final class ColorUtil {
 
     /**
      * 发送消息给玩家
-     * @see cn.guangdian.rpgcore.service.api.MessageService#send(Player, String)
+     * @see AudienceService#sendMessage(Player, Component)
      */
     public static void send(Player player, Component message) {
         if (player == null || message == null) return;
@@ -225,7 +225,7 @@ public final class ColorUtil {
 
     /**
      * 发送消息给命令发送者
-     * @see cn.guangdian.rpgcore.service.api.MessageService#send(CommandSender, String)
+     * @see AudienceService#sendMessage(CommandSender, Component)
      */
     public static void send(CommandSender sender, Component message) {
         if (sender == null || message == null) return;
@@ -234,7 +234,7 @@ public final class ColorUtil {
 
     /**
      * 发送消息给玩家
-     * @see cn.guangdian.rpgcore.service.api.MessageService#send(Player, String)
+     * @see AudienceService#sendMessage(Player, Component)
      */
     public static void send(Player player, String text) {
         if (player == null || text == null) {
@@ -245,7 +245,7 @@ public final class ColorUtil {
 
     /**
      * 发送消息给命令发送者
-     * @see cn.guangdian.rpgcore.service.api.MessageService#send(CommandSender, String)
+     * @see AudienceService#sendMessage(CommandSender, Component)
      */
     public static void send(CommandSender sender, String text) {
         if (sender == null || text == null) {

@@ -5,6 +5,7 @@ import cn.guangdian.npc.manager.NPCManager;
 import cn.guangdian.npc.model.NPCData;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
+import cn.guangdian.rpgcore.api.EventBus;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
 import cn.guangdian.rpgcore.service.api.NPCService;
 import org.bukkit.Bukkit;
@@ -17,6 +18,7 @@ public class NPCServiceAdapter implements NPCService {
 
     private final GuangDianNPC plugin;
     private final boolean useRPGCore;
+    private EventBus eventBus;
     private AsyncExecutor asyncExecutor;
 
     public NPCServiceAdapter(GuangDianNPC plugin) {
@@ -27,6 +29,7 @@ public class NPCServiceAdapter implements NPCService {
             try {
                 RPGCore rpgCore = RPGCore.getInstance();
                 ServiceRegistry registry = rpgCore.getServiceRegistry();
+                this.eventBus = rpgCore.getEventBus();
                 this.asyncExecutor = rpgCore.getAsyncExecutor();
 
                 registry.registerService(NPCService.class, this);
@@ -137,6 +140,10 @@ public class NPCServiceAdapter implements NPCService {
 
     public boolean isUsingRPGCore() {
         return useRPGCore;
+    }
+
+    public EventBus getEventBus() {
+        return eventBus;
     }
 
     public AsyncExecutor getAsyncExecutor() {

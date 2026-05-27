@@ -12,7 +12,6 @@ import cn.guangdian.cavefu.upgrade.UpgradeManager;
 import cn.guangdian.cavefu.world.CaveWorldManager;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.GameLogger;
-import cn.guangdian.rpgcore.command.CommandFramework;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
@@ -75,8 +74,9 @@ public final class GuangDianCaveFu extends AbstractRPGPlugin {
         // 初始化升级管理
         upgradeManager = new UpgradeManager(this);
 
-        // 注册命令 - 使用 RPGCore CommandFramework
-        registerCommands();
+        // 注册命令
+        getCommand("cave").setExecutor(new CaveCommand(this));
+        getCommand("caveadmin").setExecutor(new CaveAdminCommand(this));
 
         // 注册监听器
         getServer().getPluginManager().registerEvents(new ProtectionListener(this), this);
@@ -192,7 +192,7 @@ public final class GuangDianCaveFu extends AbstractRPGPlugin {
 
         // 注销 PlaceholderAPI 扩展
         if (placeholderExpansion != null) {
-            placeholderExpansion.unregister();
+            PlaceholderAPI.unregisterExpansion(placeholderExpansion);
             placeholderExpansion = null;
         }
 
@@ -249,19 +249,5 @@ public final class GuangDianCaveFu extends AbstractRPGPlugin {
         configManager.reload();
         dataManager.load();
         logInfo("配置已重新加载！");
-    }
-
-    /**
-     * 注册命令 - 使用 RPGCore CommandFramework
-     */
-    private void registerCommands() {
-        CommandFramework framework = CommandFramework.getInstance();
-        if (framework != null) {
-            framework.registerCommand(new CaveCommand(this));
-            framework.registerCommand(new CaveAdminCommand(this));
-            logInfo("已使用 CommandFramework 注册命令");
-        } else {
-            logSevere("CommandFramework 不可用，命令注册失败");
-        }
     }
 }

@@ -3,12 +3,14 @@ package cn.guangdian.monthlycard.placeholder;
 import cn.guangdian.monthlycard.GuangDianMonthlyCard;
 import cn.guangdian.monthlycard.data.MonthlyCardData;
 import cn.guangdian.monthlycard.data.MonthlyCardType;
-import cn.guangdian.rpgcore.integration.PlaceholderService;
+import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public class MonthlyCardPlaceholder {
+public class MonthlyCardPlaceholder extends PlaceholderExpansion {
     
     private final GuangDianMonthlyCard plugin;
     
@@ -16,56 +18,72 @@ public class MonthlyCardPlaceholder {
         this.plugin = plugin;
     }
     
-    public void register() {
-        PlaceholderService service = PlaceholderService.getInstance();
-        if (service == null) return;
+    @Override
+    public @NotNull String getIdentifier() {
+        return "gdmonthly";
+    }
+    
+    @Override
+    public @NotNull String getAuthor() {
+        return "Gumin";
+    }
+    
+    @Override
+    public @NotNull String getVersion() {
+        return "1.0.0";
+    }
+    
+    @Override
+    public boolean persist() {
+        return true;
+    }
+    
+    @Override
+    public String onRequest(OfflinePlayer player, @NotNull String params) {
+        if (player == null) return "";
         
-        service.register("gdmonthly", (player, params) -> {
-            if (player == null) return "";
-            
-            String identifier = params.toLowerCase();
-            
-            switch (identifier) {
-                case "has_card":
-                case "active":
-                    return plugin.hasActiveCard(player.getUniqueId()) ? "true" : "false";
-                    
-                case "remaining_days":
-                case "days_left":
-                    return String.valueOf(plugin.getRemainingDays(player.getUniqueId()));
-                    
-                case "claimed_days":
-                case "total_claimed":
-                    MonthlyCardData data = plugin.getPlayerData(player.getUniqueId());
-                    return String.valueOf(data.getTotalClaimedDays());
-                    
-                case "can_claim":
-                case "can_sign":
-                    return plugin.canClaimToday(player.getUniqueId()) ? "true" : "false";
-                    
-                case "card_type":
-                    MonthlyCardData cardData = plugin.getPlayerData(player.getUniqueId());
-                    if (cardData.hasActiveCard()) {
-                        Optional<MonthlyCardType> typeOpt = plugin.getCardType(cardData.getCardType());
-                        return typeOpt.map(MonthlyCardType::getDisplayName).orElse(cardData.getCardType());
-                    }
-                    return "无";
-                    
-                case "card_type_id":
-                    MonthlyCardData typeData = plugin.getPlayerData(player.getUniqueId());
-                    return typeData.hasActiveCard() ? typeData.getCardType() : "none";
-                    
-                case "status":
-                    MonthlyCardData statusData = plugin.getPlayerData(player.getUniqueId());
-                    if (!statusData.hasActiveCard()) {
-                        return "未激活";
-                    }
-                    return statusData.canClaimToday() ? "可领取" : "已领取";
-                    
-                default:
-                    return handleComplexPlaceholder(player, identifier);
-            }
-        });
+        String identifier = params.toLowerCase();
+        
+        switch (identifier) {
+            case "has_card":
+            case "active":
+                return plugin.hasActiveCard(player.getUniqueId()) ? "true" : "false";
+                
+            case "remaining_days":
+            case "days_left":
+                return String.valueOf(plugin.getRemainingDays(player.getUniqueId()));
+                
+            case "claimed_days":
+            case "total_claimed":
+                MonthlyCardData data = plugin.getPlayerData(player.getUniqueId());
+                return String.valueOf(data.getTotalClaimedDays());
+                
+            case "can_claim":
+            case "can_sign":
+                return plugin.canClaimToday(player.getUniqueId()) ? "true" : "false";
+                
+            case "card_type":
+                MonthlyCardData cardData = plugin.getPlayerData(player.getUniqueId());
+                if (cardData.hasActiveCard()) {
+                    Optional<MonthlyCardType> typeOpt = plugin.getCardType(cardData.getCardType());
+                    return typeOpt.map(MonthlyCardType::getDisplayName).orElse(cardData.getCardType());
+                }
+                return "无";
+                
+            case "card_type_id":
+                MonthlyCardData typeData = plugin.getPlayerData(player.getUniqueId());
+                return typeData.hasActiveCard() ? typeData.getCardType() : "none";
+                
+            case "status":
+                MonthlyCardData statusData = plugin.getPlayerData(player.getUniqueId());
+                if (!statusData.hasActiveCard()) {
+                    return "未激活";
+                }
+                return statusData.canClaimToday() ? "可领取" : "已领取";
+                
+            default:
+                return handleComplexPlaceholder(player, identifier);
+        }
     }
     
     private String handleComplexPlaceholder(OfflinePlayer player, String identifier) {
@@ -88,8 +106,5 @@ public class MonthlyCardPlaceholder {
         }
         
         return null;
-    }
-    
-    public void unregister() {
     }
 }

@@ -6,7 +6,6 @@ import cn.guangdian.cavefu.cave.CaveManager;
 import cn.guangdian.cavefu.config.ConfigManager;
 import cn.guangdian.cavefu.permission.PermissionType;
 import cn.guangdian.cavefu.world.CaveWorldManager;
-import cn.guangdian.rpgcore.message.MiniMessageService;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -30,21 +29,12 @@ public class ProtectionListener implements Listener {
     private final CaveManager caveManager;
     private final ConfigManager configManager;
     private final CaveWorldManager worldManager;
-    private final MiniMessageService miniMessage;
 
     public ProtectionListener(GuangDianCaveFu plugin) {
         this.plugin = plugin;
         this.caveManager = plugin.getCaveManager();
         this.configManager = plugin.getConfigManager();
         this.worldManager = plugin.getWorldManager();
-        this.miniMessage = plugin.getMiniMessageService();
-    }
-
-    /**
-     * 使用 MiniMessage 发送消息
-     */
-    private void sendMessage(Player player, String text) {
-        player.sendMessage(miniMessage.colorize(text));
     }
 
     /**
@@ -61,14 +51,14 @@ public class ProtectionListener implements Listener {
 
         if (cave == null) {
             event.setCancelled(true);
-            sendMessage(player, "<red>这里不是你的洞府区域！");
+            player.sendMessage("§c这里不是你的洞府区域！");
             return;
         }
 
         PermissionType permission = caveManager.checkPermission(player.getUniqueId(), cave);
         if (!permission.isAtLeast(PermissionType.MEMBER)) {
             event.setCancelled(true);
-            sendMessage(player, configManager.getMessage("no-permission"));
+            player.sendMessage(configManager.getMessage("no-permission"));
         }
     }
 
@@ -86,14 +76,14 @@ public class ProtectionListener implements Listener {
 
         if (cave == null) {
             event.setCancelled(true);
-            sendMessage(player, "<red>这里不是你的洞府区域！");
+            player.sendMessage("§c这里不是你的洞府区域！");
             return;
         }
 
         PermissionType permission = caveManager.checkPermission(player.getUniqueId(), cave);
         if (!permission.isAtLeast(PermissionType.MEMBER)) {
             event.setCancelled(true);
-            sendMessage(player, configManager.getMessage("no-permission"));
+            player.sendMessage(configManager.getMessage("no-permission"));
         }
     }
 
@@ -121,14 +111,14 @@ public class ProtectionListener implements Listener {
 
         if (cave == null) {
             event.setCancelled(true);
-            sendMessage(player, "<red>这里不是你的洞府区域！");
+            player.sendMessage("§c这里不是你的洞府区域！");
             return;
         }
 
         PermissionType permission = caveManager.checkPermission(player.getUniqueId(), cave);
         if (!permission.isAtLeast(PermissionType.MEMBER)) {
             event.setCancelled(true);
-            sendMessage(player, configManager.getMessage("no-permission"));
+            player.sendMessage(configManager.getMessage("no-permission"));
         }
     }
 

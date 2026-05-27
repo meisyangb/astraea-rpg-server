@@ -4,66 +4,21 @@ import cn.guangdian.rpgcore.api.ConfigManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 public class ConfigManagerImpl implements ConfigManager {
-
+    
     private final JavaPlugin hostPlugin;
     private final Logger logger;
     private final Map<String, JavaPlugin> registeredPlugins = new ConcurrentHashMap<>();
     private final Map<String, FileConfiguration> configCache = new ConcurrentHashMap<>();
-    private final List<ConfigChangeListener> listeners = new CopyOnWriteArrayList<>();
-
+    
     public ConfigManagerImpl(JavaPlugin hostPlugin) {
         this.hostPlugin = hostPlugin;
         this.logger = hostPlugin.getLogger();
-    }
-
-    /**
-     * 配置变更监听器接口
-     */
-    public interface ConfigChangeListener {
-        /**
-         * 配置变更时调用
-         *
-         * @param pluginName 插件名称
-         * @param key        变更的配置键
-         * @param newValue   新值
-         */
-        void onConfigChanged(String pluginName, String key, Object newValue);
-    }
-
-    /**
-     * 注册配置变更监听器
-     *
-     * @param listener 监听器
-     */
-    public void addChangeListener(ConfigChangeListener listener) {
-        listeners.add(listener);
-    }
-
-    /**
-     * 注销配置变更监听器
-     *
-     * @param listener 监听器
-     */
-    public void removeChangeListener(ConfigChangeListener listener) {
-        listeners.remove(listener);
-    }
-
-    private void notifyListeners(String pluginName, String key, Object newValue) {
-        for (ConfigChangeListener listener : listeners) {
-            try {
-                listener.onConfigChanged(pluginName, key, newValue);
-            } catch (Exception e) {
-                logger.warning("[Config] 配置变更通知失败: " + e.getMessage());
-            }
-        }
     }
     
     @Override
@@ -72,15 +27,10 @@ public class ConfigManagerImpl implements ConfigManager {
         if (config == null) {
             return defaultValue;
         }
-
+        
         try {
             Object value = config.get(key, defaultValue);
             if (value == null) {
-                return defaultValue;
-            }
-            if (defaultValue != null && !defaultValue.getClass().isInstance(value)) {
-                logger.warning("[Config] Type mismatch for " + key + " in " + pluginName +
-                    ": expected " + defaultValue.getClass().getName() + ", got " + value.getClass().getName());
                 return defaultValue;
             }
             @SuppressWarnings("unchecked")
@@ -116,7 +66,6 @@ public class ConfigManagerImpl implements ConfigManager {
         FileConfiguration config = configCache.get(pluginName);
         if (config != null) {
             config.set(key, value);
-            notifyListeners(pluginName, key, value);
         }
     }
     
