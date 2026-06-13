@@ -1,0 +1,36 @@
+{
+  "title": "Astraea RPG 插件文档",
+  "description": "光点RPG服务器专属插件体系文档",
+  "author": "GuangDian / Gumin",
+  "language": "zh-hans",
+  "plugins": [
+    "theme-default",
+    "-highlight",
+    "prism",
+    "prism-themes",
+    "fontsettings",
+    "sharing",
+    "livereload"
+  ],
+  "pluginsConfig": {
+    "prism": {
+      "css": ["prism-themes/themes/prism-atom-dark.css"]
+    },
+    "fontsettings": {
+      "theme": "white",
+      "family": "sans",
+      "size": 2
+    },
+    "sharing": {
+      "facebook": false,
+      "twitter": false,
+      "google": false,
+      "weibo": true,
+      "qq": true,
+      "qzone": true
+    }
+  },
+  "styles": {
+    "website": "styles/website.css"
+  }
+}

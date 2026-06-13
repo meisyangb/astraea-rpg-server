@@ -1,0 +1,110 @@
+/* GitBook 自定义样式 */
+
+/* 整体字体 */
+.book-body {
+    font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", sans-serif;
+}
+
+/* 标题样式 */
+.book-body h1,
+.book-body h2,
+.book-body h3,
+.book-body h4,
+.book-body h5,
+.book-body h6 {
+    font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", sans-serif;
+    color: #2c3e50;
+}
+
+/* 链接颜色 */
+.book-body a {
+    color: #3498db;
+}
+
+.book-body a:hover {
+    color: #2980b9;
+}
+
+/* 代码块样式 */
+.book-body code {
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    padding: 2px 6px;
+}
+
+.book-body pre {
+    background-color: #282c34;
+    border-radius: 6px;
+}
+
+.book-body pre code {
+    background-color: transparent;
+}
+
+/* 表格样式 */
+.book-body table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+}
+
+.book-body table th,
+.book-body table td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+}
+
+.book-body table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+.book-body table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+/* 引用块样式 */
+.book-body blockquote {
+    border-left: 4px solid #3498db;
+    background-color: #f0f7fb;
+    padding: 10px 15px;
+    margin: 1em 0;
+}
+
+/* 提示框样式 */
+.book-body .hints {
+    padding: 15px;
+    border-radius: 4px;
+    margin: 1em 0;
+}
+
+/* 侧边栏样式 */
+.book-summary {
+    background-color: #fafafa;
+}
+
+.book-summary ul li a {
+    color: #333;
+}
+
+.book-summary ul li a:hover {
+    color: #3498db;
+}
+
+.book-summary ul li.active > a {
+    color: #3498db;
+    border-right: 3px solid #3498db;
+}
+
+/* 页面导航 */
+.navigation-prev,
+.navigation-next {
+    color: #3498db;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .book-body {
+        padding: 10px;
+    }
+}
