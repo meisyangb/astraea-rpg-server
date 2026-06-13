@@ -348,10 +348,12 @@
       basePath: window.location.hostname === 'meisyangb.github.io' ? '/astraea-rpg-server/' : '/',
       loadSidebar: true,
       subMaxLevel: 3,
-      autoHeader: true,
       auto2top: true,
       coverpage: false,
       notFoundPage: true,
+      alias: {
+        '/.*/_sidebar.md': '/_sidebar.md'
+      },
       
       // 搜索配置
       search: {
