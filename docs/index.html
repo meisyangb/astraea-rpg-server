@@ -346,14 +346,97 @@
       name: 'Astraea RPG 插件文档',
       repo: '',
       basePath: window.location.hostname === 'meisyangb.github.io' ? '/astraea-rpg-server/' : '/',
-      loadSidebar: true,
       subMaxLevel: 3,
       auto2top: true,
       coverpage: false,
       notFoundPage: true,
-      alias: {
-        '/.*/_sidebar.md': '/_sidebar.md'
-      },
+      
+      // 侧边栏 - 直接内联定义，不依赖 _sidebar.md 文件
+      sidebar: `
+- **开始使用**
+  - [简介](/)
+  - [快速开始](/quickstart)
+  - [文档编写规范](/DOCUMENTATION_RULES)
+  - [部署指南](/DEPLOYMENT)
+
+- **核心框架**
+  - [RPGCore](/RPGCore/README)
+
+- **属性与职业**
+  - [GuangDianArmorStats](/GuangDianArmorStats/README)
+  - [GuangDianClass](/GuangDianClass/README)
+  - [GuangDianAccessory](/GuangDianAccessory/README)
+  - [GuangDianGearScore](/GuangDianGearScore/README)
+
+- **怪物与战斗**
+  - [GuangDianMobs](/GuangDianMobs/README)
+  - [GuangDianMobHealth](/GuangDianMobHealth/README)
+  - [GuangDianAggro](/GuangDianAggro/README)
+  - [GuangDianRaid](/GuangDianRaid/README)
+
+- **任务系统**
+  - [GuangDianQuest](/GuangDianQuest/README)
+  - [GuangDianBattlePass](/GuangDianBattlePass/README)
+
+- **社交系统**
+  - [GuangDianGuild](/GuangDianGuild/README)
+  - [GuangDianMarriage](/GuangDianMarriage/README)
+  - [GuangDianTrade](/GuangDianTrade/README)
+
+- **经济系统**
+  - [GuangDianBank](/GuangDianBank/README)
+  - [GuangDianMarket](/GuangDianMarket/README)
+  - [GuangDianPoints](/GuangDianPoints/README)
+
+- **装备系统**
+  - [GuangDianForge](/GuangDianForge/README)
+  - [GuangDianDecompose](/GuangDianDecompose/README)
+  - [GuangDianSocket](/GuangDianSocket/README)
+  - [GuangDianCollection](/GuangDianCollection/README)
+  - [GuangDianDragonCore](/GuangDianDragonCore/README)
+
+- **世界管理**
+  - [GuangDianWorld](/GuangDianWorld/README)
+  - [GuangDianCaveFu](/GuangDianCaveFu/README)
+  - [GuangDianWorldRules](/GuangDianWorldRules/README)
+
+- **界面显示**
+  - [GuangDianMenu](/GuangDianMenu/README)
+  - [GuangDianHolo](/GuangDianHolo/README)
+  - [GuangDianBoard](/GuangDianBoard/README)
+  - [GuangDianTab](/GuangDianTab/README)
+  - [GuangDianChat](/GuangDianChat/README)
+  - [GuangDianName](/GuangDianName/README)
+  - [GuangDianItemLabel](/GuangDianItemLabel/README)
+
+- **功能辅助**
+  - [GuangDianNPC](/GuangDianNPC/README)
+  - [GuangDianNPCCommand](/GuangDianNPCCommand/README)
+  - [GuangDianSignCommand](/GuangDianSignCommand/README)
+  - [GuangDianLocation](/GuangDianLocation/README)
+  - [GuangDianItemTrigger](/GuangDianItemTrigger/README)
+  - [GuangDianVillagerTrade](/GuangDianVillagerTrade/README)
+
+- **管理工具**
+  - [GuangDianAuth](/GuangDianAuth/README)
+  - [GuangDianCleaner](/GuangDianCleaner/README)
+  - [GuangDianChain](/GuangDianChain/README)
+  - [GuangDianMCP](/GuangDianMCP/README)
+
+- **扩展系统**
+  - [RPGItems](/RPGItems/README)
+  - [RPGSkill](/RPGSkill/README)
+
+- **其他**
+  - [GuangDianHolo](/GuangDianHolo/README)
+  - [GuangDianSoulBind](/GuangDianSoulBind/README)
+  - [GuangDianSignIn](/GuangDianSignIn/README)
+  - [GuangDianMonthlyCard](/GuangDianMonthlyCard/README)
+  - [GuangDianGift](/GuangDianGift/README)
+  - [GuangDianDropControl](/GuangDianDropControl/README)
+  - [GuangDianSocket](/GuangDianSocket/README)
+  - [GuangDianDecompose](/GuangDianDecompose/README)
+      `,
       
       // 搜索配置
       search: {
