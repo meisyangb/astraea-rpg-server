@@ -1,75 +1,54 @@
 ﻿# GuangDianBoard
 
-> 插件简介 - 待补充
+> 计分板系统 - 自定义侧边栏显示
 
 ---
 
 ## 一、简介
 
-本插件文档正在完善中...
+自定义侧边栏计分板系统，支持变量显示、世界别名、分组格式。
 
 ### 功能特性
-
-- 功能1 - 描述待补充
-- 功能2 - 描述待补充
-- 功能3 - 描述待补充
-
-### 前置要求
-
-- **必需**: [RPGCore](/RPGCore/README)
-- **可选**: PlaceholderAPI
-
-### 兼容性
-
-- **服务端**: Paper 1.21+
-- **Java**: Java 21+
+- 自定义侧边栏内容
+- PlaceholderAPI 变量
+- 世界别名
+- 分组显示格式
+- 刷新间隔可配置
 
 ---
 
-## 二、安装
+## 二、配置文件 (`config.yml`)
 
-### 2.1 安装步骤
+```yaml
+# 刷新间隔（毫秒）
+refresh-interval: 5000
 
-1. 确保已安装 RPGCore
-2. 下载插件 jar 文件
-3. 将 jar 文件放入 \plugins\ 文件夹
-4. 重启服务器
+# 标题
+title: '<white>Lv.<yellow>%player_level% <green>%player_name%'
 
-### 2.2 验证安装
-
-\\\ash
-/plugin info          # 查看插件信息
-/plugin reload        # 重载配置
-\\\
+# 侧边栏内容
+lines:
+  - ""
+  - "&f☄ 金币: &e%vault_eco_balance_formatted%"
+  - "&f✪ 点券: &b%guangdianpoints_points%"
+  - "&f❤ 生命: &c%player_health%&f/&c%player_max_health%"
+  - "&f⚔ 攻击: &c%guangdian_stats_attack%"
+  - ""
+  - "&f⛏ 公会: &d%guangdianguild_name%"
+  - "&f❤ 伴侣: &d%guangdianmarriage_partner%"
+  - "&f⚒ 锻造: &6Lv.%guangdianforge_level%"
+  - ""
+  - "&7官方群: 1104425711"
+```
 
 ---
 
 ## 三、命令权限
 
-### 3.1 玩家命令
-
 | 命令 | 权限 | 说明 |
 |------|------|------|
-| \/plugin help\ | 无 | 查看帮助 |
-
-### 3.2 管理员命令
-
-| 命令 | 权限 | 说明 |
-|------|------|------|
-| \/plugin reload\ | \plugin.admin\ | 重载配置 |
+| `/board reload` | `board.admin` | 重载配置 |
 
 ---
 
-## 四、配置文件
-
-配置文件说明待补充...
-
----
-
-## 五、下一步
-
-- 📖 本文档正在完善中，敬请期待...
-
----
-
-*最后更新: 2026-06-11*
+*最后更新: 2026-06-13*

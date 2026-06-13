@@ -26,96 +26,120 @@
 ## 🏗️ 插件体系
 
 ### 核心框架
-
 | 插件 | 说明 | 必装 |
 |------|------|:----:|
-| [RPGCore](/RPGCore/README) | 核心框架，提供服务注册、事件总线、缓存管理等基础服务 | ✅ |
+| [RPGCore](/RPGCore/README) | 核心框架，提供服务注册、事件总线、缓存管理 | ✅ |
 
-### 属性与职业系统
-
+### 属性与职业
 | 插件 | 说明 |
 |------|------|
-| [GuangDianArmorStats](/GuangDianArmorStats/README) | RPG装备属性系统，支持自定义属性、伤害计算、Boss属性 |
-| [GuangDianClass](/GuangDianClass/README) | 职业系统，支持阶位、转职、职业技能 |
-| [GuangDianAccessory](/GuangDianAccessory/README) | 饰品系统，支持徽章、勋章、圣物 |
+| [GuangDianArmorStats](/GuangDianArmorStats/README) | RPG装备属性，伤害计算、Boss属性 |
+| [GuangDianClass](/GuangDianClass/README) | 职业系统，阶位、转职、属性成长 |
+| [GuangDianAccessory](/GuangDianAccessory/README) | 饰品系统，徽章、勋章、圣物 |
 | [GuangDianGearScore](/GuangDianGearScore/README) | 装备评分系统 |
 
-### 怪物与战斗系统
-
+### 怪物与战斗
 | 插件 | 说明 |
 |------|------|
-| [GuangDianMobs](/GuangDianMobs/README) | 自定义怪物系统，支持怪物配置、刷新点、AI |
-| [GuangDianMobHealth](/GuangDianMobHealth/README) | 怪物血量显示，使用TextDisplay实体 |
-| [GuangDianAggro](/GuangDianAggro/README) | 高级仇恨管理系统 |
-| [GuangDianRaid](/GuangDianRaid/README) | 搜打撤战术副本系统 |
+| [GuangDianMobs](/GuangDianMobs/README) | 自定义怪物系统 |
+| [GuangDianDungeon](/GuangDianDungeon/README) | 副本系统，多楼层Boss战 |
+| [GuangDianCombat](/GuangDianCombat/README) | 战斗状态管理，PVP/PVE控制 |
+| [GuangDianMobHealth](/GuangDianMobHealth/README) | 怪物血量显示 |
+| [GuangDianAggro](/GuangDianAggro/README) | 仇恨管理系统 |
+| [GuangDianRaid](/GuangDianRaid/README) | 战术副本系统 |
+| [GuangDianRegen](/GuangDianRegen/README) | 生命恢复系统 |
+| [GuangDianKillAura](/GuangDianKillAura/README) | 杀戮光环检测 |
 
 ### 任务系统
-
 | 插件 | 说明 |
 |------|------|
-| [GuangDianQuest](/GuangDianQuest/README) | 任务系统，支持主线/支线/每日/成就任务 |
-| [GuangDianBattlePass](/GuangDianBattlePass/README) | 战令系统，赛季奖励与任务 |
+| [GuangDianQuest](/GuangDianQuest/README) | 任务系统，主线/支线/每日 |
+| [GuangDianBattlePass](/GuangDianBattlePass/README) | 战令系统 |
 
 ### 社交系统
-
 | 插件 | 说明 |
 |------|------|
-| [GuangDianGuild](/GuangDianGuild/README) | 工会系统 |
+| [GuangDianGuild](/GuangDianGuild/README) | 公会系统 |
 | [GuangDianMarriage](/GuangDianMarriage/README) | 结婚系统 |
 | [GuangDianTrade](/GuangDianTrade/README) | 玩家交易系统 |
 
 ### 经济系统
-
 | 插件 | 说明 |
 |------|------|
-| [GuangDianBank](/GuangDianBank/README) | 银行系统，支持存取款、借贷、利息 |
+| [GuangDianBank](/GuangDianBank/README) | 银行系统，存取款、利息 |
 | [GuangDianMarket](/GuangDianMarket/README) | 全球市场/拍卖行 |
-| [GuangDianPoints](/GuangDianPoints/README) | 点卷系统 |
+| [GuangDianPoints](/GuangDianPoints/README) | 点券系统 |
+| [GuangDianLottery](/GuangDianLottery/README) | 抽奖系统 |
 
-### 签到奖励系统
+### 装备系统
+| 插件 | 说明 |
+|------|------|
+| [GuangDianForge](/GuangDianForge/README) | 锻造系统，图纸学习、锻造等级 |
+| [GuangDianDecompose](/GuangDianDecompose/README) | 装备分解系统 |
+| [GuangDianSocket](/GuangDianSocket/README) | 宝石镶嵌系统 |
+| [GuangDianEnhance](/GuangDianEnhance/README) | 装备强化系统 |
+| [GuangDianDevour](/GuangDianDevour/README) | 装备吞噬升级 |
+| [GuangDianSoulBag](/GuangDianSoulBag/README) | 灵魂背包，死亡不掉落 |
+| [GuangDianDragonCore](/GuangDianDragonCore/README) | 龙核系统 |
+| [GuangDianCollection](/GuangDianCollection/README) | 图鉴收集系统 |
+| [GuangDianSoulBind](/GuangDianSoulBind/README) | 灵魂绑定系统 |
 
+### 世界管理
+| 插件 | 说明 |
+|------|------|
+| [GuangDianWorld](/GuangDianWorld/README) | 世界管理，替代Multiverse |
+| [GuangDianCaveFu](/GuangDianCaveFu/README) | 空岛洞府系统 |
+| [GuangDianWorldRules](/GuangDianWorldRules/README) | 世界规则管理 |
+| [GuangDianPortal](/GuangDianPortal/README) | 传送门系统 |
+
+### 签到奖励
 | 插件 | 说明 |
 |------|------|
 | [GuangDianSignIn](/GuangDianSignIn/README) | 签到系统 |
 | [GuangDianMonthlyCard](/GuangDianMonthlyCard/README) | 月卡系统 |
 | [GuangDianGift](/GuangDianGift/README) | 礼包系统 |
 
-### 装备系统
-
+### 界面显示
 | 插件 | 说明 |
 |------|------|
-| [GuangDianForge](/GuangDianForge/README) | 锻造系统，支持装备合成、锻造等级 |
-| [GuangDianDecompose](/GuangDianDecompose/README) | 装备分解系统 |
-| [GuangDianSocket](/GuangDianSocket/README) | 宝石镶嵌系统 |
-| [GuangDianCollection](/GuangDianCollection/README) | 图鉴收集系统 |
-
-### 世界管理系统
-
-| 插件 | 说明 |
-|------|------|
-| [GuangDianWorld](/GuangDianWorld/README) | 世界管理，替代Multiverse-Core |
-| [GuangDianCaveFu](/GuangDianCaveFu/README) | 空岛洞府系统 |
-| [GuangDianWorldRules](/GuangDianWorldRules/README) | 世界规则管理 |
-
-### 界面显示系统
-
-| 插件 | 说明 |
-|------|------|
-| [GuangDianMenu](/GuangDianMenu/README) | 菜单系统 |
-| [GuangDianHolo](/GuangDianHolo/README) | 全息显示，替代FancyHolograms |
+| [GuangDianMenu](/GuangDianMenu/README) | GUI菜单系统 |
+| [GuangDianHolo](/GuangDianHolo/README) | 全息显示 |
 | [GuangDianBoard](/GuangDianBoard/README) | 侧边栏计分板 |
 | [GuangDianTab](/GuangDianTab/README) | Tab列表显示 |
 | [GuangDianChat](/GuangDianChat/README) | 聊天格式 |
 | [GuangDianName](/GuangDianName/README) | 玩家名称显示 |
-| [GuangDianItemLabel](/GuangDianItemLabel/README) | 物品标签显示 |
+| [GuangDianItemLabel](/GuangDianItemLabel/README) | 物品标签 |
+| [GuangDianDynamicView](/GuangDianDynamicView/README) | 动态视距 |
+| [GuangDianParticleBlocker](/GuangDianParticleBlocker/README) | 粒子屏蔽 |
 
-### 功能辅助系统
-
+### 功能辅助
 | 插件 | 说明 |
 |------|------|
 | [GuangDianNPC](/GuangDianNPC/README) | NPC管理系统 |
-| [GuangDianNPCCommand](/GuangDianNPCCommand/README) | NPC命令绑定，替代CitizensCMD |
-| [GuangDianSignCommand](/GuangDianSignCommand/README) | 牌子命令系统 |
+| [GuangDianNPCCommand](/GuangDianNPCCommand/README) | NPC命令绑定 |
+| [GuangDianItemTrigger](/GuangDianItemTrigger/README) | 物品触发（右键兑换等） |
+| [GuangDianSignCommand](/GuangDianSignCommand/README) | 牌子命令 |
+| [GuangDianSignMenu](/GuangDianSignMenu/README) | 牌子菜单 |
+| [GuangDianLocation](/GuangDianLocation/README) | 定位系统 |
+| [GuangDianVillagerTrade](/GuangDianVillagerTrade/README) | 村民交易 |
+| [GuangDianMusic](/GuangDianMusic/README) | 音乐系统 |
+| [GuangDianDropControl](/GuangDianDropControl/README) | 丢弃控制 |
+| [GuangDianBlockDrop](/GuangDianBlockDrop/README) | 方块掉落 |
+
+### 管理工具
+| 插件 | 说明 |
+|------|------|
+| [GuangDianAuth](/GuangDianAuth/README) | 登录验证 |
+| [GuangDianCleaner](/GuangDianCleaner/README) | 扫地娘 |
+| [GuangDianChain](/GuangDianChain/README) | 连锁采集 |
+| [GuangDianMCP](/GuangDianMCP/README) | MCP服务端桥接 |
+| [GuangDianExpControl](/GuangDianExpControl/README) | 经验控制 |
+
+### 扩展系统
+| 插件 | 说明 |
+|------|------|
+| [RPGItems](/RPGItems/README) | RPG自定义物品 |
+| [RPGSkill](/RPGSkill/README) | RPG技能系统 | |
 | [GuangDianLocation](/GuangDianLocation/README) | 坐标点传送系统 |
 | [GuangDianItemTrigger](/GuangDianItemTrigger/README) | 物品触发系统 |
 | [GuangDianVillagerTrade](/GuangDianVillagerTrade/README) | 村民兑换系统 |

@@ -1,75 +1,73 @@
 ﻿# GuangDianItemTrigger
 
-> 插件简介 - 待补充
+> 物品触发系统 - 右键/左键物品触发动作
 
 ---
 
 ## 一、简介
 
-本插件文档正在完善中...
+通过物品 Lore 中的关键词匹配，触发指定动作（命令、消息、音效、消耗物品等）。
 
 ### 功能特性
-
-- 功能1 - 描述待补充
-- 功能2 - 描述待补充
-- 功能3 - 描述待补充
-
-### 前置要求
-
-- **必需**: [RPGCore](/RPGCore/README)
-- **可选**: PlaceholderAPI
-
-### 兼容性
-
-- **服务端**: Paper 1.21+
-- **Java**: Java 21+
+- 右键/左键触发
+- 潜行触发
+- Lore 关键词匹配
+- 多种动作（命令、消息、音效、消耗、金币）
+- 冷却系统
 
 ---
 
-## 二、安装
+## 二、配置文件 (`config.yml`)
 
-### 2.1 安装步骤
+```yaml
+triggers:
+  # 黄金出售
+  少量黄金:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "价值1000金"
+    actions:
+      - "vault_money:1000"
+    cooldown: 0
 
-1. 确保已安装 RPGCore
-2. 下载插件 jar 文件
-3. 将 jar 文件放入 \plugins\ 文件夹
-4. 重启服务器
-
-### 2.2 验证安装
-
-\\\ash
-/plugin info          # 查看插件信息
-/plugin reload        # 重载配置
-\\\
-
----
-
-## 三、命令权限
-
-### 3.1 玩家命令
-
-| 命令 | 权限 | 说明 |
-|------|------|------|
-| \/plugin help\ | 无 | 查看帮助 |
-
-### 3.2 管理员命令
-
-| 命令 | 权限 | 说明 |
-|------|------|------|
-| \/plugin reload\ | \plugin.admin\ | 重载配置 |
+  点券1000:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "兑换1000点券"
+    actions:
+      - "message:<green>你成功兑换了 <yellow>1000 <green>点券!"
+      - "console:points give %player_name% 1000"
+      - "sound:minecraft:entity.player.levelup:1.0:1.0"
+      - "take:1"
+    cooldown: 0
+```
 
 ---
 
-## 四、配置文件
+## 三、触发类型
 
-配置文件说明待补充...
+| 类型 | 说明 |
+|:----|:-----|
+| `right_click` | 右键点击 |
+| `left_click` | 左键点击 |
+| `shift_right_click` | 潜行+右键 |
+| `shift_left_click` | 潜行+左键 |
+| `on_hit` | 攻击命中 |
+| `consume` | 消耗物品 |
 
 ---
 
-## 五、下一步
+## 四、动作类型
 
-- 📖 本文档正在完善中，敬请期待...
+| 动作 | 格式 | 说明 |
+|:----|:-----|------|
+| `vault_money:<金额>` | `vault_money:1000` | 获得金币 |
+| `message:<文本>` | `message:<green>成功!` | 发送消息 |
+| `console:<命令>` | `console:points give %player_name% 1000` | 控制台命令 |
+| `sound:<音效>` | `sound:minecraft:entity.player.levelup:1.0:1.0` | 播放音效 |
+| `take:<数量>` | `take:1` | 消耗物品 |
+| `effect:<效果>` | `effect:HEAL:1:1` | 药水效果 |
 
 ---
 
-*最后更新: 2026-06-11*
+*最后更新: 2026-06-13*
