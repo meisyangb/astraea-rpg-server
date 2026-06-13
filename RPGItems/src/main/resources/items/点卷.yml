@@ -1,0 +1,18 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 点卷.yml
+# ========================================
+
+点卷:
+  Id: NETHER_WART
+  Display: '<gold><bold>点卷'
+  Lore:
+  - '<yellow>特殊货币              消耗品'
+  - '<green>击杀点卷之主获得'
+  - '<gray>------------------------'
+  - '<aqua>可在商店兑换稀有物品'
+  - '<light_purple>珍贵货币，请妥善保管'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+

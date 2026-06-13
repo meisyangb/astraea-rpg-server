@@ -1,0 +1,58 @@
+name: GuangDianCaveFu
+version: 1.0.0
+main: cn.guangdian.cavefu.GuangDianCaveFu
+api-version: '1.21'
+author: GuangDian
+description: 光点RPG空岛洞府插件
+
+softdepend:
+  - RPGCore
+  - PlaceholderAPI
+
+commands:
+  cave:
+    description: 洞府主命令
+    usage: /cave <create|home|info|upgrade|invite|kick|members|leave|transfer|visit|sethome|accept|deny>
+    aliases: [dongfu, df]
+  caveadmin:
+    description: 洞府管理命令
+    usage: /caveadmin <tp|delete|setlevel|reload|list>
+    permission: guangdian.cave.admin
+
+permissions:
+  guangdian.cave.create:
+    description: 创建洞府权限
+    default: true
+  guangdian.cave.home:
+    description: 回到洞府权限
+    default: true
+  guangdian.cave.info:
+    description: 查看洞府信息权限
+    default: true
+  guangdian.cave.upgrade:
+    description: 升级洞府权限
+    default: true
+  guangdian.cave.invite:
+    description: 邀请成员权限
+    default: true
+  guangdian.cave.kick:
+    description: 移除成员权限
+    default: true
+  guangdian.cave.members:
+    description: 查看成员列表权限
+    default: true
+  guangdian.cave.leave:
+    description: 离开洞府权限
+    default: true
+  guangdian.cave.transfer:
+    description: 转让洞主权限
+    default: true
+  guangdian.cave.visit:
+    description: 访问他人洞府权限
+    default: true
+  guangdian.cave.sethome:
+    description: 设置传送点权限
+    default: true
+  guangdian.cave.admin:
+    description: 管理员权限
+    default: op

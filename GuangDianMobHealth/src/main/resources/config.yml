@@ -1,0 +1,132 @@
+# GuangDianMobHealth 配置文件
+# 怪物血量显示插件 - 支持头顶全息图和物品栏上方(ActionBar)两种显示模式
+# 使用 MiniMessage 格式 (<color> 替代 §color)
+
+# ==================== 核心设置 ====================
+enabled: true
+
+# 显示模式选择
+# HOLOGRAM = 怪物头顶全息图 (TextDisplay实体)
+# ACTIONBAR = 物品栏上方显示 (ActionBar)
+# BOTH = 同时显示两种模式
+display-mode: ACTIONBAR
+
+# ==================== 全息图显示设置 ====================
+# 仅当 display-mode 为 HOLOGRAM 或 BOTH 时生效
+display:
+  # 显示高度 (格) - 相对于怪物头顶
+  height: 2.5
+
+  # 血量条显示超时 (ticks) - 20 ticks = 1秒
+  # 怪物被攻击后，超过此时间未再次被攻击则隐藏血量条
+  # 建议: 60-200 (3-10秒)
+  timeout: 100
+
+  # 是否隐藏原版名字显示 (MythicMobs的AlwaysShowName)
+  # true = 隐藏原版名字，用TextDisplay替代
+  # false = 保留原版名字，TextDisplay显示在名字上方
+  hide-vanilla-name: true
+
+  # 是否隐藏MythicMobs怪物的原版名字
+  hide-mythicmobs-name: true
+
+  # 是否强制覆盖 LibsDisguises 伪装插件设置的名字
+  # true = MobHealth 显示名字，LibsDisguises 不显示名字
+  # false = LibsDisguises 显示名字，MobHealth 不显示名字
+  override-libsdisguises-name: true
+
+  # 血量条格式（支持 MiniMessage 标签）
+  # 可用占位符:
+  #   <name> - 怪物名称（支持 MiniMessage 标签，如 <red>、<gradient>）
+  #   <health> - 当前血量
+  #   <max_health> - 最大血量
+  #   <health_bar> - 血量条 [||||||||||]
+  #   <percent> - 血量百分比
+  # 兼容旧版 {name} 等占位符，会自动转换
+  format: "<name><reset> <health_bar><reset> <green><health>"
+
+  # 血量条设置
+  bar:
+    # 血量条长度 (字符数)
+    length: 10
+
+    # 血量条符号
+    symbol: "|"
+
+    # 血量条颜色 (按血量百分比分段)
+    # 格式: "百分比范围:MiniMessage颜色"
+    colors:
+      - "0-100:<green>"   # 绿色（有血量）
+
+    # 空血量条颜色（失去的血量）
+    empty-color: "<red>"
+
+    # 血量条两端括号
+    bracket-left: "<dark_gray>["
+    bracket-right: "<dark_gray>]"
+
+# ==================== ActionBar显示设置 ====================
+# 仅当 display-mode 为 ACTIONBAR 或 BOTH 时生效
+actionbar:
+  # 是否启用 ActionBar 血量显示
+  enabled: true
+
+  # 显示持续时间 (ticks) - 20 ticks = 1秒
+  # 玩家攻击怪物后，ActionBar显示持续的时间
+  duration: 60
+
+  # 血量条格式（支持 MiniMessage 标签）
+  # 可用占位符:
+  #   <name> - 怪物名称
+  #   <health> - 当前血量
+  #   <max_health> - 最大血量
+  #   <health_bar> - 血量条 [████████░░]
+  #   <percent> - 血量百分比
+  format: "<red>❤ <name> <health_bar><reset> <green><health><gray>/<green><max_health>"
+
+  # 血量条设置
+  bar:
+    # 血量条长度 (字符数)
+    length: 10
+
+    # 血量条符号
+    symbol: "█"
+
+    # 空血量条颜色（失去的血量）
+    empty-color: "<gray>"
+
+    # 血量条两端括号
+    bracket-left: "<dark_gray>["
+    bracket-right: "<dark_gray>]"
+
+# ==================== 过滤设置 ====================
+filter:
+  # 最小血量 - 只有血量大于此值的怪物才显示
+  # 注意: 原版僵尸只有20血，设置为0显示所有怪物
+  min-health: 0
+
+  # 排除的实体类型
+  excluded-types:
+    - "PLAYER"
+    - "ARMOR_STAND"
+    - "ITEM_FRAME"
+    - "GLOW_ITEM_FRAME"
+    - "PAINTING"
+    - "ENDER_CRYSTAL"
+    - "MARKER"
+    - "INTERACTION"
+    - "TEXT_DISPLAY"
+    - "BLOCK_DISPLAY"
+    - "ITEM_DISPLAY"
+
+  # 排除的MythicMobs怪物 (内部名称)
+  excluded-mythicmobs: []
+
+  # 只显示MythicMobs怪物
+  mythicmobs-only: false
+
+  # 显示原版怪物
+  show-vanilla: true
+
+# ==================== 调试设置 ====================
+debug: false

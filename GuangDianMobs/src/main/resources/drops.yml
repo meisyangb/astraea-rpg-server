@@ -1,0 +1,172 @@
+# GuangDianMobs 掉落表配置
+# 使用 MiniMessage 格式: <color>, <bold>, <reset> 等
+#
+# 配置说明:
+# - items: 物品列表，只支持原版物品
+# - experience: 经验值
+# - money: 金钱
+# - chance: 掉落几率 (0-1)
+
+drop-tables:
+  # ============================================
+  # 普通掉落
+  # ============================================
+
+  common_drops:
+    experience: 5
+    money: 10
+    items:
+      - item: "ROTTEN_FLESH"
+        amount: "1-3"
+        chance: 0.8
+      - item: "BONE"
+        amount: "0-2"
+        chance: 0.5
+      - item: "ARROW"
+        amount: "1-5"
+        chance: 0.3
+
+  # ============================================
+  # 精英掉落
+  # ============================================
+
+  elite_drops:
+    experience: 25
+    money: 50
+    items:
+      - item: "IRON_INGOT"
+        amount: "1-3"
+        chance: 0.6
+      - item: "IRON_SWORD"
+        amount: 1
+        chance: 0.1
+      - item: "IRON_HELMET"
+        amount: 1
+        chance: 0.05
+      - item: "EXPERIENCE_BOTTLE"
+        amount: "1-3"
+        chance: 0.4
+
+  # ============================================
+  # 稀有掉落
+  # ============================================
+
+  rare_drops:
+    experience: 50
+    money: 100
+    items:
+      - item: "DIAMOND"
+        amount: "1-2"
+        chance: 0.4
+      - item: "EMERALD"
+        amount: "1-5"
+        chance: 0.3
+      - item: "DIAMOND_SWORD"
+        amount: 1
+        chance: 0.08
+      - item: "DIAMOND_CHESTPLATE"
+        amount: 1
+        chance: 0.05
+      - item: "ENCHANTED_GOLDEN_APPLE"
+        amount: 1
+        chance: 0.02
+
+  # ============================================
+  # Boss掉落
+  # ============================================
+
+  boss_drops:
+    experience: 200
+    money: 500
+    items:
+      - item: "DIAMOND_BLOCK"
+        amount: "1-3"
+        chance: 0.8
+      - item: "NETHERITE_INGOT"
+        amount: "1-2"
+        chance: 0.5
+      - item: "NETHERITE_SWORD"
+        amount: 1
+        chance: 0.3
+      - item: "NETHERITE_CHESTPLATE"
+        amount: 1
+        chance: 0.2
+      - item: "TOTEM_OF_UNDYING"
+        amount: 1
+        chance: 0.15
+      - item: "ELYTRA"
+        amount: 1
+        chance: 0.1
+
+  # ============================================
+  # 传说掉落
+  # ============================================
+
+  legendary_drops:
+    experience: 500
+    money: 2000
+    items:
+      - item: "NETHERITE_BLOCK"
+        amount: "1-3"
+        chance: 0.9
+      - item: "NETHERITE_SWORD"
+        amount: 1
+        chance: 0.5
+      - item: "NETHERITE_CHESTPLATE"
+        amount: 1
+        chance: 0.3
+      - item: "TOTEM_OF_UNDYING"
+        amount: 1
+        chance: 0.2
+      - item: "DRAGON_EGG"
+        amount: 1
+        chance: 0.05
+
+  # ============================================
+  # 环境特定掉落
+  # ============================================
+
+  swamp_drops:
+    experience: 15
+    money: 25
+    items:
+      - item: "SLIME_BALL"
+        amount: "2-5"
+        chance: 0.7
+      - item: "LILY_PAD"
+        amount: "1-3"
+        chance: 0.4
+      - item: "VINE"
+        amount: "2-4"
+        chance: 0.3
+
+  nether_drops:
+    experience: 30
+    money: 40
+    items:
+      - item: "BLAZE_ROD"
+        amount: "1-3"
+        chance: 0.6
+      - item: "MAGMA_CREAM"
+        amount: "1-2"
+        chance: 0.5
+      - item: "GOLD_NUGGET"
+        amount: "3-8"
+        chance: 0.4
+      - item: "ANCIENT_DEBRIS"
+        amount: 1
+        chance: 0.05
+
+  undead_drops:
+    experience: 20
+    money: 30
+    items:
+      - item: "BONE"
+        amount: "2-4"
+        chance: 0.7
+      - item: "SKELETON_SKULL"
+        amount: 1
+        chance: 0.1
+      - item: "COAL"
+        amount: "1-3"
+        chance: 0.3

@@ -1,0 +1,206 @@
+# GuangDianMobs 生成规则配置
+#
+# 配置说明:
+# - worlds: 生成的世界列表
+# - biomes: 生物群系列表 (可选)
+# - regions: 区域名称列表 (需要配合 WorldGuard)
+# - conditions: 生成条件
+#   - time: 时间条件 (day, night, any)
+#   - weather: 天气条件 (clear, rain, storm, any)
+#   - light: 光照等级范围 "0-7"
+#   - height: 高度范围 "0-128"
+
+spawns:
+  # ============================================
+  # 普通怪物生成
+  # ============================================
+
+  weak_zombie_spawn:
+    mob: "weak_zombie"
+    worlds:
+      - "world"
+    chance: 0.3
+    priority: 1
+    conditions:
+      time: "any"
+      weather: "any"
+      light: "0-15"
+      height: "0-128"
+    # 替换原版僵尸
+    replace:
+      - "ZOMBIE"
+
+  skeleton_archer_spawn:
+    mob: "skeleton_archer"
+    worlds:
+      - "world"
+    chance: 0.25
+    priority: 1
+    conditions:
+      time: "night"
+      light: "0-7"
+    replace:
+      - "SKELETON"
+
+  cave_spider_spawn:
+    mob: "cave_spider"
+    worlds:
+      - "world"
+    biomes:
+      - "DARK_FOREST"
+      - "SWAMP"
+    chance: 0.2
+    priority: 2
+    conditions:
+      time: "any"
+      light: "0-10"
+      height: "0-60"
+
+  # ============================================
+  # 精英怪物生成
+  # ============================================
+
+  elite_zombie_spawn:
+    mob: "elite_zombie"
+    worlds:
+      - "world"
+    chance: 0.05
+    priority: 5
+    conditions:
+      time: "night"
+      light: "0-5"
+    # 生成数量限制
+    max-mobs: 5
+
+  skeletal_knight_spawn:
+    mob: "skeletal_knight"
+    worlds:
+      - "world"
+    biomes:
+      - "DESERT"
+      - "BADLANDS"
+    chance: 0.08
+    priority: 5
+    conditions:
+      time: "night"
+
+  shadow_assassin_spawn:
+    mob: "shadow_assassin"
+    worlds:
+      - "world"
+    biomes:
+      - "DARK_FOREST"
+      - "ROOFED_FOREST"
+    chance: 0.06
+    priority: 6
+    conditions:
+      time: "night"
+      light: "0-3"
+
+  # ============================================
+  # 高级怪物生成
+  # ============================================
+
+  fire_mage_spawn:
+    mob: "fire_mage"
+    worlds:
+      - "world_nether"
+    chance: 0.1
+    priority: 8
+    conditions:
+      time: "any"
+
+  frost_giant_spawn:
+    mob: "frost_giant"
+    worlds:
+      - "world"
+    biomes:
+      - "ICE_PLAINS"
+      - "ICE_MOUNTAINS"
+      - "COLD_BEACH"
+    chance: 0.08
+    priority: 8
+    conditions:
+      time: "any"
+      max-mobs: 3
+
+  thunder_lord_spawn:
+    mob: "thunder_lord"
+    worlds:
+      - "world"
+    chance: 0.05
+    priority: 9
+    conditions:
+      weather: "storm"
+      time: "any"
+    max-mobs: 2
+
+  # ============================================
+  # Boss生成 (通过命令或特殊事件)
+  # ============================================
+
+  skeleton_king_spawn:
+    mob: "skeleton_king"
+    worlds:
+      - "world"
+    # Boss 不自然生成，需要通过命令或事件
+    chance: 0.0
+    priority: 10
+    max-mobs: 1
+
+  abyss_worm_spawn:
+    mob: "abyss_worm"
+    worlds:
+      - "world"
+    biomes:
+      - "SWAMP"
+      - "DEEP_OCEAN"
+    chance: 0.01
+    priority: 10
+    conditions:
+      time: "night"
+      light: "0-3"
+    max-mobs: 1
+
+  # ============================================
+  # 环境特定生成
+  # ============================================
+
+  angry_sludge_spawn:
+    mob: "angry_sludge"
+    worlds:
+      - "world"
+    biomes:
+      - "SWAMP"
+      - "SWAMP_HILLS"
+    chance: 0.15
+    priority: 3
+    conditions:
+      time: "any"
+    replace:
+      - "SLIME"
+
+  lava_golem_spawn:
+    mob: "lava_golem"
+    worlds:
+      - "world_nether"
+    chance: 0.12
+    priority: 4
+    conditions:
+      time: "any"
+      height: "0-100"
+    replace:
+      - "MAGMA_CUBE"
+
+  ghost_spawn:
+    mob: "ghost"
+    worlds:
+      - "world"
+    biomes:
+      - "ROOFED_FOREST"
+      - "BIRCH_FOREST"
+    chance: 0.08
+    priority: 4
+    conditions:
+      time: "night"
+      light: "0-5"

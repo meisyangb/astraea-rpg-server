@@ -1,0 +1,115 @@
+# GuangDianBank 配置文件
+# Astraea RPG 银行系统
+#
+# 颜色格式说明（MiniMessage）：
+# <green> - 绿色（成功消息）
+# <red> - 红色（错误消息）
+# <yellow> - 黄色（警告/提示消息）
+# <gold> - 金色（高亮内容）
+# <aqua> - 青色（信息消息）
+# <white> - 白色（普通文本）
+# <dark_green> - 深绿色
+# <dark_red> - 深红色
+# <gray> - 灰色
+# <bold> - 粗体
+# <reset> - 重置格式
+
+# ==================== 基础设置 ====================
+settings:
+  # 默认余额
+  default-balance: 0
+  # 存款利率（百分比）
+  deposit-interest-rate: 0.5
+  # 贷款利率（百分比）
+  loan-interest-rate: 5.0
+  # 利息结算间隔（分钟）
+  interest-interval-minutes: 1440
+  # 最大贷款金额
+  max-loan-amount: 1000000
+  # 贷款最低信用评分要求
+  min-credit-score-for-loan: 60
+  # 自动保存间隔（分钟）
+  auto-save-interval-minutes: 5
+
+# ==================== 消息设置 ====================
+messages:
+  # 余额显示
+  balance-display: "<yellow>你的银行余额: <gold><bold>%balance%</bold></gold></yellow>"
+  # 存款成功
+  deposit-success: "<green>✓ 成功存入 <gold>%amount%</gold>，当前余额: <gold>%balance%</gold></green>"
+  # 取款成功
+  withdraw-success: "<green>✓ 成功取出 <gold>%amount%</gold>，当前余额: <gold>%balance%</gold></green>"
+  # 转账成功（发送方）
+  transfer-success: "<green>✓ 成功转账 <gold>%amount%</gold> 给 <white>%player%</white></green>"
+  # 转账收到（接收方）
+  transfer-received: "<gold>✓ 你收到 <white>%player%</white> 转账的 <gold>%amount%</gold></gold>"
+  # 余额不足
+  insufficient-funds: "<red>✗ 余额不足！当前余额: <gold>%balance%</gold></red>"
+  # 贷款申请成功
+  loan-applied: "<green>✓ 成功申请贷款 <gold>%amount%</gold>，期限 <gold>%days%</gold> 天</green>"
+  # 贷款还款成功
+  loan-repaid: "<green>✓ 成功还款 <gold>%amount%</gold></green>"
+  # 贷款还清
+  loan-paid-off: "<green>✓ 恭喜！你已还清贷款！信用评分 <dark_green>+5</dark_green></green>"
+  # 贷款逾期
+  loan-overdue: "<red>✗ 你的贷款已逾期！信用评分 <dark_red>-10</dark_red></red>"
+  # 无法贷款
+  cannot-loan: "<red>✗ 信用评分不足或贷款额度已达上限，无法申请贷款！</red>"
+  # 玩家不在线
+  player-not-found: "<red>✗ 玩家 <white>%player%</white> 不在线或不存在！</red>"
+  # 没有权限
+  no-permission: "<red>✗ 你没有权限执行此操作！</red>"
+  # 无效金额
+  invalid-amount: "<red>✗ 无效的金额！</red>"
+  # 金额必须为正数
+  amount-must-be-positive: "<red>✗ 金额必须大于 0！</red>"
+  # 金额过大
+  amount-too-large: "<red>✗ 金额不能超过 <gold>%max%</gold></red>"
+  # 银行已满
+  bank-full: "<red>✗ 银行存款已达上限！</red>"
+  # 贷款不存在
+  loan-not-found: "<red>✗ 贷款不存在或已还清！</red>"
+  # 还款金额超过剩余
+  over-repay: "<red>✗ 还款金额超过剩余贷款金额！</red>"
+  # 信用评分显示
+  credit-score-display: "<aqua>信用评分: <gold>%score%</gold></aqua>"
+  # 信用评分提升
+  credit-score-up: "<green>信用评分提升！当前: <gold>%score%</gold></green>"
+  # 信用评分下降
+  credit-score-down: "<red>信用评分下降！当前: <gold>%score%</gold></red>"
+
+# ==================== 帮助消息 ====================
+help:
+  # 帮助标题
+  header: "<gold><bold>===== 光点银行帮助 =====</bold></gold>"
+  # 余额查询
+  balance: "<yellow>/bank balance <white>- 查看余额</white></yellow>"
+  # 存款
+  deposit: "<yellow>/bank deposit <金额> <white>- 存款</white></yellow>"
+  # 取款
+  withdraw: "<yellow>/bank withdraw <金额> <white>- 取款</white></yellow>"
+  # 转账
+  transfer: "<yellow>/bank transfer <玩家> <金额> <white>- 转账</white></yellow>"
+  # 贷款
+  loan: "<yellow>/bank loan <金额> <天数> <white>- 申请贷款</white></yellow>"
+  # 还款
+  repay: "<yellow>/bank repay <贷款ID> <金额> <white>- 还款</white></yellow>"
+  # 交易记录
+  history: "<yellow>/bank history [页数] <white>- 查看交易记录</white></yellow>"
+  # 我的贷款
+  loans: "<yellow>/bank loans <white>- 查看我的贷款</white></yellow>"
+  # 帮助页脚
+  footer: "<gray>============================</gray>"
+
+# ==================== 管理员帮助 ====================
+admin-help:
+  # 设置余额
+  set: "<aqua>/bankadmin set <玩家> <金额> <white>- 设置玩家余额</white></aqua>"
+  # 给予金额
+  give: "<aqua>/bankadmin give <玩家> <金额> <white>- 给予玩家金额</white></aqua>"
+  # 扣除金额
+  take: "<aqua>/bankadmin take <玩家> <金额> <white>- 扣除玩家金额</white></aqua>"
+  # 重载配置
+  reload: "<aqua>/bankadmin reload <white>- 重载配置</white></aqua>"
+  # 查看玩家信息
+  info: "<aqua>/bankadmin info <玩家> <white>- 查看玩家银行信息</white></aqua>"

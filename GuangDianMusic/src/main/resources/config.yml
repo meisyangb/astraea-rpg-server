@@ -1,0 +1,79 @@
+# 译梦传说音乐系统配置
+# Version: 1.0.0
+
+# 音乐文件路径配置
+music:
+  # 音乐文件存储目录
+  directory: "plugins/GuangDianMusic/music"
+  
+  # 支持的音频格式
+  supported-formats:
+    - ".ogg"
+    - ".mp3"
+    - ".wav"
+    - ".m4a"
+
+# 系统设置
+settings:
+  # 默认音量 (0.0 - 1.0)
+  default-volume: 0.5
+  
+  # 是否启用音乐渐变切换
+  fade-enabled: true
+  
+  # 渐变时间（毫秒）
+  fade-duration: 2000
+  
+  # 最大同时播放数
+  max-concurrent-tracks: 3
+  
+  # 音乐循环模式 (true/false)
+  loop-by-default: false
+
+# 场景音乐配置
+scenes:
+  # 主世界背景音乐
+  overworld:
+    music-id: "music_game.azure_core"
+    volume: 0.6
+    enabled: true
+    
+  # 战斗场景音乐
+  combat:
+    music-id: "music_game.solitary_battlefield"
+    volume: 0.8
+    enabled: true
+    
+  # 探索场景音乐
+  exploration:
+    music-id: "music_game.re_code_skyline"
+    volume: 0.5
+    enabled: true
+
+# 冷却时间设置（秒）
+cooldown:
+  # 玩家切换音乐冷却
+  switch: 5
+  
+  # 点歌冷却
+  request: 30
+
+# 消息配置
+messages:
+  prefix: "<yellow>[音乐] <reset>"
+  now-playing: "<green>正在播放: <white>%song%"
+  stopped: "<yellow>音乐已停止"
+  no-permission: "<red>你没有权限使用此命令"
+  invalid-song: "<red>无效的音乐ID: <white>%song%"
+  volume-changed: "<green>音量已调整为: <white>%volume%%"
+  cooldown: "<red>请等待 %time% 秒后再试"
+
+# 权限设置
+permissions:
+  # 是否启用权限检查
+  enabled: true
+  
+  # 各音乐的播放权限
+  song-permissions:
+    guangdian.music.play.any: true
+    guangdian.music.play.solitary_battlefield: true

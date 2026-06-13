@@ -1,0 +1,22 @@
+name: GuangDianItemLabel
+version: 1.0.0
+main: cn.guangdian.itemlabel.GuangDianItemLabel
+api-version: '1.21.6'
+author: Astraea RPG Team
+dependencies:
+  - name: RPGCore
+    required: true
+  - name: PlaceholderAPI
+    required: false
+  - name: MythicMobs
+    required: false
+commands:
+  itemlabel:
+    description: GuangDianItemLabel 管理命令
+    usage: /itemlabel <clear|reload|help>
+    permission: guangdianitemlabel.admin
+    aliases: [ilabel, iteml]
+permissions:
+  guangdianitemlabel.admin:
+    description: 允许使用 GuangDianItemLabel 管理命令
+    default: op

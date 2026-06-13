@@ -1,0 +1,31 @@
+# ========================================
+# 光点交易插件 - GuangDianTrade
+# ========================================
+# 作者: Gumin
+# QQ: 2271257344
+# 版本: 1.0.0
+# ========================================
+
+name: GuangDianTrade
+version: 1.0.0
+main: cn.guangdian.trade.GuangDianTrade
+api-version: '1.21'
+author: Gumin
+description: 光点交易插件 - 蹲下右键玩家发起交易
+
+softdepend:
+  - RPGCore
+
+commands:
+  trade:
+    description: 交易命令
+    usage: /trade <accept|deny|cancel|help> [玩家]
+    aliases: [tr, jiaoyi]
+
+permissions:
+  guangdian.trade.use:
+    description: 使用交易功能权限
+    default: true
+  guangdian.trade.admin:
+    description: 管理员权限
+    default: op

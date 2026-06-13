@@ -1,0 +1,21 @@
+﻿# ========================================
+# 支线任务示例
+# ========================================
+id: side_collect
+name: "收集材料"
+type: SIDE
+description:
+  - "<gray>村民需要一些材料来修缮房屋。"
+  - "<gray>你能帮忙收集一些石头吗？"
+
+objectives:
+  - type: COLLECT
+    target: STONE
+    amount: 32
+    description: "收集石头"
+
+prerequisites: []
+
+rewards:
+  points: 50
+  experience: 20

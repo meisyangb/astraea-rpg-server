@@ -1,0 +1,32 @@
+name: GuangDianLocation
+version: 1.0.0
+main: cn.guangdian.location.GuangDianLocation
+api-version: '1.21'
+author: GuangDian
+description: 坐标点选择系统 - 使用木锄头右键选点并命名保存到数据库
+
+depend:
+  - RPGCore
+
+commands:
+  location:
+    description: 坐标点管理命令
+    usage: /location <list|delete|clear|help> [名称]
+    aliases: [loc, waypoint]
+  gdlocset:
+    description: 设置当前位置为坐标点
+    usage: /gdlocset <名称>
+  gdloc:
+    description: 传送到已保存的坐标点
+    usage: /gdloc <名称>
+
+permissions:
+  guangdian.location.use:
+    description: 允许使用木锄头选择坐标点
+    default: true
+  guangdian.location.admin:
+    description: 管理员权限
+    default: op
+  guangdian.location.teleport:
+    description: 允许传送到已保存的坐标点
+    default: true

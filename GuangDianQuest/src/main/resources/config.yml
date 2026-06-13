@@ -1,0 +1,42 @@
+# ========================================
+# GuangDianQuest 配置文件
+# 使用 MiniMessage 格式 (<color> 替代 <red>olor)
+# ========================================
+
+# 最大同时进行任务数
+max-active-quests: 10
+
+# 每日任务上限
+daily-quest-limit: 5
+
+# GUI 背景配置
+gui:
+  # 背景材质类型
+  background-material: PAPER
+  # CustomModelData (需要配合资源包使用)
+  # 1001 = book.png 背景
+  background-custom-model-data: 1001
+  # 是否启用自定义背景
+  use-custom-background: true
+
+# 任务完成公告
+quest-complete-broadcast:
+  main: true
+  daily: false
+  achievement: true
+
+# 自动保存间隔（秒）
+auto-save-interval: 300
+
+# 消息配置
+messages:
+  quest-accepted: "<green>成功接取任务: <yellow>{quest}"
+  quest-completed: "<green>任务完成: <yellow>{quest}"
+  quest-abandoned: "<red>已放弃任务: <yellow>{quest}"
+  quest-not-found: "<red>任务不存在！"
+  quest-already-active: "<red>你已经接取了这个任务！"
+  quest-already-completed: "<red>你已经完成了这个任务！"
+  quest-prerequisites-not-met: "<red>前置任务未完成！"
+  quest-limit-reached: "<red>任务数量已达上限！"
+  daily-limit-reached: "<red>今日任务数量已达上限！"
+  quest-level-not-met: "<red>等级不足！需要等级: {level}"

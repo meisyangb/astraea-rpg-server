@@ -1,0 +1,94 @@
+# ─── 锻造图纸配置 ──
+# 
+# 本插件只支持锻造 RPGItems 物品！
+#
+# 材料格式说明:
+#   RPGItems 物品: "rpg:物品ID" 或 "rpgitems:物品ID"
+#
+# 结果格式说明:
+#   rpg-item: RPGItems 物品 ID（必须配置）
+#
+# 图纸通用属性:
+#   exp-reward: 锻造成功获得的经验值（可选，默认50）
+#               ⚠ 重要：每个图纸独立配置，防止玩家刷低级图纸快速升级
+#
+# 图纸配置说明:
+#   blueprint.display: 图纸显示名称
+#   blueprint.lore: 图纸描述（可选，不配置会自动生成）
+#   blueprint.is-book: 是否显示为书本（默认true）
+#
+# 自动生成的图纸 lore 格式:
+#   ═══════════════════════
+#   【图纸】xxx
+#   ═══════════════════════
+#   所需材料:
+#   ◆ 材料名 x数量
+#   锻造等级要求: N级
+#   成功率: xx%
+#   ═══════════════════════
+#   右键使用学习此图纸
+#   ═══════════════════════
+
+recipes:
+  # ─── 示例图纸 ───
+  
+  # 尤里斯圣剑（使用 RPGItems 物品作为材料和结果）
+  yulis_sword:
+    name: "<red><bold>尤里斯圣剑"
+    required-forge-level: 10
+    exp-reward: 300
+    ingredients:
+      rpg:杀戮圣石I: 1
+      rpg:尤里斯魔眼: 1
+      rpg:尤里斯之心: 1
+    result:
+      rpg-item: "尤里斯圣剑成品"
+    base-success-rate: 0.3
+    blueprint:
+      display: "<red><bold>【图纸】尤里斯圣剑"
+      is-book: true
+      # lore 不配置会自动生成，包含材料需求、等级要求、右键学习提示
+
+  # 魔法护身符
+  magic_amulet:
+    name: "<aqua>魔法护身符"
+    required-forge-level: 5
+    exp-reward: 100
+    ingredients:
+      rpg:魔法精华: 3
+      rpg:神秘宝石: 1
+    result:
+      rpg-item: "魔法护身符成品"
+    base-success-rate: 0.5
+
+  # 暗影匕首
+  shadow_dagger:
+    name: "<dark_gray>暗影匕首"
+    required-forge-level: 8
+    ingredients:
+      rpg:暗影精华: 2
+      rpg:陨铁碎片: 3
+    result:
+      rpg-item: "暗影匕首成品"
+    base-success-rate: 0.35
+    blueprint:
+      display: "<dark_gray><bold>【图纸】暗影匕首"
+      lore:
+        - "<dark_gray><strikethrough>═══════════════════════"
+        - "<dark_gray><bold>       暗影匕首"
+        - "<dark_gray><strikethrough>═══════════════════════"
+        - ""
+        - "<gray><bold>「 传说记载 」"
+        - "<dark_gray>这把匕首由暗影精华锻造而成"
+        - "<dark_gray>锋利无比，能穿透任何护甲"
+        - "<dark_gray>是刺客的首选武器"
+        - ""
+        - "<gray><bold>「 所需材料 」"
+        - "<light_purple>◆ 暗影精华 x2"
+        - "<light_purple>◆ 陨铁碎片 x3"
+        - ""
+        - "<dark_gray><strikethrough>═══════════════════════"
+        - "<gold><bold>    锻造等级要求: 8级"
+        - "<dark_gray><strikethrough>═══════════════════════"
+        - "<green>右键使用学习此图纸"
+      is-book: true

@@ -1,0 +1,883 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 装备进阶路线.yml
+# ========================================
+
+晨曦誓约之刃:
+  Id: IRON_SWORD
+  Display: '<yellow>晨曦誓约之刃'
+  Lore:
+  - '<white>近战武器                    <gray>普通'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力： <aqua>150-450'
+  - '<dark_gray>暴击几率： <aqua>8%'
+  - '<dark_gray>暴击伤害： <aqua>60%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>1'
+  - '<dark_gray>评分： <gray>120'
+  - '<gray>"黎明初晖，誓言如铁，征途自此始。"'
+  - '<dark_purple>一阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 150.0
+    AttackMax: 450.0
+    CritChance: 8.0
+    CritDamage: 60.0
+    Level: 1
+
+晨曦誓约之冠:
+  Id: IRON_HELMET
+  Display: '<yellow>晨曦誓约之冠'
+  Lore:
+  - '<white>防具                        <gray>普通'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>8%'
+  - '<dark_gray>生命上限： <aqua>+900'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>1'
+  - '<dark_gray>评分： <gray>120'
+  - '<gray>"黎明初晖，誓言如铁，征途自此始。"'
+  - '<dark_purple>一阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 8.0
+    MaxHealth: 900.0
+    Level: 1
+
+晨曦誓约战甲:
+  Id: IRON_CHESTPLATE
+  Display: '<yellow>晨曦誓约战甲'
+  Lore:
+  - '<white>防具                        <gray>普通'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>12%'
+  - '<dark_gray>生命上限： <aqua>+1400'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>1'
+  - '<dark_gray>评分： <gray>120'
+  - '<gray>"黎明初晖，誓言如铁，征途自此始。"'
+  - '<dark_purple>一阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 12.0
+    MaxHealth: 1400.0
+    Level: 1
+
+晨曦誓约护腿:
+  Id: IRON_LEGGINGS
+  Display: '<yellow>晨曦誓约护腿'
+  Lore:
+  - '<white>防具                        <gray>普通'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>9%'
+  - '<dark_gray>生命上限： <aqua>+1100'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>1'
+  - '<dark_gray>评分： <gray>120'
+  - '<gray>"黎明初晖，誓言如铁，征途自此始。"'
+  - '<dark_purple>一阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 9.0
+    MaxHealth: 1100.0
+    Level: 1
+
+晨曦誓约战靴:
+  Id: IRON_BOOTS
+  Display: '<yellow>晨曦誓约战靴'
+  Lore:
+  - '<white>防具                        <gray>普通'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>7%'
+  - '<dark_gray>生命上限： <aqua>+800'
+  - '<dark_gray>移动速度： <aqua>+12%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>1'
+  - '<dark_gray>评分： <gray>120'
+  - '<gray>"黎明初晖，誓言如铁，征途自此始。"'
+  - '<dark_purple>一阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 7.0
+    MaxHealth: 800.0
+    MoveSpeed: 12.0
+    Level: 1
+
+曙光骑士之刃:
+  Id: IRON_SWORD
+  Display: '<green>曙光骑士之刃'
+  Lore:
+  - '<white>近战武器                    <green>优秀'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力： <aqua>400-1000'
+  - '<dark_gray>暴击几率： <aqua>12%'
+  - '<dark_gray>暴击伤害： <aqua>100%'
+  - '<dark_gray>命中： <aqua>8%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>5'
+  - '<dark_gray>评分： <green>400'
+  - '<gray>"曙光撕夜，骑士无畏，剑下即是荣耀。"'
+  - '<dark_purple>二阶装备'
+  - ''
+  - '<gray>进阶需求： <yellow>试炼徽章 x10'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 400.0
+    AttackMax: 1000.0
+    CritChance: 12.0
+    CritDamage: 100.0
+    Level: 5
+
+曙光骑士之冠:
+  Id: IRON_HELMET
+  Display: '<green>曙光骑士之冠'
+  Lore:
+  - '<white>防具                        <green>优秀'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>12%'
+  - '<dark_gray>生命上限： <aqua>+2800'
+  - '<dark_gray>每秒回血： <aqua>+8'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>5'
+  - '<dark_gray>评分： <green>400'
+  - '<gray>"曙光撕夜，骑士无畏，剑下即是荣耀。"'
+  - '<dark_purple>二阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 12.0
+    MaxHealth: 2800.0
+    HealthRegen: 8.0
+    Level: 5
+
+曙光骑士战甲:
+  Id: IRON_CHESTPLATE
+  Display: '<green>曙光骑士战甲'
+  Lore:
+  - '<white>防具                        <green>优秀'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>18%'
+  - '<dark_gray>生命上限： <aqua>+4500'
+  - '<dark_gray>每秒回血： <aqua>+12'
+  - '<dark_gray>韧性： <aqua>5%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>5'
+  - '<dark_gray>评分： <green>400'
+  - '<gray>"曙光撕夜，骑士无畏，剑下即是荣耀。"'
+  - '<dark_purple>二阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 18.0
+    MaxHealth: 4500.0
+    HealthRegen: 12.0
+    Level: 5
+
+曙光骑士护腿:
+  Id: IRON_LEGGINGS
+  Display: '<green>曙光骑士护腿'
+  Lore:
+  - '<white>防具                        <green>优秀'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>14%'
+  - '<dark_gray>生命上限： <aqua>+3600'
+  - '<dark_gray>闪避： <aqua>8%'
+  - '<dark_gray>移动速度： <aqua>+15%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>5'
+  - '<dark_gray>评分： <green>400'
+  - '<gray>"曙光撕夜，骑士无畏，剑下即是荣耀。"'
+  - '<dark_purple>二阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 14.0
+    MaxHealth: 3600.0
+    DodgeChance: 8.0
+    MoveSpeed: 15.0
+    Level: 5
+
+曙光骑士战靴:
+  Id: IRON_BOOTS
+  Display: '<green>曙光骑士战靴'
+  Lore:
+  - '<white>防具                        <green>优秀'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>9%'
+  - '<dark_gray>生命上限： <aqua>+2200'
+  - '<dark_gray>移动速度： <aqua>+25%'
+  - '<dark_gray>跳跃增强： <aqua>1级'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>5'
+  - '<dark_gray>评分： <green>400'
+  - '<gray>"曙光撕夜，骑士无畏，剑下即是荣耀。"'
+  - '<dark_purple>二阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 9.0
+    MaxHealth: 2200.0
+    MoveSpeed: 25.0
+    Level: 5
+
+风暴使者之刃:
+  Id: GOLDEN_SWORD
+  Display: '<blue>风暴使者之刃'
+  Lore:
+  - '<white>近战武器                    <blue>稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力： <aqua>1200-2500'
+  - '<dark_gray>暴击几率： <aqua>16%'
+  - '<dark_gray>暴击伤害： <aqua>140%'
+  - '<dark_gray>命中： <aqua>12%'
+  - '<dark_gray>吸血几率： <aqua>8%'
+  - '<dark_gray>吸血倍率： <aqua>30%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>10'
+  - '<dark_gray>评分： <blue>1200'
+  - '<gray>"风雷为翼，怒涛为刃，天地任我驰骋。"'
+  - '<dark_purple>三阶装备'
+  - ''
+  - '<gray>进阶需求： <yellow>暗影精华 x15'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 1200.0
+    AttackMax: 2500.0
+    CritChance: 16.0
+    CritDamage: 140.0
+    LifestealChance: 8.0
+    LifestealMultiplier: 30.0
+    Level: 10
+
+风暴使者之冠:
+  Id: GOLDEN_HELMET
+  Display: '<blue>风暴使者之冠'
+  Lore:
+  - '<white>防具                        <blue>稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>16%'
+  - '<dark_gray>生命上限： <aqua>+8000'
+  - '<dark_gray>每秒回血： <aqua>+25'
+  - '<dark_gray>韧性： <aqua>9%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>10'
+  - '<dark_gray>评分： <blue>1200'
+  - '<gray>"风雷为翼，怒涛为刃，天地任我驰骋。"'
+  - '<dark_purple>三阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 16.0
+    MaxHealth: 8000.0
+    HealthRegen: 25.0
+    Level: 10
+
+风暴使者战甲:
+  Id: GOLDEN_CHESTPLATE
+  Display: '<blue>风暴使者战甲'
+  Lore:
+  - '<white>防具                        <blue>稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>25%'
+  - '<dark_gray>生命上限： <aqua>+13000'
+  - '<dark_gray>每秒回血： <aqua>+35'
+  - '<dark_gray>韧性： <aqua>12%'
+  - '<dark_gray>伤害减免： <aqua>8%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>10'
+  - '<dark_gray>评分： <blue>1200'
+  - '<gray>"风雷为翼，怒涛为刃，天地任我驰骋。"'
+  - '<dark_purple>三阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 25.0
+    MaxHealth: 13000.0
+    HealthRegen: 35.0
+    Level: 10
+
+风暴使者护腿:
+  Id: GOLDEN_LEGGINGS
+  Display: '<blue>风暴使者护腿'
+  Lore:
+  - '<white>防具                        <blue>稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>20%'
+  - '<dark_gray>生命上限： <aqua>+10500'
+  - '<dark_gray>闪避： <aqua>12%'
+  - '<dark_gray>移动速度： <aqua>+20%'
+  - '<dark_gray>韧性： <aqua>9%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>10'
+  - '<dark_gray>评分： <blue>1200'
+  - '<gray>"风雷为翼，怒涛为刃，天地任我驰骋。"'
+  - '<dark_purple>三阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 20.0
+    MaxHealth: 10500.0
+    DodgeChance: 12.0
+    MoveSpeed: 20.0
+    Level: 10
+
+风暴使者战靴:
+  Id: GOLDEN_BOOTS
+  Display: '<blue>风暴使者战靴'
+  Lore:
+  - '<white>防具                        <blue>稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>14%'
+  - '<dark_gray>生命上限： <aqua>+6000'
+  - '<dark_gray>移动速度： <aqua>+38%'
+  - '<dark_gray>跳跃增强： <aqua>2级'
+  - '<dark_gray>闪避： <aqua>9%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>10'
+  - '<dark_gray>评分： <blue>1200'
+  - '<gray>"风雷为翼，怒涛为刃，天地任我驰骋。"'
+  - '<dark_purple>三阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 14.0
+    MaxHealth: 6000.0
+    MoveSpeed: 38.0
+    DodgeChance: 9.0
+    Level: 10
+
+冥界死神之刃:
+  Id: DIAMOND_SWORD
+  Display: '<dark_purple>冥界死神之刃'
+  Lore:
+  - '<white>近战武器                    <dark_purple>史诗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力： <aqua>3200-6000'
+  - '<dark_gray>暴击几率： <aqua>22%'
+  - '<dark_gray>暴击伤害： <aqua>190%'
+  - '<dark_gray>命中： <aqua>16%'
+  - '<dark_gray>吸血几率： <aqua>14%'
+  - '<dark_gray>吸血倍率： <aqua>50%'
+  - '<dark_gray>攻速： <aqua>+18%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>15'
+  - '<dark_gray>评分： <dark_purple>3600'
+  - '<gray>"冥府之门已开，死神低语，吾即永夜之镰。"'
+  - '<dark_purple>四阶装备'
+  - ''
+  - '<gray>进阶需求： <yellow>贤者之石 x20'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 3200.0
+    AttackMax: 6000.0
+    CritChance: 22.0
+    CritDamage: 190.0
+    LifestealChance: 14.0
+    LifestealMultiplier: 50.0
+    Level: 15
+
+冥界死神之冠:
+  Id: DIAMOND_HELMET
+  Display: '<dark_purple>冥界死神之冠'
+  Lore:
+  - '<white>防具                        <dark_purple>史诗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>24%'
+  - '<dark_gray>生命上限： <aqua>+20000'
+  - '<dark_gray>每秒回血： <aqua>+70'
+  - '<dark_gray>韧性： <aqua>15%'
+  - '<dark_gray>伤害减免： <aqua>12%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>15'
+  - '<dark_gray>评分： <dark_purple>3600'
+  - '<gray>"冥府之门已开，死神低语，吾即永夜之镰。"'
+  - '<dark_purple>四阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 24.0
+    MaxHealth: 20000.0
+    HealthRegen: 70.0
+    Level: 15
+
+冥界死神战甲:
+  Id: DIAMOND_CHESTPLATE
+  Display: '<dark_purple>冥界死神战甲'
+  Lore:
+  - '<white>防具                        <dark_purple>史诗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>32%'
+  - '<dark_gray>生命上限： <aqua>+32000'
+  - '<dark_gray>每秒回血： <aqua>+90'
+  - '<dark_gray>韧性： <aqua>18%'
+  - '<dark_gray>伤害减免： <aqua>15%'
+  - '<dark_gray>反伤： <aqua>10%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>15'
+  - '<dark_gray>评分： <dark_purple>3600'
+  - '<gray>"冥府之门已开，死神低语，吾即永夜之镰。"'
+  - '<dark_purple>四阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 32.0
+    MaxHealth: 32000.0
+    HealthRegen: 90.0
+    Level: 15
+
+冥界死神护腿:
+  Id: DIAMOND_LEGGINGS
+  Display: '<dark_purple>冥界死神护腿'
+  Lore:
+  - '<white>防具                        <dark_purple>史诗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>27%'
+  - '<dark_gray>生命上限： <aqua>+26000'
+  - '<dark_gray>闪避： <aqua>15%'
+  - '<dark_gray>移动速度： <aqua>+28%'
+  - '<dark_gray>韧性： <aqua>14%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>15'
+  - '<dark_gray>评分： <dark_purple>3600'
+  - '<gray>"冥府之门已开，死神低语，吾即永夜之镰。"'
+  - '<dark_purple>四阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 27.0
+    MaxHealth: 26000.0
+    DodgeChance: 15.0
+    MoveSpeed: 28.0
+    Level: 15
+
+冥界死神战靴:
+  Id: DIAMOND_BOOTS
+  Display: '<dark_purple>冥界死神战靴'
+  Lore:
+  - '<white>防具                        <dark_purple>史诗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>18%'
+  - '<dark_gray>生命上限： <aqua>+16000'
+  - '<dark_gray>移动速度： <aqua>+48%'
+  - '<dark_gray>跳跃增强： <aqua>3级'
+  - '<dark_gray>闪避： <aqua>13%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>15'
+  - '<dark_gray>评分： <dark_purple>3600'
+  - '<gray>"冥府之门已开，死神低语，吾即永夜之镰。"'
+  - '<dark_purple>四阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 18.0
+    MaxHealth: 16000.0
+    MoveSpeed: 48.0
+    DodgeChance: 13.0
+    Level: 15
+
+焚天圣者之刃:
+  Id: DIAMOND_SWORD
+  Display: '<gold>焚天圣者之刃'
+  Lore:
+  - '<white>近战武器                    <gold>传说'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力： <aqua>8500-15000'
+  - '<dark_gray>暴击几率： <aqua>28%'
+  - '<dark_gray>暴击伤害： <aqua>250%'
+  - '<dark_gray>命中： <aqua>22%'
+  - '<dark_gray>吸血几率： <aqua>20%'
+  - '<dark_gray>吸血倍率： <aqua>65%'
+  - '<dark_gray>攻速： <aqua>+28%'
+  - '<dark_gray>穿透： <aqua>16%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>20'
+  - '<dark_gray>评分： <gold>10000'
+  - '<gray>"圣焰焚天，净世之炎，天使陨落亦为新生。"'
+  - '<dark_purple>五阶装备'
+  - ''
+  - '<gray>进阶需求： <yellow>神域核心 x30'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 8500.0
+    AttackMax: 15000.0
+    CritChance: 28.0
+    CritDamage: 250.0
+    LifestealChance: 20.0
+    LifestealMultiplier: 65.0
+    Level: 20
+
+焚天圣者之冠:
+  Id: DIAMOND_HELMET
+  Display: '<gold>焚天圣者之冠'
+  Lore:
+  - '<white>防具                        <gold>传说'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>30%'
+  - '<dark_gray>生命上限： <aqua>+60000'
+  - '<dark_gray>每秒回血： <aqua>+140'
+  - '<dark_gray>韧性： <aqua>24%'
+  - '<dark_gray>伤害减免： <aqua>20%'
+  - '<dark_gray>格挡： <aqua>12%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>20'
+  - '<dark_gray>评分： <gold>10000'
+  - '<gray>"圣焰焚天，净世之炎，天使陨落亦为新生。"'
+  - '<dark_purple>五阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 30.0
+    MaxHealth: 60000.0
+    HealthRegen: 140.0
+    Level: 20
+
+焚天圣者战甲:
+  Id: DIAMOND_CHESTPLATE
+  Display: '<gold>焚天圣者战甲'
+  Lore:
+  - '<white>防具                        <gold>传说'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>38%'
+  - '<dark_gray>生命上限： <aqua>+95000'
+  - '<dark_gray>每秒回血： <aqua>+180'
+  - '<dark_gray>韧性： <aqua>28%'
+  - '<dark_gray>伤害减免： <aqua>24%'
+  - '<dark_gray>反伤： <aqua>16%'
+  - '<dark_gray>格挡： <aqua>16%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>20'
+  - '<dark_gray>评分： <gold>10000'
+  - '<gray>"圣焰焚天，净世之炎，天使陨落亦为新生。"'
+  - '<dark_purple>五阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 38.0
+    MaxHealth: 95000.0
+    HealthRegen: 180.0
+    Level: 20
+
+焚天圣者护腿:
+  Id: DIAMOND_LEGGINGS
+  Display: '<gold>焚天圣者护腿'
+  Lore:
+  - '<white>防具                        <gold>传说'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>32%'
+  - '<dark_gray>生命上限： <aqua>+78000'
+  - '<dark_gray>闪避： <aqua>20%'
+  - '<dark_gray>移动速度： <aqua>+36%'
+  - '<dark_gray>韧性： <aqua>22%'
+  - '<dark_gray>格挡： <aqua>14%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>20'
+  - '<dark_gray>评分： <gold>10000'
+  - '<gray>"圣焰焚天，净世之炎，天使陨落亦为新生。"'
+  - '<dark_purple>五阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 32.0
+    MaxHealth: 78000.0
+    DodgeChance: 20.0
+    MoveSpeed: 36.0
+    Level: 20
+
+焚天圣者战靴:
+  Id: DIAMOND_BOOTS
+  Display: '<gold>焚天圣者战靴'
+  Lore:
+  - '<white>防具                        <gold>传说'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>22%'
+  - '<dark_gray>生命上限： <aqua>+48000'
+  - '<dark_gray>移动速度： <aqua>+58%'
+  - '<dark_gray>跳跃增强： <aqua>4级'
+  - '<dark_gray>闪避： <aqua>20%'
+  - '<dark_gray>韧性： <aqua>18%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>20'
+  - '<dark_gray>评分： <gold>10000'
+  - '<gray>"圣焰焚天，净世之炎，天使陨落亦为新生。"'
+  - '<dark_purple>五阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 22.0
+    MaxHealth: 48000.0
+    MoveSpeed: 58.0
+    DodgeChance: 20.0
+    Level: 20
+
+永恒终结之刃:
+  Id: NETHERITE_SWORD
+  Display: '<red><bold>永恒终结之刃'
+  Lore:
+  - '<white>近战武器                    <red>神话'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力： <aqua>20000-36000'
+  - '<dark_gray>暴击几率： <aqua>35%'
+  - '<dark_gray>暴击伤害： <aqua>320%'
+  - '<dark_gray>命中： <aqua>30%'
+  - '<dark_gray>吸血几率： <aqua>28%'
+  - '<dark_gray>吸血倍率： <aqua>90%'
+  - '<dark_gray>攻速： <aqua>+45%'
+  - '<dark_gray>穿透： <aqua>28%'
+  - '<dark_gray>破甲： <aqua>22%'
+  - '<dark_gray>真实伤害： <aqua>12%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_gray>评分： <red>28000'
+  - '<gray>"亘古轮回，终焉裁决，吾即万物之末。"'
+  - '<dark_purple>六阶装备'
+  - ''
+  - '<gray>终极装备，无需进阶'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 20000.0
+    AttackMax: 36000.0
+    CritChance: 35.0
+    CritDamage: 320.0
+    LifestealChance: 28.0
+    LifestealMultiplier: 90.0
+    Level: 25
+
+永恒终结之冠:
+  Id: NETHERITE_HELMET
+  Display: '<red><bold>永恒终结之冠'
+  Lore:
+  - '<white>防具                        <red>神话'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>38%'
+  - '<dark_gray>生命上限： <aqua>+140000'
+  - '<dark_gray>每秒回血： <aqua>+260'
+  - '<dark_gray>韧性： <aqua>34%'
+  - '<dark_gray>伤害减免： <aqua>28%'
+  - '<dark_gray>反伤： <aqua>24%'
+  - '<dark_gray>格挡： <aqua>20%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_gray>评分： <red>28000'
+  - '<gray>"亘古轮回，终焉裁决，吾即万物之末。"'
+  - '<dark_purple>六阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 38.0
+    MaxHealth: 140000.0
+    HealthRegen: 260.0
+    Level: 25
+
+永恒终结战甲:
+  Id: NETHERITE_CHESTPLATE
+  Display: '<red><bold>永恒终结战甲'
+  Lore:
+  - '<white>防具                        <red>神话'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>48%'
+  - '<dark_gray>生命上限： <aqua>+200000'
+  - '<dark_gray>每秒回血： <aqua>+340'
+  - '<dark_gray>韧性： <aqua>40%'
+  - '<dark_gray>伤害减免： <aqua>34%'
+  - '<dark_gray>反伤： <aqua>30%'
+  - '<dark_gray>格挡： <aqua>25%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_gray>评分： <red>28000'
+  - '<gray>"亘古轮回，终焉裁决，吾即万物之末。"'
+  - '<dark_purple>六阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 48.0
+    MaxHealth: 200000.0
+    HealthRegen: 340.0
+    Level: 25
+
+永恒终结护腿:
+  Id: NETHERITE_LEGGINGS
+  Display: '<red><bold>永恒终结护腿'
+  Lore:
+  - '<white>防具                        <red>神话'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>42%'
+  - '<dark_gray>生命上限： <aqua>+165000'
+  - '<dark_gray>闪避： <aqua>28%'
+  - '<dark_gray>移动速度： <aqua>+55%'
+  - '<dark_gray>韧性： <aqua>30%'
+  - '<dark_gray>格挡： <aqua>22%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_gray>评分： <red>28000'
+  - '<gray>"亘古轮回，终焉裁决，吾即万物之末。"'
+  - '<dark_purple>六阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 42.0
+    MaxHealth: 165000.0
+    DodgeChance: 28.0
+    MoveSpeed: 55.0
+    Level: 25
+
+永恒终结战靴:
+  Id: NETHERITE_BOOTS
+  Display: '<red><bold>永恒终结战靴'
+  Lore:
+  - '<white>防具                        <red>神话'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>30%'
+  - '<dark_gray>生命上限： <aqua>+100000'
+  - '<dark_gray>移动速度： <aqua>+85%'
+  - '<dark_gray>跳跃增强： <aqua>5级'
+  - '<dark_gray>闪避： <aqua>28%'
+  - '<dark_gray>韧性： <aqua>24%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_gray>评分： <red>28000'
+  - '<gray>"亘古轮回，终焉裁决，吾即万物之末。"'
+  - '<dark_purple>六阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 30.0
+    MaxHealth: 100000.0
+    MoveSpeed: 85.0
+    DodgeChance: 28.0
+    Level: 25
+
+试炼徽章:
+  Id: SUNFLOWER
+  Display: '<green>试炼徽章'
+  Lore:
+  - '<yellow>进阶材料'
+  - '<gray>通过试炼的证明'
+  - ''
+  - '<gray>用于进阶 <green>曙光骑士套装'
+  - '<gray>获取方式：击杀第一层BOSS'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+暗影精华:
+  Id: ECHO_SHARD
+  Display: '<blue>暗影精华'
+  Lore:
+  - '<yellow>进阶材料                    <blue>稀有'
+  - '<gray>凝聚暗影之力的精华'
+  - ''
+  - '<gray>用于进阶 <blue>风暴使者套装'
+  - '<gray>获取方式：击杀第二层BOSS'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+贤者之石:
+  Id: DISC_FRAGMENT_5
+  Display: '<dark_purple>贤者之石'
+  Lore:
+  - '<yellow>进阶材料                    <dark_purple>史诗'
+  - '<gray>蕴含古老智慧的结晶'
+  - ''
+  - '<gray>用于进阶 <dark_purple>冥界死神套装'
+  - '<gray>获取方式：击杀第四层BOSS'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+神域核心:
+  Id: NETHERITE_INGOT
+  Display: '<gold>神域核心'
+  Lore:
+  - '<yellow>进阶材料                    <gold>传说'
+  - '<gray>神域的能量核心'
+  - ''
+  - '<gray>用于进阶 <gold>焚天圣者套装'
+  - '<gray>获取方式：击杀第七层BOSS'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+深渊之魂:
+  Id: SCULK
+  Display: '<red>深渊之魂'
+  Lore:
+  - '<yellow>进阶材料                    <red>神话'
+  - '<gray>来自深渊的强大灵魂'
+  - ''
+  - '<gray>用于进阶 <red>永恒终结套装'
+  - '<gray>获取方式：击杀终极BOSS'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+

@@ -1,0 +1,27 @@
+name: GuangDianDynamicView
+version: 1.0.0
+main: cn.guangdian.dynamicview.DynamicViewPlugin
+api-version: '1.21'
+description: 动态视距插件 - 预设挡位模式（跑图/战斗/挂机）
+author: GuangDian
+website: https://guangdian.cn
+
+load: POSTWORLD
+
+permissions:
+  guangdiandynamicview.admin:
+    description: 管理员权限
+    default: op
+  guangdiandynamicview.reload:
+    description: 重载配置
+    default: op
+  guangdiandynamicview.stats:
+    description: 查看统计信息
+    default: op
+
+commands:
+  dynamicview:
+    description: 动态视距主命令
+    usage: /<command> [reload|stats|info|help]
+    permission: guangdiandynamicview.admin
+    aliases: [dview, dv]

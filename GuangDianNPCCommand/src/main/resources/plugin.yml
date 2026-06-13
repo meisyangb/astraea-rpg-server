@@ -1,0 +1,21 @@
+name: GuangDianNPCCommand
+version: 1.0.0
+main: cn.guangdian.npccommand.GuangDianNPCCommand
+api-version: '1.21'
+authors: [GuangDian]
+description: NPC命令绑定插件 - 为Citizens NPC绑定执行命令
+
+softdepend:
+  - Citizens
+  - PlaceholderAPI
+
+commands:
+  npcmd:
+    description: NPC命令管理
+    usage: /<command> [add|remove|list|cooldown|clear|reload]
+    permission: npcmd.admin
+
+permissions:
+  npcmd.admin:
+    description: 允许管理NPC命令
+    default: op

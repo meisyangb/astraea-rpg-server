@@ -1,0 +1,46 @@
+name: GuangDianWorld
+version: '1.0.0'
+main: cn.guangdian.world.GuangDianWorld
+api-version: '1.21'
+description: 光点世界管理插件 - 替代Multiverse-Core
+author: GuangDian
+
+depend:
+  - RPGCore
+softdepend:
+  - PlaceholderAPI
+  - LuckPerms
+
+commands:
+  gworld:
+    description: 世界管理主命令
+    usage: /gworld <create|delete|tp|list|info|reload> [args]
+    permission: guangdian.world.admin
+  gworldtp:
+    description: 传送到指定世界
+    usage: /gworldtp <世界名>
+    permission: guangdian.world.tp
+  gspawn:
+    description: 设置或传送到世界出生点
+    usage: /gspawn [set|world]
+    permission: guangdian.world.spawn
+
+permissions:
+  guangdian.world.admin:
+    description: 管理员权限 - 创建/删除/加载/卸载世界、设置出生点、重载配置
+    default: op
+  guangdian.world.tp:
+    description: 传送权限 - 使用 /gworldtp 传送到指定世界
+    default: true
+  guangdian.world.spawn:
+    description: 出生点权限 - 使用 /gspawn 传送到出生点
+    default: true
+  guangdian.world.list:
+    description: 查看世界列表权限 - 使用 /gworld list
+    default: true
+  guangdian.world.info:
+    description: 查看世界信息权限 - 使用 /gworld info
+    default: true
+  guangdian.world.bypass:
+    description: 绕过世界限制 - 忽略世界权限限制
+    default: op

@@ -1,0 +1,85 @@
+# 任务配置文件
+# Astraea RPG - GuangDianBattlePass
+
+tasks:
+  # 每日任务
+  daily_login:
+    id: "daily_login"
+    name: "每日登录"
+    type: "LOGIN"
+    amount: 1
+    exp: 100
+    description: "每日登录游戏"
+    daily: true
+    weekly: false
+  
+  daily_kill_mob:
+    id: "daily_kill_mob"
+    name: "怪物猎人"
+    type: "KILL_MOB"
+    amount: 50
+    exp: 200
+    description: "击杀50只怪物"
+    daily: true
+    weekly: false
+  
+  daily_break_block:
+    id: "daily_break_block"
+    name: "矿工日常"
+    type: "BREAK_BLOCK"
+    amount: 100
+    exp: 150
+    description: "破坏100个方块"
+    daily: true
+    weekly: false
+  
+  daily_place_block:
+    id: "daily_place_block"
+    name: "建筑师日常"
+    type: "PLACE_BLOCK"
+    amount: 100
+    exp: 150
+    description: "放置100个方块"
+    daily: true
+    weekly: false
+  
+  # 每周任务
+  weekly_kill_player:
+    id: "weekly_kill_player"
+    name: "PVP大师"
+    type: "KILL_PLAYER"
+    amount: 10
+    exp: 500
+    description: "击杀10名玩家"
+    daily: false
+    weekly: true
+  
+  weekly_kill_mob:
+    id: "weekly_kill_mob"
+    name: "怪物终结者"
+    type: "KILL_MOB"
+    amount: 500
+    exp: 1000
+    description: "击杀500只怪物"
+    daily: false
+    weekly: true
+  
+  weekly_break_block:
+    id: "weekly_break_block"
+    name: "疯狂矿工"
+    type: "BREAK_BLOCK"
+    amount: 1000
+    exp: 800
+    description: "破坏1000个方块"
+    daily: false
+    weekly: true
+  
+  weekly_place_block:
+    id: "weekly_place_block"
+    name: "疯狂建筑师"
+    type: "PLACE_BLOCK"
+    amount: 1000
+    exp: 800
+    description: "放置1000个方块"
+    daily: false
+    weekly: true

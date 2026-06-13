@@ -1,0 +1,23 @@
+name: GuangDianMobHealth
+version: 1.0.0
+main: cn.guangdian.mobhealth.GuangDianMobHealth
+api-version: '1.21'
+author: GuangDian
+description: 怪物血量显示插件 - 使用TextDisplay实体显示怪物血量条
+
+depend:
+  - RPGCore
+softdepend:
+  - MythicMobs
+
+commands:
+  gdmobhealth:
+    description: 怪物血量显示管理命令
+    usage: /gdmobhealth <reload|status|debug>
+    permission: gdmobhealth.admin
+    aliases: [gmh]
+
+permissions:
+  gdmobhealth.admin:
+    description: 管理员权限
+    default: op

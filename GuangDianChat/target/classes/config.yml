@@ -1,0 +1,212 @@
+﻿# ========================================
+# 光点聊天插件配置文件
+# GuangDianChat Configuration
+# ========================================
+# 作者: Gumin
+# QQ: 2271257344
+# 版本: 1.0.0
+# ========================================
+
+# ========================================
+# 基础设置
+# ========================================
+
+# 是否启用聊天格式功能
+# 设为 false 将禁用所有聊天格式处理
+enabled: true
+
+# ========================================
+# 默认聊天格式
+# ========================================
+# 当玩家不属于任何权限组时使用的格式
+# 
+# 可用占位符:
+# %player_name% - 玩家名称
+# %player_displayname% - 玩家显示名(可能包含称号)
+# %player_world% - 当前世界(使用世界别名)
+# %player_level% - 玩家等级
+# %player_exp% - 玩家经验值
+# %player_health% - 玩家生命值
+# %player_max_health% - 玩家最大生命值
+# %player_food_level% - 玩家饥饿值
+# %player_x% / %player_y% / %player_z% - 玩家坐标
+# %player_ping% - 玩家延迟
+# %player_gamemode% - 游戏模式
+# %player_ip% - 玩家IP地址
+# %luckperms_prefix% - LuckPerms前缀
+# %luckperms_suffix% - LuckPerms后缀
+# %luckperms_primary_group_name% - 主权限组名称
+# %server_online% - 在线玩家数
+# %server_max_players% - 最大玩家数
+# %server_tps% - 服务器TPS
+# %vault_eco_balance% - 经济余额
+# %vault_eco_balance_formatted% - 格式化的经济余额
+# %message% - 聊天消息内容
+#
+# 颜色代码:
+# <black>-9, <green>-f - 颜色代码
+# <obfuscated> - 随机字符(魔法效果)
+# <bold> - 粗体
+# <strikethrough> - 删除线
+# <underlined> - 下划线
+# <italic> - 斜体
+# <reset> - 重置
+# ========================================
+
+default-format: "<gray>[<aqua>%player_world%<gray>] <gray><bold>[<white><bold>玩家<gray><bold>]<reset> <yellow>Lv.%player_level% <white>%player_name%<gray>: <white>%message%"
+
+# ========================================
+# 权限组专属格式
+# ========================================
+# 根据玩家的LuckPerms权限组显示不同的聊天格式
+# 权限组名称区分大小写，必须与LuckPerms中的名称完全一致
+#
+# 格式说明:
+# owner - 服主权限组
+# admin - 管理员权限组
+# moderator - 版主权限组
+# helper - 助手权限组
+# builder - 建筑师权限组
+# vip - VIP权限组
+# default - 默认权限组
+# ========================================
+
+group-formats:
+  # 服主 - 金色，最高权限
+  owner: "<gray>[<aqua>%player_world%<gray>] <gold><bold>[<yellow><bold>服主<gold><bold>]<reset> <yellow>Lv.%player_level% <gold>%player_name%<gray>: <white>%message%"
+  
+  # 管理员 - 红色，管理权限
+  admin: "<gray>[<aqua>%player_world%<gray>] <red><bold>[<dark_red><bold>管理员<red><bold>]<reset> <yellow>Lv.%player_level% <red>%player_name%<gray>: <white>%message%"
+  
+  # 版主 - 深蓝色，版务权限
+  moderator: "<gray>[<aqua>%player_world%<gray>] <blue><bold>[<dark_blue><bold>版主<blue><bold>]<reset> <yellow>Lv.%player_level% <blue>%player_name%<gray>: <white>%message%"
+  
+  # 助手 - 绿色，辅助权限
+  helper: "<gray>[<aqua>%player_world%<gray>] <green><bold>[<dark_green><bold>助手<green><bold>]<reset> <yellow>Lv.%player_level% <green>%player_name%<gray>: <white>%message%"
+  
+  # 建筑师 - 紫色，建筑权限
+  builder: "<gray>[<aqua>%player_world%<gray>] <light_purple><bold>[<dark_purple><bold>建筑师<light_purple><bold>]<reset> <yellow>Lv.%player_level% <light_purple>%player_name%<gray>: <white>%message%"
+  
+  # VIP - 黄色，VIP特权
+  vip: "<gray>[<aqua>%player_world%<gray>] <yellow><bold>[<gold><bold>VIP<yellow><bold>]<reset> <yellow>Lv.%player_level% <yellow>%player_name%<gray>: <white>%message%"
+  
+  # 默认玩家 - 白色
+  default: "<gray>[<aqua>%player_world%<gray>] <gray><bold>[<white><bold>玩家<gray><bold>]<reset> <yellow>Lv.%player_level% <white>%player_name%<gray>: <white>%message%"
+
+# ========================================
+# 世界别名设置
+# ========================================
+# 将世界名称转换为更友好的显示名称
+# 格式: 世界名称: 显示名称
+# ========================================
+
+world-aliases:
+  world: "主世界"
+  world_nether: "下界"
+  world_the_end: "末地"
+  # 添加更多世界别名示例:
+  # spawn: "出生点"
+  # survival: "生存世界"
+  # creative: "创造世界"
+  # pvp: "PVP竞技场"
+
+# ========================================
+# 聊天设置
+# ========================================
+
+settings:
+  # 是否允许玩家在聊天中使用颜色代码
+  # 需要对应权限才能使用
+  allow-colors: true
+  
+  # 使用颜色代码所需的权限节点
+  # 默认只有OP可以使用
+  color-permission: "guangdian.chat.color"
+  
+  # 是否允许玩家在聊天中使用格式代码(<bold>, <strikethrough>, <underlined>, <italic>)
+  allow-formatting: true
+  
+  # 使用格式代码所需的权限节点
+  format-permission: "guangdian.chat.format"
+  
+  # 是否允许魔法字符(<obfuscated>)
+  allow-magic: true
+  
+  # 使用魔法字符所需的权限节点
+  magic-permission: "guangdian.chat.magic"
+  
+  # 聊天范围设置
+  # 0 = 全局聊天(所有玩家都能看到)
+  # 大于0 = 本地聊天范围(只有指定距离内的玩家能看到)
+  chat-range: 0
+  
+  # 是否在玩家加入时显示欢迎消息
+  show-welcome-message: true
+  
+  # 欢迎消息内容
+  welcome-message: "<yellow>欢迎 <green>%player_name% <yellow>来到光点RPG服务器!"
+  
+  # 是否在玩家退出时显示离开消息
+  show-quit-message: true
+  
+  # 离开消息内容
+  quit-message: "<red>%player_name% <yellow>离开了服务器"
+
+# ========================================
+# 高级设置
+# ========================================
+
+advanced:
+  # 是否启用调试模式
+  # 开启后会在控制台输出详细的调试信息
+  debug: false
+  
+  # 占位符刷新间隔(毫秒)
+  # 某些占位符可能需要定期刷新
+  placeholder-refresh-interval: 1000
+  
+  # 是否检查更新
+  check-updates: true
+  
+  # 是否启用 bStats 统计
+  enable-metrics: true
+
+# ========================================
+# 消息设置
+# ========================================
+
+messages:
+  # 无权限提示
+  no-permission: "<red>您没有权限执行此操作!"
+  
+  # 配置重载成功
+  config-reloaded: "<green>配置已重新加载!"
+  
+  # 插件信息
+  plugin-info:
+    - "<yellow>===== 光点聊天插件 ====="
+    - "<green>版本: <white>%version%"
+    - "<green>作者: <white>Gumin"
+    - "<green>QQ: <white>2271257344"
+    - "<green>状态: <white>已启用"
+
+# ========================================
+# 格式示例
+# ========================================
+# 以下是一些常用的聊天格式示例，您可以复制使用:
+#
+# 简洁格式:
+# %luckperms_prefix% %player_name%<gray>: <white>%message%
+#
+# 带世界格式:
+# <gray>[<aqua>%player_world%<gray>] %luckperms_prefix% %player_name%<gray>: <white>%message%
+#
+# 带等级格式:
+# <gray>[<aqua>%player_world%<gray>] <yellow>Lv.%player_level% %luckperms_prefix% %player_name%<gray>: <white>%message%
+#
+# 完整信息格式:
+# <gray>[<aqua>%player_world%<gray>] <red>%player_health%❤ <gray>| <yellow>Lv.%player_level% %luckperms_prefix% %player_name%<gray>: <white>%message%
+#
+# 经济信息格式:
+# <gray>[<aqua>%player_world%<gray>] <gold>%vault_eco_balance_formatted%金币 %luckperms_prefix% %player_name%<gray>: <white>%message%
+# ========================================

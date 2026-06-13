@@ -1,0 +1,23 @@
+name: GuangDianSoulBind
+version: 1.0.0
+main: cn.guangdian.soulbind.GuangDianSoulBind
+api-version: '1.21'
+depend:
+  - RPGCore
+softdepend:
+  - MythicMobs
+author: Astraea RPG Team
+description: 灵魂绑定系统 - 物品绑定玩家，防止丢失和交易
+
+commands:
+  soulbind:
+    description: 灵魂绑定系统主命令（管理员/控制台使用）
+    usage: /soulbind [bind|unbind|info|reload]
+    aliases: [sb, linghunbangding]
+    permission: guangdian.soulbind.admin
+    permission-message: <red>你没有权限使用此命令
+
+permissions:
+  guangdian.soulbind.admin:
+    description: 灵魂绑定系统管理员权限（绑定/解绑/查看/重载）
+    default: op

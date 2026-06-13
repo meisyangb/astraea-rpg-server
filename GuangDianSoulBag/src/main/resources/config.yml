@@ -1,0 +1,42 @@
+# 灵魂背包配置文件
+
+settings:
+  # 背包行数 (1-6)
+  rows: 6
+  
+  # 是否允许放入灵魂物品
+  allow-soul-items: true
+  
+  # 是否允许取出物品
+  allow-withdraw: true
+  
+  # 是否在死亡时保留背包内容
+  keep-on-death: true
+  
+  # 是否允许其他玩家查看
+  allow-others-view: false
+
+messages:
+  # 打开背包消息
+  open: "&7正在打开灵魂背包..."
+  
+  # 关闭背包消息
+  close: "&7灵魂背包已关闭"
+  
+  # 背包已满
+  full: "&c灵魂背包已满！"
+  
+  # 无权限
+  no-permission: "&c你没有权限执行此操作！"
+  
+  # 玩家不存在
+  player-not-found: "&c玩家不存在或未在线！"
+  
+  # 重载成功
+  reload-success: "&a配置文件已重新加载！"
+  
+  # 清空成功
+  clear-success: "&a灵魂背包已清空！"
+  
+  # 标题
+  gui-title: "&8灵魂背包"

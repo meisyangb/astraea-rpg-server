@@ -1,0 +1,38 @@
+name: GuangDianEnhance
+version: 1.0.0
+main: cn.guangdian.enhance.GuangDianEnhance
+api-version: '1.21'
+description: Astraea RPG 强化系统插件
+author: GuangDian Team
+website: https://astraea.rpg
+
+depend:
+  - RPGCore
+
+softdepend:
+  - PlaceholderAPI
+  - Vault
+
+commands:
+  enhance:
+    description: 强化系统命令
+    usage: /enhance <info|enhance|setlevel|reset|reload>
+    aliases:
+      - qh
+      - reinforce
+    permission: guangdian.enhance.use
+    permission-message: "§c你没有权限执行此命令"
+
+permissions:
+  guangdian.enhance.use:
+    description: 使用强化系统
+    default: true
+  guangdian.enhance.admin:
+    description: 管理员权限
+    default: op
+  guangdian.enhance.bypass.cooldown:
+    description: 绕过强化冷却
+    default: op
+  guangdian.enhance.bypass.cost:
+    description: 绕过材料消耗
+    default: op

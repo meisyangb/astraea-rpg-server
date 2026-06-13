@@ -1,0 +1,25 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 锻造.yml
+# ========================================
+
+天空徽章:
+  Id: PAPER
+  Display: '<green>天空徽章'
+  Lore:
+  - '<yellow>天空锻造师用来注入能量的必备材料'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+遗忘结晶:
+  Id: INK_SAC
+  Display: '<dark_purple>遗忘结晶'
+  Lore:
+  - '<white>锻造材料'
+  - '<white>极少数遗忘之石中会诞生一个遗忘结晶'
+  - '<white>遗忘结晶是锻造遗忘套装的主要材料之一'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+

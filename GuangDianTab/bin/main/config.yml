@@ -1,0 +1,163 @@
+﻿# ========================================
+# 光点Tab列表插件配置文件
+# GuangDianTab Configuration
+# ========================================
+# 作者: Gumin
+# QQ: 2271257344
+# 版本: 1.0.0
+# ========================================
+
+# ========================================
+# 基础设置
+# ========================================
+enabled: true
+
+# 刷新间隔 (毫秒)
+# 推荐值: 1000-5000 (1-5秒)
+refresh-interval: 1000
+
+# ========================================
+# Tab列表头部和尾部
+# ========================================
+# 显示在Tab列表的顶部和底部
+# 支持多行，使用 \n 换行
+# 支持所有占位符
+header:
+  enabled: true
+  refresh-interval: 1000
+  lines:
+    - "<gold><bold>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    - ""
+    - "<gold><bold>★ <yellow><bold>光点RPG <gold><bold>★"
+    - "<gray>一个充满冒险的世界"
+    - ""
+    - "<yellow><bold>服务器信息: <green>%server_online%<gray>/<green>%server_max_players% <yellow>在线"
+
+footer:
+  enabled: true
+  refresh-interval: 1000
+  lines:
+    - ""
+    - "<yellow><bold>服务器TPS: <green>%server_tps_1%"
+    - "<yellow><bold>你的延迟: <green>%player_ping%ms"
+    - ""
+    - "<gray>官网: <aqua>www.guangdianrpg.com"
+    - "<gray>QQ群: <green>123456789"
+    - ""
+    - "<gold><bold>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# ========================================
+# Tab列表格式
+# ========================================
+# 支持的占位符:
+# PlaceholderAPI: %xxx%
+# 内置: %player%, %player_name%, %player_level%, %player_ping%
+# LuckPerms: %luckperms_prefix%, %luckperms_suffix%, %luckperms_primary_group_name%
+# Vault: %vault_eco_balance%, %vault_eco_balance_fixed%
+#
+# 格式说明:
+# - prefix: 玩家名前显示的内容 (称号、等级等)
+# - name: 玩家名格式
+# - suffix: 玩家名后显示的内容
+# ========================================
+
+# 默认格式 (无权限组的玩家)
+default-format:
+  prefix: "<gray>[玩家] "
+  name: "<white>%player_name%"
+  suffix: ""
+  ping:
+    low: "<green>"      # ping < 50
+    medium: "<yellow>"   # 50 <= ping < 150
+    high: "<red>"     # ping >= 150
+
+# ========================================
+# 权限组格式
+# ========================================
+# 不同权限组的玩家显示不同的格式
+# 格式: 权限组名 -> 显示格式
+# ========================================
+group-formats:
+  admin:
+    prefix: "<red>[管理员] "
+    name: "<red>%player_name%"
+    suffix: " <gray>[<red>%player_ping%ms<gray>]"
+    weight: 100
+    
+  owner:
+    prefix: "<gold>[服主] "
+    name: "<gold>%player_name%"
+    suffix: " <gray>[<gold>%player_ping%ms<gray>]"
+    weight: 200
+    
+  vip:
+    prefix: "<aqua>[VIP] "
+    name: "<aqua>%player_name%"
+    suffix: " <gray>[<aqua>%player_ping%ms<gray>]"
+    weight: 50
+    
+  svip:
+    prefix: "<light_purple>[SVIP] "
+    name: "<light_purple>%player_name%"
+    suffix: " <gray>[<light_purple>%player_ping%ms<gray>]"
+    weight: 60
+    
+  mvp:
+    prefix: "<yellow>[MVP] "
+    name: "<yellow>%player_name%"
+    suffix: " <gray>[<yellow>%player_ping%ms<gray>]"
+    weight: 70
+
+# ========================================
+# Tab列表排序
+# ========================================
+# 按权限组权重排序 (权重越大越靠前)
+sort-by-weight: true
+
+# 或者按玩家名排序
+# sort-by-name: false
+
+# ========================================
+# 头顶名称标签
+# ========================================
+# 同时修改玩家头顶显示的名称
+nametag:
+  enabled: true
+  # 显示格式: prefix + name + suffix
+  # 设置为空则使用Tab列表格式
+  
+# ========================================
+# 消息设置
+# ========================================
+messages:
+  no-permission: "<red>您没有权限执行此操作!"
+  config-reloaded: "<green>Tab列表配置已重新加载!"
+  info-header: "<gold>===== 光点Tab列表插件信息 ====="
+  info-version: "<yellow>版本: <white>"
+  info-author: "<yellow>作者: <white>Gumin"
+  info-qq: "<yellow>QQ: <white>2271257344"
+  info-status: "<yellow>状态: <green>已启用"
+  info-refresh: "<yellow>刷新间隔: <white>"
+
+# ========================================
+# 高级设置
+# ========================================
+advanced:
+  debug: false
+  
+  # 自动隐藏世界 (在这些世界不修改Tab)
+  disabled-worlds: []
+  
+  # 观察者模式隐藏
+  hide-spectators: false
+  
+  # AFK玩家标记
+  afk:
+    enabled: true
+    format: "<gray>[AFK] "
+    
+  # 玩家加入/退出提示
+  join-quit:
+    enabled: true
+    join: "<green>+ <yellow>%player_name% <gray>加入了游戏"
+    quit: "<red>- <yellow>%player_name% <gray>离开了游戏"

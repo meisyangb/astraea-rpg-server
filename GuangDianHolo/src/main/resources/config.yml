@@ -1,0 +1,32 @@
+settings:
+  language: zh_cn
+  debug: false
+  auto-save-interval: 900
+  visibility-distance: 20
+  update-interval-ticks: 10
+  spawn-delay-on-join-ms: 300
+  player-proximity:
+    enabled: true
+    distance: 50.0
+
+defaults:
+  background-transparent: true
+  background-color: '#00000000'
+  text-shadow: false
+  see-through: false
+  billboard: center
+
+messages:
+  prefix: '<aqua>[全息] <white>'
+  hologram-created: '<green>全息显示 {name} 已创建！'
+  hologram-deleted: '<red>全息显示 {name} 已删除！'
+  hologram-not-found: '<red>全息显示 {name} 不存在！'
+  hologram-already-exists: '<red>全息显示 {name} 已存在！'
+  line-added: '<green>已添加第 {line} 行！'
+  line-removed: '<red>已移除第 {line} 行！'
+  line-set: '<green>已设置第 {line} 行内容！'
+  hologram-moved: '<green>全息显示 {name} 已移动到新位置！'
+  hologram-list: '<gold>全息显示列表 ({count}):'
+  no-permission: '<red>你没有权限执行此操作！'
+  player-only: '<red>此命令只能由玩家执行！'
+  reloaded: '<green>配置已重新加载！'

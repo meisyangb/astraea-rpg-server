@@ -1,0 +1,41 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 怪物掉落2.yml
+# ========================================
+
+莫洛斯托寒冰之刃:
+  Id: GOLDEN_SWORD
+  Display: '<dark_purple>莫洛斯托寒冰之刃'
+  Lore:
+  - '<aqua>隐藏武器                 史诗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>75-850'
+  - '<dark_gray>招架: <aqua>5%'
+  - '<dark_gray>暴击几率: <aqua>15%'
+  - '<dark_gray>暴击伤害: <aqua>150%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>10'
+  - '<dark_gray>评分: <red>400'
+  - '<yellow>魔王莫洛斯托的分身使用的武器'
+  - '<dark_purple>二阶装备'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 75.0
+    AttackMax: 850.0
+    ParryChance: 5.0
+    CritChance: 15.0
+    CritDamage: 150.0
+    LifestealChance: 10.0
+    LifestealMultiplier: 20.0
+    Level: 10
+

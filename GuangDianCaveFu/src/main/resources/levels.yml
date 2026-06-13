@@ -1,0 +1,27 @@
+# GuangDianCaveFu 等级配置
+# 升级物品格式：
+#   rpgitem:物品名:数量  - RPGItems物品（通过PDC检测）
+#   vanilla:材料名:数量 - 原版物品
+
+levels:
+  1:
+    name: "初级洞府"
+    size: 16
+    height: 16
+    upgrade-cost:
+      - "rpgitem:灵石:10"
+      - "vanilla:DIAMOND:5"
+
+  2:
+    name: "中级洞府"
+    size: 32
+    height: 32
+    upgrade-cost:
+      - "rpgitem:灵石:50"
+      - "rpgitem:仙玉:5"
+
+  3:
+    name: "高级洞府"
+    size: 64
+    height: 64
+    upgrade-cost: []

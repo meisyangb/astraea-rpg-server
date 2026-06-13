@@ -1,0 +1,17 @@
+// ========================================
+// GuangDianVillagerTrade - 村民兑换系统
+// ========================================
+
+plugins {
+    id 'java'
+}
+
+dependencies {
+    compileOnly project(':plugins:RPGCore')
+    compileOnly project(':plugins:RPGItems')
+    compileOnly name: 'MythicMobs'
+}
+
+jar {
+    archiveBaseName.set('GuangDianVillagerTrade')
+}

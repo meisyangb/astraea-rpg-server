@@ -1,0 +1,27 @@
+name: GuangDianRaid
+version: 1.0.0
+main: cn.guangdian.raid.GuangDianRaid
+api-version: '1.21'
+author: Astraea RPG Team
+description: 搜打撤战术副本系统
+depend:
+  - RPGCore
+softdepend:
+  - PlaceholderAPI
+  - MythicMobs
+commands:
+  raid:
+    description: 副本命令
+    usage: /raid <join|leave|list|info>
+    permission: guangdian.raid.use
+  raidadmin:
+    description: 副本管理命令
+    usage: /raidadmin <create|delete|reload|forcestart>
+    permission: guangdian.raid.admin
+permissions:
+  guangdian.raid.use:
+    description: 使用副本命令
+    default: true
+  guangdian.raid.admin:
+    description: 管理副本
+    default: op

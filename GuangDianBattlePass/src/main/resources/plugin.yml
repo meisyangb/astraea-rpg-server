@@ -1,0 +1,27 @@
+name: GuangDianBattlePass
+version: 1.0.0
+main: cn.guangdian.battlepass.GuangDianBattlePass
+api-version: '1.21'
+depend: [RPGCore]
+softdepend: [PlaceholderAPI, LuckPerms, Vault]
+author: Astraea RPG Team
+description: 战令系统 - 赛季奖励与任务系统
+
+commands:
+  battlepass:
+    description: 战令主命令
+    usage: /battlepass [args]
+    aliases: [bp, 战令]
+  battlepassadmin:
+    description: 战令管理命令
+    usage: /battlepassadmin [args]
+    aliases: [bpa, 战令管理]
+    permission: battlepass.admin
+
+permissions:
+  battlepass.use:
+    description: 使用战令系统
+    default: true
+  battlepass.admin:
+    description: 战令管理权限
+    default: op

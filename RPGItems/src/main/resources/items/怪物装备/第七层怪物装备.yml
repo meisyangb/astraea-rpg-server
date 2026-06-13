@@ -1,0 +1,56 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 第七层怪物装备.yml
+# ========================================
+
+兵长头盔:
+  Id: IRON_HELMET
+  Display: '<green>兵长头盔'
+  Lore:
+  - '<dark_aqua>护甲值: <green>20'
+  - '<dark_aqua>伤害反弹: <green>5'
+  - '<dark_aqua>暴击抵抗: <green>300%'
+  - '<dark_aqua>吸血抵抗: <green>40%'
+  - '<gray>暴击抵抗: <aqua>30%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritResist: 30.0
+    LifestealResist: 40.0
+
+骑士头盔:
+  Id: DIAMOND_HELMET
+  Display: '<green>兵长头盔'
+  Lore:
+  - '<dark_aqua>护甲值: <green>20'
+  - '<dark_aqua>伤害反弹: <green>5'
+  - '<dark_aqua>暴击抵抗: <green>400%'
+  - '<dark_aqua>吸血抵抗: <green>50%'
+  - '<gray>暴击抵抗: <aqua>30%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritResist: 30.0
+    LifestealResist: 50.0
+
+将领头盔:
+  Id: DIAMOND_HELMET
+  Display: '<green>兵长头盔'
+  Lore:
+  - '<dark_aqua>护甲值: <green>20'
+  - '<dark_aqua>伤害反弹: <green>5'
+  - '<dark_aqua>暴击抵抗: <green>500%'
+  - '<dark_aqua>吸血抵抗: <green>60%'
+  - '<gray>暴击抵抗: <aqua>30%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritResist: 30.0
+    LifestealResist: 60.0
+

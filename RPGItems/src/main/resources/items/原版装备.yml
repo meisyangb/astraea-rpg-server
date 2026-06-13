@@ -1,0 +1,280 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 原版装备.yml
+# ========================================
+
+皮帽:
+  Id: LEATHER_HELMET
+  Display: '<green>皮帽'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+皮甲:
+  Id: LEATHER_CHESTPLATE
+  Display: '<green>皮甲'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+皮裤:
+  Id: LEATHER_LEGGINGS
+  Display: '<green>皮裤'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+皮靴:
+  Id: LEATHER_BOOTS
+  Display: '<green>皮靴'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+黑皮帽:
+  Id: LEATHER_HELMET
+  Display: '<green>皮帽'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+黑皮甲:
+  Id: LEATHER_CHESTPLATE
+  Display: '<green>皮甲'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+皮甲1:
+  Id: LEATHER_CHESTPLATE
+  Display: '<green>皮甲'
+  Lore:
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+黑皮裤:
+  Id: LEATHER_LEGGINGS
+  Display: '<green>皮裤'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+黑皮靴:
+  Id: LEATHER_BOOTS
+  Display: '<green>皮靴'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+锁帽:
+  Id: CHAINMAIL_HELMET
+  Display: '<green>锁帽'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+锁甲:
+  Id: CHAINMAIL_CHESTPLATE
+  Display: '<green>锁甲'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+锁裤:
+  Id: CHAINMAIL_LEGGINGS
+  Display: '<green>锁裤'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+锁靴:
+  Id: CHAINMAIL_BOOTS
+  Display: '<green>锁靴'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+金帽:
+  Id: GOLDEN_HELMET
+  Display: '<green>金帽'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+金甲:
+  Id: GOLDEN_CHESTPLATE
+  Display: '<green>金甲'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+金裤:
+  Id: GOLDEN_LEGGINGS
+  Display: '<green>金裤'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+金靴:
+  Id: GOLDEN_BOOTS
+  Display: '<green>金靴'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+钻石帽:
+  Id: DIAMOND_HELMET
+  Display: '<green>钻石帽'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+钻石甲:
+  Id: DIAMOND_CHESTPLATE
+  Display: '<green>钻石甲'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+钻石裤:
+  Id: DIAMOND_LEGGINGS
+  Display: '<green>钻石裤'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+钻石靴:
+  Id: DIAMOND_BOOTS
+  Display: '<green>钻石靴'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+钻帽:
+  Id: DIAMOND_HELMET
+  Display: '<green>钻帽'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+钻甲:
+  Id: DIAMOND_CHESTPLATE
+  Display: '<green>钻甲'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+钻裤:
+  Id: DIAMOND_LEGGINGS
+  Display: '<green>钻裤'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+钻靴:
+  Id: DIAMOND_BOOTS
+  Display: '<green>钻靴'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+木剑:
+  Id: WOODEN_SWORD
+  Display: '<green>木剑'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+石剑:
+  Id: STONE_SWORD
+  Display: '<green>木剑'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+铁剑:
+  Id: IRON_SWORD
+  Display: '<green>木剑'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+金剑:
+  Id: GOLDEN_SWORD
+  Display: '<green>木剑'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+钻石剑:
+  Id: DIAMOND_SWORD
+  Display: '<green>木剑'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+石斧:
+  Id: PAPER
+  Display: '<green>木剑'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+铁斧:
+  Id: PAPER
+  Display: '<green>木剑'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+金斧:
+  Id: GOLDEN_AXE
+  Display: '<green>木剑'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+钻石斧:
+  Id: PAPER
+  Display: '<green>木剑'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+弓:
+  Id: PAPER
+  Display: '<green>弓'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+铁帽:
+  Id: IRON_HELMET
+  Display: '<green>铁帽'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+铁甲:
+  Id: IRON_CHESTPLATE
+  Display: '<green>铁甲'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+铁裤:
+  Id: IRON_LEGGINGS
+  Display: '<green>铁裤'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+铁靴:
+  Id: IRON_BOOTS
+  Display: '<green>铁靴'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+

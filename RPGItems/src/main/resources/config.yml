@@ -1,0 +1,18 @@
+# ========================================n# RPGItems 主配置n# ========================================
+
+# 调试模式
+debug: false
+
+# 物品设置
+items:
+  # 是否显示物品ID在Lore中
+  show-item-id: false
+  
+  # 是否允许通过命令修改物品
+  allow-modification: true
+
+# 缓存设置
+cache:
+  enabled: true
+  max-size: 1000
+  expire-minutes: 10

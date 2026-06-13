@@ -1,0 +1,156 @@
+# ========================================
+# GuangDianWorldRules - 世界规则配置
+# ========================================
+
+# 默认世界规则 (适用于所有未单独配置的世界)
+# 无怪物世界继承此规则
+default-rules:
+  # 死亡保护
+  keep-inventory: true        # 死亡不掉落物品
+  keep-exp: true              # 死亡不掉落经验
+
+  # 生物刷新控制
+  disable-natural-spawn: true  # 禁止自然刷新
+  disable-monster-spawn: true  # 禁止怪物刷新
+  disable-animal-spawn: true   # 禁止动物刷新
+
+  # 环境控制
+  disable-weather-change: true # 禁止天气变化
+  disable-time-change: true    # 禁止时间变化
+
+  # 玩家保护
+  disable-hunger: true         # 禁止饥饿
+  disable-fall-damage: true    # 禁止摔落伤害
+  disable-fire-damage: true    # 禁止火焰伤害
+  disable-drowning-damage: true # 禁止溺水
+
+  # 方块保护
+  disable-explosion-block-damage: true  # 禁止爆炸破坏
+  disable-mob-griefing: true            # 禁止生物破坏
+  disable-block-break: true             # 禁止方块破坏
+  disable-block-place: true             # 禁止方块放置
+  disable-block-interact: false         # 允许方块交互(箱子等)
+
+  # 物品控制
+  disable-item-drop: false    # 允许丢弃物品
+  disable-item-pickup: false  # 允许拾取物品
+
+  # PVP
+  pvp: false                  # 禁止PVP
+
+# 世界特定规则配置
+# 副本世界规则 - 覆盖默认规则
+worlds:
+  # F1 - 死灵墓穴 (第一层)
+  F1:
+    keep-inventory: true
+    keep-exp: true
+    disable-natural-spawn: true
+    disable-monster-spawn: false  # 允许MythicMobs刷新
+    disable-animal-spawn: true
+    disable-weather-change: true
+    disable-time-change: true
+    disable-hunger: true
+    disable-fall-damage: true
+    disable-fire-damage: true
+    disable-drowning-damage: true
+    disable-explosion-block-damage: true
+    disable-mob-griefing: true
+    disable-block-break: true
+    disable-block-place: true
+    disable-block-interact: false
+    disable-item-drop: false
+    disable-item-pickup: false
+    pvp: false
+
+  # F2 - 幻翼巢穴 (第二层)
+  F2:
+    keep-inventory: true
+    keep-exp: true
+    disable-natural-spawn: true
+    disable-monster-spawn: false
+    disable-animal-spawn: true
+    disable-weather-change: true
+    disable-time-change: true
+    disable-hunger: true
+    disable-fall-damage: true
+    disable-fire-damage: true
+    disable-drowning-damage: true
+    disable-explosion-block-damage: true
+    disable-mob-griefing: true
+    disable-block-break: true
+    disable-block-place: true
+    disable-block-interact: false
+    disable-item-drop: false
+    disable-item-pickup: false
+    pvp: false
+
+  # F3 - 腐尸堡垒 (第三层)
+  F3:
+    keep-inventory: true
+    keep-exp: true
+    disable-natural-spawn: true
+    disable-monster-spawn: false
+    disable-animal-spawn: true
+    disable-weather-change: true
+    disable-time-change: true
+    disable-hunger: true
+    disable-fall-damage: true
+    disable-fire-damage: true
+    disable-drowning-damage: true
+    disable-explosion-block-damage: true
+    disable-mob-griefing: true
+    disable-block-break: true
+    disable-block-place: true
+    disable-block-interact: false
+    disable-item-drop: false
+    disable-item-pickup: false
+    pvp: false
+
+  # F4 - 寄生之地 (第四层)
+  F4:
+    keep-inventory: true
+    keep-exp: true
+    disable-natural-spawn: true
+    disable-monster-spawn: false
+    disable-animal-spawn: true
+    disable-weather-change: true
+    disable-time-change: true
+    disable-hunger: true
+    disable-fall-damage: true
+    disable-fire-damage: true
+    disable-drowning-damage: true
+    disable-explosion-block-damage: true
+    disable-mob-griefing: true
+    disable-block-break: true
+    disable-block-place: true
+    disable-block-interact: false
+    disable-item-drop: false
+    disable-item-pickup: false
+    pvp: false
+
+# 生物类型控制
+spawn-control:
+  # 全局禁用这些生物类型
+  disabled-mobs: []
+  # 只在特定世界禁用
+  world-specific: {}
+
+# 区块卸载配置
+chunk-unload:
+  # 是否启用区块卸载
+  enabled: true
+  # 副本世界的活跃区域配置
+  # 格式: 世界名: 区域名
+  active-regions:
+    F1: F1_战斗区域
+    F2: F2_战斗区域
+    F3: F3_战斗区域
+    F4: F4_战斗区域
+  # 卸载延迟(秒)
+  unload-delay: 5
+  # 是否在玩家离开世界时立即卸载
+  unload-on-leave: true
+
+# 调试模式
+debug: false

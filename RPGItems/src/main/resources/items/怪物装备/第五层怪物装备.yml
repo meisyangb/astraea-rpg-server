@@ -1,0 +1,141 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 第五层怪物装备.yml
+# ========================================
+
+遗忘战士铁剑:
+  Id: IRON_SWORD
+  Display: '<green>遗忘战士铁剑'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+遗忘术士木剑:
+  Id: WOODEN_SWORD
+  Display: '<green>遗忘术士木剑'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+遗忘者钻石剑:
+  Id: DIAMOND_SWORD
+  Display: '<green>遗忘者钻石剑'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+遗忘幻术师木剑:
+  Id: WOODEN_SWORD
+  Display: '<green>遗忘幻术师木剑'
+  Lore:
+  - '<dark_aqua>暴击伤害: <green>250'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+遗忘幻术师头盔:
+  Id: CHAINMAIL_HELMET
+  Display: '<green>遗忘幻术师头盔'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+遗忘士兵铁剑:
+  Id: IRON_SWORD
+  Display: '<green>遗忘士兵铁剑'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+腐竹剑:
+  Id: IRON_SWORD
+  Display: '<green>腐竹剑'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+遗忘力士铁斧:
+  Id: PAPER
+  Display: '<green>遗忘力士铁斧'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+遗忘军士-科洛莫斯金剑:
+  Id: GOLDEN_SWORD
+  Display: '<green>遗忘军士-科洛莫斯金剑'
+  Lore:
+  - '<dark_aqua>暴击伤害: <green>300'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+遗忘军士头盔:
+  Id: GOLDEN_HELMET
+  Display: '<green>遗忘军士头盔'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+遗忘城主-卡拉特斯钻石剑:
+  Id: DIAMOND_SWORD
+  Display: '<green>遗忘城主-卡拉特斯钻石剑'
+  Lore:
+  - '<dark_aqua>暴击伤害: <green>300'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+遗忘城主头盔:
+  Id: DIAMOND_HELMET
+  Display: '<green>遗忘城主头盔'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+处刑者侍卫钻石剑:
+  Id: DIAMOND_SWORD
+  Display: '<green>处刑者侍卫钻石剑'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+魔王头盔1:
+  Id: DIAMOND_HELMET
+  Display: '<green>魔王头盔'
+  Lore:
+  - '<dark_aqua>伤害反弹: <green>5'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+莫洛斯托魔王之刃:
+  Id: DIAMOND_SWORD
+  Display: '<green>莫洛斯托魔王之刃'
+  Lore:
+  - '<dark_aqua>暴击伤害: <green>300'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+魔王瘟疫之刃:
+  Id: DIAMOND_SWORD
+  Display: '<green>魔王瘟疫之刃'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+魔王病毒之刃:
+  Id: DIAMOND_SWORD
+  Display: '<green>魔王瘟疫之刃'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+魔王死亡之刃:
+  Id: DIAMOND_SWORD
+  Display: '<green>魔王瘟疫之刃'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+

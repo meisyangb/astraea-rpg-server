@@ -1,0 +1,25 @@
+name: GuangDianDecompose
+version: 1.0.0
+main: cn.guangdian.decompose.GuangDianDecompose
+api-version: '1.21'
+depend:
+  - RPGCore
+  - MythicMobs
+softdepend:
+  - PlaceholderAPI
+commands:
+  decompose:
+    description: 打开分解界面
+    usage: /decompose
+    permission: guangdian.decompose.use
+  decomposeadmin:
+    description: 分解管理命令
+    usage: /decomposeadmin reload|set <物品ID> <材料> <数量>
+    permission: guangdian.decompose.admin
+permissions:
+  guangdian.decompose.use:
+    description: 使用分解功能
+    default: true
+  guangdian.decompose.admin:
+    description: 分解管理权限
+    default: op

@@ -1,0 +1,156 @@
+# GuangDianDungeon 主配置
+# 版本: 2.0.0
+
+# 调试模式
+debug: false
+
+# 副本出口设置
+exit-world:
+  world: "world"
+  x: 0
+  y: 64
+  z: 0
+  yaw: 0
+  pitch: 0
+
+# 全局设置
+global:
+  # 最大并发实例数
+  max-instances: 50
+  # 实例超时时间(秒)
+  instance-timeout: 3600
+  # 自动清理间隔(秒)
+  cleanup-interval: 300
+  # 是否允许单人副本
+  allow-solo: true
+
+# 世界实例设置
+world:
+  # 实例世界前缀
+  instance-prefix: "dungeon_"
+  # 世界加载超时(秒)
+  load-timeout: 30
+  # 是否保存实例世界(调试用)
+  save-instances: false
+
+# 队伍设置
+party:
+  # 默认最大人数
+  default-max-players: 5
+  # 邀请过期时间(秒)
+  invite-expire: 60
+  # 是否允许离线玩家占位
+  allow-offline-slot: false
+  # 队长离线后自动解散时间(秒), -1为不解散
+  leader-offline-disband: 300
+
+# 奖励设置
+reward:
+  # 首通奖励倍率
+  first-clear-multiplier: 2.0
+  # 是否广播首通
+  broadcast-first-clear: true
+
+# 数据库设置
+database:
+  type: "sqlite"
+  mysql:
+    host: "localhost"
+    port: 3306
+    database: "guangdiandungeon"
+    username: "root"
+    password: "password"
+    pool-size: 10
+    table-prefix: "dungeon_"
+
+# 缓存设置
+cache:
+  # 模板缓存大小
+  template-cache-size: 100
+  # 玩家数据缓存过期(分钟)
+  player-data-expire: 30
+
+# 性能设置
+performance:
+  # 异步加载世界
+  async-world-load: true
+  # 批量保存间隔(秒)
+  batch-save-interval: 60
+  # 最大每tick处理触发器数
+  max-triggers-per-tick: 100
+
+# 自动保存间隔(秒)
+auto-save-interval: 300
+
+# 奖励命令配置
+# 通过控制台执行命令发放奖励
+# 占位符: {player} {dungeon} {difficulty} {score} {first_clear}
+reward-commands:
+  # 默认奖励命令 (当副本没有配置专属命令时使用)
+  default:
+    clear:
+      - "give {player} diamond {score}"
+      - "xp add {player} 500"
+    first_clear:
+      - "give {player} nether_star 1"
+      - "xp add {player} 1000"
+    score-rewards:
+      - min-score: 800
+        commands:
+          - "give {player} emerald 5"
+      - min-score: 1000
+        commands:
+          - "give {player} emerald 10"
+          - "give {player} gold_ingot 32"
+
+  # 示例副本专属奖励命令
+  example_dungeon:
+    normal:
+      clear:
+        - "give {player} diamond 3"
+        - "xp add {player} 500"
+      first_clear:
+        - "give {player} nether_star 1"
+        - "xp add {player} 2000"
+      score-rewards:
+        - min-score: 800
+          commands:
+            - "give {player} emerald 5"
+        - min-score: 1000
+          commands:
+            - "give {player} emerald 10"
+    hard:
+      clear:
+        - "give {player} diamond 5"
+        - "xp add {player} 1000"
+      first_clear:
+        - "give {player} nether_star 2"
+        - "xp add {player} 3000"
+    heroic:
+      clear:
+        - "give {player} diamond 10"
+        - "xp add {player} 2000"
+      first_clear:
+        - "give {player} nether_star 5"
+        - "xp add {player} 5000"
+
+# 消息配置 (MiniMessage 格式)
+messages:
+  prefix: "<gray>[<aqua>副本<gray>] <reset>"
+  no-permission: "<red>你没有权限执行此操作"
+  player-only: "<red>此命令只能由玩家执行"
+  dungeon-not-found: "<red>副本 <yellow>{dungeon}</yellow> 不存在"
+  difficulty-not-found: "<red>难度 <yellow>{difficulty}</yellow> 不存在"
+  party-created: "<green>队伍创建成功！"
+  party-disbanded: "<yellow>队伍已解散"
+  party-joined: "<green>你已加入 {leader} 的队伍"
+  party-left: "<yellow>你已离开队伍"
+  party-full: "<red>队伍已满"
+  not-in-party: "<red>你不在任何队伍中"
+  not-leader: "<red>只有队长可以执行此操作"
+  dungeon-starting: "<green>副本将在 <yellow>{countdown}</yellow> 秒后开始"
+  dungeon-completed: "<green>恭喜通关！用时: <yellow>{time}</yellow>, 评分: <gold>{score}</gold>"
+  dungeon-failed: "<red>副本失败: {reason}"
+  cooldown: "<red>副本冷却中，剩余: <yellow>{time}</yellow>"
+  boss-appear: "<red><bold>⚠ BOSS出现 ⚠</bold>"
+  boss-name: "<dark_red><bold>{boss}</bold> <red>降临了！"

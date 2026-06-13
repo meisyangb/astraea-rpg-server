@@ -1,0 +1,25 @@
+name: GuangDianExpControl
+version: 1.0.0
+main: cn.guangdian.expcontrol.GuangDianExpControl
+api-version: '1.21'
+author: Astraea RPG Team
+description: 经验控制插件 - 玩家无法主动获取经验，完全由系统发放
+
+softdepend:
+  - RPGCore
+  - PlaceholderAPI
+
+commands:
+  expcontrol:
+    description: 经验控制管理命令
+    usage: /expcontrol <give|set|add|reset|reload|info> [玩家] [数值]
+    aliases: [expc, expc]
+    permission: guangdian.expcontrol.admin
+
+permissions:
+  guangdian.expcontrol.admin:
+    description: 管理员权限
+    default: op
+  guangdian.expcontrol.bypass:
+    description: 绕过经验限制（可以正常获取经验）
+    default: false

@@ -1,0 +1,68 @@
+# =============================================
+# 光点扫地娘配置文件
+# GuangDianCleaner Configuration
+# 作者: Gumin | QQ: 2271257344
+# =============================================
+
+# 自动清理配置
+auto-clean:
+  # 是否启用自动清理
+  enabled: true
+  # 自动清理间隔（秒）
+  interval: 300
+  # 清理前预警时间（秒），设为0关闭预警
+  warning-time: 30
+  # 是否按玩家分配清理（暂未实现）
+  clean-by-player: true
+
+# 物品过滤配置
+# none: 不过滤，清理所有物品
+# blacklist: 黑名单模式，只清理列表中的物品
+# whitelist: 白名单模式，只清理不在列表中的物品
+filter:
+  mode: none
+  # 物品列表（使用Material名称）
+  items:
+    - "DIRT"
+    - "COBBLESTONE"
+    - "GRAVEL"
+    - "SAND"
+  # 物品名称过滤（包含这些名称的物品会被处理）
+  item-names:
+    - "垃圾"
+    - "废品"
+
+# 世界配置
+# all: 清理所有世界
+# whitelist: 只清理列表中的世界
+# blacklist: 不清理列表中的世界
+worlds:
+  mode: all
+  list:
+    - "world"
+    - "world_nether"
+    - "world_the_end"
+
+# 保护配置
+protection:
+  # 是否保护有自定义名称的物品
+  named-items: true
+  # 是否保护玩家刚掉落的物品
+  player-drops: true
+  # 玩家掉落物品保护时间（秒）
+  player-drops-time: 60
+
+# 消息配置（支持 MiniMessage 格式 <color>）
+messages:
+  prefix: "<gold>[扫地娘] <reset>"
+  warning: "<yellow>地面物品将在 <red>%time% <yellow>秒后清理!"
+  cleaned: "<green>已清理 <yellow>%count% <green>个掉落物!"
+  no-permission: "<red>你没有权限执行此操作!"
+  reload: "<green>配置已重新加载!"
+  status: "<yellow>扫地娘状态: %status%"
+  stats: "<yellow>本次清理: <green>%items%<yellow>个物品, 累计清理: <green>%total%<yellow>个物品"
+
+# 统计数据（请勿手动修改）
+stats:
+  total-cleaned-items: 0
+  total-cleaned-entities: 0

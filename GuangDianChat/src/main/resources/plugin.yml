@@ -1,0 +1,52 @@
+﻿# ========================================
+# 光点聊天插件 - GuangDianChat
+# ========================================
+# 作者：Gumin
+# QQ: 2271257344
+# 版本：1.0.0
+# 适用于：Minecraft 1.21+
+# ========================================
+
+name: GuangDianChat
+version: 1.0.0
+main: cn.guangdian.chat.GuangDianChat
+api-version: '1.21'
+author: Gumin
+description: 光点 RPG 自定义聊天格式插件
+
+# 插件依赖
+softdepend:
+  - RPGCore
+  - PlaceholderAPI
+
+# 命令定义
+commands:
+  gdchat:
+    description: 光点聊天插件主命令
+    usage: |
+      §e===== 光点聊天插件 =====
+      §a/gdchat reload §7- 重新加载配置
+      §a/gdchat info §7- 显示插件信息
+      §a/gdchat help §7- 显示帮助信息
+    permission: guangdian.chat.admin
+    aliases:
+      - guangdianchat
+      - gdc
+
+# 权限定义
+permissions:
+  guangdian.chat.admin:
+    description: 管理员权限 - 可以使用所有管理命令
+    default: op
+  guangdian.chat.color:
+    description: 颜色权限 - 可以在聊天中使用颜色代码
+    default: true
+  guangdian.chat.format:
+    description: 格式权限 - 可以在聊天中使用格式代码 (粗体、斜体等)
+    default: op
+  guangdian.chat.magic:
+    description: 魔法字符权限 - 可以使用<obfuscated> 魔法字符
+    default: op
+  guangdian.chat.url:
+    description: URL 权限 - 聊天中可以发送链接
+    default: op

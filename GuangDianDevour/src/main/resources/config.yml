@@ -1,0 +1,157 @@
+# ========================================
+# 吞噬插件配置
+# GuangDianDevour - 武器吞噬系统
+# ========================================
+
+# GUI 设置
+gui:
+  # GUI 标题 (支持 MiniMessage)
+  title: "<dark_red>⚔ 吞噬武器 ⚔"
+  
+  # GUI 大小 (54格大箱子)
+  size: 54
+  
+  # 吞噬槽位位置 (从0开始)
+  devour-slots:
+    - 10
+    - 11
+    - 12
+    - 13
+    - 14
+    - 15
+    - 16
+  
+  # 属性显示起始位置
+  attribute-display-start: 28
+  
+  # 预览显示起始位置
+  preview-display-start: 37
+  
+  # 确认按钮位置
+  confirm-button: 48
+  
+  # 取消按钮位置
+  cancel-button: 50
+
+# 打开方式
+open-method:
+  # 命令打开
+  command: true
+  
+  # 右键打开 (已禁用)
+  right-click: false
+  
+  # Shift+右键打开 (已禁用)
+  shift-right-click: false
+
+# 吞噬设置
+settings:
+  # 是否消耗被吞噬物品
+  consume-item: true
+  
+  # 是否允许清空槽位
+  allow-clear: true
+  
+  # 清空槽位是否返还物品
+  return-on-clear: false
+  
+  # 吞噬音效
+  sound:
+    enable: true
+    open: "BLOCK_CHEST_OPEN"
+    devour: "ENTITY_PLAYER_LEVELUP"
+    clear: "BLOCK_ANVIL_BREAK"
+    close: "BLOCK_CHEST_CLOSE"
+    error: "ENTITY_VILLAGER_NO"
+    volume: 1.0
+    pitch: 1.0
+  
+  # 吞噬粒子特效
+  particle:
+    enable: true
+    type: "TOTEM"
+    count: 20
+
+# 吞噬消息 (支持 MiniMessage)
+messages:
+  prefix: "<dark_red>[吞噬系统]<reset> "
+  success: "<green>成功吞噬 <yellow>{item}<green>！属性已累加"
+  no-slot: "<red>没有可用的吞噬槽位"
+  not-weapon: "<red>只能吞噬武器类物品"
+  already-devoured: "<red>该槽位已被占用"
+  slot-cleared: "<green>槽位已清空"
+  not-devour-weapon: "<red>这不是吞噬剑"
+  gui-opened: "<gray>吞噬界面已打开"
+  reload: "<green>配置已重载"
+
+# 可吞噬的属性列表 (所有武器属性)
+# 注意: 这里定义的属性都会被吞噬并累加
+devour-attributes:
+  # 攻击类属性
+  - "攻击力"
+  - "PVP攻击力"
+  - "暴击几率"
+  - "暴击伤害"
+  - "命中"
+  - "招架"
+  - "穿透"
+  - "破甲"
+  - "真实伤害"
+  
+  # 吸血类属性
+  - "吸血几率"
+  - "吸血倍率"
+  
+  # 速度类属性
+  - "攻速"
+  - "移动速度"
+  
+  # 状态效果属性
+  - "冰冻"
+  - "致盲"
+  - "中毒"
+  - "燃烧"
+  - "灼烧"
+  
+  # 防御类属性 (部分武器可能有)
+  - "护甲强度"
+  - "生命上限"
+  - "每秒回血"
+  - "韧性"
+  - "伤害减免"
+  - "闪避"
+  - "格挡"
+  - "反伤"
+  - "反伤比例"
+  
+  # 抵抗类属性
+  - "暴击抵抗"
+  - "暴伤抵抗"
+  - "吸血抵抗"
+
+# 吞噬剑定义
+# 格式: 
+#   吞噬剑名称:
+#     max-slots: 最大吞噬槽位数
+#     mythic-type: MythicMobs 物品类型
+#     material: 物品材质 (可选,默认为 DIAMOND_SWORD)
+devour-weapons:
+  吞噬之刃·初阶:
+    max-slots: 3
+    mythic-type: "吞噬之刃·初阶"
+    material: DIAMOND_SWORD
+    
+  吞噬之刃·中阶:
+    max-slots: 5
+    mythic-type: "吞噬之刃·中阶"
+    material: DIAMOND_SWORD
+    
+  吞噬之刃·高阶:
+    max-slots: 7
+    mythic-type: "吞噬之刃·高阶"
+    material: NETHERITE_SWORD
+    
+  吞噬魔剑·传说:
+    max-slots: 10
+    mythic-type: "吞噬魔剑·传说"
+    material: NETHERITE_SWORD

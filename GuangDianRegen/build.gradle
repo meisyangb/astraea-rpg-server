@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+}
+
+jar {
+    archiveBaseName.set('GuangDianRegen')
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}

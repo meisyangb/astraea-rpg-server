@@ -1,0 +1,38 @@
+# 签到系统配置
+# 使用 MiniMessage 格式 (<color> 替代 §color)
+
+messages:
+  already_signed: "<red>你今天已经签到过了！"
+  sign_success: "<green>签到成功！连续签到 {days} 天"
+  not_signed: "<yellow>你今天还没有签到，使用 /signin 签到"
+  
+rewards:
+  1:
+    commands:
+      - "give {player} diamond 1"
+    message: "<aqua>获得签到奖励：钻石 x1"
+  3:
+    commands:
+      - "give {player} diamond 3"
+      - "exp add {player} 100"
+    message: "<aqua>获得连续签到3天奖励：钻石 x3，经验值 100"
+  7:
+    commands:
+      - "give {player} diamond 5"
+      - "give {player} emerald 3"
+      - "exp add {player} 500"
+    message: "<aqua>获得连续签到7天奖励：钻石 x5，绿宝石 x3，经验值 500"
+  15:
+    commands:
+      - "give {player} diamond 10"
+      - "give {player} emerald 5"
+      - "give {player} gold_ingot 16"
+      - "exp add {player} 1000"
+    message: "<aqua>获得连续签到15天奖励：钻石 x10，绿宝石 x5，金锭 x16，经验值 1000"
+  30:
+    commands:
+      - "give {player} diamond 20"
+      - "give {player} emerald 10"
+      - "give {player} netherite_ingot 1"
+      - "exp add {player} 5000"
+    message: "<aqua>获得连续签到30天奖励：钻石 x20，绿宝石 x10，下界合金锭 x1，经验值 5000"

@@ -1,0 +1,27 @@
+﻿menus:
+  main:
+    title: "<gold>村民菜单"
+    size: 27
+    items:
+      welcome:
+        slot: 11
+        material: BOOK
+        name: "<yellow>欢迎"
+        lore:
+          - "<gray>这是一个示例NPC菜单。"
+          - "<gray>右键村民即可打开。"
+        action: "message:<green>欢迎来到光点RPG。"
+      help:
+        slot: 13
+        material: EMERALD
+        name: "<green>新手帮助"
+        lore:
+          - "<gray>点击查看新手指引。"
+        action: "message:<yellow>请联系管理员完善这个菜单。"
+      close:
+        slot: 15
+        material: BARRIER
+        name: "<red>关闭"
+        lore:
+          - "<gray>关闭当前菜单。"
+        action: "close"

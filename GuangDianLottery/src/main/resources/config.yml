@@ -1,0 +1,13 @@
+settings:
+  default-cooldown-seconds: 60
+  max-history-size: 50
+  broadcast-rare-prizes: true
+  broadcast-permission: "guangdian.lottery.broadcast"
+
+messages:
+  prefix: "<gold>[抽奖] <white>"
+  no-permission: "<red>你没有权限执行此操作!"
+  insufficient-funds: "<red>货币不足!"
+  on-cooldown: "<red>冷却中，请等待 %time% 秒!"
+  draw-success: "<green>恭喜你获得了 %prize%!"
+  pool-not-found: "<red>抽奖池不存在!"

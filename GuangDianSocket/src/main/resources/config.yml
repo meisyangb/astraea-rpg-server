@@ -1,0 +1,39 @@
+# GuangDianSocket 配置文件
+# 宝石镶嵌插件
+# 使用 MiniMessage 格式: <color>, <bold>, <reset> 等
+
+# ==================== 宝石孔位匹配模式 ====================
+# 从 Lore 中匹配显式定义的槽位
+# 支持带颜色标签的格式，如: <dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+socket_patterns:
+  # 匹配 [可镶嵌...] 或 [可镶嵌<颜色>宝石名<颜色>] 格式
+  pattern1: "\\[可镶嵌[^\\]]*<[^>]+>([^<]+)<[^>]+>[^\\]]*\\]"
+  # 匹配简单格式 [可镶嵌红宝石]
+  pattern2: "\\[可镶嵌([^\\]]+)\\]"
+  # 匹配带星号前缀的格式 *[可镶嵌红宝石]
+  pattern3: "\\*\\[可镶嵌([^\\]]+)\\]"
+
+# ==================== 宝石类型映射 ====================
+gem_types:
+  red: "红宝石"
+  blue: "蓝宝石"
+  green: "绿宝石"
+  yellow: "黄宝石"
+  purple: "紫宝石"
+
+# ==================== 拆卸设置 ====================
+gem_rework:
+  enabled: true
+  # 消耗物品 (可以是原版材料或 rpgitem:物品ID)
+  cost_item: "rpgitem:拆卸石"
+  cost_amount: 1
+  exp_levels: 0
+  success_chance: 1.0
+  fail_mode: "keep_all"  # 可选: keep_all, destroy_one, destroy_all
+
+  # 保险设置
+  insurance:
+    enabled: false
+    item: "TOTEM_OF_UNDYING"
+    amount: 1
+    consume_on_use: true

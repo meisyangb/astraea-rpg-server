@@ -1,0 +1,220 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 怪物掉落兑换4.yml
+# ========================================
+
+堕落结晶:
+  Id: CHARCOAL
+  Display: '<dark_purple>堕落结晶'
+  Lore:
+  - '<aqua>材料                    史诗'
+  - '<yellow>可以用于兑换'
+  - '<yellow>幻界堕落祭坛BOSS装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 1
+
+堕落召唤师恶毒之剑:
+  Id: DIAMOND_SWORD
+  Display: '<dark_purple>堕落召唤师恶毒之剑'
+  Lore:
+  - '<aqua>近战武器                  史诗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力： <aqua>150-2200'
+  - '<dark_gray>招架： <aqua>5%'
+  - '<dark_gray>暴击几率： <aqua>10%'
+  - '<dark_gray>暴击伤害： <aqua>200%'
+  - '<dark_gray>吸血几率： <aqua>12.5%'
+  - '<dark_gray>吸血倍率： <aqua>20%'
+  - '<dark_gray>中毒： <aqua>3%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>17'
+  - '<dark_gray>评分： <red>800'
+  - '<yellow>充满不祥的剑'
+  - '<dark_purple>三阶装备'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 150.0
+    AttackMax: 2200.0
+    ParryChance: 5.0
+    CritChance: 10.0
+    CritDamage: 200.0
+    LifestealChance: 12.5
+    LifestealMultiplier: 20.0
+    Level: 17
+
+堕落召唤师法袍:
+  Id: LEATHER_CHESTPLATE
+  Display: '<dark_purple>堕落召唤师法袍'
+  Lore:
+  - '<aqua>防具                    史诗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>15%'
+  - '<dark_gray>生命上限： <aqua>9000'
+  - '<dark_gray>攻击力： <aqua>75-150'
+  - '<dark_gray>中毒： <aqua>1%'
+  - '<dark_gray>每秒回血： <aqua>30'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>17'
+  - '<dark_gray>评分： <red>800'
+  - '<yellow>堕落召唤师穿戴的法袍'
+  - '<dark_purple>三阶装备'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 9000.0
+    AttackMin: 75.0
+    AttackMax: 150.0
+    HealthRegen: 30.0
+    Level: 17
+
+堕落召唤师长裤:
+  Id: LEATHER_LEGGINGS
+  Display: '<dark_purple>堕落召唤师长裤'
+  Lore:
+  - '<aqua>防具                    史诗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>10%'
+  - '<dark_gray>生命上限： <aqua>8500'
+  - '<dark_gray>闪避： <aqua>5%'
+  - '<dark_gray>中毒： <aqua>1%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>17'
+  - '<dark_gray>评分： <red>800'
+  - '<yellow>堕落召唤师穿戴的长裤'
+  - '<dark_purple>三阶装备'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 10.0
+    MaxHealth: 8500.0
+    DodgeChance: 5.0
+    Level: 17
+
+阿卡斯塔贤者圣剑:
+  Id: GOLDEN_SWORD
+  Display: '<gold>阿卡斯塔贤者圣剑'
+  Lore:
+  - '<green>近战武器                  传说'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>攻击力： <aqua>250-3000'
+  - '<dark_gray>招架： <aqua>5%'
+  - '<dark_gray>暴击几率： <aqua>10%'
+  - '<dark_gray>暴击伤害： <aqua>200%'
+  - '<dark_gray>吸血几率： <aqua>15%'
+  - '<dark_gray>吸血倍率： <aqua>20%'
+  - '<dark_gray>中毒： <aqua>5%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>17'
+  - '<dark_gray>评分： <aqua>1200'
+  - '<yellow>曾经大贤者使用的圣剑'
+  - '<dark_purple>三阶装备'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 250.0
+    AttackMax: 3000.0
+    ParryChance: 5.0
+    CritChance: 10.0
+    CritDamage: 200.0
+    LifestealChance: 15.0
+    LifestealMultiplier: 20.0
+    Level: 17
+
+阿卡斯塔贤者之袍:
+  Id: LEATHER_CHESTPLATE
+  Display: '<gold>阿卡斯塔贤者之袍'
+  Lore:
+  - '<green>防具                    传说'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>15%'
+  - '<dark_gray>生命上限： <aqua>12000'
+  - '<dark_gray>攻击力： <aqua>100-200'
+  - '<dark_gray>中毒： <aqua>3%'
+  - '<dark_gray>每秒回血： <aqua>35'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>17'
+  - '<dark_gray>评分： <red>1200'
+  - '<yellow>阿卡斯塔大贤者之袍'
+  - '<dark_purple>三阶装备'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 12000.0
+    AttackMin: 100.0
+    AttackMax: 200.0
+    HealthRegen: 35.0
+    Level: 17
+
+阿卡斯塔贤者长裤:
+  Id: LEATHER_LEGGINGS
+  Display: '<gold>阿卡斯塔贤者长裤'
+  Lore:
+  - '<green>防具                    传说'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>15%'
+  - '<dark_gray>生命上限： <aqua>10000'
+  - '<dark_gray>闪避： <aqua>5%'
+  - '<dark_gray>中毒： <aqua>2%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>17'
+  - '<dark_gray>评分： <red>1200'
+  - '<yellow>阿卡斯塔大贤者长裤'
+  - '<dark_purple>三阶装备'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 10000.0
+    DodgeChance: 5.0
+    Level: 17
+

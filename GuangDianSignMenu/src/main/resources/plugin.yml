@@ -1,0 +1,13 @@
+name: GuangDianSignMenu
+version: '1.0.0'
+main: cn.guangdian.signmenu.GuangDianSignMenu
+api-version: '1.21'
+author: GuangDian
+description: 右键告示牌打开菜单系统
+depend: [RPGCore]
+
+commands:
+  signmenu:
+    description: 告示牌菜单管理命令
+    usage: /<command> [reload]
+    permission: signmenu.admin

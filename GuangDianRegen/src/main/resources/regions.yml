@@ -1,0 +1,49 @@
+# ========================================
+# 区域配置文件
+# ========================================
+
+regions:
+  # 示例铁矿场
+  example_iron_mine:
+    type: MINE
+    world: world
+    min:
+      x: 100
+      y: 50
+      z: 100
+    max:
+      x: 150
+      y: 80
+      z: 150
+    blocks:
+      IRON_ORE:
+        replace: STONE
+        delay: 300
+        drops:
+          - "IRON_INGOT:1-3"
+          - "EXPERIENCE:5"
+      COAL_ORE:
+        replace: STONE
+        delay: 180
+        drops:
+          - "COAL:2-4"
+    enabled: true
+
+  # 示例橡木林场
+  example_oak_forest:
+    type: FOREST
+    world: world
+    min:
+      x: 200
+      y: 60
+      z: 200
+    max:
+      x: 300
+      y: 100
+      z: 300
+    trees:
+      OAK_LOG:
+        delay: 600
+        min_height: 5
+        max_height: 8
+    enabled: true

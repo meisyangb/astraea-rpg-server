@@ -1,0 +1,31 @@
+# GuangDianAccessory 配置文件
+# 饰品系统配置
+
+# 调试模式
+debug: false
+
+# 语言设置
+language: zh_CN
+
+# 自动保存间隔（秒）
+auto-save-interval: 300
+
+# GUI设置
+gui:
+  title: "饰品栏"
+  size: 27
+
+# 饰品槽位配置
+slots:
+  badge:
+    enabled: true
+    name: "徽章"
+    position: 10
+  medal:
+    enabled: true
+    name: "勋章"
+    position: 13
+  relic:
+    enabled: true
+    name: "圣物"
+    position: 16

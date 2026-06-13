@@ -1,0 +1,157 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 吞噬武器.yml
+# ========================================
+
+吞噬之刃·初阶:
+  Id: DIAMOND_SWORD
+  Display: '"<dark_red>吞噬之刃·初阶"'
+  Lore:
+  - '"<yellow>吞噬武器               <dark_purple>史诗"'
+  - '"<dark_red><strikethrough>－－－－－－－－－－－－"'
+  - '"<dark_gray>攻击力： <aqua>500-800"'
+  - '"<dark_gray>暴击几率： <aqua>8%"'
+  - '"<dark_gray>暴击伤害： <aqua>60%"'
+  - '"<dark_gray>命中： <aqua>5%"'
+  - '"<dark_red><strikethrough>－－－－－－－－－－－－"'
+  - '"<gray>可吞噬其他武器获得其属性"'
+  - '"<gray>每个槽位只能吞噬一次"'
+  - '"<dark_red><strikethrough>－－－－－－－－－－－－"'
+  - '"<dark_gray>吞噬槽位： <aqua>3"'
+  - '"<dark_red>[<gray> 吞噬槽位1 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位2 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位3 <dark_aqua>] <green>空"'
+  - '"<dark_red><strikethrough>－－－－－－－－－－－－"'
+  - '"<dark_purple>吞噬武器"'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 500.0
+    AttackMax: 800.0
+    CritChance: 8.0
+    CritDamage: 60.0
+
+吞噬之刃·中阶:
+  Id: DIAMOND_SWORD
+  Display: '"<dark_red>吞噬之刃·中阶"'
+  Lore:
+  - '"<yellow>吞噬武器               <light_purple>传说"'
+  - '"<dark_red><strikethrough>－－－－－－－－－－－－"'
+  - '"<dark_gray>攻击力： <aqua>1200-1800"'
+  - '"<dark_gray>暴击几率： <aqua>12%"'
+  - '"<dark_gray>暴击伤害： <aqua>90%"'
+  - '"<dark_gray>命中： <aqua>8%"'
+  - '"<dark_gray>吸血几率： <aqua>5%"'
+  - '"<dark_gray>吸血倍率： <aqua>15%"'
+  - '"<dark_red><strikethrough>－－－－－－－－－－－－"'
+  - '"<gray>可吞噬其他武器获得其属性"'
+  - '"<gray>每个槽位只能吞噬一次"'
+  - '"<dark_red><strikethrough>－－－－－－－－－－－－"'
+  - '"<dark_gray>吞噬槽位： <aqua>5"'
+  - '"<dark_red>[<gray> 吞噬槽位1 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位2 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位3 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位4 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位5 <dark_aqua>] <green>空"'
+  - '"<dark_red><strikethrough>－－－－－－－－－－－－"'
+  - '"<dark_purple>吞噬武器"'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 1200.0
+    AttackMax: 1800.0
+    CritChance: 12.0
+    CritDamage: 90.0
+    LifestealChance: 5.0
+    LifestealMultiplier: 15.0
+
+吞噬之刃·高阶:
+  Id: NETHERITE_SWORD
+  Display: '"<red><bold>吞噬之刃·高阶"'
+  Lore:
+  - '"<yellow>吞噬武器               <gold>远古传说"'
+  - '"<dark_red><strikethrough>－－－－－－－－－－－－"'
+  - '"<dark_gray>攻击力： <aqua>3000-5000"'
+  - '"<dark_gray>暴击几率： <aqua>18%"'
+  - '"<dark_gray>暴击伤害： <aqua>130%"'
+  - '"<dark_gray>命中： <aqua>12%"'
+  - '"<dark_gray>吸血几率： <aqua>10%"'
+  - '"<dark_gray>吸血倍率： <aqua>25%"'
+  - '"<dark_gray>穿透： <aqua>8%"'
+  - '"<dark_gray>破甲： <aqua>5%"'
+  - '"<dark_red><strikethrough>－－－－－－－－－－－－"'
+  - '"<gray>可吞噬其他武器获得其属性"'
+  - '"<gray>每个槽位只能吞噬一次"'
+  - '"<dark_red><strikethrough>－－－－－－－－－－－－"'
+  - '"<dark_gray>吞噬槽位： <aqua>7"'
+  - '"<dark_red>[<gray> 吞噬槽位1 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位2 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位3 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位4 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位5 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位6 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位7 <dark_aqua>] <green>空"'
+  - '"<dark_red><strikethrough>－－－－－－－－－－－－"'
+  - '"<dark_purple>吞噬武器"'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 3000.0
+    AttackMax: 5000.0
+    CritChance: 18.0
+    CritDamage: 130.0
+    LifestealChance: 10.0
+    LifestealMultiplier: 25.0
+
+吞噬魔剑·传说:
+  Id: NETHERITE_SWORD
+  Display: '"<dark_red><bold>吞噬魔剑·传说"'
+  Lore:
+  - '"<yellow>吞噬武器               <dark_red>神器"'
+  - '"<dark_red><strikethrough>－－－－－－－－－－－－"'
+  - '"<dark_gray>攻击力： <aqua>8000-12000"'
+  - '"<dark_gray>暴击几率： <aqua>25%"'
+  - '"<dark_gray>暴击伤害： <aqua>200%"'
+  - '"<dark_gray>命中： <aqua>20%"'
+  - '"<dark_gray>吸血几率： <aqua>15%"'
+  - '"<dark_gray>吸血倍率： <aqua>40%"'
+  - '"<dark_gray>穿透： <aqua>15%"'
+  - '"<dark_gray>破甲： <aqua>10%"'
+  - '"<dark_gray>真实伤害： <aqua>8%"'
+  - '"<dark_gray>冰冻： <aqua>10%"'
+  - '"<dark_gray>致盲： <aqua>10%"'
+  - '"<dark_red><strikethrough>－－－－－－－－－－－－"'
+  - '"<gray>可吞噬其他武器获得其属性"'
+  - '"<gray>每个槽位只能吞噬一次"'
+  - '"<dark_red><strikethrough>－－－－－－－－－－－－"'
+  - '"<dark_gray>吞噬槽位： <aqua>10"'
+  - '"<dark_red>[<gray> 吞噬槽位1 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位2 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位3 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位4 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位5 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位6 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位7 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位8 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位9 <dark_aqua>] <green>空"'
+  - '"<dark_red>[<gray> 吞噬槽位10 <dark_aqua>] <green>空"'
+  - '"<dark_red><strikethrough>－－－－－－－－－－－－"'
+  - '"<dark_purple>吞噬武器"'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 8000.0
+    AttackMax: 12000.0
+    CritChance: 25.0
+    CritDamage: 200.0
+    LifestealChance: 15.0
+    LifestealMultiplier: 40.0
+

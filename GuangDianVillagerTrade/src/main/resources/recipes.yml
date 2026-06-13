@@ -1,0 +1,188 @@
+# 村民兑换配方配置
+# 支持单个配方和配方组
+
+# ==================== 单个配方配置 ====================
+recipes:
+  # 示例配方1: 基础兑换
+  example_basic:
+    display:
+      name: '<green>基础兑换'
+      material: PAPER
+      lore:
+        - '<gray>这是一个基础兑换配方'
+        - '<yellow>需要: 10个石头'
+    input:
+      item1:
+        material: STONE
+        amount: 10
+    output:
+      material: DIAMOND
+      amount: 1
+      name: '<aqua>兑换钻石'
+    limit:
+      permission: ''
+      daily: -1
+      max-uses: 9999
+    settings:
+      give-experience: true
+      experience-amount: 5
+
+  # 示例配方2: 使用MythicMobs物品
+  example_mythic:
+    display:
+      name: '<dark_purple>神话兑换'
+      material: NETHER_STAR
+      lore:
+        - '<gray>使用MythicMobs物品兑换'
+    input:
+      item1:
+        material: DIAMOND
+        amount: 5
+        mythic-type: 'rare_gem'
+    output:
+      mythic-item: 'legendary_sword'
+      amount: 1
+    limit:
+      permission: 'villagertrade.mythic'
+      daily: 3
+      max-uses: 10
+    settings:
+      give-experience: true
+      experience-amount: 50
+
+  # 示例配方3: 多材料兑换
+  example_multi:
+    display:
+      name: '<gold>高级兑换'
+      material: GOLD_INGOT
+      lore:
+        - '<gray>需要多种材料'
+    input:
+      item1:
+        material: IRON_INGOT
+        amount: 32
+      item2:
+        material: GOLD_INGOT
+        amount: 16
+    output:
+      material: EMERALD_BLOCK
+      amount: 1
+      name: '<green>绿宝石块'
+    limit:
+      permission: ''
+      daily: -1
+      max-uses: 9999
+    settings:
+      give-experience: true
+      experience-amount: 20
+
+  # 配方组中的子配方示例
+  sub_recipe_1:
+    display:
+      name: '<green>兑换选项1'
+      material: IRON_SWORD
+    input:
+      item1:
+        material: IRON_INGOT
+        amount: 5
+    output:
+      material: IRON_SWORD
+      amount: 1
+    settings:
+      give-experience: false
+
+  sub_recipe_2:
+    display:
+      name: '<aqua>兑换选项2'
+      material: DIAMOND
+    input:
+      item1:
+        material: GOLD_INGOT
+        amount: 10
+    output:
+      material: DIAMOND
+      amount: 1
+    settings:
+      give-experience: false
+
+  sub_recipe_3:
+    display:
+      name: '<light_purple>兑换选项3'
+      material: NETHER_STAR
+    input:
+      item1:
+        material: DIAMOND
+        amount: 5
+    output:
+      material: NETHER_STAR
+      amount: 1
+    settings:
+      give-experience: false
+
+# ==================== 配方组配置 ====================
+# 配方组可以将多个配方组合在一起，打开后显示所有子配方
+recipe-groups:
+  # 示例配方组: 综合兑换商店
+  shop_general:
+    display:
+      name: '<gold><bold>综合兑换商店'
+      material: BOOK
+      lore:
+        - '<gray>这里汇集了各种兑换选项'
+        - '<yellow>点击选择你想要的兑换'
+    # 配方组包含的子配方列表
+    recipes:
+      - sub_recipe_1
+      - sub_recipe_2
+      - sub_recipe_3
+    # 权限设置（可选）
+    permission: ''
+
+  # 示例配方组: VIP专属兑换
+  shop_vip:
+    display:
+      name: '<dark_purple><bold>VIP专属兑换'
+      material: ENCHANTED_BOOK
+      lore:
+        - '<gray>VIP玩家专属兑换选项'
+        - '<yellow>包含稀有物品兑换'
+    recipes:
+      - example_mythic
+      - example_multi
+    permission: 'villagertrade.vip'
+
+# ==================== 配置说明 ====================
+# 
+# 【单个配方配置项】
+# display.name: 显示名称（支持MiniMessage格式）
+# display.material: 显示材料
+# display.lore: 显示描述
+# input: 输入材料（最多2个）
+#   - material: 材料类型
+#   - amount: 数量
+#   - name: 物品名称（可选，用于精确匹配）
+#   - lore: 物品Lore（可选）
+#   - custom-model-data: 自定义模型数据（可选）
+#   - exact-match: 是否精确匹配（可选，默认false）
+#   - mythic-type: MythicMobs物品类型（可选）
+# output: 输出物品
+#   - material: 材料类型
+#   - amount: 数量
+#   - name: 物品名称
+#   - lore: 物品Lore
+#   - custom-model-data: 自定义模型数据
+#   - mythic-item / mythic-type: MythicMobs物品ID
+# limit: 限制条件
+#   - permission: 所需权限（可选）
+#   - daily: 每日限制次数（-1表示无限制）
+#   - max-uses: 最大使用次数
+# settings: 其他设置
+#   - give-experience: 是否给予经验
+#   - experience-amount: 经验数量
+#
+# 【配方组配置项】
+# display.name: 配方组显示名称
+# display.material: 配方组图标材料
+# display.lore: 配方组描述
+# recipes: 包含的子配方名称列表
+# permission: 使用配方组所需的权限（可选）

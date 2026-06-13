@@ -1,0 +1,174 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 新手武器商店.yml
+# ========================================
+
+橡木学徒剑:
+  Id: GOLDEN_SWORD
+  Display: '<green>橡木学徒剑'
+  Lore:
+  - '<white>近战武器                   普通'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>80-240'
+  - '<dark_gray>暴击几率: <aqua>1%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>评分: <red>5'
+  - '<yellow>冒险者入门级武器'
+  - '<yellow>回收价格: <light_purple>10'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 80.0
+    AttackMax: 240.0
+    CritChance: 1.0
+
+磐石卫士剑:
+  Id: STONE_SWORD
+  Display: '<green>磐石卫士剑'
+  Lore:
+  - '<white>近战武器                   普通'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>160-480'
+  - '<dark_gray>暴击几率: <aqua>2%'
+  - '<dark_gray>暴击伤害: <aqua>5%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>评分: <red>15'
+  - '<yellow>冒险者常用的武器'
+  - '<yellow>回收价格: <light_purple>30'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 160.0
+    AttackMax: 480.0
+    CritChance: 2.0
+    CritDamage: 5.0
+
+黑铁征伐剑:
+  Id: IRON_SWORD
+  Display: '<blue>黑铁征伐剑'
+  Lore:
+  - '<white>近战武器                   优秀'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>320-960'
+  - '<dark_gray>暴击几率: <aqua>3%'
+  - '<dark_gray>暴击伤害: <aqua>8%'
+  - '<dark_gray>吸血几率: <aqua>0.5%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>评分: <red>30'
+  - '<yellow>进阶冒险者的选择'
+  - '<yellow>回收价格: <light_purple>80'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 320.0
+    AttackMax: 960.0
+    CritChance: 3.0
+    CritDamage: 8.0
+    LifestealChance: 0.5
+
+淬炼钢锋剑:
+  Id: WOODEN_SWORD
+  Display: '<blue>淬炼钢锋剑'
+  Lore:
+  - '<white>近战武器                   优秀'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>560-1680'
+  - '<dark_gray>暴击几率: <aqua>4%'
+  - '<dark_gray>暴击伤害: <aqua>10%'
+  - '<dark_gray>吸血几率: <aqua>1%'
+  - '<dark_gray>吸血倍率: <aqua>3%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>评分: <red>50'
+  - '<yellow>精铁锻造的冒险者佩剑'
+  - '<yellow>回收价格: <light_purple>150'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 560.0
+    AttackMax: 1680.0
+    CritChance: 4.0
+    CritDamage: 10.0
+    LifestealChance: 1.0
+    LifestealMultiplier: 3.0
+
+璀璨晶魄剑:
+  Id: DIAMOND_SWORD
+  Display: '<dark_aqua>璀璨晶魄剑'
+  Lore:
+  - '<white>近战武器                   稀有'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>800-2400'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>12%'
+  - '<dark_gray>吸血几率: <aqua>1%'
+  - '<dark_gray>吸血倍率: <aqua>5%'
+  - '<dark_gray>招架: <aqua>2%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>评分: <red>80'
+  - '<yellow>镶嵌钻石的精钢长剑'
+  - '<yellow>回收价格: <light_purple>300'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 800.0
+    AttackMax: 2400.0
+    CritChance: 5.0
+    CritDamage: 12.0
+    LifestealChance: 1.0
+    LifestealMultiplier: 5.0
+    ParryChance: 2.0
+
+猎骨短柄斧:
+  Id: PAPER
+  Display: '<green>猎骨短柄斧'
+  Lore:
+  - '<white>近战武器                   普通'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>120-360'
+  - '<dark_gray>暴击几率: <aqua>1%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>评分: <red>10'
+  - '<yellow>新手冒险者的近战选择'
+  - '<yellow>回收价格: <light_purple>20'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 120.0
+    AttackMax: 360.0
+    CritChance: 1.0
+
+狂怒双刃斧:
+  Id: PAPER
+  Display: '<blue>狂怒双刃斧'
+  Lore:
+  - '<white>近战武器                   优秀'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>400-1200'
+  - '<dark_gray>暴击几率: <aqua>3%'
+  - '<dark_gray>暴击伤害: <aqua>8%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>评分: <red>40'
+  - '<yellow>威力强大的双刃战斧'
+  - '<yellow>回收价格: <light_purple>100'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 400.0
+    AttackMax: 1200.0
+    CritChance: 3.0
+    CritDamage: 8.0
+

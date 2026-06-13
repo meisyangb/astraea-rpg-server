@@ -1,0 +1,16 @@
+// ========================================
+// GuangDianHolo - 全息图系统
+// ========================================
+
+plugins {
+    id 'java'
+}
+
+dependencies {
+    compileOnly project(':plugins:RPGCore')
+    compileOnly name: 'PlaceholderAPI'
+}
+
+jar {
+    archiveBaseName.set('GuangDianHolo')
+}

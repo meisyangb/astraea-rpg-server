@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+    flatDir { dirs '../libs' }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+    compileOnly project(':plugins:RPGCore')
+    compileOnly name: 'ProtocolLib'
+}
+
+jar {
+    archiveBaseName.set('GuangDianParticleBlocker')
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}

@@ -1,0 +1,69 @@
+﻿﻿# GuangDianBoard 配置文件
+# RPGCore MiniMessage 格式支持
+
+# 刷新间隔 (毫秒) - 改为保底刷新间隔
+refresh-interval: 5000
+title-refresh-interval: 1500
+
+# 智能刷新设置
+smart-refresh:
+  enabled: true
+  event-cooldown: 1000
+  detect-equipment-change: true
+  detect-attribute-change: true
+
+# 标题 - 使用 MiniMessage 格式 (<color> 替代 <red>olor)
+title: '<white>Lv.<yellow>%player_level% <green>%player_name%'
+
+title-animation:
+  enabled: false
+  frames: []
+
+# ========================================
+# 世界别名设置 (世界中文名)
+# ========================================
+world-aliases:
+  world: "生存世界"
+  world_nether: "下界"
+  world_the_end: "末地"
+  spawn: "出生点大厅"
+  rpg: "RPG世界"
+  CaveFuWorld: "洞府世界"
+  gsslc: "古神试炼场"
+
+# 高级设置
+advanced:
+  debug: false
+  max-lines: 15
+  remember-toggle-state: true
+  show-by-default: true
+  hidden-worlds: []
+  hide-when-sneaking: false
+  hide-in-combat: false
+
+# 消息设置 - 使用 MiniMessage 格式
+messages:
+  no-permission: "<red>您没有权限执行此操作!"
+  board-enabled: "<green>侧边栏已启用!"
+  board-disabled: "<red>侧边栏已关闭!"
+  config-reloaded: "<green>侧边栏配置已重新加载!"
+
+# ========================================
+# 侧边栏显示内容 - 使用 MiniMessage 格式
+# ========================================
+lines:
+  - '<green><underlined>﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏'
+  - ''
+  - '<gold>✔ <aqua>金币<white>: <yellow>%vault_eco_balance_formatted%'
+  - '<dark_aqua>✔ <aqua>点券<white>: <yellow>%gdpoints_balance_formatted%'
+  - '<red>✚ <aqua>生命<white>: <red>%gdrpg_health%'
+  - '<red>々 <aqua>工会<white>: <aqua>%gdguild_name%'
+  - '<light_purple>✟ <aqua>称号<white>: %luckperms_prefix%<white>'
+  - '<dark_purple>✿ <aqua>伴侣<white>: <light_purple>%gdmarriage_partner%'
+  - '<yellow>⚔ <aqua>锻造等级<white>: <yellow>%forge_level%'
+  - '<yellow>✦ <aqua>锻造经验<white>: <yellow>%forge_exp%'
+  - '<aqua>当前世界<white>: <yellow>%player_world%'
+  - '<aqua>全服人数<white>: <yellow><bold>%server_online%'
+  - '<aqua>官方①群<white>: <light_purple>2271257344'
+  - ''
+  - '<green><underlined>﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏'

@@ -1,0 +1,31 @@
+﻿# ========================================
+# 每日任务示例配置
+# ========================================
+
+name: "每日狩猎"
+type: DAILY
+description:
+  - "<gray>每日任务：击杀一些怪物"
+  - "<gray>完成后可获得奖励"
+
+# 任务目标
+objectives:
+  - type: KILL
+    target: "ZOMBIE"
+    amount: 10
+    description: "击杀僵尸 x10"
+  - type: KILL
+    target: "SKELETON"
+    amount: 5
+    description: "击杀骷髅 x5"
+
+# 可重复
+repeatable: true
+daily_weight: 10
+
+# 女励
+rewards:
+  points: 3
+  experience: 30
+  commands:
+    - "[message] <green>每日任务完成！"

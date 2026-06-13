@@ -1,0 +1,26 @@
+name: GuangDianChain
+version: 1.0.0
+main: cn.guangdian.chain.GuangDianChain
+api-version: '1.21'
+depend:
+  - RPGCore
+authors:
+  - Astraea RPG Team
+description: 连锁挖矿/砍伐系统
+
+permissions:
+  guangdian.chain.ore:
+    description: 允许连锁挖矿
+    default: true
+  guangdian.chain.tree:
+    description: 允许连锁砍伐
+    default: true
+  guangdian.chain.custom:
+    description: 允许连锁破坏自定义方块
+    default: op
+  guangdian.chain.vip:
+    description: VIP玩家连锁上限
+    default: op
+  guangdian.chain.premium:
+    description: 高级玩家连锁上限
+    default: op

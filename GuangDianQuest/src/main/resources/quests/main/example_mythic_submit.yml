@@ -1,0 +1,68 @@
+# ========================================
+# MythicMobs 材料提交任务示例
+# ========================================
+
+name: "收集神秘材料"
+type: MAIN
+description:
+  - "<gray>铁匠需要一些特殊的材料来锻造武器"
+  - "<gray>请收集并提交以下材料"
+
+# 任务目标
+objectives:
+  # 方式1: COLLECT - 自动拾取（不消耗物品）
+  # 支持标准物品和 MythicMobs 物品
+  - type: COLLECT
+    target: "DIAMOND"
+    amount: 5
+    description: "收集钻石"
+
+  # 方式2: COLLECT - 通过材料名识别 MythicMobs 物品
+  - type: COLLECT
+    target: "material:EMERALD"
+    amount: 3
+    description: "收集绿宝石"
+
+  # 方式3: COLLECT - 通过 MythicMobs 物品 ID 识别
+  - type: COLLECT
+    target: "mythic:MagicCrystal"
+    amount: 5
+    description: "收集魔法水晶"
+
+  # 方式4: SUBMIT - 手动提交（会消耗物品）
+  # 右键点击手持物品即可提交
+  - type: SUBMIT
+    target: "DRAGON_SCALE"
+    amount: 10
+    description: "提交龙鳞"
+
+  # 方式5: SUBMIT - 通过 MythicMobs 物品 ID 提交
+  - type: SUBMIT
+    target: "mythic:RareMaterial"
+    amount: 3
+    description: "提交稀有材料"
+
+  # 方式6: SUBMIT - 通过 MythicMobs PDC type 提交
+  # 直接使用 MythicMobs 中定义的物品类型名
+  - type: SUBMIT
+    target: "HeroSwordFragment"
+    amount: 5
+    description: "提交英雄剑碎片"
+
+# 前置条件
+prerequisites: []
+
+# 等级要求
+required_level: 5
+
+# 任务线
+questline: "main_story"
+order: 10
+
+# 奖励
+rewards:
+  points: 50
+  experience: 500
+  commands:
+    - "[message] <green>恭喜完成材料收集任务！"
+    - "give %player% diamond 10"

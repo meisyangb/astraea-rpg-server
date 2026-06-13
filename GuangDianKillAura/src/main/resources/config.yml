@@ -1,0 +1,28 @@
+global:
+  enabled: true
+
+attack:
+  default-range: 4.5
+  max-range: 6.0
+  default-interval-ticks: 20
+  min-interval-ticks: 10
+
+target:
+  monsters: true
+  players: false
+  animals: false
+  require-line-of-sight: true
+
+damage:
+  base-damage: 1.0
+  use-player-damage: true
+
+visual:
+  swing-animation: true
+  damage-indicator: true
+
+mythicmobs:
+  only: false
+
+performance:
+  max-targets-per-scan: 10

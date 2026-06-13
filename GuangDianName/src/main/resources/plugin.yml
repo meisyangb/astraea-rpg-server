@@ -1,0 +1,33 @@
+name: GuangDianName
+version: 1.0.0
+main: cn.guangdian.name.GuangDianName
+description: 玩家头顶显示插件 - 血量、称号、工会、婚姻（三行显示）
+api-version: '1.21'
+authors:
+  - GuangDian Team
+
+depend:
+  - RPGCore
+  - PlaceholderAPI
+
+softdepend:
+  - LuckPerms
+  - GuangDianGuild
+
+commands:
+  gdname:
+    description: GuangDianName 主命令
+    usage: /gdname <reload|monitor|debug>
+    permission: gdname.admin
+  gdnametoggle:
+    description: 切换头顶显示
+    usage: /gdnametoggle <title|guild|marriage|status>
+    permission: gdname.toggle
+
+permissions:
+  gdname.admin:
+    description: 管理员权限
+    default: op
+  gdname.toggle:
+    description: 切换头顶显示权限
+    default: true

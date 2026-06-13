@@ -1,0 +1,146 @@
+# ======================================== 
+# 示例商店菜单 - 展示条件购买功能
+# GuangDianMenu v1.2.0+
+# ======================================== 
+
+title: '<gold><bold>示例商店 <dark_gray>| <yellow>条件购买演示'
+size: 27
+
+items:
+  # 示例1: 使用点券购买
+  buy_with_points:
+    material: DIAMOND_SWORD
+    slot: 10
+    name: '<yellow>购买钻石剑'
+    lore:
+      - '<dark_gray>--------------------'
+      - '<gray>一把锋利的钻石剑'
+      - ''
+      - '<red>价格: <yellow>1000 点券'
+      - '<green>点击查看详情...'
+      - '<dark_gray>--------------------'
+    action: 'console:rpgitem 钻石剑 give {player} 1'
+    keep-open: false
+    conditions:
+      points: 1000
+      fail-message: '<red>你的点券不足! 需要 <yellow>1000 <red>点券'
+
+  # 示例2: 使用金币购买
+  buy_with_money:
+    material: GOLD_INGOT
+    slot: 12
+    name: '<gold>购买金锭 x10'
+    lore:
+      - '<dark_gray>--------------------'
+      - '<gray>10个金锭'
+      - ''
+      - '<red>价格: <yellow>5000 金币'
+      - '<green>点击查看详情...'
+      - '<dark_gray>--------------------'
+    action: 'console:give {player} gold_ingot 10'
+    keep-open: false
+    conditions:
+      money: 5000.0
+      fail-message: '<red>你的金币不足! 需要 <yellow>5000 <red>金币'
+
+  # 示例3: 使用物品兑换
+  exchange_item:
+    material: DIAMOND
+    slot: 14
+    name: '<aqua>钻石兑换'
+    lore:
+      - '<dark_gray>--------------------'
+      - '<gray>用金锭兑换钻石'
+      - ''
+      - '<red>需要: <yellow>金锭 x16'
+      - '<green>获得: <aqua>钻石 x4'
+      - '<dark_gray>--------------------'
+    actions:
+      - 'console:give {player} diamond 4'
+      - 'message:<green>兑换成功!'
+    keep-open: true
+    conditions:
+      items:
+        gold_ingots:
+          material: 'GOLD_INGOT'
+          amount: 16
+      fail-message: '<red>你需要 <yellow>16个金锭 <red>才能兑换!'
+
+  # 示例4: 需要等级和点券
+  level_required:
+    material: NETHERITE_SWORD
+    slot: 16
+    name: '<dark_purple>下界合金剑'
+    lore:
+      - '<dark_gray>--------------------'
+      - '<gray>强大的下界合金武器'
+      - ''
+      - '<red>需要等级: <yellow>30级'
+      - '<red>价格: <yellow>5000 点券'
+      - '<dark_gray>--------------------'
+    action: 'console:rpgitem 下界合金剑 give {player} 1'
+    keep-open: false
+    conditions:
+      level: 30
+      points: 5000
+      fail-message: '<red>需要等级 <yellow>30 <red>且 <yellow>5000 <red>点券!'
+
+  # 示例5: VIP专属物品 (权限限制)
+  vip_item:
+    material: NETHER_STAR
+    slot: 20
+    name: '<light_purple>VIP专属礼包'
+    lore:
+      - '<dark_gray>--------------------'
+      - '<gray>只有VIP玩家可以购买'
+      - ''
+      - '<red>价格: <yellow>2000 点券'
+      - '<dark_gray>--------------------'
+    action: 'console:rpgitem VIP礼包 give {player} 1'
+    keep-open: false
+    conditions:
+      permission: 'vip.shop'
+      points: 2000
+      fail-message: '<red>只有 <light_purple>VIP <red>玩家可以购买此物品!'
+
+  # 示例6: 复杂条件 (物品+点券)
+  complex_trade:
+    material: BEACON
+    slot: 22
+    name: '<gold>信标'
+    lore:
+      - '<dark_gray>--------------------'
+      - '<gray>强大的信标'
+      - ''
+      - '<red>需要物品:'
+      - '<yellow>  - 钻石块 x3'
+      - '<yellow>  - 绿宝石块 x2'
+      - '<red>价格: <yellow>10000 点券'
+      - '<dark_gray>--------------------'
+    action: 'console:give {player} beacon 1'
+    keep-open: false
+    conditions:
+      points: 10000
+      items:
+        diamond_blocks:
+          material: 'DIAMOND_BLOCK'
+          amount: 3
+        emerald_blocks:
+          material: 'EMERALD_BLOCK'
+          amount: 2
+      fail-message: '<red>条件不足! 需要钻石块x3、绿宝石块x2和10000点券'
+
+  # 返回按钮
+  back:
+    slot: 26
+    material: ARROW
+    name: '<gray><bold>返回主菜单'
+    lore:
+      - '<yellow>点击返回'
+    action: 'menu:main'
+
+  # 装饰边框
+  border:
+    slots: [0,1,2,3,4,5,6,7,8,9,17,18,19,20,21,23,24,25]
+    material: BLACK_STAINED_GLASS_PANE
+    name: ' '

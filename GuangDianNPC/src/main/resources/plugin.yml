@@ -1,0 +1,30 @@
+name: GuangDianNPC
+version: 1.0.0
+main: cn.guangdian.npc.GuangDianNPC
+api-version: '1.21'
+author: GuangDian
+description: NPC管理系统 - 支持GUI菜单和命令触发
+
+depend:
+  - RPGCore
+
+softdepend:
+  - PlaceholderAPI
+
+commands:
+  npc:
+    description: NPC 管理命令
+    usage: /npc <create|remove|movehere|name|menu|tp|enable|list|reload> [参数]
+    permission: guangdian.npc.admin
+  npcmenu:
+    description: 直接打开NPC菜单
+    usage: /npcmenu <menuId> 或 /npcmenu npc <npcId>
+    permission: guangdian.npc.use
+
+permissions:
+  guangdian.npc.use:
+    description: 允许使用 NPC 和打开菜单
+    default: true
+  guangdian.npc.admin:
+    description: 允许管理 NPC
+    default: op

@@ -1,0 +1,56 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 第八层怪物装备.yml
+# ========================================
+
+天启瘟疫头盔:
+  Id: CHAINMAIL_HELMET
+  Display: '<gold><bold>天启骑士头盔'
+  Lore:
+  - '<dark_aqua>护甲值: <green>40'
+  - '<dark_aqua>伤害反弹: <green>5'
+  - '<dark_aqua>暴击抵抗: <green>600%'
+  - '<dark_aqua>吸血抵抗: <green>50%'
+  - '<gray>暴击抵抗: <aqua>30%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritResist: 30.0
+    LifestealResist: 50.0
+
+天启屠杀头盔:
+  Id: CHAINMAIL_HELMET
+  Display: '<gold><bold>天启骑士头盔'
+  Lore:
+  - '<dark_aqua>护甲值: <green>50'
+  - '<dark_aqua>伤害反弹: <green>5'
+  - '<dark_aqua>暴击抵抗: <green>800%'
+  - '<dark_aqua>吸血抵抗: <green>60%'
+  - '<gray>暴击抵抗: <aqua>38%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritResist: 38.0
+    LifestealResist: 60.0
+
+天启饥饿头盔:
+  Id: CHAINMAIL_HELMET
+  Display: '<gold><bold>天启骑士头盔'
+  Lore:
+  - '<dark_aqua>护甲值: <green>60'
+  - '<dark_aqua>伤害反弹: <green>5'
+  - '<dark_aqua>暴击抵抗: <green>1000%'
+  - '<dark_aqua>吸血抵抗: <green>70%'
+  - '<gray>暴击抵抗: <aqua>45%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritResist: 45.0
+    LifestealResist: 70.0
+

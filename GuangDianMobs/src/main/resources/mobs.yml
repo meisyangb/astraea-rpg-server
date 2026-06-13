@@ -1,0 +1,442 @@
+# GuangDianMobs 怪物配置
+# 使用 MiniMessage 格式: <color>, <bold>, <reset> 等
+#
+# 配置说明:
+# - level-modifiers: 等级修饰器，怪物等级提升时自动增加属性
+# - damage-modifiers: 伤害类型修饰器，如 LIGHTNING, FIRE 等
+# - options: 怪物选项，如 always-show-name, prevent-other-drops 等
+# - ai: AI配置
+#   - target-selectors: 目标选择器 (players, attacker, highestthreat, randomplayer)
+#   - goals: AI目标
+#   - settings: AI设置
+#     - can-swim: 会游泳
+#     - can-break-doors: 会破门
+#     - can-open-doors: 会开门
+#     - avoid-water: 避水
+#     - avoid-sun: 避日
+#     - follow-range: 追踪范围
+#     - retreat-health-percent: 撤退血量百分比
+#   - threat: 仇恨设置
+#     - radius: 仇恨范围
+#     - use-threat-table: 使用仇恨表
+
+mobs:
+  # ============================================
+  # 普通怪物 - 适合新手区域
+  # ============================================
+
+  # 基础僵尸 - 新手怪物
+  weak_zombie:
+    display-name: "<gray>虚弱僵尸"
+    type: ZOMBIE
+    health: 20
+    damage: 3
+    defense: 0
+    speed: 0.2
+    level: 1
+    drop-table: "common_drops"
+    skills:
+      - "weak_attack"
+    options:
+      always-show-name: false
+
+  # 骷髅射手 - 远程怪物
+  skeleton_archer:
+    display-name: "<white>骷髅射手"
+    type: SKELETON
+    health: 25
+    damage: 5
+    defense: 1
+    speed: 0.25
+    level: 3
+    drop-table: "common_drops"
+    skills:
+      - "shoot_arrow"
+    equipment:
+      main-hand: "BOW"
+
+  # 洞穴蜘蛛 - 快速怪物
+  cave_spider:
+    display-name: "<dark_green>洞穴蜘蛛"
+    type: CAVE_SPIDER
+    health: 15
+    damage: 4
+    defense: 0
+    speed: 0.35
+    level: 4
+    drop-table: "common_drops"
+    skills:
+      - "poison_bite"
+
+  # ============================================
+  # 精英怪物 - 适合中级区域
+  # ============================================
+
+  # 精英僵尸 - 带技能
+  elite_zombie:
+    display-name: "<green><bold>精英僵尸"
+    type: ZOMBIE
+    health: 80
+    damage: 12
+    defense: 5
+    speed: 0.28
+    level: 15
+    level-modifiers:
+      health: 8
+      damage: 0.8
+      defense: 0.3
+    damage-modifiers:
+      FIRE: 1.5       # 火焰伤害增加50%
+    drop-table: "elite_drops"
+    skills:
+      - "charge_attack"
+      - "heal"
+    equipment:
+      helmet: "IRON_HELMET"
+      chestplate: "IRON_CHESTPLATE"
+      main-hand: "IRON_SWORD"
+    options:
+      always-show-name: true
+
+  # 骷髅骑士 - 高防御
+  skeletal_knight:
+    display-name: "<dark_gray><bold>骷髅骑士"
+    type: WITHER_SKELETON
+    health: 60
+    damage: 10
+    defense: 8
+    speed: 0.22
+    level: 18
+    level-modifiers:
+      health: 6
+      damage: 0.6
+      defense: 0.5
+    damage-modifiers:
+      LIGHTNING: 0.0    # 免疫闪电
+      FIRE: 0.5         # 火焰减半
+    drop-table: "elite_drops"
+    skills:
+      - "shield_bash"
+      - "smash_attack"
+    equipment:
+      helmet: "IRON_HELMET"
+      chestplate: "IRON_CHESTPLATE"
+      leggings: "IRON_LEGGINGS"
+      boots: "IRON_BOOTS"
+      main-hand: "STONE_SWORD"
+    options:
+      always-show-name: true
+      knockback-resistance: 0.6
+
+  # 暗影刺客 - 高速度
+  shadow_assassin:
+    display-name: "<dark_purple><bold>暗影刺客"
+    type: SKELETON
+    health: 40
+    damage: 15
+    defense: 2
+    speed: 0.4
+    attack-speed: 2.0
+    level: 20
+    level-modifiers:
+      health: 4
+      damage: 1.2
+      speed: 0.02
+    drop-table: "elite_drops"
+    skills:
+      - "teleport"
+      - "backstab"
+      - "poison_blade"
+    equipment:
+      main-hand: "DIAMOND_SWORD"
+    options:
+      always-show-name: true
+
+  # ============================================
+  # 高级怪物 - 适合高级区域
+  # ============================================
+
+  # 烈焰法师
+  fire_mage:
+    display-name: "<red><bold>烈焰法师"
+    type: SKELETON
+    health: 100
+    damage: 20
+    defense: 4
+    speed: 0.25
+    level: 35
+    level-modifiers:
+      health: 10
+      damage: 1.5
+    damage-modifiers:
+      FIRE: 0.0       # 免疫火焰
+      LAVA: 0.0       # 免疫岩浆
+    drop-table: "rare_drops"
+    skills:
+      - "fireball"
+      - "fire_nova"
+      - "flame_shield"
+    options:
+      always-show-name: true
+
+  # 冰霜巨人
+  frost_giant:
+    display-name: "<aqua><bold>冰霜巨人"
+    type: ZOMBIE
+    health: 200
+    damage: 25
+    defense: 12
+    speed: 0.18
+    level: 40
+    level-modifiers:
+      health: 15
+      damage: 1.8
+      defense: 0.8
+    damage-modifiers:
+      FREEZE: 0.0     # 免疫冰冻
+      FIRE: 2.0       # 火焰伤害翻倍
+    drop-table: "rare_drops"
+    skills:
+      - "frost_nova"
+      - "ice_shield"
+      - "ground_slam"
+    options:
+      always-show-name: true
+      knockback-resistance: 1.0
+      size: 3
+
+  # 雷霆领主
+  thunder_lord:
+    display-name: "<yellow><bold>雷霆领主"
+    type: WITHER_SKELETON
+    health: 150
+    damage: 30
+    defense: 6
+    speed: 0.3
+    level: 45
+    level-modifiers:
+      health: 12
+      damage: 2.0
+    damage-modifiers:
+      LIGHTNING: 0.0    # 免疫闪电
+    drop-table: "rare_drops"
+    skills:
+      - "lightning_strike"
+      - "chain_lightning"
+      - "thunderstorm"
+    equipment:
+      main-hand: "GOLDEN_AXE"
+    options:
+      always-show-name: true
+
+  # ============================================
+  # Boss怪物 - 团队挑战
+  # ============================================
+
+  # 骷髅王 - 入门级Boss
+  skeleton_king:
+    display-name: "<gold><bold>☠ 骷髅王 ☠"
+    type: WITHER_SKELETON
+    health: 500
+    damage: 25
+    defense: 15
+    speed: 0.25
+    level: 50
+    level-modifiers:
+      health: 20
+      damage: 2
+      defense: 1
+    damage-modifiers:
+      LIGHTNING: 0.0
+      FIRE: 0.5
+    drop-table: "boss_drops"
+    skills:
+      - "summon_skeletons"
+      - "smash_attack"
+      - "bone_shield"
+      - "heal"
+    equipment:
+      helmet: "DIAMOND_HELMET"
+      chestplate: "DIAMOND_CHESTPLATE"
+      main-hand: "DIAMOND_SWORD"
+    options:
+      always-show-name: true
+      show-boss-bar: true
+      boss-bar-color: "RED"
+      boss-bar-style: "SOLID"
+      prevent-other-drops: true
+      max-combat-distance: 40
+      knockback-resistance: 0.9
+    # AI配置 - 骷髅王会优先攻击仇恨最高的玩家
+    ai:
+      target-selectors:
+        - "highestthreat"    # 优先攻击仇恨最高
+        - "players"          # 其次是最近的玩家
+      goals:
+        - "attack"
+        - "summon"
+      settings:
+        can-swim: false
+        can-break-doors: true
+        follow-range: 40.0
+        retreat-health-percent: 20.0  # 血量低于20%会尝试撤退
+      threat:
+        radius: 50.0
+        use-threat-table: true
+        taunt-immune: false
+
+  # 深渊蠕虫 - 特殊Boss
+  abyss_worm:
+    display-name: "<dark_red><bold>⚠ 深渊蠕虫 ⚠"
+    type: SLIME
+    health: 800
+    damage: 35
+    defense: 10
+    speed: 0.15
+    level: 60
+    level-modifiers:
+      health: 25
+      damage: 2.5
+    damage-modifiers:
+      POISON: 0.0
+      MAGIC: 0.5
+    drop-table: "boss_drops"
+    skills:
+      - "poison_cloud"
+      - "devour"
+      - "split"
+      - "regenerate"
+    options:
+      always-show-name: true
+      show-boss-bar: true
+      boss-bar-color: "PURPLE"
+      boss-bar-style: "SEGMENTED_10"
+      prevent-other-drops: true
+      prevent-slime-split: false
+      size: 10
+      knockback-resistance: 1.0
+
+  # 末日守卫 - 终极Boss
+  doom_guardian:
+    display-name: "<dark_red><bold><obfuscated>★</obfuscated> <red>末日守卫 <dark_red><obfuscated>★</obfuscated>"
+    type: WITHER_SKELETON
+    health: 2000
+    damage: 50
+    defense: 25
+    speed: 0.2
+    level: 100
+    level-modifiers:
+      health: 50
+      damage: 5
+      defense: 2
+    damage-modifiers:
+      LIGHTNING: 0.0
+      FIRE: 0.0
+      MAGIC: 0.25
+      PHYSICAL: 0.75
+    drop-table: "legendary_drops"
+    skills:
+      - "doom_nova"
+      - "dark_orb"
+      - "summon_minions"
+      - "life_drain"
+      - "berserk"
+      - "teleport"
+    equipment:
+      helmet: "NETHERITE_HELMET"
+      chestplate: "NETHERITE_CHESTPLATE"
+      leggings: "NETHERITE_LEGGINGS"
+      boots: "NETHERITE_BOOTS"
+      main-hand: "NETHERITE_SWORD"
+    options:
+      always-show-name: true
+      show-boss-bar: true
+      boss-bar-color: "PINK"
+      boss-bar-style: "SEGMENTED_20"
+      prevent-other-drops: true
+      max-combat-distance: 50
+      knockback-resistance: 1.0
+    # AI配置 - 末日守卫免疫嘲讽，随机选择目标
+    ai:
+      target-selectors:
+        - "randomplayer"     # 随机选择玩家
+        - "players"
+      goals:
+        - "attack"
+        - "teleport"
+        - "summon"
+      settings:
+        can-swim: true
+        can-break-doors: true
+        can-open-doors: true
+        follow-range: 50.0
+        retreat-health-percent: 0.0  # 永不撤退
+      threat:
+        radius: 60.0
+        use-threat-table: true
+        taunt-immune: true          # 免疫嘲讽
+        switch-threshold: 1.5       # 更难切换目标
+
+  # ============================================
+  # 特殊怪物 - 环境特定
+  # ============================================
+
+  # 愤怒淤泥 - 沼泽怪物
+  angry_sludge:
+    display-name: "<dark_green><bold>愤怒淤泥"
+    type: SLIME
+    health: 120
+    damage: 8
+    defense: 5
+    speed: 0.12
+    level: 22
+    damage-modifiers:
+      POISON: 0.0
+    drop-table: "swamp_drops"
+    skills:
+      - "poison_cloud"
+      - "split"
+    options:
+      size: 5
+      prevent-slime-split: false
+      prevent-other-drops: true
+
+  # 熔岩魔像 - 地狱怪物
+  lava_golem:
+    display-name: "<gold><bold>熔岩魔像"
+    type: MAGMA_CUBE
+    health: 180
+    damage: 18
+    defense: 15
+    speed: 0.18
+    level: 35
+    damage-modifiers:
+      FIRE: 0.0
+      LAVA: 0.0
+      WATER: 2.0      # 水伤害翻倍
+    drop-table: "nether_drops"
+    skills:
+      - "fire_nova"
+      - "lava_burst"
+    options:
+      size: 4
+      prevent-other-drops: true
+
+  # 幽灵 - 亡灵怪物
+  ghost:
+    display-name: "<white><bold>幽灵"
+    type: VEX
+    health: 60
+    damage: 12
+    defense: 0
+    speed: 0.5
+    level: 28
+    damage-modifiers:
+      PHYSICAL: 0.5   # 物理伤害减半
+      MAGIC: 1.5      # 魔法伤害增加
+    drop-table: "undead_drops"
+    skills:
+      - "phase_shift"
+      - "life_drain"
+    options:
+      always-show-name: true

@@ -1,0 +1,33 @@
+name: GuangDianMCP
+version: 1.0.0
+main: cn.guangdian.mcp.GuangDianMCP
+api-version: '1.21'
+description: MCP服务器管理插件 - 允许AI通过MCP协议管理服务器
+author: GuangDian
+website: https://guangdian.cn
+
+softdepend:
+  - RPGCore
+  - PlaceholderAPI
+  - LuckPerms
+  - Vault
+
+load: POSTWORLD
+
+permissions:
+  guangdianmcp.admin:
+    description: MCP管理插件管理员权限
+    default: op
+  guangdianmcp.reload:
+    description: 重载MCP配置
+    default: op
+  guangdianmcp.token:
+    description: 管理MCP Token
+    default: op
+
+commands:
+  guangdianmcp:
+    description: MCP管理命令
+    usage: /<command> [reload|token|status|stop|start]
+    permission: guangdianmcp.admin
+    aliases: [gmcp, mcp]

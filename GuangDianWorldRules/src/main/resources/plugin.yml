@@ -1,0 +1,17 @@
+name: GuangDianWorldRules
+version: 1.0.0
+main: cn.guangdian.worldrules.GuangDianWorldRules
+api-version: '1.21'
+author: Astraea RPG Team
+description: 世界规则管理插件 - 死亡不掉落、生物刷新控制等
+
+commands:
+  gworldrules:
+    description: 世界规则管理命令
+    usage: /<command> [reload|info|set]
+    aliases: [gwr, worldrules]
+
+permissions:
+  guangdian.worldrules.admin:
+    description: 世界规则管理权限
+    default: op

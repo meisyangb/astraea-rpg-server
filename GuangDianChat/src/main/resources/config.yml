@@ -1,0 +1,110 @@
+﻿﻿# ========================================
+# 光点聊天插件配置文件
+# GuangDianChat Configuration
+# RPGCore MiniMessage 格式支持
+# ========================================
+# 作者: Gumin
+# QQ: 2271257344
+# 版本: 2.0.0
+# ========================================
+
+# ========================================
+# 基础设置
+# ========================================
+enabled: true
+
+# ========================================
+# 聊天格式 - 使用 MiniMessage 格式 (<color> 替代 <red>olor)
+# ========================================
+# 可用占位符:
+# %player_name% - 玩家名称
+# %player_world% - 当前世界
+# %player_level% - 玩家等级
+# %player_health% - 玩家生命值
+# %player_max_health% - 玩家最大生命值
+# %player_ping% - 玩家延迟
+# %luckperms_prefix% - LuckPerms前缀
+# %luckperms_suffix% - LuckPerms后缀
+# %luckperms_primary_group_name% - 主权限组名称
+# %gdguild_name% - 工会名称
+# %gdguild_in_guild% - 是否在工会
+# %gdmarriage_partner% - 配偶名称
+# %gdcombat_in_combat% - 是否在战斗
+# %gdpoints_points% - 点券数量
+# %message% - 聊天消息内容
+
+# 默认聊天格式
+default-format: "<dark_gray>[<aqua>%player_world%<dark_gray>] <gray>冒险者 <white>%player_name%<white>: <gray>%message%"
+
+# 权限组专属格式
+group-formats:
+  owner: "<dark_gray>[<aqua>%player_world%<dark_gray>] <gold>⚜ <yellow>服主 <gold>%player_name%<white>: <yellow>%message%"
+  admin: "<dark_gray>[<aqua>%player_world%<dark_gray>] <red>⚡ <dark_red>管理员 <red>%player_name%<white>: <red>%message%"
+  gm: "<dark_gray>[<aqua>%player_world%<dark_gray>] <aqua>☆ <white>GM <aqua>%player_name%<white>: <aqua>%message%"
+  svip: "<dark_gray>[<aqua>%player_world%<dark_gray>] <light_purple>♦ <dark_purple>SVIP <light_purple>%player_name%<white>: <light_purple>%message%"
+  vip: "<dark_gray>[<aqua>%player_world%<dark_gray>] <yellow>★ <gold>VIP <yellow>%player_name%<white>: <yellow>%message%"
+  mvp: "<dark_gray>[<aqua>%player_world%<dark_gray>] <yellow>♦ <yellow>MVP <yellow>%player_name%<white>: <white>%message%"
+  default: "<dark_gray>[<aqua>%player_world%<dark_gray>] <gray>冒险者 <white>%player_name%<white>: <gray>%message%"
+
+# ========================================
+# 世界别名设置
+# ========================================
+world-aliases:
+  world: "主世界"
+  world_nether: "下界"
+  world_the_end: "末地"
+  spawn: "新手村"
+  pvp: "PVP"
+  dungeon: "副本"
+
+# ========================================
+# 聊天设置
+# ========================================
+settings:
+  # 允许玩家使用颜色代码
+  allow-colors: true
+  color-permission: "guangdian.chat.color"
+
+  # 允许玩家使用格式代码
+  allow-formatting: true
+  format-permission: "guangdian.chat.format"
+
+  # 聊天范围 (0=全局)
+  chat-range: 0
+
+  # 欢迎消息 - MiniMessage 格式
+  show-welcome-message: true
+  welcome-message: "<green><strikethrough>─────────────────────────────────────"
+  welcome-message-2: "<gold>✦ <yellow>欢迎来到 <gold>光点RPG <yellow>世界!"
+  welcome-message-3: "<gray>冒险者 <green>%player_name% <gray>加入了游戏"
+  welcome-message-4: "<green><strikethrough>─────────────────────────────────────"
+
+  # 离开消息 - MiniMessage 格式
+  show-quit-message: true
+  quit-message: "<red><strikethrough>─────────────────────────────────────"
+  quit-message-2: "<yellow>%player_name% <gray>离开了游戏"
+  quit-message-3: "<red><strikethrough>─────────────────────────────────────"
+
+# ========================================
+# 高级设置
+# ========================================
+advanced:
+  debug: false
+  placeholder-refresh-interval: 1000
+  check-updates: true
+  enable-metrics: true
+
+# ========================================
+# 消息设置 - MiniMessage 格式
+# ========================================
+messages:
+  no-permission: "<red>✗ <white>您没有权限执行此操作!"
+  config-reloaded: "<green>✓ <white>聊天配置已重新加载!"
+  plugin-info:
+    - "<gold><strikethrough>────────────────────────────────"
+    - "<yellow>光点RPG <gray>聊天系统"
+    - "<white>"
+    - "<yellow>版本: <white>2.0.0"
+    - "<yellow>作者: <white>Gumin"
+    - "<yellow>状态: <green>✓ 已启用"
+    - "<gold><strikethrough>────────────────────────────────"

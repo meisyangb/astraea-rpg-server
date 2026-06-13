@@ -1,0 +1,17 @@
+// ========================================
+// GuangDianDecompose - 装备分解系统
+// ========================================
+
+plugins {
+    id 'java'
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+    compileOnly project(':plugins:RPGCore')
+    compileOnly files('libs/RPGItems.jar')
+}
+
+jar {
+    archiveBaseName.set('GuangDianDecompose')
+}

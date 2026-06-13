@@ -1,0 +1,50 @@
+name: GuangDianMenu
+version: 1.2.0
+main: cn.guangdian.menu.GuangDianMenu
+api-version: '1.21'
+author: Gumin
+description: 光点RPG菜单插件 - 支持条件检查、购买扣费
+website: www.guangdianrpg.com
+load: POSTWORLD
+
+# 插件依赖 (通过PlaceholderAPI获取其他插件数据)
+depend:
+  - RPGCore
+
+softdepend:
+  - PlaceholderAPI
+  - LuckPerms
+  - Vault
+  - GuangDianPoints
+  - GuangDianGuild
+  - GuangDianMarriage
+  - GuangDianArmorStats
+  - GuangDianMarket
+  - GuangDianTrade
+  - GuangDianForge
+  - GuangDianGem
+  - GuangDianEnhance
+  - GuangDianCaveFu
+  - GuangDianWorld
+  - GuangDianBoard
+
+commands:
+  menu:
+    description: 打开主菜单
+    usage: /menu [菜单名称]
+    aliases: [m, cd]
+  guangdianmenu:
+    description: 菜单插件管理命令
+    usage: /guangdianmenu reload
+    aliases: [gdm]
+
+permissions:
+  guangdian.menu.use:
+    description: 使用菜单权限
+    default: true
+  guangdian.menu.admin:
+    description: 管理员权限
+    default: op
+  guangdian.menu.reload:
+    description: 重载配置权限
+    default: op

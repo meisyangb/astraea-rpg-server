@@ -1,0 +1,460 @@
+﻿# ========================================
+# BOSS属性配置文件 (工业级重构)
+# ========================================
+# 为MythicMobs怪物定义自定义属性
+# 
+# 【重要说明】
+# 1. BOSS血量完全由 MythicMobs 自己管理，本插件不修改
+# 2. 本配置只为BOSS附加以下属性，用于伤害计算：
+#    - 攻击力范围 (attack.min/max)
+#    - 防御属性 (defense.base/armor_percent/damage_reduction)
+#    - 暴击/闪避/招架 (crit/dodge/parry)
+#    - 穿透属性 (penetration)
+#    - 元素伤害/抗性 (elemental)
+# 3. 公告功能请在 MythicMobs 怪物配置中使用 Skills 实现：
+#    - 出生公告: ~onSpawn 触发 message/sendtitle
+#    - 死亡公告: ~onDeath 触发 message/sendtitle
+#    - 血量阶段: ~onDamaged <30% 触发技能
+# ========================================
+
+bosses:
+  # ==================== 塔克要塞 - 普通怪物 ====================
+  塔克士兵:
+    display_name: "<gray>塔克士兵"
+    attack:
+      min: 80
+      max: 150
+    defense:
+      base: 3000
+      armor_percent: 15
+      damage_reduction: 0
+    crit:
+      chance: 5
+      damage: 120
+    dodge:
+      chance: 0
+    parry:
+      chance: 0
+    penetration:
+      armor: 5
+      defense: 0
+    multiplier:
+      health: 1.0
+      damage: 1.0
+
+  塔克兵长:
+    display_name: "<yellow>塔克兵长"
+    attack:
+      min: 200
+      max: 350
+    defense:
+      base: 8000
+      armor_percent: 25
+      damage_reduction: 5
+    crit:
+      chance: 15
+      damage: 180
+    dodge:
+      chance: 0
+    parry:
+      chance: 5
+    penetration:
+      armor: 15
+      defense: 10
+    multiplier:
+      health: 1.0
+      damage: 1.0
+
+  塔克守护者:
+    display_name: "<aqua>塔克守护者"
+    attack:
+      min: 300
+      max: 500
+    defense:
+      base: 15000
+      armor_percent: 35
+      damage_reduction: 10
+    crit:
+      chance: 20
+      damage: 200
+    dodge:
+      chance: 0
+    parry:
+      chance: 8
+    penetration:
+      armor: 20
+      defense: 15
+    multiplier:
+      health: 1.0
+      damage: 1.0
+
+  # ==================== 塔克要塞 - BOSS ====================
+  尤里斯:
+    display_name: "<red><bold>【BOSS】尤里斯"
+    attack:
+      min: 1500
+      max: 2500
+    defense:
+      base: 35000
+      armor_percent: 40
+      damage_reduction: 20
+    crit:
+      chance: 35
+      damage: 300
+    dodge:
+      chance: 10
+    parry:
+      chance: 8
+    penetration:
+      armor: 40
+      defense: 30
+    multiplier:
+      health: 1.0
+      damage: 1.0
+    elemental:
+      damage:
+        poison: 150
+        ice: 100
+      resistance:
+        poison: 90
+        ice: 50
+    custom:
+      shadow_step_cooldown: 15
+      clone_count: 3
+
+  塔克领主:
+    display_name: "<dark_red><bold>塔克领主"
+    attack:
+      min: 2000
+      max: 3500
+    defense:
+      base: 50000
+      armor_percent: 45
+      damage_reduction: 20
+    crit:
+      chance: 25
+      damage: 250
+    dodge:
+      chance: 0
+    parry:
+      chance: 5
+    penetration:
+      armor: 35
+      defense: 25
+    multiplier:
+      health: 1.5
+      damage: 1.2
+    elemental:
+      damage:
+        fire: 200
+      resistance:
+        fire: 80
+        ice: 20
+    custom:
+      phase_2_health_percent: 50
+      enrage_damage_multiplier: 2.0
+
+  # ==================== 其他精英怪 ====================
+  塔克卫士:
+    display_name: "<red>塔克卫士"
+    attack:
+      min: 500
+      max: 800
+    defense:
+      base: 15000
+      armor_percent: 25
+      damage_reduction: 5
+    crit:
+      chance: 10
+      damage: 150
+    dodge:
+      chance: 0
+    parry:
+      chance: 2
+    penetration:
+      armor: 10
+      defense: 5
+    multiplier:
+      health: 1.0
+      damage: 1.0
+
+  暗影刺客:
+    display_name: "<dark_gray>暗影刺客"
+    attack:
+      min: 600
+      max: 1000
+    defense:
+      base: 8000
+      armor_percent: 15
+      damage_reduction: 0
+    crit:
+      chance: 40
+      damage: 200
+    dodge:
+      chance: 15
+    parry:
+      chance: 0
+    penetration:
+      armor: 25
+      defense: 20
+    multiplier:
+      health: 0.8
+      damage: 1.1
+    elemental:
+      damage:
+        poison: 80
+
+  # ==================== 暗黑终焉 - 小怪 ====================
+  深渊士兵:
+    display_name: "<dark_purple>深渊士兵"
+    attack:
+      min: 200
+      max: 400
+    defense:
+      base: 5000
+      armor_percent: 15
+      damage_reduction: 0
+    crit:
+      chance: 5
+      damage: 100
+    dodge:
+      chance: 0
+    parry:
+      chance: 0
+    penetration:
+      armor: 5
+      defense: 0
+    multiplier:
+      health: 1.0
+      damage: 1.0
+
+  深渊刺客:
+    display_name: "<dark_gray>深渊刺客"
+    attack:
+      min: 400
+      max: 800
+    defense:
+      base: 3000
+      armor_percent: 10
+      damage_reduction: 0
+    crit:
+      chance: 35
+      damage: 250
+    dodge:
+      chance: 20
+    parry:
+      chance: 0
+    penetration:
+      armor: 30
+      defense: 20
+    multiplier:
+      health: 0.7
+      damage: 1.3
+    elemental:
+      damage:
+        poison: 100
+
+  深渊法师:
+    display_name: "<blue>深渊法师"
+    attack:
+      min: 300
+      max: 600
+    defense:
+      base: 4000
+      armor_percent: 10
+      damage_reduction: 0
+    crit:
+      chance: 15
+      damage: 180
+    dodge:
+      chance: 5
+    parry:
+      chance: 0
+    penetration:
+      armor: 20
+      defense: 30
+    multiplier:
+      health: 0.8
+      damage: 1.0
+    elemental:
+      damage:
+        fire: 200
+      resistance:
+        fire: 60
+        ice: 30
+
+  # ==================== 暗黑终焉 - BOSS ====================
+  深渊守卫:
+    display_name: "<dark_purple><bold>【BOSS】深渊守卫"
+    attack:
+      min: 800
+      max: 1500
+    defense:
+      base: 25000
+      armor_percent: 35
+      damage_reduction: 15
+    crit:
+      chance: 20
+      damage: 200
+    dodge:
+      chance: 5
+    parry:
+      chance: 10
+    penetration:
+      armor: 25
+      defense: 15
+    multiplier:
+      health: 1.0
+      damage: 1.0
+    elemental:
+      damage:
+        poison: 100
+      resistance:
+        poison: 70
+        fire: 50
+
+  黑暗之子:
+    display_name: "<aqua><bold>【BOSS】黑暗之子"
+    attack:
+      min: 1200
+      max: 2000
+    defense:
+      base: 35000
+      armor_percent: 30
+      damage_reduction: 15
+    crit:
+      chance: 30
+      damage: 280
+    dodge:
+      chance: 15
+    parry:
+      chance: 5
+    penetration:
+      armor: 35
+      defense: 25
+    multiplier:
+      health: 1.0
+      damage: 1.0
+    elemental:
+      damage:
+        poison: 150
+        ice: 100
+      resistance:
+        poison: 80
+        fire: 40
+    custom:
+      can_revive: true
+      revive_count: 1
+
+  深渊领主:
+    display_name: "<red><bold>【BOSS】深渊领主"
+    attack:
+      min: 2000
+      max: 3500
+    defense:
+      base: 50000
+      armor_percent: 40
+      damage_reduction: 20
+    crit:
+      chance: 25
+      damage: 300
+    dodge:
+      chance: 5
+    parry:
+      chance: 8
+    penetration:
+      armor: 40
+      defense: 30
+    multiplier:
+      health: 1.2
+      damage: 1.1
+    elemental:
+      damage:
+        fire: 250
+        poison: 100
+      resistance:
+        fire: 90
+        poison: 70
+        ice: 30
+    custom:
+      phase_2_health_percent: 50
+      enrage_damage_multiplier: 1.8
+
+  暗黑帝王:
+    display_name: "<gold><bold>【BOSS】暗黑帝王"
+    attack:
+      min: 3000
+      max: 5000
+    defense:
+      base: 80000
+      armor_percent: 45
+      damage_reduction: 25
+    crit:
+      chance: 35
+      damage: 350
+    dodge:
+      chance: 10
+    parry:
+      chance: 8
+    penetration:
+      armor: 50
+      defense: 40
+    multiplier:
+      health: 1.5
+      damage: 1.3
+    elemental:
+      damage:
+        fire: 300
+        poison: 200
+      resistance:
+        fire: 95
+        poison: 80
+        ice: 50
+    custom:
+      phase_2_health_percent: 30
+      enrage_damage_multiplier: 2.0
+      teleport_cooldown: 60
+
+  终焉之神:
+    display_name: "<dark_red><bold>【隐藏BOSS】终焉之神"
+    attack:
+      min: 5000
+      max: 10000
+    defense:
+      base: 120000
+      armor_percent: 50
+      damage_reduction: 30
+    crit:
+      chance: 40
+      damage: 400
+    dodge:
+      chance: 15
+    parry:
+      chance: 10
+    penetration:
+      armor: 60
+      defense: 50
+    multiplier:
+      health: 2.0
+      damage: 1.5
+    elemental:
+      damage:
+        fire: 500
+        poison: 300
+        ice: 200
+      resistance:
+        fire: 95
+        poison: 90
+        ice: 80
+    custom:
+      can_revive: true
+      max_revive_count: 2
+      phase_2_health_percent: 20
+      enrage_damage_multiplier: 3.0
+
+# ==================== 全局配置 ====================
+global:
+  enabled: true
+  override_mythic_damage: true
+  cache_expire_seconds: 30
+  debug: false

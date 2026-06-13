@@ -1,0 +1,1758 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 宝石.yml
+# ========================================
+
+幻域杀戮宝石:
+  Id: REDSTONE
+  Display: '<dark_red>幻域杀戮宝石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>攻击力: <aqua>+300-600'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 300.0
+    AttackMax: 600.0
+
+幻域屠戮宝石:
+  Id: REDSTONE
+  Display: '<dark_red>幻域屠戮宝石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+30%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 30.0
+
+杀戮之石I:
+  Id: REDSTONE
+  Display: '<dark_red>杀戮之石I'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>攻击力: <aqua>+0-50'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 0.0
+    AttackMax: 50.0
+
+杀戮之石II:
+  Id: REDSTONE
+  Display: '<dark_red>杀戮之石II'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>攻击力: <aqua>+25-100'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 25.0
+    AttackMax: 100.0
+
+杀戮之石III:
+  Id: REDSTONE
+  Display: '<dark_red>杀戮之石III'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>攻击力: <aqua>+50-150'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 50.0
+    AttackMax: 150.0
+
+屠戮之石I:
+  Id: REDSTONE
+  Display: '<dark_red>屠戮之石I'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+5%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 5.0
+
+屠戮之石II:
+  Id: REDSTONE
+  Display: '<dark_red>屠戮之石II'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+10%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 10.0
+
+屠戮之石III:
+  Id: REDSTONE
+  Display: '<dark_red>屠戮之石III'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+15%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 15.0
+
+魔化杀戮之石:
+  Id: REDSTONE
+  Display: '<dark_red>魔化杀戮之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>攻击力: <aqua>+25-50'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 25.0
+    AttackMax: 50.0
+
+恶魔屠戮之石:
+  Id: REDSTONE
+  Display: '<dark_red>恶魔屠戮之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+6%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 6.0
+
+魔王狂暴之石:
+  Id: REDSTONE
+  Display: '<dark_red>魔王狂暴之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击几率: <aqua>+5%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritChance: 5.0
+
+魔族杀戮之石:
+  Id: REDSTONE
+  Display: '<dark_red>魔族杀戮之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>攻击力: <aqua>+75-100'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 75.0
+    AttackMax: 100.0
+
+圣者杀戮之石:
+  Id: REDSTONE
+  Display: '<dark_red>圣者杀戮之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>攻击力: <aqua>+100-200'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 100.0
+    AttackMax: 200.0
+
+堕天狂暴之石:
+  Id: REDSTONE
+  Display: '<dark_red>堕天狂暴之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击几率: <aqua>+10%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritChance: 10.0
+
+召唤师屠戮之石:
+  Id: REDSTONE
+  Display: '<dark_red>召唤师屠戮之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+18%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 18.0
+
+贤者杀戮之石:
+  Id: REDSTONE
+  Display: '<dark_red>贤者杀戮之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>攻击力: <aqua>+150-350'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 150.0
+    AttackMax: 350.0
+
+生命之石I:
+  Id: EMERALD
+  Display: '<green>生命之石I'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>生命上限: <aqua>+250'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 250.0
+
+生命之石II:
+  Id: EMERALD
+  Display: '<green>生命之石II'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>生命上限: <aqua>+500'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 500.0
+
+生命之石III:
+  Id: EMERALD
+  Display: '<green>生命之石III'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>生命上限: <aqua>+750'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 750.0
+
+幻域生命宝石:
+  Id: EMERALD
+  Display: '<green>幻域生命宝石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>生命上限: <aqua>+3000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 3000.0
+
+魔化生命之石:
+  Id: EMERALD
+  Display: '<green>魔化生命之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>生命上限: <aqua>+350'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 350.0
+
+恶魔敏捷之石:
+  Id: EMERALD
+  Display: '<green>恶魔敏捷之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>闪避: <aqua>+1.5%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    DodgeChance: 1.5
+
+魔王防御之石:
+  Id: EMERALD
+  Display: '<green>魔王防御之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>防御力: <aqua>+1000-2000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    DefenseMin: 1000.0
+    DefenseMax: 2000.0
+
+魔族生命之石:
+  Id: EMERALD
+  Display: '<green>魔族生命之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>生命上限: <aqua>+600'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 600.0
+
+圣者生命之石:
+  Id: EMERALD
+  Display: '<green>圣者生命之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>生命上限: <aqua>+1200'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 1200.0
+
+堕天防御之石:
+  Id: EMERALD
+  Display: '<green>堕天防御之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>防御力: <aqua>+1500-3000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    DefenseMin: 1500.0
+    DefenseMax: 3000.0
+
+召唤师敏捷之石:
+  Id: EMERALD
+  Display: '<green>召唤师敏捷之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>闪避: <aqua>+2%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    DodgeChance: 2.0
+
+贤者生命之石:
+  Id: EMERALD
+  Display: '<green>贤者生命之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>生命上限: <aqua>+2000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 2000.0
+
+保护卷轴:
+  Id: BOOK
+  Display: '<gold>强化保护卷轴'
+  Lore:
+  - '<green>确保强化必成卷轴'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+巫妖生命之石:
+  Id: EMERALD
+  Display: '<green>巫妖生命之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>生命上限: <aqua>+5000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 5000.0
+
+巫妖杀戮之石:
+  Id: REDSTONE
+  Display: '<dark_red>巫妖杀戮之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>攻击力: <aqua>+1000-2500'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 1000.0
+    AttackMax: 2500.0
+
+魔王杀戮圣石:
+  Id: REDSTONE
+  Display: '<dark_red>魔王杀戮圣石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>攻击力: <aqua>+5000-8000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 5000.0
+    AttackMax: 8000.0
+
+魔王屠戮圣石:
+  Id: REDSTONE
+  Display: '<dark_red>魔王屠戮圣石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+100%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 100.0
+
+魔王狂暴圣石:
+  Id: REDSTONE
+  Display: '<dark_red>魔王狂暴圣石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击几率: <aqua>+5%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritChance: 5.0
+
+魔王生命圣石:
+  Id: EMERALD
+  Display: '<green>魔王生命圣石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>生命上限: <aqua>+15000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 15000.0
+
+魔王杀戮神石:
+  Id: INK_SAC
+  Display: '<yellow>魔王杀戮神石'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>攻击力: <aqua>+2500-5000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 2500.0
+    AttackMax: 5000.0
+
+魔王生命神石:
+  Id: INK_SAC
+  Display: '<yellow>魔王生命神石'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>生命上限: <aqua>+10000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 10000.0
+
+强化石:
+  Id: INK_SAC
+  Display: '<green>强化石'
+  Lore:
+  - '<green>纯度:<yellow><bold>5'
+  - '<yellow>说明1:<gray>增加锻造强度极品率'
+  - '<yellow>说明2:<gray>但不会影响品质几率'
+  - '<yellow>说明3:<gray>纯度5代表+5%几率，可叠加使用'
+  - '<yellow>说明4:<gray>建议一次不要超过20个，多了浪费'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 12
+
+魔王韧性神石:
+  Id: EMERALD
+  Display: '<dark_green>魔王韧性神石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>暴伤抵抗: <aqua>+60%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamageResist: 60.0
+
+魔王冷静神石:
+  Id: EMERALD
+  Display: '<dark_green>魔王冷静神石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>暴击抵抗: <aqua>+3%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritResist: 3.0
+
+魔王荆棘神石:
+  Id: INK_SAC
+  Display: '<yellow>魔王荆棘神石'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>反伤比例: <aqua>+2%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    ReflectRatio: 2.0
+
+魔王坚固神石:
+  Id: INK_SAC
+  Display: '<yellow>魔王坚固神石'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>反伤比例: <aqua>+15%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    ReflectRatio: 15.0
+
+魔王穿刺神石:
+  Id: REDSTONE
+  Display: '<dark_red>魔王穿刺神石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+100%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 100.0
+
+魔王毁灭神石:
+  Id: REDSTONE
+  Display: '<dark_red>魔王毁灭神石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+120%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 120.0
+
+魔王愤怒神石:
+  Id: REDSTONE
+  Display: '<dark_red>魔王愤怒神石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+80%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 80.0
+
+魔王战神神石:
+  Id: REDSTONE
+  Display: '<dark_red>魔王战神神石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>【PVP】攻击力: <aqua>+7000-15000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 7000.0
+    AttackMax: 15000.0
+    PvpAttackMin: 7000.0
+    PvpAttackMax: 15000.0
+
+魔王金刚神石:
+  Id: EMERALD
+  Display: '<dark_green>魔王金刚神石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>【PVP】防御力: <aqua>+7000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    PvpDefenseMin: 7000.0
+    PvpDefenseMax: 7000.0
+
+魔王专注神石:
+  Id: REDSTONE
+  Display: '<dark_red>魔王专注神石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击几率: <aqua>+3%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritChance: 3.0
+
+天空破甲神石:
+  Id: REDSTONE
+  Display: '<dark_red>天空破甲神石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+30%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 30.0
+
+天空破甲神石2:
+  Id: REDSTONE
+  Display: '<dark_red>天空破甲神石II'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+50%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 50.0
+
+天空愤怒神石:
+  Id: REDSTONE
+  Display: '<dark_red>天空愤怒神石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+35%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 35.0
+
+天空愤怒神石2:
+  Id: REDSTONE
+  Display: '<dark_red>天空愤怒神石II'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+55%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 55.0
+
+天空破防神石:
+  Id: REDSTONE
+  Display: '<dark_red>天空破防神石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+80%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 80.0
+
+天空破防神石2:
+  Id: REDSTONE
+  Display: '<dark_red>天空破防神石II'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+100%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 100.0
+
+天空专注神石:
+  Id: REDSTONE
+  Display: '<dark_red>天空专注神石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击几率: <aqua>+4%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritChance: 4.0
+
+天空专注神石2:
+  Id: REDSTONE
+  Display: '<dark_red>天空专注神石II'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击几率: <aqua>+8%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritChance: 8.0
+
+天空暴怒神石:
+  Id: REDSTONE
+  Display: '<dark_red>天空暴怒神石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+130%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 130.0
+
+天空暴怒神石2:
+  Id: REDSTONE
+  Display: '<dark_red>天空暴怒神石II'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+180%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 180.0
+
+天空狂暴神石:
+  Id: REDSTONE
+  Display: '<dark_red>天空狂暴神石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击几率: <aqua>+6%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritChance: 6.0
+
+天空吸血神石:
+  Id: REDSTONE
+  Display: '<dark_red>天空吸血神石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>生命吸取: <aqua>+5%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    LifestealChance: 5.0
+
+天空嗜血神石:
+  Id: REDSTONE
+  Display: '<dark_red>天空嗜血神石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>吸血倍率: <aqua>+60%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    LifestealMultiplier: 60.0
+
+天空战神神石:
+  Id: REDSTONE
+  Display: '<dark_red>天空战神神石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>【PVP】攻击力: <aqua>+12000-25000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 12000.0
+    AttackMax: 25000.0
+    PvpAttackMin: 12000.0
+    PvpAttackMax: 25000.0
+
+天空战神神石2:
+  Id: REDSTONE
+  Display: '<dark_red>天空战神神石II'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>【PVP】攻击力: <aqua>+20000-45000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 20000.0
+    AttackMax: 45000.0
+    PvpAttackMin: 20000.0
+    PvpAttackMax: 45000.0
+
+天空力量神石:
+  Id: INK_SAC
+  Display: '<yellow>天空力量神石'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>攻击力: <aqua>+4500-12500'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 4500.0
+    AttackMax: 12500.0
+
+天空力量神石2:
+  Id: REDSTONE
+  Display: '<dark_red>天空力量神石II'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>攻击力: <aqua>+8000-21000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 8000.0
+    AttackMax: 21000.0
+
+天空冷静神石:
+  Id: EMERALD
+  Display: '<dark_green>天空冷静神石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>暴击抵抗: <aqua>+5%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritResist: 5.0
+
+天空自愈圣石:
+  Id: EMERALD
+  Display: '<green>天空自愈圣石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>每秒回血: <aqua>+5000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    HealthRegen: 5000.0
+
+天空铠甲神石:
+  Id: INK_SAC
+  Display: '<yellow>天空铠甲神石'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>【PVP】防御力: <aqua>+15000-30000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    PvpDefenseMin: 15000.0
+    PvpDefenseMax: 15000.0
+
+天空铠甲神石2:
+  Id: INK_SAC
+  Display: '<yellow>天空铠甲神石II'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>【PVP】防御力: <aqua>+50000-75000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    PvpDefenseMin: 50000.0
+    PvpDefenseMax: 50000.0
+
+天空圣光神石:
+  Id: EMERALD
+  Display: '<dark_green>天空圣光神石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>吸血抵抗: <aqua>+5%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    LifestealResist: 5.0
+
+天空生命神石:
+  Id: INK_SAC
+  Display: '<yellow>天空生命神石'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>生命上限: <aqua>+20000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 20000.0
+
+天空生命圣石:
+  Id: EMERALD
+  Display: '<green>天空生命圣石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>生命上限: <aqua>+25000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 25000.0
+
+天空生命圣石2:
+  Id: EMERALD
+  Display: '<green>天空生命圣石II'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>生命上限: <aqua>+40000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 40000.0
+
+天空生命神石2:
+  Id: INK_SAC
+  Display: '<yellow>天空生命神石II'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>生命上限: <aqua>+35000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 35000.0
+
+天空韧性圣石:
+  Id: EMERALD
+  Display: '<green>天空韧性圣石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>暴伤抵抗: <aqua>+110%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamageResist: 110.0
+
+天空韧性圣石2:
+  Id: EMERALD
+  Display: '<green>天空韧性圣石II'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>暴伤抵抗: <aqua>+150%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamageResist: 150.0
+
+天空镇定圣石:
+  Id: EMERALD
+  Display: '<green>天空镇定圣石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>暴击抵抗: <aqua>+5%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritResist: 5.0
+
+天空神圣圣石:
+  Id: EMERALD
+  Display: '<green>天空神圣圣石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>生命上限: <aqua>+5000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 5000.0
+
+天空神圣圣石2:
+  Id: EMERALD
+  Display: '<green>天空神圣圣石II'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>生命上限: <aqua>+8000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 8000.0
+
+天空荆棘神石:
+  Id: INK_SAC
+  Display: '<yellow>天空荆棘神石'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>反伤比例: <aqua>+1%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    ReflectRatio: 1.0
+
+天空荆棘神石2:
+  Id: INK_SAC
+  Display: '<yellow>天空荆棘神石II'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>反伤比例: <aqua>+5%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    ReflectRatio: 5.0
+
+天空防御神石:
+  Id: INK_SAC
+  Display: '<yellow>天空防御神石'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>防御力: <aqua>+35000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    DefenseMin: 35000.0
+    DefenseMax: 35000.0
+
+天空防御神石2:
+  Id: INK_SAC
+  Display: '<yellow>天空防御神石II'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>防御力: <aqua>+55000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    DefenseMin: 55000.0
+    DefenseMax: 55000.0
+
+天空护甲神石:
+  Id: INK_SAC
+  Display: '<yellow>天空护甲神石'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>防御力: <aqua>+8000-15000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    DefenseMin: 8000.0
+    DefenseMax: 15000.0
+
+天空护甲神石2:
+  Id: INK_SAC
+  Display: '<yellow>天空护甲神石II'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>防御力: <aqua>+15000-25000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    DefenseMin: 15000.0
+    DefenseMax: 25000.0
+
+天空闪避神石:
+  Id: INK_SAC
+  Display: '<yellow>天空闪避神石'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>闪避: <aqua>+7%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    DodgeChance: 7.0
+
+天空闪避神石2:
+  Id: INK_SAC
+  Display: '<yellow>天空闪避神石II'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>闪避: <aqua>+10%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    DodgeChance: 10.0
+
+天空坚固神石:
+  Id: INK_SAC
+  Display: '<yellow>天空坚固神石'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>防御力: <aqua>+10000-20000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    DefenseMin: 10000.0
+    DefenseMax: 20000.0
+
+天空坚固神石2:
+  Id: INK_SAC
+  Display: '<yellow>天空坚固神石II'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>防御力: <aqua>+20000-35000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    DefenseMin: 20000.0
+    DefenseMax: 35000.0
+
+幻术师生命之石:
+  Id: EMERALD
+  Display: '<green>幻术师生命之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>生命上限: <aqua>+7500'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 7500.0
+
+幻术师敏捷之石:
+  Id: INK_SAC
+  Display: '<yellow>幻术师敏捷之石'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>闪避: <aqua>+5%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    DodgeChance: 5.0
+
+军士生命之石:
+  Id: EMERALD
+  Display: '<green>军士生命之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>生命上限: <aqua>+10000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 10000.0
+
+军士杀戮之石:
+  Id: INK_SAC
+  Display: '<yellow>军士杀戮之石'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>攻击力: <aqua>+1500-3000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 1500.0
+    AttackMax: 3000.0
+
+城主杀戮之石:
+  Id: REDSTONE
+  Display: '<dark_red>城主杀戮之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>攻击力: <aqua>+3500-5500'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 3500.0
+    AttackMax: 5500.0
+
+城主屠戮之石:
+  Id: REDSTONE
+  Display: '<dark_red>城主屠戮之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+75%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 75.0
+
+城主狂暴之石:
+  Id: REDSTONE
+  Display: '<dark_red>城主狂暴之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击几率: <aqua>+4%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritChance: 4.0
+
+天启狂暴之石:
+  Id: REDSTONE
+  Display: '<dark_red>天启狂暴之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击几率: <aqua>+8%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritChance: 8.0
+
+天启狂暴之石2:
+  Id: REDSTONE
+  Display: '<dark_red>天启狂暴之石II'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击几率: <aqua>+10%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritChance: 10.0
+
+天启屠戮之石:
+  Id: REDSTONE
+  Display: '<dark_red>天启屠戮之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+200%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 200.0
+
+天启屠戮之石2:
+  Id: REDSTONE
+  Display: '<dark_red>天启屠戮之石II'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+230%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 230.0
+
+天启杀戮之石:
+  Id: REDSTONE
+  Display: '<dark_red>天启杀戮之石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>攻击力: <aqua>+21000-25000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 21000.0
+    AttackMax: 25000.0
+
+天启杀戮之石2:
+  Id: REDSTONE
+  Display: '<dark_red>天启杀戮之石II'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>攻击力: <aqua>+25000-30000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 25000.0
+    AttackMax: 30000.0
+
+天启镇定圣石:
+  Id: EMERALD
+  Display: '<green>天启镇定圣石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>暴击抵抗: <aqua>+8%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritResist: 8.0
+
+天启镇定圣石2:
+  Id: EMERALD
+  Display: '<green>天启镇定圣石II'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>暴击抵抗: <aqua>+10%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritResist: 10.0
+
+天启韧性圣石:
+  Id: EMERALD
+  Display: '<green>天启韧性圣石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>暴伤抵抗: <aqua>+150%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamageResist: 150.0
+
+天启韧性圣石2:
+  Id: EMERALD
+  Display: '<green>天启韧性圣石II'
+  Lore:
+  - '<white>强化石'
+  - '<dark_green>绿宝石'
+  - '<gray>暴伤抵抗: <aqua>+210%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamageResist: 210.0
+
+天启荆棘神石:
+  Id: INK_SAC
+  Display: '<yellow>天启荆棘神石'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>反伤比例: <aqua>+1%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    ReflectRatio: 1.0
+
+天启荆棘神石2:
+  Id: INK_SAC
+  Display: '<yellow>天启荆棘神石II'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>反伤比例: <aqua>+1%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    ReflectRatio: 1.0
+
+天启破防神石:
+  Id: REDSTONE
+  Display: '<dark_red>天启破防神石'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+150%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 150.0
+
+天启破防神石2:
+  Id: REDSTONE
+  Display: '<dark_red>天启破防神石II'
+  Lore:
+  - '<white>强化石'
+  - '<dark_red>红宝石'
+  - '<gray>暴击伤害: <aqua>+200%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 0
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    CritDamage: 200.0
+
+天启坚固神石:
+  Id: INK_SAC
+  Display: '<yellow>天启坚固神石'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>防御力: <aqua>+15000-25000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    DefenseMin: 15000.0
+    DefenseMax: 25000.0
+
+天启坚固神石2:
+  Id: INK_SAC
+  Display: '<yellow>天启坚固神石II'
+  Lore:
+  - '<white>强化石'
+  - '<yellow>黄宝石'
+  - '<gray>防御力: <aqua>+25000-40000'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 11
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    DefenseMin: 25000.0
+    DefenseMax: 40000.0
+
+暗影打击:
+  Id: INK_SAC
+  Display: '<dark_red>暗影打击'
+  Lore:
+  - '<white>强化石'
+  - '<dark_purple>紫宝石'
+  - '<gray>闪避: <aqua>+25%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 5
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    DodgeChance: 25.0
+
+神圣打击:
+  Id: INK_SAC
+  Display: '<dark_red>神圣打击'
+  Lore:
+  - '<white>强化石'
+  - '<dark_purple>紫宝石'
+  - '<gray>闪避: <aqua>+25%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 8
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    DodgeChance: 25.0
+
+拆卸石:
+  Id: FLINT
+  Display: '<gold>拆卸石'
+  Lore:
+  - '<gray>用于拆卸装备上已镶嵌的宝石'
+  - '<yellow>成功拆卸后宝石将返还'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 1
+

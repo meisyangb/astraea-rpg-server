@@ -1,0 +1,62 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 第六层怪物装备.yml
+# ========================================
+
+死亡骸骨铁剑:
+  Id: IRON_SWORD
+  Display: '<green>死亡骸骨铁剑'
+  Lore:
+  - '<dark_aqua>攻击力: <green>750'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+恐惧惊骸金剑:
+  Id: GOLDEN_SWORD
+  Display: '<green>恐惧惊骸金剑'
+  Lore:
+  - '<dark_aqua>攻击力: <green>5000'
+  - '<dark_aqua>暴击几率: <green>15'
+  - '<dark_aqua>暴击伤害: <green>300'
+  - '<dark_aqua>招架: <green>5'
+  - '<dark_aqua>闪避: <green>5'
+  - '<dark_aqua>中毒: <green>3'
+  - '<dark_aqua>吸血几率: <green>3'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+恐惧惊骸头盔:
+  Id: GOLDEN_HELMET
+  Display: '<green>恐惧惊骸头盔'
+  Lore:
+  - '<dark_aqua>护甲值: <green>60'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+巫妖恩佩斯铁剑:
+  Id: IRON_SWORD
+  Display: '<green>巫妖恩佩斯铁剑'
+  Lore:
+  - '<dark_aqua>攻击力: <green>7000'
+  - '<dark_aqua>暴击几率: <green>15'
+  - '<dark_aqua>暴击伤害: <green>300'
+  - '<dark_aqua>招架: <green>5'
+  - '<dark_aqua>闪避: <green>10'
+  - '<dark_aqua>中毒: <green>3'
+  - '<dark_aqua>吸血几率: <green>5'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+巫妖恩佩斯头盔:
+  Id: CHAINMAIL_HELMET
+  Display: '<green>巫妖恩佩斯头盔'
+  Lore:
+  - '<dark_aqua>护甲值: <green>60'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+

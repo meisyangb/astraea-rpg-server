@@ -1,0 +1,79 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 第三层怪物装备.yml
+# ========================================
+
+幻界魔族士兵金剑:
+  Id: GOLDEN_SWORD
+  Display: '<green>木剑'
+  Lore:
+  - '<dark_aqua>攻击力: <green>120'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+幻界魔族战将金剑:
+  Id: GOLDEN_SWORD
+  Display: '<green>木剑'
+  Lore:
+  - '<dark_aqua>攻击力: <green>150'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+幻界炎狱幽灵弓:
+  Id: IRON_SWORD
+  Display: '<green>弓'
+  Lore:
+  - '<dark_aqua>攻击力: <green>200'
+  - '<dark_aqua>燃烧: <green>5'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+幻界炎狱大恶魔弓:
+  Id: IRON_SWORD
+  Display: '<green>弓'
+  Lore:
+  - '<dark_aqua>攻击力: <green>500'
+  - '<dark_aqua>燃烧: <green>5'
+  - '<dark_aqua>暴击几率: <green>3'
+  - '<dark_aqua>暴击伤害: <green>200'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+堕天之翼铁剑:
+  Id: IRON_SWORD
+  Display: '<green>木剑'
+  Lore:
+  - '<dark_aqua>攻击力: <green>3000'
+  - '<dark_aqua>燃烧: <green>5'
+  - '<dark_aqua>暴击几率: <green>5'
+  - '<dark_aqua>暴击伤害: <green>400'
+  - '<dark_aqua>中毒: <green>3'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+恶魔圣者-伊特拉苏金剑:
+  Id: GOLDEN_SWORD
+  Display: '<green>木剑'
+  Lore:
+  - '<dark_aqua>攻击力: <green>800'
+  - '<dark_aqua>燃烧: <green>5'
+  - '<dark_aqua>暴击几率: <green>3'
+  - '<dark_aqua>暴击伤害: <green>200'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+幻界魔族统帅钻石剑:
+  Id: DIAMOND_SWORD
+  Display: '<green>弓'
+  Lore:
+  - '<dark_aqua>攻击力: <green>400'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+

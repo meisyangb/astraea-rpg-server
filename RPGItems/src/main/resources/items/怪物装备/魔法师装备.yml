@@ -1,0 +1,40 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 魔法师装备.yml
+# ========================================
+
+魔法师皮帽:
+  Id: LEATHER_HELMET
+  Display: '<green>魔法师皮帽'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+魔法师皮甲:
+  Id: LEATHER_CHESTPLATE
+  Display: '<green>魔法师甲'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+魔法师皮裤:
+  Id: LEATHER_LEGGINGS
+  Display: '<green>魔法师裤'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+魔法师皮靴:
+  Id: LEATHER_BOOTS
+  Display: '<green>魔法师靴'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+魔法师法仗:
+  Id: STICK
+  Display: '<green>魔法师法仗'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+

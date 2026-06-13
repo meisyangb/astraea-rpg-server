@@ -1,0 +1,38 @@
+﻿settings:
+  language: zh_cn
+  debug: false
+  auto-save-interval: 6000
+  default-world: world
+
+world-defaults:
+  keep-spawn-in-memory: false
+  auto-save: true
+  difficulty: normal
+  gamemode: survival
+  pvp: true
+  allow-flight: false
+  allow-weather: true
+  hunger: true
+  do-mob-spawning: true
+  do-fire-tick: true
+  keep-inventory: false
+
+spawn-worlds:
+  first-spawn-world: spawn
+  first-spawn-override: true
+  join-destination: ''
+  respawn-in-overworld: true
+
+messages:
+  prefix: '<gold>[世界] <white>'
+  world-created: '<green>世界 {world} 已创建！'
+  world-deleted: '<red>世界 {world} 已删除！'
+  world-loaded: '<green>世界 {world} 已加载！'
+  world-unloaded: '<red>世界 {world} 已卸载！'
+  world-not-found: '<red>世界 {world} 不存在！'
+  world-already-exists: '<red>世界 {world} 已存在！'
+  teleport-success: '<green>已传送到世界 {world}！'
+  teleport-fail: '<red>传送失败！'
+  no-permission: '<red>你没有权限执行此操作！'
+  spawn-set: '<green>已设置世界 {world} 的出生点！'
+  player-only: '<red>此命令只能由玩家执行！'

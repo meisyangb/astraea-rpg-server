@@ -1,0 +1,177 @@
+﻿# ========================================
+# 光点侧边栏插件配置文件
+# GuangDianBoard Configuration
+# ========================================
+# 作者: Gumin
+# QQ: 2271257344
+# 版本: 1.0.0
+# ========================================
+
+# ========================================
+# 基础设置
+# ========================================
+enabled: true
+
+# 刷新间隔 (毫秒)
+# 推荐值: 1000-5000 (1-5秒)
+# 太短可能导致性能问题
+refresh-interval: 1000
+
+# 标题刷新间隔 (毫秒)
+# 用于动画效果，0表示禁用动画
+title-refresh-interval: 3000
+
+# ========================================
+# 侧边栏标题
+# ========================================
+title: "<gold><bold>光点RPG"
+
+# 标题动画 (如果启用)
+title-animation:
+  enabled: false
+  frames:
+    - "<gold><bold>光点RPG"
+    - "<yellow><bold>光点RPG"
+    - "<white><bold>光点RPG"
+    - "<yellow><bold>光点RPG"
+
+# ========================================
+# 侧边栏内容
+# ========================================
+# 支持的占位符:
+# PlaceholderAPI: %xxx%
+# 内置: %player%, %player_name%, %world%, %online%, %max_players%
+#       %player_level%, %player_health%, %player_max_health%
+#       %player_food%, %player_exp%, %player_ping%
+# LuckPerms: %luckperms_prefix%, %luckperms_suffix%, %luckperms_primary_group_name%
+# Vault: %vault_eco_balance%, %vault_eco_balance_formatted%
+
+lines:
+  - ""
+  - "<yellow><bold>玩家信息"
+  - "<gray>昵称: <white>%player_name%"
+  - "<gray>等级: <aqua>Lv.%player_level%"
+  - "<gray>称号: %luckperms_prefix%"
+  - "<gray>生命: <red>%player_health%/%player_max_health%❤"
+  - "<gray>饱食: <gold>%player_food%🍖"
+  - ""
+  - "<yellow><bold>服务器信息"
+  - "<gray>在线: <green>%server_online%<gray>/<green>%server_max_players%"
+  - "<gray>TPS: <green>%server_tps_1%"
+  - "<gray>世界: <aqua>%world%"
+  - ""
+  - "<yellow><bold>经济信息"
+  - "<gray>金币: <gold>%vault_eco_balance_formatted%"
+  - ""
+  - "<gray>输入 <yellow>/toggleboard <gray>关闭"
+
+# ========================================
+# 权限组特殊格式
+# ========================================
+# 不同权限组的玩家可以显示不同的侧边栏
+# 如果没有匹配的权限组，则使用上面的默认lines
+
+group-boards:
+  admin:
+    enabled: true
+    title: "<red><bold>管理员面板"
+    lines:
+      - ""
+      - "<red><bold>管理员信息"
+      - "<gray>昵称: <white>%player_name%"
+      - "<gray>权限组: <red>%luckperms_primary_group_name%"
+      - ""
+      - "<red><bold>服务器状态"
+      - "<gray>在线: <green>%server_online%<gray>/<green>%server_max_players%"
+      - "<gray>TPS: <green>%server_tps_1%"
+      - "<gray>内存: <green>%server_ram_used%MB"
+      - ""
+      - "<gray>输入 <yellow>/toggleboard <gray>关闭"
+  
+  vip:
+    enabled: true
+    title: "<gold><bold>VIP面板"
+    lines:
+      - ""
+      - "<gold><bold>VIP玩家"
+      - "<gray>昵称: <white>%player_name%"
+      - "<gray>等级: <aqua>Lv.%player_level%"
+      - "<gray>称号: %luckperms_prefix%"
+      - ""
+      - "<gold><bold>VIP特权"
+      - "<gray>金币加成: <green>+20%"
+      - "<gray>经验加成: <green>+15%"
+      - ""
+      - "<gray>输入 <yellow>/toggleboard <gray>关闭"
+
+# ========================================
+# 世界别名
+# ========================================
+# 将世界名称翻译成中文
+world-aliases:
+  world: "主世界"
+  world_nether: "下界"
+  world_the_end: "末地"
+  spawn: "出生点"
+  spawn22: "大厅"
+
+# ========================================
+# 消息设置
+# ========================================
+messages:
+  no-permission: "<red>您没有权限执行此操作!"
+  config-reloaded: "<green>侧边栏配置已重新加载!"
+  board-enabled: "<green>侧边栏已启用!"
+  board-disabled: "<red>侧边栏已关闭!"
+  board-toggle-reminder: "<yellow>提示: 使用 /toggleboard 可以重新开启侧边栏"
+
+# ========================================
+# 高级设置
+# ========================================
+advanced:
+  # 调试模式
+  debug: false
+  
+  # 自动隐藏世界 (在这些世界不显示侧边栏)
+  hidden-worlds: []
+  
+  # 下蹲时隐藏侧边栏
+  hide-when-sneaking: false
+  
+  # 战斗时隐藏侧边栏
+  hide-in-combat: false
+  
+  # 保存玩家侧边栏开关状态
+  remember-toggle-state: true
+  
+  # 默认显示侧边栏 (新玩家)
+  show-by-default: true
+  
+  # 空行最大数量 (Minecraft限制最多15行)
+  max-lines: 15
+
+# ========================================
+# 占位符默认值
+# ========================================
+# 当占位符无法解析时显示的默认值
+placeholder-defaults:
+  luckperms_prefix: "<gray>[玩家]"
+  luckperms_suffix: ""
+  luckperms_primary_group_name: "default"
+  vault_eco_balance: "0"
+  vault_eco_balance_formatted: "0金币"
+  server_tps_1: "20.0"
+  server_ram_used: "0"
+
+# ========================================
+# 样式设置
+# ========================================
+style:
+  # 分隔线样式
+  separator: "<gray>──────────────"
+  
+  # 是否显示分隔线
+  show-separator: true
+  
+  # 分隔线位置 (top, bottom, both, none)
+  separator-position: "both"

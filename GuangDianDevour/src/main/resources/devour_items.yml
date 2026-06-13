@@ -1,0 +1,128 @@
+# ========================================
+# 吞噬剑 MythicMobs 配置
+# ========================================
+# 这些是吞噬剑的物品定义
+# 玩家可以通过 MythicMobs 获取这些武器
+# ========================================
+
+吞噬之刃·初阶:
+  Id: DIAMOND_SWORD
+  Display: "<dark_red>吞噬之刃·初阶"
+  Lore:
+  - "<yellow>吞噬武器               <dark_purple>史诗"
+  - "<dark_red><strikethrough>－－－－－－－－－－－－"
+  - "<dark_gray>攻击力： <aqua>500-800"
+  - "<dark_gray>暴击几率： <aqua>8%"
+  - "<dark_gray>暴击伤害： <aqua>60%"
+  - "<dark_gray>命中： <aqua>5%"
+  - "<dark_red><strikethrough>－－－－－－－－－－－－"
+  - "<gray>可吞噬其他武器获得其属性"
+  - "<gray>每个槽位只能吞噬一次"
+  - "<dark_red><strikethrough>－－－－－－－－－－－－"
+  - "<dark_gray>吞噬槽位： <aqua>3"
+  - "<dark_red>[<gray> 吞噬槽位1 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位2 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位3 <dark_aqua>] <green>空"
+  - "<dark_red><strikethrough>－－－－－－－－－－－－"
+  - "<dark_purple>吞噬武器"
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+吞噬之刃·中阶:
+  Id: DIAMOND_SWORD
+  Display: "<dark_red>吞噬之刃·中阶"
+  Lore:
+  - "<yellow>吞噬武器               <light_purple>传说"
+  - "<dark_red><strikethrough>－－－－－－－－－－－－"
+  - "<dark_gray>攻击力： <aqua>1200-1800"
+  - "<dark_gray>暴击几率： <aqua>12%"
+  - "<dark_gray>暴击伤害： <aqua>90%"
+  - "<dark_gray>命中： <aqua>8%"
+  - "<dark_gray>吸血几率： <aqua>5%"
+  - "<dark_gray>吸血倍率： <aqua>15%"
+  - "<dark_red><strikethrough>－－－－－－－－－－－－"
+  - "<gray>可吞噬其他武器获得其属性"
+  - "<gray>每个槽位只能吞噬一次"
+  - "<dark_red><strikethrough>－－－－－－－－－－－－"
+  - "<dark_gray>吞噬槽位： <aqua>5"
+  - "<dark_red>[<gray> 吞噬槽位1 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位2 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位3 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位4 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位5 <dark_aqua>] <green>空"
+  - "<dark_red><strikethrough>－－－－－－－－－－－－"
+  - "<dark_purple>吞噬武器"
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+吞噬之刃·高阶:
+  Id: NETHERITE_SWORD
+  Display: "<red><bold>吞噬之刃·高阶"
+  Lore:
+  - "<yellow>吞噬武器               <gold>远古传说"
+  - "<dark_red><strikethrough>－－－－－－－－－－－－"
+  - "<dark_gray>攻击力： <aqua>3000-5000"
+  - "<dark_gray>暴击几率： <aqua>18%"
+  - "<dark_gray>暴击伤害： <aqua>130%"
+  - "<dark_gray>命中： <aqua>12%"
+  - "<dark_gray>吸血几率： <aqua>10%"
+  - "<dark_gray>吸血倍率： <aqua>25%"
+  - "<dark_gray>穿透： <aqua>8%"
+  - "<dark_gray>破甲： <aqua>5%"
+  - "<dark_red><strikethrough>－－－－－－－－－－－－"
+  - "<gray>可吞噬其他武器获得其属性"
+  - "<gray>每个槽位只能吞噬一次"
+  - "<dark_red><strikethrough>－－－－－－－－－－－－"
+  - "<dark_gray>吞噬槽位： <aqua>7"
+  - "<dark_red>[<gray> 吞噬槽位1 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位2 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位3 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位4 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位5 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位6 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位7 <dark_aqua>] <green>空"
+  - "<dark_red><strikethrough>－－－－－－－－－－－－"
+  - "<dark_purple>吞噬武器"
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+吞噬魔剑·传说:
+  Id: NETHERITE_SWORD
+  Display: "<dark_red><bold>吞噬魔剑·传说"
+  Lore:
+  - "<yellow>吞噬武器               <dark_red>神器"
+  - "<dark_red><strikethrough>－－－－－－－－－－－－"
+  - "<dark_gray>攻击力： <aqua>8000-12000"
+  - "<dark_gray>暴击几率： <aqua>25%"
+  - "<dark_gray>暴击伤害： <aqua>200%"
+  - "<dark_gray>命中： <aqua>20%"
+  - "<dark_gray>吸血几率： <aqua>15%"
+  - "<dark_gray>吸血倍率： <aqua>40%"
+  - "<dark_gray>穿透： <aqua>15%"
+  - "<dark_gray>破甲： <aqua>10%"
+  - "<dark_gray>真实伤害： <aqua>8%"
+  - "<dark_gray>冰冻： <aqua>10%"
+  - "<dark_gray>致盲： <aqua>10%"
+  - "<dark_red><strikethrough>－－－－－－－－－－－－"
+  - "<gray>可吞噬其他武器获得其属性"
+  - "<gray>每个槽位只能吞噬一次"
+  - "<dark_red><strikethrough>－－－－－－－－－－－－"
+  - "<dark_gray>吞噬槽位： <aqua>10"
+  - "<dark_red>[<gray> 吞噬槽位1 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位2 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位3 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位4 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位5 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位6 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位7 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位8 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位9 <dark_aqua>] <green>空"
+  - "<dark_red>[<gray> 吞噬槽位10 <dark_aqua>] <green>空"
+  - "<dark_red><strikethrough>－－－－－－－－－－－－"
+  - "<dark_purple>吞噬武器"
+  Options:
+    Unbreakable: true
+    HideAttributes: true

@@ -1,0 +1,33 @@
+# ========================================
+# GuangDianParticleBlocker 粒子屏蔽配置
+# ========================================
+# 使用 ProtocolLib 拦截粒子数据包
+#
+# 推荐流程：
+#   1. 先开启 monitor-mode: true，查看日志中出现的粒子名
+#   2. 根据日志结果配置 whitelist
+#   3. 关闭 monitor-mode，开启 whitelist-mode: true
+# ========================================
+
+global:
+  # 全局屏蔽所有粒子
+  block-all: false
+
+  # 监听模式：不屏蔽任何粒子，只记录所有粒子名到日志
+  # 开启后可查看服务器实际出现的粒子名列表
+  # 发现完毕后设为 false，再配置白名单
+  monitor-mode: false
+
+  # 白名单模式
+  # true: 只显示白名单中的粒子
+  # false: 屏蔽黑名单中的粒子
+  whitelist-mode: false
+
+  # 是否启用玩家个人屏蔽设置
+  per-player-enabled: true
+
+# 黑名单模式：屏蔽这些粒子
+blocked-types: []
+
+# 白名单模式：只显示这些粒子
+whitelist: []

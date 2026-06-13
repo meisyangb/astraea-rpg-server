@@ -1,0 +1,258 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 怪物掉落兑换2.yml
+# ========================================
+
+恶魔结晶:
+  Id: BRICKS
+  Display: '<blue>恶魔结晶'
+  Lore:
+  - '<white>材料                   稀有'
+  - '<yellow>可以用于兑换'
+  - '<yellow>幻界前线战场BOSS装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+营长魔化长剑:
+  Id: DIAMOND_SWORD
+  Display: '<blue>营长魔化长剑'
+  Lore:
+  - '<white>近战武器                 稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力： <aqua>40-400'
+  - '<dark_gray>招架： <aqua>5%'
+  - '<dark_gray>暴击几率： <aqua>10%'
+  - '<dark_gray>暴击伤害： <aqua>110%'
+  - '<dark_gray>吸血几率： <aqua>6.5%'
+  - '<dark_gray>吸血倍率： <aqua>20%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>10'
+  - '<dark_gray>评分： <red>150'
+  - '<yellow>被魔化的营长武器'
+  - '<dark_purple>一阶装备'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 40.0
+    AttackMax: 400.0
+    ParryChance: 5.0
+    CritChance: 10.0
+    CritDamage: 110.0
+    LifestealChance: 6.5
+    LifestealMultiplier: 20.0
+    Level: 10
+
+营长魔化铠甲:
+  Id: DIAMOND_CHESTPLATE
+  Display: '<blue>营长魔化铠甲'
+  Lore:
+  - '<white>防具                   稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>15%'
+  - '<dark_gray>生命上限： <aqua>1500'
+  - '<green>生命恢复： <light_purple>1%'
+  - '<dark_gray>攻击力： <aqua>10-50'
+  - '<dark_gray>每秒回血： <aqua>5'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>10'
+  - '<dark_gray>评分： <red>150'
+  - '<yellow>被魔化的营长铠甲'
+  - '<dark_purple>一阶装备'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 1500.0
+    AttackMin: 10.0
+    AttackMax: 50.0
+    HealthRegen: 5.0
+    Level: 10
+
+营长魔化护腿:
+  Id: DIAMOND_LEGGINGS
+  Display: '<blue>营长魔化护腿'
+  Lore:
+  - '<white>防具                   稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>10%'
+  - '<dark_gray>生命上限： <aqua>1200'
+  - '<green>生命恢复： <light_purple>1%'
+  - '<dark_gray>闪避： <aqua>2.5%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>10'
+  - '<dark_gray>评分： <red>150'
+  - '<yellow>被魔化的营长护腿'
+  - '<dark_purple>一阶装备'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 10.0
+    MaxHealth: 1200.0
+    DodgeChance: 2.5
+    Level: 10
+
+营长魔化战靴:
+  Id: DIAMOND_BOOTS
+  Display: '<blue>营长魔化战靴'
+  Lore:
+  - '<white>防具                   稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>10%'
+  - '<dark_gray>生命上限： <aqua>800'
+  - '<green>生命恢复： <light_purple>1%'
+  - '<dark_gray>闪避： <aqua>2.5%'
+  - '<dark_gray>移动速度： <aqua>15%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>10'
+  - '<dark_gray>评分： <red>150'
+  - '<yellow>被魔化的营长战靴'
+  - '<dark_purple>一阶装备'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 10.0
+    MaxHealth: 800.0
+    DodgeChance: 2.5
+    MoveSpeed: 15.0
+    Level: 10
+
+恶魔统领幻界魔剑:
+  Id: DIAMOND_SWORD
+  Display: '<blue>恶魔统领幻界魔剑'
+  Lore:
+  - '<white>近战武器                   稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力： <aqua>50-650'
+  - '<dark_gray>招架： <aqua>5%'
+  - '<dark_gray>暴击几率： <aqua>12.5%'
+  - '<dark_gray>暴击伤害： <aqua>120%'
+  - '<dark_gray>吸血几率： <aqua>5%'
+  - '<dark_gray>吸血倍率： <aqua>20%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>10'
+  - '<dark_gray>评分： <red>200'
+  - '<yellow>恶魔统领使用的魔剑'
+  - '<dark_purple>二阶装备'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 50.0
+    AttackMax: 650.0
+    ParryChance: 5.0
+    CritChance: 12.5
+    CritDamage: 120.0
+    LifestealChance: 5.0
+    LifestealMultiplier: 20.0
+    Level: 10
+
+恶魔统领幻界布甲:
+  Id: LEATHER_CHESTPLATE
+  Display: '<blue>恶魔统领幻界布甲'
+  Lore:
+  - '<white>防具                   稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>15%'
+  - '<dark_gray>生命上限： <aqua>3000'
+  - '<green>生命恢复： <light_purple>1%'
+  - '<dark_gray>攻击力： <aqua>15-65'
+  - '<dark_gray>每秒回血： <aqua>7'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>10'
+  - '<dark_gray>评分： <red>200'
+  - '<yellow>恶魔统领穿戴的魔力布甲'
+  - '<dark_purple>二阶装备'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 3000.0
+    AttackMin: 15.0
+    AttackMax: 65.0
+    HealthRegen: 7.0
+    Level: 10
+
+恶魔统领幻界绑腿:
+  Id: LEATHER_LEGGINGS
+  Display: '<blue>恶魔统领幻界绑腿'
+  Lore:
+  - '<white>防具                   稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>10%'
+  - '<dark_gray>生命上限： <aqua>2500'
+  - '<green>生命恢复： <light_purple>1%'
+  - '<dark_gray>闪避： <aqua>2.5%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>10'
+  - '<dark_gray>评分： <red>200'
+  - '<yellow>恶魔统领穿戴的魔力绑腿'
+  - '<dark_purple>二阶装备'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 10.0
+    MaxHealth: 2500.0
+    DodgeChance: 2.5
+    Level: 10
+
+恶魔统领幻界布靴:
+  Id: LEATHER_BOOTS
+  Display: '<blue>恶魔统领幻界布靴'
+  Lore:
+  - '<white>防具                   稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度： <aqua>10%'
+  - '<dark_gray>生命上限： <aqua>2000'
+  - '<green>生命恢复： <light_purple>1%'
+  - '<dark_gray>闪避： <aqua>2.5%'
+  - '<dark_gray>移动速度： <aqua>15%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>10'
+  - '<dark_gray>评分： <red>200'
+  - '<yellow>恶魔统领穿戴的魔力布靴'
+  - '<dark_purple>二阶装备'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 10.0
+    MaxHealth: 2000.0
+    DodgeChance: 2.5
+    MoveSpeed: 15.0
+    Level: 10
+

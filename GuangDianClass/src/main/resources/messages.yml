@@ -1,0 +1,66 @@
+# Astraea RPG 职业系统消息
+# 使用 MiniMessage 格式 (<color> 替代 <red>olor)
+
+messages:
+  prefix: "<gold>[职业系统] <reset>"
+  
+  info:
+    header: "<gold>========== 职业信息 =========="
+    class: "<yellow>职业: <white>%class%"
+    tier: "<yellow>阶位: <white>%tier%阶"
+    exp: "<yellow>经验: <white>%exp%/%max_exp%"
+    total-exp: "<yellow>总经验: <white>%total_exp%"
+    advancement: "<yellow>转职: <white>%advancement%"
+    next-class: "<yellow>可转职: <white>%next_classes%"
+    footer: "<gold>=============================="
+    
+  advancement:
+    first: "一转"
+    second: "二转"
+    third: "三转"
+    divine: "神级突破"
+    
+  errors:
+    no-permission: "<red>你没有权限执行此操作!"
+    player-not-found: "<red>玩家不存在或不在线!"
+    class-not-found: "<red>职业不存在!"
+    not-enough-exp: "<red>经验不足，无法升级!"
+    not-enough-tier: "<red>阶位不足，需要 %required_tier% 阶!"
+    already-max-tier: "<red>已达最高阶位!"
+    already-max-advancement: "<red>已达最高转职等级!"
+    cannot-advance: "<red>不满足转职条件!"
+    no-class: "<red>你还没有选择职业!"
+    already-has-class: "<red>你已经拥有职业!"
+    invalid-class: "<red>无效的职业选择!"
+    requirement-not-met: "<red>未满足转职要求: %requirement%"
+    
+  success:
+    class-chosen: "<green>成功选择职业: %class%!"
+    tier-up: "<green>恭喜！阶位提升至 %tier% 阶!"
+    advancement-up: "<light_purple>★ 恭喜转职成功！新职业: %class% ★"
+    divine-ascension: "<gold>★ 神级突破成功！你已成为 %class%！★"
+    exp-added: "<green>获得 %amount% 点职业经验!"
+    exp-set: "<green>经验已设置为 %amount%!"
+    class-set: "<green>职业已设置为 %class%!"
+    reset: "<green>职业数据已重置!"
+    config-reloaded: "<green>配置已重新加载!"
+    afk-exp: "<aqua>[挂机] <green>获得 %amount% 点职业经验"
+    
+  help:
+    header: "<gold>========== 职业系统帮助 =========="
+    info: "<yellow>/class info [玩家] <gray>- 查看职业信息"
+    choose: "<yellow>/class choose <职业> <gray>- 选择职业"
+    advance: "<yellow>/class advance <gray>- 进行转职"
+    reset: "<yellow>/class reset <gray>- 重置职业"
+    help: "<yellow>/class help <gray>- 显示帮助"
+    admin-header: "<gold>========== 管理员命令 =========="
+    admin-set: "<yellow>/classadmin set <玩家> <职业> <gray>- 设置职业"
+    admin-addexp: "<yellow>/classadmin addexp <玩家> <数量> <gray>- 增加经验"
+    admin-setexp: "<yellow>/classadmin setexp <玩家> <数量> <gray>- 设置经验"
+    admin-reload: "<yellow>/classadmin reload <gray>- 重载配置"
+    footer: "<gold>================================"
+    
+  class-list:
+    header: "<gold>========== 可选职业 =========="
+    format: "<yellow>%id% <gray>- <white>%name% <gray>%description%"
+    footer: "<gold>使用 /class choose <职业ID> 选择职业"

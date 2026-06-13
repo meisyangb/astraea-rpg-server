@@ -1,0 +1,46 @@
+messages:
+  success:
+    prefix: "<green>[强化] "
+    enhance_success: "<green>强化成功! <yellow>强化等级: <bold>+{level}</bold>"
+    attribute_bonus: "<aqua>属性加成: +{bonus}%"
+  
+  failure:
+    prefix: "<red>[强化] "
+    enhance_failed: "<red>强化失败"
+    level_degrade: "<red>强化失败，等级下降至 <bold>+{level}</bold>"
+    item_destroyed: "<dark_red>强化失败，装备已破碎!"
+    protection_saved: "<yellow>强化失败，但保护符保护了装备!"
+  
+  error:
+    prefix: "<dark_red>[强化错误] "
+    not_enhanceable: "<red>该物品无法强化"
+    insufficient_material: "<red>材料不足，无法强化"
+    insufficient_money: "<red>金币不足，无法强化"
+    max_level_reached: "<red>已达到最高强化等级"
+    in_cooldown: "<red>强化冷却中，请稍后再试"
+    invalid_item: "<red>请手持装备进行操作"
+  
+  info:
+    header: "<gold>========== 强化信息 =========="
+    item_name: "<yellow>物品: <white>{item}"
+    level: "<yellow>强化等级: <green>+{level}"
+    bonus: "<yellow>属性加成: <aqua>{bonus}%"
+    success_rate: "<yellow>下次成功率: <white>{rate}%"
+    can_enhance: "<yellow>可强化: <green>是"
+    max_level: "<yellow>可强化: <red>已达最高等级"
+    footer: "<gold>================================"
+  
+  help:
+    header: "<gold>========== 强化系统帮助 =========="
+    info: "<yellow>/enhance info <white>- 查看手持装备强化信息"
+    enhance: "<yellow>/enhance enhance <white>- 强化手持装备"
+    setlevel: "<yellow>/enhance setlevel <等级> <white>- 设置强化等级"
+    reset: "<yellow>/enhance reset <white>- 重置强化等级"
+    reload: "<yellow>/enhance reload <white>- 重载配置"
+    footer: "<gold>===================================="
+  
+  admin:
+    config_reloaded: "<green>配置已重新加载"
+    level_set: "<green>已将装备强化等级设置为 <bold>+{level}</bold>"
+    level_reset: "<green>已重置装备强化等级"
+    no_permission: "<red>你没有权限执行此命令"

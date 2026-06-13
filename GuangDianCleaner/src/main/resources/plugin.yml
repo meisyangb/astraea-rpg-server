@@ -1,0 +1,41 @@
+name: GuangDianCleaner
+version: 1.0.0
+main: cn.guangdian.cleaner.GuangDianCleaner
+author: Gumin
+description: 光点扫地娘 - 高性能地面掉落物清理插件
+api-version: '1.21'
+
+# 插件依赖
+softdepend:
+  - RPGCore
+
+commands:
+  gdclean:
+    description: 扫地娘主命令
+    usage: /gdclean <clean|toggle|status|stats|reload|help>
+    permission: gdclean.use
+    aliases:
+      - cleaner
+      - saoDiNiang
+
+permissions:
+  gdclean.use:
+    description: 基础使用权限
+    default: true
+  gdclean.clean:
+    description: 手动清理权限
+    default: op
+  gdclean.status:
+    description: 查看状态权限
+    default: true
+  gdclean.stats:
+    description: 查看统计权限
+    default: true
+  gdclean.admin:
+    description: 管理员权限
+    default: op
+    children:
+      gdclean.use: true
+      gdclean.clean: true
+      gdclean.status: true
+      gdclean.stats: true

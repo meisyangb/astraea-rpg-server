@@ -1,0 +1,63 @@
+﻿# GuangDianSoulBind 灵魂绑定配置
+# ================================
+# 版本: 1.0.0
+# 作者: Astraea RPG Team
+#
+# 修复记录:
+# - 2026-05-21: 添加 MiniMessage 支持，命令改为管理员/控制台执行
+# - 2026-05-21: 移除自动绑定功能，绑定只能由管理员手动执行
+#
+# 命令使用说明 (需要权限: guangdian.soulbind.admin):
+# /soulbind bind <玩家> [物品ID]  - 绑定玩家手持物品或给予新物品并绑定
+#   - 如果不指定物品ID: 绑定目标玩家当前手持的物品
+#   - 如果指定物品ID: 给予玩家该MythicMobs物品并绑定
+#   示例: /soulbind bind PlayerName
+#   示例: /soulbind bind PlayerName 传说之剑
+#
+# /soulbind unbind <玩家>         - 解绑目标玩家手持物品
+#   示例: /soulbind unbind PlayerName
+#
+# /soulbind info <玩家>           - 查看目标玩家手持物品的绑定信息
+#   示例: /soulbind info PlayerName
+#
+# /soulbind reload                - 重载配置文件
+#
+# 注意: 所有命令只能由管理员或控制台执行
+# 注意: 灵魂绑定只能由管理员手动操作，玩家无法通过任何方式自动绑定物品
+
+# 保护设置
+protection:
+  # 阻止丢弃绑定物品
+  prevent-drop: true
+  # 阻止放入容器
+  prevent-container: true
+  # 阻止交易
+  prevent-trade: true
+  # 死亡时保留绑定物品
+  keep-on-death: true
+
+# 消息设置 (支持 MiniMessage 格式)
+# 颜色代码: <red>, <green>, <yellow>, <blue>, <aqua>, <gold>, <gray>, <white> 等
+# 格式: <bold>, <italic>, <underlined>, <strikethrough>
+# 渐变: <gradient:red:blue>文字</gradient>
+# 悬浮提示: <hover:show_text:'提示文字'>文字</hover>
+# 点击事件: <click:run_command:'/命令'>文字</click>
+messages:
+  bind-success: "<green>物品已绑定到你的灵魂！"
+  already-bound: "<red>该物品已被绑定！"
+  not-bound: "<red>该物品未绑定！"
+  bound-by-other: "<red>该物品已被其他玩家绑定！"
+  cannot-drop: "<red>绑定物品无法丢弃！"
+  cannot-trade: "<red>绑定物品无法交易！"
+  cannot-container: "<red>绑定物品无法放入容器！"
+  no-permission: "<red>你没有权限执行此操作！"
+  not-mythic-item: "<red>该物品不是MythicMobs物品！"
+  player-not-found: "<red>玩家不存在或未在线！"
+
+# Lore格式
+lore-format:
+  # 绑定信息显示格式（%player% 会被替换为玩家名）
+  # 支持 MiniMessage 颜色代码
+  format: "<dark_gray>灵魂绑定：<white>%player%"
+  # 绑定信息在Lore中的位置（从底部开始，1=最后一行）
+  position: 1

@@ -1,0 +1,14 @@
+# 图鉴收集系统配置
+# 使用 MiniMessage 格式 (<color> 替代 §color)
+
+settings:
+  save-interval: 300
+
+messages:
+  prefix: "<gold>[图鉴] <reset>"
+  collected: "<green>成功收集: <yellow>{item} <gray>(<white>{current}<gray>/<white>{total}<gray>)"
+  category-complete: "<gold>恭喜! 你已完成 <yellow>{category} <gold>的收集!"
+  no-permission: "<red>你没有权限执行此操作"
+
+gui:
+  title: "图鉴收集"

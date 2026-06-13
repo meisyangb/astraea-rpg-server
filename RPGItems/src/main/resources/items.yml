@@ -1,0 +1,205 @@
+# ========================================
+# RPGItems 物品配置 - 简化版
+# 只需要：材质、显示名、Lore描述
+# ========================================
+
+# 新手木剑
+NoviceWoodenSword:
+  Id: WOODEN_SWORD
+  Display: '<white><bold>新手木剑'
+  Lore:
+  - '<yellow>近战武器                        普通'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>+5'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<gray>剑侍的启蒙之剑'
+  - '<gray>虽然简陋，却承载着梦想'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>装备等级: <aqua>1'
+  - '<dark_gray>需要职业: <green>剑侍'
+  - ''
+
+# 新手布衣
+NoviceTunic:
+  Id: LEATHER_CHESTPLATE
+  Display: '<white><bold>新手布衣'
+  Lore:
+  - '<yellow>防具                            普通'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>生命值: <aqua>+20'
+  - '<dark_gray>防御力: <aqua>+3'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<gray>简单的布制上衣'
+  - '<gray>提供基础的保护'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>装备等级: <aqua>1'
+  - '<dark_gray>需要职业: <green>剑侍'
+  - ''
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+# 剑侍铁剑
+ApprenticeIronSword:
+  Id: IRON_SWORD
+  Display: '<green><bold>剑侍铁剑'
+  Lore:
+  - '<yellow>近战武器                        优秀'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>+12'
+  - '<dark_gray>攻击速度: <aqua>+5%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<gray>经过锻造的铁剑'
+  - '<gray>剑道修行者的标准装备'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>装备等级: <aqua>11'
+  - '<dark_gray>需要职业: <green>剑侍'
+  - ''
+
+# 剑侍轻甲
+ApprenticeArmor:
+  Id: CHAINMAIL_CHESTPLATE
+  Display: '<green><bold>剑侍轻甲'
+  Lore:
+  - '<yellow>防具                            优秀'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>生命值: <aqua>+50'
+  - '<dark_gray>防御力: <aqua>+8'
+  - '<dark_gray>移动速度: <aqua>+2%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<gray>轻便的锁子甲'
+  - '<gray>平衡防护与灵活性'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>装备等级: <aqua>11'
+  - '<dark_gray>需要职业: <green>剑侍'
+  - ''
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+# 剑卫长剑
+GuardianLongSword:
+  Id: IRON_SWORD
+  Display: '<aqua><bold>剑卫长剑'
+  Lore:
+  - '<yellow>近战武器                        稀有'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>+25'
+  - '<dark_gray>攻击速度: <aqua>+8%'
+  - '<dark_gray>暴击率: <aqua>+5%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<gray>精炼的长剑'
+  - '<gray>剑卫的标志性武器'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>装备等级: <aqua>21'
+  - '<dark_gray>需要职业: <green>剑卫'
+  - ''
+
+# 剑卫战甲
+GuardianBattleArmor:
+  Id: IRON_CHESTPLATE
+  Display: '<aqua><bold>剑卫战甲'
+  Lore:
+  - '<yellow>防具                            稀有'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>生命值: <aqua>+100'
+  - '<dark_gray>防御力: <aqua>+15'
+  - '<dark_gray>生命恢复: <aqua>+1'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<gray>坚固的铁制战甲'
+  - '<gray>提供优秀的防护能力'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>装备等级: <aqua>21'
+  - '<dark_gray>需要职业: <green>剑卫'
+  - ''
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+# 剑师精钢剑
+MasterSteelSword:
+  Id: DIAMOND_SWORD
+  Display: '<light_purple><bold>剑师精钢剑'
+  Lore:
+  - '<yellow>近战武器                        史诗'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>+45'
+  - '<dark_gray>攻击速度: <aqua>+12%'
+  - '<dark_gray>暴击率: <aqua>+10%'
+  - '<dark_gray>暴击伤害: <aqua>+15%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<gray>精钢锻造的利剑'
+  - '<gray>剑道大师的象征'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>装备等级: <aqua>31'
+  - '<dark_gray>需要职业: <green>剑师'
+  - ''
+
+# 剑师战甲
+MasterBattleArmor:
+  Id: DIAMOND_CHESTPLATE
+  Display: '<light_purple><bold>剑师战甲'
+  Lore:
+  - '<yellow>防具                            史诗'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>生命值: <aqua>+200'
+  - '<dark_gray>防御力: <aqua>+25'
+  - '<dark_gray>生命恢复: <aqua>+2'
+  - '<dark_gray>格挡率: <aqua>+8%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<gray>精良的钻石战甲'
+  - '<gray>剑道大师的荣耀'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>装备等级: <aqua>31'
+  - '<dark_gray>需要职业: <green>剑师'
+  - ''
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+# 大剑师传说之剑
+GrandmasterLegendarySword:
+  Id: DIAMOND_SWORD
+  Display: '<gold><bold>大剑师传说之剑'
+  Lore:
+  - '<yellow>近战武器                        传说'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<gold>★ 传说装备 ★'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>+80'
+  - '<dark_gray>攻击速度: <aqua>+15%'
+  - '<dark_gray>暴击率: <aqua>+15%'
+  - '<dark_gray>暴击伤害: <aqua>+25%'
+  - '<dark_gray>生命偷取: <aqua>+5%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<gray>传说中的神兵利器'
+  - '<gray>剑道巅峰的证明'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>装备等级: <aqua>41'
+  - '<dark_gray>需要职业: <green>大剑师'
+  - ''
+
+# 大剑师传说战甲
+GrandmasterLegendaryArmor:
+  Id: NETHERITE_CHESTPLATE
+  Display: '<gold><bold>大剑师传说战甲'
+  Lore:
+  - '<yellow>防具                            传说'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<gold>★ 传说装备 ★'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>生命值: <aqua>+400'
+  - '<dark_gray>防御力: <aqua>+40'
+  - '<dark_gray>生命恢复: <aqua>+3'
+  - '<dark_gray>格挡率: <aqua>+15%'
+  - '<dark_gray>减伤: <aqua>+10%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<gray>传说中的完美战甲'
+  - '<gray>剑道大师的终极装备'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>装备等级: <aqua>41'
+  - '<dark_gray>需要职业: <green>大剑师'
+  - ''
+  Options:
+    Unbreakable: true
+    HideAttributes: true

@@ -1,0 +1,27 @@
+name: GuangDianVillagerTrade
+version: 1.0.0
+main: cn.guangdian.villagertrade.GuangDianVillagerTrade
+api-version: '1.21'
+dependencies:  - name: PlaceholderAPI
+    required: false
+    bootstrap: false
+author: Astraea RPG Team
+description: 村民专用兑换系统 - 使用原版村民交易界面
+commands:
+  villagertrade:
+    description: 村民兑换系统主命令
+    usage: /villagertrade <配方名称>
+    aliases: [vtrade, vt]
+    permission: villagertrade.use
+  villagertradeadmin:
+    description: 村民兑换系统管理命令
+    usage: /villagertradeadmin <reload/list>
+    aliases: [vtadmin, vta]
+    permission: villagertrade.admin
+permissions:
+  villagertrade.use:
+    description: 允许使用村民兑换系统
+    default: true
+  villagertrade.admin:
+    description: 允许管理村民兑换系统
+    default: op

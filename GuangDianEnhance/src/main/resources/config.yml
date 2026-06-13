@@ -1,0 +1,64 @@
+enhance:
+  max_level: 15
+  
+  success_rate:
+    base: 1.0
+    decay_factor: 0.05
+    min_rate: 0.01
+  
+  failure:
+    type: degrade
+    degrade_chance: 0.5
+    destroy_chance: 0.0
+  
+  attribute_bonus:
+    type: multiplier
+    per_level: 0.1
+  
+  materials:
+    "1-5":
+      - "DIAMOND:1"
+    "6-10":
+      - "DIAMOND:3"
+      - "EMERALD:1"
+    "11-15":
+      - "DIAMOND:5"
+      - "EMERALD:3"
+      - "NETHERITE_INGOT:1"
+  
+  money_cost:
+    base: 0
+    multiplier: 1.5
+  
+  protection_charm:
+    enabled: true
+    item: "NETHER_STAR"
+    consume_on_fail: true
+  
+  enhanceable:
+    keywords:
+      - "攻击力"
+      - "防御力"
+      - "生命上限"
+      - "暴击几率"
+    materials:
+      - "DIAMOND_SWORD"
+      - "NETHERITE_SWORD"
+      - "DIAMOND_AXE"
+      - "NETHERITE_AXE"
+      - "DIAMOND_HELMET"
+      - "DIAMOND_CHESTPLATE"
+      - "DIAMOND_LEGGINGS"
+      - "DIAMOND_BOOTS"
+      - "NETHERITE_HELMET"
+      - "NETHERITE_CHESTPLATE"
+      - "NETHERITE_LEGGINGS"
+      - "NETHERITE_BOOTS"
+  
+  cooldown_ms: 500
+  
+  pity:
+    enabled: true
+    threshold: 10
+    bonus_per_fail: 0.05
+    max_bonus: 0.5

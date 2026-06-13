@@ -1,0 +1,186 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 怪物掉落3.yml
+# ========================================
+
+魔剑卡拉特尔:
+  Id: GOLDEN_SWORD
+  Display: '<dark_purple>魔剑卡拉特尔'
+  Lore:
+  - '<aqua>隐藏武器                 史诗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>150-2500'
+  - '<dark_gray>招架: <aqua>5%'
+  - '<dark_gray>暴击几率: <aqua>20%'
+  - '<dark_gray>暴击伤害: <aqua>200%'
+  - '<dark_gray>吸血几率: <aqua>20%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>17'
+  - '<dark_gray>评分: <red>1000'
+  - '<yellow>堕落天使手持的魔剑'
+  - '<dark_purple>三阶装备'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 150.0
+    AttackMax: 2500.0
+    ParryChance: 5.0
+    CritChance: 20.0
+    CritDamage: 200.0
+    LifestealChance: 20.0
+    LifestealMultiplier: 20.0
+    Level: 17
+
+堕天圣铠:
+  Id: IRON_CHESTPLATE
+  Display: '<dark_purple>堕天圣铠'
+  Lore:
+  - '<aqua>隐藏防具                 史诗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>15000'
+  - '<dark_gray>攻击力: <aqua>150-300'
+  - '<dark_gray>燃烧: <aqua>2%'
+  - '<dark_gray>每秒回血: <aqua>50'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>17'
+  - '<dark_gray>评分: <red>1500'
+  - '<yellow>被堕落天使污染的圣铠'
+  - '<dark_purple>三阶装备'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 15000.0
+    AttackMin: 150.0
+    AttackMax: 300.0
+    HealthRegen: 50.0
+    Level: 17
+
+堕天护腿:
+  Id: IRON_LEGGINGS
+  Display: '<dark_purple>堕天护腿'
+  Lore:
+  - '<aqua>隐藏防具                 史诗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>15000'
+  - '<dark_gray>闪避: <aqua>2.5%'
+  - '<dark_gray>燃烧: <aqua>2%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>17'
+  - '<dark_gray>评分: <red>1500'
+  - '<yellow>被堕落天使污染的护腿'
+  - '<dark_purple>三阶装备'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 15000.0
+    DodgeChance: 2.5
+    Level: 17
+
+堕天战靴:
+  Id: IRON_BOOTS
+  Display: '<dark_purple>堕天战靴'
+  Lore:
+  - '<aqua>隐藏防具                   史诗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>15000'
+  - '<dark_gray>生命恢复: <aqua>1%'
+  - '<dark_gray>移动速度: <aqua>20%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>17'
+  - '<dark_gray>评分: <red>1500'
+  - '<yellow>被堕落天使污染的战靴'
+  - '<dark_purple>三阶装备'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<gray>*******<aqua>宝石镶嵌<gray>*******'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 15000.0
+    MoveSpeed: 20.0
+    Level: 17
+
+炎狱头颅:
+  Id: PAPER
+  Display: '<dark_aqua>炎狱头颅'
+  Lore:
+  - '<white>材料                   稀有'
+  - '<yellow>可以用于兑换'
+  - '<yellow>幻界魔族要塞头部装备'
+
+幻界炎狱魔盔:
+  Id: DIAMOND_HELMET
+  Display: '<dark_aqua>幻界炎狱魔盔'
+  Lore:
+  - '<white>特殊防具                  稀有'
+  - '<yellow>炎狱一族的头颅做成的头盔'
+  - '<dark_gray>生命上限: <aqua>5000'
+  - '<dark_gray>招架: <aqua>1%'
+  - '<dark_gray>闪避: <aqua>1%'
+  - '<dark_gray>攻击力: <aqua>5-10'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 5000.0
+    ParryChance: 1.0
+    DodgeChance: 1.0
+    AttackMin: 5.0
+    AttackMax: 10.0
+
+魔幻炎狱头盔:
+  Id: DIAMOND_HELMET
+  Display: '<dark_purple>魔幻炎狱头盔'
+  Lore:
+  - '<aqua>防具                    史诗'
+  - '<yellow>改进的炎狱头盔'
+  - '<dark_gray>生命上限: <aqua>6000'
+  - '<dark_gray>招架: <aqua>1%'
+  - '<dark_gray>闪避: <aqua>1%'
+  - '<dark_gray>攻击力: <aqua>10-15'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MaxHealth: 6000.0
+    ParryChance: 1.0
+    DodgeChance: 1.0
+    AttackMin: 10.0
+    AttackMax: 15.0
+

@@ -1,0 +1,25 @@
+name: GuangDianGearScore
+version: 1.0.0
+main: cn.guangdian.gearscore.GuangDianGearScore
+api-version: '1.21'
+author: Astraea RPG Team
+description: 装备评分系统
+
+softdepend:
+  - RPGCore
+  - PlaceholderAPI
+  - MythicMobs
+
+commands:
+  gearscore:
+    description: 装备评分命令
+    usage: /gearscore [top|reload|help]
+    aliases: [gs, score]
+
+permissions:
+  guangdian.gearscore.use:
+    description: 使用装备评分系统基本功能
+    default: true
+  guangdian.gearscore.admin:
+    description: 管理员权限
+    default: op

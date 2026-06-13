@@ -1,0 +1,197 @@
+﻿# ========================================
+# 光点物品触发插件配置文件
+# GuangDianItemTrigger Configuration
+# ========================================
+# 作者: Gumin
+# QQ: 2271257344
+# 版本: 1.0.0
+# ========================================
+
+# ========================================
+# 基础设置
+# ========================================
+enabled: true
+
+# 调试模式
+debug: false
+
+# ========================================
+# 触发器配置
+# ========================================
+# 通过物品描述(Lore)中的关键词触发动作
+# 
+# 触发类型:
+#   - right_click: 右键点击(空气/方块)
+#   - left_click: 左键点击(攻击)
+#   - shift_right_click: 潜行+右键
+#   - shift_left_click: 潜行+左键
+#   - consume: 食用物品
+#   - drop: 丢弃物品
+#   - pickup: 拾取物品
+#
+# 动作类型:
+#   - command: 执行命令 (玩家身份)
+#   - console: 执行命令 (控制台身份)
+#   - message: 发送消息
+#   - menu: 打开菜单 (需要GuangDianMenu插件)
+#   - sound: 播放声音
+#   - effect: 添加药水效果
+#   - teleport: 传送到指定位置
+#   - give: 给予物品
+#   - take: 扣除物品
+#   - damage: 对物品造成伤害
+#   - cooldown: 设置冷却时间
+# ========================================
+
+triggers:
+  # ========================================
+  # 菜单类触发器
+  # ========================================
+  菜单:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "菜单"
+    actions:
+      - "message:<yellow>正在打开菜单..."
+      - "menu:main"
+      - "sound:BLOCK_NOTE_BLOCK_PLING:1.0:1.0"
+    cooldown: 0
+    
+  主菜单:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "主菜单"
+    actions:
+      - "menu:main"
+    cooldown: 0
+    
+  世界传送菜单:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "世界传送"
+    actions:
+      - "menu:worlds"
+    cooldown: 0
+    
+  设置菜单:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "设置"
+    actions:
+      - "menu:settings"
+    cooldown: 0
+
+  # ========================================
+  # 传送类触发器
+  # ========================================
+  回城卷轴:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "回城卷轴"
+    actions:
+      - "message:<yellow>正在传送回出生点..."
+      - "console:mvtp %player_name% spawn22"
+      - "sound:ENTITY_ENDERMAN_TELEPORT:1.0:1.0"
+      - "take:1"
+    cooldown: 5
+    
+  随机传送:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "随机传送"
+    actions:
+      - "message:<yellow>正在随机传送..."
+      - "command:randomtp"
+      - "sound:ENTITY_ENDERMAN_TELEPORT:1.0:0.5"
+    cooldown: 60
+
+  # ========================================
+  # 消耗品类触发器
+  # ========================================
+  经验药水:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "经验药水"
+    actions:
+      - "message:<green>你获得了 <yellow>100 <green>经验值!"
+      - "console:xp give %player_name% 100"
+      - "sound:ENTITY_PLAYER_LEVELUP:1.0:1.0"
+      - "take:1"
+    cooldown: 0
+    
+  生命药水:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "生命药水"
+    actions:
+      - "message:<green>你恢复了 <red>20 <green>生命值!"
+      - "effect:HEAL:1:1"
+      - "sound:ENTITY_GENERIC_DRINK:1.0:1.0"
+      - "take:1"
+    cooldown: 0
+
+  # ========================================
+  # 技能类触发器
+  # ========================================
+  闪电技能:
+    enabled: true
+    trigger-type: left_click
+    lore-keyword: "闪电技能"
+    actions:
+      - "message:<aqua>召唤闪电!"
+      - "console:summon lightning_bolt ~ ~ ~"
+      - "sound:ENTITY_LIGHTNING_BOLT_THUNDER:1.0:1.0"
+      - "damage:1"
+    cooldown: 10
+    
+  治疗技能:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "治疗技能"
+    actions:
+      - "message:<green>使用治疗技能!"
+      - "effect:REGENERATION:2:5"
+      - "effect:ABSORPTION:1:10"
+      - "sound:ENTITY_PLAYER_LEVELUP:1.0:1.5"
+    cooldown: 30
+
+  # ========================================
+  # 特殊类触发器
+  # ========================================
+  新手礼包:
+    enabled: true
+    trigger-type: right_click
+    lore-keyword: "新手礼包"
+    actions:
+      - "message:<yellow>恭喜你打开了新手礼包!"
+      - "console:mi give MATERIAL 新手木剑 1 %player_name%"
+      - "console:mi give MATERIAL 新手皮甲 1 %player_name%"
+      - "console:money give %player_name% 1000"
+      - "sound:ENTITY_FIREWORK_ROCKET_LAUNCH:1.0:1.0"
+      - "take:1"
+    cooldown: 0
+    one-time: true
+
+# ========================================
+# 消息设置
+# ========================================
+messages:
+  no-permission: "<red>你没有权限执行此操作!"
+  cooldown: "<red>该物品还在冷却中，剩余时间: <yellow>%time%秒"
+  skill-cooldown: "<red>技能冷却中，剩余时间: <yellow>%time%秒"
+  trigger-success: "<green>触发成功!"
+  trigger-failed: "<red>触发失败!"
+  config-reloaded: "<green>配置已重新加载!"
+
+# ========================================
+# 高级设置
+# ========================================
+advanced:
+  # 是否检查权限
+  check-permission: false
+  
+  # 是否记录触发日志
+  log-triggers: false
+  
+  # 冷却时间格式
+  cooldown-format: "#.##"

@@ -1,0 +1,47 @@
+# 赛季配置文件
+# Astraea RPG - GuangDianBattlePass
+
+seasons:
+  # 赛季 1
+  1:
+    id: 1
+    name: "第一赛季 - 启程"
+    start-time: "2026-04-01 00:00:00"
+    end-time: "2026-04-30 23:59:59"
+    max-level: 50
+    active: true
+    
+    # 等级配置
+    levels:
+      1:
+        level: 1
+        required-exp: 1000
+      2:
+        level: 2
+        required-exp: 1200
+      3:
+        level: 3
+        required-exp: 1400
+      4:
+        level: 4
+        required-exp: 1600
+      5:
+        level: 5
+        required-exp: 1800
+      6:
+        level: 6
+        required-exp: 2000
+      7:
+        level: 7
+        required-exp: 2200
+      8:
+        level: 8
+        required-exp: 2400
+      9:
+        level: 9
+        required-exp: 2600
+      10:
+        level: 10
+        required-exp: 3000
+      # 继续添加更多等级...
+      # 等级 11-50 的配置会自动计算

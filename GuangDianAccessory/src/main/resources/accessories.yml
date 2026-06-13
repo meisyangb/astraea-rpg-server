@@ -1,0 +1,93 @@
+# GuangDianAccessory 饰品配置
+# 使用 MythicMobs 物品 + Lore 关键词识别
+#
+# 配置格式:
+#   mythic-id: MythicMobs 物品ID（必填）
+#   slot: 槽位 (BADGE/MEDAL/RELIC)
+#   lore-keyword: Lore 中必须包含的关键词（用于识别，可选）
+#   rarity: 稀有度 (1-5)
+
+#   name: 饰品显示名称（可选）
+
+accessories:
+  # ==================== 徽章 ====================
+  starter_badge:
+    mythic-id: "StarterBadge"
+    slot: BADGE
+    lore-keyword: "新手徽章"
+    rarity: 1
+
+  warrior_badge:
+    mythic-id: "WarriorBadge"
+    slot: BADGE
+    lore-keyword: "战士徽章"
+    rarity: 3
+
+  mage_badge:
+    mythic-id: "MageBadge"
+    slot: BADGE
+    lore-keyword: "法师徽章"
+    rarity: 3
+
+  hunter_badge:
+    mythic-id: "HunterBadge"
+    slot: BADGE
+    lore-keyword: "猎人徽章"
+    rarity: 3
+
+  guardian_badge:
+    mythic-id: "GuardianBadge"
+    slot: BADGE
+    lore-keyword: "守护者徽章"
+    rarity: 3
+
+  # ==================== 勋章 ====================
+  warrior_medal:
+    mythic-id: "WarriorMedal"
+    slot: MEDAL
+    lore-keyword: "战神勋章"
+    rarity: 4
+
+  guardian_medal:
+    mythic-id: "GuardianMedal"
+    slot: MEDAL
+    lore-keyword: "守护勋章"
+    rarity: 4
+
+  hunter_medal:
+    mythic-id: "HunterMedal"
+    slot: MEDAL
+    lore-keyword: "猎人勋章"
+    rarity: 4
+  saint_medal:
+    mythic-id: "SaintMedal"
+    slot: MEDAL
+    lore-keyword: "圣者勋章"
+    rarity: 4
+  vip_medal:
+    mythic-id: "VIPMedal"
+    slot: MEDAL
+    lore-keyword: "VIP勋章"
+    rarity: 5
+
+  # ==================== 圣物 ====================
+  ancient_relic:
+    mythic-id: "AncientRelic"
+    slot: RELIC
+    lore-keyword: "远古圣物"
+    rarity: 5
+  dragon_relic:
+    mythic-id: "DragonRelic"
+    slot: RELIC
+    lore-keyword: "龙族圣物"
+    rarity: 5
+  angel_relic:
+    mythic-id: "AngelRelic"
+    slot: RELIC
+    lore-keyword: "天使圣物"
+    rarity: 5
+  demon_lord_relic:
+    mythic-id: "DemonLordRelic"
+    slot: RELIC
+    lore-keyword: "魔王圣物"
+    rarity: 5

@@ -1,0 +1,36 @@
+name: GuangDianAuth
+version: 1.0.0
+main: cn.guangdian.auth.GuangDianAuth
+api-version: '1.21'
+depend:
+  - RPGCore
+softdepend:
+  - PlaceholderAPI
+author: Astraea RPG Team
+description: Independent login system with custom GUI for Astraea RPG Server
+
+commands:
+  login:
+    description: Login to the server
+    usage: /login <password>
+    aliases: [l, log]
+  register:
+    description: Register an account
+    usage: /register <password> <confirmPassword>
+    aliases: [reg]
+  changepassword:
+    description: Change your password
+    usage: /changepassword <oldPassword> <newPassword>
+    aliases: [changepass]
+  unregister:
+    description: Unregister your account
+    usage: /unregister <password>
+  authadmin:
+    description: Admin commands for auth system
+    usage: /authadmin <reload|info|unregister|setpassword>
+    permission: guangdian.auth.admin
+
+permissions:
+  guangdian.auth.admin:
+    description: Admin permission for auth commands
+    default: op

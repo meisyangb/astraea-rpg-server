@@ -1,0 +1,1068 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 赞助装备.yml
+# ========================================
+
+﻿神圣天使剑1:
+  Id: STONE_SWORD
+  Display: '<light_purple><bold>神剑梅蒂狄亚'
+  Lore:
+  - '<yellow>近战武器                        亚神器'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪<gray>✪✪✪✪'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>11700-24180'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>75%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - '<dark_gray>冰冻: <green>10%'
+  - '<dark_gray>致盲: <green>10%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<yellow>大天使梅蒂狄亚的佩剑'
+  - '<yellow>这是一把真正的神使用的武器'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>4颗'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 11700.0
+    AttackMax: 24180.0
+    CritChance: 5.0
+    CritDamage: 75.0
+    LifestealChance: 10.0
+    LifestealMultiplier: 20.0
+    Level: 25
+
+神圣天使头盔1:
+  Id: CHAINMAIL_HELMET
+  Display: '<red><bold>神域天神头盔'
+  Lore:
+  - '<yellow>防具                          亚神器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪<gray>✪✪✪✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<yellow>神域神族使用的头盔'
+  - '<yellow>虽然是大众货'
+  - '<yellow>但是仍然不是凡人能奢望的东西'
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>97500'
+  - '<dark_gray>攻击力: <aqua>1500-5000'
+  - '<dark_gray>闪避: <aqua>5%'
+  - '<dark_gray>每秒回血: <aqua>40'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>2颗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 97500.0
+    AttackMin: 1500.0
+    AttackMax: 5000.0
+    DodgeChance: 5.0
+    HealthRegen: 40.0
+    Level: 25
+
+神圣天使链甲1:
+  Id: CHAINMAIL_CHESTPLATE
+  Display: '<light_purple><bold>神圣天使链甲'
+  Lore:
+  - '<yellow>防具                          亚神器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪<gray>✪✪✪✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>护甲强度: <aqua>20%'
+  - '<dark_gray>生命上限: <aqua>78000'
+  - '<dark_gray>攻击力: <aqua>780-1560'
+  - '<dark_gray>每秒回血: <aqua>100'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<yellow>神界天使使用的量产型护甲'
+  - '<yellow>但是仍然远超任何凡人的作品'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>1颗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 20.0
+    MaxHealth: 78000.0
+    AttackMin: 780.0
+    AttackMax: 1560.0
+    HealthRegen: 100.0
+    Level: 25
+
+神圣天使链腿1:
+  Id: CHAINMAIL_LEGGINGS
+  Display: '<light_purple><bold>神圣天使链腿'
+  Lore:
+  - '<yellow>防具                          亚神器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪<gray>✪✪✪✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>78000'
+  - '<dark_gray>闪避: <aqua>5%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<yellow>神界天使使用的量产型护甲'
+  - '<yellow>但是仍然远超任何凡人的作品'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>1颗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 78000.0
+    DodgeChance: 5.0
+    Level: 25
+
+神圣天使链靴1:
+  Id: CHAINMAIL_BOOTS
+  Display: '<light_purple><bold>神圣天使链靴'
+  Lore:
+  - '<yellow>防具                          亚神器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪<gray>✪✪✪✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>78000'
+  - '<dark_gray>移动速度: <aqua>20%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<yellow>神界天使使用的量产型护甲'
+  - '<yellow>但是仍然远超任何凡人的作品'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>1颗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 78000.0
+    MoveSpeed: 20.0
+    Level: 25
+
+神圣天使剑2:
+  Id: IRON_SWORD
+  Display: '<aqua><bold>神圣天使之剑'
+  Lore:
+  - '<yellow>近战武器                        亚神器'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪<gray>✪✪✪'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>24180-50690'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>50%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - '<dark_gray>冰冻: <aqua>15%'
+  - '<dark_gray>致盲: <aqua>15%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<yellow>大天使梅蒂狄亚的佩剑'
+  - '<yellow>这是一把真正的神使用的武器'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>8颗'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<blue>*<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 24180.0
+    AttackMax: 50690.0
+    CritChance: 5.0
+    CritDamage: 50.0
+    LifestealChance: 10.0
+    LifestealMultiplier: 20.0
+    Level: 25
+
+神圣天使头盔2:
+  Id: IRON_HELMET
+  Display: '<red><bold>神域天神头盔'
+  Lore:
+  - '<yellow>防具                          亚神器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪<gray>✪✪✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<yellow>神域神族使用的头盔'
+  - '<yellow>虽然是大众货'
+  - '<yellow>但是仍然不是凡人能奢望的东西'
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>156000'
+  - '<dark_gray>攻击力: <aqua>5000-7500'
+  - '<dark_gray>闪避: <aqua>5%'
+  - '<dark_gray>每秒回血: <aqua>80'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>4颗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 156000.0
+    AttackMin: 5000.0
+    AttackMax: 7500.0
+    DodgeChance: 5.0
+    HealthRegen: 80.0
+    Level: 25
+
+神圣天使链甲2:
+  Id: IRON_CHESTPLATE
+  Display: '<light_purple><bold>神圣天使链甲'
+  Lore:
+  - '<yellow>防具                          亚神器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪<gray>✪✪✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>护甲强度: <aqua>20%'
+  - '<dark_gray>生命上限: <aqua>156000'
+  - '<dark_gray>攻击力: <aqua>1300-2600'
+  - '<dark_gray>每秒回血: <aqua>200'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<yellow>神界天使使用的量产型护甲'
+  - '<yellow>但是仍然远超任何凡人的作品'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>3颗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 20.0
+    MaxHealth: 156000.0
+    AttackMin: 1300.0
+    AttackMax: 2600.0
+    HealthRegen: 200.0
+    Level: 25
+
+神圣天使链腿2:
+  Id: IRON_LEGGINGS
+  Display: '<light_purple><bold>神圣天使链腿'
+  Lore:
+  - '<yellow>防具                          亚神器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪<gray>✪✪✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>156000'
+  - '<dark_gray>闪避: <aqua>6%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<yellow>神界天使使用的量产型护甲'
+  - '<yellow>但是仍然远超任何凡人的作品'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>3颗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 156000.0
+    DodgeChance: 6.0
+    Level: 25
+
+神圣天使链靴2:
+  Id: IRON_BOOTS
+  Display: '<light_purple><bold>神圣天使链靴'
+  Lore:
+  - '<yellow>防具                          亚神器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪<gray>✪✪✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>156000'
+  - '<dark_gray>移动速度: <aqua>20%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<yellow>神界天使使用的量产型护甲'
+  - '<yellow>但是仍然远超任何凡人的作品'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>3颗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 156000.0
+    MoveSpeed: 20.0
+    Level: 25
+
+神圣天使剑3:
+  Id: GOLDEN_SWORD
+  Display: '<light_purple><bold>神剑梅蒂狄亚'
+  Lore:
+  - '<yellow>近战武器                        亚神器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪✪<gray>✪✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>35100-69160'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>75%'
+  - '<dark_gray>生命吸取: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>50%'
+  - '<dark_gray>冰冻: <aqua>15%'
+  - '<dark_gray>致盲: <aqua>15%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>15颗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>技能类型: <aqua>主动技能'
+  - '<dark_gray>技能名称: <gold>闪电打击'
+  - '<dark_gray>技能冷却: <aqua>15'
+  - '<dark_gray>魔法消耗: <aqua>10'
+  - '<gray>【<gold>神技 <aqua>闪电打击<gray>】'
+  - '<green>对前方扇形3码内所有目标'
+  - '<green>造成自身攻击力等量的闪电伤害.'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<yellow>接近完全觉醒的大天使之剑'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<aqua><bold>符文➱<gray>「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<blue>*<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 35100.0
+    AttackMax: 69160.0
+    CritChance: 5.0
+    CritDamage: 75.0
+    LifestealChance: 10.0
+    LifestealMultiplier: 50.0
+    Level: 25
+
+神圣天使头盔4:
+  Id: DIAMOND_HELMET
+  Display: '<red><bold>神域天神头盔'
+  Lore:
+  - '<yellow>防具                          亚神器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪✪✪<gray>✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<yellow>神域神族使用的头盔'
+  - '<yellow>虽然是大众货'
+  - '<yellow>但是仍然不是凡人能奢望的东西'
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>防御力: <aqua>12250-23750'
+  - '<dark_gray>生命上限: <aqua>390000'
+  - '<dark_gray>攻击力: <aqua>30000-75000'
+  - '<dark_gray>每秒回血: <aqua>3000'
+  - '<dark_gray>闪避: <aqua>3%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>35颗'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>技能类型: <aqua>被动技能'
+  - '<dark_gray>技能名称: <gold>炽炎天使'
+  - '<dark_gray>触发类型: <aqua>伤害触发'
+  - '<dark_gray>技能几率: <aqua>15'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<gray>【<gold>神技 <aqua>炽炎天使<gray>】'
+  - '<green>召唤炽天使降临，对3码范围内e所有目标'
+  - '<green>造成自身攻击力等量的闪电伤害.'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<aqua><bold>符文➱<gray>「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    DefenseMin: 12250.0
+    DefenseMax: 23750.0
+    MaxHealth: 390000.0
+    AttackMin: 30000.0
+    AttackMax: 75000.0
+    HealthRegen: 3000.0
+    DodgeChance: 3.0
+    Level: 25
+
+神圣天使链甲4:
+  Id: DIAMOND_CHESTPLATE
+  Display: '<red><bold>神圣天使链甲'
+  Lore:
+  - '<yellow>防具                          亚神器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪✪✪<gray>✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>护甲强度: <aqua>20%'
+  - '<dark_gray>生命上限: <aqua>364000'
+  - '<dark_gray>攻击力: <aqua>5200-10400'
+  - '<dark_gray>防御力: <aqua>12700-14200'
+  - '<dark_gray>每秒回血: <aqua>900'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<yellow>神界天使使用的量产型护甲'
+  - '<yellow>但是仍然远超任何凡人的作品'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>25颗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<aqua><bold>符文➱<gray>「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 20.0
+    MaxHealth: 364000.0
+    AttackMin: 5200.0
+    AttackMax: 10400.0
+    DefenseMin: 12700.0
+    DefenseMax: 14200.0
+    HealthRegen: 900.0
+    Level: 25
+
+神圣天使链腿4:
+  Id: DIAMOND_LEGGINGS
+  Display: '<red><bold>神圣天使链腿'
+  Lore:
+  - '<yellow>防具                          亚神器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪✪✪<gray>✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>364000'
+  - '<dark_gray>闪避: <aqua>10%'
+  - '<dark_gray>防御力: <aqua>12550-14650'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<yellow>神界天使使用的量产型护甲'
+  - '<yellow>但是仍然远超任何凡人的作品'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>25颗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<aqua><bold>符文➱<gray>「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 364000.0
+    DodgeChance: 10.0
+    DefenseMin: 12550.0
+    DefenseMax: 14650.0
+    Level: 25
+
+神圣天使链靴4:
+  Id: DIAMOND_BOOTS
+  Display: '<red><bold>神圣天使链靴'
+  Lore:
+  - '<yellow>防具                          亚神器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪✪✪<gray>✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>325000'
+  - '<dark_gray>防御力: <aqua>11950-13250'
+  - '<dark_gray>移动速度: <aqua>25%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<yellow>神界天使使用的量产型护甲'
+  - '<yellow>但是仍然远超任何凡人的作品'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>25颗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<aqua><bold>符文➱<gray>「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 325000.0
+    DefenseMin: 11950.0
+    DefenseMax: 13250.0
+    MoveSpeed: 25.0
+    Level: 25
+
+神圣天使剑4:
+  Id: GOLDEN_SWORD
+  Display: '<light_purple><bold>神剑梅蒂狄亚'
+  Lore:
+  - '<yellow>近战武器                        亚神器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪✪✪<gray>✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>48100-154160'
+  - '<dark_gray>暴击几率: <aqua>15%'
+  - '<dark_gray>暴击伤害: <aqua>150%'
+  - '<dark_gray>生命吸取: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>50%'
+  - '<dark_gray>冰冻: <aqua>15%'
+  - '<dark_gray>致盲: <aqua>15%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>30颗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>技能类型: <aqua>主动技能'
+  - '<dark_gray>技能名称: <gold>闪电打击'
+  - '<dark_gray>技能冷却: <aqua>15'
+  - '<dark_gray>魔法消耗: <aqua>10'
+  - '<gray>【<gold>神技 <aqua>闪电打击<gray>】'
+  - '<green>对前方扇形3码内所有目标'
+  - '<green>造成自身攻击力等量的闪电伤害.'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<yellow>接近完全觉醒的大天使之剑'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<aqua><bold>符文➱<gray>「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」「<dark_gray>✰<gray>」'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<blue>*<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 48100.0
+    AttackMax: 154160.0
+    CritChance: 15.0
+    CritDamage: 150.0
+    LifestealChance: 10.0
+    LifestealMultiplier: 50.0
+    Level: 25
+
+神圣天使头盔3:
+  Id: GOLDEN_HELMET
+  Display: '<red><bold>神域天神头盔'
+  Lore:
+  - '<yellow>防具                          亚神器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪✪<gray>✪✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<yellow>神域神族使用的头盔'
+  - '<yellow>虽然是大众货'
+  - '<yellow>但是仍然不是凡人能奢望的东西'
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>防御力: <aqua>750-2250'
+  - '<dark_gray>生命上限: <aqua>286000'
+  - '<dark_gray>攻击力: <aqua>15000-27500'
+  - '<dark_gray>每秒回血: <aqua>100'
+  - '<dark_gray>闪避: <aqua>3%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>8颗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>技能类型: <aqua>被动技能'
+  - '<dark_gray>技能名称: <gold>炽炎天使'
+  - '<dark_gray>触发类型: <aqua>伤害触发'
+  - '<dark_gray>技能几率: <aqua>15'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<aqua><bold>符文➯<dark_gray>⇝<blue>✵<dark_gray>⇜'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    DefenseMin: 750.0
+    DefenseMax: 2250.0
+    MaxHealth: 286000.0
+    AttackMin: 15000.0
+    AttackMax: 27500.0
+    HealthRegen: 100.0
+    DodgeChance: 3.0
+    Level: 25
+
+神圣天使链甲3:
+  Id: GOLDEN_CHESTPLATE
+  Display: '<red><bold>神圣天使链甲'
+  Lore:
+  - '<yellow>防具                          亚神器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪✪<gray>✪✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>护甲强度: <aqua>20%'
+  - '<dark_gray>生命上限: <aqua>234000'
+  - '<dark_gray>攻击力: <aqua>2600-5200'
+  - '<dark_gray>防御力: <aqua>900-2700'
+  - '<dark_gray>每秒回血: <aqua>300'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<yellow>神界天使使用的量产型护甲'
+  - '<yellow>但是仍然远超任何凡人的作品'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>6颗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<aqua><bold>符文➯<dark_gray>⇝<blue>✵<dark_gray>⇜'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 20.0
+    MaxHealth: 234000.0
+    AttackMin: 2600.0
+    AttackMax: 5200.0
+    DefenseMin: 900.0
+    DefenseMax: 2700.0
+    HealthRegen: 300.0
+    Level: 25
+
+神圣天使链腿3:
+  Id: GOLDEN_LEGGINGS
+  Display: '<red><bold>神圣天使链腿'
+  Lore:
+  - '<yellow>防具                          亚神器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪✪<gray>✪✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>234000'
+  - '<dark_gray>闪避: <aqua>6%'
+  - '<dark_gray>防御力: <aqua>1050-3100'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<yellow>神界天使使用的量产型护甲'
+  - '<yellow>但是仍然远超任何凡人的作品'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>6颗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<aqua><bold>符文➯<dark_gray>⇝<blue>✵<dark_gray>⇜'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 234000.0
+    DodgeChance: 6.0
+    DefenseMin: 1050.0
+    DefenseMax: 3100.0
+    Level: 25
+
+神圣天使链靴3:
+  Id: GOLDEN_BOOTS
+  Display: '<red><bold>神圣天使链靴'
+  Lore:
+  - '<yellow>防具                          亚神器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪✪<gray>✪✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>护甲强度: <aqua>15%'
+  - '<dark_gray>生命上限: <aqua>234000'
+  - '<dark_gray>防御力: <aqua>650-6500'
+  - '<dark_gray>移动速度: <aqua>20%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<yellow>神界天使使用的量产型护甲'
+  - '<yellow>但是仍然远超任何凡人的作品'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>6颗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<aqua><bold>符文➯<dark_gray>⇝<blue>✵<dark_gray>⇜'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 234000.0
+    DefenseMin: 650.0
+    DefenseMax: 6500.0
+    MoveSpeed: 20.0
+    Level: 25
+
+老神圣天使剑2:
+  Id: IRON_SWORD
+  Display: '<aqua><bold>神圣天使之剑'
+  Lore:
+  - '<yellow>主手武器             亚神器'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪<gray>✪'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>23250-50850'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>75%'
+  - '<dark_gray>吸血几率: <aqua>5%'
+  - '<dark_gray>吸血倍率: <aqua>40%'
+  - '<dark_gray>经验加成: <aqua>150%'
+  - '<dark_gray>命中: <green>15%'
+  - '<dark_gray>冰冻: <green>15%'
+  - '<dark_gray>致盲: <green>15%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<light_purple>分解后可获得<dark_gray>[<yellow>&L天使核心<dark_gray>]<light_purple>8颗'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>技能名称:<green> 雷霆审判'
+  - '<dark_gray>触发方式:<aqua> 右键'
+  - '<dark_gray>冷却: <gold>15秒'
+  - ''
+  - '<green>对右键的眼前生物'
+  - '<green>进行雷劈'
+  - '<green>造成100000+武器自身的伤害'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<blue>*<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    Skills: 
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 23250.0
+    AttackMax: 50850.0
+    CritChance: 5.0
+    CritDamage: 75.0
+    LifestealChance: 5.0
+    LifestealMultiplier: 40.0
+
+老神圣天使剑3:
+  Id: GOLDEN_SWORD
+  Display: '<light_purple><bold>神圣天使之剑'
+  Lore:
+  - '<yellow>主手武器             亚神器'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪✪'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>36750-80580'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>75%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>50%'
+  - '<dark_gray>经验加成: <aqua>200%'
+  - '<dark_gray>命中: <green>15%'
+  - '<dark_gray>冰冻: <green>20%'
+  - '<dark_gray>致盲: <green>20%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<light_purple>分解后可获得<dark_gray>[<yellow>&L天使核心<dark_gray>]<light_purple>18颗'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>技能名称:<green> 终结审判'
+  - '<dark_gray>触发方式:<aqua> 右键'
+  - '<dark_gray>冷却: <gold>15秒'
+  - ''
+  - '<green>对右键的眼前范围8格内生物'
+  - '<green>进行雷劈并爆炸'
+  - '<green>造成150000+武器自身的伤害'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<aqua><bold>符文➯<dark_gray>⇝<blue>✵<dark_gray>⇜'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<blue>*<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    Skills: 
+    - potion{type=FIRE_RESISTANCE;duration=200;level=4} @Self ~onTimer: 10
+    - effect: particles{particle=mobSpell;amount=300;hS=1;vS=1;speed=0.05} @self ~onTimer:5
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 36750.0
+    AttackMax: 80580.0
+    CritChance: 5.0
+    CritDamage: 75.0
+    LifestealChance: 10.0
+    LifestealMultiplier: 50.0
+
+老神圣天使头盔3:
+  Id: GOLDEN_HELMET
+  Display: '<light_purple><bold>神圣天神头盔'
+  Lore:
+  - '<yellow>锻造装备              亚神器'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪✪'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>防御力: <aqua>1200-6250'
+  - '<dark_gray>护甲值: <aqua>12%'
+  - '<dark_gray>攻击力: <aqua>15000-27500'
+  - '<dark_gray>生命上限: <aqua>286000'
+  - '<dark_gray>暴伤抵抗: <aqua>50%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<yellow>神圣天族量产的装备'
+  - '<yellow>但仍远远超过凡界任何一件装备'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<light_purple>分解后可获得<dark_gray>[<yellow>&L天使核心<dark_gray>]<light_purple>15颗'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>技能名称:<green> 炽炎天使'
+  - '<dark_gray>触发方式:<aqua> 被攻击'
+  - '<dark_gray>触发几率: <gold>10%'
+  - '<dark_gray>冷却: <gold>15秒'
+  - ''
+  - '<green>释放粒子'
+  - '<green>对命中敌人进行持续打击'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<aqua><bold>符文➯<dark_gray>⇝<blue>✵<dark_gray>⇜'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<blue>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    Skills: 
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    DefenseMin: 1200.0
+    DefenseMax: 6250.0
+    AttackMin: 15000.0
+    AttackMax: 27500.0
+    MaxHealth: 286000.0
+    CritDamageResist: 50.0
+
+老神圣天使链甲3:
+  Id: GOLDEN_CHESTPLATE
+  Display: '<light_purple><bold>神圣天使链甲'
+  Lore:
+  - '<yellow>锻造装备              亚神器'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪✪'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>护甲值: <aqua>12%'
+  - '<dark_gray>攻击力: <aqua>1200-5050'
+  - '<dark_gray>防御力: <aqua>1500-3050'
+  - '<dark_gray>生命上限: <aqua>260000'
+  - '<dark_gray>暴伤抵抗: <aqua>40%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<yellow>神圣天族量产的装备'
+  - '<yellow>但仍远远超过凡界任何一件装备'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<light_purple>分解后可获得<dark_gray>[<yellow>&L天使核心<dark_gray>]<light_purple>12颗'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<aqua><bold>符文➯<dark_gray>⇝<blue>✵<dark_gray>⇜'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 1200.0
+    AttackMax: 5050.0
+    DefenseMin: 1500.0
+    DefenseMax: 3050.0
+    MaxHealth: 260000.0
+    CritDamageResist: 40.0
+
+老神圣天使链腿3:
+  Id: GOLDEN_LEGGINGS
+  Display: '<light_purple><bold>神圣天使链腿'
+  Lore:
+  - '<yellow>锻造装备              亚神器'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪✪'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>护甲值: <aqua>10%'
+  - '<dark_gray>防御力: <aqua>1700-3150'
+  - '<dark_gray>生命上限: <aqua>260000'
+  - '<dark_gray>暴伤抵抗: <aqua>40%'
+  - '<dark_gray>闪避: <aqua>5%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<yellow>神圣天族量产的装备'
+  - '<yellow>但仍远远超过凡界任何一件装备'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<light_purple>分解后可获得<dark_gray>[<yellow>&L天使核心<dark_gray>]<light_purple>12颗'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<aqua><bold>符文➯<dark_gray>⇝<blue>✵<dark_gray>⇜'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    DefenseMin: 1700.0
+    DefenseMax: 3150.0
+    MaxHealth: 260000.0
+    CritDamageResist: 40.0
+    DodgeChance: 5.0
+
+老神圣天使链靴3:
+  Id: GOLDEN_BOOTS
+  Display: '<light_purple><bold>神圣天使链靴'
+  Lore:
+  - '<yellow>锻造装备              亚神器'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪✪'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<dark_gray>护甲值: <aqua>15%'
+  - '<dark_gray>攻击力: <aqua>2400-6900'
+  - '<dark_gray>生命上限: <aqua>260000'
+  - '<dark_gray>暴伤抵抗: <aqua>40%'
+  - '<dark_gray>移动速度: <aqua>25%'
+  - '<dark_gray>闪避: <aqua>5%'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<yellow>神圣天族量产的装备'
+  - '<yellow>但仍远远超过凡界任何一件装备'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<light_purple>分解后可获得<dark_gray>[<yellow>&L天使核心<dark_gray>]<light_purple>12颗'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<aqua><bold>符文➯<dark_gray>⇝<blue>✵<dark_gray>⇜'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>一一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 2400.0
+    AttackMax: 6900.0
+    MaxHealth: 260000.0
+    CritDamageResist: 40.0
+    MoveSpeed: 25.0
+    DodgeChance: 5.0
+

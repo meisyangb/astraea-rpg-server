@@ -1,0 +1,47 @@
+# 经验控制插件配置
+# GuangDianExpControl Configuration
+
+# 是否启用经验控制
+enabled: true
+
+# 是否拦截所有经验获取
+# 开启后玩家无法通过任何方式主动获取经验
+block-all-exp: true
+
+# 拦截的经验来源
+# 可以单独控制每种来源是否被拦截
+blocked-sources:
+  # 挖矿经验
+  mining: true
+  # 击杀怪物经验
+  mob-kill: true
+  # 击杀玩家经验
+  player-kill: true
+  # 钓鱼经验
+  fishing: true
+  # 熔炉经验
+  furnace: true
+  # 养殖经验
+  breeding: true
+  # 交易经验
+  trading: true
+  # 附魔瓶经验
+  exp-bottle: true
+  # 其他来源
+  other: true
+
+# 消息配置
+messages:
+  prefix: "<gold>[经验控制]</gold> "
+  no-permission: "<red>你没有权限执行此操作!</red>"
+  player-not-found: "<red>玩家不存在或不在线!</red>"
+  invalid-amount: "<red>无效的经验数值!</red>"
+  exp-given: "<green>成功给予 %player% %amount% 点经验!</green>"
+  exp-set: "<green>成功设置 %player% 的经验为 %amount%!</green>"
+  exp-reset: "<green>成功重置 %player% 的经验!</green>"
+  reload-success: "<green>配置已重新加载!</green>"
+  exp-info: "<yellow>玩家 %player% 当前经验: %exp% (等级: %level%)</yellow>"
+  exp-blocked: "<gray>经验获取已被系统控制</gray>"
+
+# 调试模式
+debug: false

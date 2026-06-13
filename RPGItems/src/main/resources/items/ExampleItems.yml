@@ -1,0 +1,32 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: ExampleItems.yml
+# ========================================
+
+KingsCrown:
+  Id: GOLDEN_HELMET
+  Display: '<gold>King's Crown'
+  Lore:
+  - '<yellow>A crown worn by the Skeleton King'
+  - '<gray>Legends say it grants great power'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    Enchantments: 
+    - PROTECTION_ENVIRONMENTAL: 4
+    - DURABILITY: 3
+
+SkeletonKingSword:
+  Id: DIAMOND_SWORD
+  Display: '<red>Skeleton King's Sword'
+  Lore:
+  - '<dark_red>The blade of the Skeleton King'
+  - '<gray>Forged in the depths of darkness'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    Enchantments: 
+    - DAMAGE_ALL: 5
+    - FIRE_ASPECT: 2
+    - DURABILITY: 3
+

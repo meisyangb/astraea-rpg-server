@@ -1,0 +1,1349 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 基础装备锻造.yml
+# ========================================
+
+锻造师1:
+  Id: IRON_SWORD
+  Display: '<green> 锻造师·黎明'
+  Lore:
+  - '<yellow> 锻造武器               副手'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 攻击力： <aqua>50-120'
+  - '<dark_gray> 暴击几率： <aqua>3%'
+  - '<dark_gray> 暴击伤害： <aqua>30%'
+  - '<dark_gray> 命中： <aqua>2%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 在阿尔萨斯的最后一个黎明，'
+  - '<gray> 铁匠艾德蒙将妻子临终前的眼泪'
+  - '<gray> 滴入熔炉，铸成了这把剑。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 一阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 50.0
+    AttackMax: 120.0
+    CritChance: 3.0
+    CritDamage: 30.0
+
+锻造师2:
+  Id: IRON_CHESTPLATE
+  Display: '<green> 锻造师·守誓'
+  Lore:
+  - '<yellow> 锻造防具               优秀'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 护甲强度： <aqua>8%'
+  - '<dark_gray> 生命上限： <aqua>+200'
+  - '<dark_gray> 每秒回血： <aqua>+5'
+  - '<dark_gray> 韧性： <aqua>2%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 矮人王国的年轻王子为守护'
+  - '<gray> 与人类的盟约而锻造的铠甲。'
+  - '<gray> 每一块护甲上都刻着誓言的符文。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 一阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 8.0
+    MaxHealth: 200.0
+    HealthRegen: 5.0
+
+锻造师3:
+  Id: IRON_LEGGINGS
+  Display: '<green> 锻造师·行者'
+  Lore:
+  - '<yellow> 锻造防具               优秀'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 护甲强度： <aqua>6%'
+  - '<dark_gray> 生命上限： <aqua>+150'
+  - '<dark_gray> 闪避： <aqua>3%'
+  - '<dark_gray> 移速： <aqua>+5%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 流浪诗人维恩走遍七国留下的遗物。'
+  - '<gray> 他说：路的尽头，才是真正的起点。'
+  - '<gray> 这双护腿见证了他漫长的旅途。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 一阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 6.0
+    MaxHealth: 150.0
+    DodgeChance: 3.0
+
+锻造师4:
+  Id: IRON_BOOTS
+  Display: '<green> 锻造师·初程'
+  Lore:
+  - '<yellow> 锻造防具               优秀'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 护甲强度： <aqua>4%'
+  - '<dark_gray> 生命上限： <aqua>+100'
+  - '<dark_gray> 移速： <aqua>+10%'
+  - '<dark_gray> 跳跃增强： <aqua>1级'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 第一批探险者穿过黑暗森林时穿的靴子。'
+  - '<gray> 靴底已磨损，却似乎还残留着勇者的余温。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray> 可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 一阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 4.0
+    MaxHealth: 100.0
+
+圣树1:
+  Id: GOLDEN_SWORD
+  Display: '<blue> 圣树·艾弗洛'
+  Lore:
+  - '<yellow> 锻造武器               副手'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 攻击力： <aqua>150-280'
+  - '<dark_gray> 暴击几率： <aqua>5%'
+  - '<dark_gray> 暴击伤害： <aqua>40%'
+  - '<dark_gray> 命中： <aqua>3%'
+  - '<dark_gray> 吸血几率： <aqua>3%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 圣树的守护者——精灵女祭司艾丽西娅的佩剑。'
+  - '<gray> 剑柄缠绕着她最后一次占卜时用的丝带。'
+  - '<gray> 从此剑身常映出幽绿的微光。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 装备等级： <aqua>5'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 二阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 150.0
+    AttackMax: 280.0
+    CritChance: 5.0
+    CritDamage: 40.0
+    LifestealChance: 3.0
+    Level: 5
+
+圣树2:
+  Id: GOLDEN_CHESTPLATE
+  Display: '<blue> 圣树·灵肤'
+  Lore:
+  - '<yellow> 锻造防具               稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 护甲强度： <aqua>10%'
+  - '<dark_gray> 生命上限： <aqua>+800'
+  - '<dark_gray> 每秒回血： <aqua>+10'
+  - '<dark_gray> 韧性： <aqua>3%'
+  - '<dark_gray> 伤害减免： <aqua>2%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 用圣树千年落下的树皮与精灵秘银编织而成。'
+  - '<gray> 穿上它，仿佛能听见圣树的心跳。'
+  - '<gray> 与自然之力融为一体。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 装备等级： <aqua>5'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 二阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 10.0
+    MaxHealth: 800.0
+    HealthRegen: 10.0
+    Level: 5
+
+圣树3:
+  Id: GOLDEN_LEGGINGS
+  Display: '<blue> 圣树·深林'
+  Lore:
+  - '<yellow> 锻造防具               稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 护甲强度： <aqua>8%'
+  - '<dark_gray> 生命上限： <aqua>+600'
+  - '<dark_gray> 闪避： <aqua>5%'
+  - '<dark_gray> 移速： <aqua>+8%'
+  - '<dark_gray> 韧性： <aqua>2%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 被森林深处的德鲁伊祝福过的护腿。'
+  - '<gray> 据说穿上它，野兽将视你为朋友。'
+  - '<gray> 森林将成为你的庇护所。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 装备等级： <aqua>5'
+  - '<dark_gray> 评分： <red>200'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 二阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 8.0
+    MaxHealth: 600.0
+    DodgeChance: 5.0
+    Level: 5
+
+圣树4:
+  Id: GOLDEN_BOOTS
+  Display: '<blue> 圣树·林语'
+  Lore:
+  - '<yellow> 锻造防具               稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 护甲强度： <aqua>5%'
+  - '<dark_gray> 生命上限： <aqua>+400'
+  - '<dark_gray> 移速： <aqua>+15%'
+  - '<dark_gray> 跳跃增强： <aqua>2级'
+  - '<dark_gray> 闪避： <aqua>3%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 精灵游侠队长的遗物。'
+  - '<gray> 他能用风的语言与森林交谈。'
+  - '<gray> 这双靴子似乎还保留着与风对话的能力。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 装备等级： <aqua>5'
+  - '<dark_gray> 评分： <red>200'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray> 可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 二阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 5.0
+    MaxHealth: 400.0
+    DodgeChance: 3.0
+    Level: 5
+
+恶魔1:
+  Id: IRON_SWORD
+  Display: '<blue><bold> 暗焰·噬魂'
+  Lore:
+  - '<yellow> 锻造武器               稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 攻击力： <aqua>400-750'
+  - '<dark_gray> 暴击几率： <aqua>6%'
+  - '<dark_gray> 暴击伤害： <aqua>50%'
+  - '<dark_gray> 命中： <aqua>5%'
+  - '<dark_gray> 吸血几率： <aqua>5%'
+  - '<dark_gray> 吸血倍率： <aqua>15%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 黑魔法师的魔剑。'
+  - '<gray> 传说每杀死一人，剑身上的血槽就会亮起一颗红星。'
+  - '<gray> 已有七颗，永不熄灭。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 装备等级： <aqua>10'
+  - '<dark_gray> 评分： <red>500'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 二阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 400.0
+    AttackMax: 750.0
+    CritChance: 6.0
+    CritDamage: 50.0
+    LifestealChance: 5.0
+    LifestealMultiplier: 15.0
+    Level: 10
+
+恶魔2:
+  Id: IRON_CHESTPLATE
+  Display: '<blue><bold> 暗焰·深渊守望'
+  Lore:
+  - '<yellow> 锻造防具               稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 护甲强度： <aqua>12%'
+  - '<dark_gray> 生命上限： <aqua>+2000'
+  - '<dark_gray> 每秒回血： <aqua>+20'
+  - '<dark_gray> 韧性： <aqua>5%'
+  - '<dark_gray> 伤害减免： <aqua>3%'
+  - '<dark_gray> 反伤： <aqua>3%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 深渊裂缝的守门人——铁狼爵士的铠甲。'
+  - '<gray> 他独自镇守裂缝三百年。'
+  - '<gray> 最终与铠甲融为一体，成为深渊的梦魇。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 装备等级： <aqua>10'
+  - '<dark_gray> 评分： <red>500'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 二阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 12.0
+    MaxHealth: 2000.0
+    HealthRegen: 20.0
+    Level: 10
+
+恶魔3:
+  Id: IRON_LEGGINGS
+  Display: '<blue><bold> 暗焰·炼狱行者'
+  Lore:
+  - '<yellow> 锻造防具               稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 护甲强度： <aqua>10%'
+  - '<dark_gray> 生命上限： <aqua>+1500'
+  - '<dark_gray> 闪避： <aqua>6%'
+  - '<dark_gray> 移速： <aqua>+10%'
+  - '<dark_gray> 韧性： <aqua>4%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 来自地狱边境的苦行僧所穿。'
+  - '<gray> 他们用熔岩淬炼身体。'
+  - '<gray> 用地狱之火焚烧罪孽，只为寻求救赎。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 装备等级： <aqua>10'
+  - '<dark_gray> 评分： <red>500'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 二阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 10.0
+    MaxHealth: 1500.0
+    DodgeChance: 6.0
+    Level: 10
+
+恶魔4:
+  Id: IRON_BOOTS
+  Display: '<blue><bold> 暗焰·魔息'
+  Lore:
+  - '<yellow> 锻造防具               稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 护甲强度： <aqua>6%'
+  - '<dark_gray> 生命上限： <aqua>+1000'
+  - '<dark_gray> 移速： <aqua>+20%'
+  - '<dark_gray> 跳跃增强： <aqua>2级'
+  - '<dark_gray> 闪避： <aqua>5%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 恶魔领主坐骑的蹄铁锻造而成。'
+  - '<gray> 每一步都带着硫磺的气息。'
+  - '<gray> 宣告着穿戴者的危险与死亡。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 装备等级： <aqua>10'
+  - '<dark_gray> 评分： <red>500'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray> 可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 二阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 6.0
+    MaxHealth: 1000.0
+    DodgeChance: 5.0
+    Level: 10
+
+精灵1:
+  Id: GOLDEN_SWORD
+  Display: '<dark_purple> 星辉·伊希斯'
+  Lore:
+  - '<yellow> 锻造武器               史诗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 攻击力： <aqua>550-950'
+  - '<dark_gray> 暴击几率： <aqua>8%'
+  - '<dark_gray> 暴击伤害： <aqua>60%'
+  - '<dark_gray> 命中： <aqua>7%'
+  - '<dark_gray> 吸血几率： <aqua>6%'
+  - '<dark_gray> 吸血倍率： <aqua>20%'
+  - '<dark_gray> 攻速： <aqua>+10%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 精灵王艾拉尔的佩剑。'
+  - '<gray> 满月之夜，剑身会显现王族的封印。'
+  - '<gray> 那是精灵最后的希望与荣光。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 装备等级： <aqua>15'
+  - '<dark_gray> 评分： <red>1000'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 二阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 550.0
+    AttackMax: 950.0
+    CritChance: 8.0
+    CritDamage: 60.0
+    LifestealChance: 6.0
+    LifestealMultiplier: 20.0
+    Level: 15
+
+精灵2:
+  Id: GOLDEN_CHESTPLATE
+  Display: '<dark_purple> 星辉·星织圣衣'
+  Lore:
+  - '<yellow> 锻造防具               史诗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 护甲强度： <aqua>15%'
+  - '<dark_gray> 生命上限： <aqua>+3500'
+  - '<dark_gray> 每秒回血： <aqua>+30'
+  - '<dark_gray> 韧性： <aqua>7%'
+  - '<dark_gray> 伤害减免： <aqua>5%'
+  - '<dark_gray> 反伤： <aqua>5%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 精灵圣殿的祭司长在星陨之夜编织的圣衣。'
+  - '<gray> 由流星的纤维与月光之纱织成。'
+  - '<gray> 能驱散一切邪术与诅咒。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 装备等级： <aqua>15'
+  - '<dark_gray> 评分： <red>1000'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 二阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 3500.0
+    HealthRegen: 30.0
+    Level: 15
+
+精灵3:
+  Id: GOLDEN_LEGGINGS
+  Display: '<dark_purple> 星辉·晨曦'
+  Lore:
+  - '<yellow> 锻造防具               史诗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 护甲强度： <aqua>12%'
+  - '<dark_gray> 生命上限： <aqua>+2500'
+  - '<dark_gray> 闪避： <aqua>8%'
+  - '<dark_gray> 移速： <aqua>+12%'
+  - '<dark_gray> 韧性： <aqua>5%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 精灵英雄艾拉汗的遗物。'
+  - '<gray> 他在最后一战前夜。'
+  - '<gray> 将晨曦的光芒封印在这对护腿中，照亮黑暗。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 装备等级： <aqua>15'
+  - '<dark_gray> 评分： <red>1000'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 二阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 12.0
+    MaxHealth: 2500.0
+    DodgeChance: 8.0
+    Level: 15
+
+精灵4:
+  Id: GOLDEN_BOOTS
+  Display: '<dark_purple> 星辉·风行者'
+  Lore:
+  - '<yellow> 锻造防具               史诗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 护甲强度： <aqua>8%'
+  - '<dark_gray> 生命上限： <aqua>+1800'
+  - '<dark_gray> 移速： <aqua>+25%'
+  - '<dark_gray> 跳跃增强： <aqua>3级'
+  - '<dark_gray> 闪避： <aqua>7%'
+  - '<dark_gray> 韧性： <aqua>3%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 精灵游侠传奇塔瑞尔的靴子。'
+  - '<gray> 她追随风的脚步。'
+  - '<gray> 从北境到南疆，传说从未留下足迹。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 装备等级： <aqua>15'
+  - '<dark_gray> 评分： <red>1000'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray> 可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 二阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 8.0
+    MaxHealth: 1800.0
+    DodgeChance: 7.0
+    Level: 15
+
+堕落1:
+  Id: DIAMOND_SWORD
+  Display: '<gold> 堕神·米凯尔审判'
+  Lore:
+  - '<yellow> 锻造武器               传说'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 攻击力： <aqua>1200-2000'
+  - '<dark_gray> 暴击几率： <aqua>10%'
+  - '<dark_gray> 暴击伤害： <aqua>80%'
+  - '<dark_gray> 命中： <aqua>10%'
+  - '<dark_gray> 吸血几率： <aqua>8%'
+  - '<dark_gray> 吸血倍率： <aqua>25%'
+  - '<dark_gray> 攻速： <aqua>+15%'
+  - '<dark_gray> 穿透： <aqua>5%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 圣殿骑士团大团长的圣剑。'
+  - '<gray> 当他被诬陷背叛时，他用这把剑自证清白。'
+  - '<gray> 剑刃裂开，鲜血洗净了冤屈，从此剑染上了永恒的悲伤。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 装备等级： <aqua>20'
+  - '<dark_gray> 评分： <red>2000'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray> 可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 四阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 1200.0
+    AttackMax: 2000.0
+    CritChance: 10.0
+    CritDamage: 80.0
+    LifestealChance: 8.0
+    LifestealMultiplier: 25.0
+    Level: 20
+
+堕落2:
+  Id: DIAMOND_CHESTPLATE
+  Display: '<gold> 堕神·赎罪者'
+  Lore:
+  - '<yellow> 锻造防具               传说'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 护甲强度： <aqua>18%'
+  - '<dark_gray> 生命上限： <aqua>+7000'
+  - '<dark_gray> 每秒回血： <aqua>+50'
+  - '<dark_gray> 韧性： <aqua>10%'
+  - '<dark_gray> 伤害减免： <aqua>8%'
+  - '<dark_gray> 反伤： <aqua>8%'
+  - '<dark_gray> 格挡： <aqua>5%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 堕落的圣骑士凯恩在临终前。'
+  - '<gray> 请矮人用圣火重铸他的铠甲。'
+  - '<gray> 每一道修复的痕迹都是一个忏悔的祈祷。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 装备等级： <aqua>20'
+  - '<dark_gray> 评分： <red>2000'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray> 可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 四阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 18.0
+    MaxHealth: 7000.0
+    HealthRegen: 50.0
+    Level: 20
+
+堕落3:
+  Id: DIAMOND_LEGGINGS
+  Display: '<gold> 堕神·冥府边境'
+  Lore:
+  - '<yellow> 锻造防具               传说'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 护甲强度： <aqua>15%'
+  - '<dark_gray> 生命上限： <aqua>+5000'
+  - '<dark_gray> 闪避： <aqua>10%'
+  - '<dark_gray> 移速： <aqua>+15%'
+  - '<dark_gray> 韧性： <aqua>8%'
+  - '<dark_gray> 格挡： <aqua>4%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 人类探险家雷克唯一从冥府边境带回的遗物。'
+  - '<gray> 他的同伴都留在了那里。'
+  - '<gray> 只有这双腿甲跟随着他回到故乡。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 装备等级： <aqua>20'
+  - '<dark_gray> 评分： <red>2000'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 四阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 5000.0
+    DodgeChance: 10.0
+    Level: 20
+
+堕落4:
+  Id: DIAMOND_BOOTS
+  Display: '<gold> 堕神·深渊漫步'
+  Lore:
+  - '<yellow> 锻造防具               传说'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 护甲强度： <aqua>10%'
+  - '<dark_gray> 生命上限： <aqua>+3500'
+  - '<dark_gray> 移速： <aqua>+30%'
+  - '<dark_gray> 跳跃增强： <aqua>4级'
+  - '<dark_gray> 闪避： <aqua>10%'
+  - '<dark_gray> 韧性： <aqua>5%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 战士塔格去过深渊又回来的人。'
+  - '<gray> 他带回了三样东西。'
+  - '<gray> 这道伤疤、这双靴子，和一个永不说出的秘密。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 装备等级： <aqua>20'
+  - '<dark_gray> 评分： <red>2000'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray> 可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray> 可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 四阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 10.0
+    MaxHealth: 3500.0
+    DodgeChance: 10.0
+    Level: 20
+
+村正:
+  Id: IRON_SWORD
+  Display: '<gold> 传说·妖刀村正千魂'
+  Lore:
+  - '<yellow> 锻造武器               传说'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 攻击力： <aqua>2800-4000'
+  - '<dark_gray> 暴击几率： <aqua>12%'
+  - '<dark_gray> 暴击伤害： <aqua>100%'
+  - '<dark_gray> 命中： <aqua>12%'
+  - '<dark_gray> 吸血几率： <aqua>10%'
+  - '<dark_gray> 吸血倍率： <aqua>30%'
+  - '<dark_gray> 攻速： <aqua>+20%'
+  - '<dark_gray> 穿透： <aqua>8%'
+  - '<dark_gray> 破甲： <aqua>5%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 东瀛刀匠村正锻造的最后一把刀。'
+  - '<gray> 传说他将仇敌的怨魂封入刀中。'
+  - '<gray> 从此刀下亡魂过千，刀身永不干涸。'
+  - '<gray> 每到月圆之夜，刀中怨魂便会低语。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 装备等级： <aqua>15'
+  - '<dark_gray> 评分： <red>5000'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray> 可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray> 可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 五阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 2800.0
+    AttackMax: 4000.0
+    CritChance: 12.0
+    CritDamage: 100.0
+    LifestealChance: 10.0
+    LifestealMultiplier: 30.0
+    Level: 15
+
+血弑:
+  Id: GOLDEN_SWORD
+  Display: '<dark_red> 传说·血弑无尽渴求'
+  Lore:
+  - '<white> 近战武器          <gold> 锻造武器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 攻击力： <aqua>6000-9500'
+  - '<dark_gray> 暴击几率： <aqua>15%'
+  - '<dark_gray> 暴击伤害： <aqua>120%'
+  - '<dark_gray> 命中： <aqua>15%'
+  - '<dark_gray> 吸血几率： <aqua>12%'
+  - '<dark_gray> 吸血倍率： <aqua>40%'
+  - '<dark_gray> 攻速： <aqua>+25%'
+  - '<dark_gray> 穿透： <aqua>12%'
+  - '<dark_gray> 破甲： <aqua>10%'
+  - '<dark_gray> 冰冻： <aqua>5%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<gray> 嗜血魔剑渴求的碎片重铸之刃。'
+  - '<gray> 剑身如血铸成。'
+  - '<gray> 传说它曾饮尽一整支军队的鲜血。'
+  - '<gray> 至今仍在渴求下一滴，永不满足。'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray> 装备等级： <aqua>20'
+  - '<dark_gray> 评分： <red>10000'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray> 可镶嵌<红宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray> 可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray> 可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray> 可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple> 五阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 6000.0
+    AttackMax: 9500.0
+    CritChance: 15.0
+    CritDamage: 120.0
+    LifestealChance: 12.0
+    LifestealMultiplier: 40.0
+    Level: 20
+
+遗忘1:
+  Id: DIAMOND_SWORD
+  Display: '<gold><bold>遗忘圣剑'
+  Lore:
+  - '<yellow>锻造武器               副手'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>攻击力： <aqua>3800-6000'
+  - '<dark_gray>暴击几率： <aqua>13%'
+  - '<dark_gray>暴击伤害： <aqua>110%'
+  - '<dark_gray>命中： <aqua>13%'
+  - '<dark_gray>吸血几率： <aqua>10%'
+  - '<dark_gray>吸血倍率： <aqua>35%'
+  - '<dark_gray>攻速： <aqua>+22%'
+  - '<dark_gray>穿透： <aqua>10%'
+  - '<dark_gray>破甲： <aqua>8%'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_gray>评分： <red>7000'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_purple>四阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 3800.0
+    AttackMax: 6000.0
+    CritChance: 13.0
+    CritDamage: 110.0
+    LifestealChance: 10.0
+    LifestealMultiplier: 35.0
+    Level: 25
+
+遗忘2:
+  Id: DIAMOND_CHESTPLATE
+  Display: '<gold><bold>遗忘圣铠'
+  Lore:
+  - '<yellow>锻造防具               远古传说'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>护甲强度： <aqua>22%'
+  - '<dark_gray>生命上限： <aqua>+20000'
+  - '<dark_gray>每秒回血： <aqua>+80'
+  - '<dark_gray>韧性： <aqua>15%'
+  - '<dark_gray>伤害减免： <aqua>12%'
+  - '<dark_gray>反伤： <aqua>12%'
+  - '<dark_gray>格挡： <aqua>10%'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_gray>评分： <red>7000'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_purple>四阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 22.0
+    MaxHealth: 20000.0
+    HealthRegen: 80.0
+    Level: 25
+
+遗忘3:
+  Id: DIAMOND_LEGGINGS
+  Display: '<gold><bold>遗忘圣裤'
+  Lore:
+  - '<yellow>锻造防具               远古传说'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>护甲强度： <aqua>18%'
+  - '<dark_gray>生命上限： <aqua>+15000'
+  - '<dark_gray>闪避： <aqua>12%'
+  - '<dark_gray>移速： <aqua>+18%'
+  - '<dark_gray>韧性： <aqua>12%'
+  - '<dark_gray>格挡： <aqua>8%'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_gray>评分： <red>7000'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_purple>四阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 18.0
+    MaxHealth: 15000.0
+    DodgeChance: 12.0
+    Level: 25
+
+遗忘4:
+  Id: DIAMOND_BOOTS
+  Display: '<gold><bold>遗忘圣靴'
+  Lore:
+  - '<yellow>锻造防具               远古传说'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>护甲强度： <aqua>12%'
+  - '<dark_gray>生命上限： <aqua>+10000'
+  - '<dark_gray>移速： <aqua>+35%'
+  - '<dark_gray>跳跃增强： <aqua>5级'
+  - '<dark_gray>闪避： <aqua>12%'
+  - '<dark_gray>韧性： <aqua>8%'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_gray>评分： <red>7000'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_purple>四阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 12.0
+    MaxHealth: 10000.0
+    DodgeChance: 12.0
+    Level: 25
+
+真魔王1:
+  Id: DIAMOND_SWORD
+  Display: '<red><bold>真·莫洛斯托魔王之刃'
+  Lore:
+  - '<yellow>锻造武器               可副手'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>攻击力： <aqua>6500-11000'
+  - '<dark_gray>暴击几率： <aqua>18%'
+  - '<dark_gray>暴击伤害： <aqua>150%'
+  - '<dark_gray>命中： <aqua>18%'
+  - '<dark_gray>吸血几率： <aqua>15%'
+  - '<dark_gray>吸血倍率： <aqua>50%'
+  - '<dark_gray>攻速： <aqua>+30%'
+  - '<dark_gray>穿透： <aqua>15%'
+  - '<dark_gray>破甲： <aqua>12%'
+  - '<dark_gray>真实伤害： <aqua>5%'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_gray>评分： <red>15000'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_purple>五阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 6500.0
+    AttackMax: 11000.0
+    CritChance: 18.0
+    CritDamage: 150.0
+    LifestealChance: 15.0
+    LifestealMultiplier: 50.0
+    Level: 25
+
+真魔王2:
+  Id: DIAMOND_HELMET
+  Display: '<red><bold>真·魔王头盔'
+  Lore:
+  - '<yellow>锻造防具               远古传说'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>护甲强度： <aqua>15%'
+  - '<dark_gray>生命上限： <aqua>+40000'
+  - '<dark_gray>每秒回血： <aqua>+100'
+  - '<dark_gray>韧性： <aqua>18%'
+  - '<dark_gray>伤害减免： <aqua>15%'
+  - '<dark_gray>反伤： <aqua>15%'
+  - '<dark_gray>格挡： <aqua>12%'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_gray>评分： <red>15000'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_purple>五阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 15.0
+    MaxHealth: 40000.0
+    HealthRegen: 100.0
+    Level: 25
+
+真魔王3:
+  Id: DIAMOND_CHESTPLATE
+  Display: '<red><bold>真·魔王铠甲'
+  Lore:
+  - '<yellow>锻造防具               远古传说'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>护甲强度： <aqua>25%'
+  - '<dark_gray>生命上限： <aqua>+50000'
+  - '<dark_gray>每秒回血： <aqua>+150'
+  - '<dark_gray>韧性： <aqua>20%'
+  - '<dark_gray>伤害减免： <aqua>18%'
+  - '<dark_gray>反伤： <aqua>18%'
+  - '<dark_gray>格挡： <aqua>15%'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_gray>评分： <red>15000'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_purple>五阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 25.0
+    MaxHealth: 50000.0
+    HealthRegen: 150.0
+    Level: 25
+
+真魔王4:
+  Id: DIAMOND_LEGGINGS
+  Display: '<red><bold>真·魔王护腿'
+  Lore:
+  - '<yellow>锻造防具               远古传说'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>护甲强度： <aqua>20%'
+  - '<dark_gray>生命上限： <aqua>+35000'
+  - '<dark_gray>闪避： <aqua>15%'
+  - '<dark_gray>移速： <aqua>+25%'
+  - '<dark_gray>韧性： <aqua>15%'
+  - '<dark_gray>格挡： <aqua>12%'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_gray>评分： <red>15000'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_purple>五阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 20.0
+    MaxHealth: 35000.0
+    DodgeChance: 15.0
+    Level: 25
+
+真魔王5:
+  Id: DIAMOND_BOOTS
+  Display: '<red><bold>真·魔王战靴'
+  Lore:
+  - '<yellow>锻造防具               远古传说'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>护甲强度： <aqua>12%'
+  - '<dark_gray>生命上限： <aqua>+25000'
+  - '<dark_gray>移速： <aqua>+45%'
+  - '<dark_gray>跳跃增强： <aqua>6级'
+  - '<dark_gray>闪避： <aqua>15%'
+  - '<dark_gray>韧性： <aqua>10%'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_gray>评分： <red>15000'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_purple>五阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 12.0
+    MaxHealth: 25000.0
+    DodgeChance: 15.0
+    Level: 25
+
+白骨1:
+  Id: GOLDEN_SWORD
+  Display: '<gold><bold>白骨之骸巨剑'
+  Lore:
+  - '<yellow>锻造武器               传说'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>攻击力： <aqua>1600-2800'
+  - '<dark_gray>暴击几率： <aqua>11%'
+  - '<dark_gray>暴击伤害： <aqua>90%'
+  - '<dark_gray>命中： <aqua>11%'
+  - '<dark_gray>吸血几率： <aqua>8%'
+  - '<dark_gray>吸血倍率： <aqua>28%'
+  - '<dark_gray>攻速： <aqua>+18%'
+  - '<dark_gray>穿透： <aqua>8%'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_gray>评分： <red>3500'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_purple>四阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 1600.0
+    AttackMax: 2800.0
+    CritChance: 11.0
+    CritDamage: 90.0
+    LifestealChance: 8.0
+    LifestealMultiplier: 28.0
+    Level: 25
+
+白骨2:
+  Id: GOLDEN_CHESTPLATE
+  Display: '<gold><bold>白骨之骸铠甲'
+  Lore:
+  - '<yellow>锻造防具               传说'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>护甲强度： <aqua>16%'
+  - '<dark_gray>生命上限： <aqua>+8500'
+  - '<dark_gray>每秒回血： <aqua>+45'
+  - '<dark_gray>韧性： <aqua>10%'
+  - '<dark_gray>伤害减免： <aqua>8%'
+  - '<dark_gray>反伤： <aqua>8%'
+  - '<dark_gray>格挡： <aqua>6%'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_gray>评分： <red>3500'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_purple>四阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 16.0
+    MaxHealth: 8500.0
+    HealthRegen: 45.0
+    Level: 25
+
+白骨3:
+  Id: GOLDEN_LEGGINGS
+  Display: '<gold><bold>白骨之骸护腿'
+  Lore:
+  - '<yellow>锻造防具               传说'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>护甲强度： <aqua>13%'
+  - '<dark_gray>生命上限： <aqua>+6000'
+  - '<dark_gray>闪避： <aqua>9%'
+  - '<dark_gray>移速： <aqua>+14%'
+  - '<dark_gray>韧性： <aqua>8%'
+  - '<dark_gray>格挡： <aqua>5%'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_gray>评分： <red>3500'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_purple>四阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 13.0
+    MaxHealth: 6000.0
+    DodgeChance: 9.0
+    Level: 25
+
+白骨4:
+  Id: GOLDEN_BOOTS
+  Display: '<gold><bold>白骨之骸战靴'
+  Lore:
+  - '<yellow>锻造防具               传说'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>护甲强度： <aqua>9%'
+  - '<dark_gray>生命上限： <aqua>+4500'
+  - '<dark_gray>移速： <aqua>+28%'
+  - '<dark_gray>跳跃增强： <aqua>4级'
+  - '<dark_gray>闪避： <aqua>8%'
+  - '<dark_gray>韧性： <aqua>5%'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_gray>评分： <red>3500'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<dark_green>*<dark_aqua>[<gray>可镶嵌<绿宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_purple>四阶装备'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 9.0
+    MaxHealth: 4500.0
+    DodgeChance: 8.0
+    Level: 25
+
+莫邪:
+  Id: STONE_SWORD
+  Display: '<dark_gray>[<red>神器<dark_gray>]<dark_purple>莫邪'
+  Lore:
+  - '<yellow>锻造武器                     远古传说'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_purple>进阶等级 <aqua>✞<gray>✞✞✞✞'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_aqua>固定属性：'
+  - '<dark_gray>攻击力： <aqua>12000-23000'
+  - '<dark_gray>暴击几率： <aqua>20%'
+  - '<dark_gray>暴击伤害： <aqua>180%'
+  - '<dark_gray>命中： <aqua>20%'
+  - '<dark_gray>吸血几率： <aqua>18%'
+  - '<dark_gray>吸血倍率： <aqua>60%'
+  - '<dark_gray>攻速： <aqua>+35%'
+  - '<dark_gray>穿透： <aqua>20%'
+  - '<dark_gray>破甲： <aqua>15%'
+  - '<dark_gray>真实伤害： <aqua>10%'
+  - '<dark_gray>冰冻： <aqua>15%'
+  - '<dark_gray>致盲： <aqua>15%'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>魔剑核心<dark_gray>]<dark_purple>30颗'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_blue>致死斩杀： <aqua>5%'
+  - '<gray>【<aqua>神技 <gold>致死斩击<gray>】'
+  - '<green>只对玩家目标'
+  - '<green>造成目标当前血量30%真实伤害.'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 12000.0
+    AttackMax: 23000.0
+    CritChance: 20.0
+    CritDamage: 180.0
+    LifestealChance: 18.0
+    LifestealMultiplier: 60.0
+    Level: 25
+
+神域救赎光剑:
+  Id: DIAMOND_SWORD
+  Display: '<gold><bold>神域救赎光剑'
+  Lore:
+  - '<yellow>近战武器                       锻造武器'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>攻击力： <aqua>8500-17000'
+  - '<dark_gray>暴击几率： <aqua>16%'
+  - '<dark_gray>暴击伤害： <aqua>140%'
+  - '<dark_gray>命中： <aqua>16%'
+  - '<dark_gray>吸血几率： <aqua>14%'
+  - '<dark_gray>吸血倍率： <aqua>45%'
+  - '<dark_gray>攻速： <aqua>+28%'
+  - '<dark_gray>穿透： <aqua>14%'
+  - '<dark_gray>破甲： <aqua>10%'
+  - '<dark_gray>真实伤害： <aqua>8%'
+  - '<dark_gray>冰冻： <aqua>5%'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_gray>装备等级： <aqua>35'
+  - '<dark_gray>评分： <red>20000'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_purple>*<dark_aqua>[<gray>可镶嵌<紫宝石><dark_aqua>]'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<dark_purple>五阶装备'
+  - '<dark_gray>技能类型： <aqua>主动技能'
+  - '<dark_gray>技能名称： <gold>救赎之光'
+  - '<dark_gray>技能冷却： <aqua>60'
+  - '<dark_gray>魔法消耗： <aqua>50'
+  - '<gray>【<gold>神技 <aqua>救赎之光<gray>】'
+  - '<green>回复自身最大生命值'
+  - '<green>接下来10秒每秒对范围内5格'
+  - '<green>玩家造成最大生命值12%的真实伤害'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 8500.0
+    AttackMax: 17000.0
+    CritChance: 16.0
+    CritDamage: 140.0
+    LifestealChance: 14.0
+    LifestealMultiplier: 45.0
+    Level: 35
+

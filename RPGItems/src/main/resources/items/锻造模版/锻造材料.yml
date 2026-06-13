@@ -1,0 +1,268 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 锻造材料.yml
+# ========================================
+
+下级装备核心:
+  Id: DIAMOND
+  Display: '<green><bold>下级装备核心'
+  Lore:
+  - '<yellow>锻造材料        副职业用品'
+  - '<green>分解低价装备获得的核心'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+中级装备核心:
+  Id: DIAMOND
+  Display: '<blue><bold>中级装备核心'
+  Lore:
+  - '<yellow>锻造材料        副职业用品'
+  - '<green>分解中阶装备获得的核心'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+上级装备核心:
+  Id: DIAMOND
+  Display: '<gold><bold>上级装备核心'
+  Lore:
+  - '<yellow>锻造材料        副职业用品'
+  - '<green>分解高阶装备获得的核心'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+一阶锻造材料:
+  Id: GUNPOWDER
+  Display: '<aqua><bold>一阶锻造材料'
+  Lore:
+  - '<yellow>锻造材料        副职业用品'
+  - '<green>分解装备获得的锻造材料'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+二阶锻造材料:
+  Id: GUNPOWDER
+  Display: '<green><bold>二阶锻造材料'
+  Lore:
+  - '<yellow>锻造材料        副职业用品'
+  - '<green>分解装备获得的锻造材料'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+三阶锻造材料:
+  Id: GUNPOWDER
+  Display: '<green><bold>三阶锻造材料'
+  Lore:
+  - '<yellow>锻造材料        副职业用品'
+  - '<green>分解装备获得的锻造材料'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+四阶锻造材料:
+  Id: GUNPOWDER
+  Display: '<blue><bold>四阶锻造材料'
+  Lore:
+  - '<yellow>锻造材料        副职业用品'
+  - '<green>分解装备获得的锻造材料'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+五阶锻造材料:
+  Id: GUNPOWDER
+  Display: '<blue><bold>五阶锻造材料'
+  Lore:
+  - '<yellow>锻造材料        副职业用品'
+  - '<green>分解装备获得的锻造材料'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+遗忘结晶:
+  Id: INK_SAC
+  Display: '<dark_purple><bold>遗忘结晶'
+  Lore:
+  - '<yellow>锻造材料                                    副职业用品'
+  - '<green>极少数遗忘之石中'
+  - '<green>会诞生一个遗忘结晶'
+  - '<green>遗忘结晶是锻造遗忘套装的主要材料之一'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 4
+
+魔王核心:
+  Id: EMERALD
+  Display: '<red><bold>魔王核心'
+  Lore:
+  - '<yellow>锻造材料                    副职业用品'
+  - '<yellow>用于锻造真魔王套装的核心材料'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+村正之魂:
+  Id: INK_SAC
+  Display: '<gold>村正之魂'
+  Lore:
+  - '<white>材料                                    <aqua>稀有'
+  - '<yellow>用于铸造更强武器的必要材料'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 7
+
+天族宝具碎片:
+  Id: INK_SAC
+  Display: '<dark_purple>天族宝具碎片'
+  Lore:
+  - '<white>锻造材料     <gold>传说'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 1
+
+骸骨结晶:
+  Id: QUARTZ
+  Display: '<dark_purple><bold>骸骨结晶'
+  Lore:
+  - '<yellow>锻造材料            副职业用品'
+  - '<gold>恐惧骸骨浓缩的力量结晶'
+  - '<gold>是锻造白骸套装的核心材料'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+巫妖粉尘:
+  Id: GUNPOWDER
+  Display: '<gold>巫妖之尘'
+  Lore:
+  - '<yellow>锻造材料                         副职业用品'
+  - '<gold>巫妖恩佩斯死亡后留下的灰尘'
+  - '<gold>数量极少 但是拥有不可思议的力量'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+巫妖之尘:
+  Id: GUNPOWDER
+  Display: '<gold>巫妖之尘'
+  Lore:
+  - '<yellow>锻造材料                         副职业用品'
+  - '<gold>巫妖恩佩斯死亡后留下的灰尘'
+  - '<gold>数量极少 但是拥有不可思议的力量'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+天空徽章:
+  Id: FIRE_CHARGE
+  Display: '<green>天空徽章'
+  Lore:
+  - '<dark_gray>[<yellow>材料<dark_gray>]                                            <dark_gray>[<dark_aqua>稀有<dark_gray>]'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  - '<yellow>天空锻造师用来注入能量的必备材料'
+  - '<dark_red><strikethrough>－－－－－－－－－－－－'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+强度石:
+  Id: INK_SAC
+  Display: '<green>强化石'
+  Lore:
+  - '<green>纯度<yellow><bold>5'
+  - '<yellow>说明1:<gray>增加锻造强度极品率'
+  - '<yellow>说明2:<gray>但不会影响品质几率'
+  - '<yellow>说明3:<gray>纯度5代表+5%几率,可叠加使用'
+  - '<yellow>说明4:<gray>建议一次不要超过20个,多了浪费'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+    CustomModelData: 12
+
+原初之石1星:
+  Id: EMERALD
+  Display: '<gold>[<dark_purple>原初之石<gold>]'
+  Lore:
+  - '<red>锻造类宝石'
+  - '<aqua><bold>纯度:<green>✪'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+原初之石2星:
+  Id: EMERALD
+  Display: '<gold>[<dark_purple>原初之石<gold>]'
+  Lore:
+  - '<red>锻造类宝石'
+  - '<aqua><bold>纯度:<green>✪✪'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+原初之石3星:
+  Id: EMERALD
+  Display: '<gold>[<dark_purple>原初之石<gold>]'
+  Lore:
+  - '<red>锻造类宝石'
+  - '<aqua><bold>纯度:<green>✪✪✪'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+原初之石4星:
+  Id: EMERALD
+  Display: '<gold>[<dark_purple>原初之石<gold>]'
+  Lore:
+  - '<red>锻造类宝石'
+  - '<aqua><bold>纯度:<green>✪✪✪✪'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+原初之石5星:
+  Id: EMERALD
+  Display: '<gold>[<dark_purple>原初之石<gold>]'
+  Lore:
+  - '<red>锻造类宝石'
+  - '<aqua><bold>纯度:<green>✪✪✪✪✪'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+原初之石6星:
+  Id: EMERALD
+  Display: '<gold>[<dark_purple>原初之石<gold>]'
+  Lore:
+  - '<red>锻造类宝石'
+  - '<aqua><bold>纯度:<green>✪✪✪✪✪✪'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+原初之石7星:
+  Id: EMERALD
+  Display: '<gold>[<dark_purple>原初之石<gold>]'
+  Lore:
+  - '<red>锻造类宝石'
+  - '<aqua><bold>纯度:<green>✪✪✪✪✪✪✪'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+原初之石8星:
+  Id: EMERALD
+  Display: '<gold>[<dark_purple>原初之石<gold>]'
+  Lore:
+  - '<red>锻造类宝石'
+  - '<aqua><bold>纯度:<green>✪✪✪✪✪✪✪✪'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+

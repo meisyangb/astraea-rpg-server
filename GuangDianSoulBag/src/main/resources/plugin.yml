@@ -1,0 +1,30 @@
+name: GuangDianSoulBag
+version: 1.0.0
+main: cn.guangdian.soulbag.GuangDianSoulBag
+api-version: '1.21'
+depend: [RPGCore]
+authors: [GuangDian]
+description: 灵魂背包系统 - 为玩家提供随身灵魂空间
+
+commands:
+  soulbag:
+    description: 打开灵魂背包
+    usage: /soulbag [player]
+    permission: soulbag.use
+    aliases: [sb, 灵魂背包]
+  soulbagadmin:
+    description: 灵魂背包管理命令
+    usage: /soulbagadmin <reload|clear|view>
+    permission: soulbag.admin
+    aliases: [sba]
+
+permissions:
+  soulbag.use:
+    description: 允许使用灵魂背包
+    default: true
+  soulbag.admin:
+    description: 灵魂背包管理权限
+    default: op
+  soulbag.bypass:
+    description: 绕过背包容量限制
+    default: false

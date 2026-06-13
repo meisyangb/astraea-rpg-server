@@ -1,0 +1,26 @@
+name: GuangDianBlockDrop
+version: 1.0.0
+main: cn.guangdian.blockdrop.GuangDianBlockDrop
+api-version: '1.21'
+depend:
+  - RPGCore
+softdepend:
+  - MythicMobs
+author: GuangDian Team
+description: 玩家挖掘矿物时有几率掉落 MythicMobs 物品
+
+commands:
+  blockdrop:
+    description: 方块掉落管理命令
+    usage: /blockdrop <reload|list|debug>
+    permission: blockdrop.admin
+
+permissions:
+  blockdrop.admin:
+    description: 允许使用所有管理命令
+    default: op
+    children:
+      blockdrop.reload: true
+  blockdrop.reload:
+    description: 允许重新加载配置
+    default: op

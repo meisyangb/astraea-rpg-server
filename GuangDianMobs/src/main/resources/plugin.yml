@@ -1,0 +1,34 @@
+name: GuangDianMobs
+version: 1.0.0
+main: cn.guangdian.mobs.GuangDianMobs
+api-version: '1.21.6'
+author: GuangDian
+description: 光点自定义怪物系统（含仇恨系统）
+
+dependencies:
+  server:
+    RPGCore:
+      load: BEFORE
+      required: true
+
+softdepend:
+  - PlaceholderAPI
+  - MythicMobs
+
+commands:
+  gdmm:
+    description: GuangDianMobs 管理命令
+    usage: /gdmm <spawn/kill/reload/list>
+    permission: guangdianmobs.admin
+  gdmsp:
+    description: GuangDianMobs 刷新点管理命令
+    usage: /gdmsp <create/delete/info/list/tp/spawn/set/enable/disable/near>
+    permission: guangdianmobs.admin
+
+permissions:
+  guangdianmobs.admin:
+    description: GuangDianMobs 管理员权限
+    default: op
+  guangdianmobs.spawn:
+    description: 允许使用刷新点命令
+    default: op

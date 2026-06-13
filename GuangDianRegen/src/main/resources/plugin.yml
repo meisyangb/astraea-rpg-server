@@ -1,0 +1,37 @@
+name: GuangDianRegen
+version: 1.0.0
+main: cn.guangdian.regen.GuangDianRegen
+api-version: '1.21'
+author: GuangDian Team
+description: 矿场/林场自动刷新系统
+
+commands:
+  regen:
+    description: 矿场/林场管理命令
+    usage: /regen <wand|pos1|pos2|create|delete|list|info|edit|reload>
+    permission: regen.admin
+
+permissions:
+  regen.admin:
+    description: 管理员权限
+    default: op
+    children:
+      regen.create: true
+      regen.delete: true
+      regen.edit: true
+      regen.reload: true
+  regen.create:
+    description: 创建区域
+    default: op
+  regen.delete:
+    description: 删除区域
+    default: op
+  regen.edit:
+    description: 编辑区域
+    default: op
+  regen.reload:
+    description: 重载配置
+    default: op
+  regen.use:
+    description: 使用刷新区域
+    default: true

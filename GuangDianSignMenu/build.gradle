@@ -1,0 +1,15 @@
+// ========================================
+// GuangDianSignMenu - 右键告示牌打开菜单
+// ========================================
+
+plugins {
+    id 'java'
+}
+
+dependencies {
+    compileOnly project(':plugins:RPGCore')
+}
+
+jar {
+    archiveBaseName.set('GuangDianSignMenu')
+}

@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+    compileOnly project(':plugins:RPGCore')
+    compileOnly files('../GuangDianArmorStats/libs/PlaceholderAPI.jar')
+    compileOnly files('libs/Vault.jar')
+
+    // SQLite JDBC 驱动
+    implementation 'org.xerial:sqlite-jdbc:3.45.3.0'
+}
+
+jar {
+    archiveBaseName.set('GuangDianPoints')
+
+    // 打包 SQLite JDBC 驱动
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

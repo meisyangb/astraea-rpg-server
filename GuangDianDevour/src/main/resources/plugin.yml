@@ -1,0 +1,29 @@
+name: GuangDianDevour
+version: 1.0.0
+main: cn.guangdian.devour.GuangDianDevour
+api-version: '1.21'
+author: Astraea RPG Team
+description: 吞噬系统插件 - 武器吞噬与属性累加
+
+depend:
+  - RPGCore
+  - MythicMobs
+
+softdepend:
+  - PlaceholderAPI
+  - Vault
+
+commands:
+  devour:
+    description: 吞噬系统命令
+    usage: /devour <open|give|info|reload>
+    permission: guangdian.devour.use
+    aliases: [吞噬]
+
+permissions:
+  guangdian.devour.use:
+    description: 使用吞噬系统
+    default: true
+  guangdian.devour.admin:
+    description: 吞噬系统管理权限
+    default: op

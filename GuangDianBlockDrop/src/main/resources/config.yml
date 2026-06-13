@@ -1,0 +1,183 @@
+enabled: true
+debug: false
+
+blocks:
+  DIAMOND_ORE:
+    drops:
+      原初之石1星:
+        type: mythic
+        amount: 1
+        chance: 0.05
+      exp_bonus:
+        type: experience
+        amount: 1-3
+
+  DEEPSLATE_DIAMOND_ORE:
+    drops:
+      原初之石1星:
+        type: mythic
+        amount: 1
+        chance: 0.05
+      exp_bonus:
+        type: experience
+        amount: 1-3
+
+  EMERALD_ORE:
+    drops:
+      原初之石2星:
+        type: mythic
+        amount: 1
+        chance: 0.03
+      exp_bonus:
+        type: experience
+        amount: 2-4
+
+  DEEPSLATE_EMERALD_ORE:
+    drops:
+      原初之石2星:
+        type: mythic
+        amount: 1
+        chance: 0.03
+      exp_bonus:
+        type: experience
+        amount: 2-4
+
+  GOLD_ORE:
+    drops:
+      一阶锻造材料:
+        type: mythic
+        amount: 1-2
+        chance: 0.10
+      exp_bonus:
+        type: experience
+        amount: 1-2
+
+  DEEPSLATE_GOLD_ORE:
+    drops:
+      一阶锻造材料:
+        type: mythic
+        amount: 1-2
+        chance: 0.10
+      exp_bonus:
+        type: experience
+        amount: 1-2
+
+  IRON_ORE:
+    drops:
+      二阶锻造材料:
+        type: mythic
+        amount: 1-2
+        chance: 0.15
+      exp_bonus:
+        type: experience
+        amount: 1
+
+  DEEPSLATE_IRON_ORE:
+    drops:
+      二阶锻造材料:
+        type: mythic
+        amount: 1-2
+        chance: 0.15
+      exp_bonus:
+        type: experience
+        amount: 1
+
+  COPPER_ORE:
+    drops:
+      三阶锻造材料:
+        type: mythic
+        amount: 1-3
+        chance: 0.12
+      exp_bonus:
+        type: experience
+        amount: 1
+
+  COAL_ORE:
+    drops:
+      四阶锻造材料:
+        type: mythic
+        amount: 1-2
+        chance: 0.08
+      exp_bonus:
+        type: experience
+        amount: 1
+
+  DEEPSLATE_COAL_ORE:
+    drops:
+      四阶锻造材料:
+        type: mythic
+        amount: 1-2
+        chance: 0.08
+      exp_bonus:
+        type: experience
+        amount: 1
+
+  LAPIS_ORE:
+    drops:
+      五阶锻造材料:
+        type: mythic
+        amount: 1-2
+        chance: 0.06
+      exp_bonus:
+        type: experience
+        amount: 1-2
+
+  DEEPSLATE_LAPIS_ORE:
+    drops:
+      五阶锻造材料:
+        type: mythic
+        amount: 1-2
+        chance: 0.06
+      exp_bonus:
+        type: experience
+        amount: 1-2
+
+  REDSTONE_ORE:
+    drops:
+      下级装备核心:
+        type: mythic
+        amount: 1
+        chance: 0.05
+      exp_bonus:
+        type: experience
+        amount: 1-2
+
+  DEEPSLATE_REDSTONE_ORE:
+    drops:
+      下级装备核心:
+        type: mythic
+        amount: 1
+        chance: 0.05
+      exp_bonus:
+        type: experience
+        amount: 1-2
+
+  NETHER_GOLD_ORE:
+    drops:
+      巫妖粉尘:
+        type: mythic
+        amount: 1
+        chance: 0.02
+      exp_bonus:
+        type: experience
+        amount: 2-4
+
+  ANCIENT_DEBRIS:
+    drops:
+      上级装备核心:
+        type: mythic
+        amount: 1
+        chance: 0.20
+      exp_bonus:
+        type: experience
+        amount: 5-8
+
+  NETHER_QUARTZ_ORE:
+    drops:
+      骸骨结晶:
+        type: mythic
+        amount: 1
+        chance: 0.03
+      exp_bonus:
+        type: experience
+        amount: 2-3

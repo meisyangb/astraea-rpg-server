@@ -1,0 +1,249 @@
+# 技能配置文件
+# 定义所有职业技能
+
+skills:
+  # ==================== 战士技能 ====================
+  
+  # 主动技能
+  slash:
+    name: "斩击"
+    type: "active"
+    material: "BLAZE_POWDER"
+    custom_model_data: 1001
+    description: "战士基础技能,造成物理伤害并击退敌人"
+    damage_mult: 1.5
+    range: 4.0
+    cooldown: 5
+    mana_cost: 10
+    required_tier: 1
+    effect: "fire"
+    status_effects: []
+    
+  shield_bash:
+    name: "盾击"
+    type: "active"
+    material: "SHIELD"
+    custom_model_data: 1002
+    description: "用盾牌猛击敌人,造成眩晕效果"
+    damage_mult: 2.0
+    range: 3.0
+    cooldown: 10
+    mana_cost: 15
+    required_tier: 1
+    effect: "explosion"
+    status_effects:
+      - "slowness"
+      
+  charge:
+    name: "冲锋"
+    type: "active"
+    material: "IRON_HORSE_ARMOR"
+    custom_model_data: 1003
+    description: "骑乘冲锋,造成大量伤害"
+    damage_mult: 3.0
+    range: 6.0
+    cooldown: 15
+    mana_cost: 20
+    required_tier: 3
+    effect: "explosion"
+    status_effects: []
+    
+  # 被动技能
+  tough:
+    name: "坚韧"
+    type: "passive"
+    material: "IRON_CHESTPLATE"
+    custom_model_data: 2001
+    description: "提升防御力,减少受到的伤害"
+    trigger_chance: 100
+    required_tier: 1
+    
+  regeneration:
+    name: "生命恢复"
+    type: "passive"
+    material: "GOLDEN_APPLE"
+    custom_model_data: 2002
+    description: "持续恢复生命值"
+    trigger_chance: 100
+    required_tier: 3
+    
+  # ==================== 法师技能 ====================
+  
+  fireball:
+    name: "火球术"
+    type: "active"
+    material: "FIRE_CHARGE"
+    custom_model_data: 1004
+    description: "发射一个火球,造成火焰伤害"
+    damage_mult: 2.0
+    range: 6.0
+    cooldown: 8
+    mana_cost: 15
+    required_tier: 1
+    effect: "fire"
+    status_effects: []
+    
+  ice_shield:
+    name: "冰盾"
+    type: "active"
+    material: "ICE"
+    custom_model_data: 1005
+    description: "召唤冰盾保护自己,提升防御"
+    damage_mult: 1.0
+    range: 0.0
+    cooldown: 20
+    mana_cost: 20
+    required_tier: 1
+    effect: "ice"
+    status_effects:
+      - "slowness"
+      
+  meteor:
+    name: "陨石术"
+    type: "active"
+    material: "FIREWORK_STAR"
+    custom_model_data: 1006
+    description: "召唤陨石从天而降,造成巨大伤害"
+    damage_mult: 5.0
+    range: 8.0
+    cooldown: 30
+    mana_cost: 50
+    required_tier: 6
+    effect: "explosion"
+    status_effects: []
+    
+  # 被动技能
+  mana_regen:
+    name: "法力恢复"
+    type: "passive"
+    material: "BOOK"
+    custom_model_data: 2003
+    description: "提升法力恢复速度"
+    trigger_chance: 100
+    required_tier: 1
+    
+  # ==================== 弓手技能 ====================
+  
+  aimed_shot:
+    name: "瞄准射击"
+    type: "active"
+    material: "BOW"
+    custom_model_data: 1007
+    description: "精准瞄准射击,造成额外伤害"
+    damage_mult: 2.5
+    range: 10.0
+    cooldown: 8
+    mana_cost: 10
+    required_tier: 1
+    effect: "magic"
+    status_effects: []
+    
+  arrow_rain:
+    name: "箭雨"
+    type: "active"
+    material: "SPECTRAL_ARROW"
+    custom_model_data: 1008
+    description: "射出大量箭矢,覆盖范围区域"
+    damage_mult: 1.5
+    range: 8.0
+    cooldown: 15
+    mana_cost: 25
+    required_tier: 3
+    effect: "magic"
+    status_effects: []
+    
+  # ==================== 刺客技能 ====================
+  
+  backstab:
+    name: "背刺"
+    type: "active"
+    material: "IRON_SWORD"
+    custom_model_data: 1009
+    description: "从背后攻击造成额外伤害"
+    damage_mult: 3.0
+    range: 3.0
+    cooldown: 10
+    mana_cost: 15
+    required_tier: 1
+    effect: "magic"
+    status_effects: []
+    
+  stealth:
+    name: "潜行"
+    type: "active"
+    material: "POTION"
+    custom_model_data: 1010
+    description: "进入隐身状态,躲避敌人"
+    damage_mult: 1.0
+    range: 0.0
+    cooldown: 20
+    mana_cost: 20
+    required_tier: 1
+    effect: "magic"
+    status_effects:
+      - "invisibility"
+      
+  # ==================== 牧师技能 ====================
+  
+  heal:
+    name: "治疗"
+    type: "active"
+    material: "GOLDEN_APPLE"
+    custom_model_data: 1011
+    description: "恢复生命值"
+    damage_mult: 0.0
+    range: 0.0
+    cooldown: 10
+    mana_cost: 15
+    required_tier: 1
+    effect: "heal"
+    status_effects: []
+    
+  blessing:
+    name: "祝福"
+    type: "active"
+    material: "ENCHANTED_GOLDEN_APPLE"
+    custom_model_data: 1012
+    description: "获得神明祝福,提升全属性"
+    damage_mult: 1.0
+    range: 5.0
+    cooldown: 30
+    mana_cost: 30
+    required_tier: 3
+    effect: "heal"
+    status_effects:
+      - "regeneration"
+      - "strength"
+      
+  # ==================== 高级技能 ====================
+  
+  divine_dragon_form:
+    name: "神圣龙形态"
+    type: "active"
+    material: "DRAGON_BREATH"
+    custom_model_data: 1013
+    description: "化身为神圣巨龙,获得强大力量"
+    damage_mult: 10.0
+    range: 10.0
+    cooldown: 60
+    mana_cost: 100
+    required_tier: 9
+    effect: "magic"
+    status_effects:
+      - "strength"
+      - "resistance"
+      - "speed"
+      
+  cosmic_annihilation:
+    name: "宇宙湮灭"
+    type: "active"
+    material: "END_CRYSTAL"
+    custom_model_data: 1014
+    description: "释放宇宙之力,毁灭一切"
+    damage_mult: 20.0
+    range: 15.0
+    cooldown: 120
+    mana_cost: 200
+    required_tier: 9
+    effect: "explosion"
+    status_effects: []

@@ -1,0 +1,174 @@
+pools:
+  normal:
+    display-name: "普通抽奖"
+    icon:
+      material: "CHEST"
+      custom-model-data: 0
+    cooldown-seconds: 60
+    permission: ""
+    currency:
+      type: "POINTS"
+      cost: 100
+    prizes:
+      common_iron:
+        display-name: "铁锭"
+        material: "IRON_INGOT"
+        custom-model-data: 0
+        amount: 10
+        weight: 50.0
+        rare: false
+        rarity-color: "<white>"
+        commands: []
+        messages:
+          - "<gray>你获得了 10 个铁锭!"
+      common_gold:
+        display-name: "金锭"
+        material: "GOLD_INGOT"
+        custom-model-data: 0
+        amount: 5
+        weight: 30.0
+        rare: false
+        rarity-color: "<yellow>"
+        commands: []
+        messages:
+          - "<yellow>你获得了 5 个金锭!"
+      rare_diamond:
+        display-name: "钻石"
+        material: "DIAMOND"
+        custom-model-data: 0
+        amount: 3
+        weight: 15.0
+        rare: true
+        rarity-color: "<aqua>"
+        commands: []
+        messages:
+          - "<aqua>你获得了 3 颗钻石!"
+      legendary_emerald:
+        display-name: "绿宝石"
+        material: "EMERALD"
+        custom-model-data: 0
+        amount: 1
+        weight: 5.0
+        rare: true
+        rarity-color: "<green>"
+        commands:
+          - "points give %player% 50"
+        messages:
+          - "<green>你获得了 1 颗绿宝石和 50 点券!"
+
+  premium:
+    display-name: "高级抽奖"
+    icon:
+      material: "ENDER_CHEST"
+      custom-model-data: 0
+    cooldown-seconds: 300
+    permission: "guangdian.lottery.premium"
+    currency:
+      type: "POINTS"
+      cost: 500
+    prizes:
+      rare_diamond_block:
+        display-name: "钻石块"
+        material: "DIAMOND_BLOCK"
+        custom-model-data: 0
+        amount: 1
+        weight: 40.0
+        rare: true
+        rarity-color: "<aqua>"
+        commands: []
+        messages:
+          - "<aqua>你获得了 1 个钻石块!"
+      epic_enchanted_book:
+        display-name: "附魔书"
+        material: "ENCHANTED_BOOK"
+        custom-model-data: 0
+        amount: 1
+        weight: 25.0
+        rare: true
+        rarity-color: "<light_purple>"
+        commands:
+          - "give %player% enchanted_book{StoredEnchantments:[{id:\"minecraft:sharpness\",lvl:5}]}"
+        messages:
+          - "<light_purple>你获得了一本锋利V附魔书!"
+      legendary_netherite:
+        display-name: "下界合金锭"
+        material: "NETHERITE_INGOT"
+        custom-model-data: 0
+        amount: 1
+        weight: 10.0
+        rare: true
+        rarity-color: "<gold>"
+        commands:
+          - "points give %player% 200"
+        messages:
+          - "<gold>你获得了 1 个下界合金锭和 200 点券!"
+      mythic_beacon:
+        display-name: "信标"
+        material: "BEACON"
+        custom-model-data: 0
+        amount: 1
+        weight: 5.0
+        rare: true
+        rarity-color: "<rainbow>"
+        commands:
+          - "points give %player% 500"
+        messages:
+          - "<rainbow>你获得了 1 个信标和 500 点券!"
+
+  special:
+    display-name: "限定抽奖"
+    icon:
+      material: "GOLD_BLOCK"
+      custom-model-data: 0
+    cooldown-seconds: 86400
+    permission: "guangdian.lottery.special"
+    currency:
+      type: "POINTS"
+      cost: 1000
+    prizes:
+      special_golden_apple:
+        display-name: "金苹果"
+        material: "GOLDEN_APPLE"
+        custom-model-data: 0
+        amount: 5
+        weight: 35.0
+        rare: true
+        rarity-color: "<gold>"
+        commands: []
+        messages:
+          - "<gold>你获得了 5 个金苹果!"
+      special_enchanted_golden_apple:
+        display-name: "附魔金苹果"
+        material: "ENCHANTED_GOLDEN_APPLE"
+        custom-model-data: 0
+        amount: 1
+        weight: 20.0
+        rare: true
+        rarity-color: "<gold>"
+        commands: []
+        messages:
+          - "<gold>你获得了 1 个附魔金苹果!"
+      special_totem:
+        display-name: "不死图腾"
+        material: "TOTEM_OF_UNDYING"
+        custom-model-data: 0
+        amount: 1
+        weight: 10.0
+        rare: true
+        rarity-color: "<yellow>"
+        commands:
+          - "points give %player% 1000"
+        messages:
+          - "<yellow>你获得了 1 个不死图腾和 1000 点券!"
+      special_elytra:
+        display-name: "鞘翅"
+        material: "ELYTRA"
+        custom-model-data: 0
+        amount: 1
+        weight: 5.0
+        rare: true
+        rarity-color: "<gradient:#55ffff:#5555ff>"
+        commands:
+          - "points give %player% 2000"
+        messages:
+          - "<gradient:#55ffff:#5555ff>你获得了 1 个鞘翅和 2000 点券!"

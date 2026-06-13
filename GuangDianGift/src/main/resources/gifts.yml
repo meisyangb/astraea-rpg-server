@@ -1,0 +1,100 @@
+# ========================================
+# GuangDianGift 礼包配置文件
+# 物品使用 RPGItems 中的定义
+# ========================================
+
+gifts:
+  # 礼包名称
+  新手礼包:
+    # 礼包显示名称
+    display: '<green>新手礼包'
+    # 礼包描述
+    description:
+      - '<yellow>欢迎加入游戏的新手礼包'
+      - '<gray>包含一套新手装备'
+    # 领取条件
+    conditions:
+      # 最大领取次数 (-1 表示无限)
+      max-claims: 1
+      # 需要的权限 (留空表示不需要权限)
+      permission: ''
+      # 需要的最低等级
+      min-level: 0
+      # 需要消耗的物品 (RPGItems 物品名:数量)
+      cost-items: []
+      # 需要消耗的金币
+      cost-money: 0
+      # 冷却时间 (秒, 0表示无冷却)
+      cooldown: 0
+    # 礼包内容 (RPGItems 物品名:数量)
+    items:
+      - 阿斯特瑞亚短剑:1
+      - 阿斯特瑞亚头盔:1
+      - 阿斯特瑞亚胸甲:1
+      - 阿斯特瑞亚护腿:1
+      - 阿斯特瑞亚靴子:1
+
+  # 高级礼包示例
+  VIP礼包:
+    display: '<gold>VIP礼包'
+    description:
+      - '<yellow>VIP玩家专属礼包'
+      - '<gray>包含稀有装备和材料'
+    conditions:
+      max-claims: 7
+      permission: 'guangdian.gift.vip'
+      min-level: 10
+      cost-items:
+        - 魔族结晶:5
+      cost-money: 1000
+      cooldown: 86400  # 24小时
+    items:
+      - 魔族统帅之剑:1
+      - 魔族统帅布甲:1
+
+  # 兑换礼包示例 (消耗材料兑换装备)
+  魔族装备兑换:
+    display: '<dark_purple>魔族装备兑换礼包'
+    description:
+      - '<yellow>使用魔族结晶兑换魔族装备'
+    conditions:
+      max-claims: -1  # 无限次
+      permission: ''
+      min-level: 15
+      cost-items:
+        - 魔族结晶:10
+      cost-money: 0
+      cooldown: 0
+    items:
+      - 魔族统帅之剑:1
+
+  # 每日签到礼包
+  每日签到:
+    display: '<aqua>每日签到礼包'
+    description:
+      - '<yellow>每日签到奖励'
+    conditions:
+      max-claims: -1
+      permission: ''
+      min-level: 0
+      cost-items: []
+      cost-money: 0
+      cooldown: 86400  # 24小时冷却
+    items:
+      - 魔族结晶:1
+
+# ========================================
+# 配置说明:
+#
+# conditions 条件配置:
+#   max-claims: 最大领取次数 (-1 = 无限)
+#   permission: 需要的权限节点
+#   min-level: 需要的最低玩家等级
+#   cost-items: 需要消耗的RPGItems物品列表
+#   cost-money: 需要消耗的金币 (需要Vault支持)
+#   cooldown: 冷却时间(秒)
+#
+# items 物品格式:
+#   - 物品名:数量
+#   物品名必须是RPGItems中定义的物品名称
+# ========================================

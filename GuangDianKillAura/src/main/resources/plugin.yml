@@ -1,0 +1,30 @@
+name: GuangDianKillAura
+version: 1.0.0
+main: cn.guangdian.killaura.GuangDianKillAura
+api-version: '1.21'
+author: Astraea RPG Team
+description: 自动攻击杀戮模式插件
+
+softdepend:
+  - RPGCore
+  - PlaceholderAPI
+  - MythicMobs
+
+commands:
+  killaura:
+    description: 杀戮模式主命令
+    usage: /killaura <toggle|status|strategy|range|stats|reload|help>
+    permission: killaura.use
+    aliases:
+      - ka
+
+permissions:
+  killaura.use:
+    description: 使用杀戮模式权限
+    default: true
+  killaura.admin:
+    description: 杀戮模式管理权限
+    default: op
+  killaura.bypass:
+    description: 免受杀戮模式攻击
+    default: op

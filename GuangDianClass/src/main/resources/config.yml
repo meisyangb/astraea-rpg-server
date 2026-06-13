@@ -1,0 +1,204 @@
+# Astraea RPG 职业系统配置
+
+settings:
+  default-class: "novice"
+  max-tier: 9
+  auto-save-interval-minutes: 5
+
+  exp-sources:
+    monster-kill:
+      enabled: true
+      base-exp: 15
+      base-level: 1
+      # 特定怪物经验配置（可选，不配置则使用 base-exp）
+      mob-exp:
+        # 第一章：灰烬平原（1-10级）
+        corruptedrat: 8
+        corruptedbat: 6
+        ashspiderling: 10
+        corruptedboar: 12
+        ashwanderer: 15
+        corruptedwolf: 18
+        ashscout: 20
+        corruptedgiantrat: 50
+        ruinsspider: 22
+        ruinsguard: 28
+        ashwarlock: 35
+        ashchieftain: 100
+      # 怪物等级配置（用于等级差惩罚）
+      mob-level:
+        # 第一章：灰烬平原（1-10级）
+        corruptedrat: 1
+        corruptedbat: 1
+        ashspiderling: 2
+        corruptedboar: 2
+        ashwanderer: 3
+        corruptedwolf: 3
+        ashscout: 4
+        corruptedgiantrat: 5
+        ruinsspider: 5
+        ruinsguard: 6
+        ashwarlock: 7
+        ashchieftain: 8
+    quest-complete:
+      enabled: true
+      base-exp: 100
+    block-break:
+      enabled: false
+      base-exp: 1
+    afk:
+      enabled: true
+      exp-per-minute: 1
+      message-enabled: true
+    # 每日经验上限
+    daily-limit:
+      enabled: true
+      # 每日职业经验上限（击杀怪物获取）
+      class-exp: 1000
+      # 每日原版经验上限（附魔、熔炉等）
+      vanilla-exp: 500
+
+tier-exp-requirements:
+  1: 0
+  2: 500
+  3: 1500
+  4: 4000
+  5: 8000
+  6: 15000
+  7: 30000
+  8: 60000
+  9: 120000
+
+advancement-tiers:
+  first: 3
+  second: 6
+  third: 8
+  divine: 9
+
+advancement-requirements:
+  first:
+    tier: 3
+    exp-multiplier: 1.0
+    items: []
+  second:
+    tier: 6
+    exp-multiplier: 1.5
+    items: []
+  third:
+    tier: 8
+    exp-multiplier: 2.0
+    items: []
+  divine:
+    tier: 9
+    exp-multiplier: 3.0
+    items: []
+    special-quest: "divine_ascension"
+
+advancement-costs:
+  '1':
+    money: 1000
+    exp: 0
+    items: []
+  '2':
+    money: 5000
+    exp: 0
+    items: []
+  '3':
+    money: 20000
+    exp: 0
+    items: []
+  '4':
+    money: 100000
+    exp: 0
+    items: []
+
+restrictions:
+  warrior:
+    allowed-items: []
+    blocked-items: ["bow", "blaze_rod"]
+    required-permissions: []
+    allowed-worlds: []
+    skill-multiplier: 1.0
+    exp-multiplier: 1.0
+  mage:
+    allowed-items: []
+    blocked-items: ["iron_sword", "diamond_sword"]
+    required-permissions: []
+    allowed-worlds: []
+    skill-multiplier: 1.2
+    exp-multiplier: 1.0
+  archer:
+    allowed-items: []
+    blocked-items: []
+    required-permissions: []
+    allowed-worlds: []
+    skill-multiplier: 1.0
+    exp-multiplier: 1.0
+
+cooldowns:
+  advancement: 0
+  reset: 300
+
+attributes:
+  initial-points: 50
+  points-per-level: 5
+  points-per-advancement: 20
+  
+  tier-points-cap:
+    1: 50
+    2: 100
+    3: 200
+    4: 350
+    5: 500
+    6: 700
+    7: 900
+    8: 1200
+    9: 1500
+    
+  advancement-points:
+    1: 100
+    2: 200
+    3: 350
+    4: 500
+  
+  types:
+    strength:
+      health: 0
+      attack: 2.0
+      defense: 0
+      crit-chance: 0
+      crit-damage: 0.5
+      dodge: 0
+      mana: 0
+    vitality:
+      health: 50.0
+      attack: 0
+      defense: 1.0
+      crit-chance: 0
+      crit-damage: 0
+      dodge: 0
+      mana: 0
+    agility:
+      health: 0
+      attack: 0
+      defense: 0
+      crit-chance: 0.2
+      crit-damage: 0
+      dodge: 0.1
+      mana: 0
+    intelligence:
+      health: 0
+      attack: 1.5
+      defense: 0
+      crit-chance: 0
+      crit-damage: 0
+      dodge: 0
+      mana: 20.0
+    luck:
+      health: 0
+      attack: 0
+      defense: 0
+      crit-chance: 0.1
+      crit-damage: 1.0
+      dodge: 0
+      mana: 0

@@ -1,0 +1,68 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 第一层怪物装备.yml
+# ========================================
+
+幻界士兵铁剑:
+  Id: IRON_SWORD
+  Display: '<green>幻界士兵铁剑'
+  Lore:
+  - '<dark_aqua>攻击力: <green>25'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+幻界弓:
+  Id: PAPER
+  Display: '<green>幻界弓'
+  Lore:
+  - '<dark_aqua>攻击力: <green>20'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+幻界精英弓:
+  Id: PAPER
+  Display: '<green>幻界精英弓'
+  Lore:
+  - '<dark_aqua>攻击力: <green>30'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+幻界战士铁剑:
+  Id: IRON_SWORD
+  Display: '<green>幻界战士铁剑'
+  Lore:
+  - '<dark_aqua>攻击力: <green>25'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+幻界精英士兵铁剑:
+  Id: IRON_SWORD
+  Display: '<green>幻界精英士兵铁剑'
+  Lore:
+  - '<dark_aqua>攻击力: <green>25'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+幻界百夫长铁剑:
+  Id: IRON_SWORD
+  Display: '<green>幻界百夫长铁剑'
+  Lore:
+  - '<dark_aqua>攻击力: <green>80'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+幻界营长铁剑:
+  Id: IRON_SWORD
+  Display: '<green>幻界营长铁剑'
+  Lore:
+  - '<dark_aqua>攻击力: <green>45'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+

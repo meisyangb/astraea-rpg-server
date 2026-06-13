@@ -1,0 +1,52 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 赞助2.yml
+# ========================================
+
+神圣重锤5:
+  Id: mace
+  Display: '<gold><bold>神圣审判重锤'
+  Lore:
+  - '<yellow>近战武器                        亚神器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪✪✪✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>85000-185000'
+  - '<dark_gray>暴击几率: <aqua>20%'
+  - '<dark_gray>暴击伤害: <aqua>200%'
+  - '<dark_gray>生命吸取: <aqua>15%'
+  - '<dark_gray>吸血倍率: <aqua>75%'
+  - '<dark_gray>命中: <aqua>25%'
+  - '<dark_gray>冰冻: <aqua>20%'
+  - '<dark_gray>致盲: <aqua>20%'
+  - '<dark_gray>击退: <aqua>50%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<yellow>由沉重核心与旋风棒锻造而成'
+  - '<yellow>蕴含着风暴与重力的双重神力'
+  - '<yellow>下落攻击可造成毁灭性伤害'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_purple>分解后可获得<dark_gray>[<yellow>天使核心<dark_gray>]<dark_purple>50颗'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>25'
+  - '<aqua><bold>符文➱<gray>「<gold>✪<gray>」「<gold>✪<gray>」「<gold>✪<gray>」「<gold>✪<gray>」「<gold>✪<gray>」'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<yellow>*<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<blue>*<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 85000.0
+    AttackMax: 185000.0
+    CritChance: 20.0
+    CritDamage: 200.0
+    LifestealChance: 15.0
+    LifestealMultiplier: 75.0
+    Level: 25
+

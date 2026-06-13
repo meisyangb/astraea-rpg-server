@@ -1,0 +1,70 @@
+name: GuangDianClass
+version: 1.0.0
+main: cn.guangdian.classsystem.GuangDianClass
+api-version: '1.21'
+author: Astraea RPG Team
+description: Astraea RPG 职业系统 - 阶位与转职
+
+softdepend:
+  - RPGCore
+  - PlaceholderAPI
+
+commands:
+  class:
+    description: 职业系统命令
+    usage: /class [info|choose|advance|reset|help]
+    aliases: [zhiye, job]
+  classadmin:
+    description: 职业管理命令
+    usage: /classadmin [set|addexp|setexp|reload]
+    permission: guangdian.class.admin
+
+permissions:
+  guangdian.class.use:
+    description: 使用职业系统基本功能
+    default: true
+  guangdian.class.admin:
+    description: 管理员权限
+    default: op
+  guangdian.class.choose:
+    description: 选择职业
+    default: true
+  guangdian.class.advance:
+    description: 进行转职
+    default: true
+  guangdian.class.reset:
+    description: 重置职业
+    default: true
+  guangdian.class.attr:
+    description: 使用属性点系统
+    default: true
+  guangdian.class.gui:
+    description: 使用职业GUI
+    default: true
+  guangdian.class.skills:
+    description: 查看技能列表
+    default: true
+  guangdian.class.bypass.restriction:
+    description: 绕过职业限制
+    default: op
+  guangdian.class.bypass.cooldown:
+    description: 绕过冷却限制
+    default: op
+  guangdian.class.bypass.cost:
+    description: 绕过转职消耗
+    default: op
+  guangdian.class.class.warrior:
+    description: 可选择战士职业
+    default: true
+  guangdian.class.class.mage:
+    description: 可选择法师职业
+    default: true
+  guangdian.class.class.archer:
+    description: 可选择弓箭手职业
+    default: true
+  guangdian.class.class.assassin:
+    description: 可选择刺客职业
+    default: true
+  guangdian.class.class.priest:
+    description: 可选择牧师职业
+    default: true

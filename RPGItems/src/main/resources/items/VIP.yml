@@ -1,0 +1,22 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: VIP.yml
+# ========================================
+
+VIP1天:
+  Id: PAPER
+  Display: '<yellow><bold>VIP<gold><bold>1天'
+  Lore:
+  - '<gray>[<gold>VIP一天时限书<gray>]              <gray>[<light_purple>右键使用<gray>]'
+  - '<green>获得一天VIP时限'
+  - '&A使用后消耗掉'
+  - '&E1.打怪经验额外获得100%'
+  - '&E2.进入VIP独立副本，以及各层VIP专线'
+  - '&E3.随身54格超大背包'
+  - '&E4.全球商店上架物品可10件，收税0%'
+  - '&E5.可在地皮生存资源世界任意飞行'
+  - '&E6.可随意更改称号'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+

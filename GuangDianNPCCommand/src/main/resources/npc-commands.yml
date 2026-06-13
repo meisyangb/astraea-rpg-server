@@ -1,0 +1,26 @@
+# ============================================
+# GuangDianNPCCommand - NPC命令配置
+# ============================================
+# 
+# 命令类型说明:
+#   console  - 以控制台身份执行
+#   player   - 以玩家身份执行(带权限检查)
+#   op       - 以OP权限执行
+#   command  - 直接执行命令(不添加/)
+#   no_perms - 以玩家身份执行(无权限检查)
+#
+# 可用变量:
+#   %player% - 玩家名称
+#   %p%      - 玩家名称(简写)
+#
+# 示例:
+# npc-commands:
+#   '1':
+#     cooldown: 60
+#     commands:
+#       - type: console
+#         command: 'give %player% diamond 1'
+#       - type: player
+#         command: 'spawn'
+
+npc-commands:

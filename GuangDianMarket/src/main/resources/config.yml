@@ -1,0 +1,60 @@
+# ================================
+# GuangDianMarket 全球市场配置
+# ================================
+
+# 双货币配置
+currency:
+  # 点券设置
+  points:
+    enabled: true
+    name: "点券"
+    symbol: "💎"
+  # 经济设置 (需要Vault和前置经济插件)
+  economy:
+    enabled: true
+    name: "金币"
+    symbol: "金币"
+
+# 市场设置
+settings:
+  transaction-fee: 0        # 固定手续费
+  fee-percent: 5.0          # 百分比手续费 (%)
+  max-listings-per-player: 10  # 每人最大上架数量
+  listing-duration-hours: 168  # 上架持续时间 (小时)
+  items-per-page: 45        # 每页显示数量
+
+# 消息配置
+messages:
+  insufficient-funds: "<red><currency>不足!"
+  invalid-price: "<red>无效的价格!"
+  no-item-in-hand: "<red>请手持要出售的物品!"
+  max-listings-reached: "<red>你已达到最大上架数量 (<gold><max><red>)!"
+  item-listed: "<green>成功上架物品! 价格: <gold><price> <currency>"
+  item-sold: "<green>你的物品已售出! 获得 <gold><price> <currency>"
+  purchase-success: "<green>购买成功! 花费 <gold><price> <currency>"
+  cannot-buy-own: "<red>不能购买自己的物品!"
+  not-your-item: "<red>这不是你的物品!"
+  listing-cancelled: "<green>已取消上架，物品已返还!"
+  item-expired: "<red>你的市场物品已过期并已返还!"
+  no-permission: "<red>你没有权限使用市场!"
+
+# GUI配置
+gui:
+  market-title: "<gold>全球市场 <gray>- 第 <page> 页"
+  my-listings-title: "<gold>我的上架"
+  prev-page: "<green>上一页"
+  next-page: "<red>下一页"
+  current-page: "<yellow>当前页: <page>/<total>"
+  my-listings: "<gold>我的上架"
+  balance-display: "<yellow>点券: <points> <gray>| <yellow>金币: <economy>"
+  price-display: "<yellow>价格: <gold><price> <currency>"
+  seller-display: "<gray>卖家: <white><seller>"
+  time-remaining: "<gray>剩余时间: <white><time>"
+  click-to-buy: "<green>点击购买"
+  click-to-cancel: "<red>点击下架"
+
+# 音效配置
+sounds:
+  purchase-success: "ENTITY_PLAYER_LEVELUP"
+  purchase-fail: "ENTITY_VILLAGER_NO"
+  listing-success: "BLOCK_NOTE_BLOCK_PLING"

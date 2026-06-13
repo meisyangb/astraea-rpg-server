@@ -1,0 +1,44 @@
+﻿# 战令系统配置文件
+# Astraea RPG - GuangDianBattlePass
+
+# 高级战令价格（点券）
+premium-price: 1000
+
+# 默认赛季设置
+default-season:
+  max-level: 50
+  duration-days: 30
+
+# 经验获取设置
+exp-settings:
+  # 击杀怪物获得的经验
+  kill-mob: 10
+  # 击杀玩家获得的经验
+  kill-player: 50
+  # 破坏方块获得的经验
+  break-block: 5
+  # 放置方块获得的经验
+  place-block: 5
+  # 完成任务获得的经验
+  complete-quest: 100
+  # 完成副本获得的经验
+  complete-dungeon: 200
+
+# 消息设置
+messages:
+  prefix: "<gold>[战令] <reset>"
+  no-permission: "<red>你没有权限执行此操作！"
+  season-not-active: "<red>当前没有进行中的赛季！"
+  premium-purchased: "<green>成功购买高级战令！"
+  insufficient-points: "<red>点券不足！需要 %price% 点券"
+  reward-claimed: "<green>成功领取奖励！"
+  already-claimed: "<red>你已经领取过这个奖励了！"
+  level-up: "<yellow>恭喜！你的战令等级提升到了 <gold>%level% <yellow>级！"
+
+# 自动保存设置
+auto-save:
+  enabled: true
+  interval-minutes: 5
+
+# 调试模式
+debug: false

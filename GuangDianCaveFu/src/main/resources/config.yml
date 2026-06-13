@@ -1,0 +1,55 @@
+# GuangDianCaveFu 配置文件
+# 光点RPG空岛洞府插件
+
+# 存储设置
+storage:
+  use-sqlite: false        # true = SQLite本地数据库, false = YAML文件存储
+
+# 洞府世界设置
+world:
+  name: "CaveFuWorld"
+  view-distance: 2        # 洞府内视距（chunks）
+  grid-size: 80           # 洞府间隔（格）- 需要容纳最大64x64的洞穴
+  base-y: 64              # 基础Y轴高度
+  platform-block: BEDROCK # 平台底层方块
+  surface-block: GRASS_BLOCK # 平台表面方块（草坪）
+
+# 消息配置（支持 MiniMessage 格式 <color>）
+messages:
+  prefix: "<gold>[洞府] <white>"
+  no-permission: "<red>你没有权限执行此操作！"
+  cave-created: "<green>洞府创建成功！"
+  cave-full: "<red>洞府空间已满，请联系管理员！"
+  already-have-cave: "<red>你已经拥有洞府了！"
+  no-cave: "<red>你还没有洞府！"
+  upgrade-success: "<green>洞府升级成功！当前等级: <yellow>{level} <green>- <yellow>{name}"
+  upgrade-failed: "<red>升级失败，材料不足！"
+  upgrade-max: "<red>已经是最高等级，无法继续升级！"
+  invite-sent: "<green>已向 <yellow>{player} <green>发送邀请！"
+  invite-received: "<yellow>{player} <green>邀请你加入洞府，输入 <yellow>/cave accept <green>接受"
+  invite-none: "<red>没有待处理的邀请！"
+  invite-accepted: "<green>已加入洞府！"
+  invite-denied: "<red>已拒绝邀请！"
+  not-owner: "<red>你不是洞主！"
+  player-not-member: "<red>该玩家不是你的洞府成员！"
+  player-not-online: "<red>玩家不在线！"
+  player-already-member: "<red>该玩家已经是洞府成员！"
+  player-already-in-cave: "<red>该玩家已拥有洞府！"
+  member-kicked: "<red>你已被移出洞府！"
+  member-joined: "<yellow>{player} <green>加入了洞府！"
+  member-left: "<yellow>{player} <red>离开了洞府！"
+  transfer-success: "<green>已将洞主转让给 <yellow>{player}<green>！"
+  home-set: "<green>传送点已设置！"
+  teleporting: "<green>正在传送..."
+  not-in-cave: "<red>你不在任何洞府内！"
+  target-no-cave: "<red>该玩家没有洞府！"
+  cave-deleted: "<red>洞府已被删除！"
+  visitor-allowed: "<green>该洞府允许访客进入，但无法操作！"
+  visitor-denied: "<red>该洞府不允许访客进入！"
+
+# 初始设置
+settings:
+  default-level: 1        # 初始等级
+  max-members: 10         # 最大成员数
+  allow-visitor: true     # 是否允许访客进入参观
+  create-cost: ""         # 创建洞府消耗（留空免费），格式同升级物品

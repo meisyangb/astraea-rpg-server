@@ -1,0 +1,51 @@
+# ========================================
+# GuangDianLocation 配置文件
+# ========================================
+
+# 基本设置
+settings:
+  # 每个玩家最多保存的坐标点数量
+  max-locations-per-player: 50
+
+  # 选点效果配置
+  selection:
+    # 粒子效果
+    particle:
+      enabled: true
+      type: END_ROD
+    # 音效
+    sound:
+      enabled: true
+      type: BLOCK_NOTE_BLOCK_PLING
+
+# 存储方式配置
+# 可选值: yml, mysql, sqlite
+# yml - 使用 YML 文件存储（直接可读，推荐）
+# mysql - 使用 MySQL 数据库存储
+# sqlite - 使用 SQLite 数据库存储
+storage:
+  type: yml
+
+# MySQL 数据库配置（当 storage.type = mysql 时生效）
+mysql:
+  host: localhost
+  port: 3306
+  database: guangdian_location
+  username: root
+  password: ""
+  useSSL: false
+  serverTimezone: Asia/Shanghai
+  characterEncoding: utf8
+
+# SQLite 数据库配置（当 storage.type = sqlite 时生效）
+sqlite:
+  # 数据库文件名（相对于插件数据目录）
+  filename: locations.db
+
+# 消息配置（可选自定义）
+messages:
+  selection-prompt: "<green>请在聊天栏输入坐标名称（30秒内有效）"
+  selection-success: "<green>成功保存坐标点 <yellow>{name} <green>!"
+  selection-cancelled: "<yellow>已取消本次坐标选择."
+  location-not-found: "<red>坐标点 <yellow>{name} <red>不存在!"
+  teleport-success: "<green>已传送到坐标点 <yellow>{name} <green>!"

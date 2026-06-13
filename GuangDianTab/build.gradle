@@ -1,0 +1,25 @@
+// ========================================
+// GuangDianTab - Tab列表系统
+// ========================================
+
+plugins {
+    id 'java'
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+    compileOnly project(':plugins:RPGCore')
+    compileOnly files('../GuangDianArmorStats/libs/PlaceholderAPI.jar')
+    compileOnly files('libs/LuckPerms.jar')
+    compileOnly files('libs/Vault.jar')
+}
+
+jar {
+    archiveBaseName.set('GuangDianTab')
+}

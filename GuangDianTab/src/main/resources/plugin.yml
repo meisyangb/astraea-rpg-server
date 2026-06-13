@@ -1,0 +1,40 @@
+# ========================================
+# 光点Tab列表插件 - GuangDianTab
+# ========================================
+# 作者: Gumin
+# QQ: 2271257344
+# 版本: 1.0.0
+# ========================================
+
+name: GuangDianTab
+version: 1.0.0
+main: cn.guangdian.tab.GuangDianTab
+api-version: '1.21'
+author: Gumin
+description: 光点RPG Tab列表插件
+website: www.guangdianrpg.com
+
+# 插件依赖
+softdepend:
+  - RPGCore
+  - PlaceholderAPI
+
+commands:
+  gdtab:
+    description: Tab列表插件管理命令
+    usage: /gdtab <reload|info|help>
+    aliases: [gtab, tablist]
+  tablist:
+    description: 查看Tab列表信息
+    usage: /tablist
+
+permissions:
+  guangdian.tab.use:
+    description: 使用Tab列表权限
+    default: true
+  guangdian.tab.admin:
+    description: 管理员权限
+    default: op
+  guangdian.tab.reload:
+    description: 重载配置权限
+    default: op

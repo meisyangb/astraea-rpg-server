@@ -1,0 +1,70 @@
+name: GuangDianDungeon
+version: 1.0.0
+main: cn.guangdian.dungeon.GuangDianDungeon
+api-version: '1.21'
+author: Gumin
+description: 光点RPG副本系统 - 支持实例管理、队伍系统、进度追踪、奖励分发、BOSS战机制
+website: www.guangdianrpg.com
+load: POSTWORLD
+
+depend:
+  - RPGCore
+
+softdepend:
+  - PlaceholderAPI
+  - LuckPerms
+  - GuangDianPoints
+  - GuangDianArmorStats
+  - MythicMobs
+
+commands:
+  dungeon:
+    description: 副本命令
+    usage: /dungeon <list|info|enter|leave|status> [参数]
+    aliases: [d, fb]
+    permission: guangdian.dungeon.use
+  party:
+    description: 队伍命令
+    usage: /party <create|invite|accept|leave|kick|leader|disband> [参数]
+    aliases: [p, team]
+    permission: guangdian.dungeon.party
+  dungeonadmin:
+    description: 副本管理命令
+    usage: /dungeonadmin <reload|create|stop|fail|tp|list|info|cleanup>
+    aliases: [da]
+    permission: guangdian.dungeon.admin
+
+permissions:
+  guangdian.dungeon.use:
+    description: 使用副本系统权限
+    default: true
+  guangdian.dungeon.party:
+    description: 队伍功能权限
+    default: true
+  guangdian.dungeon.admin:
+    description: 副本管理权限
+    default: op
+  guangdian.dungeon.list:
+    description: 查看副本列表
+    default: true
+  guangdian.dungeon.enter:
+    description: 进入副本
+    default: true
+  guangdian.dungeon.leave:
+    description: 离开副本
+    default: true
+  guangdian.dungeon.top:
+    description: 查看排行榜
+    default: true
+  guangdian.dungeon.party.create:
+    description: 创建队伍
+    default: true
+  guangdian.dungeon.party.invite:
+    description: 邀请玩家
+    default: true
+  guangdian.dungeon.party.kick:
+    description: 踢出成员
+    default: true
+  guangdian.dungeon.party.leader:
+    description: 转让队长
+    default: true

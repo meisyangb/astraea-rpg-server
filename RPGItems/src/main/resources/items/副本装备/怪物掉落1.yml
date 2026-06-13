@@ -1,0 +1,175 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 怪物掉落1.yml
+# ========================================
+
+百夫长幻界之刃:
+  Id: GOLDEN_SWORD
+  Display: '<blue>百夫长幻界之刃'
+  Lore:
+  - '<white>近战武器                 稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>30-255'
+  - '<dark_gray>招架: <aqua>5%'
+  - '<dark_gray>暴击几率: <aqua>10%'
+  - '<dark_gray>暴击伤害: <aqua>100%'
+  - '<dark_gray>吸血几率: <aqua>5%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>5'
+  - '<dark_gray>评分: <red>100'
+  - '<yellow>幻界百夫长使用的武器'
+  - '<dark_purple>一阶装备'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 30.0
+    AttackMax: 255.0
+    ParryChance: 5.0
+    CritChance: 10.0
+    CritDamage: 100.0
+    LifestealChance: 5.0
+    LifestealMultiplier: 20.0
+    Level: 5
+
+百夫长幻界护腿:
+  Id: GOLDEN_LEGGINGS
+  Display: '<blue>百夫长幻界护腿'
+  Lore:
+  - '<white>防具                   稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度: <aqua>8%'
+  - '<dark_gray>生命上限: <aqua>600'
+  - '<green>生命恢复: <light_purple>1%'
+  - '<dark_gray>闪避: <aqua>2.5%'
+  - '<dark_gray>每秒回血: <aqua>3'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>5'
+  - '<dark_gray>评分: <red>100'
+  - '<yellow>幻界百夫长穿戴的护腿'
+  - '<dark_purple>一阶装备'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 8.0
+    MaxHealth: 600.0
+    DodgeChance: 2.5
+    HealthRegen: 3.0
+    Level: 5
+
+百夫长幻界战靴:
+  Id: GOLDEN_BOOTS
+  Display: '<blue>百夫长幻界战靴'
+  Lore:
+  - '<white>防具                   稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度: <aqua>7%'
+  - '<dark_gray>生命上限: <aqua>400'
+  - '<green>生命恢复: <light_purple>1%'
+  - '<dark_gray>闪避: <aqua>2.5%'
+  - '<dark_gray>移动速度: <aqua>10%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>5'
+  - '<dark_gray>评分: <red>100'
+  - '<yellow>幻界百夫长穿戴的战靴'
+  - '<dark_purple>一阶装备'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 7.0
+    MaxHealth: 400.0
+    DodgeChance: 2.5
+    MoveSpeed: 10.0
+    Level: 5
+
+营长幻界重剑:
+  Id: GOLDEN_SWORD
+  Display: '<blue>营长幻界重剑'
+  Lore:
+  - '<white>近战武器                 稀有'
+  - '<dark_red><strikethrough>                      '
+  - '<dark_gray>攻击力: <aqua>35-330'
+  - '<dark_gray>招架: <aqua>5%'
+  - '<dark_gray>暴击几率: <aqua>10%'
+  - '<dark_gray>暴击伤害: <aqua>100%'
+  - '<dark_gray>吸血几率: <aqua>5%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - '<dark_red><strikethrough>                      '
+  - '<dark_gray>装备等级： <aqua>5'
+  - '<dark_gray>评分: <red>125'
+  - '<yellow>幻界营长使用的武器'
+  - '<dark_purple>一阶装备'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 35.0
+    AttackMax: 330.0
+    ParryChance: 5.0
+    CritChance: 10.0
+    CritDamage: 100.0
+    LifestealChance: 5.0
+    LifestealMultiplier: 20.0
+    Level: 5
+
+营长幻界护腿:
+  Id: GOLDEN_LEGGINGS
+  Display: '<blue>营长幻界护腿'
+  Lore:
+  - '<white>防具                   稀有'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>护甲强度: <aqua>8%'
+  - '<dark_gray>生命上限: <aqua>1000'
+  - '<green>生命恢复: <light_purple>1%'
+  - '<dark_gray>闪避: <aqua>2.5%'
+  - '<dark_gray>每秒回血: <aqua>5'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>5'
+  - '<dark_gray>评分: <red>125'
+  - '<yellow>幻界营长穿戴的护腿'
+  - '<dark_purple>一阶装备'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 8.0
+    MaxHealth: 1000.0
+    DodgeChance: 2.5
+    HealthRegen: 5.0
+    Level: 5
+
+营长幻界战靴:
+  Id: GOLDEN_BOOTS
+  Display: '<blue>营长幻界战靴'
+  Lore:
+  - '<white>防具                   稀有'
+  - '<dark_red><strikethrough>                      '
+  - '<dark_gray>护甲强度: <aqua>8%'
+  - '<dark_gray>生命上限: <aqua>600'
+  - '<green>生命恢复: <light_purple>1%'
+  - '<dark_gray>闪避: <aqua>2.5%'
+  - '<dark_gray>移动速度: <aqua>15%'
+  - '<dark_red><strikethrough>                      '
+  - '<dark_gray>装备等级： <aqua>5'
+  - '<dark_gray>评分: <red>125'
+  - '<yellow>幻界营长穿戴的战靴'
+  - '<dark_purple>一阶装备'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    Armor: 8.0
+    MaxHealth: 600.0
+    DodgeChance: 2.5
+    MoveSpeed: 15.0
+    Level: 5
+

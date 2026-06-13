@@ -1,0 +1,40 @@
+﻿# GuangDianForge 等级配置
+# 锻造等级系统设置
+
+levels:
+  # 基础升级经验
+  base-exp: 100
+  # 经验倍率 (每级所需经验 = base-exp * exp-multiplier ^ (level - 1))
+  exp-multiplier: 1.5
+
+  # 等级解锁配方
+  # 玩家达到指定等级自动解锁这些配方
+  unlock-recipes:
+    1:
+      - "iron_sword"
+      - "iron_chestplate"
+    # 10:
+    #   - "steel_equipment"
+    # 30:
+    #   - "diamond_set"
+    # 50:
+    #   - "legendary_blade"
+
+  # 等级奖励
+  # 玩家达到指定等级执行命令
+  level-rewards:
+    10:
+      commands:
+        - "give %player% diamond 5"
+      message: "<green>达到10级! 获得5颗钻石!"
+    50:
+      commands:
+        - "give %player% netherite_ingot 1"
+      message: "<gold>达到50级! 获得下界合金锭!"
+
+# 成功率加成设置
+success-bonus:
+  # 每级增加成功率 (%)
+  per-level: 0.5
+  # 最大加成 (%)
+  max-bonus: 50

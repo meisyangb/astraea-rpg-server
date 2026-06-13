@@ -1,0 +1,27 @@
+name: GuangDianGuild
+version: 1.0.0
+main: cn.guangdian.guild.GuangDianGuild
+api-version: '1.21'
+author: GuangDian
+description: 工会系统插件
+depend:
+  - PlaceholderAPI
+
+commands:
+  guild:
+    description: 工会主命令
+    usage: /guild <create|join|leave|disband|info|list|invite|accept|deny|kick|promote|demote|setprefix|setdesc|chat>
+    aliases: [g, gonghui]
+  guildadmin:
+    description: 工会管理命令
+    usage: /guildadmin <reload|delete>
+    permission: guangdian.guild.admin
+    aliases: [ga]
+
+permissions:
+  guangdian.guild.create:
+    description: 创建工会权限
+    default: true
+  guangdian.guild.admin:
+    description: 工会管理权限
+    default: op

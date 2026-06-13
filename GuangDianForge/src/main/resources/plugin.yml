@@ -1,0 +1,55 @@
+name: GuangDianForge
+version: 1.0.0
+main: cn.guangdian.forge.GuangDianForge
+api-version: '1.21'
+author: GuangDian
+description: 锻造插件 - 支持装备合成、锻造等级、图纸解锁
+
+softdepend:
+  - RPGItems
+  - RPGCore
+
+commands:
+  forge:
+    description: 锻造系统主命令
+    usage: /forge [open|learn|info|list|help]
+    permission: guangdian.forge.use
+  forgeadmin:
+    description: 锻造管理命令
+    usage: /forgeadmin [give|setlevel|addexp|reset|reload|stats]
+    permission: guangdian.forge.admin
+
+permissions:
+  guangdian.forge.use:
+    description: 允许使用锻造功能
+    default: true
+  guangdian.forge.learn:
+    description: 允许学习图纸
+    default: true
+  guangdian.forge.info:
+    description: 允许查看锻造信息
+    default: true
+  guangdian.forge.list:
+    description: 允许查看图纸列表
+    default: true
+  guangdian.forge.admin:
+    description: 锻造管理员总权限
+    default: op
+  guangdian.forge.admin.give:
+    description: 允许给予图纸
+    parent: guangdian.forge.admin
+  guangdian.forge.admin.setlevel:
+    description: 允许设置等级
+    parent: guangdian.forge.admin
+  guangdian.forge.admin.addexp:
+    description: 允许添加经验
+    parent: guangdian.forge.admin
+  guangdian.forge.admin.reset:
+    description: 允许重置数据
+    parent: guangdian.forge.admin
+  guangdian.forge.admin.reload:
+    description: 允许重载配置
+    parent: guangdian.forge.admin
+  guangdian.forge.admin.stats:
+    description: 允许查看统计
+    parent: guangdian.forge.admin

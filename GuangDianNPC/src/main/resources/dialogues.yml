@@ -1,0 +1,121 @@
+# GuangDianNPC 对话配置文件
+# 使用聊天框作为对话背景
+
+dialogues:
+  # 示例对话 - 新手引导
+  tutorial_guide:
+    npc_id: "guide"  # 绑定的NPC ID
+    display_name: "<gold>新手向导"  # NPC显示名称
+    use_chat_frame: true  # 使用聊天框样式
+    start_node: "welcome"  # 起始节点
+    nodes:
+      welcome:
+        text: |
+          欢迎来到 <yellow>阿斯特瑞亚</yellow> 世界！
+          我是你的新手向导，将带你了解这个世界。
+        options:
+          ask_help:
+            text: "我需要帮助"
+            next: "help_menu"
+          ask_story:
+            text: "这个世界的故事"
+            next: "story"
+          goodbye:
+            text: "再见"
+            action: "message:<green>祝你好运！"
+            
+      help_menu:
+        text: |
+          你可以在这里：
+          <gray>- 打怪升级</gray>
+          <gray>- 收集装备</gray>
+          <gray>- 完成任务</gray>
+          <gray>- 探索世界</gray>
+        options:
+          how_level:
+            text: "如何升级？"
+            next: "level_guide"
+          back:
+            text: "返回"
+            next: "welcome"
+            
+      level_guide:
+        text: |
+          升级方法：
+          <yellow>1.</yellow> 击杀怪物获得经验
+          <yellow>2.</yellow> 完成任务获得奖励
+          <yellow>3.</yellow> 参与活动
+        options:
+          back:
+            text: "返回"
+            next: "help_menu"
+          end:
+            text: "结束对话"
+            action: "message:<green>加油升级吧！"
+            
+      story:
+        text: |
+          <italic>很久很久以前...</italic>
+          阿斯特瑞亚大陆曾是和平的乐土，
+          直到黑暗势力入侵...
+        auto_continue:
+          delay: 60  # 3秒后自动继续 (tick)
+          next: "story2"
+          
+      story2:
+        text: |
+          现在，只有勇者才能拯救这个世界。
+          你，就是那个被选中的勇者！
+        options:
+          accept:
+            text: "我接受这个使命！"
+            action: "sound:ENTITY_PLAYER_LEVELUP"
+            next: "welcome"
+          decline:
+            text: "我还需要准备..."
+            next: "prepare"
+            
+      prepare:
+        text: |
+          没关系，准备好后再来找我。
+          我会一直在这里等你。
+        end: true  # 结束对话
+        action: "message:<gray>你感到一股神秘的力量在召唤你..."
+
+  # 示例对话 - 商店老板
+  shopkeeper:
+    npc_id: "shop"
+    display_name: "<aqua>商店老板"
+    use_chat_frame: true
+    start_node: "greeting"
+    nodes:
+      greeting:
+        text: |
+          欢迎光临我的商店！
+          今天想买点什么？
+        options:
+          buy:
+            text: "我想购买物品"
+            action: "gdmenu:shop_main"
+          sell:
+            text: "我想出售物品"
+            action: "message:<yellow>请将物品丢在地上即可出售"
+          quest:
+            text: "你有什么任务吗？"
+            next: "quest_offer"
+          bye:
+            text: "下次再来"
+            action: "message:<green>欢迎下次光临！"
+            
+      quest_offer:
+        text: |
+          确实有个任务...
+          我需要 <yellow>10个野猪皮</yellow> 来制作装备。
+          你能帮我收集吗？
+        options:
+          accept_quest:
+            text: "接受任务"
+            action: "quest:accept collect_boar_skin"
+          decline:
+            text: "暂时不接"
+            next: "greeting"

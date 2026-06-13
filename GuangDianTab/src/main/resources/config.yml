@@ -1,0 +1,210 @@
+﻿# ========================================
+# 光点Tab列表插件配置文件
+# GuangDianTab Configuration
+# 使用 MiniMessage 格式 (<color> 替代 <red>olor)
+# ========================================
+# 作者: Gumin
+# QQ: 2271257344
+# 版本: 2.0.0
+# ========================================
+
+# ========================================
+# 基础设置
+# ========================================
+enabled: true
+
+# 刷新间隔 (毫秒) - 建议根据玩家数量调整
+# 100人以下服务器建议 2000-3000ms
+# 100人以上服务器建议 3000-5000ms
+refresh-interval: 2000
+
+# ========================================
+# 按需刷新机制
+# ========================================
+use-lazy-refresh: true
+lazy-refresh-interval: 5000
+
+# ========================================
+# 权限组数据缓存
+# ========================================
+cache:
+  expire-ms: 30000
+
+# ========================================
+# Tab列表头部 (现代化设计)
+# 使用 MiniMessage 格式
+# ========================================
+header:
+  enabled: true
+  refresh-interval: 2000
+  lines:
+    - "<dark_gray><strikethrough>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    - ""
+    - "  <gold><bold>✦ <yellow><bold>光 点 RPG <gold><bold>✦"
+    - "  <gray><italic>探索冒险的世界"
+    - ""
+    - "  <white>� <gray>服务器: <green>%server_online%<gray>/<green>%server_max_players% <gray>人在线"
+    - "  <white>⚡ <gray>状态: <green>正常"
+
+footer:
+  enabled: true
+  refresh-interval: 2000
+  lines:
+    - ""
+    - "  <white>❤ <gray>TPS: <green>%server_tps% <dark_gray>| <gray>延迟: <green>%player_ping%ms"
+    - ""
+    - "  <gold><bold>➤ <yellow>官网: <aqua>www.guangdianrpg.com"
+    - "  <gold><bold>➤ <yellow>群聊: <green>2271257344"
+    - ""
+    - "<dark_gray><strikethrough>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# ========================================
+# Tab列表格式 (现代化RPG风格)
+# 使用 MiniMessage 格式
+# ========================================
+# 支持的占位符:
+# PlaceholderAPI: %xxx%
+# LuckPerms: %luckperms_prefix%, %luckperms_suffix%, %luckperms_primary_group_name%
+# GuangDianGuild: %gdguild_in_guild%, %gdguild_name%
+# GuangDianMarriage: %gdmarriage_partner%
+# GuangDianCombat: %gdcombat_in_combat%
+
+# 默认格式 (无权限组的玩家)
+default-format:
+  prefix: "<gray>◆ <white>"
+  name: "<gray>%player_name%"
+  suffix: " <dark_gray>[<gray>Lv.%player_level%<dark_gray>]"
+  ping:
+    low: "<green>"
+    medium: "<yellow>"
+    high: "<red>"
+  condition: ""
+
+# ========================================
+# 权限组格式 (带图标和颜色)
+# 使用 MiniMessage 格式
+# ========================================
+group-formats:
+  owner:
+    prefix: "<gold><bold>⚜ <yellow><bold>服主 <gold><bold>⚜ <white>"
+    name: "<yellow>%player_name%"
+    suffix: " <dark_gray>[<gold>Lv.%player_level%<dark_gray>]"
+    weight: 1000
+    condition: "group:owner"
+
+  admin:
+    prefix: "<red><bold>⚡ <white>"
+    name: "<red>%player_name%"
+    suffix: " <dark_gray>[<red>Admin<dark_gray>]"
+    weight: 900
+    condition: "group:admin"
+
+  admin2:
+    prefix: "<red><bold>⚡ <white>"
+    name: "<red>%player_name%"
+    suffix: " <dark_gray>[<red>管理<dark_gray>]"
+    weight: 850
+    condition: "permission:guangdian.admin"
+
+  gm:
+    prefix: "<aqua><bold>☆ <white>"
+    name: "<aqua>%player_name%"
+    suffix: " <dark_gray>[<aqua>GM<dark_gray>]"
+    weight: 800
+    condition: "group:gm"
+
+  svip:
+    prefix: "<light_purple><bold>♦ <dark_purple><bold>SVIP <light_purple><bold>♦ <white>"
+    name: "<light_purple>%player_name%"
+    suffix: " <dark_gray>[<light_purple>SVIP<dark_gray>]"
+    weight: 700
+    condition: "permission:guangdian.svip"
+
+  vip:
+    prefix: "<gold><bold>★ <yellow><bold>VIP <gold><bold>★ <white>"
+    name: "<yellow>%player_name%"
+    suffix: " <dark_gray>[<gold>VIP<dark_gray>]"
+    weight: 600
+    condition: "permission:guangdian.vip"
+
+  mvp:
+    prefix: "<yellow><bold>♦ <white>"
+    name: "<yellow>%player_name%"
+    suffix: " <dark_gray>[<yellow>MVP<dark_gray>]"
+    weight: 500
+    condition: "group:mvp"
+
+  member:
+    prefix: "<green><bold>● <white>"
+    name: "<green>%player_name%"
+    suffix: " <dark_gray>[<green>冒险者<dark_gray>]"
+    weight: 100
+    condition: ""
+
+# ========================================
+# Tab列表排序
+# ========================================
+sort-by-weight: true
+
+# ========================================
+# 头顶名称标签 (由GuangDianName处理)
+# ========================================
+nametag:
+  enabled: false
+
+# ========================================
+# 消息设置 (现代化风格)
+# 使用 MiniMessage 格式
+# ========================================
+messages:
+  no-permission: "<red>✗ <white>您没有权限执行此操作!"
+  config-reloaded: "<green>✓ <white>Tab列表配置已重新加载!"
+  info-header: "<gold><bold>━━━ 光点Tab列表 ━━━"
+  info-version: "<yellow>版本: <white>"
+  info-author: "<yellow>作者: <white>Gumin"
+  info-qq: "<yellow>QQ: <white>2271257344"
+  info-status: "<yellow>状态: <green>已启用"
+  info-refresh: "<yellow>刷新间隔: <white>"
+
+# ========================================
+# 高级设置
+# ========================================
+advanced:
+  debug: false
+  disabled-worlds: []
+  hide-spectators: false
+
+  # AFK玩家标记
+  afk:
+    enabled: true
+    format: "<gray>[AFK] <white>"
+
+  # 玩家加入/退出提示
+  join-quit:
+    enabled: true
+    join: "<green>➤ <yellow>%player_name% <gray>加入了游戏"
+    quit: "<red>➤ <yellow>%player_name% <gray>离开了游戏"
+
+# ========================================
+# 特殊显示标签
+# 使用 MiniMessage 格式
+# ========================================
+# 用于在Tab中显示特殊状态
+special-tags:
+  # 战斗状态
+  combat:
+    enabled: true
+    in-combat: "<red><bold>⚔ 战斗 <reset>"
+    out-combat: ""
+
+  # 工会状态
+  guild:
+    enabled: true
+    has-guild: "<aqua><bold>⚔ %gdguild_name%"
+    no-guild: ""
+
+  # 婚姻状态
+  marriage:
+    enabled: true
+    married: "<light_purple><bold>❤ %gdmarriage_partner%"
+    single: ""

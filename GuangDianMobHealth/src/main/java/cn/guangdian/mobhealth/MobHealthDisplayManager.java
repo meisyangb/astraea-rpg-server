@@ -1,0 +1,487 @@
+package cn.guangdian.mobhealth;
+
+import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.message.MiniMessageService;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.TextDisplay;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
+public class MobHealthDisplayManager {
+
+    private final GuangDianMobHealth plugin;
+    private final MythicMobsHook mythicMobsHook;
+    private final LibsDisguisesHook libsDisguisesHook;
+    private final Map<UUID, TextDisplay> displays = new ConcurrentHashMap<>();
+    private final Map<UUID, HealthData> healthCache = new ConcurrentHashMap<>();
+    private final Map<UUID, String> originalNames = new ConcurrentHashMap<>();
+    private final Map<UUID, Boolean> originalNameVisible = new ConcurrentHashMap<>();
+    private final Map<UUID, Long> lastAttackTime = new ConcurrentHashMap<>();
+    private long timeoutCheckTaskId = -1;
+
+    private final MiniMessageService miniMessage;
+    private boolean enabled = true;
+    private float displayHeight = 2.5f;
+    private boolean hideVanillaName = true;
+    private boolean hideMythicMobsName = true;
+    private boolean overrideLibsDisguisesName = true;
+    private int displayTimeout = 100;
+    private String format = "{name} <reset>{health_bar}<reset> <green>{health}";
+    private int barLength = 10;
+    private String barSymbol = "█";
+    private String emptyColor = "<gray>";
+    private String bracketLeft = "<dark_gray>[";
+    private String bracketRight = "<dark_gray>]";
+    private List<BarColorRange> barColors = new ArrayList<>();
+    private double minHealth = 0;
+    private Set<EntityType> excludedTypes = new HashSet<>();
+    private boolean mythicMobsOnly = false;
+    private boolean showVanilla = true;
+
+    public MobHealthDisplayManager(GuangDianMobHealth plugin, MythicMobsHook mythicMobsHook) {
+        this.plugin = plugin;
+        this.mythicMobsHook = mythicMobsHook;
+        this.libsDisguisesHook = new LibsDisguisesHook(plugin);
+        this.miniMessage = plugin.getMiniMessageService();
+        loadConfig();
+    }
+
+    public void loadConfig() {
+        enabled = plugin.getConfig().getBoolean("enabled", true);
+        displayHeight = (float) plugin.getConfig().getDouble("display.height", 2.5);
+        hideVanillaName = plugin.getConfig().getBoolean("display.hide-vanilla-name", true);
+        hideMythicMobsName = plugin.getConfig().getBoolean("display.hide-mythicmobs-name", true);
+        overrideLibsDisguisesName = plugin.getConfig().getBoolean("display.override-libsdisguises-name", true);
+        displayTimeout = plugin.getConfig().getInt("display.timeout", 100);
+        // 使用 MiniMessage 格式的占位符 <name> 而不是 {name}
+        format = plugin.getConfig().getString("display.format", "<name><reset> <health_bar><reset> <green><health>");
+        // 兼容旧版配置：如果格式中包含 {name} 等旧占位符，转换为 <name>
+        format = convertOldPlaceholders(format);
+        barLength = plugin.getConfig().getInt("display.bar.length", 10);
+        barSymbol = plugin.getConfig().getString("display.bar.symbol", "█");
+        // 直接使用 MiniMessage 格式，不再转换
+        emptyColor = plugin.getConfig().getString("display.bar.empty-color", "<red>");
+        bracketLeft = plugin.getConfig().getString("display.bar.bracket-left", "<dark_gray>[");
+        bracketRight = plugin.getConfig().getString("display.bar.bracket-right", "<dark_gray>]");
+        
+        barColors.clear();
+        List<String> colorList = plugin.getConfig().getStringList("display.bar.colors");
+        for (String colorEntry : colorList) {
+            String[] parts = colorEntry.split(":");
+            if (parts.length == 2) {
+                String[] range = parts[0].split("-");
+                if (range.length == 2) {
+                    try {
+                        int min = Integer.parseInt(range[0].trim());
+                        int max = Integer.parseInt(range[1].trim());
+                        // 直接使用 MiniMessage 格式
+                        String color = parts[1].trim();
+                        barColors.add(new BarColorRange(min, max, color));
+                    } catch (NumberFormatException ignored) {}
+                }
+            }
+        }
+        
+        minHealth = plugin.getConfig().getDouble("filter.min-health", 0);
+        excludedTypes.clear();
+        for (String type : plugin.getConfig().getStringList("filter.excluded-types")) {
+            try {
+                excludedTypes.add(EntityType.valueOf(type.toUpperCase()));
+            } catch (IllegalArgumentException ignored) {}
+        }
+        mythicMobsOnly = plugin.getConfig().getBoolean("filter.mythicmobs-only", false);
+        showVanilla = plugin.getConfig().getBoolean("filter.show-vanilla", true);
+    }
+
+    public void startUpdateTask() {
+        if (!enabled) return;
+        
+        RPGCore rpgCore = RPGCore.getInstance();
+        if (rpgCore == null) return;
+        
+        timeoutCheckTaskId = rpgCore.getScheduler().runSyncRepeating(() -> {
+            long now = System.currentTimeMillis();
+            List<UUID> toRemove = new ArrayList<>();
+            
+            for (Map.Entry<UUID, Long> entry : lastAttackTime.entrySet()) {
+                UUID entityId = entry.getKey();
+                long lastTime = entry.getValue();
+                
+                if (now - lastTime > displayTimeout * 50L) {
+                    toRemove.add(entityId);
+                }
+            }
+            
+            for (UUID id : toRemove) {
+                removeDisplay(id);
+                plugin.debug("超时移除显示: " + id);
+            }
+        }, 20L, 20L);
+    }
+
+    public void stopUpdateTask() {
+        if (timeoutCheckTaskId != -1) {
+            RPGCore rpgCore = RPGCore.getInstance();
+            if (rpgCore != null) {
+                rpgCore.getScheduler().cancelTask(timeoutCheckTaskId);
+            }
+            timeoutCheckTaskId = -1;
+        }
+    }
+
+    public void updateLastAttackTime(UUID entityId) {
+        lastAttackTime.put(entityId, System.currentTimeMillis());
+    }
+
+    public void createDisplay(LivingEntity entity) {
+        if (!enabled) return;
+        if (!shouldDisplay(entity)) return;
+        
+        UUID entityId = entity.getUniqueId();
+        if (displays.containsKey(entityId)) {
+            updateDisplay(entity, displays.get(entityId));
+            lastAttackTime.put(entityId, System.currentTimeMillis());
+            return;
+        }
+        
+        double maxHealth = entity.getAttribute(Attribute.MAX_HEALTH).getValue();
+        if (maxHealth < minHealth) return;
+        
+        lastAttackTime.put(entityId, System.currentTimeMillis());
+        
+        boolean isMythicMob = mythicMobsHook.isMythicMob(entity);
+
+        if ((hideVanillaName && !isMythicMob) || (hideMythicMobsName && isMythicMob) || overrideLibsDisguisesName) {
+            String originalName = entity.getCustomName();
+            boolean wasVisible = entity.isCustomNameVisible();
+
+            originalNames.put(entityId, originalName != null ? originalName : "");
+            originalNameVisible.put(entityId, wasVisible);
+
+            entity.setCustomNameVisible(false);
+
+            // 如果启用了 LibsDisguises 覆盖，隐藏伪装名字
+            if (overrideLibsDisguisesName && libsDisguisesHook.isLibsDisguisesEnabled()) {
+                libsDisguisesHook.hideDisguiseName(entity);
+                plugin.debug("强制覆盖 LibsDisguises 伪装名字: " + entity.getName());
+            } else {
+                plugin.debug("隐藏原版名字: " + entity.getName() + " (MythicMob: " + isMythicMob + ")");
+            }
+        }
+        
+        Location loc = entity.getLocation().clone().add(0, displayHeight, 0);
+        World world = entity.getWorld();
+        
+        TextDisplay display = world.spawn(loc, TextDisplay.class, td -> {
+            td.setVisibleByDefault(true);
+            td.setBillboard(org.bukkit.entity.Display.Billboard.CENTER);
+            td.setBackgroundColor(org.bukkit.Color.fromARGB(0, 0, 0, 0));
+            td.setShadowed(true);
+            td.setSeeThrough(false);
+            td.setInvulnerable(true);
+            td.setPersistent(false);
+            td.addScoreboardTag("gdmobhealth_display");
+        });
+        
+        updateDisplay(entity, display);
+        
+        entity.addPassenger(display);
+        displays.put(entityId, display);
+        
+        plugin.debug("创建显示: " + entity.getName() + " (" + entityId + ")");
+    }
+
+    public void updateDisplay(LivingEntity entity, TextDisplay display) {
+        if (entity == null || display == null || !display.isValid()) return;
+        
+        double health = entity.getHealth();
+        double maxHealth = entity.getAttribute(Attribute.MAX_HEALTH).getValue();
+        
+        UUID entityId = entity.getUniqueId();
+        HealthData cached = healthCache.get(entityId);
+        
+        if (cached != null && 
+            Math.abs(cached.health - health) < 1 && 
+            Math.abs(cached.maxHealth - maxHealth) < 1) {
+            return;
+        }
+        
+        String name = getEntityName(entity);
+        String healthBar = buildHealthBar(health, maxHealth);
+        int percent = (int) ((health / maxHealth) * 100);
+        
+        Component healthBarComponent = miniMessage.parse(healthBar);
+        Component nameComponent = miniMessage.parse(name != null ? name : "");
+
+        TagResolver resolver = TagResolver.resolver(
+            Placeholder.component("name", nameComponent),
+            Placeholder.component("health_bar", healthBarComponent),
+            Placeholder.unparsed("health", String.valueOf((int) health)),
+            Placeholder.unparsed("max_health", String.valueOf((int) maxHealth)),
+            Placeholder.unparsed("percent", String.valueOf(percent))
+        );
+
+        display.text(miniMessage.parse(format, resolver));
+        healthCache.put(entityId, new HealthData(health, maxHealth));
+    }
+
+    public void updateDisplay(LivingEntity entity) {
+        if (entity == null) return;
+        TextDisplay display = displays.get(entity.getUniqueId());
+        if (display != null && display.isValid()) {
+            updateDisplay(entity, display);
+        }
+    }
+
+    public void removeDisplay(UUID entityId) {
+        TextDisplay display = displays.remove(entityId);
+        healthCache.remove(entityId);
+        lastAttackTime.remove(entityId);
+
+        String originalName = originalNames.remove(entityId);
+        Boolean wasVisible = originalNameVisible.remove(entityId);
+
+        if (display != null && display.isValid()) {
+            Entity vehicle = display.getVehicle();
+            if (vehicle instanceof LivingEntity) {
+                LivingEntity entity = (LivingEntity) vehicle;
+                if (originalName != null && !originalName.isEmpty()) {
+                    entity.setCustomName(originalName);
+                }
+                if (wasVisible != null) {
+                    entity.setCustomNameVisible(wasVisible);
+                }
+                // 恢复 LibsDisguises 伪装名字显示
+                if (overrideLibsDisguisesName && libsDisguisesHook.isLibsDisguisesEnabled()) {
+                    libsDisguisesHook.restoreDisguiseName(entity);
+                }
+            }
+            display.remove();
+            plugin.debug("移除显示: " + entityId);
+        }
+    }
+
+    public void removeDisplay(LivingEntity entity) {
+        removeDisplay(entity.getUniqueId());
+    }
+
+    public void clear() {
+        for (Map.Entry<UUID, TextDisplay> entry : displays.entrySet()) {
+            TextDisplay display = entry.getValue();
+            if (display != null && display.isValid()) {
+                Entity vehicle = display.getVehicle();
+                if (vehicle instanceof LivingEntity) {
+                    LivingEntity entity = (LivingEntity) vehicle;
+                    String originalName = originalNames.get(entry.getKey());
+                    Boolean wasVisible = originalNameVisible.get(entry.getKey());
+                    if (originalName != null && !originalName.isEmpty()) {
+                        entity.setCustomName(originalName);
+                    }
+                    if (wasVisible != null) {
+                        entity.setCustomNameVisible(wasVisible);
+                    }
+                    // 恢复 LibsDisguises 伪装名字显示
+                    if (overrideLibsDisguisesName && libsDisguisesHook.isLibsDisguisesEnabled()) {
+                        libsDisguisesHook.restoreDisguiseName(entity);
+                    }
+                }
+                display.remove();
+            }
+        }
+        displays.clear();
+        healthCache.clear();
+        originalNames.clear();
+        originalNameVisible.clear();
+        lastAttackTime.clear();
+    }
+
+    private boolean shouldDisplay(LivingEntity entity) {
+        if (excludedTypes.contains(entity.getType())) return false;
+        
+        boolean isMythicMob = mythicMobsHook.isMythicMob(entity);
+        
+        if (mythicMobsOnly && !isMythicMob) return false;
+        if (!showVanilla && !isMythicMob) return false;
+        
+        return true;
+    }
+
+    private String getEntityName(LivingEntity entity) {
+        String mythicName = mythicMobsHook.getMythicMobName(entity);
+        if (mythicName != null && !mythicName.isEmpty()) {
+            return convertLegacyColors(mythicName);
+        }
+
+        String customName = entity.getCustomName();
+        if (customName != null && !customName.isEmpty()) {
+            return convertLegacyColors(customName);
+        }
+
+        return convertLegacyColors(entity.getName());
+    }
+
+    /**
+     * 将旧版颜色代码 (§) 转换为 MiniMessage 格式
+     */
+    private String convertLegacyColors(String text) {
+        if (text == null || text.isEmpty()) {
+            return text;
+        }
+
+        // 如果已经包含 MiniMessage 标签，直接返回
+        if (text.contains("<") && text.contains(">")) {
+            return text;
+        }
+
+        StringBuilder result = new StringBuilder();
+        char[] chars = text.toCharArray();
+
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == '§' && i + 1 < chars.length) {
+                char code = chars[i + 1];
+                String miniMessageTag = getMiniMessageTag(code);
+                if (miniMessageTag != null) {
+                    result.append(miniMessageTag);
+                }
+                i++; // 跳过颜色代码字符
+            } else {
+                result.append(chars[i]);
+            }
+        }
+
+        return result.toString();
+    }
+
+    /**
+     * 将旧版颜色代码转换为 MiniMessage 标签
+     */
+    private String getMiniMessageTag(char code) {
+        return switch (code) {
+            case '0' -> "<black>";
+            case '1' -> "<dark_blue>";
+            case '2' -> "<dark_green>";
+            case '3' -> "<dark_aqua>";
+            case '4' -> "<dark_red>";
+            case '5' -> "<dark_purple>";
+            case '6' -> "<gold>";
+            case '7' -> "<gray>";
+            case '8' -> "<dark_gray>";
+            case '9' -> "<blue>";
+            case 'a' -> "<green>";
+            case 'b' -> "<aqua>";
+            case 'c' -> "<red>";
+            case 'd' -> "<light_purple>";
+            case 'e' -> "<yellow>";
+            case 'f' -> "<white>";
+            case 'k' -> "<obfuscated>";
+            case 'l' -> "<bold>";
+            case 'm' -> "<strikethrough>";
+            case 'n' -> "<underlined>";
+            case 'o' -> "<italic>";
+            case 'r' -> "<reset>";
+            default -> null;
+        };
+    }
+
+    private String buildHealthBar(double health, double maxHealth) {
+        if (maxHealth <= 0) return bracketLeft + bracketRight;
+        
+        int percent = (int) ((health / maxHealth) * 100);
+        int filled = (int) ((health / maxHealth) * barLength);
+        filled = Math.max(0, Math.min(barLength, filled));
+        
+        String fillColor = getBarColor(percent);
+        
+        StringBuilder bar = new StringBuilder();
+        bar.append(bracketLeft);
+        
+        for (int i = 0; i < barLength; i++) {
+            if (i < filled) {
+                bar.append(fillColor).append(barSymbol);
+            } else {
+                bar.append(emptyColor).append(barSymbol);
+            }
+        }
+        
+        bar.append(bracketRight);
+        return bar.toString();
+    }
+
+    private String getBarColor(int percent) {
+        for (BarColorRange range : barColors) {
+            if (percent >= range.min && percent <= range.max) {
+                return range.color;
+            }
+        }
+        return "<green>";
+    }
+
+    /**
+     * 将旧版 {placeholder} 格式转换为 MiniMessage <placeholder> 格式
+     */
+    private String convertOldPlaceholders(String format) {
+        if (format == null || format.isEmpty()) {
+            return format;
+        }
+        return format
+            .replace("{name}", "<name>")
+            .replace("{health}", "<health>")
+            .replace("{max_health}", "<max_health>")
+            .replace("{health_bar}", "<health_bar>")
+            .replace("{percent}", "<percent>");
+    }
+
+    public boolean hasDisplay(UUID entityId) {
+        return displays.containsKey(entityId);
+    }
+
+    public int getDisplayCount() {
+        return displays.size();
+    }
+    
+    /**
+     * 显示实体血量（公开方法，供Adapter调用）
+     */
+    public void showHealth(LivingEntity entity) {
+        createDisplay(entity);
+    }
+    
+    /**
+     * 隐藏实体血量（公开方法，供Adapter调用）
+     */
+    public void hideHealth(LivingEntity entity) {
+        if (entity == null) return;
+        removeDisplay(entity.getUniqueId());
+    }
+
+    private static class HealthData {
+        final double health;
+        final double maxHealth;
+        
+        HealthData(double health, double maxHealth) {
+            this.health = health;
+            this.maxHealth = maxHealth;
+        }
+    }
+
+    private static class BarColorRange {
+        final int min;
+        final int max;
+        final String color;
+        
+        BarColorRange(int min, int max, String color) {
+            this.min = min;
+            this.max = max;
+            this.color = color;
+        }
+    }
+}

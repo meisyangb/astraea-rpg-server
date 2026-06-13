@@ -1,0 +1,17 @@
+// ========================================
+// GuangDianWorld - 世界管理系统
+// ========================================
+
+plugins {
+    id 'java'
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+    compileOnly project(':plugins:RPGCore')
+    compileOnly files('../GuangDianArmorStats/libs/PlaceholderAPI.jar')
+}
+
+jar {
+    archiveBaseName.set('GuangDianWorld')
+}

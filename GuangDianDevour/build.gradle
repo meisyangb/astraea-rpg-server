@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+    flatDir { dirs '../libs' }
+}
+
+dependencies {
+    // Paper API 1.21.6
+    compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+    
+    // RPGCore 核心
+    compileOnly project(':plugins:RPGCore')
+    
+    // 外部依赖
+    compileOnly name: 'Vault'
+    compileOnly name: 'MythicMobs'
+    compileOnly name: 'PlaceholderAPI'
+}
+
+jar {
+    archiveBaseName.set('GuangDianDevour')
+    archiveVersion.set('1.0.0')
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+// 编译选项
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.compilerArgs += ['-Xlint:unchecked', '-Xlint:deprecation']
+}

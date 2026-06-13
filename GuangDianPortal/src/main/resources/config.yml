@@ -1,0 +1,36 @@
+# GuangDianPortal 配置文件
+# 光点传送门插件 v1.0.0
+
+settings:
+  # 传送冷却时间 (毫秒)
+  cooldown-ms: 1000
+  
+  # 传送延迟 (秒, 0为立即传送)
+  teleport-delay: 0
+  
+  # 默认传送门框架材质
+  default-frame-material: OBSIDIAN
+  
+  # 传送门填充材质
+  portal-fill-material: END_GATEWAY
+  
+  # 选点工具
+  selection-tool: WOODEN_AXE
+  
+  # 传送效果
+  effects:
+    enabled: true
+  
+  # 传送音效
+  sound:
+    enabled: true
+
+# 消息配置
+messages:
+  prefix: "<gold>[传送门]</gold>"
+  no-permission: "<red>你没有权限执行此操作!</red>"
+  portal-created: "<green>成功创建传送门!</green>"
+  portal-deleted: "<green>传送门已删除!</green>"
+  portal-not-found: "<red>传送门不存在!</red>"
+  teleport-success: "<green>已传送到目的地!</green>"
+  cooldown: "<red>请等待后再使用传送门!</red>"

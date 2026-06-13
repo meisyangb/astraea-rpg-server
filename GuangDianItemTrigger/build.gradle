@@ -1,0 +1,24 @@
+// ========================================
+// GuangDianItemTrigger - 物品触发器系统
+// ========================================
+
+plugins {
+    id 'java'
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+    compileOnly project(':plugins:RPGCore')
+    // 使用本地 Vault API
+    compileOnly files('libs/Vault.jar')
+}
+
+jar {
+    archiveBaseName.set('GuangDianItemTrigger')
+}

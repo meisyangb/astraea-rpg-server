@@ -1,0 +1,22 @@
+name: GuangDianMarket
+version: 1.0.0
+main: cn.guangdian.market.GuangDianMarket
+api-version: '1.21'
+author: Gumin
+description: 光点RPG全球市场系统
+
+# 插件依赖 (全部通过PlaceholderAPI获取数据)
+softdepend:
+  - PlaceholderAPI
+  - RPGCore
+
+commands:
+  market:
+    description: 全球市场命令
+    usage: /market [sell|my|help]
+    aliases: [ah, auction]
+
+permissions:
+  guangdian.market.use:
+    description: 使用全球市场
+    default: true

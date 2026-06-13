@@ -1,0 +1,36 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 加速.yml
+# ========================================
+
+电视机:
+  Id: PLAYER_HEAD
+  Display: '<gold>98寸液晶电视'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+急速熊宝宝头:
+  Id: PLAYER_HEAD
+  Display: '<blue>急速熊宝宝头'
+  Lore:
+  - '<gray>移动速度: <aqua>50%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MoveSpeed: 50.0
+
+急速熊宝宝头2:
+  Id: PLAYER_HEAD
+  Display: '<blue>急速熊宝宝头'
+  Lore:
+  - '<gray>移动速度: <aqua>150%'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    MoveSpeed: 150.0
+

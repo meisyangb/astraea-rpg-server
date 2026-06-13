@@ -1,0 +1,22 @@
+// ========================================
+// GuangDianWorldRules - 世界规则管理插件
+// ========================================
+
+plugins {
+    id 'java'
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+    compileOnly project(':plugins:RPGCore')
+    compileOnly name: 'PlaceholderAPI'
+}
+
+jar {
+    archiveBaseName.set('GuangDianWorldRules')
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}

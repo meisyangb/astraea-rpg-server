@@ -1,0 +1,375 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 咒杀.yml
+# ========================================
+
+﻿幻域粉尘:
+  Id: PAPER
+  Display: '<dark_purple><bold>幻域粉尘'
+  Lore:
+  - '<aqua>升级道具                 远古史诗'
+  - '<yellow>蕴含着幻域力量的神秘粉尘'
+  - '<yellow>可在<gray>[<dark_purple>铁匠铺<gray>]<yellow>进行装备升级'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+幻域怨灵长剑:
+  Id: GOLDEN_SWORD
+  Display: '<red>幻域怨灵长剑'
+  Lore:
+  - '<yellow>近战武器                 可副手'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>460-910'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>50%'
+  - '<dark_gray>吸血几率: <aqua>5%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>20'
+  - '<dark_gray>评分: <red>150'
+  - '<yellow>由幻域怨念凝聚而成的长剑'
+  - '<yellow>承载着无数亡魂的悲鸣与诅咒'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 460.0
+    AttackMax: 910.0
+    CritChance: 5.0
+    CritDamage: 50.0
+    LifestealChance: 5.0
+    LifestealMultiplier: 20.0
+    Level: 20
+
+幻域嗜血魔刃:
+  Id: GOLDEN_SWORD
+  Display: '<red>幻域嗜血魔刃'
+  Lore:
+  - '<yellow>近战武器                 可副手'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>650-1300'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>50%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>20'
+  - '<dark_gray>评分: <red>300'
+  - '<yellow>饮血而生的幻域魔刃'
+  - '<yellow>唯有鲜血才能平息其无尽的饥渴'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 650.0
+    AttackMax: 1300.0
+    CritChance: 5.0
+    CritDamage: 50.0
+    LifestealChance: 10.0
+    LifestealMultiplier: 20.0
+    Level: 20
+
+幻域噬灵魔剑:
+  Id: GOLDEN_SWORD
+  Display: '<red>幻域噬灵魔剑'
+  Lore:
+  - '<yellow>近战武器                 可副手'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>1300-2600'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>50%'
+  - '<dark_gray>吸血几率: <aqua>5%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>20'
+  - '<dark_gray>评分: <red>600'
+  - '<yellow>能够吞噬灵魂的幻域魔剑'
+  - '<yellow>每一次击杀都将使剑身更加强大'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 1300.0
+    AttackMax: 2600.0
+    CritChance: 5.0
+    CritDamage: 50.0
+    LifestealChance: 5.0
+    LifestealMultiplier: 20.0
+    Level: 20
+
+异次元指挥官之剑:
+  Id: DIAMOND_SWORD
+  Display: '<red>异次元指挥官之剑'
+  Lore:
+  - '<yellow>近战武器               赞助武器'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>1300-3120'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>50%'
+  - '<dark_gray>吸血几率: <aqua>5%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>评分: <red>900'
+  - '<yellow>来自异次元维度的指挥官佩剑'
+  - '<yellow>曾经见证过无数星系的陨落'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 1300.0
+    AttackMax: 3120.0
+    CritChance: 5.0
+    CritDamage: 50.0
+    LifestealChance: 5.0
+    LifestealMultiplier: 20.0
+
+幻域风暴斩舰刀:
+  Id: DIAMOND_SWORD
+  Display: '<red>幻域风暴斩舰刀'
+  Lore:
+  - '<white>近战武器                            可副手'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>1950-4550'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>50%'
+  - '<dark_gray>吸血几率: <aqua>5%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>20'
+  - '<dark_gray>评分: <red>1200'
+  - '<yellow>幻域风暴武装的核心武器'
+  - '<yellow>由混沌风暴之力锻造而成的斩舰刀'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 1950.0
+    AttackMax: 4550.0
+    CritChance: 5.0
+    CritDamage: 50.0
+    LifestealChance: 5.0
+    LifestealMultiplier: 20.0
+    Level: 20
+
+幻域咒杀魔剑:
+  Id: WOODEN_SWORD
+  Display: '<red><bold>幻域咒杀魔剑'
+  Lore:
+  - '<yellow>近战武器                 可副手'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple>觉醒进度 <gray>✪✪✪✪✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>2925-6825'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>50%'
+  - '<dark_gray>吸血几率: <aqua>5%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级：<aqua>20'
+  - '<dark_gray>评分: <red>2500'
+  - '<yellow>被幻域诅咒浸染的魔剑'
+  - '<yellow>能够咒杀一切被其伤害的敌人'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 2925.0
+    AttackMax: 6825.0
+    CritChance: 5.0
+    CritDamage: 50.0
+    LifestealChance: 5.0
+    LifestealMultiplier: 20.0
+    Level: 20
+
+幻域咒杀魔剑一觉:
+  Id: WOODEN_SWORD
+  Display: '<red><bold>幻域咒杀魔剑<blue>[<yellow>一觉<blue>]'
+  Lore:
+  - '<yellow>近战武器                 可副手'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪<gray>✪✪✪✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>4680-11310'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>50%'
+  - '<dark_gray>吸血几率: <aqua>5%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级：<aqua>20'
+  - '<dark_gray>评分: <red>4500'
+  - '<yellow>幻域魔剑一阶段封印解除'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 4680.0
+    AttackMax: 11310.0
+    CritChance: 5.0
+    CritDamage: 50.0
+    LifestealChance: 5.0
+    LifestealMultiplier: 20.0
+    Level: 20
+
+幻域咒杀魔剑二觉:
+  Id: WOODEN_SWORD
+  Display: '<red><bold>幻域咒杀魔剑<blue>[<yellow>二觉<blue>]'
+  Lore:
+  - '<yellow>近战武器                 可副手'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪<gray>✪✪✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>6500-15000'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>75%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级：<aqua>20'
+  - '<dark_gray>评分: <red>7500'
+  - '<yellow>幻域魔剑二阶段封印解除'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 6500.0
+    AttackMax: 15000.0
+    CritChance: 5.0
+    CritDamage: 75.0
+    LifestealChance: 10.0
+    LifestealMultiplier: 20.0
+    Level: 20
+
+幻域咒杀魔剑三觉:
+  Id: WOODEN_SWORD
+  Display: '<red><bold>幻域咒杀魔剑<blue>[<yellow>三觉<blue>]'
+  Lore:
+  - '<yellow>近战武器                 可副手'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪✪<gray>✪✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>9750-26000'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>75%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>20%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级：<aqua>20'
+  - '<dark_gray>评分: <red>10000'
+  - '<yellow>幻域魔剑三阶段封印解除'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 9750.0
+    AttackMax: 26000.0
+    CritChance: 5.0
+    CritDamage: 75.0
+    LifestealChance: 10.0
+    LifestealMultiplier: 20.0
+    Level: 20
+
+幻域咒杀魔剑四觉:
+  Id: WOODEN_SWORD
+  Display: '<red><bold>幻域咒杀魔剑<blue>[<yellow>四觉<blue>]'
+  Lore:
+  - '<yellow>近战武器                 可副手'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪✪✪<gray>✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>19500-52000'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>75%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>40%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级：<aqua>20'
+  - '<dark_gray>评分: <red>12000'
+  - '<yellow>幻域魔剑四阶段封印解除'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 19500.0
+    AttackMax: 52000.0
+    CritChance: 5.0
+    CritDamage: 75.0
+    LifestealChance: 10.0
+    LifestealMultiplier: 40.0
+    Level: 20
+
+幻域咒杀魔剑觉醒:
+  Id: WOODEN_SWORD
+  Display: '<red><bold>幻域咒杀魔剑<blue>[<yellow>觉醒<blue>]'
+  Lore:
+  - '<yellow>近战武器                 可副手'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_purple>觉醒进度 <aqua>✪✪✪✪✪'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>攻击力: <aqua>39000-104000'
+  - '<dark_gray>暴击几率: <aqua>5%'
+  - '<dark_gray>暴击伤害: <aqua>75%'
+  - '<dark_gray>吸血几率: <aqua>10%'
+  - '<dark_gray>吸血倍率: <aqua>50%'
+  - '<aqua>致盲: <light_purple>5%'
+  - '<aqua>冰冻: <light_purple>5%'
+  - '<gold>伤害反弹: <light_purple>5%'
+  - '<gold>反伤比例: <light_purple>10%'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<dark_gray>装备等级： <aqua>20'
+  - '<dark_gray>评分: <red>14000'
+  - '<yellow>幻域魔剑完全觉醒形态'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<aqua><bold>符文➯<dark_gray>⇝<blue>✵<dark_gray>⇜'
+  - '<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]'
+  - '<dark_aqua>[<gray>可镶嵌<黄宝石><dark_aqua>]'
+  - '<dark_aqua>[<gray>可镶嵌<蓝宝石><dark_aqua>]'
+  - '<dark_red><strikethrough><bold>一一一一一一一一'
+  - '<blue>无限耐久'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  # RPGItems 属性 (从 Lore 解析)
+  Attributes:
+    AttackMin: 39000.0
+    AttackMax: 104000.0
+    CritChance: 5.0
+    CritDamage: 75.0
+    LifestealChance: 10.0
+    LifestealMultiplier: 50.0
+    ReflectRatio: 10.0
+    Level: 20
+

@@ -1,0 +1,28 @@
+name: GuangDianLottery
+version: 1.0.0
+main: cn.guangdian.lottery.GuangDianLottery
+api-version: '1.21'
+author: Gumin
+description: 光点RPG抽奖系统
+
+softdepend:
+  - RPGCore
+  - PlaceholderAPI
+  - MythicMobs
+
+commands:
+  lottery:
+    description: 抽奖系统命令
+    usage: /lottery [draw|pools|history|reload|help]
+    aliases: [lotto, lt]
+
+permissions:
+  guangdian.lottery.use:
+    description: 使用抽奖系统基本功能
+    default: true
+  guangdian.lottery.admin:
+    description: 管理员权限
+    default: op
+  guangdian.lottery.broadcast:
+    description: 接收稀有奖品广播
+    default: true

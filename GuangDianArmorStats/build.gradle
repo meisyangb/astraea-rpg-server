@@ -1,0 +1,32 @@
+// ========================================
+// GuangDianArmorStats - 装备属性系统
+// ========================================
+
+plugins {
+    id 'java'
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+    compileOnly project(':plugins:RPGCore')
+    compileOnly project(':plugins:RPGItems')
+    compileOnly project(':plugins:GuangDianClass')
+    compileOnly project(':plugins:GuangDianSocket')
+    compileOnly files('libs/PlaceholderAPI.jar')
+    compileOnly files('libs/MythicMobs.jar')
+    compileOnly files('../../../MythicLib-dist-1.7.1-20260319.222439-90.jar')
+}
+
+jar {
+    archiveBaseName.set('GuangDianArmorStats')
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs.add('--add-modules')
+    options.compilerArgs.add('jdk.incubator.vector')
+}

@@ -1,0 +1,96 @@
+# ========================================
+# 从 MythicMobs 迁移的物品配置
+# 源文件: 第四层怪物装备.yml
+# ========================================
+
+幻界堕落战士钻石剑:
+  Id: DIAMOND_SWORD
+  Display: '<green>木剑'
+  Lore:
+  - '<dark_aqua>攻击力: <green>300'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+幻界堕落召唤师钻石剑:
+  Id: DIAMOND_SWORD
+  Display: '<green>木剑'
+  Lore:
+  - '<dark_aqua>攻击力: <green>1500'
+  - '<dark_aqua>燃烧: <green>5'
+  - '<dark_aqua>暴击几率: <green>3'
+  - '<dark_aqua>暴击伤害: <green>200'
+  - '<dark_aqua>中毒: <green>3'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+堕落大贤者-阿卡斯塔金剑:
+  Id: GOLDEN_SWORD
+  Display: '<green>木剑'
+  Lore:
+  - '<dark_aqua>攻击力: <green>3000'
+  - '<dark_aqua>燃烧: <green>5'
+  - '<dark_aqua>暴击几率: <green>3'
+  - '<dark_aqua>暴击伤害: <green>300'
+  - '<dark_aqua>中毒: <green>3'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+青皮帽:
+  Id: LEATHER_HELMET
+  Display: '<green>皮帽'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+青皮甲:
+  Id: LEATHER_CHESTPLATE
+  Display: '<green>皮甲'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+青皮裤:
+  Id: LEATHER_LEGGINGS
+  Display: '<green>皮裤'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+青皮靴:
+  Id: LEATHER_BOOTS
+  Display: '<green>皮靴'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+蓝皮帽:
+  Id: LEATHER_HELMET
+  Display: '<green>皮帽'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+蓝皮甲:
+  Id: LEATHER_CHESTPLATE
+  Display: '<green>皮甲'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+蓝皮裤:
+  Id: LEATHER_LEGGINGS
+  Display: '<green>皮裤'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+
+蓝皮靴:
+  Id: LEATHER_BOOTS
+  Display: '<green>皮靴'
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+

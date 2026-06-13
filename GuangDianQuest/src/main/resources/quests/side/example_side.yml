@@ -1,0 +1,34 @@
+﻿# ========================================
+# 支线任务示例配置
+# ========================================
+
+name: "铁匠的委托"
+type: SIDE
+description:
+  - "<gray>铁匠需要一些材料来打造装备..."
+  - "<gray>请帮他收集这些物品。"
+
+# 任务目标
+objectives:
+  - type: COLLECT
+    target: "IRON_INGOT"
+    amount: 5
+    description: "收集铁锭 x5"
+  - type: COLLECT
+    target: "COAL"
+    amount: 3
+    description: "收集煤炭 x3"
+
+# 前置条件
+prerequisites:
+  - "example_main"
+required_level: 0
+
+# 奖励
+rewards:
+  points: 5
+  experience: 50
+  items:
+    - type: vanilla
+      id: "IRON_SWORD"
+      amount: 1

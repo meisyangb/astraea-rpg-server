@@ -1,0 +1,135 @@
+# ========================================
+# GuangDianWorldRules - 区域配置
+# ========================================
+
+# 保护区域配置
+# 区域可以覆盖世界规则，实现特定区域的特殊规则
+
+regions:
+  # ==================== F1 - 死灵墓穴 (第一层) ====================
+  # 刷怪点范围: X: -580~-530, Y: 0~20, Z: 510~660
+  F1_战斗区域:
+    world: F1
+    min:
+      x: -590
+      y: -10
+      z: 500
+    max:
+      x: -520
+      y: 30
+      z: 670
+    enter-title: "§c§l死灵墓穴"
+    enter-subtitle: "§7第一层副本"
+    leave-title: "§e离开死灵墓穴"
+    leave-subtitle: ""
+
+  F1_BOSS房间:
+    world: F1
+    min:
+      x: -575
+      y: 5
+      z: 590
+    max:
+      x: -555
+      y: 15
+      z: 610
+    enter-title: "§4§l⚠ BOSS区域"
+    enter-subtitle: "§c死灵领主"
+    leave-title: ""
+    leave-subtitle: ""
+
+  # ==================== F2 - 幻翼巢穴 (第二层) ====================
+  # 刷怪点范围: X: -820~-620, Y: -10~20, Z: 200~260
+  F2_战斗区域:
+    world: F2
+    min:
+      x: -830
+      y: -20
+      z: 190
+    max:
+      x: -610
+      y: 30
+      z: 270
+    enter-title: "§b§l幻翼巢穴"
+    enter-subtitle: "§7第二层副本"
+    leave-title: "§e离开幻翼巢穴"
+    leave-subtitle: ""
+
+  F2_BOSS房间:
+    world: F2
+    min:
+      x: -810
+      y: 0
+      z: 220
+    max:
+      x: -785
+      y: 15
+      z: 240
+    enter-title: "§4§l⚠ BOSS区域"
+    enter-subtitle: "§b幻翼魔王"
+    leave-title: ""
+    leave-subtitle: ""
+
+  # ==================== F3 - 腐尸堡垒 (第三层) ====================
+  # 刷怪点范围: X: 250~400, Y: 40~80, Z: 740~820
+  F3_战斗区域:
+    world: F3
+    min:
+      x: 240
+      y: 30
+      z: 730
+    max:
+      x: 410
+      y: 90
+      z: 830
+    enter-title: "§a§l腐尸堡垒"
+    enter-subtitle: "§7第三层副本"
+    leave-title: "§e离开腐尸堡垒"
+    leave-subtitle: ""
+
+  F3_BOSS房间:
+    world: F3
+    min:
+      x: 260
+      y: 40
+      z: 760
+    max:
+      x: 280
+      y: 55
+      z: 780
+    enter-title: "§4§l⚠ BOSS区域"
+    enter-subtitle: "§a腐尸将军"
+    leave-title: ""
+    leave-subtitle: ""
+
+  # ==================== F4 - 寄生之地 (第四层) ====================
+  # 刷怪点范围: X: 80~160, Y: 70~90, Z: -80~10
+  F4_战斗区域:
+    world: F4
+    min:
+      x: 70
+      y: 60
+      z: -90
+    max:
+      x: 170
+      y: 100
+      z: 20
+    enter-title: "§d§l寄生之地"
+    enter-subtitle: "§7第四层副本"
+    leave-title: "§e离开寄生之地"
+    leave-subtitle: ""
+
+  F4_BOSS房间:
+    world: F4
+    min:
+      x: 110
+      y: 75
+      z: -20
+    max:
+      x: 130
+      y: 90
+      z: 5
+    enter-title: "§4§l⚠ BOSS区域"
+    enter-subtitle: "§d寄生者奥莱斯"
+    leave-title: ""
+    leave-subtitle: ""

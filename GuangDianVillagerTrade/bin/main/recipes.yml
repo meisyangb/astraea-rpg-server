@@ -1,0 +1,4353 @@
+recipes:
+  recipe_幻域嗜血魔刃_0:
+    display:
+      name: "<gold>幻域嗜血魔刃"
+      material: GOLD_SWORD
+      lore:
+        - "<gray>需要: 幻域怨灵长剑 x1"
+        - "<gray>      幻域粉尘 x3"
+    input:
+      item1:
+        material: GOLD_SWORD
+        amount: 1
+        mythic-type: 幻域怨灵长剑
+        unbreakable: true
+      item2:
+        material: SULPHUR
+        amount: 3
+        mythic-type: 幻域粉尘
+    output:
+      material: GOLD_SWORD
+      amount: 1
+      mythic-type: 幻域嗜血魔刃
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_幻域噬灵魔剑_1:
+    display:
+      name: "<gold>幻域噬灵魔剑"
+      material: GOLD_SWORD
+      lore:
+        - "<gray>需要: 幻域嗜血魔刃 x1"
+        - "<gray>      幻域粉尘 x9"
+    input:
+      item1:
+        material: GOLD_SWORD
+        amount: 1
+        mythic-type: 幻域嗜血魔刃
+        unbreakable: true
+      item2:
+        material: SULPHUR
+        amount: 9
+        mythic-type: 幻域粉尘
+    output:
+      material: GOLD_SWORD
+      amount: 1
+      mythic-type: 幻域噬灵魔剑
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_幻域风暴斩舰刀_2:
+    display:
+      name: "<gold>幻域风暴斩舰刀"
+      material: DIAMOND_SWORD
+      lore:
+        - "<gray>需要: 幻域噬灵魔剑 x1"
+        - "<gray>      幻域粉尘 x12"
+    input:
+      item1:
+        material: GOLD_SWORD
+        amount: 1
+        mythic-type: 幻域噬灵魔剑
+        unbreakable: true
+      item2:
+        material: SULPHUR
+        amount: 12
+        mythic-type: 幻域粉尘
+    output:
+      material: DIAMOND_SWORD
+      amount: 1
+      mythic-type: 幻域风暴斩舰刀
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_幻域咒杀魔剑_3:
+    display:
+      name: "<gold>幻域咒杀魔剑"
+      material: WOOD_SWORD
+      lore:
+        - "<gray>需要: 幻域风暴斩舰刀 x1"
+        - "<gray>      幻域粉尘 x14"
+    input:
+      item1:
+        material: DIAMOND_SWORD
+        amount: 1
+        mythic-type: 幻域风暴斩舰刀
+        unbreakable: true
+      item2:
+        material: SULPHUR
+        amount: 14
+        mythic-type: 幻域粉尘
+    output:
+      material: WOOD_SWORD
+      amount: 1
+      mythic-type: 幻域咒杀魔剑
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_幻域咒杀魔剑_一觉_4:
+    display:
+      name: "<gold>幻域咒杀魔剑[一觉]"
+      material: WOOD_SWORD
+      lore:
+        - "<gray>需要: 幻域咒杀魔剑 x1"
+        - "<gray>      幻域粉尘 x20"
+    input:
+      item1:
+        material: WOOD_SWORD
+        amount: 1
+        mythic-type: 幻域咒杀魔剑
+        unbreakable: true
+      item2:
+        material: SULPHUR
+        amount: 20
+        mythic-type: 幻域粉尘
+    output:
+      material: WOOD_SWORD
+      amount: 1
+      mythic-type: 幻域咒杀魔剑
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_幻域咒杀魔剑_二觉_5:
+    display:
+      name: "<gold>幻域咒杀魔剑[二觉]"
+      material: WOOD_SWORD
+      lore:
+        - "<gray>需要: 幻域咒杀魔剑[一觉] x1"
+        - "<gray>      幻域粉尘 x20"
+    input:
+      item1:
+        material: WOOD_SWORD
+        amount: 1
+        mythic-type: 幻域咒杀魔剑
+        unbreakable: true
+      item2:
+        material: SULPHUR
+        amount: 20
+        mythic-type: 幻域粉尘
+    output:
+      material: WOOD_SWORD
+      amount: 1
+      mythic-type: 幻域咒杀魔剑
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_幻域咒杀魔剑_三觉_6:
+    display:
+      name: "<gold>幻域咒杀魔剑[三觉]"
+      material: WOOD_SWORD
+      lore:
+        - "<gray>需要: 幻域咒杀魔剑[二觉] x1"
+        - "<gray>      幻域粉尘 x25"
+    input:
+      item1:
+        material: WOOD_SWORD
+        amount: 1
+        mythic-type: 幻域咒杀魔剑
+        unbreakable: true
+      item2:
+        material: SULPHUR
+        amount: 25
+        mythic-type: 幻域粉尘
+    output:
+      material: WOOD_SWORD
+      amount: 1
+      mythic-type: 幻域咒杀魔剑
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_幻域战神头盔_7:
+    display:
+      name: "<gold>幻域战神头盔"
+      material: DIAMOND_HELMET
+      lore:
+        - "<gray>需要: 幻域神炎头盔 x1"
+        - "<gray>      幻域粉尘 x12"
+    input:
+      item1:
+        material: DIAMOND_HELMET
+        amount: 1
+        name: 幻域神炎头盔
+        exact-match: true
+      item2:
+        material: SULPHUR
+        amount: 12
+        mythic-type: 幻域粉尘
+    output:
+      material: DIAMOND_HELMET
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_幻域治愈神术_0:
+    display:
+      name: "<gold>幻域治愈神术"
+      material: MAGMA_CREAM
+      lore:
+        - "<gray>需要: 幻域抗火魔法 x10"
+    input:
+      item1:
+        material: MAGMA_CREAM
+        amount: 10
+        name: 幻域抗火魔法
+        exact-match: true
+    output:
+      material: MAGMA_CREAM
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_幻域治愈神术_1:
+    display:
+      name: "<gold>幻域治愈神术"
+      material: MAGMA_CREAM
+      lore:
+        - "<gray>需要: 幻域治愈魔法 x5"
+    input:
+      item1:
+        material: MAGMA_CREAM
+        amount: 5
+        name: 幻域治愈魔法
+        exact-match: true
+    output:
+      material: MAGMA_CREAM
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_0:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 真魔王装备残页 x4"
+    input:
+      item1:
+        material: PAPER
+        amount: 4
+        mythic-type: 真魔王装备残页
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_1:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 真魔王装备残页 x3"
+    input:
+      item1:
+        material: PAPER
+        amount: 3
+        mythic-type: 真魔王装备残页
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_2:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 真魔王装备残页 x3"
+    input:
+      item1:
+        material: PAPER
+        amount: 3
+        mythic-type: 真魔王装备残页
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_3:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 真魔王装备残页 x2"
+    input:
+      item1:
+        material: PAPER
+        amount: 2
+        mythic-type: 真魔王装备残页
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_4:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 真魔王装备残页 x2"
+    input:
+      item1:
+        material: PAPER
+        amount: 2
+        mythic-type: 真魔王装备残页
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_0_1:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 遗忘图纸残页 x20"
+    input:
+      item1:
+        material: PAPER
+        amount: 20
+        name: 遗忘图纸残页
+        exact-match: true
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_1_1:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 遗忘图纸残页 x15"
+    input:
+      item1:
+        material: PAPER
+        amount: 15
+        name: 遗忘图纸残页
+        exact-match: true
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_2_1:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 遗忘图纸残页 x10"
+    input:
+      item1:
+        material: PAPER
+        amount: 10
+        name: 遗忘图纸残页
+        exact-match: true
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_3_1:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 遗忘图纸残页 x10"
+    input:
+      item1:
+        material: PAPER
+        amount: 10
+        name: 遗忘图纸残页
+        exact-match: true
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神剑梅蒂狄亚_0:
+    display:
+      name: "<gold>神剑梅蒂狄亚"
+      material: STONE_SWORD
+      lore:
+        - "<gray>需要: 天使核心 x4"
+    input:
+      item1:
+        material: GOLD_NUGGET
+        amount: 4
+        name: 天使核心
+        exact-match: true
+    output:
+      material: STONE_SWORD
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神域天神头盔_1:
+    display:
+      name: "<gold>神域天神头盔"
+      material: CHAINMAIL_HELMET
+      lore:
+        - "<gray>需要: 天使核心 x2"
+    input:
+      item1:
+        material: GOLD_NUGGET
+        amount: 2
+        name: 天使核心
+        exact-match: true
+    output:
+      material: CHAINMAIL_HELMET
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神圣天使链甲_2:
+    display:
+      name: "<gold>神圣天使链甲"
+      material: CHAINMAIL_CHESTPLATE
+      lore:
+        - "<gray>需要: 天使核心 x2"
+    input:
+      item1:
+        material: GOLD_NUGGET
+        amount: 2
+        name: 天使核心
+        exact-match: true
+    output:
+      material: CHAINMAIL_CHESTPLATE
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神圣天使链腿_3:
+    display:
+      name: "<gold>神圣天使链腿"
+      material: CHAINMAIL_LEGGINGS
+      lore:
+        - "<gray>需要: 天使核心 x2"
+    input:
+      item1:
+        material: GOLD_NUGGET
+        amount: 2
+        name: 天使核心
+        exact-match: true
+    output:
+      material: CHAINMAIL_LEGGINGS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神圣天使链靴_4:
+    display:
+      name: "<gold>神圣天使链靴"
+      material: CHAINMAIL_BOOTS
+      lore:
+        - "<gray>需要: 天使核心 x2"
+    input:
+      item1:
+        material: GOLD_NUGGET
+        amount: 2
+        name: 天使核心
+        exact-match: true
+    output:
+      material: CHAINMAIL_BOOTS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_0_2:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 白之骸骨图纸残页 x15"
+    input:
+      item1:
+        material: PAPER
+        amount: 15
+        name: 白之骸骨图纸残页
+        exact-match: true
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_1_2:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 白之骸骨图纸残页 x10"
+    input:
+      item1:
+        material: PAPER
+        amount: 10
+        name: 白之骸骨图纸残页
+        exact-match: true
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_2_2:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 白之骸骨图纸残页 x10"
+    input:
+      item1:
+        material: PAPER
+        amount: 10
+        name: 白之骸骨图纸残页
+        exact-match: true
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_3_2:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 白之骸骨图纸残页 x10"
+    input:
+      item1:
+        material: PAPER
+        amount: 10
+        name: 白之骸骨图纸残页
+        exact-match: true
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神圣天使之剑_0:
+    display:
+      name: "<gold>神圣天使之剑"
+      material: IRON_SWORD
+      lore:
+        - "<gray>需要: 天使核心 x8"
+    input:
+      item1:
+        material: GOLD_NUGGET
+        amount: 8
+        name: 天使核心
+        exact-match: true
+    output:
+      material: IRON_SWORD
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神域天神头盔_1_1:
+    display:
+      name: "<gold>神域天神头盔"
+      material: IRON_HELMET
+      lore:
+        - "<gray>需要: 天使核心 x4"
+    input:
+      item1:
+        material: GOLD_NUGGET
+        amount: 4
+        name: 天使核心
+        exact-match: true
+    output:
+      material: IRON_HELMET
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神圣天使链甲_2_1:
+    display:
+      name: "<gold>神圣天使链甲"
+      material: IRON_CHESTPLATE
+      lore:
+        - "<gray>需要: 天使核心 x4"
+    input:
+      item1:
+        material: GOLD_NUGGET
+        amount: 4
+        name: 天使核心
+        exact-match: true
+    output:
+      material: IRON_CHESTPLATE
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神圣天使链腿_3_1:
+    display:
+      name: "<gold>神圣天使链腿"
+      material: IRON_LEGGINGS
+      lore:
+        - "<gray>需要: 天使核心 x4"
+    input:
+      item1:
+        material: GOLD_NUGGET
+        amount: 4
+        name: 天使核心
+        exact-match: true
+    output:
+      material: IRON_LEGGINGS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神圣天使链靴_4_1:
+    display:
+      name: "<gold>神圣天使链靴"
+      material: IRON_BOOTS
+      lore:
+        - "<gray>需要: 天使核心 x4"
+    input:
+      item1:
+        material: GOLD_NUGGET
+        amount: 4
+        name: 天使核心
+        exact-match: true
+    output:
+      material: IRON_BOOTS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神剑梅蒂狄亚_0_1:
+    display:
+      name: "<gold>神剑梅蒂狄亚"
+      material: GOLD_SWORD
+      lore:
+        - "<gray>需要: 天使核心 x25"
+    input:
+      item1:
+        material: GOLD_NUGGET
+        amount: 25
+        name: 天使核心
+        exact-match: true
+    output:
+      material: GOLD_SWORD
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神域天神头盔_1_2:
+    display:
+      name: "<gold>神域天神头盔"
+      material: GOLD_HELMET
+      lore:
+        - "<gray>需要: 天使核心 x20"
+    input:
+      item1:
+        material: GOLD_NUGGET
+        amount: 20
+        name: 天使核心
+        exact-match: true
+    output:
+      material: GOLD_HELMET
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神圣天使链甲_2_2:
+    display:
+      name: "<gold>神圣天使链甲"
+      material: GOLD_CHESTPLATE
+      lore:
+        - "<gray>需要: 天使核心 x15"
+    input:
+      item1:
+        material: GOLD_NUGGET
+        amount: 15
+        name: 天使核心
+        exact-match: true
+    output:
+      material: GOLD_CHESTPLATE
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神圣天使链腿_3_2:
+    display:
+      name: "<gold>神圣天使链腿"
+      material: GOLD_LEGGINGS
+      lore:
+        - "<gray>需要: 天使核心 x15"
+    input:
+      item1:
+        material: GOLD_NUGGET
+        amount: 15
+        name: 天使核心
+        exact-match: true
+    output:
+      material: GOLD_LEGGINGS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神圣天使链靴_4_2:
+    display:
+      name: "<gold>神圣天使链靴"
+      material: GOLD_BOOTS
+      lore:
+        - "<gray>需要: 天使核心 x15"
+    input:
+      item1:
+        material: GOLD_NUGGET
+        amount: 15
+        name: 天使核心
+        exact-match: true
+    output:
+      material: GOLD_BOOTS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_幻域咒杀魔剑_四觉_0:
+    display:
+      name: "<gold>幻域咒杀魔剑[四觉]"
+      material: WOOD_SWORD
+      lore:
+        - "<gray>需要: 幻域咒杀魔剑[三觉] x1"
+        - "<gray>      幻域粉尘 x40"
+    input:
+      item1:
+        material: WOOD_SWORD
+        amount: 1
+        mythic-type: 幻域咒杀魔剑
+        unbreakable: true
+      item2:
+        material: SULPHUR
+        amount: 40
+        mythic-type: 幻域粉尘
+    output:
+      material: WOOD_SWORD
+      amount: 1
+      mythic-type: 幻域咒杀魔剑
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_幻域咒杀魔剑_觉醒_1:
+    display:
+      name: "<gold>幻域咒杀魔剑[觉醒]"
+      material: WOOD_SWORD
+      lore:
+        - "<gray>需要: 幻域咒杀魔剑[四觉] x1"
+        - "<gray>      幻域粉尘 x64"
+    input:
+      item1:
+        material: WOOD_SWORD
+        amount: 1
+        mythic-type: 幻域咒杀魔剑
+        unbreakable: true
+      item2:
+        material: SULPHUR
+        amount: 64
+        mythic-type: 幻域粉尘
+    output:
+      material: WOOD_SWORD
+      amount: 1
+      mythic-type: 幻域咒杀魔剑
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_幻域咒杀魔剑_觉醒_2:
+    display:
+      name: "<gold>幻域咒杀魔剑[觉醒]"
+      material: WOOD_SWORD
+      lore:
+        - "<gray>需要: 幻域咒杀魔剑[觉醒] x1"
+    input:
+      item1:
+        material: WOOD_SWORD
+        amount: 1
+        mythic-type: 幻域咒杀魔剑
+        unbreakable: true
+    output:
+      material: WOOD_SWORD
+      amount: 1
+      mythic-type: 幻域咒杀魔剑
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_营长魔化长剑_0:
+    display:
+      name: "<gold>营长魔化长剑"
+      material: DIAMOND_SWORD
+      lore:
+        - "<gray>需要: 恶魔结晶 x30"
+    input:
+      item1:
+        material: CLAY_BRICK
+        amount: 30
+        name: 恶魔结晶
+        exact-match: true
+    output:
+      material: DIAMOND_SWORD
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_营长魔化铠甲_1:
+    display:
+      name: "<gold>营长魔化铠甲"
+      material: DIAMOND_CHESTPLATE
+      lore:
+        - "<gray>需要: 恶魔结晶 x20"
+    input:
+      item1:
+        material: CLAY_BRICK
+        amount: 20
+        name: 恶魔结晶
+        exact-match: true
+    output:
+      material: DIAMOND_CHESTPLATE
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_营长魔化护腿_2:
+    display:
+      name: "<gold>营长魔化护腿"
+      material: DIAMOND_LEGGINGS
+      lore:
+        - "<gray>需要: 恶魔结晶 x20"
+    input:
+      item1:
+        material: CLAY_BRICK
+        amount: 20
+        name: 恶魔结晶
+        exact-match: true
+    output:
+      material: DIAMOND_LEGGINGS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_营长魔化战靴_3:
+    display:
+      name: "<gold>营长魔化战靴"
+      material: DIAMOND_BOOTS
+      lore:
+        - "<gray>需要: 恶魔结晶 x20"
+    input:
+      item1:
+        material: CLAY_BRICK
+        amount: 20
+        name: 恶魔结晶
+        exact-match: true
+    output:
+      material: DIAMOND_BOOTS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_恶魔统领幻界魔剑_4:
+    display:
+      name: "<gold>恶魔统领幻界魔剑"
+      material: DIAMOND_SWORD
+      lore:
+        - "<gray>需要: 恶魔结晶 x60"
+    input:
+      item1:
+        material: CLAY_BRICK
+        amount: 60
+        name: 恶魔结晶
+        exact-match: true
+    output:
+      material: DIAMOND_SWORD
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_恶魔统领幻界布甲_5:
+    display:
+      name: "<gold>恶魔统领幻界布甲"
+      material: LEATHER_CHESTPLATE
+      lore:
+        - "<gray>需要: 恶魔结晶 x40"
+    input:
+      item1:
+        material: CLAY_BRICK
+        amount: 40
+        name: 恶魔结晶
+        exact-match: true
+    output:
+      material: LEATHER_CHESTPLATE
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_恶魔统领幻界绑腿_6:
+    display:
+      name: "<gold>恶魔统领幻界绑腿"
+      material: LEATHER_LEGGINGS
+      lore:
+        - "<gray>需要: 恶魔结晶 x40"
+    input:
+      item1:
+        material: CLAY_BRICK
+        amount: 40
+        name: 恶魔结晶
+        exact-match: true
+    output:
+      material: LEATHER_LEGGINGS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_恶魔统领幻界布靴_7:
+    display:
+      name: "<gold>恶魔统领幻界布靴"
+      material: LEATHER_BOOTS
+      lore:
+        - "<gray>需要: 恶魔结晶 x40"
+    input:
+      item1:
+        material: CLAY_BRICK
+        amount: 40
+        name: 恶魔结晶
+        exact-match: true
+    output:
+      material: LEATHER_BOOTS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_幻界炎狱魔盔_0:
+    display:
+      name: "<gold>幻界炎狱魔盔"
+      material: DIAMOND_HELMET
+      lore:
+        - "<gray>需要: 炎狱头颅 x15"
+    input:
+      item1:
+        material: SKULL_ITEM
+        amount: 15
+        name: 炎狱头颅
+        exact-match: true
+    output:
+      material: DIAMOND_HELMET
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_魔幻炎狱头盔_1:
+    display:
+      name: "<gold>魔幻炎狱头盔"
+      material: DIAMOND_HELMET
+      lore:
+        - "<gray>需要: 炎狱头颅 x30"
+    input:
+      item1:
+        material: SKULL_ITEM
+        amount: 30
+        name: 炎狱头颅
+        exact-match: true
+    output:
+      material: DIAMOND_HELMET
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_魔族统帅之剑_0:
+    display:
+      name: "<gold>魔族统帅之剑"
+      material: DIAMOND_SWORD
+      lore:
+        - "<gray>需要: 魔族结晶 x60"
+    input:
+      item1:
+        material: NETHER_BRICK_ITEM
+        amount: 60
+        name: 魔族结晶
+        exact-match: true
+    output:
+      material: DIAMOND_SWORD
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_魔族统帅布甲_1:
+    display:
+      name: "<gold>魔族统帅布甲"
+      material: LEATHER_CHESTPLATE
+      lore:
+        - "<gray>需要: 魔族结晶 x60"
+    input:
+      item1:
+        material: NETHER_BRICK_ITEM
+        amount: 60
+        name: 魔族结晶
+        exact-match: true
+    output:
+      material: LEATHER_CHESTPLATE
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_魔族统帅绑腿_2:
+    display:
+      name: "<gold>魔族统帅绑腿"
+      material: LEATHER_LEGGINGS
+      lore:
+        - "<gray>需要: 魔族结晶 x60"
+    input:
+      item1:
+        material: NETHER_BRICK_ITEM
+        amount: 60
+        name: 魔族结晶
+        exact-match: true
+    output:
+      material: LEATHER_LEGGINGS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_魔族统帅布靴_3:
+    display:
+      name: "<gold>魔族统帅布靴"
+      material: LEATHER_BOOTS
+      lore:
+        - "<gray>需要: 魔族结晶 x60"
+    input:
+      item1:
+        material: NETHER_BRICK_ITEM
+        amount: 60
+        name: 魔族结晶
+        exact-match: true
+    output:
+      material: LEATHER_BOOTS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_伊特拉苏裁决之刃_4:
+    display:
+      name: "<gold>伊特拉苏裁决之刃"
+      material: GOLD_SWORD
+      lore:
+        - "<gray>需要: 魔族结晶 x64"
+        - "<gray>      魔族结晶 x60"
+    input:
+      item1:
+        material: NETHER_BRICK_ITEM
+        amount: 64
+        name: 魔族结晶
+        exact-match: true
+      item2:
+        material: NETHER_BRICK_ITEM
+        amount: 60
+        name: 魔族结晶
+        exact-match: true
+    output:
+      material: GOLD_SWORD
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_伊特拉苏衬衫_5:
+    display:
+      name: "<gold>伊特拉苏衬衫"
+      material: LEATHER_CHESTPLATE
+      lore:
+        - "<gray>需要: 魔族结晶 x64"
+        - "<gray>      魔族结晶 x60"
+    input:
+      item1:
+        material: NETHER_BRICK_ITEM
+        amount: 64
+        name: 魔族结晶
+        exact-match: true
+      item2:
+        material: NETHER_BRICK_ITEM
+        amount: 60
+        name: 魔族结晶
+        exact-match: true
+    output:
+      material: LEATHER_CHESTPLATE
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_伊特拉苏长裤_6:
+    display:
+      name: "<gold>伊特拉苏长裤"
+      material: LEATHER_LEGGINGS
+      lore:
+        - "<gray>需要: 魔族结晶 x64"
+        - "<gray>      魔族结晶 x60"
+    input:
+      item1:
+        material: NETHER_BRICK_ITEM
+        amount: 64
+        name: 魔族结晶
+        exact-match: true
+      item2:
+        material: NETHER_BRICK_ITEM
+        amount: 60
+        name: 魔族结晶
+        exact-match: true
+    output:
+      material: LEATHER_LEGGINGS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_伊特拉苏长靴_7:
+    display:
+      name: "<gold>伊特拉苏长靴"
+      material: LEATHER_BOOTS
+      lore:
+        - "<gray>需要: 魔族结晶 x64"
+        - "<gray>      魔族结晶 x60"
+    input:
+      item1:
+        material: NETHER_BRICK_ITEM
+        amount: 64
+        name: 魔族结晶
+        exact-match: true
+      item2:
+        material: NETHER_BRICK_ITEM
+        amount: 60
+        name: 魔族结晶
+        exact-match: true
+    output:
+      material: LEATHER_BOOTS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_堕落召唤师恶毒之剑_0:
+    display:
+      name: "<gold>堕落召唤师恶毒之剑"
+      material: DIAMOND_SWORD
+      lore:
+        - "<gray>需要: 堕落结晶 x60"
+    input:
+      item1:
+        material: COAL
+        amount: 60
+        name: 堕落结晶
+        exact-match: true
+    output:
+      material: DIAMOND_SWORD
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_堕落召唤师法袍_1:
+    display:
+      name: "<gold>堕落召唤师法袍"
+      material: LEATHER_CHESTPLATE
+      lore:
+        - "<gray>需要: 堕落结晶 x60"
+    input:
+      item1:
+        material: COAL
+        amount: 60
+        name: 堕落结晶
+        exact-match: true
+    output:
+      material: LEATHER_CHESTPLATE
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_堕落召唤师长裤_2:
+    display:
+      name: "<gold>堕落召唤师长裤"
+      material: LEATHER_LEGGINGS
+      lore:
+        - "<gray>需要: 堕落结晶 x60"
+    input:
+      item1:
+        material: COAL
+        amount: 60
+        name: 堕落结晶
+        exact-match: true
+    output:
+      material: LEATHER_LEGGINGS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_阿卡斯塔贤者圣剑_3:
+    display:
+      name: "<gold>阿卡斯塔贤者圣剑"
+      material: GOLD_SWORD
+      lore:
+        - "<gray>需要: 堕落结晶 x64"
+        - "<gray>      堕落结晶 x60"
+    input:
+      item1:
+        material: COAL
+        amount: 64
+        name: 堕落结晶
+        exact-match: true
+      item2:
+        material: COAL
+        amount: 60
+        name: 堕落结晶
+        exact-match: true
+    output:
+      material: GOLD_SWORD
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_阿卡斯塔贤者之袍_4:
+    display:
+      name: "<gold>阿卡斯塔贤者之袍"
+      material: LEATHER_CHESTPLATE
+      lore:
+        - "<gray>需要: 堕落结晶 x60"
+        - "<gray>      堕落结晶 x40"
+    input:
+      item1:
+        material: COAL
+        amount: 60
+        name: 堕落结晶
+        exact-match: true
+      item2:
+        material: COAL
+        amount: 40
+        name: 堕落结晶
+        exact-match: true
+    output:
+      material: LEATHER_CHESTPLATE
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_阿卡斯塔贤者长裤_5:
+    display:
+      name: "<gold>阿卡斯塔贤者长裤"
+      material: LEATHER_LEGGINGS
+      lore:
+        - "<gray>需要: 堕落结晶 x60"
+        - "<gray>      堕落结晶 x40"
+    input:
+      item1:
+        material: COAL
+        amount: 60
+        name: 堕落结晶
+        exact-match: true
+      item2:
+        material: COAL
+        amount: 40
+        name: 堕落结晶
+        exact-match: true
+    output:
+      material: LEATHER_LEGGINGS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_生命之石i_0:
+    display:
+      name: "<gold>生命之石I"
+      material: EMERALD
+      lore:
+        - "<gray>需要: 宝石碎片 x10"
+    input:
+      item1:
+        material: QUARTZ
+        amount: 10
+        name: 宝石碎片
+        exact-match: true
+    output:
+      material: EMERALD
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_生命之石ii_1:
+    display:
+      name: "<gold>生命之石II"
+      material: EMERALD
+      lore:
+        - "<gray>需要: 宝石碎片 x15"
+    input:
+      item1:
+        material: QUARTZ
+        amount: 15
+        name: 宝石碎片
+        exact-match: true
+    output:
+      material: EMERALD
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_生命之石iii_2:
+    display:
+      name: "<gold>生命之石III"
+      material: EMERALD
+      lore:
+        - "<gray>需要: 宝石碎片 x20"
+    input:
+      item1:
+        material: QUARTZ
+        amount: 20
+        name: 宝石碎片
+        exact-match: true
+    output:
+      material: EMERALD
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_杀戮之石i_0:
+    display:
+      name: "<gold>杀戮之石I"
+      material: REDSTONE
+      lore:
+        - "<gray>需要: 宝石碎片 x10"
+    input:
+      item1:
+        material: QUARTZ
+        amount: 10
+        name: 宝石碎片
+        exact-match: true
+    output:
+      material: REDSTONE
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_杀戮之石ii_1:
+    display:
+      name: "<gold>杀戮之石II"
+      material: REDSTONE
+      lore:
+        - "<gray>需要: 宝石碎片 x15"
+    input:
+      item1:
+        material: QUARTZ
+        amount: 15
+        name: 宝石碎片
+        exact-match: true
+    output:
+      material: REDSTONE
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_杀戮之石iii_2:
+    display:
+      name: "<gold>杀戮之石III"
+      material: REDSTONE
+      lore:
+        - "<gray>需要: 宝石碎片 x20"
+    input:
+      item1:
+        material: QUARTZ
+        amount: 20
+        name: 宝石碎片
+        exact-match: true
+    output:
+      material: REDSTONE
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_屠戮之石i_3:
+    display:
+      name: "<gold>屠戮之石I"
+      material: REDSTONE
+      lore:
+        - "<gray>需要: 宝石碎片 x10"
+    input:
+      item1:
+        material: QUARTZ
+        amount: 10
+        name: 宝石碎片
+        exact-match: true
+    output:
+      material: REDSTONE
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_屠戮之石ii_4:
+    display:
+      name: "<gold>屠戮之石II"
+      material: REDSTONE
+      lore:
+        - "<gray>需要: 宝石碎片 x15"
+    input:
+      item1:
+        material: QUARTZ
+        amount: 15
+        name: 宝石碎片
+        exact-match: true
+    output:
+      material: REDSTONE
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_屠戮之石iii_5:
+    display:
+      name: "<gold>屠戮之石III"
+      material: REDSTONE
+      lore:
+        - "<gray>需要: 宝石碎片 x20"
+    input:
+      item1:
+        material: QUARTZ
+        amount: 20
+        name: 宝石碎片
+        exact-match: true
+    output:
+      material: REDSTONE
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_二阶锻造材料_0:
+    display:
+      name: "<gold>二阶锻造材料"
+      material: SULPHUR
+      lore:
+        - "<gray>需要: 一阶锻造材料 x16"
+    input:
+      item1:
+        material: SULPHUR
+        amount: 16
+        name: 一阶锻造材料
+        exact-match: true
+        unbreakable: true
+    output:
+      material: SULPHUR
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_三阶锻造材料_1:
+    display:
+      name: "<gold>三阶锻造材料"
+      material: SULPHUR
+      lore:
+        - "<gray>需要: 二阶锻造材料 x16"
+    input:
+      item1:
+        material: SULPHUR
+        amount: 16
+        name: 二阶锻造材料
+        exact-match: true
+        unbreakable: true
+    output:
+      material: SULPHUR
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_四阶锻造材料_2:
+    display:
+      name: "<gold>四阶锻造材料"
+      material: SULPHUR
+      lore:
+        - "<gray>需要: 三阶锻造材料 x16"
+    input:
+      item1:
+        material: SULPHUR
+        amount: 16
+        name: 三阶锻造材料
+        exact-match: true
+        unbreakable: true
+    output:
+      material: SULPHUR
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_中级装备核心_3:
+    display:
+      name: "<gold>中级装备核心"
+      material: DIAMOND
+      lore:
+        - "<gray>需要: 下级装备核心 x16"
+    input:
+      item1:
+        material: DIAMOND
+        amount: 16
+        name: 下级装备核心
+        exact-match: true
+        unbreakable: true
+    output:
+      material: DIAMOND
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空战盔_0:
+    display:
+      name: "<gold>天空战盔"
+      material: LEATHER_HELMET
+      lore:
+        - "<gray>需要: 天空战盔 x1"
+        - "<gray>      天空徽章 x30"
+    input:
+      item1:
+        material: LEATHER_HELMET
+        amount: 1
+        name: 天空战盔
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 30
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: LEATHER_HELMET
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空战甲_1:
+    display:
+      name: "<gold>天空战甲"
+      material: LEATHER_CHESTPLATE
+      lore:
+        - "<gray>需要: 天空战甲 x1"
+        - "<gray>      天空徽章 x30"
+    input:
+      item1:
+        material: LEATHER_CHESTPLATE
+        amount: 1
+        name: 天空战甲
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 30
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: LEATHER_CHESTPLATE
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空战胫_2:
+    display:
+      name: "<gold>天空战胫"
+      material: LEATHER_LEGGINGS
+      lore:
+        - "<gray>需要: 天空战胫 x1"
+        - "<gray>      天空徽章 x30"
+    input:
+      item1:
+        material: LEATHER_LEGGINGS
+        amount: 1
+        name: 天空战胫
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 30
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: LEATHER_LEGGINGS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空战靴_3:
+    display:
+      name: "<gold>天空战靴"
+      material: LEATHER_BOOTS
+      lore:
+        - "<gray>需要: 天空战靴 x1"
+        - "<gray>      天空徽章 x30"
+    input:
+      item1:
+        material: LEATHER_BOOTS
+        amount: 1
+        name: 天空战靴
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 30
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: LEATHER_BOOTS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空战盔_0_1:
+    display:
+      name: "<gold>天空战盔"
+      material: LEATHER_HELMET
+      lore:
+        - "<gray>需要: 天空战盔 x1"
+        - "<gray>      天空徽章 x10"
+    input:
+      item1:
+        material: LEATHER_HELMET
+        amount: 1
+        name: 天空战盔
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: LEATHER_HELMET
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空战甲_1_1:
+    display:
+      name: "<gold>天空战甲"
+      material: LEATHER_CHESTPLATE
+      lore:
+        - "<gray>需要: 天空战甲 x1"
+        - "<gray>      天空徽章 x10"
+    input:
+      item1:
+        material: LEATHER_CHESTPLATE
+        amount: 1
+        name: 天空战甲
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: LEATHER_CHESTPLATE
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空战胫_2_1:
+    display:
+      name: "<gold>天空战胫"
+      material: LEATHER_LEGGINGS
+      lore:
+        - "<gray>需要: 天空战胫 x1"
+        - "<gray>      天空徽章 x10"
+    input:
+      item1:
+        material: LEATHER_LEGGINGS
+        amount: 1
+        name: 天空战胫
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: LEATHER_LEGGINGS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空战靴_3_1:
+    display:
+      name: "<gold>天空战靴"
+      material: LEATHER_BOOTS
+      lore:
+        - "<gray>需要: 天空战靴 x1"
+        - "<gray>      天空徽章 x10"
+    input:
+      item1:
+        material: LEATHER_BOOTS
+        amount: 1
+        name: 天空战靴
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: LEATHER_BOOTS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空战盔_4:
+    display:
+      name: "<gold>天空战盔"
+      material: LEATHER_HELMET
+      lore:
+        - "<gray>需要: 天空战盔 x1"
+        - "<gray>      天空徽章 x20"
+    input:
+      item1:
+        material: LEATHER_HELMET
+        amount: 1
+        name: 天空战盔
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 20
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: LEATHER_HELMET
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空战甲_5:
+    display:
+      name: "<gold>天空战甲"
+      material: LEATHER_CHESTPLATE
+      lore:
+        - "<gray>需要: 天空战甲 x1"
+        - "<gray>      天空徽章 x20"
+    input:
+      item1:
+        material: LEATHER_CHESTPLATE
+        amount: 1
+        name: 天空战甲
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 20
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: LEATHER_CHESTPLATE
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空战胫_6:
+    display:
+      name: "<gold>天空战胫"
+      material: LEATHER_LEGGINGS
+      lore:
+        - "<gray>需要: 天空战胫 x1"
+        - "<gray>      天空徽章 x20"
+    input:
+      item1:
+        material: LEATHER_LEGGINGS
+        amount: 1
+        name: 天空战胫
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 20
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: LEATHER_LEGGINGS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空战靴_7:
+    display:
+      name: "<gold>天空战靴"
+      material: LEATHER_BOOTS
+      lore:
+        - "<gray>需要: 天空战靴 x1"
+        - "<gray>      天空徽章 x20"
+    input:
+      item1:
+        material: LEATHER_BOOTS
+        amount: 1
+        name: 天空战靴
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 20
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: LEATHER_BOOTS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空圣剑_0:
+    display:
+      name: "<gold>天空圣剑"
+      material: IRON_SWORD
+      lore:
+        - "<gray>需要: 天空圣剑 x1"
+        - "<gray>      天空徽章 x15"
+    input:
+      item1:
+        material: IRON_SWORD
+        amount: 1
+        name: 天空圣剑
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 15
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: IRON_SWORD
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空圣剑_1:
+    display:
+      name: "<gold>天空圣剑"
+      material: IRON_SWORD
+      lore:
+        - "<gray>需要: 天空圣剑 x1"
+        - "<gray>      天空徽章 x30"
+    input:
+      item1:
+        material: IRON_SWORD
+        amount: 1
+        name: 天空圣剑
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 30
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: IRON_SWORD
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空圣剑_2:
+    display:
+      name: "<gold>天空圣剑"
+      material: IRON_SWORD
+      lore:
+        - "<gray>需要: 天空圣剑 x1"
+        - "<gray>      天空徽章 x60"
+    input:
+      item1:
+        material: IRON_SWORD
+        amount: 1
+        name: 天空圣剑
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 60
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: IRON_SWORD
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空徽章_0:
+    display:
+      name: "<gold>天空徽章"
+      material: FIREWORK_CHARGE
+      lore:
+        - "<gray>需要: 天空碎片 x10"
+        - "<gray>      中量黄金 x5"
+    input:
+      item1:
+        material: PRISMARINE_CRYSTALS
+        amount: 10
+        name: 天空碎片
+        exact-match: true
+      item2:
+        material: GOLD_INGOT
+        amount: 5
+        name: 中量黄金
+        exact-match: true
+    output:
+      material: FIREWORK_CHARGE
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空生命符文ⅰ_0:
+    display:
+      name: "<gold>天空生命符文Ⅰ"
+      material: NETHER_STAR
+      lore:
+        - "<gray>需要: 天空徽章 x15"
+        - "<gray>      大量黄金 x3"
+    input:
+      item1:
+        material: FIREWORK_CHARGE
+        amount: 15
+        name: 天空徽章
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: GOLD_INGOT
+        amount: 3
+        name: 大量黄金
+        exact-match: true
+    output:
+      material: NETHER_STAR
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空生命符文ⅱ_1:
+    display:
+      name: "<gold>天空生命符文Ⅱ"
+      material: NETHER_STAR
+      lore:
+        - "<gray>需要: 天空徽章 x20"
+        - "<gray>      天空生命符文Ⅰ x1"
+    input:
+      item1:
+        material: FIREWORK_CHARGE
+        amount: 20
+        name: 天空徽章
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: NETHER_STAR
+        amount: 1
+        name: 天空生命符文Ⅰ
+        exact-match: true
+    output:
+      material: NETHER_STAR
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空生命符文ⅲ_2:
+    display:
+      name: "<gold>天空生命符文Ⅲ"
+      material: NETHER_STAR
+      lore:
+        - "<gray>需要: 天空徽章 x25"
+        - "<gray>      天空生命符文Ⅱ x1"
+    input:
+      item1:
+        material: FIREWORK_CHARGE
+        amount: 25
+        name: 天空徽章
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: NETHER_STAR
+        amount: 1
+        name: 天空生命符文Ⅱ
+        exact-match: true
+    output:
+      material: NETHER_STAR
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空生命符文ⅳ_3:
+    display:
+      name: "<gold>天空生命符文Ⅳ"
+      material: NETHER_STAR
+      lore:
+        - "<gray>需要: 天空徽章 x30"
+        - "<gray>      天空生命符文Ⅲ x1"
+    input:
+      item1:
+        material: FIREWORK_CHARGE
+        amount: 30
+        name: 天空徽章
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: NETHER_STAR
+        amount: 1
+        name: 天空生命符文Ⅲ
+        exact-match: true
+    output:
+      material: NETHER_STAR
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空生命符文ⅴ_4:
+    display:
+      name: "<gold>天空生命符文Ⅴ"
+      material: NETHER_STAR
+      lore:
+        - "<gray>需要: 天空徽章 x35"
+        - "<gray>      天空生命符文Ⅳ x1"
+    input:
+      item1:
+        material: FIREWORK_CHARGE
+        amount: 35
+        name: 天空徽章
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: NETHER_STAR
+        amount: 1
+        name: 天空生命符文Ⅳ
+        exact-match: true
+    output:
+      material: NETHER_STAR
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空力量符文ⅰ_0:
+    display:
+      name: "<gold>天空力量符文Ⅰ"
+      material: NETHER_STAR
+      lore:
+        - "<gray>需要: 天空徽章 x10"
+        - "<gray>      大量黄金 x5"
+    input:
+      item1:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: GOLD_INGOT
+        amount: 5
+        name: 大量黄金
+        exact-match: true
+    output:
+      material: NETHER_STAR
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空力量符文ⅱ_1:
+    display:
+      name: "<gold>天空力量符文Ⅱ"
+      material: NETHER_STAR
+      lore:
+        - "<gray>需要: 天空徽章 x15"
+        - "<gray>      天空力量符文Ⅰ x1"
+    input:
+      item1:
+        material: FIREWORK_CHARGE
+        amount: 15
+        name: 天空徽章
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: NETHER_STAR
+        amount: 1
+        name: 天空力量符文Ⅰ
+        exact-match: true
+    output:
+      material: NETHER_STAR
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空力量符文ⅲ_2:
+    display:
+      name: "<gold>天空力量符文Ⅲ"
+      material: NETHER_STAR
+      lore:
+        - "<gray>需要: 天空徽章 x20"
+        - "<gray>      天空力量符文Ⅱ x1"
+    input:
+      item1:
+        material: FIREWORK_CHARGE
+        amount: 20
+        name: 天空徽章
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: NETHER_STAR
+        amount: 1
+        name: 天空力量符文Ⅱ
+        exact-match: true
+    output:
+      material: NETHER_STAR
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空力量符文ⅳ_3:
+    display:
+      name: "<gold>天空力量符文Ⅳ"
+      material: NETHER_STAR
+      lore:
+        - "<gray>需要: 天空徽章 x25"
+        - "<gray>      天空力量符文Ⅲ x1"
+    input:
+      item1:
+        material: FIREWORK_CHARGE
+        amount: 25
+        name: 天空徽章
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: NETHER_STAR
+        amount: 1
+        name: 天空力量符文Ⅲ
+        exact-match: true
+    output:
+      material: NETHER_STAR
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空力量符文ⅴ_4:
+    display:
+      name: "<gold>天空力量符文Ⅴ"
+      material: NETHER_STAR
+      lore:
+        - "<gray>需要: 天空徽章 x30"
+        - "<gray>      天空力量符文Ⅳ x1"
+    input:
+      item1:
+        material: FIREWORK_CHARGE
+        amount: 30
+        name: 天空徽章
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: NETHER_STAR
+        amount: 1
+        name: 天空力量符文Ⅳ
+        exact-match: true
+    output:
+      material: NETHER_STAR
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空生命神石ii_0:
+    display:
+      name: "<gold>天空生命神石II"
+      material: INK_SACK
+      lore:
+        - "<gray>需要: 天空生命神石 x5"
+        - "<gray>      天空徽章 x10"
+    input:
+      item1:
+        material: INK_SACK
+        amount: 5
+        name: 天空生命神石
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: INK_SACK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空闪避神石ii_1:
+    display:
+      name: "<gold>天空闪避神石II"
+      material: INK_SACK
+      lore:
+        - "<gray>需要: 天空闪避神石 x5"
+        - "<gray>      天空徽章 x10"
+    input:
+      item1:
+        material: INK_SACK
+        amount: 5
+        name: 天空闪避神石
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: INK_SACK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空护甲神石ii_2:
+    display:
+      name: "<gold>天空护甲神石II"
+      material: INK_SACK
+      lore:
+        - "<gray>需要: 天空护甲神石 x5"
+        - "<gray>      天空徽章 x10"
+    input:
+      item1:
+        material: INK_SACK
+        amount: 5
+        name: 天空护甲神石
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: INK_SACK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空荆棘神石ii_3:
+    display:
+      name: "<gold>天空荆棘神石II"
+      material: INK_SACK
+      lore:
+        - "<gray>需要: 天空荆棘神石 x5"
+        - "<gray>      天空徽章 x10"
+    input:
+      item1:
+        material: INK_SACK
+        amount: 5
+        name: 天空荆棘神石
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: INK_SACK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空力量神石ii_4:
+    display:
+      name: "<gold>天空力量神石II"
+      material: REDSTONE
+      lore:
+        - "<gray>需要: 天空力量神石 x1"
+        - "<gray>      天空徽章 x10"
+    input:
+      item1:
+        material: INK_SACK
+        amount: 1
+        name: 天空力量神石
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: REDSTONE
+      amount: 2
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空防御神石ii_5:
+    display:
+      name: "<gold>天空防御神石II"
+      material: INK_SACK
+      lore:
+        - "<gray>需要: 天空防御神石 x5"
+        - "<gray>      天空徽章 x10"
+    input:
+      item1:
+        material: INK_SACK
+        amount: 5
+        name: 天空防御神石
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: INK_SACK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空坚固神石ii_6:
+    display:
+      name: "<gold>天空坚固神石II"
+      material: INK_SACK
+      lore:
+        - "<gray>需要: 天空坚固神石 x5"
+        - "<gray>      天空徽章 x10"
+    input:
+      item1:
+        material: INK_SACK
+        amount: 5
+        name: 天空坚固神石
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: INK_SACK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空铠甲神石ii_7:
+    display:
+      name: "<gold>天空铠甲神石II"
+      material: INK_SACK
+      lore:
+        - "<gray>需要: 天空铠甲神石 x5"
+        - "<gray>      天空徽章 x10"
+    input:
+      item1:
+        material: INK_SACK
+        amount: 5
+        name: 天空铠甲神石
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: INK_SACK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空破甲神石ii_0:
+    display:
+      name: "<gold>天空破甲神石II"
+      material: REDSTONE
+      lore:
+        - "<gray>需要: 天空破甲神石 x5"
+        - "<gray>      天空徽章 x10"
+    input:
+      item1:
+        material: REDSTONE
+        amount: 5
+        name: 天空破甲神石
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: REDSTONE
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空破防神石ii_1:
+    display:
+      name: "<gold>天空破防神石II"
+      material: REDSTONE
+      lore:
+        - "<gray>需要: 天空破防神石 x5"
+        - "<gray>      天空徽章 x10"
+    input:
+      item1:
+        material: REDSTONE
+        amount: 5
+        name: 天空破防神石
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: REDSTONE
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空愤怒神石ii_2:
+    display:
+      name: "<gold>天空愤怒神石II"
+      material: REDSTONE
+      lore:
+        - "<gray>需要: 天空愤怒神石 x5"
+        - "<gray>      天空徽章 x10"
+    input:
+      item1:
+        material: REDSTONE
+        amount: 5
+        name: 天空愤怒神石
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: REDSTONE
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空暴怒神石ii_3:
+    display:
+      name: "<gold>天空暴怒神石II"
+      material: REDSTONE
+      lore:
+        - "<gray>需要: 天空暴怒神石 x5"
+        - "<gray>      天空徽章 x10"
+    input:
+      item1:
+        material: REDSTONE
+        amount: 5
+        name: 天空暴怒神石
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: REDSTONE
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空战神神石ii_4:
+    display:
+      name: "<gold>天空战神神石II"
+      material: REDSTONE
+      lore:
+        - "<gray>需要: 天空战神神石 x5"
+        - "<gray>      天空徽章 x10"
+    input:
+      item1:
+        material: REDSTONE
+        amount: 5
+        name: 天空战神神石
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: REDSTONE
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空生命圣石ii_0:
+    display:
+      name: "<gold>天空生命圣石II"
+      material: EMERALD
+      lore:
+        - "<gray>需要: 天空生命圣石 x5"
+        - "<gray>      天空徽章 x10"
+    input:
+      item1:
+        material: EMERALD
+        amount: 5
+        name: 天空生命圣石
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: EMERALD
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空神圣圣石ii_1:
+    display:
+      name: "<gold>天空神圣圣石II"
+      material: EMERALD
+      lore:
+        - "<gray>需要: 天空神圣圣石 x5"
+        - "<gray>      天空徽章 x10"
+    input:
+      item1:
+        material: EMERALD
+        amount: 5
+        name: 天空神圣圣石
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: EMERALD
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空韧性圣石ii_2:
+    display:
+      name: "<gold>天空韧性圣石II"
+      material: EMERALD
+      lore:
+        - "<gray>需要: 天空韧性圣石 x5"
+        - "<gray>      天空徽章 x10"
+    input:
+      item1:
+        material: EMERALD
+        amount: 5
+        name: 天空韧性圣石
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 10
+        name: 天空徽章
+        exact-match: true
+    output:
+      material: EMERALD
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天空自愈圣石_3:
+    display:
+      name: "<gold>天空自愈圣石"
+      material: EMERALD
+      lore:
+        - "<gray>需要: 天空徽章 x20"
+    input:
+      item1:
+        material: FIREWORK_CHARGE
+        amount: 20
+        name: 天空徽章
+        exact-match: true
+        unbreakable: true
+    output:
+      material: EMERALD
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天族遗物残页_0:
+    display:
+      name: "<gold>天族遗物残页"
+      material: PAPER
+      lore:
+        - "<gray>需要: 天空徽章 x32"
+    input:
+      item1:
+        material: FIREWORK_CHARGE
+        amount: 32
+        name: 天空徽章
+        exact-match: true
+        unbreakable: true
+    output:
+      material: PAPER
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_1_3:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 天族遗物残页 x30"
+    input:
+      item1:
+        material: PAPER
+        amount: 30
+        name: 天族遗物残页
+        exact-match: true
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_2_3:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 天族遗物残页 x20"
+    input:
+      item1:
+        material: PAPER
+        amount: 20
+        name: 天族遗物残页
+        exact-match: true
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_3_3:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 天族遗物残页 x20"
+    input:
+      item1:
+        material: PAPER
+        amount: 20
+        name: 天族遗物残页
+        exact-match: true
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_4_1:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 天族遗物残页 x20"
+    input:
+      item1:
+        material: PAPER
+        amount: 20
+        name: 天族遗物残页
+        exact-match: true
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_5:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 天族遗物残页 x20"
+    input:
+      item1:
+        material: PAPER
+        amount: 20
+        name: 天族遗物残页
+        exact-match: true
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_圣神打击_0:
+    display:
+      name: "<gold>圣神打击"
+      material: INK_SACK
+      lore:
+        - "<gray>需要: 天空徽章 x30"
+        - "<gray>      大量黄金 x5"
+    input:
+      item1:
+        material: FIREWORK_CHARGE
+        amount: 30
+        name: 天空徽章
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: GOLD_INGOT
+        amount: 5
+        name: 大量黄金
+        exact-match: true
+    output:
+      material: INK_SACK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_暗影打击_1:
+    display:
+      name: "<gold>暗影打击"
+      material: INK_SACK
+      lore:
+        - "<gray>需要: 天空徽章 x30"
+        - "<gray>      大量黄金 x5"
+    input:
+      item1:
+        material: FIREWORK_CHARGE
+        amount: 30
+        name: 天空徽章
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: GOLD_INGOT
+        amount: 5
+        name: 大量黄金
+        exact-match: true
+    output:
+      material: INK_SACK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_0_3:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 天族遗物残页 x10"
+    input:
+      item1:
+        material: PAPER
+        amount: 10
+        name: 天族遗物残页
+        exact-match: true
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_1_4:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 天族遗物残页 x10"
+    input:
+      item1:
+        material: PAPER
+        amount: 10
+        name: 天族遗物残页
+        exact-match: true
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_2_4:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 天族遗物残页 x10"
+    input:
+      item1:
+        material: PAPER
+        amount: 10
+        name: 天族遗物残页
+        exact-match: true
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_莫邪日志_0:
+    display:
+      name: "<gold>莫邪日志"
+      material: PAPER
+      lore:
+        - "<gray>需要: 魔剑核心 x16"
+    input:
+      item1:
+        material: FERMENTED_SPIDER_EYE
+        amount: 16
+        name: 魔剑核心
+        exact-match: true
+    output:
+      material: PAPER
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造图纸_1_5:
+    display:
+      name: "<gold>锻造图纸"
+      material: BOOK
+      lore:
+        - "<gray>需要: 莫邪日志 x10"
+    input:
+      item1:
+        material: PAPER
+        amount: 10
+        name: 莫邪日志
+        exact-match: true
+    output:
+      material: BOOK
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_恶魔符文ⅱ_0:
+    display:
+      name: "<gold>恶魔符文Ⅱ"
+      material: NETHER_STAR
+      lore:
+        - "<gray>需要: 恶魔符文 x5"
+        - "<gray>      大量黄金 x5"
+    input:
+      item1:
+        material: NETHER_STAR
+        amount: 5
+        name: 恶魔符文
+        exact-match: true
+      item2:
+        material: GOLD_INGOT
+        amount: 5
+        name: 大量黄金
+        exact-match: true
+    output:
+      material: NETHER_STAR
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_圣者符文ⅱ_1:
+    display:
+      name: "<gold>圣者符文Ⅱ"
+      material: NETHER_STAR
+      lore:
+        - "<gray>需要: 圣者符文 x1"
+        - "<gray>      大量黄金 x5"
+    input:
+      item1:
+        material: NETHER_STAR
+        amount: 1
+        name: 圣者符文
+        exact-match: true
+      item2:
+        material: GOLD_INGOT
+        amount: 5
+        name: 大量黄金
+        exact-match: true
+    output:
+      material: NETHER_STAR
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神圣符文ⅱ_2:
+    display:
+      name: "<gold>神圣符文Ⅱ"
+      material: NETHER_STAR
+      lore:
+        - "<gray>需要: 神圣符文 x1"
+        - "<gray>      大量黄金 x5"
+    input:
+      item1:
+        material: NETHER_STAR
+        amount: 1
+        name: 神圣符文
+        exact-match: true
+      item2:
+        material: GOLD_INGOT
+        amount: 5
+        name: 大量黄金
+        exact-match: true
+    output:
+      material: NETHER_STAR
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_原初之石_0:
+    display:
+      name: "<gold>[原初之石]"
+      material: EMERALD
+      lore:
+        - "<gray>需要: 中量黄金 x6"
+        - "<gray>      少量黄金 x25"
+    input:
+      item1:
+        material: GOLD_INGOT
+        amount: 6
+        name: 中量黄金
+        exact-match: true
+      item2:
+        material: GOLD_INGOT
+        amount: 25
+        name: 少量黄金
+        exact-match: true
+    output:
+      material: EMERALD
+      amount: 64
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_原初之石_1:
+    display:
+      name: "<gold>[原初之石]"
+      material: EMERALD
+      lore:
+        - "<gray>需要: 中量黄金 x8"
+        - "<gray>      少量黄金 x32"
+    input:
+      item1:
+        material: GOLD_INGOT
+        amount: 8
+        name: 中量黄金
+        exact-match: true
+      item2:
+        material: GOLD_INGOT
+        amount: 32
+        name: 少量黄金
+        exact-match: true
+    output:
+      material: EMERALD
+      amount: 16
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_原初之石_2:
+    display:
+      name: "<gold>[原初之石]"
+      material: EMERALD
+      lore:
+        - "<gray>需要: 中量黄金 x32"
+        - "<gray>      少量黄金 x64"
+    input:
+      item1:
+        material: GOLD_INGOT
+        amount: 32
+        name: 中量黄金
+        exact-match: true
+      item2:
+        material: GOLD_INGOT
+        amount: 64
+        name: 少量黄金
+        exact-match: true
+    output:
+      material: EMERALD
+      amount: 8
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_强化保护卷轴_0:
+    display:
+      name: "<gold>强化保护卷轴"
+      material: PAPER
+      lore:
+        - "<gray>需要: 中量黄金 x15"
+    input:
+      item1:
+        material: GOLD_INGOT
+        amount: 15
+        name: 中量黄金
+        exact-match: true
+    output:
+      material: PAPER
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_淬炼石_1:
+    display:
+      name: "<gold>淬炼石"
+      material: REDSTONE
+      lore:
+        - "<gray>需要: 中量黄金 x15"
+    input:
+      item1:
+        material: GOLD_INGOT
+        amount: 15
+        name: 中量黄金
+        exact-match: true
+    output:
+      material: REDSTONE
+      amount: 64
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_安全石_2:
+    display:
+      name: "<gold>安全石"
+      material: REDSTONE
+      lore:
+        - "<gray>需要: 大量黄金 x3"
+    input:
+      item1:
+        material: GOLD_INGOT
+        amount: 3
+        name: 大量黄金
+        exact-match: true
+    output:
+      material: REDSTONE
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_大量黄金_3:
+    display:
+      name: "<gold>大量黄金"
+      material: GOLD_INGOT
+      lore:
+        - "<gray>需要: 1000点券 x1"
+    input:
+      item1:
+        material: PAPER
+        amount: 1
+        name: 1000点券
+        exact-match: true
+    output:
+      material: GOLD_INGOT
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神剑梅蒂狄亚_0_2:
+    display:
+      name: "<gold>神剑梅蒂狄亚"
+      material: GOLD_SWORD
+      lore:
+        - "<gray>需要: 天使核心 x40"
+    input:
+      item1:
+        material: GOLD_NUGGET
+        amount: 40
+        name: 天使核心
+        exact-match: true
+    output:
+      material: GOLD_SWORD
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神域天神头盔_1_3:
+    display:
+      name: "<gold>神域天神头盔"
+      material: DIAMOND_HELMET
+      lore:
+        - "<gray>需要: 天使核心 x40"
+    input:
+      item1:
+        material: GOLD_NUGGET
+        amount: 40
+        name: 天使核心
+        exact-match: true
+    output:
+      material: DIAMOND_HELMET
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神圣天使链甲_2_3:
+    display:
+      name: "<gold>神圣天使链甲"
+      material: DIAMOND_CHESTPLATE
+      lore:
+        - "<gray>需要: 天使核心 x30"
+    input:
+      item1:
+        material: GOLD_NUGGET
+        amount: 30
+        name: 天使核心
+        exact-match: true
+    output:
+      material: DIAMOND_CHESTPLATE
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神圣天使链腿_3_3:
+    display:
+      name: "<gold>神圣天使链腿"
+      material: DIAMOND_LEGGINGS
+      lore:
+        - "<gray>需要: 天使核心 x30"
+    input:
+      item1:
+        material: GOLD_NUGGET
+        amount: 30
+        name: 天使核心
+        exact-match: true
+    output:
+      material: DIAMOND_LEGGINGS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_神圣天使链靴_4_3:
+    display:
+      name: "<gold>神圣天使链靴"
+      material: DIAMOND_BOOTS
+      lore:
+        - "<gray>需要: 天使核心 x30"
+    input:
+      item1:
+        material: GOLD_NUGGET
+        amount: 30
+        name: 天使核心
+        exact-match: true
+    output:
+      material: DIAMOND_BOOTS
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_幻域咒杀魔剑_0:
+    display:
+      name: "<gold>幻域咒杀魔剑"
+      material: WOOD_SWORD
+      lore:
+        - "<gray>需要: [新手装备券] x1"
+    input:
+      item1:
+        material: PAPER
+        amount: 1
+        name: "[新手装备券]"
+        exact-match: true
+    output:
+      material: WOOD_SWORD
+      amount: 1
+      mythic-type: 幻域咒杀魔剑
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造师之甲_1:
+    display:
+      name: "<gold>锻造师之甲"
+      material: IRON_CHESTPLATE
+      lore:
+        - "<gray>需要: [新手装备券] x1"
+    input:
+      item1:
+        material: PAPER
+        amount: 1
+        name: "[新手装备券]"
+        exact-match: true
+    output:
+      material: IRON_CHESTPLATE
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造师之裤_2:
+    display:
+      name: "<gold>锻造师之裤"
+      material: IRON_LEGGINGS
+      lore:
+        - "<gray>需要: [新手装备券] x1"
+    input:
+      item1:
+        material: PAPER
+        amount: 1
+        name: "[新手装备券]"
+        exact-match: true
+    output:
+      material: IRON_LEGGINGS
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_锻造师之靴_3:
+    display:
+      name: "<gold>锻造师之靴"
+      material: IRON_BOOTS
+      lore:
+        - "<gray>需要: [新手装备券] x1"
+    input:
+      item1:
+        material: PAPER
+        amount: 1
+        name: "[新手装备券]"
+        exact-match: true
+    output:
+      material: IRON_BOOTS
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_急速熊宝宝头_4:
+    display:
+      name: "<gold>急速熊宝宝头"
+      material: SKULL_ITEM
+      lore:
+        - "<gray>需要: [新手装备券] x2"
+    input:
+      item1:
+        material: PAPER
+        amount: 2
+        name: "[新手装备券]"
+        exact-match: true
+    output:
+      material: SKULL_ITEM
+      amount: 2
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_recipe_5:
+    display:
+      name: "<gold>"
+      material: DIAMOND_PICKAXE
+      lore:
+        - "<gray>需要: [新手装备券] x1"
+    input:
+      item1:
+        material: PAPER
+        amount: 1
+        name: "[新手装备券]"
+        exact-match: true
+    output:
+      material: DIAMOND_PICKAXE
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天启战刃_0:
+    display:
+      name: "<gold>天启战刃"
+      material: STONE_SWORD
+      lore:
+        - "<gray>需要: 天启战刃 x1"
+        - "<gray>      天启徽章 x15"
+    input:
+      item1:
+        material: STONE_SWORD
+        amount: 1
+        name: 天启战刃
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 15
+        name: 天启徽章
+        exact-match: true
+    output:
+      material: STONE_SWORD
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天启头盔_1:
+    display:
+      name: "<gold>天启头盔"
+      material: CHAINMAIL_HELMET
+      lore:
+        - "<gray>需要: 天启头盔 x1"
+        - "<gray>      天启徽章 x15"
+    input:
+      item1:
+        material: CHAINMAIL_HELMET
+        amount: 1
+        name: 天启头盔
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 15
+        name: 天启徽章
+        exact-match: true
+    output:
+      material: CHAINMAIL_HELMET
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天启战甲_2:
+    display:
+      name: "<gold>天启战甲"
+      material: CHAINMAIL_CHESTPLATE
+      lore:
+        - "<gray>需要: 天启战甲 x1"
+        - "<gray>      天启徽章 x15"
+    input:
+      item1:
+        material: CHAINMAIL_CHESTPLATE
+        amount: 1
+        name: 天启战甲
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 15
+        name: 天启徽章
+        exact-match: true
+    output:
+      material: CHAINMAIL_CHESTPLATE
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天启裤子_3:
+    display:
+      name: "<gold>天启裤子"
+      material: CHAINMAIL_LEGGINGS
+      lore:
+        - "<gray>需要: 天启裤子 x1"
+        - "<gray>      天启徽章 x15"
+    input:
+      item1:
+        material: CHAINMAIL_LEGGINGS
+        amount: 1
+        name: 天启裤子
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 15
+        name: 天启徽章
+        exact-match: true
+    output:
+      material: CHAINMAIL_LEGGINGS
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天启靴子_4:
+    display:
+      name: "<gold>天启靴子"
+      material: CHAINMAIL_BOOTS
+      lore:
+        - "<gray>需要: 天启靴子 x1"
+        - "<gray>      天启徽章 x15"
+    input:
+      item1:
+        material: CHAINMAIL_BOOTS
+        amount: 1
+        name: 天启靴子
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 15
+        name: 天启徽章
+        exact-match: true
+    output:
+      material: CHAINMAIL_BOOTS
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天启战刃_0_1:
+    display:
+      name: "<gold>天启战刃"
+      material: STONE_SWORD
+      lore:
+        - "<gray>需要: 天启战刃 x1"
+        - "<gray>      天启徽章 x30"
+    input:
+      item1:
+        material: STONE_SWORD
+        amount: 1
+        name: 天启战刃
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 30
+        name: 天启徽章
+        exact-match: true
+    output:
+      material: STONE_SWORD
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天启头盔_1_1:
+    display:
+      name: "<gold>天启头盔"
+      material: CHAINMAIL_HELMET
+      lore:
+        - "<gray>需要: 天启头盔 x1"
+        - "<gray>      天启徽章 x30"
+    input:
+      item1:
+        material: CHAINMAIL_HELMET
+        amount: 1
+        name: 天启头盔
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 30
+        name: 天启徽章
+        exact-match: true
+    output:
+      material: CHAINMAIL_HELMET
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天启战甲_2_1:
+    display:
+      name: "<gold>天启战甲"
+      material: CHAINMAIL_CHESTPLATE
+      lore:
+        - "<gray>需要: 天启战甲 x1"
+        - "<gray>      天启徽章 x30"
+    input:
+      item1:
+        material: CHAINMAIL_CHESTPLATE
+        amount: 1
+        name: 天启战甲
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 30
+        name: 天启徽章
+        exact-match: true
+    output:
+      material: CHAINMAIL_CHESTPLATE
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天启裤子_3_1:
+    display:
+      name: "<gold>天启裤子"
+      material: CHAINMAIL_LEGGINGS
+      lore:
+        - "<gray>需要: 天启裤子 x1"
+        - "<gray>      天启徽章 x30"
+    input:
+      item1:
+        material: CHAINMAIL_LEGGINGS
+        amount: 1
+        name: 天启裤子
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 30
+        name: 天启徽章
+        exact-match: true
+    output:
+      material: CHAINMAIL_LEGGINGS
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天启靴子_4_1:
+    display:
+      name: "<gold>天启靴子"
+      material: CHAINMAIL_BOOTS
+      lore:
+        - "<gray>需要: 天启靴子 x1"
+        - "<gray>      天启徽章 x30"
+    input:
+      item1:
+        material: CHAINMAIL_BOOTS
+        amount: 1
+        name: 天启靴子
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 30
+        name: 天启徽章
+        exact-match: true
+    output:
+      material: CHAINMAIL_BOOTS
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天启觉醒战刃_0:
+    display:
+      name: "<gold>天启觉醒战刃"
+      material: STONE_SWORD
+      lore:
+        - "<gray>需要: 天启战刃 x1"
+        - "<gray>      天启徽章 x60"
+    input:
+      item1:
+        material: STONE_SWORD
+        amount: 1
+        name: 天启战刃
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 60
+        name: 天启徽章
+        exact-match: true
+    output:
+      material: STONE_SWORD
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天启觉醒头盔_1:
+    display:
+      name: "<gold>天启觉醒头盔"
+      material: CHAINMAIL_HELMET
+      lore:
+        - "<gray>需要: 天启头盔 x1"
+        - "<gray>      天启徽章 x60"
+    input:
+      item1:
+        material: CHAINMAIL_HELMET
+        amount: 1
+        name: 天启头盔
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 60
+        name: 天启徽章
+        exact-match: true
+    output:
+      material: CHAINMAIL_HELMET
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天启觉醒战甲_2:
+    display:
+      name: "<gold>天启觉醒战甲"
+      material: CHAINMAIL_CHESTPLATE
+      lore:
+        - "<gray>需要: 天启战甲 x1"
+        - "<gray>      天启徽章 x60"
+    input:
+      item1:
+        material: CHAINMAIL_CHESTPLATE
+        amount: 1
+        name: 天启战甲
+        exact-match: true
+        unbreakable: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 60
+        name: 天启徽章
+        exact-match: true
+    output:
+      material: CHAINMAIL_CHESTPLATE
+      amount: 1
+      unbreakable: true
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天启觉醒裤子_3:
+    display:
+      name: "<gold>天启觉醒裤子"
+      material: CHAINMAIL_LEGGINGS
+      lore:
+        - "<gray>需要: 天启裤子 x1"
+        - "<gray>      天启徽章 x60"
+    input:
+      item1:
+        material: CHAINMAIL_LEGGINGS
+        amount: 1
+        name: 天启裤子
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 60
+        name: 天启徽章
+        exact-match: true
+    output:
+      material: CHAINMAIL_LEGGINGS
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0
+  recipe_天启靴子_4_2:
+    display:
+      name: "<gold>天启靴子"
+      material: CHAINMAIL_BOOTS
+      lore:
+        - "<gray>需要: 天启靴子 x1"
+        - "<gray>      天启徽章 x60"
+    input:
+      item1:
+        material: CHAINMAIL_BOOTS
+        amount: 1
+        name: 天启靴子
+        exact-match: true
+      item2:
+        material: FIREWORK_CHARGE
+        amount: 60
+        name: 天启徽章
+        exact-match: true
+    output:
+      material: CHAINMAIL_BOOTS
+      amount: 1
+    limit:
+      permission: null
+      daily: -1
+      max-uses: 999999
+    settings:
+      give-experience: false
+      experience-amount: 0

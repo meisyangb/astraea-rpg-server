@@ -1,0 +1,126 @@
+# ─── 锻造系统全局配置 ───
+# Astraea RPG 锻造系统
+#
+# 颜色格式说明（MiniMessage）：
+# <green> - 绿色（成功消息）
+# <red> - 红色（错误消息）
+# <yellow> - 黄色（警告/提示消息）
+# <gold> - 金色（高亮内容）
+# <aqua> - 青色（信息消息）
+# <white> - 白色（普通文本）
+# <dark_gray> - 深灰色
+# <gray> - 灰色
+# <bold> - 粗体
+# <italic> - 斜体
+# <strikethrough> - 删除线
+# <reset> - 重置格式
+
+# ==================== 基础设置 ====================
+
+# 调试模式（开启后会在控制台输出详细的匹配日志）
+debug: false
+
+# 每次锻造消耗的经验等级
+forge-exp-cost: 3
+
+# 锻造等级每级提供的成功率加成
+success-rate-per-forge-level: 0.02
+
+# 锻造成功获得的经验（全局默认值，当图纸未配置 exp-reward 时使用）
+# 建议在每个图纸中独立配置 exp-reward，防止玩家刷低级图纸升级
+exp-on-success: 50
+
+# 锻造失败获得的经验（慰藉奖，当图纸配置 exp-reward 时为 exp-reward/5）
+exp-on-failure: 10
+
+# ==================== 锻造等级经验需求表 ====================
+# 等级 -> 需要的累计经验
+level-thresholds:
+  1: 0
+  2: 200
+  3: 500
+  4: 1000
+  5: 2000
+  6: 3500
+  7: 5500
+  8: 8000
+  9: 11000
+  10: 15000
+
+# ==================== 消息设置 ====================
+messages:
+  # 锻造成功
+  forge-success: "<green><bold>✓ 锻造成功！</bold></green> <white>你成功锻造出了 <gold><bold>%item%</bold></gold></white>"
+  # 锻造失败
+  forge-failure: "<red><bold>✗ 锻造失败！</bold></red> <gray>材料已消耗，但你的锻造技术得到了提升</gray>"
+  # 经验不足
+  insufficient-exp: "<red>✗ 经验不足！</red> <gray>需要 <gold>%cost%</gold> 级经验</gray>"
+  # 材料不足
+  insufficient-materials: "<red>✗ 材料不足！</red> <gray>缺少: <gold>%materials%</gold></gray>"
+  # 等级不足
+  level-too-low: "<red>✗ 锻造等级不足！</red> <gray>需要等级 <gold>%required%</gold>，当前等级 <yellow>%current%</yellow></gray>"
+  # 图纸未解锁
+  recipe-not-unlocked: "<red>✗ 图纸未解锁！</red> <gray>你需要先学习 <gold>%recipe%</gold> 图纸</gray>"
+  # 学习图纸成功
+  learn-recipe-success: "<green><bold>✓ 学习成功！</bold></green> <white>你已掌握 <gold><bold>%recipe%</bold></gold> 的锻造方法</white>"
+  # 已经学会图纸
+  recipe-already-learned: "<yellow>⚠ 你已经学会了 <gold>%recipe%</gold> 的锻造方法</yellow>"
+  # 等级提升
+  level-up: "<gold><bold>🎉 锻造等级提升！</bold></gold> <white>当前等级: <gold><bold>%level%</bold></gold></white>"
+  # 打开锻造界面
+  open-forge-gui: "<aqua>🔨 打开锻造界面...</aqua>"
+  # 查看图纸
+  view-recipe: "<yellow>📜 图纸详情:</yellow> <white>%recipe%</white>"
+  # 图纸列表
+  recipe-list-header: "<gold><bold>===== 已学会图纸 =====</bold></gold>"
+  recipe-list-item: "<yellow>•</yellow> <white>%recipe%</white> <gray>(等级 %level%)</gray>"
+  recipe-list-empty: "<gray>你还没有学会任何图纸</gray>"
+  recipe-list-footer: "<gold><bold>====================</bold></gold>"
+  # 成功率显示
+  success-rate-display: "<gray>成功率: <gold>%rate%%</gold></gray>"
+  # 锻造中
+  forging: "<aqua>🔨 正在锻造 <gold>%item%</gold>...</aqua>"
+  # 没有权限
+  no-permission: "<red>✗ 你没有权限执行此操作！</red>"
+  # 玩家不在线
+  player-offline: "<red>✗ 玩家 <gold>%player%</gold> 不在线！</red>"
+  # 配置重载成功
+  config-reloaded: "<green><bold>✓ 配置已重载！</bold></green>"
+  # 给予图纸成功
+  give-recipe-success: "<green><bold>✓</bold></green> <white>已给予 <gold>%player%</gold> 图纸: <gold>%recipe%</gold></white>"
+  # 给予图纸失败
+  give-recipe-failed: "<red><bold>✗</bold></red> <white>给予图纸失败，请检查图纸ID是否正确</white>"
+  # 设置等级成功
+  set-level-success: "<green><bold>✓</bold></green> <white>已设置 <gold>%player%</gold> 的锻造等级为 <gold>%level%</gold></white>"
+  # 设置经验成功
+  set-exp-success: "<green><bold>✓</bold></green> <white>已设置 <gold>%player%</gold> 的锻造经验为 <gold>%exp%</gold></white>"
+  # 查看信息
+  info-display: 
+    - "<gold><bold>===== 锻造信息 =====</bold></gold>"
+    - "<yellow>玩家:</yellow> <white>%player%</white>"
+    - "<yellow>等级:</yellow> <gold><bold>%level%</bold></gold>"
+    - "<yellow>经验:</yellow> <gold>%exp%</gold> <gray>/ %next_level_exp%</gray>"
+    - "<yellow>已学会图纸:</yellow> <gold>%recipe_count%</gold> <gray>个</gray>"
+    - "<gold><bold>==================</bold></gold>"
+
+# ==================== GUI 设置 ====================
+gui:
+  # 锻造界面标题
+  forge-gui-title: "<dark_gray><bold>🔨 锻造台</bold></dark_gray>"
+  # 图纸列表界面标题
+  recipe-list-gui-title: "<dark_gray><bold>📜 图纸列表</bold></dark_gray>"
+  # 图纸详情界面标题
+  recipe-detail-gui-title: "<dark_gray><bold>📋 图纸详情</bold></dark_gray>"
+  # 确认锻造界面标题
+  confirm-forge-gui-title: "<dark_gray><bold>⚡ 确认锻造</bold></dark_gray>"
+
+# ==================== 占位符设置 ====================
+placeholder:
+  # 等级显示格式
+  level-format: "<gold><bold>%level%</bold></gold>"
+  # 经验显示格式
+  exp-format: "<gold>%current%</gold><gray>/</gray><gold>%required%</gold>"
+  # 进度条显示
+  progress-bar:
+    filled: "<green>█</green>"
+    empty: "<gray>░</gray>"

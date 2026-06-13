@@ -1,0 +1,31 @@
+﻿# ========================================
+# 任务线配置
+# ========================================
+
+questlines:
+  main_story:
+    name: "<gold>主线剧情"
+    description: "光之迷城的故事主线"
+    quests:
+      - main_001
+      - main_002
+      - main_003
+      - main_004
+      - main_005
+    chapters:
+      - "<yellow>第一章：初入迷城"
+      - "<yellow>第二章：黑暗降临"
+      - "<yellow>第三章：勇者觉醒"
+      - "<yellow>第四章：最终之战"
+  
+  cave_exploration:
+    name: "<aqua>洞府探索"
+    description: "探索各个洞府的秘密"
+    quests:
+      - cave_001
+      - cave_002
+      - cave_003
+    chapters:
+      - "<aqua>初级洞府"
+      - "<aqua>中级洞府"
+      - "<aqua>高级洞府"

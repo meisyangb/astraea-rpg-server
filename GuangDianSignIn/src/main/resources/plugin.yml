@@ -1,0 +1,26 @@
+name: GuangDianSignIn
+version: 1.0.0
+main: cn.guangdian.signin.GuangDianSignIn
+api-version: '1.21'
+depend:
+  - RPGCore
+softdepend:
+  - PlaceholderAPI
+author: Astraea RPG Team
+description: 签到系统组件
+
+commands:
+  signin:
+    description: 签到系统主命令
+    usage: /signin [reload]
+    aliases: [qiandao, sign]
+    permission: signin.use
+    permission-message: §c你没有权限使用此命令
+
+permissions:
+  signin.use:
+    description: 允许使用签到系统
+    default: true
+  signin.admin:
+    description: 管理员权限
+    default: op

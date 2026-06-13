@@ -1,0 +1,29 @@
+name: GuangDianMusic
+version: 1.0.0
+main: cn.guangdian.music.GuangDianMusic
+api-version: '1.21'
+author: Astraea RPG Team
+description: 译梦传说音乐管理系统 - 支持场景音乐播放、自定义音乐播放、音量控制等功能
+
+softdepend:
+  - RPGCore
+
+commands:
+  music:
+    description: 音乐系统命令
+    usage: /music [play|stop|volume|list|scene]
+    aliases: [musicsystem]
+  scene:
+    description: 场景音乐命令
+    usage: /scene <场景名>
+
+permissions:
+  guangdian.music.use:
+    description: 使用音乐系统基本功能
+    default: true
+  guangdian.music.admin:
+    description: 管理员音乐控制权限
+    default: op
+  guangdian.music.bypass:
+    description: 绕过音乐冷却限制
+    default: op

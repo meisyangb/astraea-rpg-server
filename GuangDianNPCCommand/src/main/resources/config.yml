@@ -1,0 +1,29 @@
+# ============================================
+# GuangDianNPCCommand Configuration
+# NPC命令插件配置
+# ============================================
+
+# 配置版本 - 不要修改
+config-version: 1
+
+# 默认冷却时间（秒）
+default-cooldown: 0
+
+# 冷却时间显示格式
+# SHORT = 3m 3s
+# MEDIUM = 3分钟 3秒
+# FULL = 3 minutes 3 seconds
+cooldown-display: MEDIUM
+
+# 消息配置
+messages:
+  prefix: '<gray>[<green>NPC命令<gray>] '
+  no-permission: '<red>你没有权限执行此操作!'
+  npc-not-found: '<red>找不到该NPC!'
+  command-added: '<green>成功为NPC添加命令!'
+  command-removed: '<green>成功移除NPC命令!'
+  cooldown-set: '<green>冷却时间已设置为 <yellow>%time% <green>秒!'
+  on-cooldown: '<yellow>请等待 <red>%time% <yellow>后再使用此NPC!'
+  command-list-header: '<green>=== NPC命令列表 ==='
+  no-commands: '<gray>该NPC没有绑定任何命令'
+  reload-success: '<green>配置已重新加载!'

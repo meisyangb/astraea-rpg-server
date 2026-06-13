@@ -1,0 +1,130 @@
+# 示例副本配置
+# 这是一个基础的副本模板，展示所有可用的配置选项
+
+id: "example_dungeon"
+name: "示例副本"
+description: "这是一个示例副本，用于展示配置格式"
+version: "1.0.0"
+author: "Astraea"
+
+world-template: "example_dungeon"
+
+icon:
+  material: "DIAMOND_SWORD"
+  custom-model-data: 0
+
+settings:
+  max-players: 5
+  min-players: 1
+  time-limit: 1800
+  cooldown: 3600
+  max-deaths: 10
+  revive-cooldown: 30
+  requirements:
+    min-level: 0
+    max-level: 0
+    permission: null
+
+difficulties:
+  - id: "normal"
+    name: "普通"
+    health-multiplier: 1.0
+    damage-multiplier: 1.0
+    mob-count-multiplier: 1.0
+    reward-multiplier: 1.0
+    exp-multiplier: 1.0
+    time-limit-modifier: 0
+    max-deaths-modifier: 0
+    
+  - id: "hard"
+    name: "困难"
+    health-multiplier: 1.5
+    damage-multiplier: 1.3
+    mob-count-multiplier: 1.2
+    reward-multiplier: 1.5
+    exp-multiplier: 1.5
+    time-limit-modifier: -300
+    max-deaths-modifier: -3
+    
+  - id: "heroic"
+    name: "英雄"
+    health-multiplier: 2.0
+    damage-multiplier: 1.8
+    mob-count-multiplier: 1.5
+    reward-multiplier: 2.5
+    exp-multiplier: 2.0
+    time-limit-modifier: -600
+    max-deaths-modifier: -5
+
+phases:
+  - id: "phase_1"
+    name: "第一阶段"
+    description: "清理小怪"
+    time-limit: 600
+    triggers:
+      - type: "kill"
+        target: "ExampleMob"
+        count: 10
+        one-time: true
+    spawns:
+      - id: "spawn_1"
+        mob: "ExampleMob"
+        location: {x: 100, y: 64, z: 100}
+        count: 10
+        respawn: false
+        delay: 0
+    rewards:
+      exp: 500
+      items: []
+      
+  - id: "boss_phase"
+    name: "BOSS战"
+    description: "击败BOSS"
+    time-limit: 600
+    boss:
+      mythicmob: "ExampleBoss"
+      location: {x: 150, y: 65, z: 150}
+      health-bar: true
+      announce-skills: true
+    triggers:
+      - type: "kill"
+        target: "ExampleBoss"
+        count: 1
+        one-time: true
+    rewards:
+      exp: 2000
+      items: []
+
+reward-pools:
+  basic:
+    - item: "diamond@5"
+      weight: 50
+      chance: 1.0
+    - item: "gold_ingot@32"
+      weight: 30
+      chance: 1.0
+      
+  rare:
+    - item: "enchanted_book@1"
+      weight: 40
+      chance: 0.5
+
+first-clear-rewards:
+  exp: 5000
+  items: []
+
+score-rewards:
+  - min-score: 800
+    items: []
+  - min-score: 1000
+    items: []
+
+checkpoints:
+  - id: "checkpoint_1"
+    location: {x: 120, y: 64, z: 120}
+    phase: "boss_phase"
+
+teleports:
+  entrance: {x: 50, y: 64, z: 50}
+  lobby: {x: 45, y: 64, z: 45}
+  exit: {x: 0, y: 64, z: 0}

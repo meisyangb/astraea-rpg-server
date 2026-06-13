@@ -1,0 +1,20 @@
+name: GuangDianSocket
+version: 1.0.0
+main: cn.guangdian.socket.GuangDianSocket
+api-version: '1.21.6'
+author: GuangDian
+
+dependencies:
+  server:
+    RPGCore:
+      load: BEFORE
+      required: true
+    RPGItems:
+      load: BEFORE
+      required: true
+
+commands:
+  socket:
+    description: 宝石镶嵌命令
+    usage: /socket [gui|help]
+    aliases: [gem, inlay]

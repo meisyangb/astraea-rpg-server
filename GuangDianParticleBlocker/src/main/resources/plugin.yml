@@ -1,0 +1,30 @@
+name: GuangDianParticleBlocker
+version: 1.0.0
+main: cn.guangdian.particleblocker.GuangDianParticleBlocker
+api-version: '1.21'
+
+description: 粒子屏蔽插件 - 拦截粒子数据包，防止客户端卡顿
+
+author: Astraea RPG Team
+website: https://github.com/Astraea-RPG
+
+commands:
+  particleblocker:
+    description: 粒子屏蔽管理命令
+    usage: /particleblocker <help|status|blockall|allowall|block|allow|list|toggle|stats|reload>
+    aliases: [pb, particle]
+    permission: particleblocker.admin
+    permission-message: "§c你没有权限执行此命令!"
+
+permissions:
+  particleblocker.admin:
+    description: 粒子屏蔽管理权限
+    default: op
+
+  particleblocker.toggle:
+    description: 切换个人粒子屏蔽权限
+    default: true
+
+  particleblocker.bypass:
+    description: 绕过粒子屏蔽权限
+    default: false

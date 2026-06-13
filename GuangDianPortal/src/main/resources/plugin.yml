@@ -1,0 +1,53 @@
+name: GuangDianPortal
+version: 1.0.0
+main: cn.guangdian.portal.GuangDianPortal
+api-version: '1.21'
+author: GuangDian
+description: 光点传送门插件 - 简单易用的传送门系统
+
+commands:
+  portal:
+    description: 传送门管理命令
+    usage: /portal <create|delete|list|info|setdest|setpermission|enable|disable|reload|help>
+    permission: guangdian.portal.use
+    aliases:
+      - portals
+      - p
+
+permissions:
+  guangdian.portal.use:
+    description: 使用传送门
+    default: true
+  guangdian.portal.select:
+    description: 选择传送门区域
+    default: op
+  guangdian.portal.create:
+    description: 创建传送门
+    default: op
+  guangdian.portal.delete:
+    description: 删除传送门
+    default: op
+  guangdian.portal.list:
+    description: 列出传送门
+    default: true
+  guangdian.portal.info:
+    description: 查看传送门信息
+    default: true
+  guangdian.portal.setdest:
+    description: 设置传送门目的地
+    default: op
+  guangdian.portal.admin:
+    description: 管理员权限
+    default: op
+  guangdian.portal.*:
+    description: 所有权限
+    default: op
+    children:
+      guangdian.portal.use: true
+      guangdian.portal.select: true
+      guangdian.portal.create: true
+      guangdian.portal.delete: true
+      guangdian.portal.list: true
+      guangdian.portal.info: true
+      guangdian.portal.setdest: true
+      guangdian.portal.admin: true

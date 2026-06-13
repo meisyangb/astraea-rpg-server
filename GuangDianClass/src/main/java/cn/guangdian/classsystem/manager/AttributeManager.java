@@ -1,0 +1,210 @@
+package cn.guangdian.classsystem.manager;
+
+import cn.guangdian.classsystem.GuangDianClass;
+import cn.guangdian.classsystem.data.ClassDataHandler;
+import cn.guangdian.classsystem.model.AttributeType;
+import cn.guangdian.classsystem.model.PlayerClassData;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+public class AttributeManager {
+    
+    private final GuangDianClass plugin;
+    private final ClassDataHandler dataHandler;
+    
+    private final Map<AttributeType, AttributeConfig> attributeConfigs;
+    private int pointsPerLevel;
+    private int pointsPerAdvancement;
+    
+    public AttributeManager(GuangDianClass plugin, ClassDataHandler dataHandler) {
+        this.plugin = plugin;
+        this.dataHandler = dataHandler;
+        this.attributeConfigs = new HashMap<>();
+        loadConfig();
+    }
+    
+    private void loadConfig() {
+        ConfigurationSection config = plugin.getConfig().getConfigurationSection("attributes");
+        if (config == null) {
+            setDefaultConfig();
+            return;
+        }
+        
+        pointsPerLevel = config.getInt("points-per-level", 5);
+        pointsPerAdvancement = config.getInt("points-per-advancement", 20);
+        
+        ConfigurationSection typesSection = config.getConfigurationSection("types");
+        if (typesSection != null) {
+            for (AttributeType type : AttributeType.values()) {
+                ConfigurationSection typeSection = typesSection.getConfigurationSection(type.getId());
+                if (typeSection != null) {
+                    AttributeConfig attrConfig = new AttributeConfig();
+                    attrConfig.healthPerPoint = typeSection.getDouble("health", 0);
+                    attrConfig.attackPerPoint = typeSection.getDouble("attack", 0);
+                    attrConfig.defensePerPoint = typeSection.getDouble("defense", 0);
+                    attrConfig.critChancePerPoint = typeSection.getDouble("crit-chance", 0);
+                    attrConfig.critDamagePerPoint = typeSection.getDouble("crit-damage", 0);
+                    attrConfig.dodgePerPoint = typeSection.getDouble("dodge", 0);
+                    attrConfig.manaPerPoint = typeSection.getDouble("mana", 0);
+                    attributeConfigs.put(type, attrConfig);
+                }
+            }
+        } else {
+            setDefaultAttributeConfigs();
+        }
+    }
+    
+    private void setDefaultConfig() {
+        pointsPerLevel = 5;
+        pointsPerAdvancement = 20;
+        setDefaultAttributeConfigs();
+    }
+    
+    private void setDefaultAttributeConfigs() {
+        AttributeConfig strength = new AttributeConfig();
+        strength.attackPerPoint = 2.0;
+        strength.critDamagePerPoint = 0.5;
+        attributeConfigs.put(AttributeType.STRENGTH, strength);
+        
+        AttributeConfig vitality = new AttributeConfig();
+        vitality.healthPerPoint = 50.0;
+        vitality.defensePerPoint = 1.0;
+        attributeConfigs.put(AttributeType.VITALITY, vitality);
+        
+        AttributeConfig agility = new AttributeConfig();
+        agility.critChancePerPoint = 0.2;
+        agility.dodgePerPoint = 0.1;
+        attributeConfigs.put(AttributeType.AGILITY, agility);
+        
+        AttributeConfig intelligence = new AttributeConfig();
+        intelligence.manaPerPoint = 20.0;
+        intelligence.attackPerPoint = 1.5;
+        attributeConfigs.put(AttributeType.INTELLIGENCE, intelligence);
+        
+        AttributeConfig luck = new AttributeConfig();
+        luck.critDamagePerPoint = 1.0;
+        luck.critChancePerPoint = 0.1;
+        attributeConfigs.put(AttributeType.LUCK, luck);
+    }
+    
+    public boolean allocateAttribute(Player player, AttributeType type, int points) {
+        if (points <= 0) return false;
+        
+        PlayerClassData data = dataHandler.getPlayerData(player.getUniqueId());
+        if (data == null) return false;
+        
+        if (data.getAvailableAttributePoints() < points) return false;
+        
+        return data.allocateAttribute(type, points);
+    }
+    
+    public boolean deallocateAttribute(Player player, AttributeType type, int points) {
+        if (points <= 0) return false;
+        
+        PlayerClassData data = dataHandler.getPlayerData(player.getUniqueId());
+        if (data == null) return false;
+        
+        return data.deallocateAttribute(type, points);
+    }
+    
+    public void resetAttributes(Player player) {
+        PlayerClassData data = dataHandler.getPlayerData(player.getUniqueId());
+        if (data == null) return;
+        
+        data.resetAttributes();
+    }
+    
+    public void grantLevelUpPoints(Player player, int newTier) {
+        PlayerClassData data = dataHandler.getPlayerData(player.getUniqueId());
+        if (data == null) return;
+        
+        data.addAttributePoints(pointsPerLevel);
+    }
+    
+    public void grantAdvancementPoints(Player player, int advancementLevel) {
+        PlayerClassData data = dataHandler.getPlayerData(player.getUniqueId());
+        if (data == null) return;
+        
+        data.addAttributePoints(pointsPerAdvancement);
+    }
+    
+    public void grantAttributePoints(Player player, int points) {
+        PlayerClassData data = dataHandler.getPlayerData(player.getUniqueId());
+        if (data == null) return;
+        
+        data.addAttributePoints(points);
+    }
+    
+    public AttributeBonus calculateTotalBonus(Player player) {
+        return calculateTotalBonus(player.getUniqueId());
+    }
+    
+    public AttributeBonus calculateTotalBonus(UUID playerId) {
+        PlayerClassData data = dataHandler.getPlayerData(playerId);
+        if (data == null) return new AttributeBonus();
+        
+        AttributeBonus total = new AttributeBonus();
+        
+        for (AttributeType type : AttributeType.values()) {
+            int points = data.getAllocatedAttribute(type);
+            if (points > 0) {
+                AttributeConfig config = attributeConfigs.get(type);
+                if (config != null) {
+                    total.health += config.healthPerPoint * points;
+                    total.attack += config.attackPerPoint * points;
+                    total.defense += config.defensePerPoint * points;
+                    total.critChance += config.critChancePerPoint * points;
+                    total.critDamage += config.critDamagePerPoint * points;
+                    total.dodge += config.dodgePerPoint * points;
+                    total.mana += config.manaPerPoint * points;
+                }
+            }
+        }
+        
+        return total;
+    }
+    
+    public int getAvailablePoints(Player player) {
+        PlayerClassData data = dataHandler.getPlayerData(player.getUniqueId());
+        return data != null ? data.getAvailableAttributePoints() : 0;
+    }
+    
+    public int getAllocatedPoints(Player player, AttributeType type) {
+        PlayerClassData data = dataHandler.getPlayerData(player.getUniqueId());
+        return data != null ? data.getAllocatedAttribute(type) : 0;
+    }
+    
+    public int getTotalAllocatedPoints(Player player) {
+        PlayerClassData data = dataHandler.getPlayerData(player.getUniqueId());
+        return data != null ? data.getTotalAllocatedPoints() : 0;
+    }
+    
+    public void reload() {
+        attributeConfigs.clear();
+        loadConfig();
+    }
+    
+    public static class AttributeConfig {
+        public double healthPerPoint = 0;
+        public double attackPerPoint = 0;
+        public double defensePerPoint = 0;
+        public double critChancePerPoint = 0;
+        public double critDamagePerPoint = 0;
+        public double dodgePerPoint = 0;
+        public double manaPerPoint = 0;
+    }
+    
+    public static class AttributeBonus {
+        public double health = 0;
+        public double attack = 0;
+        public double defense = 0;
+        public double critChance = 0;
+        public double critDamage = 0;
+        public double dodge = 0;
+        public double mana = 0;
+    }
+}

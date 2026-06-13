@@ -1,0 +1,139 @@
+plugins {
+    id 'java'
+    id 'io.github.goooler.shadow' version '8.1.8'
+}
+
+// 网络构建配置 - 使用 Maven 仓库
+repositories {
+    mavenCentral()
+    maven {
+        name = 'papermc'
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+    // 使用本地libs目录作为备用
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    // Paper API
+    compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+
+    // 外部插件 API - 从本地文件加载
+    compileOnly name: 'PlaceholderAPI'
+    compileOnly name: 'LuckPerms'
+    compileOnly name: 'Vault'
+    compileOnly name: 'ProtocolLib'
+
+    // 数据库连接池
+    implementation 'com.zaxxer:HikariCP:5.1.0'
+
+    // Caffeine 缓存
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
+
+    // 其他依赖
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'org.slf4j:slf4j-api:2.0.9'
+
+    // HTTP客户端 - OkHttp
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+
+    // Cron调度器 - Cron4J
+    implementation 'it.sauronsoftware.cron4j:cron4j:2.2.5'
+
+    // 单元测试
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
+    testImplementation 'org.mockito:mockito-core:5.8.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.8.0'
+    testImplementation 'org.assertj:assertj-core:3.24.2'
+}
+
+// 项目配置
+group = 'cn.guangdian'
+version = '1.0.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs += ['-parameters']
+}
+
+test {
+    useJUnitPlatform()
+    enabled = true
+}
+
+// 启用测试编译
+compileTestJava {
+    enabled = true
+}
+
+// 普通 JAR 配置
+jar {
+    archiveClassifier.set('')
+    archiveFileName = "RPGCore-${version}.jar"
+    
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    
+    manifest {
+        attributes(
+            'Main-Class': 'cn.guangdian.rpgcore.RPGCore',
+            'Implementation-Title': 'RPGCore',
+            'Implementation-Version': version
+        )
+    }
+}
+
+// 阴影打包配置 - 禁用 minimize 避免ASM问题
+shadowJar {
+    archiveClassifier.set('')
+    archiveFileName = "RPGCore-${version}.jar"
+
+    // 重定位第三方库
+    relocate 'com.zaxxer.hikari', 'cn.guangdian.rpgcore.libs.hikari'
+    relocate 'com.google.gson', 'cn.guangdian.rpgcore.libs.gson'
+    relocate 'okhttp3', 'cn.guangdian.rpgcore.libs.okhttp3'
+    relocate 'okio', 'cn.guangdian.rpgcore.libs.okio'
+    relocate 'it.sauronsoftware.cron4j', 'cn.guangdian.rpgcore.libs.cron4j'
+
+    // 禁用 minimize 避免ASM兼容问题
+    minimize {
+        enabled false
+    }
+}
+
+// 构建任务 - 使用普通jar而非shadowJar
+build {
+    dependsOn jar
+}
+
+// 清理旧构建
+clean {
+    doFirst {
+        delete 'build'
+    }
+}
+
+// 任务: 复制到服务器
+task deployToServer(type: Copy) {
+    from jar
+    into '../../server/plugins'
+    rename { "RPGCore.jar" }
+}
+
+// 任务: 构建并部署
+task buildAndDeploy {
+    dependsOn build
+    dependsOn deployToServer
+    tasks.findByName('deployToServer').mustRunAfter jar
+}

@@ -1,0 +1,36 @@
+# ========================================
+# GuangDianRegen 配置文件
+# 矿场/林场自动刷新系统
+# ========================================
+
+settings:
+  # 选区工具
+  selection_tool: WOODEN_AXE
+
+  # 粒子预览
+  particle_preview: true
+
+  # 每个世界最大区域数
+  max_regions_per_world: 10
+
+  # 默认刷新延迟(秒)
+  default_delay: 300
+
+  # 自动保存间隔(秒)
+  save_interval: 300
+
+  # 每tick处理方块数
+  blocks_per_tick: 10
+
+# 消息配置
+messages:
+  prefix: "&6[矿场系统] &r"
+  no_permission: "&c你没有权限执行此操作!"
+  region_created: "&a区域 &e{name} &a创建成功!"
+  region_deleted: "&a区域 &e{name} &a已删除!"
+  region_not_found: "&c区域 &e{name} &c不存在!"
+  selection_pos1: "&a已设置第一个点: &e{x}, {y}, {z}"
+  selection_pos2: "&a已设置第二个点: &e{x}, {y}, {z}"
+  selection_invalid: "&c请先选择两个点!"
+  wand_given: "&a已获得选区工具!"
+  reloaded: "&a配置已重载!"

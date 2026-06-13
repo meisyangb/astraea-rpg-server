@@ -1,0 +1,28 @@
+# ========================================
+# GuangDianVillagerTrade - 村民兑换系统配置
+# ========================================
+
+settings:
+  # 是否启用音效
+  sound-enabled: true
+  
+  # 音效配置
+  sounds:
+    success: "minecraft:block.note_block.pling"
+    error: "minecraft:block.note_block.bass"
+    click: "minecraft:ui.button.click"
+  
+  # 是否记录兑换日志
+  log-trades: true
+  
+  # 是否启用每日兑换限制
+  daily-limit-enabled: true
+
+# 消息配置
+messages:
+  prefix: "<gold>[村民兑换] <reset>"
+  no-permission: "<red>你没有权限使用此功能"
+  recipe-not-found: "<red>找不到兑换配方"
+  trade-success: "<green>兑换成功!"
+  trade-failed: "<red>兑换失败"
+  daily-limit-reached: "<red>你已达到今日兑换上限"
