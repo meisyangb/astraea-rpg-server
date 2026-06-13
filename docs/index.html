@@ -345,7 +345,7 @@
     window.$docsify = {
       name: 'Astraea RPG 插件文档',
       repo: '',
-      basePath: '/',
+      basePath: window.location.hostname === 'meisyangb.github.io' ? '/astraea-rpg-server/' : '/',
       loadSidebar: true,
       subMaxLevel: 3,
       autoHeader: true,
