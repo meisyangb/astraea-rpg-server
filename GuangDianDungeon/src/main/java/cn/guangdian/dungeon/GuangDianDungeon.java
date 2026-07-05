@@ -12,6 +12,7 @@ import cn.guangdian.dungeon.model.DungeonTemplate;
 import cn.guangdian.dungeon.placeholder.DungeonPlaceholder;
 import cn.guangdian.dungeon.repository.DungeonRepository;
 import cn.guangdian.dungeon.repository.PlayerDungeonRepository;
+import cn.guangdian.dungeon.storage.DungeonStorage;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.message.MiniMessageService;
@@ -29,6 +30,7 @@ public class GuangDianDungeon extends AbstractRPGPlugin {
 
     private DungeonRepository dungeonRepository;
     private PlayerDungeonRepository playerRepository;
+    private DungeonStorage dungeonStorage;
     private PartyManager partyManager;
     private SessionRewardManager rewardManager;
     private TemplateLoader templateLoader;
@@ -103,6 +105,11 @@ public class GuangDianDungeon extends AbstractRPGPlugin {
         if (playerRepository != null) {
             playerRepository.saveAll();
         }
+        
+        if (dungeonStorage != null) {
+            dungeonStorage.save();
+            dungeonStorage.close();
+        }
 
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
@@ -155,6 +162,9 @@ public class GuangDianDungeon extends AbstractRPGPlugin {
 
         File playerDataDir = new File(getDataFolder(), "playerdata");
         playerRepository = new PlayerDungeonRepository(this, playerDataDir);
+        
+        dungeonStorage = new DungeonStorage(this);
+        if (dungeonStorage.init()) dungeonStorage.load();
 
         mobBridge = new MobBridge(this);
 

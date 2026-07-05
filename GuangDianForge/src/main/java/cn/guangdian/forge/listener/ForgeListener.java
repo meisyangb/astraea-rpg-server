@@ -3,6 +3,7 @@ package cn.guangdian.forge.listener;
 import cn.guangdian.forge.GuangDianForge;
 import cn.guangdian.forge.gui.ForgeGUI;
 import cn.guangdian.forge.gui.RecipeSelectGUI;
+import cn.guangdian.forge.model.ForgeQuality;
 import cn.guangdian.forge.model.ForgeRecipe;
 import cn.guangdian.forge.model.PlayerForgeData;
 import cn.guangdian.forge.util.ForgeUtil;
@@ -227,15 +228,23 @@ public class ForgeListener implements Listener {
         boolean success = Math.random() < rate;
         
         if (success) {
-            ItemStack result = ForgeUtil.buildResult(recipe, plugin);
+            ItemStack result = ForgeUtil.buildResultWithQuality(recipe, plugin, data);
             if (result == null) {
-                // RPGItems 物品获取失败，退还材料（理论上不应该发生）
                 player.sendMessage(Component.text("锻造出错: 无法获取结果物品，请联系管理员!", NamedTextColor.RED));
                 plugin.getLogger().warning("锻造失败: 无法获取 RPGItems 物品 " + recipe.getResultRPGItem() + "，玩家: " + player.getName());
                 return;
             }
             player.getInventory().addItem(result);
-            player.sendMessage(Component.text("锻造成功!", NamedTextColor.GREEN));
+
+            // 从锻造产物读取品质信息用于消息提示
+            ForgeQuality quality = ForgeQuality.readFromItem(result);
+            if (quality != null) {
+                player.sendMessage(Component.text("锻造成功! 品质: " + quality.getTier().getDisplay() 
+                    + " (属性 ×" + String.format("%.2f", quality.getMultiplier()) + ")", NamedTextColor.GREEN));
+            } else {
+                player.sendMessage(Component.text("锻造成功!", NamedTextColor.GREEN));
+            }
+
             player.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, player.getLocation(), 20, 0.5, 1, 0.5);
             
             data.setSuccessForges(data.getSuccessForges() + 1);

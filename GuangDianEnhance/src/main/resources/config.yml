@@ -1,5 +1,16 @@
 enhance:
+  # 全局默认最大强化等级 (Tier未配置时使用)
   max_level: 15
+  
+  # 各阶位最高强化等级 (Tier: max_level)
+  tier_max_level:
+    1: 5
+    2: 7
+    3: 8
+    4: 10
+    5: 12
+    6: 14
+    7: 15
   
   success_rate:
     base: 1.0
@@ -13,7 +24,7 @@ enhance:
   
   attribute_bonus:
     type: multiplier
-    per_level: 0.1
+    per_level: 0.12
   
   materials:
     "1-5":
@@ -34,26 +45,6 @@ enhance:
     enabled: true
     item: "NETHER_STAR"
     consume_on_fail: true
-  
-  enhanceable:
-    keywords:
-      - "攻击力"
-      - "防御力"
-      - "生命上限"
-      - "暴击几率"
-    materials:
-      - "DIAMOND_SWORD"
-      - "NETHERITE_SWORD"
-      - "DIAMOND_AXE"
-      - "NETHERITE_AXE"
-      - "DIAMOND_HELMET"
-      - "DIAMOND_CHESTPLATE"
-      - "DIAMOND_LEGGINGS"
-      - "DIAMOND_BOOTS"
-      - "NETHERITE_HELMET"
-      - "NETHERITE_CHESTPLATE"
-      - "NETHERITE_LEGGINGS"
-      - "NETHERITE_BOOTS"
   
   cooldown_ms: 500
   

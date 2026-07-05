@@ -1,9 +1,6 @@
 # GuangDianCaveFu 配置文件
-# 光点RPG空岛洞府插件
-
-# 存储设置
-storage:
-  use-sqlite: false        # true = SQLite本地数据库, false = YAML文件存储
+# 光点RPG空岛洞府插件 - 独立版本
+# 存储模式：纯 YML 文件（data.yml）
 
 # 洞府世界设置
 world:
@@ -53,3 +50,6 @@ settings:
   max-members: 10         # 最大成员数
   allow-visitor: true     # 是否允许访客进入参观
   create-cost: ""         # 创建洞府消耗（留空免费），格式同升级物品
+
+# 数据保存设置
+auto-save-interval: 300   # 自动保存间隔（秒），设为 0 禁用自动保存，默认 300 秒（5分钟）

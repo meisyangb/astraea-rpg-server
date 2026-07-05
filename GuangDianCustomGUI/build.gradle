@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+    id 'com.gradleup.shadow' version '8.3.0'
+}
+
+group = 'cn.guangdian'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+    maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+    compileOnly 'me.clip:placeholderapi:2.11.6'
+}
+
+def targetPluginDir = project.hasProperty('pluginDir') ? project.property('pluginDir') : "e:\\RPG\\艾尔丽雅\\plugins"
+
+tasks.register('deploy', Copy) {
+    dependsOn shadowJar
+    from shadowJar.archiveFile
+    into targetPluginDir
+    rename { String fileName ->
+        fileName.replace("-${version}", "")
+    }
+}
+
+tasks.build.dependsOn shadowJar

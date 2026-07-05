@@ -1,0 +1,69 @@
+# GuangDianCustomModels 物品定义配置文件
+# 定义自定义武器和装备
+
+# 武器定义
+weapons:
+  # 示例武器1 - 炎龙剑
+  sd_1sd100003:
+    id: "sd_1sd100003"
+    display_name: "§6炎龙剑"
+    material: "DIAMOND_SWORD"
+    custom_model_data: 10001
+    texture: "1SD100003_ICON1_1.png"
+    model_template: "sword"
+    lore:
+      - "§e------------"
+      - "§7攻击力: §c+50"
+      - "§7等级: §a4阶"
+      - "§7职业: §f战士"
+      - "§e------------"
+      - "§7描述: §f传说中的炎龙之剑"
+    attributes:
+      attack_damage: 50
+      attack_speed: 1.6
+      durability: 2000
+  
+  # 示例武器2 - 冰霜斧
+  axe_axe200004:
+    id: "axe_axe200004"
+    display_name: "§b冰霜斧"
+    material: "DIAMOND_AXE"
+    custom_model_data: 10002
+    texture: "AXE200004_ICON1_1.png"
+    model_template: "axe"
+    lore:
+      - "§e------------"
+      - "§7攻击力: §c+45"
+      - "§7等级: §a4阶"
+      - "§7职业: §f狂战士"
+      - "§e------------"
+    attributes:
+      attack_damage: 45
+      attack_speed: 0.9
+      durability: 2500
+  
+  # 示例武器3 - 精灵弓
+  bow_bow400005:
+    id: "bow_bow400005"
+    display_name: "§a精灵弓"
+    material: "BOW"
+    custom_model_data: 10003
+    texture: "BOW400005_ICON1_1.png"
+    model_template: "bow"
+    lore:
+      - "§e------------"
+      - "§7攻击力: §c+35"
+      - "§7等级: §a4阶"
+      - "§7职业: §f弓箭手"
+      - "§e------------"
+    attributes:
+      attack_damage: 35
+      durability: 1500
+
+# 注意：
+# 1. custom_model_data 必须唯一
+# 2. texture 必须与贴图文件名匹配
+# 3. material 必须是有效的Minecraft材质
+# 4. model_template 必须是有效的模板名称
+# 5. display_name 和 lore 使用 § 符号（Bukkit ChatColor格式）
+#    §6=金色, §c=红色, §a=绿色, §b=青色, §e=黄色, §7=灰色, §f=白色

@@ -15,9 +15,10 @@ import java.util.List;
 
 public class EnhanceStorage {
 
-    private static final NamespacedKey LEVEL_KEY = new NamespacedKey("guangdianenhance", "level");
-    private static final NamespacedKey MAX_LEVEL_KEY = new NamespacedKey("guangdianenhance", "max_level");
-    private static final NamespacedKey ATTEMPTS_KEY = new NamespacedKey("guangdianenhance", "attempts");
+    // 强化等级存 RPGItems 命名空间，默认0级（无PDC=0）
+    private static final NamespacedKey LEVEL_KEY = new NamespacedKey("rpgitems", "enhance_level");
+    private static final NamespacedKey MAX_LEVEL_KEY = new NamespacedKey("rpgitems", "enhance_max_level");
+    private static final NamespacedKey ATTEMPTS_KEY = new NamespacedKey("rpgitems", "enhance_attempts");
     
     private final GuangDianEnhance plugin;
     private final MiniMessageService miniMessage;
@@ -131,26 +132,29 @@ public class EnhanceStorage {
     }
 
     private void updateLore(ItemMeta meta, int level) {
-        List<String> lore = new ArrayList<>();
+        // 使用 Component 方式操作 lore，确保 <i:false> 等标签正确渲染
+        List<Component> lore = new ArrayList<>();
         
-        if (meta.hasLore() && meta.getLore() != null) {
-            for (String line : meta.getLore()) {
-                String stripped = TextStripper.stripAll(line);
-                if (!stripped.contains("强化等级") && !stripped.contains("【+" + stripped.replaceAll("[^0-9]", "") + "】")) {
-                    lore.add(line);
+        if (meta.lore() != null) {
+            for (Component comp : meta.lore()) {
+                // 序列化为 MiniMessage 文本再 strip，用于关键词匹配
+                String miniMsg = net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().serialize(comp);
+                String stripped = TextStripper.stripAll(miniMsg);
+                if (!stripped.contains("强化等级") && !stripped.contains("属性倍率") && !stripped.contains("【+")) {
+                    lore.add(comp);
                 }
             }
         }
         
         if (level > 0) {
-            String prefix = getLevelPrefix(level);
-            String color = getLevelColor(level);
-            Component enhanceLine = miniMessage.colorize(
-                color + "强化等级: " + prefix + level);
-            lore.add(0, miniMessage.legacySerialize(enhanceLine));
+            double multiplier = 1.0 + level * plugin.getEnhanceConfig().getAttributeBonusPerLevel();
+            // 在 lore 末尾追加强化等级信息
+            lore.add(miniMessage.colorize("<i:false><blue><bold>【强化等级】</bold></blue>"));
+            lore.add(miniMessage.colorize("<i:false><gray>  强化等级: <yellow>" + level + "级"));
+            lore.add(miniMessage.colorize("<i:false><gray>  属性倍率: <yellow>" + String.format("%.2f", multiplier) + "x"));
         }
         
-        meta.setLore(lore);
+        meta.lore(lore);
     }
 
     private String getLevelPrefix(int level) {

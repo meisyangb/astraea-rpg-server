@@ -1,0 +1,21 @@
+name: GuangDianFakeOnline
+version: 1.0.0
+main: cn.guangdian.fakeonline.GuangDianFakeOnline
+description: 伪装玩家在线数插件（简化版） - 修改服务器列表和API查询返回的在线人数
+api-version: '1.21'
+authors:
+  - GuangDian Team
+
+commands:
+  gdfakeonline:
+    description: GuangDianFakeOnline 主命令
+    usage: /gdfakeonline <reload|status|set|mode>
+    permission: gdfakeonline.admin
+    aliases:
+      - gdfake
+      - fakeonline
+
+permissions:
+  gdfakeonline.admin:
+    description: 管理员权限
+    default: op

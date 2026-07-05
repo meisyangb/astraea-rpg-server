@@ -1,75 +1,27 @@
 ﻿# GuangDianBattlePass
 
-> 插件简介 - 待补充
+> 光点战令系统 — 赛季战令/免费+付费双轨道/等级解锁奖励/GUI展示
 
 ---
 
 ## 一、简介
 
-本插件文档正在完善中...
-
-### 功能特性
-
-- 功能1 - 描述待补充
-- 功能2 - 描述待补充
-- 功能3 - 描述待补充
-
-### 前置要求
-
-- **必需**: [RPGCore](/RPGCore/README)
-- **可选**: PlaceholderAPI
-
-### 兼容性
-
-- **服务端**: Paper 1.21+
-- **Java**: Java 21+
+GuangDianBattlePass 提供赛季式战令通行证，分为免费和付费两条奖励轨道。
 
 ---
 
-## 二、安装
-
-### 2.1 安装步骤
-
-1. 确保已安装 RPGCore
-2. 下载插件 jar 文件
-3. 将 jar 文件放入 \plugins\ 文件夹
-4. 重启服务器
-
-### 2.2 验证安装
-
-\\\ash
-/plugin info          # 查看插件信息
-/plugin reload        # 重载配置
-\\\
-
----
-
-## 三、命令权限
-
-### 3.1 玩家命令
+## 二、命令权限
 
 | 命令 | 权限 | 说明 |
 |------|------|------|
-| \/plugin help\ | 无 | 查看帮助 |
-
-### 3.2 管理员命令
-
-| 命令 | 权限 | 说明 |
-|------|------|------|
-| \/plugin reload\ | \plugin.admin\ | 重载配置 |
-
----
-
-## 四、配置文件
-
-配置文件说明待补充...
+| `/battlepass` | 无 | 打开战令界面 |
+| `/battlepass info` | 无 | 查看当前赛季信息 |
+| `/battlepass claim` | 无 | 领取已解锁奖励 |
+| `/battlepass buy` | 无 | 购买付费通行证 |
+| `/battlepass help` | 无 | 帮助 |
+| `/battlepassadmin reload` | `guangdian.battlepass.admin` | 重载配置 |
+| `/battlepassadmin addxp <玩家> <数量>` | `guangdian.battlepass.admin` | 增加经验 |
 
 ---
 
-## 五、下一步
-
-- 📖 本文档正在完善中，敬请期待...
-
----
-
-*最后更新: 2026-06-11*
+*最后更新: 2026-06-13*

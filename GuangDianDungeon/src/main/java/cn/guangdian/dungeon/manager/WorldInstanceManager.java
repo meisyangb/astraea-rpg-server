@@ -80,15 +80,19 @@ public class WorldInstanceManager {
         }
         
         deleteUidFile(instanceDir);
-        
-        WorldCreator creator = new WorldCreator(instanceName);
-        creator.type(WorldType.FLAT);
-        creator.generatorSettings("minecraft:air");
-        
-        World instanceWorld = Bukkit.createWorld(creator);
+
+        // 直接加载复制的世界文件夹，而不是重新创建
+        World instanceWorld = Bukkit.getWorld(instanceName);
         if (instanceWorld == null) {
-            plugin.getLogger().severe("Failed to create world: " + instanceName);
-            return null;
+            // 世界未加载，使用 WorldCreator 加载已有的世界文件夹
+            WorldCreator creator = new WorldCreator(instanceName);
+            // 不再设置 generatorSettings，避免 JSON 解析错误
+            // 让 Bukkit 直接使用 level.dat 中的配置
+            instanceWorld = creator.createWorld();
+            if (instanceWorld == null) {
+                plugin.getLogger().severe("Failed to load world: " + instanceName);
+                return null;
+            }
         }
         
         InstanceInfo info = new InstanceInfo(instanceName, templateWorldName, dungeonId, sessionId);

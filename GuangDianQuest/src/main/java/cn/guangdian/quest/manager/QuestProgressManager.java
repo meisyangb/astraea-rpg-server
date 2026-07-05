@@ -33,8 +33,8 @@ public class QuestProgressManager {
         int required = obj != null ? obj.getAmount() : 0;
         publishProgressEvent(playerId, questId, objectiveIndex, progress, required);
 
-        // 立即保存玩家数据（异步）
-        savePlayerDataAsync(playerId);
+        // 立即保存玩家数据（同步）
+        savePlayerData(playerId);
     }
 
     public int incrementProgress(UUID playerId, String questId, int objectiveIndex, int amount) {
@@ -53,22 +53,14 @@ public class QuestProgressManager {
         // 发送进度更新消息到聊天框
         sendProgressMessage(playerId, quest, obj, newProgress);
 
-        // 立即保存玩家数据（异步）
-        savePlayerDataAsync(playerId);
+        // 立即保存玩家数据（同步）
+        savePlayerData(playerId);
 
         return newProgress;
     }
 
-    private void savePlayerDataAsync(UUID playerId) {
-        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
-        if (rpgCore != null) {
-            rpgCore.getScheduler().runAsync(() -> {
-                playerRepository.savePlayerData(playerId);
-            });
-        } else {
-            // 如果 RPGCore 不可用，同步保存
-            playerRepository.savePlayerData(playerId);
-        }
+    private void savePlayerData(UUID playerId) {
+        playerRepository.savePlayerData(playerId);
     }
 
     private void sendProgressMessage(UUID playerId, Quest quest, QuestObjective obj, int currentProgress) {

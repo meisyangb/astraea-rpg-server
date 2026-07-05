@@ -1,6 +1,7 @@
 package cn.guangdian.armorstats.applier;
 
 import cn.guangdian.armorstats.GuangDianArmorStats;
+import cn.guangdian.armorstats.config.AttributeApplyLogConfig;
 import cn.guangdian.armorstats.data.PlayerStats;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
@@ -28,6 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SimpleAttributeApplier {
 
     private final GuangDianArmorStats plugin;
+    private final AttributeApplyLogConfig logConfig;
     
     private final NamespacedKey healthKey;
     private final NamespacedKey speedKey;
@@ -42,6 +44,7 @@ public class SimpleAttributeApplier {
     
     public SimpleAttributeApplier(GuangDianArmorStats plugin) {
         this.plugin = plugin;
+        this.logConfig = AttributeApplyLogConfig.getInstance();
         this.healthKey = new NamespacedKey(plugin, "max_health");
         this.speedKey = new NamespacedKey(plugin, "move_speed");
     }
@@ -125,7 +128,7 @@ public class SimpleAttributeApplier {
             attr.addModifier(modifier);
         }
         
-        plugin.getLogger().info("[属性应用] " + player.getName() + 
+        logConfig.logApply(player.getName() + 
             " 生命上限: " + attr.getValue() + 
             " (基础:" + DEFAULT_MAX_HEALTH + " + 加成:" + bonusHealth + ")");
     }
@@ -178,7 +181,7 @@ public class SimpleAttributeApplier {
             expectedSpeedPercent.remove(player.getUniqueId());
         }
         
-        plugin.getLogger().info("[属性应用] " + player.getName() + 
+        logConfig.logApply(player.getName() + 
             " 移动速度: " + attr.getValue() + 
             " (基础:" + DEFAULT_MOVE_SPEED + " + " + moveSpeedPercent + "%)" +
             " walkSpeed: " + player.getWalkSpeed());
@@ -235,7 +238,7 @@ public class SimpleAttributeApplier {
         }
         for (AttributeModifier modifier : toRemove) {
             attr.removeModifier(modifier);
-            plugin.getLogger().info("[属性清理] 移除 modifier: " + modifier.getAmount());
+            logConfig.logAttributeClear("移除 modifier: " + modifier.getAmount());
         }
     }
 }

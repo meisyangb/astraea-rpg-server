@@ -1,8 +1,7 @@
 package cn.guangdian.cavefu.hook;
 
-import cn.guangdian.rpgcore.RPGCore;
-import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.node.Node;
 import net.luckperms.api.node.types.InheritanceNode;
@@ -14,6 +13,10 @@ import java.util.List;
 import java.util.Map;
 import net.luckperms.api.context.ImmutableContextSet;
 
+/**
+ * LuckPerms 权限钩子
+ * 直接使用 LuckPerms API，不依赖 RPGCore
+ */
 public class LuckPermsHook {
     private final String worldName;
     private LuckPerms luckPerms;
@@ -48,13 +51,8 @@ public class LuckPermsHook {
 
     private void setup() {
         try {
-            RPGCore rpgCore = RPGCore.getInstance();
-            if (rpgCore == null) {
-                return;
-            }
-            ExternalServiceIntegration externalServices = rpgCore.getExternalServices();
-            if (externalServices != null) {
-                luckPerms = externalServices.getLuckPerms().orElse(null);
+            if (Bukkit.getPluginManager().isPluginEnabled("LuckPerms")) {
+                luckPerms = LuckPermsProvider.get();
                 enabled = luckPerms != null;
             }
         } catch (Exception e) {

@@ -253,14 +253,21 @@ public class DungeonCommand implements CommandExecutor, TabCompleter {
         party.setActiveSessionId(sessionId);
         party.setState(PartyState.IN_DUNGEON);
 
-        // 传送所有队员
+        // 传送所有队员 - 从配置文件读取入口坐标
+        org.bukkit.configuration.file.YamlConfiguration dungeonConfig =
+            org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
+                new java.io.File(plugin.getDataFolder(), "dungeons/" + dungeonId + ".yml"));
+        double entranceX = dungeonConfig.getDouble("teleports.entrance.x", 0);
+        double entranceY = dungeonConfig.getDouble("teleports.entrance.y", 64);
+        double entranceZ = dungeonConfig.getDouble("teleports.entrance.z", 0);
+
         for (PartyMember member : party.getMembers()) {
             Player p = Bukkit.getPlayer(member.getPlayerId());
             if (p != null) {
                 plugin.getWorldInstanceManager().addPlayerToInstance(
                     instanceInfo.getInstanceWorldName(), member.getPlayerId());
 
-                Location entrance = new Location(instanceWorld, 0, 64, 0);
+                Location entrance = new Location(instanceWorld, entranceX, entranceY, entranceZ);
                 p.teleport(entrance);
             }
         }
@@ -330,13 +337,21 @@ public class DungeonCommand implements CommandExecutor, TabCompleter {
         session.setParty(party);
         session.setDifficulty("normal");
 
+        // 从配置文件读取入口坐标
+        org.bukkit.configuration.file.YamlConfiguration testDungeonConfig =
+            org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
+                new java.io.File(plugin.getDataFolder(), "dungeons/" + dungeonId + ".yml"));
+        double testEntranceX = testDungeonConfig.getDouble("teleports.entrance.x", 0);
+        double testEntranceY = testDungeonConfig.getDouble("teleports.entrance.y", 64);
+        double testEntranceZ = testDungeonConfig.getDouble("teleports.entrance.z", 0);
+
         for (PartyMember member : party.getMembers()) {
             Player p = Bukkit.getPlayer(member.getPlayerId());
             if (p != null) {
                 plugin.getWorldInstanceManager().addPlayerToInstance(
                     instanceInfo.getInstanceWorldName(), member.getPlayerId());
 
-                Location entrance = new Location(instanceWorld, 0, 64, 0);
+                Location entrance = new Location(instanceWorld, testEntranceX, testEntranceY, testEntranceZ);
                 p.teleport(entrance);
             }
         }

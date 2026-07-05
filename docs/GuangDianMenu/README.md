@@ -1,74 +1,63 @@
 ﻿# GuangDianMenu
 
-> 菜单系统 - 自定义GUI菜单，支持条件、动作、分页
+> 光点菜单系统 — YAML 驱动 GUI 菜单，支持按钮/条件/命令/打开子菜单/PlaceholderAPI
 
 ---
 
 ## 一、简介
 
-强大的GUI菜单系统，支持自定义菜单布局、条件判断、多动作触发和分页功能。
+GuangDianMenu 基于 YAML 配置文件驱动 Inventory GUI 菜单，完全无需 Java 编码即可创建交互式菜单。
 
 ### 功能特性
-- 自定义菜单布局（1-54格）
-- MiniMessage 格式文本
-- 条件系统（金币、权限、点券）
-- 动作系统（命令、消息、音效、菜单跳转）
-- 分页支持
-- PlaceholderAPI 变量支持
+
+- **YAML 驱动** — 纯配置文件创建菜单，无需编码
+- **按钮系统** — 自定义物品材质、名称、Lore
+- **条件判断** — 权限/点券/等级多条件组合
+- **命令执行** — 按钮支持玩家/控制台命令
+- **子菜单** — 支持菜单间跳转
+- **PlaceholderAPI** — 按钮文本支持变量
+
+### 前置要求
+
+| 插件 | 说明 | 必装 |
+|------|------|:----:|
+| RPGCore | 核心框架 | ✅ 是 |
+| PlaceholderAPI | 变量支持 | ❌ 否 |
 
 ---
 
-## 二、菜单配置示例
+## 二、命令权限
 
-### 主菜单 (`menus/主菜单.yml`)
-```yaml
-title: '<dark_gray><bold>【主菜单】</bold></dark_gray>'
-size: 27
-items:
-  锻造:
-    material: ANVIL
-    slot: 11
-    name: '<gold><bold>⚒ 锻造'
-    lore:
-      - '<gray>点击打开锻造界面'
-    action: 'console:forge open %player%'
-```
-
-### 条件菜单
-```yaml
-  传送:
-    material: ENDER_PEARL
-    slot: 13
-    name: '<green><bold>世界传送'
-    action: 'open:世界传送.yml'
-    conditions:
-      money: 100.0
-      fail-message: '<red>金币不足！需要100金币'
-```
-
-### 经济条件菜单
-```yaml
-  购买:
-    material: DIAMOND
-    slot: 15
-    name: '<gold><bold>购买物品'
-    action: 'console:rpgitem give %player% 物品ID 1'
-    conditions:
-      money: 5000.0
-      fail-message: '<red>金币不足！'
-```
+| 命令 | 权限 | 说明 |
+|------|------|------|
+| `/menu open <菜单名>` | 无 | 打开指定菜单 |
+| `/menu list` | 无 | 列出可用菜单 |
+| `/menu reload` | `guangdian.menu.admin` | 重载所有菜单 |
 
 ---
 
-## 三、动作类型
+## 三、菜单配置示例
 
-| 动作 | 格式 | 说明 |
-|:----|:-----|------|
-| 命令 | `console:<命令>` | 控制台执行 |
-| 玩家命令 | `player:<命令>` | 玩家执行 |
-| 打开菜单 | `open:<文件名>` | 打开另一个菜单 |
-| 消息 | `message:<文本>` | 发送消息 |
-| 音效 | `sound:<音效>` | 播放音效 |
+```yaml
+# menus/main_menu.yml
+main_menu:
+  title: "主菜单"
+  rows: 3
+  items:
+    button1:
+      slot: 11
+      material: "DIAMOND_SWORD"
+      name: "&a副本传送"
+      lore:
+        - "&7点击传送到副本区域"
+      commands:
+        - "console:warp dungeons {player}"
+    button2:
+      slot: 15
+      material: "CHEST"
+      name: "&e锻造工坊"
+      open-menu: "forge_menu"
+```
 
 ---
 

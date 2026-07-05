@@ -6,7 +6,6 @@ import cn.guangdian.cavefu.cave.CaveManager;
 import cn.guangdian.cavefu.config.ConfigManager;
 import cn.guangdian.cavefu.permission.PermissionType;
 import cn.guangdian.cavefu.world.CaveWorldManager;
-import cn.guangdian.rpgcore.message.MiniMessageService;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -24,24 +23,26 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 /**
  * 区域保护监听器
  * 洞府插件自带保护，无需 WorldGuard
+ * 完全独立，不依赖 RPGCore
  */
 public class ProtectionListener implements Listener {
     private final GuangDianCaveFu plugin;
     private final CaveManager caveManager;
     private final ConfigManager configManager;
     private final CaveWorldManager worldManager;
-    private final MiniMessageService miniMessage;
 
     public ProtectionListener(GuangDianCaveFu plugin) {
         this.plugin = plugin;
         this.caveManager = plugin.getCaveManager();
         this.configManager = plugin.getConfigManager();
         this.worldManager = plugin.getWorldManager();
-        this.miniMessage = plugin.getMiniMessageService();
     }
 
+    /**
+     * 使用 MiniMessage 发送消息
+     */
     private void sendMessage(Player player, String text) {
-        player.sendMessage(miniMessage.colorize(text));
+        plugin.sendMiniMessage(player, text);
     }
 
     /**

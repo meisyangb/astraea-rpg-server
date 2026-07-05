@@ -1,0 +1,26 @@
+name: GuangDianCustomModels
+version: 1.1.0
+main: cn.guangdian.custommodels.GuangDianCustomModels
+api-version: 1.21
+author: GuangDian Team
+description: 自定义武器贴图和模型插件 - 完全独立版本
+
+# 插件命令
+commands:
+  custommodels:
+    description: GuangDianCustomModels 主命令
+    usage: /custommodels <scan|generate|pack|list|give|reload|info|help>
+    permission: custommodels.use
+    permission-message: "你没有权限使用此命令"
+
+# 权限节点
+permissions:
+  custommodels.use:
+    description: 使用插件基本命令
+    default: true
+  custommodels.admin:
+    description: 管理员权限（扫描、生成、打包）
+    default: op
+  custommodels.give:
+    description: 给予物品权限
+    default: op

@@ -16,6 +16,7 @@ public class BossStats {
     private double dodgeChance;
     private double parryChance;
     private double damageReduction;
+    private double lifestealResistPercent;
     private double armorPenetration;
     private double defensePenetration;
     private double healthMultiplier;
@@ -119,6 +120,14 @@ public class BossStats {
 
     public void setDamageReduction(double damageReduction) {
         this.damageReduction = damageReduction;
+    }
+
+    public double getLifestealResistPercent() {
+        return lifestealResistPercent;
+    }
+
+    public void setLifestealResistPercent(double lifestealResistPercent) {
+        this.lifestealResistPercent = lifestealResistPercent;
     }
 
     public double getArmorPenetration() {

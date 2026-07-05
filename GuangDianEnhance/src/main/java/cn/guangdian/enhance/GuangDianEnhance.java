@@ -3,10 +3,8 @@ package cn.guangdian.enhance;
 import cn.guangdian.enhance.adapter.EnhanceServiceAdapter;
 import cn.guangdian.enhance.command.EnhanceCommand;
 import cn.guangdian.enhance.config.EnhanceConfig;
-import cn.guangdian.enhance.gui.EnhanceGUI;
 import cn.guangdian.enhance.listener.EnhanceListener;
 import cn.guangdian.enhance.manager.EnhanceManager;
-import cn.guangdian.enhance.stone.EnhanceStoneManager;
 import cn.guangdian.enhance.storage.EnhanceStorage;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.SyncScheduler;
@@ -23,8 +21,6 @@ public final class GuangDianEnhance extends AbstractRPGPlugin {
     private EnhanceStorage enhanceStorage;
     private EnhanceManager enhanceManager;
     private EnhanceServiceAdapter serviceAdapter;
-    private EnhanceGUI enhanceGUI;
-    private EnhanceStoneManager stoneManager;
     
     private RPGCore rpgCore;
     private SyncScheduler rpgCoreScheduler;
@@ -43,14 +39,10 @@ public final class GuangDianEnhance extends AbstractRPGPlugin {
         enhanceStorage = new EnhanceStorage(this);
         enhanceManager = new EnhanceManager(this, enhanceStorage, enhanceConfig);
         
-        stoneManager = new EnhanceStoneManager(this);
+        // GUI 不再是共享实例 — 每次 /enhance 创建 per-player 实例 (参考 Socket)
+        getServer().getPluginManager().registerEvents(new EnhanceListener(this), this);
         
-        enhanceGUI = new EnhanceGUI(this, enhanceManager);
-        
-        getServer().getPluginManager().registerEvents(
-            new EnhanceListener(this, enhanceManager), this);
-        
-        getCommand("enhance").setExecutor(new EnhanceCommand(this, enhanceManager, enhanceGUI, stoneManager));
+        getCommand("enhance").setExecutor(new EnhanceCommand(this));
         
         serviceAdapter = new EnhanceServiceAdapter(this, enhanceManager);
         if (serviceAdapter.isUsingRPGCore()) {
@@ -63,10 +55,6 @@ public final class GuangDianEnhance extends AbstractRPGPlugin {
 
     @Override
     protected void onPluginDisable() {
-        if (enhanceGUI != null) {
-            enhanceGUI.closeAll();
-        }
-        
         if (serviceAdapter != null) {
             serviceAdapter.unregister();
         }
@@ -120,13 +108,7 @@ public final class GuangDianEnhance extends AbstractRPGPlugin {
         return enhanceManager;
     }
 
-    public EnhanceGUI getEnhanceGUI() {
-        return enhanceGUI;
-    }
-
-    public EnhanceStoneManager getStoneManager() {
-        return stoneManager;
-    }
+    // GUI 不再是共享实例，每次命令创建 per-player 实例
 
     public RPGCore getRPGCore() {
         return rpgCore;

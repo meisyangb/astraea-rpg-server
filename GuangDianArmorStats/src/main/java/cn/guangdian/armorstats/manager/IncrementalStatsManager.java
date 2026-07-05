@@ -1,6 +1,7 @@
 package cn.guangdian.armorstats.manager;
 
 import cn.guangdian.armorstats.GuangDianArmorStats;
+import cn.guangdian.armorstats.config.AttributeApplyLogConfig;
 import cn.guangdian.armorstats.data.PlayerStats;
 import cn.guangdian.armorstats.applier.SimpleAttributeApplier;
 import cn.guangdian.armorstats.source.PlayerAttributeApplier;
@@ -37,6 +38,7 @@ public class IncrementalStatsManager {
     private final GuangDianArmorStats plugin;
     private final SimpleAttributeApplier applier;
     private final PlayerAttributeApplier combatApplier; // 战斗属性应用器
+    private final AttributeApplyLogConfig logConfig;
     
     // 槽位枚举
     public enum Slot {
@@ -58,6 +60,7 @@ public class IncrementalStatsManager {
         this.plugin = plugin;
         this.applier = new SimpleAttributeApplier(plugin);
         this.combatApplier = new PlayerAttributeApplier();
+        this.logConfig = AttributeApplyLogConfig.getInstance();
     }
     
     // ==================== 槽位变化处理 ====================

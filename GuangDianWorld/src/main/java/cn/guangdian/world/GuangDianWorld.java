@@ -16,12 +16,14 @@ import cn.guangdian.world.listener.WorldListener;
 import cn.guangdian.world.manager.WorldManager;
 import cn.guangdian.world.papi.WorldPlaceholders;
 import cn.guangdian.world.storage.ConfigManager;
+import cn.guangdian.world.storage.WorldStorage;
 
 public final class GuangDianWorld extends AbstractRPGPlugin {
 
     private static GuangDianWorld instance;
     private ConfigManager configManager;
     private WorldManager worldManager;
+    private WorldStorage worldStorage;
     private WorldAPIImpl worldAPIImpl;
     private WorldServiceAdapter serviceAdapter;
     private WorldPlaceholders placeholders;
@@ -55,6 +57,9 @@ public final class GuangDianWorld extends AbstractRPGPlugin {
         configManager = new ConfigManager(this);
         configManager.load();
 
+        worldStorage = new WorldStorage(this);
+        if (worldStorage.init()) worldStorage.load();
+        
         worldManager = new WorldManager(this);
         worldManager.loadAllWorlds();
 

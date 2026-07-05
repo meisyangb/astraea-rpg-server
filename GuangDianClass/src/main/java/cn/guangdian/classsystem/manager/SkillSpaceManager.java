@@ -92,6 +92,10 @@ public class SkillSpaceManager {
         SkillOrb.SkillType type = "passive".equalsIgnoreCase(typeStr) ? 
             SkillOrb.SkillType.PASSIVE : SkillOrb.SkillType.ACTIVE;
         
+        // 从配置读取 pathway 和 sequence
+        String pathway = config.getString("pathway", "");
+        int sequence = config.getInt("sequence", 9);
+        
         String materialStr = config.getString("material", "BLAZE_POWDER");
         Material material = Material.matchMaterial(materialStr);
         if (material == null) material = Material.BLAZE_POWDER;
@@ -108,23 +112,43 @@ public class SkillSpaceManager {
         
         List<String> statusEffects = config.getStringList("status_effects");
         
-        return new SkillOrb(skillId, name, type, material, customModelData, description,
+        return new SkillOrb(skillId, name, type, pathway, sequence, material, customModelData, description,
                           damageMult, range, cooldown, manaCost, requiredTier, effect,
                           triggerChance, statusEffects);
     }
     
     /**
      * 获取或创建玩家技能数据
+     * 只根据玩家当前职业的途径来初始化技能
      */
     public PlayerSkillData getPlayerSkillData(Player player) {
         return playerDataMap.computeIfAbsent(player.getUniqueId(), uuid -> {
             PlayerSkillData data = new PlayerSkillData(uuid);
-            // 初始化技能空间(复制模板)
-            for (SkillOrb template : skillTemplates.values()) {
+            // 不在这里初始化技能，等玩家选择职业后再初始化
+            return data;
+        });
+    }
+    
+    /**
+     * 根据职业途径初始化技能
+     * 只添加该途径的技能到玩家技能空间
+     */
+    public void initSkillsForPathway(Player player, String pathway) {
+        PlayerSkillData data = getPlayerSkillData(player);
+        
+        // 清空现有技能空间
+        data.getSkillSpace().clear();
+        
+        // 只添加该途径的技能（使用配置中的 pathway 属性）
+        for (SkillOrb template : skillTemplates.values()) {
+            // 检查技能是否属于该途径（使用配置中的 pathway 属性）
+            if (template.getPathway().equals(pathway)) {
                 data.addSkill(new SkillOrb(
                     template.getSkillId(),
                     template.getName(),
                     template.getType(),
+                    template.getPathway(),
+                    template.getSequence(),
                     template.getMaterial(),
                     template.getCustomModelData(),
                     template.getDescription(),
@@ -138,8 +162,9 @@ public class SkillSpaceManager {
                     template.getStatusEffects()
                 ));
             }
-            return data;
-        });
+        }
+        
+        plugin.getLogger().info("为玩家 " + player.getName() + " 初始化途径 " + pathway + " 的技能");
     }
     
     /**

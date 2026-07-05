@@ -1,11 +1,11 @@
 @echo off
 chcp 65001 >nul
 echo ========================================
-echo GuangDianDynamicView 插件构建脚本
+echo GuangDianDynamicView 插件构建脚本 (1.19.4)
 echo ========================================
 
 cd /d e:\RPG\原创RPG服务端-插件最多提交
-set JAVA_HOME=e:\RPG\原创RPG服务端-插件最多提交\tools\jdk-21.0.10+7
+set JAVA_HOME=C:\Program Files\Java\jdk-17
 
 echo.
 echo [1/3] 清理旧构建...

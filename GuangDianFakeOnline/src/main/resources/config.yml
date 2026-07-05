@@ -1,0 +1,40 @@
+# GuangDianFakeOnline 配置文件（简化版）
+
+# ==================== 服务器列表伪装 ====================
+# 修改服务器列表中显示的在线人数（包括API查询）
+
+# 伪装模式
+mode: FIXED  # FIXED, RANGE, MULTIPLIER, ADD
+
+# 固定模式显示的在线数
+fixed-online: 50
+
+# 范围模式最小在线数
+min-online: 30
+
+# 范围模式最大在线数
+max-online: 80
+
+# 倍数模式倍率
+multiplier: 1.5
+
+# 伪装最大玩家数
+fake-max-players: 100
+
+# ==================== 自定义 MOTD ====================
+custom-motd:
+  enabled: false
+  line1: "&a译梦传说 RPG服务器"
+  line2: "&e当前在线: %fake_online% 人"
+
+# ==================== 自定义玩家列表 ====================
+# 鼠标悬停时显示的玩家名
+custom-sample-players:
+  enabled: false
+  players:
+    - "玩家A"
+    - "玩家B"
+    - "玩家C"
+
+# ==================== 调试设置 ====================
+debug: false

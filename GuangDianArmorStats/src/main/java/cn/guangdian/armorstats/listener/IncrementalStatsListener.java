@@ -1,6 +1,7 @@
 package cn.guangdian.armorstats.listener;
 
 import cn.guangdian.armorstats.GuangDianArmorStats;
+import cn.guangdian.armorstats.config.AttributeApplyLogConfig;
 import cn.guangdian.armorstats.manager.HealthManager;
 import cn.guangdian.armorstats.manager.IncrementalStatsManager;
 import cn.guangdian.armorstats.manager.IncrementalStatsManager.Slot;
@@ -34,6 +35,7 @@ public class IncrementalStatsListener implements Listener {
     private final GuangDianArmorStats plugin;
     private final IncrementalStatsManager statsManager;
     private final HealthManager healthManager;
+    private final AttributeApplyLogConfig logConfig;
     
     // 副手槽位索引
     private static final int OFFHAND_SLOT = 40;
@@ -42,6 +44,7 @@ public class IncrementalStatsListener implements Listener {
         this.plugin = plugin;
         this.statsManager = statsManager;
         this.healthManager = plugin.getHealthManager();
+        this.logConfig = AttributeApplyLogConfig.getInstance();
     }
     
     // ==================== 玩家生命周期 ====================
@@ -88,7 +91,7 @@ public class IncrementalStatsListener implements Listener {
             return;
         }
         
-        plugin.getLogger().info("[装备变化] " + player.getName() + 
+        logConfig.logEquipmentChange(player.getName() + 
             " 槽位: " + slot.name() + 
             " 旧: " + itemName(event.getOldItem()) + 
             " 新: " + itemName(event.getNewItem()));
@@ -121,14 +124,14 @@ public class IncrementalStatsListener implements Listener {
                 
                 // 手持防具时不解析属性，防具只在装备栏生效
                 if (isArmorType(newWeapon)) {
-                    plugin.getLogger().info("[主手变化] " + player.getName() + 
+                    logConfig.logMainHandChange(player.getName() + 
                         " 手持防具，跳过解析: " + itemName(newWeapon));
                     // 传空，清除主手属性
                     statsManager.onWeaponChange(player, null);
                     return;
                 }
                 
-                plugin.getLogger().info("[主手变化] " + player.getName() + 
+                logConfig.logMainHandChange(player.getName() + 
                     " 新武器: " + itemName(newWeapon));
                 statsManager.onWeaponChange(player, newWeapon);
             }
@@ -153,7 +156,7 @@ public class IncrementalStatsListener implements Listener {
                 ItemStack newWeapon = player.getInventory().getItemInMainHand();
                 ItemStack newOffHand = player.getInventory().getItemInOffHand();
                 
-                plugin.getLogger().info("[主手/副手交换] " + player.getName());
+                logConfig.logMainHandChange(player.getName() + " [主手/副手交换]");
                 
                 // 主手：防具不解析
                 if (isArmorType(newWeapon)) {
@@ -254,11 +257,11 @@ public class IncrementalStatsListener implements Listener {
                 if (checkOffhand) {
                     ItemStack newOffHand = player.getInventory().getItemInOffHand();
                     if (isArmorType(newOffHand)) {
-                        plugin.getLogger().info("[副手变化] " + player.getName() + 
+                        logConfig.logOffHandChange(player.getName() + 
                             " 副手持防具，跳过解析: " + itemName(newOffHand));
                         statsManager.onOffHandChange(player, null);
                     } else {
-                        plugin.getLogger().info("[副手变化] " + player.getName() + 
+                        logConfig.logOffHandChange(player.getName() + 
                             " 新副手: " + itemName(newOffHand));
                         statsManager.onOffHandChange(player, newOffHand);
                     }
@@ -267,11 +270,11 @@ public class IncrementalStatsListener implements Listener {
                 if (checkMainHand) {
                     ItemStack newWeapon = player.getInventory().getItemInMainHand();
                     if (isArmorType(newWeapon)) {
-                        plugin.getLogger().info("[主手变化] " + player.getName() + 
+                        logConfig.logMainHandChange(player.getName() + 
                             " 手持防具，跳过解析: " + itemName(newWeapon));
                         statsManager.onWeaponChange(player, null);
                     } else {
-                        plugin.getLogger().info("[主手变化] " + player.getName() + 
+                        logConfig.logMainHandChange(player.getName() + 
                             " 新武器: " + itemName(newWeapon));
                         statsManager.onWeaponChange(player, newWeapon);
                     }
@@ -307,24 +310,24 @@ public class IncrementalStatsListener implements Listener {
             // 检查副手
             ItemStack newOffHand = player.getInventory().getItemInOffHand();
             if (isArmorType(newOffHand)) {
-                plugin.getLogger().info("[副手变化-拖拽] " + player.getName() + 
-                    " 副手持防具，跳过解析: " + itemName(newOffHand));
+                logConfig.logOffHandChange(player.getName() + 
+                    " [拖拽] 副手持防具，跳过解析: " + itemName(newOffHand));
                 statsManager.onOffHandChange(player, null);
             } else {
-                plugin.getLogger().info("[副手变化-拖拽] " + player.getName() + 
-                    " 新副手: " + itemName(newOffHand));
+                logConfig.logOffHandChange(player.getName() + 
+                    " [拖拽] 新副手: " + itemName(newOffHand));
                 statsManager.onOffHandChange(player, newOffHand);
             }
             
             // 检查主手
             ItemStack newWeapon = player.getInventory().getItemInMainHand();
             if (isArmorType(newWeapon)) {
-                plugin.getLogger().info("[主手变化-拖拽] " + player.getName() + 
-                    " 手持防具，跳过解析: " + itemName(newWeapon));
+                logConfig.logMainHandChange(player.getName() + 
+                    " [拖拽] 手持防具，跳过解析: " + itemName(newWeapon));
                 statsManager.onWeaponChange(player, null);
             } else {
-                plugin.getLogger().info("[主手变化-拖拽] " + player.getName() + 
-                    " 新武器: " + itemName(newWeapon));
+                logConfig.logMainHandChange(player.getName() + 
+                    " [拖拽] 新武器: " + itemName(newWeapon));
                 statsManager.onWeaponChange(player, newWeapon);
             }
         }, 1L);

@@ -44,7 +44,7 @@ skills:
     target: TARGET
     effects:
       - POISON
-    particle: SLIME
+    particle: ITEM_SLIME
     sound: ENTITY_SPIDER_AMBIENT
     message: "<dark_green>你被毒蜘蛛咬伤了！"
 
@@ -105,7 +105,7 @@ skills:
     effects:
       - POISON
       - WEAKNESS
-    particle: SPELL_MOB
+    particle: ENTITY_EFFECT
     sound: ENTITY_SPLASH_POTION_BREAK
     message: "<green>毒刃划破了你的皮肤！"
 
@@ -196,7 +196,7 @@ skills:
       - "targetwithin 12"
     effects:
       - SLOW
-    particle: SNOWBALL
+    particle: ITEM_SNOWBALL
     sound: ENTITY_PLAYER_HURT_FREEZE
     message: "<aqua>冰霜新星冻结了你！"
 
@@ -211,7 +211,7 @@ skills:
       - "health <50"
     effects:
       - RESISTANCE
-    particle: SNOWBALL
+    particle: ITEM_SNOWBALL
     sound: BLOCK_GLASS_BREAK
 
   # ============================================
@@ -300,7 +300,7 @@ skills:
       - "targetwithin 5"
     sub-skills:
       - "heal_self"
-    particle: SPELL_WITCH
+    particle: WITCH
     sound: ENTITY_WITCH_DRINK
     message: "<dark_red>你的生命被吸取了！"
 
@@ -357,7 +357,7 @@ skills:
       - "health <50"
     effects:
       - "2"
-    particle: SLIME
+    particle: ITEM_SLIME
     sound: ENTITY_SLIME_SQUISH
 
   # ============================================
@@ -421,7 +421,7 @@ skills:
       - "targetwithin 10"
     sub-skills:
       - "stun"
-    particle: BLOCK_CRACK
+    particle: DUST
     sound: ENTITY_GENERIC_EXPLODE
     message: "<dark_gray>大地在颤抖！"
 
@@ -476,7 +476,7 @@ skills:
     effects:
       - SLOW
       - WEAKNESS
-    particle: SPELL
+    particle: ENTITY_EFFECT
 
   fire_burn:
     display-name: "<red>燃烧"
@@ -504,7 +504,7 @@ skills:
     effects:
       - POISON
       - NAUSEA
-    particle: SPELL_MOB
+    particle: ENTITY_EFFECT
     sound: ENTITY_SLIME_SQUISH
     message: "<green>毒云笼罩了你！"
 
@@ -520,7 +520,7 @@ skills:
       - "targetwithin 3"
     sub-skills:
       - "heal_large"
-    particle: SLIME
+    particle: ITEM_SLIME
     sound: ENTITY_GENERIC_EAT
     message: "<dark_red>你被深渊蠕虫吞噬了！"
 
@@ -546,7 +546,7 @@ skills:
     effects:
       - RESISTANCE
       - ABSORPTION
-    particle: SNOWBALL
+    particle: ITEM_SNOWBALL
     sound: BLOCK_BONE_BLOCK_BREAK
 
   dark_orb:

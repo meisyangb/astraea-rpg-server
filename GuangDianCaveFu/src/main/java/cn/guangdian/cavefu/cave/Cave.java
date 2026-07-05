@@ -88,6 +88,21 @@ public class Cave {
         return new Location(Bukkit.getWorld(worldName), homeX, homeY, homeZ, homeYaw, homePitch);
     }
 
+    // SQLite 存储用的 raw getter
+    public double getHomeX() { return homeX; }
+    public double getHomeY() { return homeY; }
+    public double getHomeZ() { return homeZ; }
+    public float getHomeYaw() { return homeYaw; }
+    public float getHomePitch() { return homePitch; }
+
+    public void setHomeLocationRaw(double x, double y, double z, float yaw, float pitch) {
+        this.homeX = x;
+        this.homeY = y;
+        this.homeZ = z;
+        this.homeYaw = yaw;
+        this.homePitch = pitch;
+    }
+
     public void setHomeLocation(Location loc) {
         this.homeX = loc.getX();
         this.homeY = loc.getY();

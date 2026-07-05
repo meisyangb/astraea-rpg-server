@@ -5,7 +5,6 @@ import cn.guangdian.cavefu.config.ConfigManager;
 import cn.guangdian.cavefu.permission.PermissionType;
 import cn.guangdian.cavefu.storage.DataManager;
 import cn.guangdian.cavefu.world.CaveWorldManager;
-import cn.guangdian.rpgcore.message.MiniMessageService;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -13,20 +12,19 @@ import java.util.UUID;
 
 /**
  * 洞府管理器
+ * 完全独立，不依赖 RPGCore
  */
 public class CaveManager {
     private final GuangDianCaveFu plugin;
     private final ConfigManager configManager;
     private final DataManager dataManager;
     private final CaveWorldManager worldManager;
-    private final MiniMessageService miniMessage;
 
     public CaveManager(GuangDianCaveFu plugin) {
         this.plugin = plugin;
         this.configManager = plugin.getConfigManager();
         this.dataManager = plugin.getDataManager();
         this.worldManager = plugin.getWorldManager();
-        this.miniMessage = plugin.getMiniMessageService();
     }
 
     /**
@@ -69,7 +67,7 @@ public class CaveManager {
         for (UUID memberUuid : cave.getMembers().keySet()) {
             Player member = plugin.getServer().getPlayer(memberUuid);
             if (member != null) {
-                member.sendMessage(miniMessage.colorize(configManager.getMessage("cave-deleted")));
+                plugin.sendMiniMessage(member, configManager.getMessage("cave-deleted"));
             }
         }
 
@@ -120,7 +118,7 @@ public class CaveManager {
         // 添加成员
         cave.addMember(target.getUniqueId(), target.getName(), PermissionType.MEMBER);
         dataManager.updateMemberIndex(target.getUniqueId(), cave);
-        dataManager.save();
+        dataManager.saveCave(cave);
 
         return true;
     }
@@ -141,7 +139,7 @@ public class CaveManager {
 
         cave.removeMember(targetUuid);
         dataManager.updateMemberIndex(targetUuid, null);
-        dataManager.save();
+        dataManager.saveCave(cave);
 
         return true;
     }
@@ -162,7 +160,7 @@ public class CaveManager {
 
         cave.removeMember(uuid);
         dataManager.updateMemberIndex(uuid, null);
-        dataManager.save();
+        dataManager.saveCave(cave);
 
         return true;
     }
@@ -182,7 +180,7 @@ public class CaveManager {
 
         cave.transferOwner(target.getUniqueId(), target.getName());
         dataManager.updateMemberIndex(owner.getUniqueId(), cave);
-        dataManager.save();
+        dataManager.saveCave(cave);
 
         return true;
     }
@@ -202,7 +200,7 @@ public class CaveManager {
         }
 
         cave.setHomeLocation(player.getLocation());
-        dataManager.save();
+        dataManager.saveCave(cave);
 
         return true;
     }

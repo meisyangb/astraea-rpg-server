@@ -3,6 +3,7 @@ package cn.guangdian.gift;
 import cn.guangdian.gift.adapter.GiftServiceAdapter;
 import cn.guangdian.gift.model.GiftConfig;
 import cn.guangdian.gift.model.GiftConditions;
+import cn.guangdian.gift.storage.GiftStorage;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.GameLogger;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
@@ -50,6 +51,8 @@ public class GuangDianGift extends AbstractRPGPlugin {
     private Map<UUID, Map<String, Long>> cooldownRecords = new ConcurrentHashMap<>();
 
     private GiftServiceAdapter giftServiceAdapter;
+    private GiftStorage giftStorage;
+    private int giftSaveId = -1;
 
     // RPGCore 服务
     private GameLogger gameLogger;
@@ -60,7 +63,10 @@ public class GuangDianGift extends AbstractRPGPlugin {
         initRPGCoreServices();
         saveDefaultConfig();
         loadGifts();
-        loadPlayerData();
+        giftStorage = new GiftStorage(this);
+        if (giftStorage.init()) { giftStorage.load(); claimRecords = giftStorage.claims(); cooldownRecords = giftStorage.cooldowns(); }
+        else loadPlayerData();
+        giftSaveId = getServer().getScheduler().runTaskTimerAsynchronously(this, () -> { if (giftStorage != null) giftStorage.saveAsync(); }, 6000L, 6000L).getTaskId();
         registerRPGCoreService();
         logInfo("GuangDianGift 礼包插件已启用！(RPGItems模式)");
     }
@@ -102,7 +108,9 @@ public class GuangDianGift extends AbstractRPGPlugin {
 
     @Override
     protected void onPluginDisable() {
-        savePlayerData();
+        getServer().getScheduler().cancelTask(giftSaveId);
+        if (giftStorage != null) { giftStorage.claims().clear(); giftStorage.claims().putAll(claimRecords); giftStorage.cooldowns().clear(); giftStorage.cooldowns().putAll(cooldownRecords); giftStorage.save(); giftStorage.close(); }
+        else savePlayerData();
         unregisterRPGCoreService();
         if (scheduler != null) {
             scheduler.cancelAllTasks();

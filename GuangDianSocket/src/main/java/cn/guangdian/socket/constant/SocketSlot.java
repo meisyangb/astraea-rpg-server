@@ -14,7 +14,9 @@ public enum SocketSlot {
     SLOT_1(1),
     SLOT_2(2),
     SLOT_3(3),
-    SLOT_4(4);
+    SLOT_4(4),
+    SLOT_5(5),
+    SLOT_6(6);
 
     private static final String NAMESPACE = "rpgitems";
     private static final String GEM_PREFIX = "gem_";

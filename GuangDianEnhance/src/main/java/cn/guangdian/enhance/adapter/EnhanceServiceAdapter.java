@@ -67,7 +67,7 @@ public class EnhanceServiceAdapter implements EnhanceService {
 
     @Override
     public boolean canEnhance(ItemStack item) {
-        return plugin.getEnhanceConfig().isEnhanceable(item);
+        return cn.guangdian.rpgitems.item.ItemFactory.isEnhanceable(item);
     }
 
     @Override

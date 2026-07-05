@@ -7,6 +7,7 @@ import cn.guangdian.collection.data.CollectionDataHandler;
 import cn.guangdian.collection.gui.CollectionGUIListener;
 import cn.guangdian.collection.papi.CollectionPlaceholder;
 import cn.guangdian.collection.service.CollectionServiceImpl;
+import cn.guangdian.collection.storage.CollectionStorage;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
@@ -20,6 +21,8 @@ public class GuangDianCollection extends AbstractRPGPlugin {
     private CollectionPlaceholder placeholder;
     private CollectionGUIListener guiListener;
     private MiniMessageService miniMessage;
+    private CollectionStorage collStorage;
+    private int collSaveId = -1;
     
     @Override
     protected void onPluginEnable() {
@@ -30,6 +33,10 @@ public class GuangDianCollection extends AbstractRPGPlugin {
         
         configManager = new ConfigManager(this);
         collectionService = new CollectionServiceImpl(this);
+        
+        collStorage = new CollectionStorage(this);
+        if (collStorage.init()) collStorage.load();
+        collSaveId = getServer().getScheduler().runTaskTimerAsynchronously(this, () -> { if (collStorage != null) collStorage.saveAsync(); }, 6000L, 6000L).getTaskId();
         
         dataHandler = new CollectionDataHandler(this);
         dataHandler.register();
@@ -43,7 +50,8 @@ public class GuangDianCollection extends AbstractRPGPlugin {
     
     @Override
     protected void onPluginDisable() {
-        // ✅ 保存所有缓存中的数据
+        getServer().getScheduler().cancelTask(collSaveId);
+        if (collStorage != null) { collStorage.save(); collStorage.close(); }
         if (collectionService != null) {
             collectionService.saveAllPlayerData();
             getLogger().info("已保存所有玩家数据");

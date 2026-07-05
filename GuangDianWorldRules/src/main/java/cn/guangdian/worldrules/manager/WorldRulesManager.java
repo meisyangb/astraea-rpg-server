@@ -32,6 +32,10 @@ public class WorldRulesManager {
             defaultRules = new WorldRules("__default__");
         }
 
+        // 先加载生物控制配置到 defaultRules
+        // 这样特定世界规则会继承这些配置
+        loadSpawnControl(config);
+
         // 加载特定世界规则
         ConfigurationSection worldsSection = config.getConfigurationSection("worlds");
         if (worldsSection != null) {
@@ -40,7 +44,7 @@ public class WorldRulesManager {
                 if (worldSection != null) {
                     WorldRules rules = loadRulesFromSection(worldSection, worldName);
                     if (rules != null) {
-                        // 继承默认规则
+                        // 继承默认规则（包含 disabled-mobs）
                         WorldRules mergedRules = new WorldRules(worldName);
                         mergedRules.copyFrom(defaultRules);
                         // 覆盖特定设置
@@ -54,9 +58,6 @@ public class WorldRulesManager {
                 }
             }
         }
-
-        // 加载生物控制配置
-        loadSpawnControl(config);
     }
 
     private WorldRules loadRulesFromSection(ConfigurationSection section, String worldName) {

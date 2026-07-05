@@ -2,6 +2,7 @@ package cn.guangdian.classsystem.manager;
 
 import cn.guangdian.classsystem.GuangDianClass;
 import cn.guangdian.classsystem.data.ClassDataHandler;
+import cn.guangdian.classsystem.enums.TierAttributePoints;
 import cn.guangdian.classsystem.model.AttributeType;
 import cn.guangdian.classsystem.model.PlayerClassData;
 import org.bukkit.configuration.ConfigurationSection;
@@ -11,14 +12,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * 属性点管理器 - 使用枚举定义阶位属性点
+ * 
+ * 属性点获取规则：
+ * - 阶位提升时获得属性点（使用 TierAttributePoints 枚举）
+ * - 不通过转职获得属性点
+ * - 阶位越高，属性点越多
+ */
 public class AttributeManager {
     
     private final GuangDianClass plugin;
     private final ClassDataHandler dataHandler;
     
     private final Map<AttributeType, AttributeConfig> attributeConfigs;
-    private int pointsPerLevel;
-    private int pointsPerAdvancement;
     
     public AttributeManager(GuangDianClass plugin, ClassDataHandler dataHandler) {
         this.plugin = plugin;
@@ -28,14 +35,14 @@ public class AttributeManager {
     }
     
     private void loadConfig() {
+        // 加载阶位属性点配置
+        TierAttributePoints.loadFromConfig(plugin);
+        
         ConfigurationSection config = plugin.getConfig().getConfigurationSection("attributes");
         if (config == null) {
-            setDefaultConfig();
+            setDefaultAttributeConfigs();
             return;
         }
-        
-        pointsPerLevel = config.getInt("points-per-level", 5);
-        pointsPerAdvancement = config.getInt("points-per-advancement", 20);
         
         ConfigurationSection typesSection = config.getConfigurationSection("types");
         if (typesSection != null) {
@@ -56,12 +63,6 @@ public class AttributeManager {
         } else {
             setDefaultAttributeConfigs();
         }
-    }
-    
-    private void setDefaultConfig() {
-        pointsPerLevel = 5;
-        pointsPerAdvancement = 20;
-        setDefaultAttributeConfigs();
     }
     
     private void setDefaultAttributeConfigs() {
@@ -118,18 +119,48 @@ public class AttributeManager {
         data.resetAttributes();
     }
     
+    /**
+     * 阶位提升时给予属性点（使用枚举）
+     */
     public void grantLevelUpPoints(Player player, int newTier) {
         PlayerClassData data = dataHandler.getPlayerData(player.getUniqueId());
         if (data == null) return;
         
-        data.addAttributePoints(pointsPerLevel);
+        // 使用枚举获取该阶位的属性点数量
+        int points = TierAttributePoints.getPointsByTier(newTier);
+        data.addAttributePoints(points);
     }
     
+    /**
+     * 转职不给属性点（已移除）
+     * @deprecated 转职不再给予属性点，只通过阶位提升获得
+     */
+    @Deprecated
     public void grantAdvancementPoints(Player player, int advancementLevel) {
+        // 转职不给属性点
+    }
+    
+    /**
+     * 计算玩家当前阶位应有的总属性点
+     */
+    public int calculateTotalPointsForTier(int tier) {
+        return TierAttributePoints.getTotalPointsForTier(tier);
+    }
+    
+    /**
+     * 同步玩家属性点到正确数量
+     * 用于修复属性点数量不正确的情况
+     */
+    public void syncAttributePoints(Player player) {
         PlayerClassData data = dataHandler.getPlayerData(player.getUniqueId());
         if (data == null) return;
         
-        data.addAttributePoints(pointsPerAdvancement);
+        int correctTotal = calculateTotalPointsForTier(data.getTier());
+        int currentTotal = data.getAttributePoints();
+        
+        if (currentTotal != correctTotal) {
+            data.setAttributePoints(correctTotal);
+        }
     }
     
     public void grantAttributePoints(Player player, int points) {

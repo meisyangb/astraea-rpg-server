@@ -2,6 +2,7 @@ package cn.guangdian.bank;
 
 import cn.guangdian.bank.api.BankServiceAdapter;
 import cn.guangdian.bank.data.BankAccount;
+import cn.guangdian.bank.storage.BankStorage;
 import cn.guangdian.bank.listener.BankListener;
 import cn.guangdian.bank.manager.InterestManager;
 import cn.guangdian.bank.manager.LoanManager;
@@ -50,6 +51,8 @@ public class GuangDianBank extends AbstractRPGPlugin {
     private InterestManager interestManager;
     private LoanManager loanManager;
     private BankPlaceholder bankPlaceholder;
+    private BankStorage bankStorage;
+    private int bankSaveId = -1;
 
     private File dataFile;
     private YamlConfiguration data;
@@ -74,7 +77,10 @@ public class GuangDianBank extends AbstractRPGPlugin {
 
         saveDefaultConfig();
         loadConfiguration();
+        bankStorage = new BankStorage(this);
+        if (bankStorage.init()) { bankStorage.load(); for (var e : bankStorage.accounts().entrySet()) { long[] v = e.getValue(); BankAccount a = new BankAccount(e.getKey()); a.setBalance(v[0]); if (v.length > 1) a.setCreditScore((int)v[1]); if (v.length > 2) a.setLastInterestTime(v[2]); accounts.put(e.getKey(), a); } }
         loadData();
+        bankSaveId = getServer().getScheduler().runTaskTimerAsynchronously(this, () -> { if (bankStorage != null) { bankStorage.accounts().clear(); for (var e : accounts.entrySet()) { var a = e.getValue(); bankStorage.accounts().put(e.getKey(), new long[]{a.getBalance(), a.getCreditScore(), a.getLastInterestTime()}); } bankStorage.saveAsync(); } }, 6000L, 6000L).getTaskId();
         initializeManagers();
         registerServices();
         registerListeners();
@@ -122,6 +128,7 @@ public class GuangDianBank extends AbstractRPGPlugin {
         }
 
         saveData();
+        if (bankStorage != null) { bankStorage.accounts().clear(); for (var e : accounts.entrySet()) { var a = e.getValue(); bankStorage.accounts().put(e.getKey(), new long[]{a.getBalance(), a.getCreditScore(), a.getLastInterestTime()}); } bankStorage.save(); bankStorage.close(); }
 
         logInfo(getPluginName() + " 已关闭");
     }

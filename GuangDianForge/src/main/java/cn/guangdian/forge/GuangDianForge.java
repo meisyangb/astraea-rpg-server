@@ -10,6 +10,7 @@ import cn.guangdian.forge.listener.LearnRecipeListener;
 import cn.guangdian.forge.listener.PlayerJoinQuitListener;
 import cn.guangdian.forge.manager.PlayerDataManager;
 import cn.guangdian.forge.manager.RecipeManager;
+import cn.guangdian.forge.storage.ForgeStorage;
 import cn.guangdian.forge.placeholder.ForgePlaceholder;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.AsyncExecutor;
@@ -45,6 +46,8 @@ public class GuangDianForge extends AbstractRPGPlugin {
     private ForgeServiceAdapter serviceAdapter;
     private RPGItemsHook rpgItemsHook;
     private boolean useRPGCore;
+    private ForgeStorage forgeStorage;
+    private int forgeSaveId = -1;
     
     // RPGCore 服务
     private GameLogger gameLogger;
@@ -72,6 +75,10 @@ public class GuangDianForge extends AbstractRPGPlugin {
         recipeManager.loadRecipes();
         
         playerDataManager = new PlayerDataManager(this);
+        
+        forgeStorage = new ForgeStorage(this);
+        if (forgeStorage.init()) forgeStorage.load();
+        forgeSaveId = getServer().getScheduler().runTaskTimerAsynchronously(this, () -> { if (forgeStorage != null) forgeStorage.saveAsync(); }, 6000L, 6000L).getTaskId();
         
         // 初始化服务适配器 (注册到 RPGCore)
         serviceAdapter = new ForgeServiceAdapter(this);
@@ -138,25 +145,13 @@ public class GuangDianForge extends AbstractRPGPlugin {
 
     @Override
     protected void onPluginDisable() {
-        // 注销服务
-        if (serviceAdapter != null) {
-            serviceAdapter.unregister();
-        }
-        
-        // 取消所有任务
-        if (scheduler != null) {
-            scheduler.cancelAllTasks();
-        }
-        
-        // 保存所有在线玩家数据 (使用 RPGCore 异步执行器或同步保存)
-        Optional<AsyncExecutor> asyncExecutor = getAsyncExecutor();
+        getServer().getScheduler().cancelTask(forgeSaveId);
+        if (forgeStorage != null) { forgeStorage.save(); forgeStorage.close(); }
+        if (serviceAdapter != null) serviceAdapter.unregister();
+        if (scheduler != null) scheduler.cancelAllTasks();
         for (var player : getServer().getOnlinePlayers()) {
             var data = playerDataManager.get(player.getUniqueId());
-            if (asyncExecutor.isPresent()) {
-                asyncExecutor.get().execute(() -> playerDataManager.save(data));
-            } else {
-                playerDataManager.save(data);
-            }
+            if (data != null) playerDataManager.save(data);
         }
         logInfo("GuangDianForge 已关闭，数据已保存");
     }

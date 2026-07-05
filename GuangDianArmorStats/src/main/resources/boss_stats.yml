@@ -38,6 +38,9 @@ bosses:
     penetration:
       armor: 5
       defense: 0
+    # 吸血抵抗(%)：减少被玩家吸血的比例
+    # 30% = 玩家对该怪物的吸血量减少30%
+    lifesteal_resist: 30
     multiplier:
       health: 1.0
       damage: 1.0
@@ -61,6 +64,7 @@ bosses:
     penetration:
       armor: 15
       defense: 10
+    lifesteal_resist: 35
     multiplier:
       health: 1.0
       damage: 1.0
@@ -84,6 +88,7 @@ bosses:
     penetration:
       armor: 20
       defense: 15
+    lifesteal_resist: 40
     multiplier:
       health: 1.0
       damage: 1.0
@@ -108,6 +113,8 @@ bosses:
     penetration:
       armor: 40
       defense: 30
+    # BOSS吸血抵抗较高，防止玩家靠吸血无敌
+    lifesteal_resist: 60
     multiplier:
       health: 1.0
       damage: 1.0
@@ -141,6 +148,7 @@ bosses:
     penetration:
       armor: 35
       defense: 25
+    lifesteal_resist: 65
     multiplier:
       health: 1.5
       damage: 1.2
@@ -174,6 +182,7 @@ bosses:
     penetration:
       armor: 10
       defense: 5
+    lifesteal_resist: 35
     multiplier:
       health: 1.0
       damage: 1.0
@@ -197,6 +206,7 @@ bosses:
     penetration:
       armor: 25
       defense: 20
+    lifesteal_resist: 30
     multiplier:
       health: 0.8
       damage: 1.1
@@ -224,6 +234,7 @@ bosses:
     penetration:
       armor: 5
       defense: 0
+    lifesteal_resist: 30
     multiplier:
       health: 1.0
       damage: 1.0
@@ -247,6 +258,7 @@ bosses:
     penetration:
       armor: 30
       defense: 20
+    lifesteal_resist: 30
     multiplier:
       health: 0.7
       damage: 1.3
@@ -273,6 +285,7 @@ bosses:
     penetration:
       armor: 20
       defense: 30
+    lifesteal_resist: 30
     multiplier:
       health: 0.8
       damage: 1.0
@@ -303,6 +316,7 @@ bosses:
     penetration:
       armor: 25
       defense: 15
+    lifesteal_resist: 55
     multiplier:
       health: 1.0
       damage: 1.0
@@ -332,6 +346,7 @@ bosses:
     penetration:
       armor: 35
       defense: 25
+    lifesteal_resist: 60
     multiplier:
       health: 1.0
       damage: 1.0
@@ -365,6 +380,7 @@ bosses:
     penetration:
       armor: 40
       defense: 30
+    lifesteal_resist: 65
     multiplier:
       health: 1.2
       damage: 1.1
@@ -399,6 +415,7 @@ bosses:
     penetration:
       armor: 50
       defense: 40
+    lifesteal_resist: 70
     multiplier:
       health: 1.5
       damage: 1.3
@@ -434,6 +451,8 @@ bosses:
     penetration:
       armor: 60
       defense: 50
+    # 终焉之神有极高吸血抵抗(80%)，防止高吸血玩家无敌
+    lifesteal_resist: 80
     multiplier:
       health: 2.0
       damage: 1.5

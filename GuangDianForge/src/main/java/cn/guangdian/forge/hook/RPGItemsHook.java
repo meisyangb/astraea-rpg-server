@@ -244,4 +244,23 @@ public class RPGItemsHook {
             return "<yellow>" + configStr;
         }
     }
+
+    /**
+     * 按倍率更新 RPGItems 物品的所有数值属性（PDC）
+     * 委托给 RPGItems 的 ItemAttributeAPI
+     *
+     * @param item       RPGItems 物品
+     * @param multiplier 属性倍率
+     */
+    public void updateItemAttributes(ItemStack item, double multiplier) {
+        if (!enabled || itemAttributeAPI == null) return;
+        itemAttributeAPI.updateAttributes(item, multiplier);
+    }
+
+    /**
+     * 获取 ItemAttributeAPI（供其他模块使用）
+     */
+    public ItemAttributeAPI getAttributeAPI() {
+        return itemAttributeAPI;
+    }
 }

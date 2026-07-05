@@ -286,8 +286,8 @@ public class QuestServiceAdapter implements QuestService {
     
     @Override
     public CompletableFuture<Void> savePlayerDataAsync(UUID playerId) {
-        return CompletableFuture.runAsync(() -> 
-            plugin.getPlayerRepository().savePlayerData(playerId));
+        plugin.getPlayerRepository().savePlayerData(playerId);
+        return CompletableFuture.completedFuture(null);
     }
     
     // ==================== 服务状态 ====================

@@ -934,7 +934,7 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
      */
     private void takePlayerPoints(Player player, int points) {
         // 通过控制台命令扣除点券 - 使用 GuangDianPoints 插件命令
-        String cmd = "gdpoints take " + player.getName() + " " + points;
+        String cmd = "points take " + player.getName() + " " + points;
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
     }
 

@@ -229,7 +229,7 @@ public class PlayerDataStorage {
         stats.setDefenseMin(section.getDouble("defenseMin", 0));
         stats.setDefenseMax(section.getDouble("defenseMax", 0));
         stats.setCritChancePercent(section.getDouble("critChancePercent", 0));
-        stats.setCritDamagePercent(section.getDouble("critDamagePercent", 200));
+        stats.setCritDamagePercent(section.getDouble("critDamagePercent", 0));
         stats.setLifestealPercent(section.getDouble("lifestealPercent", 0));
         stats.setHealthRegen(section.getDouble("healthRegen", 0));
         stats.setDodgePercent(section.getDouble("dodgePercent", 0));
@@ -248,7 +248,7 @@ public class PlayerDataStorage {
         stats.setFreezePercent(section.getDouble("freezePercent", 0));
         stats.setBlindPercent(section.getDouble("blindPercent", 0));
         stats.setExpBonusPercent(section.getDouble("expBonusPercent", 0));
-        stats.setLifestealMultiplier(section.getDouble("lifestealMultiplier", 100));
+        stats.setLifestealMultiplier(section.getDouble("lifestealMultiplier", 0));
         return stats;
     }
 

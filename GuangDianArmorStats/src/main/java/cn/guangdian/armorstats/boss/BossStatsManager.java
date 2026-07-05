@@ -96,6 +96,7 @@ public class BossStatsManager {
             stats.setDodgeChance(bossSection.getDouble("dodge.chance", 0));
             stats.setParryChance(bossSection.getDouble("parry.chance", 0));
             stats.setDamageReduction(bossSection.getDouble("defense.damage_reduction", 0));
+            stats.setLifestealResistPercent(bossSection.getDouble("lifesteal_resist", 0));
             stats.setArmorPenetration(bossSection.getDouble("penetration.armor", 0));
             stats.setDefensePenetration(bossSection.getDouble("penetration.defense", 0));
             stats.setHealthMultiplier(bossSection.getDouble("multiplier.health", 1.0));

@@ -17,8 +17,9 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class CritInterceptor implements DamageInterceptor {
 
-    private double minCritDamage = 1.5;
-    private double maxCritDamage = 3.0;  // 新增: 暴击伤害上限
+    private double minCritDamage = 1.0;  // 暴击伤害下限1.0x（暴击至少造成等额伤害，不额外加伤）
+    private double maxCritDamage = 3.0;  // 暴击伤害上限
+    private double maxCritChance = 0.50; // 暴击几率上限50%（防止100%暴击）
     private DamageDebugConfig debugConfig;
 
     public CritInterceptor() {
@@ -30,8 +31,9 @@ public class CritInterceptor implements DamageInterceptor {
         var config = GuangDianArmorStats.getInstance().getConfig();
         var damageSection = config.getConfigurationSection("damage");
         if (damageSection != null) {
-            minCritDamage = damageSection.getDouble("min_crit_damage", 1.5);
+            minCritDamage = damageSection.getDouble("min_crit_damage", 1.0);
             maxCritDamage = damageSection.getDouble("max_crit_damage", 3.0);
+            maxCritChance = damageSection.getDouble("max_crit_chance", 0.50);
         }
     }
 
@@ -70,15 +72,17 @@ public class CritInterceptor implements DamageInterceptor {
         }
 
         ThreadLocalRandom random = ThreadLocalRandom.current();
-        double critChance = stats.getCritChancePercent() / 100.0;
+        double critChance = Math.min(maxCritChance, stats.getCritChancePercent() / 100.0);
 
-        debugConfig.logCrit("暴击几率: " + (critChance * 100) + "%");
+        debugConfig.logCrit("暴击几率: " + (critChance * 100) + "% (上限" + (maxCritChance * 100) + "%)");
 
         if (random.nextDouble() < critChance) {
             context.setCritical(true);
 
-            // 基础暴击伤害 150%，装备提供额外暴击伤害
-            final double BASE_CRIT_DAMAGE = 150.0;
+            // 基础暴击伤害 0%，全部由装备提供
+            // 暴击触发时倍率 = 装备暴击伤害% / 100
+            // 例: 装备暴击伤害150% → 暴击倍率1.5x
+            final double BASE_CRIT_DAMAGE = 0.0;
             double totalCritDamage = BASE_CRIT_DAMAGE + stats.getCritDamagePercent();
             double critMultiplier = totalCritDamage / 100.0;
 

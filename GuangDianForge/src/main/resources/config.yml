@@ -124,3 +124,82 @@ placeholder:
   progress-bar:
     filled: "<green>█</green>"
     empty: "<gray>░</gray>"
+
+# ==================== 锻造品质设置 ====================
+# 锻造成功时随机生成品质，品质直接影响物品属性倍率
+#
+# 品质分公式: score = forgeLevel × 2 + random(0, 30)
+# 品质分档:
+#   0~8   → 粗糙 (0.70x)
+#   9~18  → 普通 (1.00x)
+#   19~28 → 优秀 (1.15x)
+#   29~38 → 精良 (1.30x)
+#   39~46 → 史诗 (1.50x)
+#   47+   → 传说 (1.80x)
+#
+quality:
+  # 是否启用品质系统
+  enabled: true
+
+  # 品质配置
+  tiers:
+    rough:
+      display: "粗糙"
+      color: "gray"
+      multiplier: 0.70
+      min-score: 0
+      max-score: 8
+    normal:
+      display: "普通"
+      color: "white"
+      multiplier: 1.00
+      min-score: 9
+      max-score: 18
+    excellent:
+      display: "优秀"
+      color: "green"
+      multiplier: 1.15
+      min-score: 19
+      max-score: 28
+    superior:
+      display: "精良"
+      color: "blue"
+      multiplier: 1.30
+      min-score: 29
+      max-score: 38
+    epic:
+      display: "史诗"
+      color: "dark_purple"
+      multiplier: 1.50
+      min-score: 39
+      max-score: 46
+    legendary:
+      display: "传说"
+      color: "gold"
+      multiplier: 1.80
+      min-score: 47
+      max-score: 100
+
+  # 品质分计算参数
+  score:
+    # 公式: score = forgeLevel × level-weight + random(0, random-max)
+    level-weight: 2
+    random-max: 30
+
+  # 强度条显示
+  strength-bar:
+    length: 15
+    filled-char: "|"
+    empty-char: "|"
+    empty-color: "dark_gray"
+
+  # 属性倍率上限（防止数值离谱）
+  caps:
+    # 几率类属性上限（暴击/闪避/吸血等）
+    chance: 100.0
+    # 伤害倍率类上限（暴伤/吸血倍率等）
+    damage-multi: 500.0
+    # 减免/护甲类上限
+    reduction: 90.0
+    # 经验加成上限
+    bonus: 200.0

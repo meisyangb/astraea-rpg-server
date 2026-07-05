@@ -17,6 +17,8 @@ public class SkillOrb {
     private final String skillId;           // 技能ID
     private final String name;              // 技能名称
     private final SkillType type;           // 技能类型
+    private final String pathway;           // 所属途径
+    private final int sequence;             // 序列等级
     private final Material material;        // 技能球材质
     private final int customModelData;      // 自定义模型数据(用于材质包)
     private final String description;       // 技能描述
@@ -30,13 +32,15 @@ public class SkillOrb {
     private final List<String> statusEffects; // 状态效果
     private boolean unlocked;               // 是否解锁
 
-    public SkillOrb(String skillId, String name, SkillType type, Material material, 
-                   int customModelData, String description, double damageMult, 
+    public SkillOrb(String skillId, String name, SkillType type, String pathway, int sequence,
+                   Material material, int customModelData, String description, double damageMult, 
                    double range, int cooldown, int manaCost, int requiredTier, 
                    String effect, double triggerChance, List<String> statusEffects) {
         this.skillId = skillId;
         this.name = name;
         this.type = type;
+        this.pathway = pathway;
+        this.sequence = sequence;
         this.material = material;
         this.customModelData = customModelData;
         this.description = description;
@@ -55,6 +59,8 @@ public class SkillOrb {
     public String getSkillId() { return skillId; }
     public String getName() { return name; }
     public SkillType getType() { return type; }
+    public String getPathway() { return pathway; }
+    public int getSequence() { return sequence; }
     public Material getMaterial() { return material; }
     public int getCustomModelData() { return customModelData; }
     public String getDescription() { return description; }

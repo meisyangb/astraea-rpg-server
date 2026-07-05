@@ -5,8 +5,6 @@ import cn.guangdian.cavefu.cave.Cave;
 import cn.guangdian.cavefu.cave.CaveLevel;
 import cn.guangdian.cavefu.config.ConfigManager;
 import cn.guangdian.cavefu.storage.DataManager;
-import cn.guangdian.rpgcore.message.MiniMessageService;
-import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,25 +19,24 @@ import java.util.stream.Collectors;
 
 /**
  * 管理员洞府命令
+ * 使用 Adventure MiniMessage 发送彩色消息
  */
 public class CaveAdminCommand implements CommandExecutor, TabCompleter {
     private final GuangDianCaveFu plugin;
     private final ConfigManager configManager;
     private final DataManager dataManager;
-    private final MiniMessageService miniMessage;
 
     public CaveAdminCommand(GuangDianCaveFu plugin) {
         this.plugin = plugin;
         this.configManager = plugin.getConfigManager();
         this.dataManager = plugin.getDataManager();
-        this.miniMessage = plugin.getMiniMessageService();
     }
 
     /**
      * 使用 MiniMessage 发送消息
      */
     private void sendMessage(CommandSender sender, String text) {
-        sender.sendMessage(miniMessage.colorize(text));
+        plugin.sendMiniMessage(sender, text);
     }
 
     @Override
@@ -153,7 +150,7 @@ public class CaveAdminCommand implements CommandExecutor, TabCompleter {
         }
 
         cave.setLevel(level);
-        dataManager.save();
+        dataManager.saveCave(cave);
         sendMessage(sender, "<green>已将 " + targetName + " 的洞府等级设置为 " + level);
     }
 

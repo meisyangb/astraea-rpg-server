@@ -43,7 +43,6 @@ public class GuangDianQuest extends AbstractRPGPlugin {
     private QuestGUIManager guiManager;
     private DialogueGUI dialogueGUI;
 
-    // RPGCore 服务引用
     private MiniMessageService miniMessage;
     private final MiniMessage miniMessageParser = MiniMessage.miniMessage();
 
@@ -66,22 +65,17 @@ public class GuangDianQuest extends AbstractRPGPlugin {
         loadConfiguration();
 
         initRPGCoreServices();
-
         hookRPGCore();
-
         initComponents();
-
         registerCommands();
-
         registerListeners();
-
         registerPlaceholderAPI();
 
         serviceAdapter = new QuestServiceAdapter(this);
 
         startAutoSave();
 
-        getLogger().info("GuangDianQuest 已启动！");
+        getLogger().info("GuangDianQuest 已启动！(SQLite 版本)");
         getLogger().info("已加载 " + questManager.getQuestCount() + " 个任务");
     }
 
@@ -89,12 +83,13 @@ public class GuangDianQuest extends AbstractRPGPlugin {
     protected void onPluginDisable() {
         stopAutoSave();
 
-        if (dataHandler != null) {
-            dataHandler.unregister();
-        }
-
         if (playerRepository != null) {
             playerRepository.saveAll();
+            playerRepository.close();
+        }
+
+        if (dataHandler != null) {
+            dataHandler.unregister();
         }
 
         if (serviceAdapter != null) {
@@ -110,7 +105,6 @@ public class GuangDianQuest extends AbstractRPGPlugin {
     }
 
     private void initRPGCoreServices() {
-        // 获取 RPGCore 服务
         if (getServer().getPluginManager().isPluginEnabled("RPGCore")) {
             try {
                 RPGCore rpgCore = RPGCore.getInstance();
@@ -120,8 +114,6 @@ public class GuangDianQuest extends AbstractRPGPlugin {
                 getLogger().warning("无法获取 RPGCore MiniMessageService: " + e.getMessage());
             }
         }
-
-        // 如果 RPGCore 服务不可用，使用本地降级
         if (miniMessage == null) {
             miniMessage = MiniMessageService.getInstance();
         }
@@ -143,13 +135,16 @@ public class GuangDianQuest extends AbstractRPGPlugin {
         questRepository = new QuestRepository(this, questsDir);
         questRepository.loadAll();
 
-        File playerDataDir = new File(getDataFolder(), "playerdata");
-        playerRepository = new PlayerQuestRepository(this, playerDataDir);
+        // 初始化 SQLite 玩家数据存储
+        playerRepository = new PlayerQuestRepository(this);
+        if (!playerRepository.initialize()) {
+            getLogger().severe("SQLite 初始化失败，插件无法启动！");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
 
         questManager = new QuestManager(this, questRepository, playerRepository);
-
         progressManager = new QuestProgressManager(this, questManager, playerRepository);
-
         dailyManager = new DailyQuestManager(this, questManager);
 
         questLineManager = new QuestLineManager(this);
@@ -160,11 +155,7 @@ public class GuangDianQuest extends AbstractRPGPlugin {
         questLineManager.loadAll(questLinesFile);
 
         chatMessageService = new ChatMessageService(this);
-
-        // 初始化任务解锁管理器
         unlockManager = new QuestUnlockManager(this);
-
-        // 初始化GUI管理器
         guiManager = new QuestGUIManager(this);
         dialogueGUI = new DialogueGUI(this);
     }
@@ -189,8 +180,6 @@ public class GuangDianQuest extends AbstractRPGPlugin {
         questEventListener = new QuestEventListener(this);
         Bukkit.getPluginManager().registerEvents(questEventListener, this);
         subscribeRPGCoreEvents();
-        
-        // 注册玩家生命周期处理器
         if (Bukkit.getPluginManager().isPluginEnabled("RPGCore")) {
             dataHandler = new QuestDataHandler(this);
             dataHandler.register();
@@ -232,7 +221,7 @@ public class GuangDianQuest extends AbstractRPGPlugin {
         if (rpgCore != null) {
             externalServices = rpgCore.getExternalServices();
             scheduler = rpgCore.getScheduler();
-            getLogger().info("已连接到 RPGCore: " + (externalServices != null ? externalServices.getExternalServiceStatus() : "服务不可用"));
+            getLogger().info("已连接到 RPGCore");
         }
     }
 
@@ -241,8 +230,7 @@ public class GuangDianQuest extends AbstractRPGPlugin {
         long ticks = autoSaveInterval * 20L;
         autoSaveTaskId = scheduler.runAsyncRepeating(() -> {
             if (playerRepository != null) {
-                playerRepository.saveAll();
-                getLogger().info("自动保存玩家数据完成");
+                playerRepository.saveAllAsync(); // SQLite 线程安全
             }
         }, ticks, ticks);
     }
@@ -256,7 +244,7 @@ public class GuangDianQuest extends AbstractRPGPlugin {
 
     public void savePlayerOnQuit(Player player) {
         if (playerRepository != null) {
-            playerRepository.savePlayerData(player.getUniqueId());
+            playerRepository.savePlayerDataAsync(player.getUniqueId()); // SQLite 线程安全
         }
     }
 
@@ -269,6 +257,8 @@ public class GuangDianQuest extends AbstractRPGPlugin {
         startAutoSave();
         getLogger().info("配置已重载！");
     }
+
+    // ==================== 颜色工具 ====================
 
     public String getMessage(String key, String... replacements) {
         String msg = getConfig().getString("messages." + key, "");
@@ -290,79 +280,39 @@ public class GuangDianQuest extends AbstractRPGPlugin {
 
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
 
-    /**
-     * 将 & 颜色代码转换为 MiniMessage 格式
-     */
     public static String legacyToMiniMessage(String text) {
         if (text == null) return "";
         return text
-            .replace("&0", "<black>")
-            .replace("&1", "<dark_blue>")
-            .replace("&2", "<dark_green>")
-            .replace("&3", "<dark_aqua>")
-            .replace("&4", "<dark_red>")
-            .replace("&5", "<dark_purple>")
-            .replace("&6", "<gold>")
-            .replace("&7", "<gray>")
-            .replace("&8", "<dark_gray>")
-            .replace("&9", "<blue>")
-            .replace("&a", "<green>")
-            .replace("&b", "<aqua>")
-            .replace("&c", "<red>")
-            .replace("&d", "<light_purple>")
-            .replace("&e", "<yellow>")
-            .replace("&f", "<white>")
-            .replace("&k", "<obfuscated>")
-            .replace("&l", "<bold>")
-            .replace("&m", "<strikethrough>")
-            .replace("&n", "<underlined>")
-            .replace("&o", "<italic>")
-            .replace("&r", "<reset>");
+            .replace("&0", "<black>").replace("&1", "<dark_blue>")
+            .replace("&2", "<dark_green>").replace("&3", "<dark_aqua>")
+            .replace("&4", "<dark_red>").replace("&5", "<dark_purple>")
+            .replace("&6", "<gold>").replace("&7", "<gray>")
+            .replace("&8", "<dark_gray>").replace("&9", "<blue>")
+            .replace("&a", "<green>").replace("&b", "<aqua>")
+            .replace("&c", "<red>").replace("&d", "<light_purple>")
+            .replace("&e", "<yellow>").replace("&f", "<white>")
+            .replace("&k", "<obfuscated>").replace("&l", "<bold>")
+            .replace("&m", "<strikethrough>").replace("&n", "<underlined>")
+            .replace("&o", "<italic>").replace("&r", "<reset>");
     }
 
-    /**
-     * 使用 MiniMessage 解析颜色代码并返回 String（用于兼容旧代码）
-     * 将 & 颜色代码转换为 MiniMessage 格式
-     */
-    public static String colorToString(String text) {
-        return legacyToMiniMessage(text);
-    }
+    public static String colorToString(String text) { return legacyToMiniMessage(text); }
 
-    /**
-     * 使用 MiniMessage 解析文本并返回 Component
-     * 支持 & 颜色代码和原生 MiniMessage 标签
-     */
     public static Component color(String text) {
         if (text == null || text.isEmpty()) return Component.empty();
-        String miniMessageText = legacyToMiniMessage(text);
-        return MINI_MESSAGE.deserialize(miniMessageText);
+        return MINI_MESSAGE.deserialize(legacyToMiniMessage(text));
     }
 
-    /**
-     * 直接使用 MiniMessage 解析文本（不转换 & 代码）
-     */
     public static Component miniMessage(String text) {
         if (text == null || text.isEmpty()) return Component.empty();
         return MINI_MESSAGE.deserialize(text);
     }
 
-    /**
-     * 获取 MiniMessage 解析器实例
-     */
-    public static MiniMessage getMiniMessage() {
-        return MINI_MESSAGE;
-    }
+    public static MiniMessage getMiniMessage() { return MINI_MESSAGE; }
 
-    /**
-     * 获取 MiniMessageService
-     * @return MiniMessageService 实例（可能为本地降级实现）
-     */
-    public MiniMessageService getMiniMessageService() {
-        return miniMessage;
-    }
+    public MiniMessageService getMiniMessageService() { return miniMessage; }
 
     public static GuangDianQuest getInstance() { return instance; }
-
     public QuestRepository getQuestRepository() { return questRepository; }
     public PlayerQuestRepository getPlayerRepository() { return playerRepository; }
     public QuestManager getQuestManager() { return questManager; }

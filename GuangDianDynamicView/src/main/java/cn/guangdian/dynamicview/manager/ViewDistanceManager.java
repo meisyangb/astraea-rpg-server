@@ -26,8 +26,8 @@ public class ViewDistanceManager {
 
     private final Map<UUID, PlayerViewData> viewDataMap = new ConcurrentHashMap<>();
 
-    // Paper 1.21.6 Moonrise 最低视距为3
-    private static final int MIN_VIEW_DISTANCE = 3;
+    // Paper 1.19.4 最低视距为4（1.21.6是3）
+    private static final int MIN_VIEW_DISTANCE = 4;
 
     // 统计
     private int totalAdjustments = 0;

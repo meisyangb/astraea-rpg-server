@@ -35,8 +35,16 @@ public class ChunkLoadListener implements Listener {
     private int unloadDelay = 5;
     // 是否在玩家离开世界时立即卸载
     private boolean unloadOnLeave = true;
+    // 区域内区块检查间隔(秒)
+    private int checkInterval = 60;
+    // 区域内区块无玩家后卸载延迟(秒)
+    private int inactiveUnloadDelay = 120;
+    // 定时任务ID
+    private int checkTaskId = -1;
     // 已卸载的区块缓存(避免重复卸载)
     private final Set<String> unloadedChunks = new HashSet<>();
+    // 区域内玩家最后活动时间
+    private final Map<String, Long> lastPlayerActivity = new HashMap<>();
 
     public ChunkLoadListener(GuangDianWorldRules plugin) {
         this.plugin = plugin;
@@ -57,6 +65,8 @@ public class ChunkLoadListener implements Listener {
         enabled = section.getBoolean("enabled", false);
         unloadDelay = section.getInt("unload-delay", 5);
         unloadOnLeave = section.getBoolean("unload-on-leave", true);
+        checkInterval = section.getInt("check-interval", 60);
+        inactiveUnloadDelay = section.getInt("inactive-unload-delay", 120);
 
         // 加载活跃区域配置
         ConfigurationSection activeRegions = section.getConfigurationSection("active-regions");
@@ -72,7 +82,11 @@ public class ChunkLoadListener implements Listener {
         }
 
         plugin.getLogger().info("区块卸载配置已加载: enabled=" + enabled + 
-            ", unloadDelay=" + unloadDelay + "s, unloadOnLeave=" + unloadOnLeave);
+            ", unloadDelay=" + unloadDelay + "s, unloadOnLeave=" + unloadOnLeave +
+            ", checkInterval=" + checkInterval + "s, inactiveUnloadDelay=" + inactiveUnloadDelay + "s");
+
+        // 启动定时检查任务
+        startCheckTask();
     }
 
     /**
@@ -346,5 +360,123 @@ public class ChunkLoadListener implements Listener {
      */
     public void clearCache() {
         unloadedChunks.clear();
+        lastPlayerActivity.clear();
+    }
+
+    /**
+     * 启动定时检查任务
+     * 定期检查活跃区域内是否有玩家，无玩家时卸载区域内区块
+     */
+    private void startCheckTask() {
+        // 取消之前的任务
+        stopCheckTask();
+
+        if (!enabled || trimRegions.isEmpty()) {
+            return;
+        }
+
+        checkTaskId = plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
+            checkActiveRegions();
+        }, checkInterval * 20L, checkInterval * 20L).getTaskId();
+
+        plugin.getLogger().info("已启动区块检查定时任务，间隔: " + checkInterval + "秒");
+    }
+
+    /**
+     * 停止定时检查任务
+     */
+    private void stopCheckTask() {
+        if (checkTaskId != -1) {
+            plugin.getServer().getScheduler().cancelTask(checkTaskId);
+            checkTaskId = -1;
+        }
+    }
+
+    /**
+     * 检查所有活跃区域内的玩家数量
+     * 如果区域内没有玩家且超过延迟时间，卸载区域内区块
+     */
+    private void checkActiveRegions() {
+        long now = System.currentTimeMillis();
+
+        for (Map.Entry<String, String> entry : trimRegions.entrySet()) {
+            String worldName = entry.getKey();
+            String regionName = entry.getValue();
+
+            World world = plugin.getServer().getWorld(worldName);
+            if (world == null) {
+                continue;
+            }
+
+            ProtectedRegion region = plugin.getRegionManager().getRegion(regionName);
+            if (region == null) {
+                continue;
+            }
+
+            // 检查区域内是否有玩家
+            boolean hasPlayerInRegion = false;
+            for (org.bukkit.entity.Player player : world.getPlayers()) {
+                if (region.contains(player.getLocation())) {
+                    hasPlayerInRegion = true;
+                    // 更新玩家活动时间
+                    lastPlayerActivity.put(worldName, now);
+                    break;
+                }
+            }
+
+            // 如果区域内没有玩家
+            if (!hasPlayerInRegion) {
+                Long lastActivity = lastPlayerActivity.get(worldName);
+                
+                // 如果从未有玩家活动，或者超过延迟时间
+                if (lastActivity == null || (now - lastActivity) > inactiveUnloadDelay * 1000L) {
+                    unloadActiveRegionChunks(world, region);
+                    lastPlayerActivity.remove(worldName);
+                }
+            }
+        }
+    }
+
+    /**
+     * 卸载活跃区域内的区块
+     * 当区域内没有玩家且超过延迟时间时调用
+     */
+    private void unloadActiveRegionChunks(World world, ProtectedRegion region) {
+        String worldName = world.getName();
+
+        if (plugin.getConfigManager().isDebug()) {
+            plugin.getLogger().info("活跃区域 " + region.getName() + " 无玩家，卸载区域内区块 @ " + worldName);
+        }
+
+        // 计算活跃区域的区块范围
+        int minChunkX = region.getMinX() >> 4;
+        int maxChunkX = region.getMaxX() >> 4;
+        int minChunkZ = region.getMinZ() >> 4;
+        int maxChunkZ = region.getMaxZ() >> 4;
+
+        int unloadedCount = 0;
+        for (Chunk chunk : world.getLoadedChunks()) {
+            int cx = chunk.getX();
+            int cz = chunk.getZ();
+            
+            // 检查区块是否在活跃区域内
+            if (cx >= minChunkX && cx <= maxChunkX && cz >= minChunkZ && cz <= maxChunkZ) {
+                if (world.unloadChunk(cx, cz, false)) {
+                    unloadedCount++;
+                }
+            }
+        }
+
+        if (plugin.getConfigManager().isDebug()) {
+            plugin.getLogger().info("已卸载 " + unloadedCount + " 个活跃区域区块 @ " + worldName);
+        }
+    }
+
+    /**
+     * 插件禁用时停止定时任务
+     */
+    public void shutdown() {
+        stopCheckTask();
+        clearCache();
     }
 }

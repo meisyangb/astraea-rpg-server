@@ -1,0 +1,122 @@
+# ========================================
+# 示例物品 - 使用自动生成Lore和Display的新格式
+# ========================================
+#
+# 新格式说明:
+# 1. Display字段自动添加字体格式前缀: <font:minecraft:uniform><i:false>
+#    - 用户只需要写颜色和名字内容
+#    - 如果不写Display,系统自动使用紫色默认格式
+# 2. Lore可以省略,系统根据 Attributes 自动生成
+# 3. 大幅减少YML文件大小(减少60-80%)
+#
+# Display自动添加规则:
+# - 如果写 Display: <dark_purple>魔剑卡拉特尔
+#   → 自动生成: <font:minecraft:uniform><i:false><dark_purple>魔剑卡拉特尔
+# - 如果写 Display: <gold>金色武器
+#   → 自动生成: <font:minecraft:uniform><i:false><gold>金色武器
+# - 如果不写Display
+#   → 自动生成: <font:minecraft:uniform><i:false><dark_purple>{物品名称}
+#
+# ========================================
+
+# ==================== 示例1: 极简格式(Display不写,系统自动生成紫色) ====================
+魔剑卡拉特尔_极简:
+  Id: GOLDEN_SWORD
+  # Display不写!系统自动生成: <font:minecraft:uniform><i:false><dark_purple>魔剑卡拉特尔_极简
+  # Lore不写!系统自动生成属性描述
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  Attributes:
+    AttackMin: 900
+    AttackMax: 2700
+    ParryChance: 5.0
+    CritChance: 20.0
+    CritDamage: 200.0
+    LifestealMultiplier: 20.0
+    Level: 17
+    Sockets:
+    - 红宝石
+    - 红宝石
+    - 红宝石
+    EnhanceLevel: 0
+
+# ==================== 示例2: 自定义颜色(只写颜色,字体格式自动添加) ====================
+魔剑卡拉特尔_金色:
+  Id: GOLDEN_SWORD
+  Display: <gold>魔剑卡拉特尔_金色
+  # 系统自动添加前缀: <font:minecraft:uniform><i:false><gold>魔剑卡拉特尔_金色
+  # Lore仍然自动生成!
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  Attributes:
+    AttackMin: 900
+    AttackMax: 2700
+
+# ==================== 示例3: 自定义颜色和Lore ====================
+特殊武器_完全自定义:
+  Id: DIAMOND_SWORD
+  Display: <gold>特殊武器
+  # 系统自动添加前缀: <font:minecraft:uniform><i:false><gold>特殊武器
+  Lore:
+  - <font:minecraft:uniform><i:false><aqua>这是一把特殊的武器
+  - <font:minecraft:uniform><i:false><yellow>拥有独特的外观
+  Options:
+    Unbreakable: true
+    HideAttributes: true
+  Attributes:
+    AttackMin: 500
+    AttackMax: 1000
+
+# ==================== 对比:旧格式 vs 新格式 ====================
+#
+# 旧格式(需要写50+行):
+# 魔剑卡拉特尔:
+#   Id: GOLDEN_SWORD
+#   Display: <font:minecraft:uniform><i:false><dark_purple>魔剑卡拉特尔  # 需要写完整格式
+#   Lore:
+#   - <font:minecraft:uniform><i:false><aqua>隐藏武器                 史诗
+#   - <font:minecraft:uniform><i:false><dark_red><strikethrough><bold>一一一一一一一一
+#   - '<font:minecraft:uniform><i:false><dark_gray>攻击力: <aqua>900-2700'
+#   - '<font:minecraft:uniform><i:false><dark_gray>招架: <aqua>5%'
+#   - '<font:minecraft:uniform><i:false><dark_gray>暴击几率: <aqua>20%'
+#   - '<font:minecraft:uniform><i:false><dark_gray>暴击伤害: <aqua>200%'
+#   - '<font:minecraft:uniform><i:false><dark_gray>生命吸取: <aqua>20%'
+#   - '<font:minecraft:uniform><i:false><dark_gray>吸血倍率: <aqua>20%'
+#   - <font:minecraft:uniform><i:false><dark_red><strikethrough><bold>一一一一一一一一
+#   - <font:minecraft:uniform><i:false><dark_gray>装备等级： <aqua>17
+#   - '<font:minecraft:uniform><i:false><dark_gray>评分: <red>1000'
+#   - <font:minecraft:uniform><i:false><yellow>堕落天使手持的魔剑
+#   - <font:minecraft:uniform><i:false><dark_purple>三阶装备
+#   - <font:minecraft:uniform><i:false><gray>*******<aqua>宝石镶嵌<gray>*******
+#   - <font:minecraft:uniform><i:false><dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+#   - <font:minecraft:uniform><i:false><dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+#   - <font:minecraft:uniform><i:false><dark_red>*<dark_aqua>[<gray>可镶嵌<红宝石><dark_aqua>]
+#   - <font:minecraft:uniform><i:false><gray>*******<aqua>宝石镶嵌<gray>*******
+#   - <font:minecraft:uniform><i:false><dark_red><strikethrough><bold>一一一一一一一一
+#   - <font:minecraft:uniform><i:false><blue>无限耐久
+#   Options: ...
+#   Attributes: ...
+#
+# 新格式-极简版(只需要写7行,减少86%):
+# 魔剑卡拉特尔_极简:
+#   Id: GOLDEN_SWORD
+#   # Display和Lore都不写,系统自动生成!
+#   Options: ...
+#   Attributes: ...
+#
+# 新格式-自定义颜色版(8行,减少84%):
+# 魔剑卡拉特尔_金色:
+#   Id: GOLDEN_SWORD
+#   Display: <gold>魔剑卡拉特尔_金色  # 只写颜色,字体格式自动添加!
+#   # Lore仍然自动生成!
+#   Options: ...
+#   Attributes: ...
+#
+# 关键改进:
+# - Display: 不需要写 <font:minecraft:uniform><i:false> (自动添加)
+# - Lore: 完全自动生成(根据Attributes)
+# - 体积减少: 86% (从50行减少到7行)
+#
+# ========================================

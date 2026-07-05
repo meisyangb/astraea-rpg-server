@@ -4,7 +4,6 @@ import cn.guangdian.enhance.GuangDianEnhance;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
@@ -13,6 +12,7 @@ public class EnhanceConfig {
     private final GuangDianEnhance plugin;
     
     private int maxLevel;
+    private Map<Integer, Integer> tierMaxLevel;  // Tier → 最高强化等级
     private double baseSuccessRate;
     private double decayFactor;
     private double minSuccessRate;
@@ -28,8 +28,6 @@ public class EnhanceConfig {
     private double moneyCostBase;
     private double moneyCostMultiplier;
     private double[] moneyCostCache;
-    private Set<String> enhanceableKeywords;
-    private Set<Material> enhanceableMaterials;
     private long cooldownMs;
     
     private boolean pityEnabled;
@@ -44,6 +42,7 @@ public class EnhanceConfig {
 
     private void setDefaults() {
         maxLevel = 15;
+        tierMaxLevel = new HashMap<>();
         baseSuccessRate = 1.0;
         decayFactor = 0.05;
         minSuccessRate = 0.01;
@@ -58,8 +57,6 @@ public class EnhanceConfig {
         materialCosts = new HashMap<>();
         moneyCostBase = 0;
         moneyCostMultiplier = 1.0;
-        enhanceableKeywords = Set.of("攻击力", "防御力", "生命上限");
-        enhanceableMaterials = EnumSet.noneOf(Material.class);
         cooldownMs = 500;
         
         pityEnabled = true;
@@ -75,6 +72,19 @@ public class EnhanceConfig {
         FileConfiguration config = plugin.getConfig();
         
         maxLevel = config.getInt("enhance.max_level", 15);
+        
+        // 各阶位最高强化等级
+        tierMaxLevel = new HashMap<>();
+        ConfigurationSection tierSection = config.getConfigurationSection("enhance.tier_max_level");
+        if (tierSection != null) {
+            for (String key : tierSection.getKeys(false)) {
+                try {
+                    int tier = Integer.parseInt(key);
+                    int tlMax = tierSection.getInt(key);
+                    tierMaxLevel.put(tier, tlMax);
+                } catch (NumberFormatException ignored) {}
+            }
+        }
         
         ConfigurationSection successSection = config.getConfigurationSection("enhance.success_rate");
         if (successSection != null) {
@@ -114,19 +124,6 @@ public class EnhanceConfig {
         if (moneySection != null) {
             moneyCostBase = moneySection.getDouble("base", 0);
             moneyCostMultiplier = moneySection.getDouble("multiplier", 1.0);
-        }
-        
-        ConfigurationSection enhanceableSection = config.getConfigurationSection("enhance.enhanceable");
-        if (enhanceableSection != null) {
-            enhanceableKeywords = new HashSet<>(enhanceableSection.getStringList("keywords"));
-            List<String> materialNames = enhanceableSection.getStringList("materials");
-            enhanceableMaterials = EnumSet.noneOf(Material.class);
-            for (String name : materialNames) {
-                try {
-                    enhanceableMaterials.add(Material.valueOf(name.toUpperCase()));
-                } catch (IllegalArgumentException ignored) {
-                }
-            }
         }
         
         cooldownMs = config.getLong("enhance.cooldown_ms", 500);
@@ -230,32 +227,13 @@ public class EnhanceConfig {
         return moneyCostBase * Math.pow(moneyCostMultiplier, level);
     }
 
-    public boolean isEnhanceable(ItemStack item) {
-        if (item == null || item.getType().isAir()) {
-            return false;
-        }
-        
-        if (!enhanceableMaterials.isEmpty() && enhanceableMaterials.contains(item.getType())) {
-            return true;
-        }
-        
-        if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
-            List<String> lore = item.getItemMeta().getLore();
-            if (lore != null) {
-                for (String line : lore) {
-                    for (String keyword : enhanceableKeywords) {
-                        if (line.contains(keyword)) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        
-        return false;
-    }
-
     public int getMaxLevel() { return maxLevel; }
+    
+    /** 获取指定Tier的最高强化等级，未配置则返回全局默认 */
+    public int getMaxLevelForTier(int tier) {
+        return tierMaxLevel.getOrDefault(tier, maxLevel);
+    }
+    
     public double getBaseSuccessRate() { return baseSuccessRate; }
     public double getDecayFactor() { return decayFactor; }
     public double getMinSuccessRate() { return minSuccessRate; }

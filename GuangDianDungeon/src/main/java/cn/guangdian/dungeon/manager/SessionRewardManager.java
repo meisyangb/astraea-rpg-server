@@ -70,8 +70,19 @@ public class SessionRewardManager {
             commands = plugin.getConfig().getStringList("reward-commands.default." + rewardType);
         }
 
-        for (String command : commands) {
-            String parsed = parseCommand(command, player, dungeonId, difficultyId, score, firstClear);
+        for (String raw : commands) {
+            String cmd = raw;
+            double chance = 1.0;
+            // 支持格式: "命令 | 0.3"  → 30%概率
+            int bar = raw.lastIndexOf(" | ");
+            if (bar > 0) {
+                try {
+                    chance = Double.parseDouble(raw.substring(bar + 3).trim());
+                    cmd = raw.substring(0, bar).trim();
+                } catch (NumberFormatException ignored) {}
+            }
+            if (Math.random() > chance) continue;
+            String parsed = parseCommand(cmd, player, dungeonId, difficultyId, score, firstClear);
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parsed);
         }
     }
@@ -95,8 +106,18 @@ public class SessionRewardManager {
             List<String> commands = (List<String>) reward.get("commands");
             if (commands == null) continue;
 
-            for (String command : commands) {
-                String parsed = parseCommand(command, player, dungeonId, difficultyId, score, false);
+            for (String raw : commands) {
+                String cmd = raw;
+                double chance = 1.0;
+                int bar = raw.lastIndexOf(" | ");
+                if (bar > 0) {
+                    try {
+                        chance = Double.parseDouble(raw.substring(bar + 3).trim());
+                        cmd = raw.substring(0, bar).trim();
+                    } catch (NumberFormatException ignored) {}
+                }
+                if (Math.random() > chance) continue;
+                String parsed = parseCommand(cmd, player, dungeonId, difficultyId, score, false);
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parsed);
             }
         }

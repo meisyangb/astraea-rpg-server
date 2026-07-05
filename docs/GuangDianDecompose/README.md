@@ -1,75 +1,40 @@
 ﻿# GuangDianDecompose
 
-> 插件简介 - 待补充
+> 光点分解系统 — 装备分解/材料返还/阶位规则/一键分解
 
 ---
 
 ## 一、简介
 
-本插件文档正在完善中...
-
-### 功能特性
-
-- 功能1 - 描述待补充
-- 功能2 - 描述待补充
-- 功能3 - 描述待补充
-
-### 前置要求
-
-- **必需**: [RPGCore](/RPGCore/README)
-- **可选**: PlaceholderAPI
-
-### 兼容性
-
-- **服务端**: Paper 1.21+
-- **Java**: Java 21+
+GuangDianDecompose 提供装备分解功能，将 RPGItems 装备分解为材料。
 
 ---
 
-## 二、安装
-
-### 2.1 安装步骤
-
-1. 确保已安装 RPGCore
-2. 下载插件 jar 文件
-3. 将 jar 文件放入 \plugins\ 文件夹
-4. 重启服务器
-
-### 2.2 验证安装
-
-\\\ash
-/plugin info          # 查看插件信息
-/plugin reload        # 重载配置
-\\\
-
----
-
-## 三、命令权限
-
-### 3.1 玩家命令
+## 二、命令权限
 
 | 命令 | 权限 | 说明 |
 |------|------|------|
-| \/plugin help\ | 无 | 查看帮助 |
-
-### 3.2 管理员命令
-
-| 命令 | 权限 | 说明 |
-|------|------|------|
-| \/plugin reload\ | \plugin.admin\ | 重载配置 |
+| `/decompose` | `guangdian.decompose.use` | 打开分解界面 |
+| `/decomposeadmin reload` | `guangdian.decompose.admin` | 重载规则 |
+| `/decomposeadmin list` | `guangdian.decompose.admin` | 查看规则列表 |
 
 ---
 
-## 四、配置文件
+## 三、规则配置 rules.yml
 
-配置文件说明待补充...
+```yaml
+rules:
+  iron_sword:
+    item: "rpg:铁剑"
+    materials:
+      "rpg:铁锭": 3
+      "rpg:木棍": 1
+  tier_3:
+    tier: 3
+    materials:
+      "rpg:三阶精华": 2
+```
 
 ---
 
-## 五、下一步
-
-- 📖 本文档正在完善中，敬请期待...
-
----
-
-*最后更新: 2026-06-11*
+*最后更新: 2026-06-13*

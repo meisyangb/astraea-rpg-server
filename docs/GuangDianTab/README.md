@@ -1,75 +1,33 @@
 ﻿# GuangDianTab
 
-> 插件简介 - 待补充
+> 光点TAB列表 — 自定义玩家列表/TAB 页眉页脚/PlaceholderAPI 变量
 
 ---
 
 ## 一、简介
 
-本插件文档正在完善中...
-
-### 功能特性
-
-- 功能1 - 描述待补充
-- 功能2 - 描述待补充
-- 功能3 - 描述待补充
-
-### 前置要求
-
-- **必需**: [RPGCore](/RPGCore/README)
-- **可选**: PlaceholderAPI
-
-### 兼容性
-
-- **服务端**: Paper 1.21+
-- **Java**: Java 21+
+GuangDianTab 自定义玩家 TAB 列表的页眉页脚显示，支持 PlaceholderAPI 变量动态更新。
 
 ---
 
-## 二、安装
-
-### 2.1 安装步骤
-
-1. 确保已安装 RPGCore
-2. 下载插件 jar 文件
-3. 将 jar 文件放入 \plugins\ 文件夹
-4. 重启服务器
-
-### 2.2 验证安装
-
-\\\ash
-/plugin info          # 查看插件信息
-/plugin reload        # 重载配置
-\\\
-
----
-
-## 三、命令权限
-
-### 3.1 玩家命令
+## 二、命令权限
 
 | 命令 | 权限 | 说明 |
 |------|------|------|
-| \/plugin help\ | 无 | 查看帮助 |
-
-### 3.2 管理员命令
-
-| 命令 | 权限 | 说明 |
-|------|------|------|
-| \/plugin reload\ | \plugin.admin\ | 重载配置 |
+| `/tab reload` | `guangdian.tab.admin` | 重载配置 |
 
 ---
 
-## 四、配置文件
+## 三、配置
 
-配置文件说明待补充...
+```yaml
+header:
+  - "<gold>═ 译梦传说 ═"
+  - "<white>在线: %server_online%"
+footer:
+  - "<gray>Ping: %player_ping%ms"
+```
 
 ---
 
-## 五、下一步
-
-- 📖 本文档正在完善中，敬请期待...
-
----
-
-*最后更新: 2026-06-11*
+*最后更新: 2026-06-13*

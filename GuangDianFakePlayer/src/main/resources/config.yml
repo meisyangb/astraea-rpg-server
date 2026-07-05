@@ -1,0 +1,187 @@
+# GuangDianFakePlayer 配置文件
+
+# ==================== 服务器列表伪装 ====================
+# 修改服务器列表中显示的在线人数（包括API查询）
+# 伪装在线数 = 真实在线数 + 虚拟人数
+
+# 伪装模式
+mode: FIXED  # FIXED, RANGE, MULTIPLIER, ADD
+
+# 固定模式虚拟人数（真实在线数 + 50）
+fixed-online: 50
+
+# 范围模式虚拟人数范围（真实在线数 + 30~80）
+min-online: 30
+max-online: 80
+
+# 倍数模式倍率（真实在线数 * 1.5，虚拟人数 = 真实在线数 * 0.5）
+multiplier: 1.5
+
+# 伪装最大玩家数
+fake-max-players: 100
+
+# ==================== TAB列表虚拟玩家 ====================
+# 使用ProtocolLib数据包在TAB列表显示虚拟玩家
+
+virtual-players:
+  # 是否启用虚拟玩家显示
+  enabled: true
+  
+  # 虚拟玩家数量
+  count: 50
+  
+  # 是否使用ProtocolLib（必须安装ProtocolLib）
+  use-protocollib: true
+  
+  # 虚拟玩家名生成模式
+  name-mode: preset  # preset, random
+  
+  # 预设玩家名列表
+  preset-names:
+    - "玩家1"
+    - "玩家2"
+    - "玩家3"
+    - "玩家4"
+    - "玩家5"
+    - "新手玩家"
+    - "老玩家"
+    - "RPG玩家"
+    - "冒险者"
+    - "探索者"
+  
+  # ==================== 显示格式 ====================
+  # 使用 MiniMessage 格式 (<color> 替代 §color)
+  # 支持占位符: %player_name%, %player_level%, %player_ping%
+  
+  # 默认格式 (所有虚拟玩家)
+  default-format:
+    prefix: "<gray>◆ <white>"
+    name: "<gray>%player_name%"
+    suffix: " <dark_gray>[<gray>Lv.%player_level%<dark_gray>]"
+  
+  # 权限组格式 (可选，根据虚拟玩家类型匹配)
+  # 如果不匹配任何格式，则使用 default-format
+  group-formats:
+    # VIP 格式
+    vip:
+      prefix: "<gold><bold>★ <yellow><bold>VIP <gold><bold>★ <white>"
+      name: "<yellow>%player_name%"
+      suffix: " <dark_gray>[<gold>VIP<dark_gray>]"
+      # 匹配条件: 名字包含特定关键词
+      match-names:
+        - "VIP玩家"
+        - "会员"
+    
+    # 冒险者格式
+    adventurer:
+      prefix: "<green><bold>● <white>"
+      name: "<green>%player_name%"
+      suffix: " <dark_gray>[<green>冒险者<dark_gray>]"
+      match-names:
+        - "冒险者"
+        - "探索者"
+    
+    # 新手格式
+    newbie:
+      prefix: "<aqua><bold>☆ <white>"
+      name: "<aqua>%player_name%"
+      suffix: " <dark_gray>[<aqua>新手<dark_gray>]"
+      match-names:
+        - "新手玩家"
+        - "玩家1"
+        - "玩家2"
+        - "玩家3"
+        - "玩家4"
+        - "玩家5"
+
+  # ==================== 特殊标签 ====================
+  # 在 TAB 列表中显示特殊状态（工会、婚姻、战斗等）
+  # 使用 MiniMessage 格式
+  
+  special-tags:
+    # 工会状态
+    guild:
+      enabled: true
+      # 有工会时显示的格式 (%guild_name% 会替换为随机工会名)
+      has-guild: "<aqua><bold>⚔ %guild_name% <reset>"
+      # 无工会时显示的格式
+      no-guild: ""
+      # 随机工会名称列表
+      guild-names:
+        - "星辰公会"
+        - "龙魂公会"
+        - "天启公会"
+        - "暗影公会"
+        - "光明公会"
+        - "风暴公会"
+        - "烈焰公会"
+        - "冰霜公会"
+        - "雷霆公会"
+        - "荣耀公会"
+    
+    # 婚姻状态
+    marriage:
+      enabled: true
+      # 已结婚时显示的格式 (%spouse% 会替换为随机伴侣名)
+      married: "<light_purple><bold>❤ %spouse% <reset>"
+      # 单身时显示的格式
+      single: ""
+      # 随机伴侣名称列表
+      spouse-names:
+        - "小可爱"
+        - "大宝贝"
+        - "心上人"
+        - "挚爱"
+        - "甜蜜"
+    
+    # 战斗状态
+    combat:
+      enabled: true
+      # 在战斗中显示的格式
+      in-combat: "<red><bold>⚔ 战斗 <reset>"
+      # 不在战斗中显示的格式
+      out-combat: ""
+    
+    # AFK 状态
+    afk:
+      enabled: true
+      format: "<gray>[AFK] <white>"
+    
+    # 特殊标签显示概率（每个虚拟玩家随机决定是否显示）
+    display-probability:
+      guild: 0.3      # 30% 的虚拟玩家显示工会
+      marriage: 0.2   # 20% 的虚拟玩家显示婚姻
+      combat: 0.1     # 10% 的虚拟玩家显示战斗
+      afk: 0.05       # 5% 的虚拟玩家显示 AFK
+
+# ==================== 动态行为 ====================
+dynamic:
+  # 是否启用动态加入/退出
+  enabled: true
+  
+  # 更新间隔（秒）
+  interval: 300
+  
+  # 每次变化人数范围
+  change-range: 1-3
+  
+  # 保持虚拟玩家数量范围
+  min-count: 40
+  max-count: 60
+
+# ==================== 自定义 MOTD ====================
+custom-motd:
+  enabled: false
+  line1: "&a译梦传说 RPG服务器"
+  line2: "&e当前在线: %fake_online% 人"
+
+# ==================== PlaceholderAPI ====================
+placeholderapi:
+  # 是否启用PlaceholderAPI支持
+  enabled: true
+  
+  # 占位符前缀
+  prefix: "gdfakeplayer"
+
+# ==================== 调试设置 ====================
+debug: false

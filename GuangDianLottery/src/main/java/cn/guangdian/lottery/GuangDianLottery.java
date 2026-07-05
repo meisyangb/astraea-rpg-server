@@ -6,6 +6,7 @@ import cn.guangdian.lottery.manager.CooldownManager;
 import cn.guangdian.lottery.manager.LotteryManager;
 import cn.guangdian.lottery.model.LotteryPool;
 import cn.guangdian.lottery.model.Prize;
+import cn.guangdian.lottery.storage.LotteryStorage;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.message.MiniMessageService;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
@@ -50,6 +51,8 @@ public class GuangDianLottery extends AbstractRPGPlugin implements Listener, Tab
     private int maxHistorySize;
     private boolean broadcastRarePrizes;
     private String broadcastPermission;
+    private int autoSaveTaskId = -1;
+    private LotteryStorage storage;
     
     @Override
     protected void onPluginEnable() {
@@ -66,27 +69,31 @@ public class GuangDianLottery extends AbstractRPGPlugin implements Listener, Tab
         cooldownManager = new CooldownManager(this);
         lotteryGUI = new LotteryGUI(this);
         
+        // SQLite 存储
+        storage = new LotteryStorage(this);
+        if (storage.init()) { storage.load(); playerCooldowns.putAll(storage.cooldowns()); playerHistory.putAll(storage.history()); }
+        startAutoSave();
+        
         registerEvents();
         registerAPI();
         
-        getLogger().info("光点抽奖插件已启用! 版本: " + getDescription().getVersion());
+        getLogger().info("光点抽奖插件已启用! (SQLite) 版本: " + getDescription().getVersion());
         getLogger().info("已加载 " + pools.size() + " 个抽奖池");
+    }
+    
+    private void startAutoSave() {
+        autoSaveTaskId = Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> {
+            if (storage != null) { storage.cooldowns().clear(); storage.cooldowns().putAll(playerCooldowns); storage.history().clear(); storage.history().putAll(playerHistory); storage.saveAsync(); }
+        }, 6000L, 6000L).getTaskId();
     }
     
     @Override
     protected void onPluginDisable() {
-        if (serviceAdapter != null) {
-            serviceAdapter.unregister();
-        }
-        
-        if (scheduler != null) {
-            scheduler.cancelAllTasks();
-        }
-        
-        if (lotteryGUI != null) {
-            lotteryGUI.closeAll();
-        }
-        
+        Bukkit.getScheduler().cancelTask(autoSaveTaskId);
+        if (storage != null) { storage.cooldowns().clear(); storage.cooldowns().putAll(playerCooldowns); storage.history().clear(); storage.history().putAll(playerHistory); storage.save(); storage.close(); }
+        if (serviceAdapter != null) serviceAdapter.unregister();
+        if (scheduler != null) scheduler.cancelAllTasks();
+        if (lotteryGUI != null) lotteryGUI.closeAll();
         getLogger().info("光点抽奖插件已禁用!");
     }
     

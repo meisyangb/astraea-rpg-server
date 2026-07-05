@@ -1,0 +1,63 @@
+# ========================================
+# GuangDianCustomGUI - 自定义GUI插件
+# ========================================
+# 作者: 光点传奇团队
+# 版本: 1.0.0
+# 功能: 自定义物品、自定义GUI、资源包管理
+# ========================================
+
+# ========================================
+# 资源包配置
+# ========================================
+resource-pack:
+  # 是否启用资源包
+  enabled: true
+  # 资源包URL（必须配置，用于玩家下载）
+  # 本地测试可使用: http://localhost:8080/resourcepack.zip
+  # 生产环境请替换为实际HTTP服务器或CDN地址
+  url: "http://localhost:8080/resourcepack.zip"
+  # 资源包SHA-1哈希（可选，用于验证）
+  hash: ""
+  # 玩家加入时自动发送资源包
+  send-on-join: true
+  # 拒绝资源包时是否踢出玩家
+  kick-if-declined: false
+  # 本地资源包文件（相对于插件目录）
+  local-file: "resourcepack.zip"
+
+# ========================================
+# 自定义背包配置
+# ========================================
+custom-backpack:
+  # 背包界面标题（支持MiniMessage格式）
+  title: "<gold><bold>自定义背包"
+  # 背包大小（必须是9的倍数，最大54）
+  size: 54
+  # 背包可用槽位数（前N个槽位为玩家背包区域）
+  backpack-slots: 45
+  # 自定义材质ID（对应资源包中的CustomModelData）
+  model-data: 10001
+
+# ========================================
+# 自定义GUI配置
+# ========================================
+custom-gui:
+  # 是否启用GUI点击音效
+  sound-enabled: true
+  # 点击音效
+  click-sound: "ui.button.click"
+  # 打开音效
+  open-sound: "block.chest.open"
+  # 关闭音效
+  close-sound: "block.chest.close"
+
+# ========================================
+# 权限配置
+# ========================================
+permissions:
+  # 打开自定义背包
+  backpack: "customgui.backpack"
+  # 重新加载配置
+  reload: "customgui.reload"
+  # 发送资源包
+  resourcepack-send: "customgui.resourcepack.send"

@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+}
+
+jar {
+    archiveBaseName.set('GuangDianCustomModels')
+    archiveVersion.set('1.1.0')
+
+    // 处理重复文件策略
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+// 编译选项
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.compilerArgs.add('-Xlint:unchecked')
+    options.compilerArgs.add('-Xlint:deprecation')
+}
+
+// 构建后自动复制到服务器plugins目录（可选）
+task copyToServer(type: Copy) {
+    from jar
+    into 'e:/RPG/艾尔丽雅/plugins'
+    onlyIf {
+        project.hasProperty('deploy')
+    }
+}
+
+// 清理构建目录
+clean {
+    delete 'build'
+    delete 'output'
+}

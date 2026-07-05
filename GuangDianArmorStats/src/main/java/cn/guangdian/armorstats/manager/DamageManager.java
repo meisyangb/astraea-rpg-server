@@ -54,6 +54,7 @@ public class DamageManager {
         
         loadConfig();
         registerDefaultInterceptors();
+        initBossStatsManager();
     }
 
     private void loadConfig() {
@@ -101,25 +102,13 @@ public class DamageManager {
         }
     }
 
-    // 暂时注释，使用 MythicMobs 自带属性
-    /*
     private void initBossStatsManager() {
         bossStatsManager = new BossStatsManager(GuangDianArmorStats.getInstance());
-        if (bossStatsInterceptor != null) {
-            bossStatsInterceptor.setBossStatsManager(bossStatsManager);
-            
-            var config = GuangDianArmorStats.getInstance().getConfig();
-            var globalSection = config.getConfigurationSection("global");
-            if (globalSection != null) {
-                boolean overrideDamage = globalSection.getBoolean("override_mythic_damage", true);
-                bossStatsInterceptor.setOverrideMythicDamage(overrideDamage);
-                GuangDianArmorStats.getInstance().getLogger().info(
-                    "BossStats override MythicMobs damage: " + overrideDamage);
-            }
+        if (postInterceptor != null) {
+            postInterceptor.setBossStatsManager(bossStatsManager);
         }
-        GuangDianArmorStats.getInstance().getLogger().info("BossStatsManager initialized");
+        GuangDianArmorStats.getInstance().getLogger().info("BossStatsManager initialized for lifesteal resistance");
     }
-    */
 
     public void setSkillManager(SkillManager skillManager) {
         this.skillManager = skillManager;
@@ -448,6 +437,9 @@ public class DamageManager {
         }
         if (formulaManager != null) {
             formulaManager.reloadConfig();
+        }
+        if (postInterceptor != null) {
+            postInterceptor.reloadConfig();
         }
     }
 

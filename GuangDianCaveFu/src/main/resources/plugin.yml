@@ -1,13 +1,14 @@
 name: GuangDianCaveFu
-version: 1.0.0
+version: 1.1.0
 main: cn.guangdian.cavefu.GuangDianCaveFu
 api-version: '1.21'
 author: GuangDian
-description: 光点RPG空岛洞府插件
+description: 光点RPG空岛洞府插件 - 独立版本
 
 softdepend:
-  - RPGCore
   - PlaceholderAPI
+  - LuckPerms
+  - RPGItems
 
 commands:
   cave:

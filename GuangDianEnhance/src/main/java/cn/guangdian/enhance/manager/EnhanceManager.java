@@ -4,12 +4,14 @@ import cn.guangdian.enhance.GuangDianEnhance;
 import cn.guangdian.enhance.config.EnhanceConfig;
 import cn.guangdian.enhance.data.EnhanceData;
 import cn.guangdian.enhance.data.EnhanceResult;
-import cn.guangdian.enhance.stone.EnhanceStone;
-import cn.guangdian.enhance.stone.EnhanceStoneManager;
-import cn.guangdian.enhance.stone.StoneType;
+import cn.guangdian.enhance.stone.EnhanceStoneType;
 import cn.guangdian.enhance.storage.EnhanceStorage;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.message.MiniMessageService;
+import cn.guangdian.rpgitems.RPGItems;
+import cn.guangdian.rpgitems.api.ItemAttributeAPI;
+import cn.guangdian.rpgitems.item.ItemFactory;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -42,73 +44,79 @@ public class EnhanceManager {
     }
 
     public EnhanceResult enhance(Player player, ItemStack item) {
-        return enhance(player, item, null);
+        return enhance(player, item, Set.of());
     }
-    
-    public EnhanceResult enhance(Player player, ItemStack item, EnhanceStone stone) {
+
+    /** 执行强化，stones = GUI中选中的强化石类型 */
+    public EnhanceResult enhance(Player player, ItemStack item, Set<EnhanceStoneType> stones) {
         UUID uuid = player.getUniqueId();
-        
-        if (!config.isEnhanceable(item)) {
+
+        // 通过 PDC 判定是否可强化
+        if (!ItemFactory.isEnhanceable(item)) {
             return EnhanceResult.NOT_ENHANCEABLE;
         }
-        
+
         int currentLevel = storage.getLevel(item);
-        
-        if (currentLevel >= config.getMaxLevel()) {
+
+        // 根据物品Tier获取该阶位最高强化等级
+        int maxLevel = getMaxLevelForItem(item);
+        if (currentLevel >= maxLevel) {
             return EnhanceResult.MAX_LEVEL_REACHED;
         }
-        
+
         if (isInCooldown(uuid)) {
             return EnhanceResult.IN_COOLDOWN;
         }
-        
+
         List<EnhanceConfig.MaterialCost> costs = config.getMaterialCostForLevel(currentLevel + 1);
         if (!hasMaterials(player, costs)) {
             return EnhanceResult.INSUFFICIENT_MATERIAL;
         }
-        
+
         double moneyCost = config.getMoneyCostForLevel(currentLevel + 1);
         if (moneyCost > 0 && !hasMoney(player, moneyCost)) {
             return EnhanceResult.INSUFFICIENT_MONEY;
         }
-        
-        if (stone != null && stone.isConsumable()) {
-            EnhanceStoneManager stoneManager = plugin.getStoneManager();
-            if (!stoneManager.consumeStone(player, stone)) {
-                player.sendMessage(miniMessage.colorize("<red>强化石不足!"));
-                return EnhanceResult.INSUFFICIENT_MATERIAL;
-            }
-        }
-        
+
         consumeMaterials(player, costs);
         if (moneyCost > 0) {
             withdrawMoney(player, moneyCost);
         }
-        
+
         lastEnhanceTime.put(uuid, System.currentTimeMillis());
-        
+
         int pityCount = getPityCount(uuid, currentLevel);
         double baseRate = rateCalculator.calculate(currentLevel, item);
         double pityBonus = calculatePityBonus(pityCount);
         double successRate = Math.min(1.0, baseRate + pityBonus);
-        
-        if (stone != null) {
-            successRate = stone.applyEffect(successRate);
+
+        // 应用选中强化石的效果
+        EnhanceStoneType guarantee = null;
+        boolean hasProtection = false;
+        for (EnhanceStoneType st : stones) {
+            successRate = st.apply(successRate);
+            if (st.getEffect() == cn.guangdian.enhance.stone.StoneEffect.GUARANTEE) guarantee = st;
+            if (st.getEffect() == cn.guangdian.enhance.stone.StoneEffect.PREVENT_DEGRADE) hasProtection = true;
+            if (st.getEffect() == cn.guangdian.enhance.stone.StoneEffect.PREVENT_DESTROY) hasProtection = true;
         }
-        
+
         boolean success = rateCalculator.rollSuccess(successRate);
-        
+
         if (success) {
             resetPityCount(uuid, currentLevel);
-            return handleSuccess(player, item, currentLevel, stone);
+            return handleSuccess(player, item, currentLevel, guarantee);
         } else {
             incrementPityCount(uuid, currentLevel);
-            return handleFailure(player, item, currentLevel, stone);
+            return handleFailure(player, item, currentLevel, hasProtection);
         }
     }
 
-    private EnhanceResult handleSuccess(Player player, ItemStack item, int currentLevel, EnhanceStone stone) {
+    private EnhanceResult handleSuccess(Player player, ItemStack item, int currentLevel, EnhanceStoneType stone) {
         ItemStack enhanced = storage.setLevel(item, currentLevel + 1);
+        int newLevel = currentLevel + 1;
+
+        // 调用 RPGItems API 更新物品的 PDC 属性值
+        applyAttributeMultiplier(enhanced, newLevel);
         
         PlayerInventory inv = player.getInventory();
         ItemStack mainHand = inv.getItemInMainHand();
@@ -124,25 +132,21 @@ public class EnhanceManager {
         }
         
         player.updateInventory();
-        
         playSuccessEffect(player);
         
-        int newLevel = currentLevel + 1;
-        if (stone != null && stone.guaranteesSuccess()) {
-            player.sendMessage(miniMessage.colorize(
-                "<green>强化成功! <yellow>(必成石) <gold>强化等级: <bold>+" + newLevel + "</bold>"));
-        } else {
-            player.sendMessage(miniMessage.colorize(
-                "<green>强化成功! <yellow>强化等级: <bold>+" + newLevel + "</bold>"));
-        }
+        double multiplier = getAttributeMultiplier(newLevel);
+        String stoneTag = stone != null ? "(" + stone.getDisplayName() + ") " : "";
+        player.sendMessage(miniMessage.colorize(
+            "<green>强化成功! " + stoneTag + "<yellow>强化等级: <bold>+" + newLevel + 
+            "</bold> <gray>(属性x" + String.format("%.2f", multiplier) + ")"));
         
         return EnhanceResult.SUCCESS;
     }
 
-    private EnhanceResult handleFailure(Player player, ItemStack item, int currentLevel, EnhanceStone stone) {
+    private EnhanceResult handleFailure(Player player, ItemStack item, int currentLevel, boolean hasStoneProtection) {
         String failureType = config.getFailureType();
         
-        boolean hasProtection = (stone != null && stone.preventsDegrade()) || 
+        boolean hasProtection = hasStoneProtection || 
             (config.isProtectionCharmEnabled() && consumeProtectionCharm(player));
         
         if (hasProtection) {
@@ -162,11 +166,13 @@ public class EnhanceManager {
             case "degrade":
                 if (currentLevel > 0 && 
                     ThreadLocalRandom.current().nextDouble() < config.getDegradeChance()) {
-                    ItemStack degraded = storage.setLevel(item, currentLevel - 1);
+                    int degradedLevel = currentLevel - 1;
+                    ItemStack degraded = storage.setLevel(item, degradedLevel);
+                    applyAttributeMultiplier(degraded, degradedLevel);
                     replaceItem(player, item, degraded);
                     playDegradeEffect(player);
                     player.sendMessage(miniMessage.colorize(
-                        "<red>强化失败，等级下降至 <bold>+" + (currentLevel - 1) + "</bold>"));
+                        "<red>强化失败，等级下降至 <bold>+" + degradedLevel + "</bold>"));
                     return EnhanceResult.FAILED_DEGRADE;
                 } else {
                     playFailEffect(player);
@@ -183,11 +189,13 @@ public class EnhanceManager {
                         "<dark_red>强化失败，装备已破碎!"));
                     return EnhanceResult.FAILED_DESTROY;
                 } else if (currentLevel > 0) {
-                    ItemStack degraded = storage.setLevel(item, currentLevel - 1);
+                    int degradedLevel = currentLevel - 1;
+                    ItemStack degraded = storage.setLevel(item, degradedLevel);
+                    applyAttributeMultiplier(degraded, degradedLevel);
                     replaceItem(player, item, degraded);
                     playDegradeEffect(player);
                     player.sendMessage(miniMessage.colorize(
-                        "<red>强化失败，等级下降至 <bold>+" + (currentLevel - 1) + "</bold>"));
+                        "<red>强化失败，等级下降至 <bold>+" + degradedLevel + "</bold>"));
                     return EnhanceResult.FAILED_DEGRADE;
                 } else {
                     playFailEffect(player);
@@ -401,6 +409,12 @@ public class EnhanceManager {
             playerPity.remove(level);
         }
     }
+
+    /** GUI调用的公共保底方法 */
+    public void pityReset(UUID uuid, int level) { resetPityCount(uuid, level); }
+    public void pityIncrement(UUID uuid, int level) { incrementPityCount(uuid, level); }
+    /** GUI调用的属性倍率更新 */
+    public void updateItemAttributes(ItemStack item, int level) { applyAttributeMultiplier(item, level); }
     
     private double calculatePityBonus(int pityCount) {
         if (!config.isPityEnabled() || pityCount <= 0) {
@@ -423,5 +437,52 @@ public class EnhanceManager {
         lastEnhanceTime.remove(uuid);
         enhanceDataCache.remove(uuid);
         pityCounters.remove(uuid);
+    }
+
+    /**
+     * 根据物品阶位获取最高强化等级
+     */
+    private int getMaxLevelForItem(ItemStack item) {
+        String tierStr = ItemFactory.getItemTier(item);
+        if (tierStr != null) {
+            try {
+                int tier = Integer.parseInt(tierStr);
+                return config.getMaxLevelForTier(tier);
+            } catch (NumberFormatException ignored) {}
+        }
+        return config.getMaxLevel();
+    }
+
+    /**
+     * 调用 RPGItems API 按强化等级更新物品属性
+     * 倍率公式: 1.0 + level * 0.12
+     */
+    private void applyAttributeMultiplier(ItemStack item, int level) {
+        if (level <= 0) return;
+        if (item == null) return;
+        
+        // 直接使用 ItemFactory 的静态方法判定（避免循环依赖）
+        if (!ItemFactory.isEnhanceable(item)) return;
+        
+        try {
+            // 通过 Bukkit 服务管理器获取 RPGItems API
+            RPGItems rpgItems = (RPGItems) Bukkit.getPluginManager().getPlugin("RPGItems");
+            if (rpgItems == null) {
+                plugin.getLogger().warning("RPGItems 未加载，无法更新属性");
+                return;
+            }
+            
+            ItemAttributeAPI api = rpgItems.getAttributeAPI();
+            if (api == null) {
+                plugin.getLogger().warning("ItemAttributeAPI 不可用");
+                return;
+            }
+            
+            double multiplier = getAttributeMultiplier(level);
+            api.updateAttributes(item, multiplier);
+            
+        } catch (Exception e) {
+            plugin.getLogger().warning("更新物品属性失败: " + e.getMessage());
+        }
     }
 }

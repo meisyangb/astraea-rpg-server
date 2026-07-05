@@ -1,0 +1,25 @@
+name: GuangDianFakePlayer
+version: 1.0.0
+main: cn.guangdian.fakeplayer.GuangDianFakePlayer
+description: 简化版伪装玩家插件 - 修改服务器列表在线人数和在TAB列表显示虚拟玩家
+api-version: '1.21'
+authors:
+  - GuangDian Team
+
+softdepend:
+  - PlaceholderAPI
+  - ProtocolLib
+
+commands:
+  gdfakeplayer:
+    description: GuangDianFakePlayer 主命令
+    usage: /gdfakeplayer <reload|status|spawn|despawn>
+    permission: gdfakeplayer.admin
+    aliases:
+      - gdfp
+      - fakeplayer
+
+permissions:
+  gdfakeplayer.admin:
+    description: 管理员权限
+    default: op

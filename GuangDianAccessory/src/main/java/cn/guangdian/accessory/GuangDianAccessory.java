@@ -8,6 +8,7 @@ import cn.guangdian.accessory.listener.AccessoryStatsListener;
 import cn.guangdian.accessory.manager.AccessoryManager;
 import cn.guangdian.accessory.placeholder.AccessoryPlaceholder;
 import cn.guangdian.accessory.service.AccessoryServiceAdapter;
+import cn.guangdian.accessory.storage.AccessoryStorage;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 
 public class GuangDianAccessory extends AbstractRPGPlugin {
@@ -18,6 +19,8 @@ public class GuangDianAccessory extends AbstractRPGPlugin {
     private AccessoryPlaceholder placeholder;
     private AccessoryCommand command;
     private AccessoryStatsListener statsListener;
+    private AccessoryStorage accStorage;
+    private int accSaveId = -1;
     
     @Override
     protected void onPluginEnable() {
@@ -25,6 +28,10 @@ public class GuangDianAccessory extends AbstractRPGPlugin {
         
         accessoryManager = new AccessoryManager(this);
         accessoryManager.loadAccessories();
+        
+        accStorage = new AccessoryStorage(this);
+        if (accStorage.init()) accStorage.load();
+        accSaveId = getServer().getScheduler().runTaskTimerAsynchronously(this, () -> { if (accStorage != null) accStorage.saveAsync(); }, 6000L, 6000L).getTaskId();
         
         serviceAdapter = new AccessoryServiceAdapter(this);
         
@@ -48,18 +55,11 @@ public class GuangDianAccessory extends AbstractRPGPlugin {
     
     @Override
     protected void onPluginDisable() {
-        if (placeholder != null) {
-            placeholder.unregister();
-        }
-        
-        if (scheduler != null) {
-            scheduler.cancelAllTasks();
-        }
-        
-        if (serviceAdapter != null) {
-            serviceAdapter.unregister();
-        }
-        
+        getServer().getScheduler().cancelTask(accSaveId);
+        if (accStorage != null) { accStorage.save(); accStorage.close(); }
+        if (placeholder != null) placeholder.unregister();
+        if (scheduler != null) scheduler.cancelAllTasks();
+        if (serviceAdapter != null) serviceAdapter.unregister();
         getLogger().info("饰品系统已关闭");
     }
     

@@ -1,5 +1,6 @@
 // ========================================
-// GuangDianCaveFu - 副本系统
+// GuangDianCaveFu - 洞府系统（独立版本）
+// 数据存储：纯 YML 文件
 // ========================================
 
 plugins {
@@ -8,7 +9,6 @@ plugins {
 
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
-    compileOnly project(':plugins:RPGCore')
     compileOnly files('../GuangDianArmorStats/libs/PlaceholderAPI.jar')
     compileOnly 'net.luckperms:api:5.4'
 }

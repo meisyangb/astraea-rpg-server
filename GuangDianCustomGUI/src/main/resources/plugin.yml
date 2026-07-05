@@ -1,0 +1,27 @@
+name: GuangDianCustomGUI
+version: '${version}'
+main: cn.guangdian.customgui.GuangDianCustomGUI
+api-version: '1.21'
+author: 光点传奇团队
+description: 自定义GUI插件 - 支持自定义物品、自定义GUI界面、资源包管理
+
+commands:
+  customgui:
+    description: 自定义GUI主命令
+    usage: /customgui [backpack|reload|resourcepack]
+    aliases: [cgui, cg]
+    permission: customgui.use
+
+permissions:
+  customgui.use:
+    description: 允许使用自定义GUI命令
+    default: true
+  customgui.backpack:
+    description: 允许打开自定义背包
+    default: true
+  customgui.reload:
+    description: 允许重新加载配置
+    default: op
+  customgui.resourcepack.send:
+    description: 允许发送资源包给玩家
+    default: op

@@ -7,6 +7,7 @@ import cn.guangdian.classsystem.cooldown.CooldownManager;
 import cn.guangdian.classsystem.cost.AdvancementCostManager;
 import cn.guangdian.classsystem.data.ClassDataHandler;
 import cn.guangdian.classsystem.effect.PassiveEffectManager;
+import cn.guangdian.classsystem.storage.ClassStorage;
 import cn.guangdian.classsystem.gui.AttributeGUI;
 import cn.guangdian.classsystem.gui.ClassAdvanceGUI;
 import cn.guangdian.classsystem.gui.ClassMainGUI;
@@ -59,6 +60,8 @@ public class GuangDianClass extends AbstractRPGPlugin {
     private cn.guangdian.classsystem.skill.SkillEffectExecutor skillEffectExecutor;
     
     private String defaultClassId;
+    private ClassStorage classStorage;
+    private long classSaveTaskId = -1;
     
     @Override
     protected void onPluginEnable() {
@@ -74,6 +77,10 @@ public class GuangDianClass extends AbstractRPGPlugin {
         classManager = new ClassManager(this);
         
         dataHandler = new ClassDataHandler(this);
+        
+        // SQLite 存储初始化（替代不安全的单文件 playerdata.yml）
+        classStorage = new ClassStorage(this);
+        if (classStorage.init()) classStorage.load();
         
         expManager = new ExpManager(this, classManager, dataHandler);
         
@@ -142,6 +149,8 @@ public class GuangDianClass extends AbstractRPGPlugin {
         
         startAfkExpTask();
         
+        startManaRegenTask();
+        
         getLogger().info("GuangDianClass 职业系统已启动!");
         getLogger().info("阶位系统: 1阶 - 9阶");
         getLogger().info("转职系统: 3阶一转 / 6阶二转 / 8阶三转 / 9阶神级");
@@ -166,6 +175,11 @@ public class GuangDianClass extends AbstractRPGPlugin {
         if (dataHandler != null) {
             dataHandler.saveAll();
             dataHandler.unregister();
+        }
+        
+        if (classStorage != null) {
+            classStorage.saveAll();
+            classStorage.close();
         }
         
         if (skillSpaceManager != null) {
@@ -215,10 +229,12 @@ public class GuangDianClass extends AbstractRPGPlugin {
         long interval = getConfig().getLong("settings.auto-save-interval-minutes", 5) * 60 * 20L;
         
         if (scheduler != null) {
-            scheduler.runSyncRepeating(() -> {
+            classSaveTaskId = scheduler.runSyncRepeating(() -> {
                 if (dataHandler != null) {
                     dataHandler.saveAll();
-                    getLogger().info("自动保存完成，缓存玩家数: " + dataHandler.getCacheSize());
+                }
+                if (classStorage != null) {
+                    classStorage.saveAllAsync();
                 }
             }, interval, interval);
         }
@@ -256,6 +272,23 @@ public class GuangDianClass extends AbstractRPGPlugin {
             
             getLogger().info("挂机经验任务已启动: 每分钟 " + expPerMinute + " 点经验");
         }
+    }
+    
+    /**
+     * 启动魔力自动恢复任务
+     * 每秒为所有在线玩家恢复 5% 最大魔力值
+     */
+    private void startManaRegenTask() {
+        if (manaManager == null || scheduler == null) return;
+        
+        // 每秒执行一次（20 ticks = 1秒）
+        scheduler.runSyncRepeating(() -> {
+            for (Player player : getServer().getOnlinePlayers()) {
+                manaManager.regenMana(player);
+            }
+        }, 20L, 20L);
+        
+        getLogger().info("魔力恢复任务已启动: 每秒恢复 5% 最大魔力");
     }
     
     public void openAttributeGUI(Player player) {

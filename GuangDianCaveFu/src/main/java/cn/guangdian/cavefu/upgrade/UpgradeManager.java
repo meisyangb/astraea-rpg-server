@@ -8,7 +8,6 @@ import cn.guangdian.cavefu.config.ConfigManager;
 import cn.guangdian.cavefu.hook.RPGItemsHook;
 import cn.guangdian.cavefu.storage.DataManager;
 import cn.guangdian.cavefu.world.CaveWorldManager;
-import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,6 +15,7 @@ import java.util.List;
 
 /**
  * 升级管理器
+ * 完全独立，不依赖 RPGCore
  */
 public class UpgradeManager {
     private final GuangDianCaveFu plugin;
@@ -65,7 +65,7 @@ public class UpgradeManager {
 
         // 升级洞府
         cave.setLevel(nextLevel.getLevel());
-        dataManager.save();
+        dataManager.saveCave(cave);
 
         // 扩展平台
         worldManager.expandPlatform(cave, oldSize, nextLevel.getSize());
@@ -98,11 +98,9 @@ public class UpgradeManager {
         int amount = Integer.parseInt(parts[2]);
 
         if (type.equals("rpgitem")) {
-            // RPGItems 物品
             int count = countRPGItem(player, itemName);
             return count >= amount;
         } else if (type.equals("vanilla")) {
-            // 原版物品
             int count = countVanillaItem(player, itemName);
             return count >= amount;
         }
@@ -114,12 +112,10 @@ public class UpgradeManager {
      * 扣除物品
      */
     private boolean consumeItems(Player player, List<String> requirements) {
-        // 先检查是否全部满足
         if (!checkItems(player, requirements)) {
             return false;
         }
 
-        // 逐个扣除
         for (String req : requirements) {
             if (!consumeItem(player, req)) {
                 return false;
@@ -150,7 +146,7 @@ public class UpgradeManager {
     }
 
     /**
-     * 统计RPGItems物品数量
+     * 统计 RPGItems 物品数量
      */
     private int countRPGItem(Player player, String itemId) {
         int total = 0;
@@ -168,7 +164,7 @@ public class UpgradeManager {
     }
 
     /**
-     * 扣除RPGItems物品
+     * 扣除 RPGItems 物品
      */
     private boolean consumeRPGItem(Player player, String itemId, int amount) {
         int remaining = amount;

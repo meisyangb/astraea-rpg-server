@@ -63,20 +63,15 @@ public class SkillSpaceGUI {
     }
 
     /**
-     * 填充主动技能区
+     * 填充主动技能区 - 只显示已解锁的技能
      */
     private void fillActiveSkills(Inventory gui, PlayerSkillData skillData) {
         int slot = 0;
         
+        // 只显示已解锁的主动技能
         for (SkillOrb skill : skillData.getSkillSpace().values()) {
-            if (skill.isActive()) {
-                ItemStack orb;
-                if (skill.isUnlocked()) {
-                    orb = skillSpaceManager.createSkillOrb(skill);
-                } else {
-                    orb = createLockedSkillOrb(skill);
-                }
-                
+            if (skill.isActive() && skill.isUnlocked()) {
+                ItemStack orb = skillSpaceManager.createSkillOrb(skill);
                 gui.setItem(slot, orb);
                 slot++;
                 
@@ -92,20 +87,15 @@ public class SkillSpaceGUI {
     }
 
     /**
-     * 填充被动技能区
+     * 填充被动技能区 - 只显示已解锁的技能
      */
     private void fillPassiveSkills(Inventory gui, PlayerSkillData skillData) {
         int slot = 18;
         
+        // 只显示已解锁的被动技能
         for (SkillOrb skill : skillData.getSkillSpace().values()) {
-            if (skill.isPassive()) {
-                ItemStack orb;
-                if (skill.isUnlocked()) {
-                    orb = skillSpaceManager.createPassiveSkillOrb(skill);
-                } else {
-                    orb = createLockedSkillOrb(skill);
-                }
-                
+            if (skill.isPassive() && skill.isUnlocked()) {
+                ItemStack orb = skillSpaceManager.createPassiveSkillOrb(skill);
                 gui.setItem(slot, orb);
                 slot++;
                 
@@ -165,12 +155,8 @@ public class SkillSpaceGUI {
         lore.add(Component.text("§7职业: §e" + className));
         lore.add(Component.text("§7等级: §6Lv." + tier));
         lore.add(Component.empty());
-        lore.add(Component.text("§7主动技能: §a" + skillData.getUnlockedActiveSkillCount() + 
-            " §7/ §c" + skillData.getSkillSpace().values().stream()
-                .filter(SkillOrb::isActive).count()));
-        lore.add(Component.text("§7被动技能: §a" + skillData.getUnlockedPassiveSkillCount() + 
-            " §7/ §c" + skillData.getSkillSpace().values().stream()
-                .filter(SkillOrb::isPassive).count()));
+        lore.add(Component.text("§7已解锁主动技能: §a" + skillData.getUnlockedActiveSkillCount()));
+        lore.add(Component.text("§7已解锁被动技能: §a" + skillData.getUnlockedPassiveSkillCount()));
         lore.add(Component.empty());
         lore.add(Component.text("§e左键 §7查看技能详情"));
         lore.add(Component.text("§e右键 §7绑定到快捷栏"));
@@ -186,28 +172,6 @@ public class SkillSpaceGUI {
                 gui.setItem(i, createDecorationItem());
             }
         }
-    }
-
-    /**
-     * 创建锁定状态的技能球
-     */
-    private ItemStack createLockedSkillOrb(SkillOrb skill) {
-        ItemStack orb = new ItemStack(Material.BARRIER);
-        ItemMeta meta = orb.getItemMeta();
-        
-        meta.displayName(Component.text("§c§k||| §r§7" + skill.getName() + " §c§k|||")
-            .decorate(TextDecoration.BOLD));
-        
-        List<Component> lore = new ArrayList<>();
-        lore.add(Component.text("§c技能未解锁"));
-        lore.add(Component.text("§7所需等级: §6Lv." + skill.getRequiredTier()));
-        lore.add(Component.empty());
-        lore.add(Component.text("§7提升职业等级以解锁此技能"));
-        
-        meta.lore(lore);
-        orb.setItemMeta(meta);
-        
-        return orb;
     }
 
     /**

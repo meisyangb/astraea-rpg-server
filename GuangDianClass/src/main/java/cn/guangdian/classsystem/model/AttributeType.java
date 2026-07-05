@@ -31,11 +31,14 @@ public enum AttributeType {
     }
     
     public static AttributeType fromId(String id) {
-        for (AttributeType type : values()) {
-            if (type.id.equalsIgnoreCase(id)) {
-                return type;
-            }
+        if (id == null) return null;
+        switch (id.toLowerCase()) {
+            case "strength": return STRENGTH;
+            case "vitality": return VITALITY;
+            case "agility": return AGILITY;
+            case "intelligence": return INTELLIGENCE;
+            case "luck": return LUCK;
+            default: return null;
         }
-        return null;
     }
 }

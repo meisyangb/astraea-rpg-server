@@ -1,0 +1,79 @@
+# GuangDianCustomModels 主配置文件
+
+# 贴图配置
+textures:
+  # 贴图源目录（扫描贴图的目录）
+  # 使用插件内部目录，将贴图放置到 plugins/GuangDianCustomModels/textures/ 下
+  source_directory: "textures"
+  
+  # 输出目录（生成的资源包保存位置）
+  output_directory: "plugins/GuangDianCustomModels/output"
+  
+  # 是否自动扫描贴图（插件启动时）
+  auto_scan: true
+  
+  # 贴图分类（用于自动分类贴图）
+  categories:
+    - "SD"   # 剑类
+    - "AXE"  # 斧类
+    - "BOW"  # 弓类
+    - "SPR"  # 矛类
+    - "STF"  # 法杖类
+    - "DGR"  # 匕首类
+
+# 模型配置
+models:
+  # 模型生成模式（2d 或 3d）
+  # 2d: 平面模型，适合快速部署
+  # 3d: 立体模型，视觉效果更好
+  generation_mode: "2d"
+  
+  # 模型模板目录
+  template_directory: "resources/models"
+  
+  # 默认缩放比例
+  default_scale: 1.0
+  
+  # 武器模板映射
+  weapon_templates:
+    sword: "weapon_sword.json"
+    axe: "weapon_axe.json"
+    bow: "weapon_bow.json"
+    spear: "weapon_spear.json"
+    staff: "weapon_staff.json"
+    dagger: "weapon_dagger.json"
+
+# 资源包配置
+resource_pack:
+  # 资源包格式版本（Minecraft 1.21.6 = 48）
+  pack_format: 48
+  
+  # 资源包名称
+  pack_name: "GuangDian_CustomModels"
+  
+  # 输出路径（完整ZIP文件路径）
+  output_path: "plugins/GuangDianCustomModels/resource_pack.zip"
+  
+  # 是否在启动时自动生成资源包
+  auto_generate_on_startup: true
+  
+  # 资源包下载URL（用于发送给客户端）
+  # 如果为空，则自动启动内置HTTP服务器托管资源包
+  # 推荐使用外部CDN/网盘URL以提高下载速度
+  download_url: ""
+  
+  # 内置HTTP服务器端口（仅当download_url为空时使用）
+  # 默认8964，确保端口未被占用且防火墙允许访问
+  server_port: 8964
+  
+  # 是否自动发送资源包给玩家
+  auto_send_to_player: true
+
+# 物品配置
+items:
+  # 物品定义配置文件
+  definitions_file: "items.yml"
+  
+  # CustomModelData起始值（自动分配的模型数据ID）
+  # 从10000开始分配，避免与原版物品冲突
+  custom_model_data_start: 10000

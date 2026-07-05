@@ -31,6 +31,13 @@ public class CooldownManager {
         playerCooldowns.put(type, System.currentTimeMillis() + durationMillis);
     }
     
+    /**
+     * 设置冷却（使用秒）
+     */
+    public void setCooldown(UUID playerId, String type, int seconds) {
+        setCooldown(playerId, type, seconds * 1000L);
+    }
+    
     public boolean isOnCooldown(UUID playerId, String type) {
         Map<String, Long> playerCooldowns = cooldowns.get(playerId);
         if (playerCooldowns == null) return false;
@@ -50,6 +57,14 @@ public class CooldownManager {
         
         long remaining = endTime - System.currentTimeMillis();
         return Math.max(0, remaining);
+    }
+    
+    /**
+     * 获取剩余冷却时间（秒）
+     */
+    public int getRemainingCooldownSeconds(UUID playerId, String type) {
+        long remaining = getRemainingCooldown(playerId, type);
+        return (int) (remaining / 1000);
     }
     
     public String getRemainingCooldownFormatted(UUID playerId, String type) {

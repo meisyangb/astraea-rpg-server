@@ -140,27 +140,19 @@ cooldowns:
   reset: 300
 
 attributes:
-  initial-points: 50
-  points-per-level: 5
-  points-per-advancement: 20
+  # 阶位属性点配置（每个阶位获得的属性点数量）
+  tier-points:
+    1: 10
+    2: 15
+    3: 20
+    4: 30
+    5: 40
+    6: 50
+    7: 60
+    8: 80
+    9: 100
   
-  tier-points-cap:
-    1: 50
-    2: 100
-    3: 200
-    4: 350
-    5: 500
-    6: 700
-    7: 900
-    8: 1200
-    9: 1500
-    
-  advancement-points:
-    1: 100
-    2: 200
-    3: 350
-    4: 500
-  
+  # 属性类型效果配置
   types:
     strength:
       health: 0

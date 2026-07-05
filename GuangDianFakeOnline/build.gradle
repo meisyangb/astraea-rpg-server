@@ -1,0 +1,23 @@
+// ========================================
+// GuangDianFakeOnline - 伪装玩家在线数插件
+// ========================================
+
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url 'https://repo.dmulloy2.net/repository/public/' }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+    compileOnly 'com.comphenix.protocol:ProtocolLib:5.1.0-SNAPSHOT'
+}
+
+jar {
+    archiveBaseName.set('GuangDianFakeOnline')
+}

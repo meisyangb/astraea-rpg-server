@@ -1,136 +1,283 @@
 package cn.guangdian.classsystem.skill;
 
 import cn.guangdian.classsystem.GuangDianClass;
+import cn.guangdian.classsystem.enums.*;
 import cn.guangdian.classsystem.model.GameClass;
 import cn.guangdian.classsystem.model.PlayerClassData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.*;
-
+/**
+ * 技能管理器 - 使用枚举简化技能系统
+ * 
+ * 设计说明：
+ * - 使用 Skill 枚举直接定义所有技能，无需配置文件加载
+ * - GuangDianClass 定义技能配置
+ * - GuangDianArmorStats 执行技能效果（可选）
+ * - 本类作为适配器，连接两个插件
+ */
 public class SkillManager {
     
     private final GuangDianClass plugin;
-    private final Map<String, SkillDefinition> skillDefinitions;
+    
+    // GuangDianArmorStats 技能执行器引用（可选）
+    private Object armorStatsSkillManager;
     
     public SkillManager(GuangDianClass plugin) {
         this.plugin = plugin;
-        this.skillDefinitions = new HashMap<>();
-        loadSkills();
+        hookArmorStats();
+        plugin.getLogger().info("技能管理器已初始化，使用枚举定义技能");
     }
     
-    private void loadSkills() {
-        registerDefaultSkills();
-        plugin.getLogger().info("已加载 " + skillDefinitions.size() + " 个技能定义");
+    /**
+     * 钩子 GuangDianArmorStats 技能执行系统（可选）
+     */
+    private void hookArmorStats() {
+        var armorStatsPlugin = Bukkit.getPluginManager().getPlugin("GuangDianArmorStats");
+        if (armorStatsPlugin != null && armorStatsPlugin.isEnabled()) {
+            try {
+                var getSkillManagerMethod = armorStatsPlugin.getClass().getMethod("getSkillManager");
+                armorStatsSkillManager = getSkillManagerMethod.invoke(armorStatsPlugin);
+                plugin.getLogger().info("已成功钩子 GuangDianArmorStats 技能执行系统");
+            } catch (Exception e) {
+                plugin.getLogger().warning("无法钩子 GuangDianArmorStats: " + e.getMessage());
+                armorStatsSkillManager = null;
+            }
+        } else {
+            plugin.getLogger().info("GuangDianArmorStats 未启用，使用本地技能执行");
+            armorStatsSkillManager = null;
+        }
     }
     
-    private void registerDefaultSkills() {
-        registerSkill(new SkillDefinition("slash", "斩击", "战士基础技能，造成物理伤害", 1, 5));
-        registerSkill(new SkillDefinition("shield_bash", "盾击", "用盾牌猛击敌人", 1, 10));
-        registerSkill(new SkillDefinition("charge", "冲锋", "骑乘冲锋，造成大量伤害", 3, 15));
-        registerSkill(new SkillDefinition("mounted_combat", "骑乘战斗", "提升骑乘时的战斗力", 3, 0));
+    /**
+     * 触发主动技能
+     */
+    public boolean triggerActiveSkill(Player player, String skillId) {
+        Skill skill = Skill.fromId(skillId);
+        if (skill == null) {
+            player.sendMessage(Component.text("技能不存在！").color(NamedTextColor.RED));
+            return false;
+        }
         
-        registerSkill(new SkillDefinition("fireball", "火球术", "发射一个火球", 1, 5));
-        registerSkill(new SkillDefinition("ice_shield", "冰盾", "召唤冰盾保护自己", 1, 10));
-        registerSkill(new SkillDefinition("elemental_fury", "元素狂怒", "释放元素之力", 3, 20));
-        registerSkill(new SkillDefinition("meteor", "陨石术", "召唤陨石从天而降", 6, 50));
-        registerSkill(new SkillDefinition("time_stop", "时间停止", "短暂停止时间", 6, 100));
+        if (!skill.isActive()) {
+            player.sendMessage(Component.text("这不是主动技能！").color(NamedTextColor.RED));
+            return false;
+        }
         
-        registerSkill(new SkillDefinition("aimed_shot", "瞄准射击", "精准瞄准射击", 1, 5));
-        registerSkill(new SkillDefinition("arrow_rain", "箭雨", "射出大量箭矢", 1, 15));
-        registerSkill(new SkillDefinition("multi_shot", "多重射击", "同时射出多支箭", 3, 10));
-        registerSkill(new SkillDefinition("trap", "陷阱", "设置陷阱", 3, 5));
+        // 检查玩家是否拥有该技能
+        if (!hasSkill(player, skill)) {
+            player.sendMessage(Component.text("你还没有解锁这个技能！").color(NamedTextColor.RED));
+            return false;
+        }
         
-        registerSkill(new SkillDefinition("backstab", "背刺", "从背后攻击造成额外伤害", 1, 15));
-        registerSkill(new SkillDefinition("stealth", "潜行", "进入隐身状态", 1, 20));
-        registerSkill(new SkillDefinition("shadow_step", "暗影步", "瞬移到目标身后", 3, 15));
-        registerSkill(new SkillDefinition("assassinate", "暗杀", "一击致命", 6, 50));
+        // 检查冷却
+        if (plugin.getCooldownManager().isOnCooldown(player.getUniqueId(), skillId)) {
+            int remaining = plugin.getCooldownManager().getRemainingCooldownSeconds(player.getUniqueId(), skillId);
+            player.sendMessage(Component.text("技能冷却中，剩余 " + remaining + " 秒").color(NamedTextColor.RED));
+            return false;
+        }
         
-        registerSkill(new SkillDefinition("heal", "治疗", "恢复生命值", 1, 10));
-        registerSkill(new SkillDefinition("blessing", "祝福", "获得神明祝福", 1, 15));
-        registerSkill(new SkillDefinition("group_heal", "群体治疗", "治疗周围队友", 3, 30));
-        registerSkill(new SkillDefinition("resurrection", "复活", "复活死亡的队友", 6, 100));
+        // 检查魔力
+        if (plugin.getManaManager().getMana(player) < skill.getManaCost()) {
+            player.sendMessage(Component.text("魔力不足！").color(NamedTextColor.RED));
+            return false;
+        }
         
-        registerSkill(new SkillDefinition("divine_dragon_form", "神圣龙形态", "化身为神圣巨龙", 9, 200));
-        registerSkill(new SkillDefinition("cosmic_annihilation", "宇宙湮灭", "释放宇宙之力", 9, 300));
-        registerSkill(new SkillDefinition("godslayer_arrow", "弑神之箭", "能弑杀神明的箭矢", 9, 250));
-        registerSkill(new SkillDefinition("divine_death", "神圣死亡", "裁决生死", 9, 200));
-        registerSkill(new SkillDefinition("divine_miracle", "神圣奇迹", "创造奇迹", 9, 150));
+        // 消耗魔力
+        plugin.getManaManager().consumeMana(player, skill.getManaCost());
+        
+        // 设置冷却
+        plugin.getCooldownManager().setCooldown(player.getUniqueId(), skillId, skill.getCooldown());
+        
+        // 执行技能
+        executeSkill(player, skill);
+        
+        player.sendMessage(Component.text("使用技能: " + skill.getName()).color(NamedTextColor.GOLD));
+        return true;
     }
     
-    private void registerSkill(SkillDefinition skill) {
-        skillDefinitions.put(skill.getId(), skill);
+    /**
+     * 执行技能效果
+     */
+    private void executeSkill(Player player, Skill skill) {
+        if (armorStatsSkillManager != null) {
+            tryExecuteArmorStatsSkill(player, skill);
+        } else {
+            plugin.getSkillEffectExecutor().executeSkill(player, skill);
+        }
     }
     
-    public List<String> getUnlockedSkills(Player player) {
+    /**
+     * 尝试调用 ArmorStats 技能执行系统
+     */
+    private void tryExecuteArmorStatsSkill(Player player, Skill skill) {
+        if (armorStatsSkillManager == null) return;
+        
+        try {
+            var skillClass = Class.forName("cn.guangdian.armorstats.skill.Skill");
+            var triggerMethod = armorStatsSkillManager.getClass().getMethod(
+                "triggerSkill", Player.class, String.class, double.class
+            );
+            triggerMethod.invoke(armorStatsSkillManager, player, skill.getId(), skill.getDamageMult());
+        } catch (Exception e) {
+            plugin.getLogger().warning("调用 ArmorStats 技能执行失败: " + e.getMessage());
+            plugin.getSkillEffectExecutor().executeSkill(player, skill);
+        }
+    }
+    
+    /**
+     * 触发被动技能
+     */
+    public boolean triggerPassiveSkill(Player player, Skill skill) {
+        if (skill == null || !skill.isPassive()) return false;
+        
+        // 检查玩家是否拥有该技能
+        if (!hasSkill(player, skill)) return false;
+        
+        // 执行被动技能效果
+        if (armorStatsSkillManager != null) {
+            tryTriggerArmorStatsPassiveSkill(player, skill);
+        } else {
+            plugin.getSkillEffectExecutor().executePassiveSkill(player, skill);
+        }
+        
+        return true;
+    }
+    
+    /**
+     * 尝试调用 ArmorStats 被动技能触发
+     */
+    private void tryTriggerArmorStatsPassiveSkill(Player player, Skill skill) {
+        if (armorStatsSkillManager == null) return;
+        
+        try {
+            var triggerMethod = armorStatsSkillManager.getClass().getMethod(
+                "triggerPassiveSkill", Player.class, String.class
+            );
+            triggerMethod.invoke(armorStatsSkillManager, player, skill.getId());
+        } catch (Exception e) {
+            plugin.getSkillEffectExecutor().executePassiveSkill(player, skill);
+        }
+    }
+    
+    /**
+     * 检查玩家是否拥有技能
+     */
+    public boolean hasSkill(Player player, Skill skill) {
         PlayerClassData data = plugin.getPlayerData(player);
-        if (data == null) return new ArrayList<>();
+        if (data == null) return false;
         
         GameClass gameClass = plugin.getClassManager().getClass(data.getClassId());
-        if (gameClass == null) return new ArrayList<>();
+        if (gameClass == null) return false;
         
-        return new ArrayList<>(gameClass.getSkills());
+        // 检查途径匹配
+        Pathway playerPathway = Pathway.fromId(gameClass.getPathway());
+        if (playerPathway != skill.getPathway()) return false;
+        
+        // 检查序列（玩家序列 <= 技能序列表示已解锁，序列越低越强）
+        Sequence playerSequence = Sequence.fromLevel(gameClass.getSequence());
+        if (playerSequence.getLevel() > skill.getSequence().getLevel()) return false;
+        
+        // 检查分支（如果有分支要求）
+        Branch playerBranch = Branch.fromId(gameClass.getBranch());
+        if (skill.getBranch() != Branch.NONE && playerBranch != skill.getBranch()) {
+            // 如果技能有分支要求，但玩家分支不匹配，检查是否是基础技能
+            if (skill.getBranch() != Branch.NONE) return false;
+        }
+        
+        return true;
     }
     
-    public boolean hasSkill(Player player, String skillId) {
-        List<String> skills = getUnlockedSkills(player);
-        return skills.contains(skillId);
+    /**
+     * 获取玩家解锁的技能列表（只有当前职业的技能）
+     */
+    public Skill[] getUnlockedSkills(Player player) {
+        PlayerClassData data = plugin.getPlayerData(player);
+        if (data == null) return new Skill[0];
+        
+        GameClass gameClass = plugin.getClassManager().getClass(data.getClassId());
+        if (gameClass == null) return new Skill[0];
+        
+        // 只获取当前职业的途径技能
+        Pathway pathway = Pathway.fromId(gameClass.getPathway());
+        if (pathway == null) return new Skill[0];
+        
+        Sequence sequence = Sequence.fromLevel(gameClass.getSequence());
+        Branch branch = Branch.fromId(gameClass.getBranch());
+        
+        // 获取途径的所有技能
+        Skill[] pathwaySkills = Skill.getSkillsByPathway(pathway);
+        
+        // 筛选已解锁的技能（只包含当前职业的技能）
+        int count = 0;
+        for (Skill skill : pathwaySkills) {
+            // 序列 <= 技能序列表示已解锁（序列越低越强）
+            if (sequence.getLevel() <= skill.getSequence().getLevel()) {
+                // 检查分支匹配
+                if (skill.getBranch() == Branch.NONE || skill.getBranch() == branch) {
+                    count++;
+                }
+            }
+        }
+        
+        Skill[] unlocked = new Skill[count];
+        int index = 0;
+        for (Skill skill : pathwaySkills) {
+            if (sequence.getLevel() <= skill.getSequence().getLevel()) {
+                if (skill.getBranch() == Branch.NONE || skill.getBranch() == branch) {
+                    unlocked[index++] = skill;
+                }
+            }
+        }
+        
+        return unlocked;
     }
     
-    public SkillDefinition getSkillDefinition(String skillId) {
-        return skillDefinitions.get(skillId);
-    }
-    
+    /**
+     * 发送技能列表给玩家
+     */
     public void sendSkillList(Player player) {
-        List<String> skills = getUnlockedSkills(player);
+        Skill[] skills = getUnlockedSkills(player);
         
-        if (skills.isEmpty()) {
+        if (skills.length == 0) {
             player.sendMessage(Component.text("你还没有解锁任何技能！").color(NamedTextColor.RED));
             return;
         }
         
-        player.sendMessage(Component.text("========== 已解锁技能 ==========").color(NamedTextColor.GOLD));
+        PlayerClassData classData = plugin.getPlayerData(player);
+        GameClass gameClass = classData != null ? plugin.getClassManager().getClass(classData.getClassId()) : null;
         
-        for (String skillId : skills) {
-            SkillDefinition skill = skillDefinitions.get(skillId);
-            if (skill != null) {
-                player.sendMessage(Component.text(skill.getName())
-                    .color(NamedTextColor.YELLOW)
-                    .append(Component.text(" - " + skill.getDescription())
-                        .color(NamedTextColor.GRAY)));
-            } else {
-                player.sendMessage(Component.text(skillId)
-                    .color(NamedTextColor.YELLOW));
-            }
+        if (gameClass != null) {
+            player.sendMessage(Component.text("========== " + gameClass.getPathwayName() + "途径技能 ==========")
+                .color(NamedTextColor.GOLD));
+            player.sendMessage(Component.text("当前序列: " + gameClass.getSequenceName())
+                .color(NamedTextColor.YELLOW));
+        }
+        
+        for (Skill skill : skills) {
+            String typeIcon = skill.isPassive() ? "[被动]" : "[主动]";
+            player.sendMessage(Component.text(typeIcon + " " + skill.getName())
+                .color(NamedTextColor.YELLOW)
+                .append(Component.text(" - " + skill.getSequence().getName())
+                    .color(NamedTextColor.GRAY)));
         }
         
         player.sendMessage(Component.text("================================").color(NamedTextColor.GOLD));
     }
     
-    public Collection<SkillDefinition> getAllSkills() {
-        return skillDefinitions.values();
+    /**
+     * 获取技能定义（通过枚举）
+     */
+    public Skill getSkill(String skillId) {
+        return Skill.fromId(skillId);
     }
     
-    public static class SkillDefinition {
-        private final String id;
-        private final String name;
-        private final String description;
-        private final int requiredTier;
-        private final int cooldown;
-        
-        public SkillDefinition(String id, String name, String description, int requiredTier, int cooldown) {
-            this.id = id;
-            this.name = name;
-            this.description = description;
-            this.requiredTier = requiredTier;
-            this.cooldown = cooldown;
-        }
-        
-        public String getId() { return id; }
-        public String getName() { return name; }
-        public String getDescription() { return description; }
-        public int getRequiredTier() { return requiredTier; }
-        public int getCooldown() { return cooldown; }
+    /**
+     * 重新加载
+     */
+    public void reload() {
+        hookArmorStats();
     }
 }

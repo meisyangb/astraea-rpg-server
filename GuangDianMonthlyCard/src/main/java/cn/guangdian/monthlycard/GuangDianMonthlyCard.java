@@ -8,6 +8,7 @@ import cn.guangdian.monthlycard.data.MonthlyCardType;
 import cn.guangdian.monthlycard.lifecycle.MonthlyCardDataHandler;
 import cn.guangdian.monthlycard.manager.MonthlyCardManager;
 import cn.guangdian.monthlycard.placeholder.MonthlyCardPlaceholder;
+import cn.guangdian.monthlycard.storage.MonthlyCardStorage;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.Bukkit;
@@ -25,6 +26,8 @@ public class GuangDianMonthlyCard extends AbstractRPGPlugin {
     private MonthlyCardDataHandler dataHandler;
     private MonthlyCardPlaceholder placeholder;
     private long checkTaskId;
+    private MonthlyCardStorage mcStorage;
+    private int mcSaveId = -1;
     
     @Override
     protected void onPluginEnable() {
@@ -34,6 +37,10 @@ public class GuangDianMonthlyCard extends AbstractRPGPlugin {
         
         cardManager = new MonthlyCardManager(this);
         cardManager.loadCardTypes();
+        
+        mcStorage = new MonthlyCardStorage(this);
+        if (mcStorage.init()) mcStorage.load();
+        mcSaveId = Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> { if (mcStorage != null) mcStorage.saveAsync(); }, 6000L, 6000L).getTaskId();
         
         registerCommands();
         registerLifecycle();
@@ -47,14 +54,13 @@ public class GuangDianMonthlyCard extends AbstractRPGPlugin {
     
     @Override
     protected void onPluginDisable() {
+        Bukkit.getScheduler().cancelTask(mcSaveId);
+        if (mcStorage != null) { mcStorage.save(); mcStorage.close(); }
         if (scheduler != null) {
             scheduler.cancelTask(checkTaskId);
             scheduler.cancelAllTasks();
         }
-        
-        if (cardManager != null) {
-            cardManager.saveAllData();
-        }
+        if (cardManager != null) cardManager.saveAllData();
         
         if (serviceAdapter != null) {
             serviceAdapter.unregister();

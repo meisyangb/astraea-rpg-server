@@ -94,21 +94,14 @@ public class QuestManager {
 
         publishQuestEvent(playerId, questId, "ACCEPT");
 
-        // 立即保存玩家数据（异步）
-        savePlayerDataAsync(playerId);
+        // 立即保存玩家数据（同步）
+        savePlayerData(playerId);
 
         return true;
     }
 
-    private void savePlayerDataAsync(UUID playerId) {
-        cn.guangdian.rpgcore.RPGCore rpgCore = cn.guangdian.rpgcore.RPGCore.getInstance();
-        if (rpgCore != null) {
-            rpgCore.getScheduler().runAsync(() -> {
-                playerRepository.savePlayerData(playerId);
-            });
-        } else {
-            playerRepository.savePlayerData(playerId);
-        }
+    private void savePlayerData(UUID playerId) {
+        playerRepository.savePlayerData(playerId);
     }
 
     public boolean completeQuest(UUID playerId, String questId) {
@@ -138,8 +131,8 @@ public class QuestManager {
 
         publishQuestEvent(playerId, questId, "COMPLETE");
 
-        // 立即保存玩家数据（异步）
-        savePlayerDataAsync(playerId);
+        // 立即保存玩家数据（同步）
+        savePlayerData(playerId);
 
         // 触发解锁通知
         Player completer = Bukkit.getPlayer(playerId);
@@ -171,8 +164,8 @@ public class QuestManager {
 
         publishQuestEvent(playerId, questId, "ABANDON");
 
-        // 立即保存玩家数据（异步）
-        savePlayerDataAsync(playerId);
+        // 立即保存玩家数据（同步）
+        savePlayerData(playerId);
 
         return true;
     }

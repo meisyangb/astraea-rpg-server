@@ -147,8 +147,12 @@ chunk-unload:
     F2: F2_战斗区域
     F3: F3_战斗区域
     F4: F4_战斗区域
-  # 卸载延迟(秒)
+  # 区域外区块卸载延迟(秒)
   unload-delay: 5
+  # 区域内区块检查间隔(秒)
+  check-interval: 60
+  # 区域内区块无玩家后卸载延迟(秒)
+  inactive-unload-delay: 120
   # 是否在玩家离开世界时立即卸载
   unload-on-leave: true
 

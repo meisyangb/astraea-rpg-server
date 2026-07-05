@@ -159,47 +159,79 @@ public class RPGCore extends JavaPlugin implements CommandExecutor, TabCompleter
 
     @Override
     public void onDisable() {
-        if (asyncExecutor != null) {
-            asyncExecutor.awaitTermination(30, TimeUnit.SECONDS);
-            asyncExecutor.shutdown();
+        // 优化关服流程：先保存所有玩家数据，再关闭
+        
+        // 1. 先保存所有在线玩家数据（同步保存，确保数据不丢失）
+        if (lifecycleManager != null) {
+            getLogger().info("保存所有在线玩家数据...");
+            lifecycleManager.saveAllPlayers(false);
         }
 
+        // 2. 直接关闭异步执行器
+        if (asyncExecutor != null) {
+            getLogger().info("关闭异步执行器...");
+            asyncExecutor.shutdownNow();
+        }
+
+        // 3. 清理事件总线和服务注册表
         if (eventBus instanceof SimpleEventBus seb) {
             seb.clear();
         }
         if (serviceRegistry instanceof SimpleServiceRegistry ssr) {
             ssr.clear();
         }
+        
+        // 4. 清理缓存
         if (cacheProvider != null) {
             cacheProvider.clear();
         }
+        
+        // 5. 释放所有锁
         if (lockManager != null) {
             lockManager.releaseAllLocks();
         }
+        
+        // 6. 关闭外部服务
         if (externalServices instanceof ExternalServiceIntegrationImpl esi) {
             esi.shutdown();
         }
+        
+        // 7. 关闭调度器
         if (scheduler instanceof UnifiedSchedulerImpl usi) {
             usi.shutdown();
         }
+        
+        // 8. 关闭HTTP客户端
         if (httpClient instanceof HttpClientImpl hci) {
             hci.shutdown();
         }
+        
+        // 9. 关闭文本显示服务
         if (textDisplayService instanceof TextDisplayServiceImpl tdsi) {
             tdsi.shutdown();
         }
 
+        // 10. 关闭BossBar服务
         AdventureBossBarService.getInstance().shutdown();
 
+        // 11. 注销生命周期管理器
         if (lifecycleManager != null) {
             lifecycleManager.unregister();
         }
+        
+        // 12. 保存配置
         if (configManager instanceof ConfigManagerImpl cmi) {
-            cmi.saveAll();
+            try {
+                cmi.saveAll();
+            } catch (Exception e) {
+                getLogger().warning("Config save failed: " + e.getMessage());
+            }
         }
 
+        // 13. 关闭数据库连接
         CoreDatabase.shutdown();
 
+        // 14. 输出关服统计信息
         logShutdownInfo();
 
         instance = null;

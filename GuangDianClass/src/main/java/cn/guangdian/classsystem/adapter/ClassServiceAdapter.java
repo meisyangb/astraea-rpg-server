@@ -201,6 +201,17 @@ public class ClassServiceAdapter implements ClassService {
         data.setAdvancementLevel(0);
         data.setLastUpdateTime(System.currentTimeMillis());
         
+        // 初始化该途径的技能空间
+        String pathway = targetClass.getPathway();
+        if (pathway != null && !pathway.isEmpty()) {
+            org.bukkit.entity.Player player = plugin.getServer().getPlayer(playerId);
+            if (player != null) {
+                plugin.getSkillSpaceManager().initSkillsForPathway(player, pathway);
+                // 解锁序列9的第一个技能
+                plugin.getSkillSpaceManager().unlockSkill(player, targetClass.getSkills().isEmpty() ? "" : targetClass.getSkills().get(0));
+            }
+        }
+        
         return true;
     }
     
@@ -221,6 +232,17 @@ public class ClassServiceAdapter implements ClassService {
         int attributePoints = targetClass.getAttributePoints();
         if (attributePoints > 0) {
             data.addAttributePoints(attributePoints);
+        }
+        
+        // 解锁新职业的技能
+        List<String> skills = targetClass.getSkills();
+        if (!skills.isEmpty()) {
+            org.bukkit.entity.Player player = plugin.getServer().getPlayer(playerId);
+            if (player != null) {
+                for (String skillId : skills) {
+                    plugin.getSkillSpaceManager().unlockSkill(player, skillId);
+                }
+            }
         }
         
         return true;
@@ -246,6 +268,38 @@ public class ClassServiceAdapter implements ClassService {
         data.setTier(targetClass.getTier());
         data.setAdvancementLevel(targetClass.getAdvancement());
         data.setLastUpdateTime(System.currentTimeMillis());
+        
+        // 初始化该途径的技能空间并解锁所有该序列及之前的技能
+        String pathway = targetClass.getPathway();
+        if (pathway != null && !pathway.isEmpty()) {
+            org.bukkit.entity.Player player = plugin.getServer().getPlayer(playerId);
+            if (player != null) {
+                // 初始化技能空间
+                plugin.getSkillSpaceManager().initSkillsForPathway(player, pathway);
+                
+                // 解锁该职业的技能
+                List<String> skills = targetClass.getSkills();
+                if (!skills.isEmpty()) {
+                    for (String skillId : skills) {
+                        plugin.getSkillSpaceManager().unlockSkill(player, skillId);
+                    }
+                }
+                
+                // 解锁该途径中序列大于当前职业序列的所有技能（序列数字越大，等级越低）
+                int currentSequence = targetClass.getSequence();
+                for (cn.guangdian.classsystem.model.GameClass gc : classManager.getClassesByPathway(pathway)) {
+                    // 序列数字越大 = 等级越低，所以 sequence > currentSequence 表示更低等级的职业
+                    if (gc.getSequence() > currentSequence) {
+                        List<String> lowerSkills = gc.getSkills();
+                        if (!lowerSkills.isEmpty()) {
+                            for (String skillId : lowerSkills) {
+                                plugin.getSkillSpaceManager().unlockSkill(player, skillId);
+                            }
+                        }
+                    }
+                }
+            }
+        }
         
         return true;
     }

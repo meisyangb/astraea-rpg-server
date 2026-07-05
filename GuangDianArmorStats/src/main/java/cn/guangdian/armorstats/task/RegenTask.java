@@ -39,6 +39,9 @@ public class RegenTask implements Runnable {
     private boolean combatRegenEnabled;
     private double combatMultiplier;
     private long combatTimeoutMillis;
+    // 回血上限配置（新增）
+    private double maxCombatRegenPercent;  // 战斗回血上限: 最大生命的百分比/每次
+    private double maxNormalRegenPercent;  // 非战斗回血上限: 最大生命的百分比/每次
 
     public RegenTask(GuangDianArmorStats plugin, StatsManager statsManager, BossBarManager bossBarManager) {
         this.plugin = plugin;
@@ -51,8 +54,11 @@ public class RegenTask implements Runnable {
         // 默认5秒（100 ticks）执行一次回血
         intervalTicks = Math.max(1L, plugin.getConfig().getLong("regen.interval", 100L));
         combatRegenEnabled = plugin.getConfig().getBoolean("regen.combat_regen", true);
-        combatMultiplier = Math.max(0.0, plugin.getConfig().getDouble("regen.combat_multiplier", 0.5));
+        combatMultiplier = Math.max(0.0, plugin.getConfig().getDouble("regen.combat_multiplier", 0.2));
         combatTimeoutMillis = Math.max(0L, plugin.getConfig().getLong("regen.combat_timeout", 5000L));
+        // 回血上限配置
+        maxCombatRegenPercent = Math.max(0.0, plugin.getConfig().getDouble("regen.max_combat_regen_percent", 0.06));
+        maxNormalRegenPercent = Math.max(0.0, plugin.getConfig().getDouble("regen.max_normal_regen_percent", 0.15));
     }
 
     public void start() {
@@ -158,6 +164,12 @@ public class RegenTask implements Runnable {
 
             double regenMultiplier = inCombat ? combatMultiplier : 1.0;
             double regenAmount = (regenPerSecond + (maxHealth * regenPercent / 100.0)) * tickScale * Math.max(0.0, regenMultiplier);
+            
+            // 回血上限: 战斗中不超过最大生命的6%/5秒, 非战斗不超过15%/5秒
+            double maxRegenThisTick = inCombat 
+                ? maxHealth * maxCombatRegenPercent 
+                : maxHealth * maxNormalRegenPercent;
+            regenAmount = Math.min(regenAmount, maxRegenThisTick);
             
             if (regenAmount <= 0) {
                 continue;

@@ -13,6 +13,8 @@ import cn.guangdian.rpgcore.api.SyncScheduler;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -299,7 +301,7 @@ public class SessionManager {
         plugin.getLogger().info("[DEBUG] Spawn complete: " + successCount + "/" + amount + " mobs spawned");
         plugin.getLogger().info("[DEBUG] Wave spawnedMobCount: " + wave.getSpawnedMobCount() + ", Session spawnedMobs: " + session.getSpawnedMobs().size());
 
-        String mobDisplayName = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(mobDisplayComponent);
+        String mobDisplayName = net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().serialize(mobDisplayComponent);
         broadcastMessage(session, "<gray>[波次] <white>生成 " + successCount + "x " + mobDisplayName);
         broadcastMessage(session, "<yellow><bold>[击杀进度]</bold> <white>0/" + wave.getSpawnedMobCount());
     }
@@ -656,9 +658,12 @@ public class SessionManager {
                     break;
                 case SOUND:
                     try {
-                        Sound sound = Sound.valueOf(action.getSound());
-                        broadcastSound(session, sound, action.getVolume(), 1.0f);
-                    } catch (IllegalArgumentException ignored) {}
+                        Sound sound = Registry.SOUNDS.get(
+                            NamespacedKey.minecraft(action.getSound().toLowerCase()));
+                        if (sound != null) {
+                            broadcastSound(session, sound, action.getVolume(), 1.0f);
+                        }
+                    } catch (Exception ignored) {}
                     break;
                 case DELAY:
                     break;

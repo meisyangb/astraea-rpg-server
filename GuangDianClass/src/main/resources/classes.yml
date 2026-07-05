@@ -1,479 +1,384 @@
-# Astraea RPG 职业定义
+# ========================================
+# 简化职业系统
+# 2个职业，每个职业9个等级
+# ========================================
 
 classes:
+  # ========================================
+  # 初始职业 - 无技能
+  # ========================================
   novice:
     name: "新手"
     tier: 1
+    sequence: 10
+    pathway: ""
     advancement: 0
-    description: "初入阿斯特瑞亚大陆的冒险者"
+    description: "尚未选择职业的新手"
     attribute-points: 0
     next-classes:
-      - "warrior"
-      - "mage"
-      - "archer"
-      - "assassin"
-      - "priest"
+      - "warrior_lv1"
+      - "mage_lv1"
     stats:
       health: 50
       attack: 5
       defense: 5
-      mana: 50
+      mana: 20
     skills: []
-    
-  warrior:
-    name: "战士"
+
+  # ========================================
+  # 战士职业 - 9个等级
+  # ========================================
+  
+  # 等级1（序列9）
+  warrior_lv1:
+    name: "战士 Lv.1"
     tier: 1
+    sequence: 9
+    pathway: "warrior"
     advancement: 0
-    description: "近战物理输出，拥有强大的生存能力"
+    description: "战士职业入门"
     attribute-points: 5
+    requires-class: "novice"
     next-classes:
-      - "knight"
+      - "warrior_lv2"
     stats:
       health: 100
       attack: 15
       defense: 10
       mana: 30
     skills:
-      - "slash"
-      - "shield_bash"
+      - "warrior_slash"
       
-  knight:
-    name: "骑士"
-    tier: 3
-    advancement: 1
-    description: "一转职业 - 骑乘战斗的勇者"
-    attribute-points: 15
-    requires-class: "warrior"
+  # 等级2（序列8）
+  warrior_lv2:
+    name: "战士 Lv.2"
+    tier: 2
+    sequence: 8
+    pathway: "warrior"
+    advancement: 0
+    description: "战士职业等级2"
+    attribute-points: 5
+    requires-class: "warrior_lv1"
     next-classes:
-      - "paladin"
+      - "warrior_lv3"
     stats:
-      health: 200
+      health: 120
+      attack: 18
+      defense: 12
+      mana: 35
+    skills: []
+      
+  # 等级3（序列7）
+  warrior_lv3:
+    name: "战士 Lv.3"
+    tier: 3
+    sequence: 7
+    pathway: "warrior"
+    advancement: 1
+    description: "战士职业等级3"
+    attribute-points: 10
+    requires-class: "warrior_lv2"
+    next-classes:
+      - "warrior_lv4"
+    stats:
+      health: 150
       attack: 25
-      defense: 25
+      defense: 20
       mana: 50
     skills:
-      - "charge"
-      - "mounted_combat"
+      - "warrior_shield"
       
-  paladin:
-    name: "圣骑士"
-    tier: 6
+  # 等级4（序列6）
+  warrior_lv4:
+    name: "战士 Lv.4"
+    tier: 4
+    sequence: 6
+    pathway: "warrior"
+    advancement: 1
+    description: "战士职业等级4"
+    attribute-points: 5
+    requires-class: "warrior_lv3"
+    next-classes:
+      - "warrior_lv5"
+    stats:
+      health: 180
+      attack: 30
+      defense: 25
+      mana: 60
+    skills: []
+      
+  # 等级5（序列5）
+  warrior_lv5:
+    name: "战士 Lv.5"
+    tier: 5
+    sequence: 5
+    pathway: "warrior"
     advancement: 2
-    description: "二转职业 - 神圣力量的守护者"
-    attribute-points: 30
-    requires-class: "knight"
+    description: "战士职业等级5"
+    attribute-points: 15
+    requires-class: "warrior_lv4"
     next-classes:
-      - "dragon_knight"
+      - "warrior_lv6"
     stats:
-      health: 400
-      attack: 45
-      defense: 50
+      health: 220
+      attack: 40
+      defense: 35
+      mana: 80
+    skills:
+      - "warrior_power"
+      
+  # 等级6（序列4）
+  warrior_lv6:
+    name: "战士 Lv.6"
+    tier: 6
+    sequence: 4
+    pathway: "warrior"
+    advancement: 2
+    description: "战士职业等级6"
+    attribute-points: 10
+    requires-class: "warrior_lv5"
+    next-classes:
+      - "warrior_lv7"
+    stats:
+      health: 280
+      attack: 55
+      defense: 45
       mana: 100
-    skills:
-      - "holy_strike"
-      - "divine_shield"
-      - "healing_aura"
+    skills: []
       
-  dragon_knight:
-    name: "龙骑士"
-    tier: 8
+  # 等级7（序列3）
+  warrior_lv7:
+    name: "战士 Lv.7"
+    tier: 7
+    sequence: 3
+    pathway: "warrior"
     advancement: 3
-    description: "三转职业 - 与龙缔结契约的战士"
-    attribute-points: 50
-    requires-class: "paladin"
+    description: "战士职业等级7"
+    attribute-points: 20
+    requires-class: "warrior_lv6"
     next-classes:
-      - "divine_dragon_knight"
+      - "warrior_lv8"
     stats:
-      health: 800
-      attack: 80
-      defense: 80
-      mana: 200
+      health: 350
+      attack: 70
+      defense: 60
+      mana: 130
     skills:
-      - "dragon_breath"
-      - "dragon_flight"
-      - "dragon_slash"
+      - "warrior_rage"
       
-  divine_dragon_knight:
-    name: "神圣龙骑士"
+  # 等级8（序列2）
+  warrior_lv8:
+    name: "战士 Lv.8"
+    tier: 8
+    sequence: 2
+    pathway: "warrior"
+    advancement: 3
+    description: "战士职业等级8"
+    attribute-points: 15
+    requires-class: "warrior_lv7"
+    next-classes:
+      - "warrior_lv9"
+    stats:
+      health: 450
+      attack: 90
+      defense: 80
+      mana: 160
+    skills: []
+      
+  # 等级9（序列1）
+  warrior_lv9:
+    name: "战士 Lv.9"
     tier: 9
+    sequence: 1
+    pathway: "warrior"
     advancement: 4
-    description: "神级职业 - 超越凡人的龙之化身"
-    attribute-points: 100
-    requires-class: "dragon_knight"
+    description: "战士职业满级"
+    attribute-points: 30
+    requires-class: "warrior_lv8"
     next-classes: []
     stats:
-      health: 2000
-      attack: 200
-      defense: 150
-      mana: 500
+      health: 600
+      attack: 120
+      defense: 100
+      mana: 200
     skills:
-      - "divine_dragon_form"
-      - "apocalypse_breath"
-      - "eternal_guardian"
-      
-  mage:
-    name: "法师"
+      - "warrior_master"
+
+  # ========================================
+  # 法师职业 - 9个等级
+  # ========================================
+  
+  # 等级1（序列9）
+  mage_lv1:
+    name: "法师 Lv.1"
     tier: 1
+    sequence: 9
+    pathway: "mage"
     advancement: 0
-    description: "掌控元素之力的施法者"
+    description: "法师职业入门"
     attribute-points: 5
+    requires-class: "novice"
     next-classes:
-      - "elementalist"
+      - "mage_lv2"
     stats:
       health: 60
       attack: 20
       defense: 5
       mana: 150
     skills:
-      - "fireball"
-      - "ice_shield"
+      - "mage_fireball"
       
-  elementalist:
-    name: "元素师"
-    tier: 3
-    advancement: 1
-    description: "一转职业 - 精通元素魔法"
-    attribute-points: 15
-    requires-class: "mage"
-    next-classes:
-      - "archmage"
-    stats:
-      health: 120
-      attack: 40
-      defense: 10
-      mana: 300
-    skills:
-      - "elemental_fury"
-      - "elemental_shield"
-      
-  archmage:
-    name: "大法师"
-    tier: 6
-    advancement: 2
-    description: "二转职业 - 魔法的大师"
-    attribute-points: 30
-    requires-class: "elementalist"
-    next-classes:
-      - "sage"
-    stats:
-      health: 250
-      attack: 80
-      defense: 20
-      mana: 600
-    skills:
-      - "meteor"
-      - "time_stop"
-      - "mana_shield"
-      
-  sage:
-    name: "贤者"
-    tier: 8
-    advancement: 3
-    description: "三转职业 - 智慧的化身"
-    attribute-points: 50
-    requires-class: "archmage"
-    next-classes:
-      - "divine_sage"
-    stats:
-      health: 500
-      attack: 150
-      defense: 40
-      mana: 1200
-    skills:
-      - "arcane_burst"
-      - "dimension_rift"
-      - "wisdom_blessing"
-      
-  divine_sage:
-    name: "神圣贤者"
-    tier: 9
-    advancement: 4
-    description: "神级职业 - 掌握宇宙真理"
-    attribute-points: 100
-    requires-class: "sage"
-    next-classes: []
-    stats:
-      health: 1200
-      attack: 400
-      defense: 80
-      mana: 3000
-    skills:
-      - "cosmic_annihilation"
-      - "reality_rewrite"
-      - "omniscience"
-      
-  archer:
-    name: "弓箭手"
-    tier: 1
+  # 等级2（序列8）
+  mage_lv2:
+    name: "法师 Lv.2"
+    tier: 2
+    sequence: 8
+    pathway: "mage"
     advancement: 0
-    description: "远程物理输出，精准致命"
+    description: "法师职业等级2"
     attribute-points: 5
+    requires-class: "mage_lv1"
     next-classes:
-      - "ranger"
+      - "mage_lv3"
     stats:
       health: 70
-      attack: 18
-      defense: 8
-      mana: 50
-    skills:
-      - "aimed_shot"
-      - "arrow_rain"
+      attack: 25
+      defense: 6
+      mana: 180
+    skills: []
       
-  ranger:
-    name: "游侠"
+  # 等级3（序列7）
+  mage_lv3:
+    name: "法师 Lv.3"
     tier: 3
+    sequence: 7
+    pathway: "mage"
     advancement: 1
-    description: "一转职业 - 森林的守护者"
-    attribute-points: 15
-    requires-class: "archer"
+    description: "法师职业等级3"
+    attribute-points: 10
+    requires-class: "mage_lv2"
     next-classes:
-      - "sniper"
+      - "mage_lv4"
+    stats:
+      health: 90
+      attack: 35
+      defense: 8
+      mana: 250
+    skills:
+      - "mage_lightning"
+      
+  # 等级4（序列6）
+  mage_lv4:
+    name: "法师 Lv.4"
+    tier: 4
+    sequence: 6
+    pathway: "mage"
+    advancement: 1
+    description: "法师职业等级4"
+    attribute-points: 5
+    requires-class: "mage_lv3"
+    next-classes:
+      - "mage_lv5"
+    stats:
+      health: 110
+      attack: 45
+      defense: 10
+      mana: 320
+    skills: []
+      
+  # 等级5（序列5）
+  mage_lv5:
+    name: "法师 Lv.5"
+    tier: 5
+    sequence: 5
+    pathway: "mage"
+    advancement: 2
+    description: "法师职业等级5"
+    attribute-points: 15
+    requires-class: "mage_lv4"
+    next-classes:
+      - "mage_lv6"
     stats:
       health: 140
-      attack: 35
-      defense: 15
-      mana: 100
-    skills:
-      - "multi_shot"
-      - "trap"
-      - "nature_bond"
-      
-  sniper:
-    name: "神射手"
-    tier: 6
-    advancement: 2
-    description: "二转职业 - 百发百中的射手"
-    attribute-points: 30
-    requires-class: "ranger"
-    next-classes:
-      - "demon_hunter"
-    stats:
-      health: 280
-      attack: 70
-      defense: 25
-      mana: 200
-    skills:
-      - "piercing_arrow"
-      - "shadow_shot"
-      - "eagle_eye"
-      
-  demon_hunter:
-    name: "猎魔人"
-    tier: 8
-    advancement: 3
-    description: "三转职业 - 狩猎邪恶的专家"
-    attribute-points: 50
-    requires-class: "sniper"
-    next-classes:
-      - "divine_demon_hunter"
-    stats:
-      health: 550
-      attack: 140
-      defense: 50
+      attack: 60
+      defense: 12
       mana: 400
     skills:
-      - "demon_slayer"
-      - "holy_arrow"
-      - "hunters_mark"
+      - "mage_wisdom"
       
-  divine_demon_hunter:
-    name: "神圣猎魔人"
-    tier: 9
-    advancement: 4
-    description: "神级职业 - 诸神的猎手"
-    attribute-points: 100
-    requires-class: "demon_hunter"
-    next-classes: []
-    stats:
-      health: 1400
-      attack: 350
-      defense: 100
-      mana: 800
-    skills:
-      - "godslayer_arrow"
-      - "celestial_hunt"
-      - "divine_judgment"
-      
-  assassin:
-    name: "刺客"
-    tier: 1
-    advancement: 0
-    description: "暗影中的杀手，一击致命"
-    attribute-points: 5
-    next-classes:
-      - "shadow_dancer"
-    stats:
-      health: 65
-      attack: 22
-      defense: 6
-      mana: 60
-    skills:
-      - "backstab"
-      - "stealth"
-      
-  shadow_dancer:
-    name: "影舞者"
-    tier: 3
-    advancement: 1
-    description: "一转职业 - 暗影中的舞者"
-    attribute-points: 15
-    requires-class: "assassin"
-    next-classes:
-      - "shadow_master"
-    stats:
-      health: 130
-      attack: 45
-      defense: 12
-      mana: 120
-    skills:
-      - "shadow_step"
-      - "blade_dance"
-      - "smoke_bomb"
-      
-  shadow_master:
-    name: "暗影大师"
+  # 等级6（序列4）
+  mage_lv6:
+    name: "法师 Lv.6"
     tier: 6
+    sequence: 4
+    pathway: "mage"
     advancement: 2
-    description: "二转职业 - 暗影的主宰"
-    attribute-points: 30
-    requires-class: "shadow_dancer"
+    description: "法师职业等级6"
+    attribute-points: 10
+    requires-class: "mage_lv5"
     next-classes:
-      - "reaper"
+      - "mage_lv7"
     stats:
-      health: 260
-      attack: 90
-      defense: 20
-      mana: 250
-    skills:
-      - "shadow_clone"
-      - "darkness_embrace"
-      - "assassinate"
-      
-  reaper:
-    name: "死神"
-    tier: 8
-    advancement: 3
-    description: "三转职业 - 收割灵魂的存在"
-    attribute-points: 50
-    requires-class: "shadow_master"
-    next-classes:
-      - "divine_reaper"
-    stats:
-      health: 520
-      attack: 180
-      defense: 40
-      mana: 500
-    skills:
-      - "soul_harvest"
-      - "death_mark"
-      - "reaper_scythe"
-      
-  divine_reaper:
-    name: "神圣死神"
-    tier: 9
-    advancement: 4
-    description: "神级职业 - 生死的裁决者"
-    attribute-points: 100
-    requires-class: "reaper"
-    next-classes: []
-    stats:
-      health: 1300
-      attack: 450
-      defense: 80
-      mana: 1000
-    skills:
-      - "divine_death"
-      - "soul_annihilation"
-      - "final_judgment"
-      
-  priest:
-    name: "牧师"
-    tier: 1
-    advancement: 0
-    description: "神圣之力的使用者，治疗与辅助"
-    attribute-points: 5
-    next-classes:
-      - "cleric"
-    stats:
-      health: 60
-      attack: 8
-      defense: 8
-      mana: 120
-    skills:
-      - "heal"
-      - "blessing"
-      
-  cleric:
-    name: "祭司"
-    tier: 3
-    advancement: 1
-    description: "一转职业 - 神圣仪式的主持者"
-    attribute-points: 15
-    requires-class: "priest"
-    next-classes:
-      - "high_priest"
-    stats:
-      health: 120
-      attack: 15
+      health: 180
+      attack: 80
       defense: 15
-      mana: 250
-    skills:
-      - "group_heal"
-      - "sanctuary"
-      - "divine_light"
-      
-  high_priest:
-    name: "大祭司"
-    tier: 6
-    advancement: 2
-    description: "二转职业 - 神明的代言人"
-    attribute-points: 30
-    requires-class: "cleric"
-    next-classes:
-      - "saint"
-    stats:
-      health: 240
-      attack: 30
-      defense: 30
       mana: 500
-    skills:
-      - "resurrection"
-      - "divine_protection"
-      - "holy_nova"
+    skills: []
       
-  saint:
-    name: "圣者"
-    tier: 8
+  # 等级7（序列3）
+  mage_lv7:
+    name: "法师 Lv.7"
+    tier: 7
+    sequence: 3
+    pathway: "mage"
     advancement: 3
-    description: "三转职业 - 圣洁的化身"
-    attribute-points: 50
-    requires-class: "high_priest"
+    description: "法师职业等级7"
+    attribute-points: 20
+    requires-class: "mage_lv6"
     next-classes:
-      - "divine_saint"
+      - "mage_lv8"
     stats:
-      health: 480
-      attack: 60
-      defense: 60
-      mana: 1000
+      health: 230
+      attack: 100
+      defense: 18
+      mana: 650
     skills:
-      - "mass_resurrection"
-      - "divine_intervention"
-      - "holy_sanctuary"
+      - "mage_ice"
       
-  divine_saint:
-    name: "神圣圣者"
+  # 等级8（序列2）
+  mage_lv8:
+    name: "法师 Lv.8"
+    tier: 8
+    sequence: 2
+    pathway: "mage"
+    advancement: 3
+    description: "法师职业等级8"
+    attribute-points: 15
+    requires-class: "mage_lv7"
+    next-classes:
+      - "mage_lv9"
+    stats:
+      health: 300
+      attack: 130
+      defense: 22
+      mana: 800
+    skills: []
+      
+  # 等级9（序列1）
+  mage_lv9:
+    name: "法师 Lv.9"
     tier: 9
+    sequence: 1
+    pathway: "mage"
     advancement: 4
-    description: "神级职业 - 诸神的使者"
-    attribute-points: 100
-    requires-class: "saint"
+    description: "法师职业满级"
+    attribute-points: 30
+    requires-class: "mage_lv8"
     next-classes: []
     stats:
-      health: 1200
-      attack: 150
-      defense: 120
-      mana: 2000
+      health: 400
+      attack: 180
+      defense: 30
+      mana: 1000
     skills:
-      - "divine_miracle"
-      - "eternal_life"
-      - "god_blessing"
+      - "mage_master"

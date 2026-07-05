@@ -136,7 +136,30 @@ public class PlayerQuestData {
 
     public int getTotalCompletedCount() { return totalCompletedCount; }
     public int getAchievementPoints() { return achievementPoints; }
+    public long getDailyResetTime() { return dailyResetTime; }
     public UUID getPlayerId() { return playerId; }
+
+    // SQLite 存储辅助方法
+    public void setTotalCompletedCount(int v) { this.totalCompletedCount = v; }
+    public void setAchievementPoints(int v) { this.achievementPoints = v; }
+    public void setDailyCompletedCount(int v) { this.dailyCompletedCount = v; }
+    public void setDailyResetTime(long v) { this.dailyResetTime = v; }
+
+    public void loadActiveQuest(String questId, int[] progress) {
+        this.activeQuests.put(questId, progress);
+    }
+
+    public void loadCompletedQuest(String questId, long completionTime) {
+        this.completedQuests.put(questId, completionTime);
+    }
+
+    public void loadQuestLineProgress(String lineId, int progress) {
+        this.questLineProgress.put(lineId, progress);
+    }
+
+    public Map<String, Integer> getQuestLineProgressMap() {
+        return questLineProgress;
+    }
 
     public Map<String, Object> toMap() {
         Map<String, Object> map = new LinkedHashMap<>();

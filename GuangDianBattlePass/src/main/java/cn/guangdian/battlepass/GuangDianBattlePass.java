@@ -10,6 +10,7 @@ import cn.guangdian.battlepass.manager.BattlePassManager;
 import cn.guangdian.battlepass.manager.ExpTriggerManager;
 import cn.guangdian.battlepass.manager.RewardManager;
 import cn.guangdian.battlepass.manager.SeasonManager;
+import cn.guangdian.battlepass.storage.BattlePassStorage;
 import cn.guangdian.battlepass.placeholder.BattlePassPlaceholder;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
@@ -28,6 +29,8 @@ public class GuangDianBattlePass extends AbstractRPGPlugin {
     
     private BattlePassServiceAdapter serviceAdapter;
     private BattlePassDataHandler dataHandler;
+    private BattlePassStorage bpStorage;
+    private int bpSaveTaskId = -1;
     
     @Override
     protected void onPluginEnable() {
@@ -42,6 +45,11 @@ public class GuangDianBattlePass extends AbstractRPGPlugin {
         expTriggerManager = new ExpTriggerManager(this);
         
         registerCommands();
+        // SQLite
+        bpStorage = new BattlePassStorage(this);
+        if (bpStorage.init()) bpStorage.load();
+        bpSaveTaskId = Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> { if (bpStorage != null) bpStorage.saveAllAsync(); }, 6000L, 6000L).getTaskId();
+        
         registerListeners();
         registerAPI();
         startTasks();
@@ -52,18 +60,11 @@ public class GuangDianBattlePass extends AbstractRPGPlugin {
     
     @Override
     protected void onPluginDisable() {
-        if (serviceAdapter != null) {
-            serviceAdapter.unregister();
-        }
-        
-        if (dataHandler != null) {
-            dataHandler.unregister();
-        }
-        
-        if (scheduler != null) {
-            scheduler.cancelAllTasks();
-        }
-        
+        Bukkit.getScheduler().cancelTask(bpSaveTaskId);
+        if (bpStorage != null) { bpStorage.saveAll(); bpStorage.close(); }
+        if (serviceAdapter != null) serviceAdapter.unregister();
+        if (dataHandler != null) dataHandler.unregister();
+        if (scheduler != null) scheduler.cancelAllTasks();
         getLogger().info("战令系统已关闭!");
     }
     

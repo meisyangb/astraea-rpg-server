@@ -1,0 +1,29 @@
+// ========================================
+// GuangDianFakePlayer - 简化版伪装玩家插件
+// ========================================
+
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.papermc.io/repository/maven-public/' }
+    // 使用服务器上的jar文件
+    flatDir { dirs 'e:/RPG/译梦传说/plugins' }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
+    
+    // 使用服务器上的jar文件
+    compileOnly name: 'PlaceholderAPI'
+    compileOnly name: 'ProtocolLib'
+    compileOnly name: 'RPGCore-1.0.0'
+    compileOnly name: 'GuangDianAuth-1.0.0'
+}
+
+jar {
+    archiveBaseName.set('GuangDianFakePlayer')
+    archiveVersion.set('1.0.0')
+}

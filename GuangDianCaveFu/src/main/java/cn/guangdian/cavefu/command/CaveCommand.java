@@ -8,7 +8,6 @@ import cn.guangdian.cavefu.cave.CaveMember;
 import cn.guangdian.cavefu.config.ConfigManager;
 import cn.guangdian.cavefu.permission.PermissionType;
 import cn.guangdian.cavefu.upgrade.UpgradeManager;
-import cn.guangdian.rpgcore.message.MiniMessageService;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -23,27 +22,26 @@ import java.util.stream.Collectors;
 
 /**
  * 玩家洞府命令
+ * 使用 Adventure MiniMessage 发送彩色消息（Minecraft 1.21 内置）
  */
 public class CaveCommand implements CommandExecutor, TabCompleter {
     private final GuangDianCaveFu plugin;
     private final CaveManager caveManager;
     private final ConfigManager configManager;
     private final UpgradeManager upgradeManager;
-    private final MiniMessageService miniMessage;
 
     public CaveCommand(GuangDianCaveFu plugin) {
         this.plugin = plugin;
         this.caveManager = plugin.getCaveManager();
         this.configManager = plugin.getConfigManager();
         this.upgradeManager = plugin.getUpgradeManager();
-        this.miniMessage = plugin.getMiniMessageService();
     }
 
     /**
      * 使用 MiniMessage 发送消息
      */
     private void sendMessage(CommandSender sender, String text) {
-        sender.sendMessage(miniMessage.colorize(text));
+        plugin.sendMiniMessage(sender, text);
     }
 
     @Override

@@ -1,75 +1,24 @@
 ﻿# GuangDianNPC
 
-> 插件简介 - 待补充
+> 光点NPC系统 — Citizens NPC 集成/RPGCore NPCService/交互命令
 
 ---
 
 ## 一、简介
 
-本插件文档正在完善中...
-
-### 功能特性
-
-- 功能1 - 描述待补充
-- 功能2 - 描述待补充
-- 功能3 - 描述待补充
-
-### 前置要求
-
-- **必需**: [RPGCore](/RPGCore/README)
-- **可选**: PlaceholderAPI
-
-### 兼容性
-
-- **服务端**: Paper 1.21+
-- **Java**: Java 21+
+GuangDianNPC 基于 Citizens 插件提供自定义 NPC 生成与管理，支持 RPGCore NPCService 接口。
 
 ---
 
-## 二、安装
-
-### 2.1 安装步骤
-
-1. 确保已安装 RPGCore
-2. 下载插件 jar 文件
-3. 将 jar 文件放入 \plugins\ 文件夹
-4. 重启服务器
-
-### 2.2 验证安装
-
-\\\ash
-/plugin info          # 查看插件信息
-/plugin reload        # 重载配置
-\\\
-
----
-
-## 三、命令权限
-
-### 3.1 玩家命令
+## 二、命令权限
 
 | 命令 | 权限 | 说明 |
 |------|------|------|
-| \/plugin help\ | 无 | 查看帮助 |
-
-### 3.2 管理员命令
-
-| 命令 | 权限 | 说明 |
-|------|------|------|
-| \/plugin reload\ | \plugin.admin\ | 重载配置 |
+| `/npc create <名称>` | `guangdian.npc.admin` | 创建 NPC |
+| `/npc remove <ID>` | `guangdian.npc.admin` | 删除 NPC |
+| `/npc list` | `guangdian.npc.admin` | 列出 NPC |
+| `/npc reload` | `guangdian.npc.admin` | 重载配置 |
 
 ---
 
-## 四、配置文件
-
-配置文件说明待补充...
-
----
-
-## 五、下一步
-
-- 📖 本文档正在完善中，敬请期待...
-
----
-
-*最后更新: 2026-06-11*
+*最后更新: 2026-06-13*

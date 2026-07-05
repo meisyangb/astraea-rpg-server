@@ -133,13 +133,8 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
         config = getConfig();
         loadSettings();
 
-        // 初始化 SQLite 数据库
-        initDatabase();
-
-        // 从数据库加载数据
-        if (databaseStorage != null && databaseStorage.isEnabled()) {
-            databaseStorage.load();
-        }
+        // 加载 YAML 数据文件
+        loadData();
 
         initOptimizationComponents();
         recoverUnfinishedTransactions();
@@ -323,8 +318,8 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
             }
         }
 
-        // 保存恢复后的数据
-        if (!unfinished.isEmpty()) {
+        // 保存恢复后的数据 (仅当 data 对象已初始化时)
+        if (!unfinished.isEmpty() && data != null) {
             saveData();
         }
     }

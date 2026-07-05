@@ -2,7 +2,6 @@ package cn.guangdian.cavefu.config;
 
 import cn.guangdian.cavefu.GuangDianCaveFu;
 import cn.guangdian.cavefu.cave.CaveLevel;
-import cn.guangdian.rpgcore.message.MiniMessageService;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -12,6 +11,7 @@ import java.util.Map;
 
 /**
  * 配置管理器
+ * 完全独立，不依赖 RPGCore
  */
 public class ConfigManager {
     private final GuangDianCaveFu plugin;
@@ -43,34 +43,33 @@ public class ConfigManager {
 
         plugin.getLogger().info("开始加载等级配置...");
 
-        // 使用getConfigurationSection获取嵌套配置
         var levelsSection = levelsConfig.getConfigurationSection("levels");
-        
+
         if (levelsSection == null) {
-            plugin.getLogger().warning("找不到levels配置节！");
+            plugin.getLogger().warning("找不到 levels 配置节！");
             return;
         }
-        
-        plugin.getLogger().info("levelsSection存在，键数量: " + levelsSection.getKeys(false).size());
+
+        plugin.getLogger().info("levelsSection 存在，键数量: " + levelsSection.getKeys(false).size());
 
         for (String key : levelsSection.getKeys(false)) {
             try {
                 int level = Integer.parseInt(key);
-                
+
                 var levelSection = levelsSection.getConfigurationSection(key);
                 if (levelSection == null) {
                     plugin.getLogger().warning("等级 " + key + " 配置无效！");
                     continue;
                 }
-                
+
                 String name = levelSection.getString("name", "等级" + level);
                 int size = levelSection.getInt("size", 4);
                 int height = levelSection.getInt("height", 6);
                 java.util.List<String> upgradeCost = levelSection.getStringList("upgrade-cost");
-                
+
                 caveLevels.put(level, new CaveLevel(level, name, size, height, upgradeCost));
                 plugin.getLogger().info("成功加载等级: " + level + " - " + name);
-                
+
             } catch (Exception e) {
                 plugin.getLogger().warning("加载等级配置失败: " + key + " - " + e.getMessage());
             }
@@ -140,11 +139,10 @@ public class ConfigManager {
         return config.getString("settings.create-cost", "");
     }
 
-    // 消息
+    // 消息（返回带前缀的格式化消息）
     public String getMessage(String key) {
         String prefix = config.getString("messages.prefix", "<gold>[洞府] <white>");
         String msg = config.getString("messages." + key, "");
-        // 返回原始字符串，由调用方使用 MiniMessageService 解析
         return prefix + msg;
     }
 

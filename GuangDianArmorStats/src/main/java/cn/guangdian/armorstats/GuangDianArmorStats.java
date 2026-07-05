@@ -16,6 +16,7 @@ import cn.guangdian.armorstats.skill.SkillManager;
 import cn.guangdian.armorstats.listener.SkillTriggerListener;
 import cn.guangdian.armorstats.command.ArmorStatsCommand;
 import cn.guangdian.armorstats.placeholder.ArmorStatsPlaceholderExpansion;
+import cn.guangdian.armorstats.storage.ArmorStatsStorage;
 import cn.guangdian.armorstats.storage.AsyncExecutorService;
 import cn.guangdian.armorstats.storage.PlayerDataStorage;
 import cn.guangdian.armorstats.task.RegenTask;
@@ -51,6 +52,8 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
     private cn.guangdian.rpgcore.api.AsyncExecutor rpgCoreAsyncExecutor;  // RPGCore 统一异步执行器
     private EquipmentCacheManager equipmentCacheManager;  // 本地装备缓存
     private BossBarOptimizer bossBarOptimizer;
+    private ArmorStatsStorage armorStorage;
+    private int armorSaveId = -1;
     
     // RPGCore 核心服务引用 - 优先使用 RPGCore，本地实现作为降级
     private RPGCore rpgCore;
@@ -203,6 +206,10 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
         }
         getLogger().info("玩家数据存储已初始化");
         
+        armorStorage = new ArmorStatsStorage(this);
+        if (armorStorage.init()) armorStorage.load();
+        armorSaveId = getServer().getScheduler().runTaskTimerAsynchronously(this, () -> { if (armorStorage != null) armorStorage.saveAllAsync(); }, 6000L, 6000L).getTaskId();
+        
         // 初始化异步执行器 - 优先使用 RPGCore 统一服务
         ConfigurationSection asyncConfig = optConfig.getConfigurationSection("async_save");
         boolean asyncEnabled = asyncConfig != null && asyncConfig.getBoolean("enabled", true);
@@ -269,11 +276,9 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
     
     @Override
     protected void onPluginDisable() {
-        // 停止速度监测
-        if (incrementalStatsManager != null) {
-            incrementalStatsManager.getApplier().stopSpeedMonitor();
-        }
-        
+        getServer().getScheduler().cancelTask(armorSaveId);
+        if (armorStorage != null) { armorStorage.saveAll(); armorStorage.close(); }
+        if (incrementalStatsManager != null) incrementalStatsManager.getApplier().stopSpeedMonitor();
         // 注销玩家生命周期处理器
         if (dataHandler != null) {
             dataHandler.unregister();
@@ -289,13 +294,12 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
             scheduler.cancelAllTasks();
         }
         
-        // 等待所有异步保存完成
+        // 直接关闭异步执行器，不等待（关服时数据已在其他时机保存）
         if (rpgCoreAsyncExecutor != null) {
-            getLogger().info("等待 RPGCore 异步任务完成...");
-            rpgCoreAsyncExecutor.awaitTermination(30, TimeUnit.SECONDS);
+            getLogger().info("关闭 RPGCore 异步执行器...");
+            rpgCoreAsyncExecutor.shutdownNow();
         } else if (asyncExecutor != null) {
-            getLogger().info("等待所有异步保存完成...");
-            asyncExecutor.awaitAllSaves(30, TimeUnit.SECONDS);
+            getLogger().info("关闭本地异步执行器...");
             asyncExecutor.shutdown();
         }
         

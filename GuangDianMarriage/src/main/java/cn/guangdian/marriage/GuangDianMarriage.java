@@ -1,6 +1,7 @@
 package cn.guangdian.marriage;
 
 import cn.guangdian.marriage.adapter.MarriageServiceAdapter;
+import cn.guangdian.marriage.storage.MarriageStorage;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -32,6 +33,8 @@ public class GuangDianMarriage extends AbstractRPGPlugin implements Listener, Co
     private Map<String, TpRequest> tpRequests;
     private Map<String, Long> tpCooldowns;
     private MarriageServiceAdapter serviceAdapter;
+    private MarriageStorage mStorage;
+    private int mSaveId = -1;
 
     @Override
     protected void onPluginEnable() {
@@ -42,7 +45,10 @@ public class GuangDianMarriage extends AbstractRPGPlugin implements Listener, Co
         tpCooldowns = new ConcurrentHashMap<>();
         saveDefaultConfig();
         config = getConfig();
+        mStorage = new MarriageStorage(this);
+        if (mStorage.init()) { mStorage.load(); for (var m : mStorage.all()) { Map<String,Object> data = new HashMap<>(); data.put("player1",m.p1());data.put("player2",m.p2());data.put("marryDate",m.d());data.put("lovePoints",m.lp());data.put("player1Nickname",m.n1());data.put("player2Nickname",m.n2()); Marriage mar = Marriage.deserialize(data); if (mar != null) { marriages.put(mar.player1.toLowerCase(), mar); marriages.put(mar.player2.toLowerCase(), mar); } } }
         loadMarriages();
+        mSaveId = getServer().getScheduler().runTaskTimerAsynchronously(this, () -> { if (mStorage != null) { mStorage.clear(); for (Marriage mar : new HashSet<>(marriages.values())) mStorage.add(mar.player1, mar.player2, mar.marryDate, mar.lovePoints, mar.player1Nickname, mar.player2Nickname); mStorage.saveAsync(); } }, 6000L, 6000L).getTaskId();
         getCommand("marriage").setExecutor(this);
         getCommand("marriage").setTabCompleter(this);
         getCommand("marriageadmin").setExecutor(this);

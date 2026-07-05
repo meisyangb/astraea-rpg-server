@@ -99,6 +99,11 @@ public class ClassManager {
             gameClass.setDescription(classSection.getString("description", ""));
             gameClass.setRequiresClass(classSection.getString("requires-class"));
             
+            // 加载克苏鲁风格途径系统字段
+            gameClass.setPathway(classSection.getString("pathway", ""));
+            gameClass.setSequence(classSection.getInt("sequence", 9));
+            gameClass.setBranch(classSection.getString("branch", ""));
+            
             List<String> nextClasses = classSection.getStringList("next-classes");
             gameClass.setNextClasses(nextClasses);
             
@@ -232,5 +237,115 @@ public class ClassManager {
         tierExpRequirements.clear();
         loadClasses();
         loadTierExpRequirements();
+    }
+    
+    // ========================================
+    // 克苏鲁风格途径系统辅助方法
+    // ========================================
+    
+    /**
+     * 获取指定途径的所有职业
+     */
+    public List<GameClass> getClassesByPathway(String pathway) {
+        return classes.values().stream()
+            .filter(gc -> gc.getPathway() != null && gc.getPathway().equals(pathway))
+            .sorted((a, b) -> Integer.compare(a.getSequence(), b.getSequence())) // 序列升序（9→0）
+            .toList();
+    }
+    
+    /**
+     * 获取指定途径的初始职业（序列9）
+     */
+    public List<GameClass> getBaseClassesByPathway(String pathway) {
+        return classes.values().stream()
+            .filter(gc -> gc.getPathway() != null && gc.getPathway().equals(pathway))
+            .filter(gc -> gc.getSequence() == 9)
+            .toList();
+    }
+    
+    /**
+     * 获取指定序列的所有职业
+     */
+    public List<GameClass> getClassesBySequence(int sequence) {
+        return classes.values().stream()
+            .filter(gc -> gc.getSequence() == sequence)
+            .toList();
+    }
+    
+    /**
+     * 获取指定途径和序列的职业
+     */
+    public GameClass getClassByPathwayAndSequence(String pathway, int sequence) {
+        return classes.values().stream()
+            .filter(gc -> gc.getPathway() != null && gc.getPathway().equals(pathway))
+            .filter(gc -> gc.getSequence() == sequence)
+            .findFirst()
+            .orElse(null);
+    }
+    
+    /**
+     * 获取指定途径、序列和分支的职业
+     */
+    public GameClass getClassByPathwaySequenceBranch(String pathway, int sequence, String branch) {
+        return classes.values().stream()
+            .filter(gc -> gc.getPathway() != null && gc.getPathway().equals(pathway))
+            .filter(gc -> gc.getSequence() == sequence)
+            .filter(gc -> branch == null || branch.isEmpty() || 
+                         (gc.getBranch() != null && gc.getBranch().equals(branch)))
+            .findFirst()
+            .orElse(null);
+    }
+    
+    /**
+     * 获取玩家可以晋升的下一序列职业
+     */
+    public List<GameClass> getNextSequenceClasses(PlayerClassData playerData) {
+        GameClass currentClass = getClass(playerData.getClassId());
+        if (currentClass == null) return new ArrayList<>();
+        
+        int currentSequence = currentClass.getSequence();
+        if (currentSequence <= 0) return new ArrayList<>(); // 已是真神
+        
+        int nextSequence = currentSequence - 1; // 序列降低（更强）
+        String pathway = currentClass.getPathway();
+        String branch = currentClass.getBranch();
+        
+        // 如果当前有分支，查找同分支的下一职业
+        if (branch != null && !branch.isEmpty()) {
+            GameClass branchNext = getClassByPathwaySequenceBranch(pathway, nextSequence, branch);
+            if (branchNext != null) {
+                return List.of(branchNext);
+            }
+        }
+        
+        // 否则返回所有可能的下一职业（通过序列筛选）
+        return classes.values().stream()
+            .filter(gc -> gc.getPathway() != null && gc.getPathway().equals(pathway))
+            .filter(gc -> gc.getSequence() == nextSequence)
+            .toList();
+    }
+    
+    /**
+     * 获取途径列表
+     */
+    public List<String> getAllPathways() {
+        return classes.values().stream()
+            .map(GameClass::getPathway)
+            .filter(p -> p != null && !p.isEmpty())
+            .distinct()
+            .toList();
+    }
+    
+    /**
+     * 获取途径名称（中文）
+     */
+    public String getPathwayName(String pathway) {
+        return switch (pathway) {
+            case "abyss" -> "深渊途径";
+            case "void" -> "虚空途径";
+            case "shadow" -> "暗影途径";
+            case "corruption" -> "腐化途径";
+            default -> "未知途径";
+        };
     }
 }

@@ -2,102 +2,75 @@ package cn.guangdian.quest.repository;
 
 import cn.guangdian.quest.GuangDianQuest;
 import cn.guangdian.quest.model.PlayerQuestData;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CompletableFuture;
 
+/**
+ * 玩家任务数据仓库 - SQLite 存储
+ * <p>参考 GuangDianPoints 的架构：主类 → Repository → PlayerQuestStorage → SQLite</p>
+ */
 public class PlayerQuestRepository {
 
-    private final GuangDianQuest plugin;
-    private final File dataDir;
-    private final Map<UUID, PlayerQuestData> playerData;
+    private final PlayerQuestStorage storage;
 
-    public PlayerQuestRepository(GuangDianQuest plugin, File dataDir) {
-        this.plugin = plugin;
-        this.dataDir = dataDir;
-        this.playerData = new ConcurrentHashMap<>();
-        if (!dataDir.exists()) {
-            dataDir.mkdirs();
-        }
+    public PlayerQuestRepository(JavaPlugin plugin) {
+        this.storage = new PlayerQuestStorage(plugin);
+    }
+
+    public boolean initialize() {
+        return storage.initialize();
+    }
+
+    public boolean isEnabled() {
+        return storage.isEnabled();
     }
 
     public PlayerQuestData getPlayerData(UUID playerId) {
-        return playerData.computeIfAbsent(playerId, this::loadPlayerData);
+        return storage.getCached(playerId);
     }
 
-    @SuppressWarnings("unchecked")
-    private PlayerQuestData loadPlayerData(UUID playerId) {
-        File file = new File(dataDir, playerId.toString() + ".yml");
-        if (!file.exists()) {
-            return new PlayerQuestData(playerId);
-        }
-
-        try {
-            FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-            // 注意：不能用 getValues(true)，因为它会把嵌套 Map 展平
-            // 例如 completedQuests.f1_01=xxx 而不是 completedQuests={f1_01=xxx}
-            // 这会导致 fromMap() 中 map.get("completedQuests") 返回 null
-            Map<String, Object> map = new java.util.LinkedHashMap<>();
-            for (String key : config.getKeys(false)) {
-                map.put(key, config.get(key));
-            }
-            return PlayerQuestData.fromMap(map);
-        } catch (Exception e) {
-            plugin.getLogger().warning("加载玩家数据失败: " + playerId + " - " + e.getMessage());
-            e.printStackTrace();
-            return new PlayerQuestData(playerId);
-        }
-    }
-
+    /** 同步保存（操作后立即调用） */
     public void savePlayerData(UUID playerId) {
-        PlayerQuestData data = playerData.get(playerId);
-        if (data == null) return;
-
-        File file = new File(dataDir, playerId.toString() + ".yml");
-        try {
-            FileConfiguration config = new YamlConfiguration();
-            Map<String, Object> map = data.toMap();
-            for (Map.Entry<String, Object> entry : map.entrySet()) {
-                config.set(entry.getKey(), entry.getValue());
-            }
-            config.save(file);
-        } catch (Exception e) {
-            plugin.getLogger().warning("保存玩家数据失败: " + playerId + " - " + e.getMessage());
+        PlayerQuestData data = storage.getCached(playerId);
+        if (data != null) {
+            storage.savePlayerSync(playerId, data);
         }
     }
 
-    public void saveAll() {
-        for (UUID playerId : playerData.keySet()) {
-            savePlayerData(playerId);
+    /** 异步保存（定时 + 退出） */
+    public CompletableFuture<Void> savePlayerDataAsync(UUID playerId) {
+        PlayerQuestData data = storage.getCached(playerId);
+        if (data != null) {
+            return storage.savePlayerAsync(playerId, data);
         }
+        return CompletableFuture.completedFuture(null);
+    }
+
+    /** 同步全量保存（关闭时） */
+    public void saveAll() {
+        storage.saveAll();
+    }
+
+    /** 异步全量保存（定时器） */
+    public CompletableFuture<Void> saveAllAsync() {
+        return storage.saveAllAsync();
     }
 
     public void removePlayerData(UUID playerId) {
-        PlayerQuestData data = playerData.remove(playerId);
+        PlayerQuestData data = storage.getCached(playerId);
         if (data != null) {
-            savePlayerData(playerId, data);
+            storage.savePlayerSync(playerId, data); // 先保存
         }
+        storage.removeCached(playerId);
     }
-    
-    private void savePlayerData(UUID playerId, PlayerQuestData data) {
-        File file = new File(dataDir, playerId.toString() + ".yml");
-        try {
-            FileConfiguration config = new YamlConfiguration();
-            Map<String, Object> map = data.toMap();
-            for (Map.Entry<String, Object> entry : map.entrySet()) {
-                config.set(entry.getKey(), entry.getValue());
-            }
-            config.save(file);
-        } catch (Exception e) {
-            plugin.getLogger().warning("保存玩家数据失败: " + playerId + " - " + e.getMessage());
-        }
+
+    public void close() {
+        storage.close();
     }
 
     public boolean isLoaded(UUID playerId) {
-        return playerData.containsKey(playerId);
+        return storage.isCached(playerId);
     }
 }

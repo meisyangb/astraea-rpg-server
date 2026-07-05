@@ -45,7 +45,7 @@ public class TemplateLoader {
         String id = config.getString("id");
         String name = config.getString("name", id);
         String description = config.getString("description", "");
-        String worldTemplate = config.getString("world-template", id);
+        String worldTemplate = config.getString("world.template", config.getString("world-template", id));
 
         DungeonSettings settings = loadSettings(config);
         List<Difficulty> difficulties = loadDifficulties(config);

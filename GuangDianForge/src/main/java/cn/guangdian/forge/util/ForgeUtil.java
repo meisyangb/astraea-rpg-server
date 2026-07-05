@@ -1,6 +1,7 @@
 package cn.guangdian.forge.util;
 
 import cn.guangdian.forge.GuangDianForge;
+import cn.guangdian.forge.model.ForgeQuality;
 import cn.guangdian.forge.model.ForgeRecipe;
 import cn.guangdian.forge.model.PlayerForgeData;
 import net.kyori.adventure.text.Component;
@@ -31,9 +32,9 @@ public class ForgeUtil {
     }
 
     /**
-     * 构建产物物品（只返回 RPGItems 物品）
+     * 构建产物物品，同时应用锻造品质
      */
-    public static ItemStack buildResult(ForgeRecipe recipe, GuangDianForge plugin) {
+    public static ItemStack buildResultWithQuality(ForgeRecipe recipe, GuangDianForge plugin, PlayerForgeData data) {
         var hook = plugin.getRPGItemsHook();
         if (hook == null || !hook.isEnabled()) {
             plugin.getLogger().warning("RPGItems 未启用，无法锻造物品: " + recipe.getResultRPGItem());
@@ -44,6 +45,25 @@ public class ForgeUtil {
         if (result == null) {
             plugin.getLogger().warning("无法获取 RPGItems 物品: " + recipe.getResultRPGItem());
             return null;
+        }
+        
+        // ═══ 生成随机品质 ═══
+        ForgeQuality quality = ForgeQuality.generate(data.getForgeLevel());
+        
+        // ═══ 按品质倍率修改物品 PDC 属性 ═══
+        hook.updateItemAttributes(result, quality.getMultiplier());
+        
+        // ═══ 写入品质数据到 PDC ═══
+        quality.writeToItem(result);
+        
+        // ═══ 追加品质信息到 Lore ═══
+        quality.appendLore(result);
+        
+        if (plugin.getConfig().getBoolean("debug", false)) {
+            plugin.getLogger().info("[锻造] 品质: " + quality.getTier().getDisplay() 
+                + " | 倍率: " + quality.getMultiplier() 
+                + " | 强度: " + quality.getStrength()
+                + " | 锻造等级: " + data.getForgeLevel());
         }
         
         return result;
