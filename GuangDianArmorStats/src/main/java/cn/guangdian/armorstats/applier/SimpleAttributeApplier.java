@@ -50,22 +50,28 @@ public class SimpleAttributeApplier {
     }
     
     /**
-     * 启动速度监测任务
-     * 每 20 tick 检查一次，确保 modifier 没有丢失
+     * 启动速度监测保底任务
+     *
+     * 设计原则：事件驱动 + 定时保底
+     * - 事件驱动：装备变化/死亡重生时立即更新（由 IncrementalStatsListener 和 CombatListener 处理）
+     * - 定时保底：每 5 分钟（6000 tick）低频检查一次，防止极端情况下的 modifier 丢失
+     *
+     * 优化前：每秒遍历所有玩家 × 所有 modifier = O(玩家数 × modifier数) 每秒
+     * 优化后：每 5 分钟才检查一次，且只检查有 expectedSpeedPercent 记录的玩家
      */
     public void startSpeedMonitor() {
         if (monitorTaskId != -1) return;
-        
+
         monitorTaskId = org.bukkit.Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             for (Player player : org.bukkit.Bukkit.getOnlinePlayers()) {
                 UUID uuid = player.getUniqueId();
                 Double expectedPercent = expectedSpeedPercent.get(uuid);
-                if (expectedPercent == null) continue;
-                
+                if (expectedPercent == null || expectedPercent <= 0) continue;
+
                 // 检查我们的 modifier 是否还在
                 AttributeInstance speedAttr = player.getAttribute(Attribute.MOVEMENT_SPEED);
                 if (speedAttr == null) continue;
-                
+
                 boolean hasOurModifier = false;
                 for (AttributeModifier mod : speedAttr.getModifiers()) {
                     if (mod.getKey().equals(speedKey)) {
@@ -73,13 +79,11 @@ public class SimpleAttributeApplier {
                         break;
                     }
                 }
-                
-                if (!hasOurModifier && expectedPercent > 0) {
-                    plugin.getLogger().warning("[速度监测] " + player.getName() + 
-                        " 的速度 modifier 丢失! 重新添加 (" + expectedPercent + "%)");
-                    // 先清除可能残留的旧 modifier（避免竞态条件导致重复添加）
+
+                if (!hasOurModifier) {
+                    plugin.getLogger().warning("[速度保底] " + player.getName() +
+                        " 的速度 modifier 丢失，重新添加 (" + expectedPercent + "%)");
                     removeAllModifiers(speedAttr, speedKey);
-                    // 重新添加 modifier
                     double modifierValue = expectedPercent / 100.0;
                     AttributeModifier modifier = new AttributeModifier(
                         speedKey,
@@ -90,9 +94,9 @@ public class SimpleAttributeApplier {
                     speedAttr.addModifier(modifier);
                 }
             }
-        }, 20L, 20L).getTaskId();
-        
-        plugin.getLogger().info("[速度监测] 速度监测任务已启动");
+        }, 6000L, 6000L).getTaskId();  // 5 分钟检查一次（原 1 秒）
+
+        plugin.getLogger().info("[速度保底] 速度保底任务已启动（每5分钟检查一次）");
     }
     
     public void stopSpeedMonitor() {

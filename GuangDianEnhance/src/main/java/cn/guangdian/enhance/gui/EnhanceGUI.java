@@ -5,9 +5,9 @@ import cn.guangdian.enhance.config.EnhanceConfig;
 import cn.guangdian.enhance.manager.EnhanceManager;
 import cn.guangdian.enhance.stone.EnhanceStoneType;
 import cn.guangdian.enhance.stone.StoneEffect;
+import cn.guangdian.enhance.util.EnhanceAttributeHelper;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.message.MiniMessageService;
-import cn.guangdian.rpgitems.item.ItemFactory;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -176,7 +176,7 @@ public class EnhanceGUI implements InventoryHolder {
 
         // 优先放入装备
         if (equipmentItem == null) {
-            if (ItemFactory.isEnhanceable(clickedItem)) {
+            if (EnhanceAttributeHelper.isEnhanceable(clickedItem)) {
                 placeEquipment(event.getClickedInventory(), event.getSlot(), clickedItem);
                 return;
             }
@@ -503,7 +503,7 @@ public class EnhanceGUI implements InventoryHolder {
     }
 
     private void refreshInfoSlot() {
-        if (equipmentItem == null || !ItemFactory.isEnhanceable(equipmentItem)) {
+        if (equipmentItem == null || !EnhanceAttributeHelper.isEnhanceable(equipmentItem)) {
             inventory.setItem(INFO_SLOT, createButton(Material.BOOK,
                 "<white>强化信息", "<gray>放入装备后显示详细信息"));
             return;
@@ -512,7 +512,8 @@ public class EnhanceGUI implements InventoryHolder {
         int level = manager.getLevel(equipmentItem);
         int maxLv = getMaxLevelForItem(equipmentItem);
         double mult = manager.getAttributeMultiplier(level);
-        double add = config.getAttributeBonusPerLevel();
+        // 【枚举法】直接获取下一级倍率
+        double nextMult = manager.getAttributeMultiplier(level + 1);
 
         List<String> info = new ArrayList<>();
         info.add("<yellow>当前等级: <green>+" + level + " <gray>/ " + maxLv);
@@ -520,7 +521,7 @@ public class EnhanceGUI implements InventoryHolder {
         if (level < maxLv) {
             info.add("");
             info.add("<yellow>目标等级: <green>+" + (level + 1));
-            info.add("<yellow>目标倍率: <aqua>" + String.format("%.2f", mult + add) + "x");
+            info.add("<yellow>目标倍率: <aqua>" + String.format("%.2f", nextMult) + "x");
             info.add("<yellow>需要材料: <gold>" + getRequiredMaterialName(level + 1));
 
             double baseRate = manager.getSuccessRate(level, equipmentItem);
@@ -557,7 +558,7 @@ public class EnhanceGUI implements InventoryHolder {
     }
 
     private void refreshEnhanceButton() {
-        if (equipmentItem == null || !ItemFactory.isEnhanceable(equipmentItem)) {
+        if (equipmentItem == null || !EnhanceAttributeHelper.isEnhanceable(equipmentItem)) {
             inventory.setItem(ENHANCE_SLOT, createButton(Material.BARRIER,
                 "<red>无法强化", "<gray>请放入可强化装备"));
             return;
@@ -596,7 +597,7 @@ public class EnhanceGUI implements InventoryHolder {
     // ════════════════════════════════════════
 
     private int getMaxLevelForItem(ItemStack item) {
-        String tierStr = ItemFactory.getItemTier(item);
+        String tierStr = EnhanceAttributeHelper.getItemTier(item);
         if (tierStr != null) {
             try { return config.getMaxLevelForTier(Integer.parseInt(tierStr)); }
             catch (NumberFormatException ignored) {}

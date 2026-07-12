@@ -147,7 +147,8 @@ public class EnhanceStorage {
         }
         
         if (level > 0) {
-            double multiplier = 1.0 + level * plugin.getEnhanceConfig().getAttributeBonusPerLevel();
+            // 【枚举法】使用配置中的固定倍率
+            double multiplier = plugin.getEnhanceConfig().getMultiplierForLevel(level);
             // 在 lore 末尾追加强化等级信息
             lore.add(miniMessage.colorize("<i:false><blue><bold>【强化等级】</bold></blue>"));
             lore.add(miniMessage.colorize("<i:false><gray>  强化等级: <yellow>" + level + "级"));

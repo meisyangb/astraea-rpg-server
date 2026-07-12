@@ -136,6 +136,9 @@ public class CleanManager {
             cleanWorldItems(world);
         }
 
+        // 定时保底：清理过期的掉落记录，防止内存泄漏
+        cleanupOldRecords();
+
         long items = currentCleanItems.get();
 
         // 更新总统计
@@ -349,7 +352,15 @@ public class CleanManager {
     }
 
     /**
-     * 清理过期的掉落记录
+     * 玩家退出时移除掉落记录，防止内存泄漏
+     */
+    public void removePlayerDrop(UUID playerUuid) {
+        playerDropTimeMap.remove(playerUuid);
+    }
+
+    /**
+     * 清理过期的掉落记录（定时保底）
+     * 在每次自动清理时调用，防止极端情况下记录残留
      */
     public void cleanupOldRecords() {
         long expireTime = System.currentTimeMillis() - configManager.getProtectPlayerDropsTime() * 1000L * 2;

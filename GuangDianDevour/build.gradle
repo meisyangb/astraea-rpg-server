@@ -13,7 +13,7 @@ dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
     
     // RPGCore 核心
-    compileOnly project(':plugins:RPGCore')
+    compileOnly files('libs/RPGCore-1.0.0.jar')
     
     // 外部依赖
     compileOnly name: 'Vault'

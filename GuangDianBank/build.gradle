@@ -10,7 +10,7 @@ repositories {
 
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
-    compileOnly project(':plugins:RPGCore')
+    compileOnly files('libs/RPGCore-1.0.0.jar')
     compileOnly files('../GuangDianArmorStats/libs/PlaceholderAPI.jar')
     compileOnly files('libs/Vault.jar')
 
@@ -21,7 +21,7 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:5.8.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.8.0'
     testImplementation 'org.assertj:assertj-core:3.24.2'
-    testImplementation project(':plugins:RPGCore')
+    testImplementation files('libs/RPGCore-1.0.0.jar')
 }
 
 jar {

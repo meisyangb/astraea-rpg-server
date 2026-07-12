@@ -121,7 +121,43 @@ public class PDCAttributeReader {
         if (!pdc.has(KEY_ID, PersistentDataType.STRING)) {
             return null;
         }
-        
+
+        // 优先读取复合存储格式
+        byte[] compoundData = pdc.get(CompoundAttributeCodec.KEY_COMPOUND, PersistentDataType.BYTE_ARRAY);
+        if (compoundData != null) {
+            double[] v = CompoundAttributeCodec.deserialize(compoundData);
+            return new ItemAttributes(
+                v[CompoundAttributeCodec.ATTACK_MIN], v[CompoundAttributeCodec.ATTACK_MAX],
+                v[CompoundAttributeCodec.DEFENSE_MIN], v[CompoundAttributeCodec.DEFENSE_MAX],
+                v[CompoundAttributeCodec.MAX_HEALTH], v[CompoundAttributeCodec.HEALTH_REGEN],
+                v[CompoundAttributeCodec.CRIT_CHANCE], v[CompoundAttributeCodec.CRIT_DAMAGE],
+                v[CompoundAttributeCodec.LIFESTEAL_CHANCE], v[CompoundAttributeCodec.LIFESTEAL_MULTIPLIER],
+                v[CompoundAttributeCodec.DODGE_CHANCE], v[CompoundAttributeCodec.PARRY_CHANCE],
+                v[CompoundAttributeCodec.MOVE_SPEED], v[CompoundAttributeCodec.DAMAGE_REDUCTION],
+                v[CompoundAttributeCodec.PVP_ATTACK_MIN], v[CompoundAttributeCodec.PVP_ATTACK_MAX],
+                v[CompoundAttributeCodec.PVP_DEFENSE_MIN], v[CompoundAttributeCodec.PVP_DEFENSE_MAX],
+                v[CompoundAttributeCodec.CRIT_RESIST], v[CompoundAttributeCodec.CRIT_DAMAGE_RESIST],
+                v[CompoundAttributeCodec.LIFESTEAL_RESIST],
+                v[CompoundAttributeCodec.ARMOR], v[CompoundAttributeCodec.ARMOR_STRENGTH],
+                v[CompoundAttributeCodec.ARMOR_PENETRATION], v[CompoundAttributeCodec.DEFENSE_PENETRATION],
+                v[CompoundAttributeCodec.DAMAGE_REFLECT], v[CompoundAttributeCodec.REFLECT_RATIO],
+                v[CompoundAttributeCodec.POISON_CHANCE], v[CompoundAttributeCodec.FREEZE_CHANCE],
+                v[CompoundAttributeCodec.BLIND_CHANCE], v[CompoundAttributeCodec.BURN_CHANCE],
+                v[CompoundAttributeCodec.SCORCH_CHANCE], v[CompoundAttributeCodec.IGNITE_CHANCE],
+                v[CompoundAttributeCodec.SLOW_CHANCE],
+                v[CompoundAttributeCodec.FIRE_RESIST], v[CompoundAttributeCodec.FALL_RESIST],
+                v[CompoundAttributeCodec.DROWNING_RESIST], v[CompoundAttributeCodec.POISON_RESIST],
+                v[CompoundAttributeCodec.WITHER_RESIST], v[CompoundAttributeCodec.LAVA_RESIST],
+                v[CompoundAttributeCodec.MAGIC_RESIST], v[CompoundAttributeCodec.EXPLOSION_RESIST],
+                v[CompoundAttributeCodec.PROJECTILE_RESIST],
+                v[CompoundAttributeCodec.KNOCKBACK_RESIST], v[CompoundAttributeCodec.EXP_BONUS],
+                v[CompoundAttributeCodec.HEALTH_REGEN_PERCENT],
+                v[CompoundAttributeCodec.DODGE_REFLECT_CHANCE], v[CompoundAttributeCodec.DODGE_REFLECT_RATIO],
+                pdc.getOrDefault(KEY_LEVEL, PersistentDataType.INTEGER, 0),
+                pdc.getOrDefault(KEY_REQUIRED_CLASS, PersistentDataType.STRING, "")
+            );
+        }
+        // 回退到旧格式（向后兼容已有物品）
         // 读取所有属性
         return new ItemAttributes(
             // 基础属性

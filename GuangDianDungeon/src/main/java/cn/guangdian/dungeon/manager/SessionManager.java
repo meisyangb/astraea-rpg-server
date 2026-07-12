@@ -54,6 +54,10 @@ public class SessionManager {
         this.mobBridge = bridge;
     }
 
+    private boolean isDebug() {
+        return plugin.getConfig().getBoolean("debug", false);
+    }
+
     private void runSyncLater(Runnable task, long delayTicks) {
         if (scheduler != null) {
             scheduler.runSyncLater(task, delayTicks);
@@ -159,9 +163,6 @@ public class SessionManager {
         broadcastMessage(session, "<red><bold>[副本]</bold> <white>时间耗尽，挑战失败！");
         broadcastSound(session, Sound.ENTITY_WITHER_DEATH, 1.0f, 0.5f);
 
-        plugin.getLogger().info("Dungeon " + session.getDungeonId() + " timed out for party " +
-            session.getParty().getLeader());
-
         runSyncLater(() -> {
             cleanupSession(session);
         }, 100L);
@@ -243,10 +244,8 @@ public class SessionManager {
     }
 
     private void spawnMobs(DungeonSession session, Wave wave, MobSpawn spawn, Location baseLoc, int amount) {
-        plugin.getLogger().info("[DEBUG] spawnMobs called: mob=" + spawn.getMobId() + ", amount=" + amount + ", location=" + baseLoc);
-
         if (mobBridge == null) {
-            plugin.getLogger().warning("[DEBUG] MobBridge is null!");
+            plugin.getLogger().warning("MobBridge is null!");
             return;
         }
 
@@ -262,7 +261,6 @@ public class SessionManager {
 
             Entity entity = mobBridge.spawnMob(spawn.getMobId(), spawnLoc);
             if (entity != null) {
-                // P0 FIX: 在实体 PDC 中标记 sessionId，死亡时从实体读取
                 mobBridge.tagEntityForSession(entity, session.getSessionId());
                 if (spawn.isBoss()) {
                     mobBridge.tagEntityAsBoss(entity, spawn.getMobId());
@@ -276,13 +274,10 @@ public class SessionManager {
                     mobDisplayComponent = entity.customName();
                 }
 
-                plugin.getLogger().info("[DEBUG] Spawned mob: " + entity.getType() + " UUID=" + entity.getUniqueId() + " Name=" + entity.getName());
-
                 if (spawn.isBoss()) {
                     broadcastTitleWithComponent(session, plugin.color("<red><bold>⚠ BOSS出现 ⚠</bold>"), mobDisplayComponent);
                     broadcastSound(session, Sound.ENTITY_WITHER_SPAWN, 1.0f, 0.5f);
 
-                    // 注册 Boss HP 阈值追踪
                     if (!spawn.getBossHpTriggers().isEmpty()) {
                         BossTrackingInfo trackingInfo = new BossTrackingInfo(
                             session.getSessionId(),
@@ -290,16 +285,12 @@ public class SessionManager {
                             spawn.getSpawnPointId()
                         );
                         bossTracking.put(entity.getUniqueId(), trackingInfo);
-                        plugin.getLogger().info("[DEBUG] Registered boss HP tracking: " + entity.getUniqueId() + " with " + spawn.getBossHpTriggers().size() + " triggers");
                     }
                 }
             } else {
-                plugin.getLogger().warning("[DEBUG] Failed to spawn mob: " + spawn.getMobId());
+                plugin.getLogger().warning("Failed to spawn mob: " + spawn.getMobId());
             }
         }
-
-        plugin.getLogger().info("[DEBUG] Spawn complete: " + successCount + "/" + amount + " mobs spawned");
-        plugin.getLogger().info("[DEBUG] Wave spawnedMobCount: " + wave.getSpawnedMobCount() + ", Session spawnedMobs: " + session.getSpawnedMobs().size());
 
         String mobDisplayName = net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().serialize(mobDisplayComponent);
         broadcastMessage(session, "<gray>[波次] <white>生成 " + successCount + "x " + mobDisplayName);
@@ -340,10 +331,7 @@ public class SessionManager {
     }
 
     public void onMobKill(DungeonSession session, Entity entity) {
-        plugin.getLogger().info("[DEBUG] onMobKill called: entity=" + entity.getType() + " UUID=" + entity.getUniqueId() + " Name=" + entity.getName());
-
         if (!session.isSessionMob(entity.getUniqueId())) {
-            plugin.getLogger().info("[DEBUG] Mob " + entity.getUniqueId() + " is not a session mob, skipping");
             return;
         }
 
@@ -354,24 +342,16 @@ public class SessionManager {
         session.incrementMobKill(mobId);
 
         Stage currentStage = session.getCurrentStage();
-        if (currentStage == null) {
-            plugin.getLogger().warning("[DEBUG] No current stage!");
-            return;
-        }
+        if (currentStage == null) return;
 
         Wave currentWave = currentStage.getCurrentWave();
-        if (currentWave == null) {
-            plugin.getLogger().warning("[DEBUG] No current wave!");
-            return;
-        }
+        if (currentWave == null) return;
 
         currentWave.incrementKillCount();
 
         int killCount = currentWave.getKillCount();
         int totalCount = currentWave.getSpawnedMobCount();
         int remaining = totalCount - killCount;
-
-        plugin.getLogger().info("[DEBUG] Mob killed: " + mobId + ", KillCount: " + killCount + "/" + totalCount + ", Remaining: " + remaining);
 
         String progressBar = generateProgressBar(killCount, totalCount, 20);
         broadcastActionBar(session, "<yellow><bold>[击杀进度]</bold> " + progressBar + " <white>" + killCount + "/" + totalCount);
@@ -383,17 +363,12 @@ public class SessionManager {
         }
 
         boolean completed = currentWave.checkCompletion();
-        plugin.getLogger().info("[DEBUG] Wave checkCompletion: " + completed);
 
         if (completed) {
             WaveTrigger trigger = currentWave.getNextWaveTrigger();
-            plugin.getLogger().info("[DEBUG] Wave trigger: " + (trigger != null ? trigger.getType() : "null"));
 
             if (trigger == null || trigger.getType() == WaveTriggerType.ON_KILL_COMPLETE) {
-                plugin.getLogger().info("[DEBUG] Wave completed by kill! Triggering onWaveComplete");
                 onWaveComplete(session, currentStage, currentWave);
-            } else {
-                plugin.getLogger().info("[DEBUG] Wave completed but trigger type is: " + trigger.getType());
             }
         }
     }
@@ -405,7 +380,6 @@ public class SessionManager {
         Wave currentWave = currentStage.getCurrentWave();
         if (currentWave == null || currentWave.isCompleted()) return;
 
-        plugin.getLogger().info("[DEBUG] Manual trigger for next wave");
         onWaveComplete(session, currentStage, currentWave);
     }
 
@@ -433,7 +407,6 @@ public class SessionManager {
         if (trigger == null || trigger.getType() != WaveTriggerType.ON_TIME) return;
 
         int delaySeconds = trigger.getDelaySeconds();
-        plugin.getLogger().info("[DEBUG] Starting time trigger for wave, delay: " + delaySeconds + "s");
 
         long timerId = runSyncRepeating(() -> {
             if (session.getState() != DungeonSession.SessionState.RUNNING) {
@@ -467,8 +440,6 @@ public class SessionManager {
     }
 
     private void checkWaveCompletion(DungeonSession session, Stage stage, Wave completedWave) {
-        plugin.getLogger().info("[DEBUG] checkWaveCompletion: stage=" + stage.getId() + ", hasNextWave=" + stage.hasNextWave() + ", wavesCount=" + stage.getWaves().size());
-
         if (stage.hasNextWave()) {
             stage.advanceWave();
             Wave nextWave = stage.getCurrentWave();
@@ -480,14 +451,11 @@ public class SessionManager {
                 startWaveTimer(session, stage);
             }, 60L);
         } else {
-            plugin.getLogger().info("[DEBUG] No more waves in stage, calling onStageComplete");
             onStageComplete(session, stage);
         }
     }
 
     private void onStageComplete(DungeonSession session, Stage stage) {
-        plugin.getLogger().info("[DEBUG] onStageComplete: stage=" + stage.getId() + ", hasNextStage=" + session.hasNextStage());
-
         stage.setCompleted(true);
         stage.setActive(false);
 
@@ -501,8 +469,6 @@ public class SessionManager {
         if (session.hasNextStage()) {
             session.advanceStage();
             Stage nextStage = session.getCurrentStage();
-
-            plugin.getLogger().info("[DEBUG] Advancing to next stage: " + (nextStage != null ? nextStage.getId() : "null"));
 
             runSyncLater(() -> {
                 startStage(session, nextStage);
@@ -522,9 +488,6 @@ public class SessionManager {
         broadcastTitle(session, "<green><bold>副本通关！", "<yellow>用时: " + elapsedSeconds + "秒");
         broadcastSound(session, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
 
-        plugin.getLogger().info("Dungeon " + session.getDungeonId() + " completed by party " +
-            session.getParty().getLeader());
-
         // 计算评分并发放奖励
         int score = calculateSessionScore(session);
         plugin.getRewardManager().distributeRewards(session, score);
@@ -535,7 +498,6 @@ public class SessionManager {
     }
 
     private int calculateSessionScore(DungeonSession session) {
-        // 基础分 = 击杀数 * 10 + 时间奖励
         int timeBonus = 0;
         int timeLimit = session.getTimeLimit();
         if (timeLimit > 0) {
@@ -548,9 +510,6 @@ public class SessionManager {
         return Math.max(0, session.getTotalKills() * 10 + timeBonus - deathDeduction);
     }
 
-    /**
-     * 强制完成会话（管理员命令）
-     */
     public void forceCompleteSession(String sessionId) {
         DungeonSession session = sessions.get(sessionId);
         if (session != null) {
@@ -558,9 +517,6 @@ public class SessionManager {
         }
     }
 
-    /**
-     * 强制失败会话（管理员命令）
-     */
     public void forceFailSession(String sessionId, String reason) {
         DungeonSession session = sessions.get(sessionId);
         if (session != null) {
@@ -571,9 +527,6 @@ public class SessionManager {
         }
     }
 
-    /**
-     * 清理过期会话
-     */
     public int cleanupExpired(long timeoutMs) {
         int cleaned = 0;
         long now = System.currentTimeMillis();
@@ -589,12 +542,11 @@ public class SessionManager {
             }
         }
 
-        // 清理已结束但未正确移除的会话
         for (DungeonSession session : List.copyOf(sessions.values())) {
             if (session.getState() == DungeonSession.SessionState.COMPLETED
                 || session.getState() == DungeonSession.SessionState.FAILED
                 || session.getState() == DungeonSession.SessionState.CLEANUP) {
-                if (now - session.getEndTime() > 60000) { // 结束超过1分钟的
+                if (now - session.getEndTime() > 60000) {
                     forceCleanupSession(session);
                     cleaned++;
                 }
@@ -628,12 +580,11 @@ public class SessionManager {
         for (PartyMember member : session.getParty().getMembers()) {
             Player player = Bukkit.getPlayer(member.getPlayerId());
             if (player != null) {
-                plugin.getWorldInstanceManager().teleportToExitWorld(player);
+                plugin.getMapInstanceManager().teleportToExitWorld(player);
             }
             playerSessions.remove(member.getPlayerId());
         }
 
-        // 清理队伍状态
         session.getParty().setActiveSessionId(null);
         session.getParty().setState(PartyState.DISBANDED);
 
@@ -641,8 +592,7 @@ public class SessionManager {
 
         if (instanceWorldName != null && !instanceWorldName.isEmpty()) {
             runSyncLater(() -> {
-                plugin.getWorldInstanceManager().unloadAndDeleteInstance(instanceWorldName);
-                plugin.getLogger().info("Cleaned up instance world: " + instanceWorldName);
+                plugin.getMapInstanceManager().destroyInstance(instanceWorldName);
             }, 40L);
         }
     }
@@ -687,8 +637,6 @@ public class SessionManager {
             }
         }
     }
-
-    // ========== 广播方法 ==========
 
     private void broadcastMessage(DungeonSession session, String message) {
         for (PartyMember member : session.getParty().getMembers()) {
@@ -773,8 +721,6 @@ public class SessionManager {
         return bar.toString();
     }
 
-    // ========== 定时器管理 ==========
-
     private void cancelStageTimer(DungeonSession session, Stage stage) {
         String key = session.getSessionId() + "_" + stage.getId();
         cancelStageTimerByKey(key);
@@ -807,8 +753,6 @@ public class SessionManager {
         }
     }
 
-    // ========== 查询方法 ==========
-
     public DungeonSession getSession(String sessionId) {
         return sessions.get(sessionId);
     }
@@ -838,9 +782,6 @@ public class SessionManager {
         return sessions.size();
     }
 
-    /**
-     * 获取所有活跃（运行中）的会话
-     */
     public List<DungeonSession> getActiveSessions() {
         return sessions.values().stream()
             .filter(s -> s.getState() == DungeonSession.SessionState.RUNNING
@@ -849,11 +790,6 @@ public class SessionManager {
             .collect(Collectors.toList());
     }
 
-    // ========== Boss HP 阈值追踪 ==========
-
-    /**
-     * 启动 Boss HP 检查任务（每 1 秒）
-     */
     private void startBossCheckTask() {
         bossCheckTaskId = runSyncRepeating(() -> {
             if (bossTracking.isEmpty()) return;
@@ -874,11 +810,9 @@ public class SessionManager {
                     if (trigger.shouldTrigger(hpPercent)) {
                         trigger.setTriggered(true);
                         executeBossHpTrigger(info.sessionId, trigger, living.getLocation());
-                        plugin.getLogger().info("[DEBUG] Boss HP trigger at " + trigger.getHpPercent() + "% for " + bossUuid);
                     }
                 }
 
-                // 如果所有触发器都已触发，停止追踪
                 if (info.triggers.stream().allMatch(BossHpTrigger::isTriggered)) {
                     bossTracking.remove(bossUuid);
                 }
@@ -902,9 +836,6 @@ public class SessionManager {
         }
     }
 
-    /**
-     * Boss HP 追踪信息
-     */
     private static class BossTrackingInfo {
         final String sessionId;
         final List<BossHpTrigger> triggers;

@@ -1,7 +1,13 @@
 package cn.guangdian.dungeon.integration;
 
 import cn.guangdian.dungeon.GuangDianDungeon;
-import org.bukkit.Bukkit;
+import io.lumine.mythic.api.adapters.AbstractEntity;
+import io.lumine.mythic.api.adapters.AbstractLocation;
+import io.lumine.mythic.api.mobs.MythicMob;
+import io.lumine.mythic.bukkit.BukkitAdapter;
+import io.lumine.mythic.bukkit.BukkitAPIHelper;
+import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.core.mobs.ActiveMob;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
@@ -9,21 +15,19 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 怪物生成桥接层 — GuangDianMobs v2.0
- * <p>通过反射获取 MobSpawner + AIController，直接调用新 API。</p>
+ * 怪物生成桥接层 — MythicMobs 5.x 直接 API 集成
  */
 public class MobBridge {
 
     private final GuangDianDungeon plugin;
     private final Map<UUID, String> spawnedBosses;
-    private boolean mobPluginEnabled;
-    private Object guangDianMobsPlugin;
-    private Object mobSpawner;
-    private Object aiController;
+    private boolean mythicMobsEnabled;
+    private BukkitAPIHelper apiHelper;
 
     public MobBridge(GuangDianDungeon plugin) {
         this.plugin = plugin;
@@ -32,70 +36,70 @@ public class MobBridge {
     }
 
     private void checkPlugins() {
-        mobPluginEnabled = Bukkit.getPluginManager().isPluginEnabled("GuangDianMobs");
-        if (mobPluginEnabled) {
-            guangDianMobsPlugin = Bukkit.getPluginManager().getPlugin("GuangDianMobs");
-            plugin.getLogger().info("已连接 GuangDianMobs v2.0");
-        } else {
-            plugin.getLogger().warning("GuangDianMobs 未启用");
+        try {
+            mythicMobsEnabled = MythicBukkit.inst() != null;
+            if (mythicMobsEnabled) {
+                apiHelper = MythicBukkit.inst().getAPIHelper();
+                plugin.getLogger().info("已连接 MythicMobs " + MythicBukkit.inst().getVersion());
+            }
+        } catch (Exception e) {
+            mythicMobsEnabled = false;
+            plugin.getLogger().warning("MythicMobs 未启用: " + e.getMessage());
         }
     }
 
     public boolean isMobPluginEnabled() {
-        return mobPluginEnabled;
+        return mythicMobsEnabled;
     }
 
     /**
-     * 生成自定义怪物 — 使用新 API
+     * 生成 MythicMobs 怪物
      */
     public LivingEntity spawnMob(String mobId, Location loc) {
-        if (!mobPluginEnabled || guangDianMobsPlugin == null) {
-            plugin.getLogger().warning("GuangDianMobs 未启用");
+        if (!mythicMobsEnabled) {
+            plugin.getLogger().warning("MythicMobs 未启用，无法生成: " + mobId);
             return null;
         }
 
         try {
-            // 缓存反射引用
-            if (mobSpawner == null) {
-                mobSpawner = guangDianMobsPlugin.getClass()
-                    .getMethod("getMobSpawner").invoke(guangDianMobsPlugin);
-            }
-            if (aiController == null) {
-                aiController = guangDianMobsPlugin.getClass()
-                    .getMethod("getAIController").invoke(guangDianMobsPlugin);
-            }
-
-            // 获取模板
-            @SuppressWarnings("unchecked")
-            Map<String, Object> templates = (Map<String, Object>) guangDianMobsPlugin.getClass()
-                .getMethod("getMobTemplates").invoke(guangDianMobsPlugin);
-
-            Object template = templates.get(mobId);
-            if (template == null) {
-                plugin.getLogger().warning("怪物模板不存在: " + mobId);
+            Optional<MythicMob> mobOpt = MythicBukkit.inst().getMobManager().getMythicMob(mobId);
+            if (mobOpt.isEmpty()) {
+                plugin.getLogger().warning("MythicMobs 怪物模板不存在: " + mobId);
                 return null;
             }
 
-            // 生成: spawner.spawn(template, loc)
-            Object entity = mobSpawner.getClass()
-                .getMethod("spawn", template.getClass(), Location.class)
-                .invoke(mobSpawner, template, loc);
+            MythicMob mob = mobOpt.get();
+            // 使用 BukkitAdapter 转换 Location -> AbstractLocation
+            AbstractLocation abstractLoc = BukkitAdapter.adapt(loc);
+            ActiveMob activeMob = mob.spawn(abstractLoc, 1.0);
+            if (activeMob == null) {
+                plugin.getLogger().warning("MythicMobs 生成失败: " + mobId);
+                return null;
+            }
 
+            // 使用 BukkitAdapter 获取 Bukkit Entity
+            AbstractEntity abstractEntity = activeMob.getEntity();
+            Entity entity = abstractEntity.getBukkitEntity();
             if (entity instanceof LivingEntity living) {
-                // 附加 AI: aiController.attach(living, template)
-                aiController.getClass()
-                    .getMethod("attach", LivingEntity.class, template.getClass())
-                    .invoke(aiController, living, template);
-
-                plugin.getLogger().info("[DEBUG] GuangDianMobs 生成成功: " + mobId);
+                if (plugin.getConfig().getBoolean("debug", false)) {
+                    plugin.getLogger().info("[DEBUG] MythicMobs 生成成功: " + mobId);
+                }
                 return living;
             }
+
+            plugin.getLogger().warning("MythicMobs 生成的实体不是 LivingEntity: " + mobId);
+            return null;
+
         } catch (Exception e) {
-            plugin.getLogger().warning("GuangDianMobs 生成失败: " + mobId + " - " + e.getMessage());
-            if (plugin.getConfig().getBoolean("debug", false)) e.printStackTrace();
+            plugin.getLogger().warning("MythicMobs 生成异常: " + mobId + " - " + e.getMessage());
+            if (plugin.getConfig().getBoolean("debug", false)) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
+
+    // ========== PDC 标记 ==========
 
     public void tagEntityForSession(Entity entity, String sessionId) {
         if (entity == null || sessionId == null) return;
@@ -126,11 +130,32 @@ public class MobBridge {
             .has(new NamespacedKey(plugin, "boss_id"), PersistentDataType.STRING);
     }
 
-    public void removeBoss(UUID entityId) { spawnedBosses.remove(entityId); }
+    /**
+     * 检测实体是否为 MythicMobs 怪物
+     */
+    public boolean isMythicMob(Entity entity) {
+        if (!mythicMobsEnabled || apiHelper == null) return false;
+        return apiHelper.isMythicMob(entity);
+    }
+
+    /**
+     * 获取 MythicMobs 怪物的内部名称
+     */
+    public String getMythicMobName(Entity entity) {
+        if (!mythicMobsEnabled || apiHelper == null) return null;
+        ActiveMob activeMob = apiHelper.getMythicMobInstance(entity);
+        return activeMob != null ? activeMob.getType().getInternalName() : null;
+    }
+
+    public void removeBoss(UUID entityId) {
+        spawnedBosses.remove(entityId);
+    }
 
     public void clearSessionBosses(String sessionId) {
         spawnedBosses.values().removeIf(sessionId::equals);
     }
 
-    public Map<UUID, String> getSpawnedBosses() { return spawnedBosses; }
+    public Map<UUID, String> getSpawnedBosses() {
+        return spawnedBosses;
+    }
 }

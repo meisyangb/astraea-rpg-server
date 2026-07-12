@@ -1,5 +1,5 @@
 // ========================================
-// GuangDianForge - 锻造系统
+// GuangDianForge - 锻造系�?
 // ========================================
 
 plugins {
@@ -8,8 +8,8 @@ plugins {
 
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
-    compileOnly project(':plugins:RPGCore')
-    compileOnly project(':plugins:RPGItems')
+    compileOnly files('libs/RPGCore-1.0.0.jar')
+    compileOnly files('libs/RPGItems-1.0.0.jar')
     compileOnly files('../GuangDianArmorStats/libs/PlaceholderAPI.jar')
 }
 

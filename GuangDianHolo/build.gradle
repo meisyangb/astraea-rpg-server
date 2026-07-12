@@ -1,5 +1,5 @@
 // ========================================
-// GuangDianHolo - 全息图系统
+// GuangDianHolo - 全息图系�?
 // ========================================
 
 plugins {
@@ -7,7 +7,7 @@ plugins {
 }
 
 dependencies {
-    compileOnly project(':plugins:RPGCore')
+    compileOnly files('libs/RPGCore-1.0.0.jar')
     compileOnly name: 'PlaceholderAPI'
 }
 

@@ -1,16 +1,21 @@
 // ========================================
 // GuangDianDungeon - 副本系统
+// 依赖: MythicMobs 5.x, RPGCore
 // ========================================
 
 plugins {
     id 'java'
 }
 
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.papermc.io/repository/maven-public/' }
+}
+
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
-    compileOnly project(':plugins:RPGCore')
-    compileOnly project(':plugins:GuangDianPoints')
-    compileOnly project(':plugins:GuangDianMobs')
+    compileOnly files('../../译梦传说/plugins/RPGCore-1.0.0.jar')
+    compileOnly files('libs/MythicMobs.jar')
     compileOnly files('../GuangDianArmorStats/libs/PlaceholderAPI.jar')
     compileOnly 'net.luckperms:api:5.4'
 }

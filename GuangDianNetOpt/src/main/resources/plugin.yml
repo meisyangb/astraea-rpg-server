@@ -1,0 +1,17 @@
+name: GuangDianNetOpt
+version: 1.0.0
+main: cn.guangdian.netopt.GuangDianNetOpt
+api-version: '1.21'
+author: GuangDian
+description: Network bandwidth optimization plugin for Paper servers
+softdepend:
+  - ProtocolLib
+commands:
+  netopt:
+    description: Network optimization commands
+    usage: /netopt [status|stats|config]
+    permission: guangdian.netopt.admin
+permissions:
+  guangdian.netopt.admin:
+    description: Admin permission for network optimization
+    default: op

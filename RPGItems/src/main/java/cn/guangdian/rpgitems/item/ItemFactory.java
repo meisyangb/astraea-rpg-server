@@ -1,5 +1,6 @@
 package cn.guangdian.rpgitems.item;
 
+import cn.guangdian.rpgitems.attribute.CompoundAttributeCodec;
 import cn.guangdian.rpgitems.template.ItemTemplate;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
@@ -129,103 +130,61 @@ public class ItemFactory {
         // 物品 ID（必须设置）
         pdc.set(KEY_ID, PersistentDataType.STRING, template.id());
 
-        // 3. 只为非零属性设置 PDC Key
+        // 3. 将所有属性序列化为复合 byte[]（替代 48 个独立 PDC key）
         ItemTemplate.Attributes attrs = template.attributes();
         if (attrs != null) {
-            // 调试日志
-            System.out.println("[ItemFactory] 创建物品: " + template.id());
+            double[] values = new double[CompoundAttributeCodec.COUNT];
+            values[CompoundAttributeCodec.ATTACK_MIN] = attrs.attackMin();
+            values[CompoundAttributeCodec.ATTACK_MAX] = attrs.attackMax();
+            values[CompoundAttributeCodec.DEFENSE_MIN] = attrs.defenseMin();
+            values[CompoundAttributeCodec.DEFENSE_MAX] = attrs.defenseMax();
+            values[CompoundAttributeCodec.MAX_HEALTH] = attrs.maxHealth();
+            values[CompoundAttributeCodec.HEALTH_REGEN] = attrs.healthRegen();
+            values[CompoundAttributeCodec.CRIT_CHANCE] = attrs.critChance();
+            values[CompoundAttributeCodec.CRIT_DAMAGE] = attrs.critDamage();
+            values[CompoundAttributeCodec.LIFESTEAL_CHANCE] = attrs.lifestealChance();
+            values[CompoundAttributeCodec.LIFESTEAL_MULTIPLIER] = attrs.lifestealMultiplier();
+            values[CompoundAttributeCodec.DODGE_CHANCE] = attrs.dodgeChance();
+            values[CompoundAttributeCodec.PARRY_CHANCE] = attrs.parryChance();
+            values[CompoundAttributeCodec.MOVE_SPEED] = attrs.moveSpeed();
+            values[CompoundAttributeCodec.DAMAGE_REDUCTION] = attrs.damageReduction();
+            values[CompoundAttributeCodec.PVP_ATTACK_MIN] = attrs.pvpAttackMin();
+            values[CompoundAttributeCodec.PVP_ATTACK_MAX] = attrs.pvpAttackMax();
+            values[CompoundAttributeCodec.PVP_DEFENSE_MIN] = attrs.pvpDefenseMin();
+            values[CompoundAttributeCodec.PVP_DEFENSE_MAX] = attrs.pvpDefenseMax();
+            values[CompoundAttributeCodec.CRIT_RESIST] = attrs.critResist();
+            values[CompoundAttributeCodec.CRIT_DAMAGE_RESIST] = attrs.critDamageResist();
+            values[CompoundAttributeCodec.LIFESTEAL_RESIST] = attrs.lifestealResist();
+            values[CompoundAttributeCodec.ARMOR] = attrs.armor();
+            values[CompoundAttributeCodec.ARMOR_STRENGTH] = attrs.armorStrength();
+            values[CompoundAttributeCodec.ARMOR_PENETRATION] = attrs.armorPenetration();
+            values[CompoundAttributeCodec.DEFENSE_PENETRATION] = attrs.defensePenetration();
+            values[CompoundAttributeCodec.DAMAGE_REFLECT] = attrs.damageReflect();
+            values[CompoundAttributeCodec.REFLECT_RATIO] = attrs.reflectRatio();
+            values[CompoundAttributeCodec.POISON_CHANCE] = attrs.poisonChance();
+            values[CompoundAttributeCodec.FREEZE_CHANCE] = attrs.freezeChance();
+            values[CompoundAttributeCodec.BLIND_CHANCE] = attrs.blindChance();
+            values[CompoundAttributeCodec.BURN_CHANCE] = attrs.burnChance();
+            values[CompoundAttributeCodec.SCORCH_CHANCE] = attrs.scorchChance();
+            values[CompoundAttributeCodec.IGNITE_CHANCE] = attrs.igniteChance();
+            values[CompoundAttributeCodec.SLOW_CHANCE] = attrs.slowChance();
+            values[CompoundAttributeCodec.FIRE_RESIST] = attrs.fireResist();
+            values[CompoundAttributeCodec.FALL_RESIST] = attrs.fallResist();
+            values[CompoundAttributeCodec.DROWNING_RESIST] = attrs.drowningResist();
+            values[CompoundAttributeCodec.POISON_RESIST] = attrs.poisonResist();
+            values[CompoundAttributeCodec.WITHER_RESIST] = attrs.witherResist();
+            values[CompoundAttributeCodec.LAVA_RESIST] = attrs.lavaResist();
+            values[CompoundAttributeCodec.MAGIC_RESIST] = attrs.magicResist();
+            values[CompoundAttributeCodec.EXPLOSION_RESIST] = attrs.explosionResist();
+            values[CompoundAttributeCodec.PROJECTILE_RESIST] = attrs.projectileResist();
+            values[CompoundAttributeCodec.KNOCKBACK_RESIST] = attrs.knockbackResist();
+            values[CompoundAttributeCodec.EXP_BONUS] = attrs.expBonus();
+            values[CompoundAttributeCodec.HEALTH_REGEN_PERCENT] = attrs.healthRegenPercent();
+            values[CompoundAttributeCodec.DODGE_REFLECT_CHANCE] = attrs.dodgeReflectChance();
+            values[CompoundAttributeCodec.DODGE_REFLECT_RATIO] = attrs.dodgeReflectRatio();
 
-            // 攻击属性
-            setIfNotZero(pdc, KEY_ATTACK_MIN, attrs.attackMin());
-            setIfNotZero(pdc, KEY_ATTACK_MAX, attrs.attackMax());
-            if (attrs.attackMin() != 0 || attrs.attackMax() != 0) {
-                System.out.println("[ItemFactory] 属性 - 攻击: " + attrs.attackMin() + "-" + attrs.attackMax());
-            }
-
-            // 防御属性
-            setIfNotZero(pdc, KEY_DEFENSE_MIN, attrs.defenseMin());
-            setIfNotZero(pdc, KEY_DEFENSE_MAX, attrs.defenseMax());
-            if (attrs.defenseMin() != 0 || attrs.defenseMax() != 0) {
-                System.out.println("[ItemFactory] 属性 - 防御: " + attrs.defenseMin() + "-" + attrs.defenseMax());
-            }
-
-            // 生命属性
-            setIfNotZero(pdc, KEY_MAX_HEALTH, attrs.maxHealth());
-            setIfNotZero(pdc, KEY_HEALTH_REGEN, attrs.healthRegen());
-            if (attrs.maxHealth() != 0) {
-                System.out.println("[ItemFactory] 属性 - 生命: " + attrs.maxHealth());
-            }
-
-            // 暴击属性
-            setIfNotZero(pdc, KEY_CRIT_CHANCE, attrs.critChance());
-            setIfNotZero(pdc, KEY_CRIT_DAMAGE, attrs.critDamage());
-
-            // 生命偷取
-            setIfNotZero(pdc, KEY_LIFESTEAL_CHANCE, attrs.lifestealChance());
-            setIfNotZero(pdc, KEY_LIFESTEAL_MULTIPLIER, attrs.lifestealMultiplier());
-
-            // 闪避与格挡
-            setIfNotZero(pdc, KEY_DODGE_CHANCE, attrs.dodgeChance());
-            setIfNotZero(pdc, KEY_PARRY_CHANCE, attrs.parryChance());
-
-            // 移动速度
-            setIfNotZero(pdc, KEY_MOVE_SPEED, attrs.moveSpeed());
-            if (attrs.moveSpeed() != 0) {
-                System.out.println("[ItemFactory] 属性 - 移动速度: " + attrs.moveSpeed());
-            }
-
-            // 减伤
-            setIfNotZero(pdc, KEY_DAMAGE_REDUCTION, attrs.damageReduction());
-
-            // PVP属性
-            setIfNotZero(pdc, KEY_PVP_ATTACK_MIN, attrs.pvpAttackMin());
-            setIfNotZero(pdc, KEY_PVP_ATTACK_MAX, attrs.pvpAttackMax());
-            setIfNotZero(pdc, KEY_PVP_DEFENSE_MIN, attrs.pvpDefenseMin());
-            setIfNotZero(pdc, KEY_PVP_DEFENSE_MAX, attrs.pvpDefenseMax());
-
-            // 暴击抵抗
-            setIfNotZero(pdc, KEY_CRIT_RESIST, attrs.critResist());
-            setIfNotZero(pdc, KEY_CRIT_DAMAGE_RESIST, attrs.critDamageResist());
-
-            // 吸血抵抗
-            setIfNotZero(pdc, KEY_LIFESTEAL_RESIST, attrs.lifestealResist());
-
-            // 护甲与穿透
-            setIfNotZero(pdc, KEY_ARMOR, attrs.armor());
-            setIfNotZero(pdc, KEY_ARMOR_STRENGTH, attrs.armorStrength());
-            setIfNotZero(pdc, KEY_ARMOR_PENETRATION, attrs.armorPenetration());
-            setIfNotZero(pdc, KEY_DEFENSE_PENETRATION, attrs.defensePenetration());
-
-            // 伤害反弹
-            setIfNotZero(pdc, KEY_DAMAGE_REFLECT, attrs.damageReflect());
-            setIfNotZero(pdc, KEY_REFLECT_RATIO, attrs.reflectRatio());
-
-            // 状态效果
-            setIfNotZero(pdc, KEY_POISON_CHANCE, attrs.poisonChance());
-            setIfNotZero(pdc, KEY_FREEZE_CHANCE, attrs.freezeChance());
-            setIfNotZero(pdc, KEY_BLIND_CHANCE, attrs.blindChance());
-            setIfNotZero(pdc, KEY_BURN_CHANCE, attrs.burnChance());
-            setIfNotZero(pdc, KEY_SCORCH_CHANCE, attrs.scorchChance());
-            setIfNotZero(pdc, KEY_IGNITE_CHANCE, attrs.igniteChance());
-            setIfNotZero(pdc, KEY_SLOW_CHANCE, attrs.slowChance());
-
-            // 环境抗性
-            setIfNotZero(pdc, KEY_FIRE_RESIST, attrs.fireResist());
-            setIfNotZero(pdc, KEY_FALL_RESIST, attrs.fallResist());
-            setIfNotZero(pdc, KEY_DROWNING_RESIST, attrs.drowningResist());
-            setIfNotZero(pdc, KEY_POISON_RESIST, attrs.poisonResist());
-            setIfNotZero(pdc, KEY_WITHER_RESIST, attrs.witherResist());
-            setIfNotZero(pdc, KEY_LAVA_RESIST, attrs.lavaResist());
-            setIfNotZero(pdc, KEY_MAGIC_RESIST, attrs.magicResist());
-            setIfNotZero(pdc, KEY_EXPLOSION_RESIST, attrs.explosionResist());
-            setIfNotZero(pdc, KEY_PROJECTILE_RESIST, attrs.projectileResist());
-
-            // 其他属性
-            setIfNotZero(pdc, KEY_KNOCKBACK_RESIST, attrs.knockbackResist());
-            setIfNotZero(pdc, KEY_EXP_BONUS, attrs.expBonus());
-            setIfNotZero(pdc, KEY_HEALTH_REGEN_PERCENT, attrs.healthRegenPercent());
-            setIfNotZero(pdc, KEY_DODGE_REFLECT_CHANCE, attrs.dodgeReflectChance());
-            setIfNotZero(pdc, KEY_DODGE_REFLECT_RATIO, attrs.dodgeReflectRatio());
+            byte[] compoundData = CompoundAttributeCodec.serialize(values);
+            pdc.set(CompoundAttributeCodec.KEY_COMPOUND, PersistentDataType.BYTE_ARRAY, compoundData);
 
             // 装备等级（必须设置，即使为0）
             pdc.set(KEY_LEVEL, PersistentDataType.INTEGER, attrs.level());
@@ -238,7 +197,6 @@ public class ItemFactory {
             // 宝石类型（用于宝石物品）
             if (attrs.gemType() != null && !attrs.gemType().isEmpty()) {
                 pdc.set(KEY_GEM_TYPE, PersistentDataType.STRING, attrs.gemType());
-                System.out.println("[ItemFactory] 宝石类型: " + attrs.gemType());
             }
             
             // 槽位定义（用于装备物品）
@@ -252,14 +210,12 @@ public class ItemFactory {
                     NamespacedKey gemKey = new NamespacedKey("rpgitems", "gem_" + i);
                     pdc.set(gemKey, PersistentDataType.STRING, "");
                 }
-                System.out.println("[ItemFactory] 槽位数量: " + attrs.sockets().size());
             }
         }
 
         // 5. 存储阶位到 PDC (用于分解匹配)
         if (template.tier() != null && !template.tier().isEmpty()) {
             pdc.set(KEY_TIER, PersistentDataType.STRING, template.tier());
-            System.out.println("[ItemFactory] 阶位: " + template.tier());
         }
 
         // 4. 应用选项
@@ -278,15 +234,6 @@ public class ItemFactory {
         return item;
     }
 
-    /**
-     * 只为非零值设置 PDC Key
-     */
-    private void setIfNotZero(PersistentDataContainer pdc, NamespacedKey key, double value) {
-        if (value != 0.0) {
-            pdc.set(key, PersistentDataType.DOUBLE, value);
-        }
-    }
-    
     /**
      * 从 PDC 读取物品 ID
      */

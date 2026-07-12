@@ -320,33 +320,46 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
     }
 
     /**
-     * 取消上架
-     * 
+     * 取消上架 - API方法（带防重复检查）
+     *
      * @param sellerId 卖家UUID
      * @param listingId 上架ID
      * @return 是否成功
      */
     public boolean cancelListingAPI(UUID sellerId, UUID listingId) {
+        // ✅ 防止重复下架：先检查物品是否存在
         MarketItem item = marketIndex.get(listingId);
-        if (item == null || !item.seller.equals(sellerId)) return false;
+        if (item == null || !item.seller.equals(sellerId)) {
+            getLogger().warning("API调用: 下架失败，物品不存在或不属于该玩家 ID: " + listingId);
+            return false;
+        }
 
-        globalMarket.remove(item);
+        // ✅ 从所有集合中移除物品（原子操作）
+        boolean removedFromMarket = globalMarket.remove(item);
         marketIndex.remove(item.id);
+
         List<MarketItem> listings = playerListings.get(sellerId);
         if (listings != null) {
             listings.remove(item);
         }
 
-        Player player = Bukkit.getPlayer(sellerId);
-        if (player != null) {
-            HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(item.item.clone());
-            if (!leftover.isEmpty()) {
-                for (ItemStack drop : leftover.values()) {
-                    player.getWorld().dropItemNaturally(player.getLocation(), drop);
+        // ✅ 只有成功移除后才返还物品
+        if (removedFromMarket) {
+            Player player = Bukkit.getPlayer(sellerId);
+            if (player != null) {
+                HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(item.item.clone());
+                if (!leftover.isEmpty()) {
+                    for (ItemStack drop : leftover.values()) {
+                        player.getWorld().dropItemNaturally(player.getLocation(), drop);
+                    }
                 }
+                getLogger().info("API调用: 玩家 " + player.getName() + " 成功下架物品 ID: " + listingId);
             }
+            return true;
+        } else {
+            getLogger().warning("API调用: 下架失败，物品已被重复处理 ID: " + listingId);
+            return false;
         }
-        return true;
     }
 
     /**
@@ -685,51 +698,67 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
             buyer.sendMessage(colorize(config.getString("messages.cannot-buy-own", "<red>不能购买自己的物品!")));
             return false;
         }
-        
+
+        // ✅ 防止重复购买：检查物品是否仍在市场
+        if (!marketIndex.containsKey(item.id)) {
+            buyer.sendMessage(colorize("<red>该物品已售出或不存在!"));
+            getLogger().warning("玩家 " + buyer.getName() + " 尝试购买不存在的物品 ID: " + item.id);
+            return false;
+        }
+
         CurrencyType currencyType = item.getCurrencyType();
         double price = item.price;
         double fee = transactionFee + (price * feePercent / 100);
         double totalCost = price + fee;
         String currencyName = getCurrencyName(currencyType);
-        
+
         if (!hasEnoughCurrency(buyer.getUniqueId(), currencyType, totalCost)) {
             String msgTemplate = config.getString("messages.insufficient-funds", "<red><currency>不足!");
             buyer.sendMessage(miniMessage.parseWithPlaceholders(msgTemplate, "currency", currencyName));
             playSound(buyer, "purchase-fail");
             return false;
         }
-        
-        removeCurrency(buyer.getUniqueId(), currencyType, totalCost);
-        addCurrency(item.seller, currencyType, price);
-        
-        HashMap<Integer, ItemStack> leftover = buyer.getInventory().addItem(item.item.clone());
-        if (!leftover.isEmpty()) {
-            for (ItemStack drop : leftover.values()) {
-                buyer.getWorld().dropItemNaturally(buyer.getLocation(), drop);
-            }
-        }
-        
-        globalMarket.remove(item);
+
+        // ✅ 扣款前先从市场移除物品（防止并发购买）
+        boolean removedFromMarket = globalMarket.remove(item);
         marketIndex.remove(item.id);
-        // ✅ 优化：避免创建新ArrayList
+
         List<MarketItem> listings = playerListings.get(item.seller);
         if (listings != null) {
             listings.remove(item);
         }
-        
-        Player seller = Bukkit.getPlayer(item.seller);
-        if (seller != null && seller.isOnline()) {
-            String sellerMsgTemplate = config.getString("messages.item-sold", "<green>你的物品已售出! 获得 <price> <currency>");
-            seller.sendMessage(miniMessage.parseWithMultiplePlaceholders(sellerMsgTemplate,
-                "price", formatCurrency(currencyType, price), "currency", currencyName));
+
+        // ✅ 只有成功移除物品后才扣款和给物品
+        if (removedFromMarket) {
+            removeCurrency(buyer.getUniqueId(), currencyType, totalCost);
+            addCurrency(item.seller, currencyType, price);
+
+            HashMap<Integer, ItemStack> leftover = buyer.getInventory().addItem(item.item.clone());
+            if (!leftover.isEmpty()) {
+                for (ItemStack drop : leftover.values()) {
+                    buyer.getWorld().dropItemNaturally(buyer.getLocation(), drop);
+                }
+            }
+
+            Player seller = Bukkit.getPlayer(item.seller);
+            if (seller != null && seller.isOnline()) {
+                String sellerMsgTemplate = config.getString("messages.item-sold", "<green>你的物品已售出! 获得 <price> <currency>");
+                seller.sendMessage(miniMessage.parseWithMultiplePlaceholders(sellerMsgTemplate,
+                    "price", formatCurrency(currencyType, price), "currency", currencyName));
+            }
+
+            String buyerMsgTemplate = config.getString("messages.purchase-success", "<green>购买成功! 花费 <price> <currency>");
+            buyer.sendMessage(miniMessage.parseWithMultiplePlaceholders(buyerMsgTemplate,
+                "price", formatCurrency(currencyType, totalCost), "currency", currencyName));
+            playSound(buyer, "purchase-success");
+
+            getLogger().info("玩家 " + buyer.getName() + " 成功购买物品 ID: " + item.id + " 价格: " + formatCurrency(currencyType, price));
+            return true;
+        } else {
+            buyer.sendMessage(colorize("<red>购买失败: 物品已被他人购买!"));
+            getLogger().warning("玩家 " + buyer.getName() + " 购买失败，物品已被并发处理 ID: " + item.id);
+            return false;
         }
-        
-        String buyerMsgTemplate = config.getString("messages.purchase-success", "<green>购买成功! 花费 <price> <currency>");
-        buyer.sendMessage(miniMessage.parseWithMultiplePlaceholders(buyerMsgTemplate,
-            "price", formatCurrency(currencyType, totalCost), "currency", currencyName));
-        playSound(buyer, "purchase-success");
-        
-        return true;
     }
 
     public void cancelListing(Player player, MarketItem item) {
@@ -737,37 +766,73 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
             player.sendMessage(colorize(config.getString("messages.not-your-item", "<red>这不是你的物品!")));
             return;
         }
-        
-        globalMarket.remove(item);
+
+        // ✅ 防止重复下架：先检查物品是否仍在市场中
+        if (!marketIndex.containsKey(item.id)) {
+            player.sendMessage(colorize("<red>该物品已下架或不存在!"));
+            getLogger().warning("玩家 " + player.getName() + " 尝试下架不存在的物品 ID: " + item.id);
+            return;
+        }
+
+        // ✅ 从所有集合中移除物品（原子操作）
+        boolean removedFromMarket = globalMarket.remove(item);
         marketIndex.remove(item.id);
-        // ✅ 优化：避免创建新ArrayList
+
         List<MarketItem> sellerListings = playerListings.get(item.seller);
         if (sellerListings != null) {
             sellerListings.remove(item);
         }
-        
-        HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(item.item.clone());
-        if (!leftover.isEmpty()) {
-            for (ItemStack drop : leftover.values()) {
-                player.getWorld().dropItemNaturally(player.getLocation(), drop);
-            }
-        }
-        
-        player.sendMessage(colorize(config.getString("messages.listing-cancelled", "<green>已取消上架!")));
-    }
 
-    private void returnExpiredItem(MarketItem item) {
-        Player player = Bukkit.getPlayer(item.seller);
-        if (player != null && player.isOnline()) {
+        // ✅ 只有当物品成功从市场移除后才返还给玩家
+        if (removedFromMarket) {
             HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(item.item.clone());
             if (!leftover.isEmpty()) {
                 for (ItemStack drop : leftover.values()) {
                     player.getWorld().dropItemNaturally(player.getLocation(), drop);
                 }
             }
-            player.sendMessage(colorize(config.getString("messages.item-expired", "<red>你的物品已过期并已返还!")));
+            player.sendMessage(colorize(config.getString("messages.listing-cancelled", "<green>已取消上架!")));
+            getLogger().info("玩家 " + player.getName() + " 成功下架物品: " + item.item.getType() + " ID: " + item.id);
         } else {
-            offlineReturns.computeIfAbsent(item.seller, k -> new ArrayList<>()).add(item.item.clone());
+            player.sendMessage(colorize("<red>下架失败: 物品已被处理!"));
+            getLogger().warning("玩家 " + player.getName() + " 下架物品失败，物品可能已被重复处理 ID: " + item.id);
+        }
+    }
+
+    private void returnExpiredItem(MarketItem item) {
+        // ✅ 防止重复返还：检查物品是否已被移除
+        if (!marketIndex.containsKey(item.id)) {
+            getLogger().warning("过期返还失败: 物品已被处理 ID: " + item.id);
+            return;
+        }
+
+        // ✅ 先从市场中移除物品
+        boolean removedFromMarket = globalMarket.remove(item);
+        marketIndex.remove(item.id);
+
+        List<MarketItem> listings = playerListings.get(item.seller);
+        if (listings != null) {
+            listings.remove(item);
+        }
+
+        // ✅ 只有成功移除后才返还物品
+        if (removedFromMarket) {
+            Player player = Bukkit.getPlayer(item.seller);
+            if (player != null && player.isOnline()) {
+                HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(item.item.clone());
+                if (!leftover.isEmpty()) {
+                    for (ItemStack drop : leftover.values()) {
+                        player.getWorld().dropItemNaturally(player.getLocation(), drop);
+                    }
+                }
+                player.sendMessage(colorize(config.getString("messages.item-expired", "<red>你的物品已过期并已返还!")));
+                getLogger().info("过期物品返还给在线玩家: " + player.getName() + " ID: " + item.id);
+            } else {
+                offlineReturns.computeIfAbsent(item.seller, k -> new ArrayList<>()).add(item.item.clone());
+                getLogger().info("过期物品暂存给离线玩家: " + item.sellerName + " ID: " + item.id);
+            }
+        } else {
+            getLogger().warning("过期返还失败: 物品未成功从市场移除 ID: " + item.id);
         }
     }
     

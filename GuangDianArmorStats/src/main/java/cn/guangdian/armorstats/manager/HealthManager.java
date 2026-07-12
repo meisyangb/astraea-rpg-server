@@ -51,7 +51,9 @@ public class HealthManager {
         // 计算每行显示的生命值
         healthPerRow = DEFAULT_MAX_HEALTH;
         
-        plugin.getLogger().info("[HealthManager] 配置加载: enableScale=" + enableScale + ", maxRows=" + maxRows);
+        if (plugin.getConfig().getBoolean("debug", false)) {
+            plugin.getLogger().info("[HealthManager] 配置加载: enableScale=" + enableScale + ", maxRows=" + maxRows);
+        }
     }
     
     /**

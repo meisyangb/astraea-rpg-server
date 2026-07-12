@@ -5,7 +5,6 @@ import cn.guangdian.dungeon.command.DungeonAdminCommand;
 import cn.guangdian.dungeon.command.DungeonCommand;
 import cn.guangdian.dungeon.command.PartyCommand;
 import cn.guangdian.dungeon.integration.MobBridge;
-import cn.guangdian.dungeon.integration.SlimeWorldBridge;
 import cn.guangdian.dungeon.listener.DungeonEventListener;
 import cn.guangdian.dungeon.manager.*;
 import cn.guangdian.dungeon.model.DungeonTemplate;
@@ -35,11 +34,10 @@ public class GuangDianDungeon extends AbstractRPGPlugin {
     private SessionRewardManager rewardManager;
     private TemplateLoader templateLoader;
     private DungeonServiceAdapter serviceAdapter;
-    private SlimeWorldBridge slimeWorldBridge;
     private MobBridge mobBridge;
     private SessionManager sessionManager;
     private StageLoader stageLoader;
-    private WorldInstanceManager worldInstanceManager;
+    private MapInstanceManager mapInstanceManager;
 
     private MiniMessageService miniMessage;
     private final MiniMessage miniMessageParser = MiniMessage.miniMessage();
@@ -79,10 +77,14 @@ public class GuangDianDungeon extends AbstractRPGPlugin {
         startCleanup();
 
         // 清理孤儿世界（服务端崩溃/异常关闭时残留的实例世界）
-        cleanupOrphanInstances();
+        mapInstanceManager.cleanupOrphanInstances();
+
+        // 启动定时保底清理任务（每60秒检查一次孤儿世界）
+        mapInstanceManager.startPeriodicCleanup();
 
         getLogger().info("GuangDianDungeon 已启动！");
         getLogger().info("已加载 " + templateLoader.getTemplateCount() + " 个副本模板");
+        getLogger().info("可用地图: " + String.join(", ", mapInstanceManager.getAvailableMaps()));
     }
 
     @Override
@@ -90,12 +92,9 @@ public class GuangDianDungeon extends AbstractRPGPlugin {
         stopAutoSave();
         stopCleanup();
 
-        if (slimeWorldBridge != null) {
-            slimeWorldBridge.cleanupAll();
-        }
-
-        if (worldInstanceManager != null) {
-            worldInstanceManager.cleanupAllInstances();
+        if (mapInstanceManager != null) {
+            mapInstanceManager.stopPeriodicCleanup();
+            mapInstanceManager.cleanupAll();
         }
 
         if (partyManager != null) {
@@ -149,6 +148,16 @@ public class GuangDianDungeon extends AbstractRPGPlugin {
     }
 
     private void initComponents() {
+        // 确保 map 目录存在
+        File mapDir = new File(getDataFolder(), "map");
+        if (!mapDir.exists()) {
+            mapDir.mkdirs();
+            getLogger().info("已创建 map/ 目录，请将副本地图放入此目录");
+        }
+
+        // 地图实例管理器（最先初始化）
+        mapInstanceManager = new MapInstanceManager(this);
+
         File dungeonsDir = new File(getDataFolder(), "dungeons");
         if (!dungeonsDir.exists()) {
             dungeonsDir.mkdirs();
@@ -171,15 +180,11 @@ public class GuangDianDungeon extends AbstractRPGPlugin {
         sessionManager = new SessionManager(this);
         sessionManager.setMobBridge(mobBridge);
 
-        slimeWorldBridge = new SlimeWorldBridge(this);
-
         partyManager = new PartyManager(this);
 
         rewardManager = new SessionRewardManager(this);
 
         stageLoader = new StageLoader(this);
-
-        worldInstanceManager = new WorldInstanceManager(this);
     }
 
     private void saveDefaultDungeons() {
@@ -216,52 +221,12 @@ public class GuangDianDungeon extends AbstractRPGPlugin {
         }
     }
 
-    /**
-     * 清理服务端崩溃/异常关闭时残留的副本实例世界
-     */
-    private void cleanupOrphanInstances() {
-        String prefix = getConfig().getString("world.instance-prefix", "dungeon_inst_");
-        File worldContainer = Bukkit.getWorldContainer();
-        File[] worldDirs = worldContainer.listFiles(File::isDirectory);
-        if (worldDirs == null) return;
-
-        int cleaned = 0;
-        for (File dir : worldDirs) {
-            String name = dir.getName();
-            if (name.startsWith(prefix) && Bukkit.getWorld(name) == null) {
-                try {
-                    deleteRecursive(dir);
-                    cleaned++;
-                    getLogger().info("清理残留世界: " + name);
-                } catch (Exception e) {
-                    getLogger().warning("清理残留世界失败: " + name + " - " + e.getMessage());
-                }
-            }
-        }
-        if (cleaned > 0) {
-            getLogger().info("共清理 " + cleaned + " 个残留副本世界");
-        }
-    }
-
-    private void deleteRecursive(File file) {
-        if (file.isDirectory()) {
-            File[] children = file.listFiles();
-            if (children != null) {
-                for (File child : children) {
-                    deleteRecursive(child);
-                }
-            }
-        }
-        file.delete();
-    }
-
     private void startAutoSave() {
         if (autoSaveInterval <= 0 || scheduler == null) return;
         long ticks = autoSaveInterval * 20L;
         autoSaveTaskId = scheduler.runAsyncRepeating(() -> {
             if (playerRepository != null) {
                 playerRepository.saveAll();
-                getLogger().info("自动保存玩家数据完成");
             }
         }, ticks, ticks);
     }
@@ -345,10 +310,9 @@ public class GuangDianDungeon extends AbstractRPGPlugin {
     public SessionRewardManager getRewardManager() { return rewardManager; }
     public TemplateLoader getTemplateLoader() { return templateLoader; }
     public DungeonServiceAdapter getServiceAdapter() { return serviceAdapter; }
-    public SlimeWorldBridge getSlimeWorldBridge() { return slimeWorldBridge; }
     public SessionManager getSessionManager() { return sessionManager; }
     public StageLoader getStageLoader() { return stageLoader; }
-    public WorldInstanceManager getWorldInstanceManager() { return worldInstanceManager; }
+    public MapInstanceManager getMapInstanceManager() { return mapInstanceManager; }
     public MobBridge getMobBridge() { return mobBridge; }
     public MiniMessageService getMiniMessageService() { return miniMessage; }
     public ExternalServiceIntegration getExternalServices() { return externalServices; }

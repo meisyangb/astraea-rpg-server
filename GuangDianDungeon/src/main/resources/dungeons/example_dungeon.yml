@@ -1,13 +1,16 @@
-# 示例副本配置
-# 这是一个基础的副本模板，展示所有可用的配置选项
+# ========================================
+# 示例副本配置 - 试炼之地
+# 使用 MythicMobs 怪物，支持 stages/waves 波次系统
+# ========================================
 
 id: "example_dungeon"
-name: "示例副本"
-description: "这是一个示例副本，用于展示配置格式"
+name: "试炼之地"
+description: "击败试炼守卫和试炼BOSS，证明你的实力！"
 version: "1.0.0"
 author: "Astraea"
 
-world-template: "example_dungeon"
+# 地图名称 (对应 map/ 文件夹下的子目录，包含 level.dat 文件)
+map: "example_dungeon"
 
 icon:
   material: "DIAMOND_SWORD"
@@ -45,56 +48,134 @@ difficulties:
     exp-multiplier: 1.5
     time-limit-modifier: -300
     max-deaths-modifier: -3
-    
-  - id: "heroic"
-    name: "英雄"
-    health-multiplier: 2.0
-    damage-multiplier: 1.8
-    mob-count-multiplier: 1.5
-    reward-multiplier: 2.5
-    exp-multiplier: 2.0
-    time-limit-modifier: -600
-    max-deaths-modifier: -5
 
-phases:
-  - id: "phase_1"
-    name: "第一阶段"
-    description: "清理小怪"
-    time-limit: 600
-    triggers:
-      - type: "kill"
-        target: "ExampleMob"
-        count: 10
-        one-time: true
-    spawns:
-      - id: "spawn_1"
-        mob: "ExampleMob"
-        location: {x: 100, y: 64, z: 100}
-        count: 10
-        respawn: false
-        delay: 0
-    rewards:
-      exp: 500
-      items: []
-      
-  - id: "boss_phase"
-    name: "BOSS战"
-    description: "击败BOSS"
-    time-limit: 600
-    boss:
-      mythicmob: "ExampleBoss"
-      location: {x: 150, y: 65, z: 150}
-      health-bar: true
-      announce-skills: true
-    triggers:
-      - type: "kill"
-        target: "ExampleBoss"
-        count: 1
-        one-time: true
-    rewards:
-      exp: 2000
-      items: []
+# ========================================
+# 生成点
+# ========================================
+spawn-points:
+  center:
+    location:
+      x: 0
+      y: 64
+      z: 0
+    radius: 5
+  left:
+    location:
+      x: -10
+      y: 64
+      z: 0
+    radius: 3
+  right:
+    location:
+      x: 10
+      y: 64
+      z: 0
+    radius: 3
+  boss_spawn:
+    location:
+      x: 0
+      y: 64
+      z: 10
+    radius: 3
 
+# ========================================
+# 阶段/波次系统 (使用 MythicMobs 怪物名称)
+# ========================================
+stages:
+  - id: "stage_1"
+    name: "第一波 - 试炼守卫"
+    type: COMBAT
+    waves:
+      - id: "wave_1"
+        start-message: "<yellow>试炼守卫出现了！击败它们！"
+        completion-message: "<green>试炼守卫已被清除！"
+        time-limit: 300
+        exp-reward: 500
+        spawns:
+          - mob: "TrialGuard"
+            spawn-point: "center"
+            amount: 5
+            radius: 5
+            delay: 0
+        completion:
+          type: KILL_ALL
+        next-wave-trigger:
+          type: ON_KILL_COMPLETE
+
+  - id: "stage_2"
+    name: "第二波 - 死灵士兵"
+    type: COMBAT
+    waves:
+      - id: "wave_2"
+        start-message: "<yellow>死灵士兵从阴影中涌出！"
+        completion-message: "<green>死灵士兵全军覆没！"
+        time-limit: 300
+        exp-reward: 800
+        spawns:
+          - mob: "死灵士兵"
+            spawn-point: "left"
+            amount: 5
+            radius: 3
+            delay: 0
+          - mob: "死灵弓箭手"
+            spawn-point: "right"
+            amount: 3
+            radius: 3
+            delay: 10
+        completion:
+          type: KILL_ALL
+        next-wave-trigger:
+          type: ON_KILL_COMPLETE
+
+  - id: "stage_3"
+    name: "BOSS战 - 死灵领主"
+    type: BOSS
+    on-complete:
+      - type: MESSAGE
+        content: "<green><bold>恭喜通关试炼之地！"
+      - type: TITLE
+        content: "<green><bold>副本通关！"
+        subtitle: "<yellow>试炼之地已被征服"
+      - type: SOUND
+        sound: "ui.toast.challenge_complete"
+        volume: 1.0
+    waves:
+      - id: "boss_wave"
+        start-message: "<red><bold>死灵领主降临！准备迎战！"
+        completion-message: "<green>死灵领主已被击败！"
+        time-limit: 600
+        exp-reward: 2000
+        spawns:
+          - mob: "死灵领主"
+            spawn-point: "boss_spawn"
+            amount: 1
+            radius: 0
+            is-boss: true
+            health-bar: true
+            announce-skills: true
+            boss-hp-triggers:
+              - hp-percent: 50.0
+                message: "死灵领主发怒了！召唤更多士兵！"
+                spawns:
+                  - mob: "死灵士兵"
+                    spawn-point: "left"
+                    amount: 3
+                    radius: 3
+              - hp-percent: 25.0
+                message: "死灵领主进入狂暴状态！"
+                spawns:
+                  - mob: "死灵战士"
+                    spawn-point: "right"
+                    amount: 3
+                    radius: 3
+        completion:
+          type: KILL_ALL
+        next-wave-trigger:
+          type: ON_KILL_COMPLETE
+
+# ========================================
+# 奖励池
+# ========================================
 reward-pools:
   basic:
     - item: "diamond@5"
@@ -119,12 +200,19 @@ score-rewards:
   - min-score: 1000
     items: []
 
-checkpoints:
-  - id: "checkpoint_1"
-    location: {x: 120, y: 64, z: 120}
-    phase: "boss_phase"
-
+# ========================================
+# 传送点
+# ========================================
 teleports:
-  entrance: {x: 50, y: 64, z: 50}
-  lobby: {x: 45, y: 64, z: 45}
-  exit: {x: 0, y: 64, z: 0}
+  entrance:
+    x: 0
+    y: 64
+    z: 0
+  lobby:
+    x: 5
+    y: 64
+    z: 5
+  exit:
+    x: 0
+    y: 64
+    z: 0

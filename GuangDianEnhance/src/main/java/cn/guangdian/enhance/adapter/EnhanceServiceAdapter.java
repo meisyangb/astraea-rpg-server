@@ -3,6 +3,7 @@ package cn.guangdian.enhance.adapter;
 import cn.guangdian.enhance.GuangDianEnhance;
 import cn.guangdian.enhance.data.EnhanceResult;
 import cn.guangdian.enhance.manager.EnhanceManager;
+import cn.guangdian.enhance.util.EnhanceAttributeHelper;
 import cn.guangdian.rpgcore.RPGCore;
 import cn.guangdian.rpgcore.api.ServiceRegistry;
 import cn.guangdian.rpgcore.service.api.EnhanceService;
@@ -67,7 +68,7 @@ public class EnhanceServiceAdapter implements EnhanceService {
 
     @Override
     public boolean canEnhance(ItemStack item) {
-        return cn.guangdian.rpgitems.item.ItemFactory.isEnhanceable(item);
+        return EnhanceAttributeHelper.isEnhanceable(item);
     }
 
     @Override

@@ -3,519 +3,400 @@ package cn.guangdian.armorstats.data;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 简化的玩家属性存储类
+ * 
+ * 使用 Map<AttributeType, Double> 存储属性值，避免硬编码大量字段
+ */
 public class PlayerStats {
 
-    private double maxHealth;
-    private double minAttack;
-    private double maxAttack;
-    private double defenseMin;
-    private double defenseMax;
-    private double critChancePercent;
-    private double critDamagePercent;
-    private double lifestealPercent;
-    private double healthRegen;
-
-    private double dodgePercent;
-    private double damageReflectPercent;
-    private double reflectPercent;
-    private double lifestealResistPercent;
-    private double critResistPercent;
-    private double critDamageResistPercent;
-    private double parryPercent;
-
-    private double pvpMinAttack;
-    private double pvpMaxAttack;
-    private double pvpDefenseMin;
-    private double pvpDefenseMax;
-
-    private double moveSpeedPercent;
-    private double poisonPercent;
-    private double freezePercent;
-    private double blindPercent;
-    private double expBonusPercent;
-    private double lifestealMultiplier;
-
-    // 护甲与穿透系统
-    private double armorPercent;           // 护甲值%
-    private double armorStrength;          // 护甲强度%（抵消护甲穿透）
-    private double armorPenetration;      // 护甲穿透%
-    private double defensePenetration;    // 防御穿透%
-    private double damageReductionBonus;  // 额外减伤%（技能/buff等）
-
-    // 躲避反伤系统
-    private double dodgeReflectPercent;   // 躲避反伤触发概率%
-    private double dodgeReflectRatio;     // 躲避反弹比例%
-
-    // 生命恢复系统
-    private double healthRegenPercent;    // 生命恢复%（按最大生命百分比回复）
-
-    // 状态效果属性
-    private double burnPercent;           // 燃烧概率%
-    private double scorchPercent;         // 灼烧概率%
-
-    // 击退抗性
-    private double knockbackResistPercent; // 击退抗性%
-
-    // 环境伤害抗性
-    private double fireResistPercent;      // 火焰抗性%
-    private double fallResistPercent;      // 摔落抗性%
-    private double drowningResistPercent;  // 溺水抗性%
-    private double poisonResistPercent;    // 中毒抗性%
-    private double witherResistPercent;    // 凋零抗性%
-    private double lavaResistPercent;      // 岩浆抗性%
-    private double magicResistPercent;     // 魔法抗性%
-    private double explosionResistPercent; // 爆炸抗性%
-    private double projectileResistPercent; // 弹射物抗性%
+    private final Map<AttributeType, Double> attributes = new HashMap<>();
 
     public PlayerStats() {
         reset();
     }
 
     public void reset() {
-        // 以下是装备提供的额外属性，默认值都应该是 0
-        // 基础值（如基础攻击1、基础暴击伤害200%）在最终计算时处理
-        this.maxHealth = 0.0;
-        this.minAttack = 0.0;
-        this.maxAttack = 0.0;
-        this.defenseMin = 0.0;
-        this.defenseMax = 0.0;
-        this.critChancePercent = 0.0;
-        this.critDamagePercent = 0.0;  // 装备提供的额外暴击伤害，不是总暴击伤害
-        this.lifestealPercent = 0.0;
-        this.healthRegen = 0.0;
-
-        this.dodgePercent = 0.0;
-        this.damageReflectPercent = 0.0;
-        this.reflectPercent = 0.0;
-        this.lifestealResistPercent = 0.0;
-        this.critResistPercent = 0.0;
-        this.critDamageResistPercent = 0.0;
-        this.parryPercent = 0.0;
-
-        this.pvpMinAttack = 0.0;
-        this.pvpMaxAttack = 0.0;
-        this.pvpDefenseMin = 0.0;
-        this.pvpDefenseMax = 0.0;
-
-        this.moveSpeedPercent = 0.0;
-        this.poisonPercent = 0.0;
-        this.freezePercent = 0.0;
-        this.blindPercent = 0.0;
-        this.expBonusPercent = 0.0;
-        this.lifestealMultiplier = 0.0;  // 装备提供的额外吸血倍率，不是总倍率
-
-        // 护甲与穿透系统
-        this.armorPercent = 0.0;
-        this.armorStrength = 0.0;
-        this.armorPenetration = 0.0;
-        this.defensePenetration = 0.0;
-        this.damageReductionBonus = 0.0;
-
-        // 躲避反伤系统
-        this.dodgeReflectPercent = 0.0;
-        this.dodgeReflectRatio = 0.0;
-
-        // 生命恢复系统
-        this.healthRegenPercent = 0.0;
-
-        // 状态效果属性
-        this.burnPercent = 0.0;
-        this.scorchPercent = 0.0;
-
-        // 击退抗性
-        this.knockbackResistPercent = 0.0;
-
-        // 环境伤害抗性
-        this.fireResistPercent = 0.0;
-        this.fallResistPercent = 0.0;
-        this.drowningResistPercent = 0.0;
-        this.poisonResistPercent = 0.0;
-        this.witherResistPercent = 0.0;
-        this.lavaResistPercent = 0.0;
-        this.magicResistPercent = 0.0;
-        this.explosionResistPercent = 0.0;
-        this.projectileResistPercent = 0.0;
+        attributes.clear();
+        // 所有属性默认值为 0
+        for (AttributeType type : AttributeType.values()) {
+            attributes.put(type, 0.0);
+        }
     }
 
-    public void addStats(Map<String, AttributeValue> attrs) {
+    /**
+     * 获取属性值
+     */
+    public double get(AttributeType type) {
+        return attributes.getOrDefault(type, 0.0);
+    }
+
+    /**
+     * 设置属性值
+     */
+    public void set(AttributeType type, double value) {
+        attributes.put(type, value);
+    }
+
+    /**
+     * 增加属性值
+     */
+    public void add(AttributeType type, double value) {
+        double current = get(type);
+        set(type, current + value);
+    }
+
+    /**
+     * 合并另一个 PlayerStats 的属性
+     */
+    public void addPlayerStats(PlayerStats other) {
+        if (other == null) return;
+        
+        for (AttributeType type : AttributeType.values()) {
+            add(type, other.get(type));
+        }
+    }
+
+    /**
+     * 添加属性值（从 Lore 解析的结果）
+     * 
+     * 支持单值和范围值：
+     * - 单值 "攻击力: 100" -> MIN_ATTACK=100, MAX_ATTACK=100
+     * - 范围值 "攻击力: 100-200" -> MIN_ATTACK=100, MAX_ATTACK=200
+     */
+    public void addAttributes(Map<String, AttributeValue> attrs) {
         if (attrs == null) return;
 
         for (Map.Entry<String, AttributeValue> entry : attrs.entrySet()) {
             String key = entry.getKey();
             AttributeValue val = entry.getValue();
+
             if (val instanceof AttributeValue.SingleValue) {
                 double v = ((AttributeValue.SingleValue) val).getValue();
-                switch (key) {
-                    case "生命上限": this.maxHealth += v; break;
-                    case "暴击几率": this.critChancePercent += v; break;
-                    case "暴击伤害": this.critDamagePercent += v; break;
-                    case "吸血几率": this.lifestealPercent += v; break;
-                    case "每秒回血": 
-                    case "生命回复": 
-                        this.healthRegen += v; 
-                        break;
-                    case "闪避": this.dodgePercent += v; break;
-                    case "伤害反弹": this.damageReflectPercent += v; break;
-                    case "反伤比例": this.reflectPercent += v; break;
-                    case "吸血抵抗": this.lifestealResistPercent += v; break;
-                    case "暴击抵抗": this.critResistPercent += v; break;
-                    case "暴伤抵抗": this.critDamageResistPercent += v; break;
-                    case "招架": this.parryPercent += v; break;
-                    case "移动速度": this.moveSpeedPercent += v; break;
-                    case "中毒": this.poisonPercent += v; break;
-                    case "冰冻": this.freezePercent += v; break;
-                    case "致盲": this.blindPercent += v; break;
-                    case "经验加成": this.expBonusPercent += v; break;
-                    case "吸血倍率": this.lifestealMultiplier += v; break;
-                    // 护甲与穿透系统
-                    case "护甲值": this.armorPercent += v; break;
-                    case "护甲强度": this.armorStrength += v; break;
-                    case "护甲穿透": this.armorPenetration += v; break;
-                    case "防御穿透": this.defensePenetration += v; break;
-                    case "减伤": this.damageReductionBonus += v; break;
-                    // 躲避反伤系统
-                    case "躲避反伤": this.dodgeReflectPercent += v; break;
-                    case "躲避反弹比例": this.dodgeReflectRatio += v; break;
-                    // 生命恢复系统
-                    case "生命恢复": this.healthRegenPercent += v; break;
-                    // 状态效果属性
-                    case "燃烧": this.burnPercent += v; break;
-                    case "灼烧": this.scorchPercent += v; break;
-                    // 击退抗性
-                    case "击退抗性": this.knockbackResistPercent += v; break;
-                    // 环境伤害抗性
-                    case "火焰抗性": this.fireResistPercent += v; break;
-                    case "摔落抗性": this.fallResistPercent += v; break;
-                    case "溺水抗性": this.drowningResistPercent += v; break;
-                    case "中毒抗性": this.poisonResistPercent += v; break;
-                    case "凋零抗性": this.witherResistPercent += v; break;
-                    case "岩浆抗性": this.lavaResistPercent += v; break;
-                    case "魔法抗性": this.magicResistPercent += v; break;
-                    case "爆炸抗性": this.explosionResistPercent += v; break;
-                    case "弹射物抗性": this.projectileResistPercent += v; break;
-                    // 单值攻击力：同时设置最小和最大攻击力
-                    case "攻击力":
-                        this.minAttack += v;
-                        this.maxAttack += v;
-                        break;
-                    // 单值防御力：同时设置最小和最大防御力
-                    case "防御力":
-                        this.defenseMin += v;
-                        this.defenseMax += v;
-                        break;
-                    // 单值PVP攻击力
-                    case "PVP攻击力":
-                        this.pvpMinAttack += v;
-                        this.pvpMaxAttack += v;
-                        break;
-                    // 单值PVP防御力
-                    case "PVP防御力":
-                        this.pvpDefenseMin += v;
-                        this.pvpDefenseMax += v;
-                        break;
-                    default: break;
-                }
+                addSingleAttribute(key, v);
             } else if (val instanceof AttributeValue.RangeValue) {
                 double min = ((AttributeValue.RangeValue) val).getMin();
                 double max = ((AttributeValue.RangeValue) val).getMax();
-                switch (key) {
-                    case "攻击力":
-                        this.minAttack += min;
-                        this.maxAttack += max;
-                        break;
-                    case "防御力":
-                        this.defenseMin += min;
-                        this.defenseMax += max;
-                        break;
-                    case "PVP攻击力":
-                        this.pvpMinAttack += min;
-                        this.pvpMaxAttack += max;
-                        break;
-                    case "PVP防御力":
-                        this.pvpDefenseMin += min;
-                        this.pvpDefenseMax += max;
-                        break;
-                    default: break;
-                }
+                addRangeAttribute(key, min, max);
             }
         }
     }
 
     /**
-     * 合并另一个PlayerStats的属性
+     * 兼容性方法 - 添加属性值（从 Lore 解析的结果）
      */
-    public void addPlayerStats(PlayerStats other) {
-        if (other == null) return;
-        
-        this.maxHealth += other.maxHealth;
-        this.minAttack += other.minAttack;
-        this.maxAttack += other.maxAttack;
-        this.defenseMin += other.defenseMin;
-        this.defenseMax += other.defenseMax;
-        this.critChancePercent += other.critChancePercent;
-        this.critDamagePercent += other.critDamagePercent;
-        this.lifestealPercent += other.lifestealPercent;
-        this.healthRegen += other.healthRegen;
-        this.dodgePercent += other.dodgePercent;
-        this.damageReflectPercent += other.damageReflectPercent;
-        this.reflectPercent += other.reflectPercent;
-        this.lifestealResistPercent += other.lifestealResistPercent;
-        this.critResistPercent += other.critResistPercent;
-        this.critDamageResistPercent += other.critDamageResistPercent;
-        this.parryPercent += other.parryPercent;
-        this.pvpMinAttack += other.pvpMinAttack;
-        this.pvpMaxAttack += other.pvpMaxAttack;
-        this.pvpDefenseMin += other.pvpDefenseMin;
-        this.pvpDefenseMax += other.pvpDefenseMax;
-        this.moveSpeedPercent += other.moveSpeedPercent;
-        this.poisonPercent += other.poisonPercent;
-        this.freezePercent += other.freezePercent;
-        this.blindPercent += other.blindPercent;
-        this.expBonusPercent += other.expBonusPercent;
-        this.lifestealMultiplier += other.lifestealMultiplier;
-        // 护甲与穿透系统
-        this.armorPercent += other.armorPercent;
-        this.armorStrength += other.armorStrength;
-        this.armorPenetration += other.armorPenetration;
-        this.defensePenetration += other.defensePenetration;
-        this.damageReductionBonus += other.damageReductionBonus;
+    public void addStats(Map<String, AttributeValue> attrs) {
+        addAttributes(attrs);
+    }
 
-        // 躲避反伤系统
-        this.dodgeReflectPercent += other.dodgeReflectPercent;
-        this.dodgeReflectRatio += other.dodgeReflectRatio;
+    /**
+     * 添加单值属性
+     */
+    private void addSingleAttribute(String key, double value) {
+        // 直接映射到枚举
+        switch (key) {
+            case "生命上限":
+                add(AttributeType.MAX_HEALTH, value);
+                break;
+            case "攻击力":
+                add(AttributeType.MIN_ATTACK, value);
+                add(AttributeType.MAX_ATTACK, value);
+                break;
+            case "防御力":
+                add(AttributeType.DEFENSE_MIN, value);
+                add(AttributeType.DEFENSE_MAX, value);
+                break;
+            case "暴击几率":
+                add(AttributeType.CRIT_CHANCE, value);
+                break;
+            case "暴击伤害":
+                add(AttributeType.CRIT_DAMAGE, value);
+                break;
+            case "吸血几率":
+                add(AttributeType.LIFESTEAL_CHANCE, value);
+                break;
+            case "吸血倍率":
+                add(AttributeType.LIFESTEAL_MULTIPLIER, value);
+                break;
+            case "每秒回血":
+            case "生命回复":
+                add(AttributeType.HEALTH_REGEN, value);
+                break;
+            case "闪避":
+                add(AttributeType.DODGE, value);
+                break;
+            case "伤害反弹":
+                add(AttributeType.DAMAGE_REFLECT, value);
+                break;
+            case "反伤比例":
+                add(AttributeType.REFLECT_RATIO, value);
+                break;
+            case "吸血抵抗":
+                add(AttributeType.LIFESTEAL_RESIST, value);
+                break;
+            case "暴击抵抗":
+                add(AttributeType.CRIT_RESIST, value);
+                break;
+            case "暴伤抵抗":
+                add(AttributeType.CRIT_DAMAGE_RESIST, value);
+                break;
+            case "招架":
+                add(AttributeType.PARRY, value);
+                break;
+            case "移动速度":
+                add(AttributeType.MOVE_SPEED, value);
+                break;
+            case "中毒":
+                add(AttributeType.POISON, value);
+                break;
+            case "冰冻":
+                add(AttributeType.FREEZE, value);
+                break;
+            case "致盲":
+                add(AttributeType.BLIND, value);
+                break;
+            case "经验加成":
+                add(AttributeType.EXP_BONUS, value);
+                break;
+            case "护甲值":
+                add(AttributeType.ARMOR, value);
+                break;
+            case "护甲强度":
+                add(AttributeType.ARMOR_STRENGTH, value);
+                break;
+            case "护甲穿透":
+                add(AttributeType.ARMOR_PENETRATION, value);
+                break;
+            case "防御穿透":
+                add(AttributeType.DEFENSE_PENETRATION, value);
+                break;
+            case "减伤":
+                add(AttributeType.DAMAGE_REDUCTION, value);
+                break;
+            case "躲避反伤":
+                add(AttributeType.DODGE_REFLECT_CHANCE, value);
+                break;
+            case "躲避反弹比例":
+                add(AttributeType.DODGE_REFLECT_RATIO, value);
+                break;
+            case "生命恢复":
+                add(AttributeType.HEALTH_REGEN_PERCENT, value);
+                break;
+            case "燃烧":
+                add(AttributeType.BURN, value);
+                break;
+            case "灼烧":
+                add(AttributeType.SCORCH, value);
+                break;
+            case "击退抗性":
+                add(AttributeType.KNOCKBACK_RESIST, value);
+                break;
+            case "火焰抗性":
+                add(AttributeType.FIRE_RESIST, value);
+                break;
+            case "摔落抗性":
+                add(AttributeType.FALL_RESIST, value);
+                break;
+            case "溺水抗性":
+                add(AttributeType.DROWNING_RESIST, value);
+                break;
+            case "中毒抗性":
+                add(AttributeType.POISON_RESIST, value);
+                break;
+            case "凋零抗性":
+                add(AttributeType.WITHER_RESIST, value);
+                break;
+            case "岩浆抗性":
+                add(AttributeType.LAVA_RESIST, value);
+                break;
+            case "魔法抗性":
+                add(AttributeType.MAGIC_RESIST, value);
+                break;
+            case "爆炸抗性":
+                add(AttributeType.EXPLOSION_RESIST, value);
+                break;
+            case "弹射物抗性":
+                add(AttributeType.PROJECTILE_RESIST, value);
+                break;
+            case "PVP攻击力":
+                add(AttributeType.PVP_MIN_ATTACK, value);
+                add(AttributeType.PVP_MAX_ATTACK, value);
+                break;
+            case "PVP防御力":
+                add(AttributeType.PVP_DEFENSE_MIN, value);
+                add(AttributeType.PVP_DEFENSE_MAX, value);
+                break;
+        }
+    }
 
-        // 生命恢复系统
-        this.healthRegenPercent += other.healthRegenPercent;
-
-        // 状态效果属性
-        this.burnPercent += other.burnPercent;
-        this.scorchPercent += other.scorchPercent;
-
-        // 击退抗性
-        this.knockbackResistPercent += other.knockbackResistPercent;
-
-        // 环境伤害抗性
-        this.fireResistPercent += other.fireResistPercent;
-        this.fallResistPercent += other.fallResistPercent;
-        this.drowningResistPercent += other.drowningResistPercent;
-        this.poisonResistPercent += other.poisonResistPercent;
-        this.witherResistPercent += other.witherResistPercent;
-        this.lavaResistPercent += other.lavaResistPercent;
-        this.magicResistPercent += other.magicResistPercent;
-        this.explosionResistPercent += other.explosionResistPercent;
-        this.projectileResistPercent += other.projectileResistPercent;
+    /**
+     * 添加范围值属性
+     */
+    private void addRangeAttribute(String key, double min, double max) {
+        switch (key) {
+            case "攻击力":
+                add(AttributeType.MIN_ATTACK, min);
+                add(AttributeType.MAX_ATTACK, max);
+                break;
+            case "防御力":
+                add(AttributeType.DEFENSE_MIN, min);
+                add(AttributeType.DEFENSE_MAX, max);
+                break;
+            case "PVP攻击力":
+                add(AttributeType.PVP_MIN_ATTACK, min);
+                add(AttributeType.PVP_MAX_ATTACK, max);
+                break;
+            case "PVP防御力":
+                add(AttributeType.PVP_DEFENSE_MIN, min);
+                add(AttributeType.PVP_DEFENSE_MAX, max);
+                break;
+        }
     }
 
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
-        map.put("maxHealth", maxHealth);
-        map.put("minAttack", minAttack);
-        map.put("maxAttack", maxAttack);
-        map.put("defenseMin", defenseMin);
-        map.put("defenseMax", defenseMax);
-        map.put("critChancePercent", critChancePercent);
-        map.put("critDamagePercent", critDamagePercent);
-        map.put("lifestealPercent", lifestealPercent);
-        map.put("healthRegen", healthRegen);
-        map.put("dodgePercent", dodgePercent);
-        map.put("damageReflectPercent", damageReflectPercent);
-        map.put("reflectPercent", reflectPercent);
-        map.put("lifestealResistPercent", lifestealResistPercent);
-        map.put("critResistPercent", critResistPercent);
-        map.put("critDamageResistPercent", critDamageResistPercent);
-        map.put("parryPercent", parryPercent);
-        map.put("pvpMinAttack", pvpMinAttack);
-        map.put("pvpMaxAttack", pvpMaxAttack);
-        map.put("pvpDefenseMin", pvpDefenseMin);
-        map.put("pvpDefenseMax", pvpDefenseMax);
-        map.put("moveSpeedPercent", moveSpeedPercent);
-        map.put("poisonPercent", poisonPercent);
-        map.put("freezePercent", freezePercent);
-        map.put("blindPercent", blindPercent);
-        map.put("expBonusPercent", expBonusPercent);
-        map.put("lifestealMultiplier", lifestealMultiplier);
+        for (AttributeType type : AttributeType.values()) {
+            map.put(type.name(), get(type));
+        }
         return map;
     }
 
-    public double getMaxHealth() { return maxHealth; }
-    public void setMaxHealth(double maxHealth) { this.maxHealth = maxHealth; }
-
-    public double getMinAttack() { return minAttack; }
-    public void setMinAttack(double minAttack) { this.minAttack = minAttack; }
-
-    public double getMaxAttack() { return maxAttack; }
-    public void setMaxAttack(double maxAttack) { this.maxAttack = maxAttack; }
-
-    public double getDefenseMin() { return defenseMin; }
-    public void setDefenseMin(double defenseMin) { this.defenseMin = defenseMin; }
-
-    public double getDefenseMax() { return defenseMax; }
-    public void setDefenseMax(double defenseMax) { this.defenseMax = defenseMax; }
-
-    public double getDefenseAverage() {
-        return (defenseMin + defenseMax) / 2.0;
-    }
-
-    public double getAttackAverage() {
-        return (minAttack + maxAttack) / 2.0;
-    }
-
-    public double getCritChancePercent() { return critChancePercent; }
-    public void setCritChancePercent(double critChancePercent) { this.critChancePercent = critChancePercent; }
-
-    public double getCritDamagePercent() { return critDamagePercent; }
-    public void setCritDamagePercent(double critDamagePercent) { this.critDamagePercent = critDamagePercent; }
-
-    public double getLifestealPercent() { return lifestealPercent; }
-    public void setLifestealPercent(double lifestealPercent) { this.lifestealPercent = lifestealPercent; }
-
-    public double getHealthRegen() { return healthRegen; }
-    public void setHealthRegen(double healthRegen) { this.healthRegen = healthRegen; }
-
-    public double getDodgePercent() { return dodgePercent; }
-    public void setDodgePercent(double dodgePercent) { this.dodgePercent = dodgePercent; }
-
-    public double getDamageReflectPercent() { return damageReflectPercent; }
-    public void setDamageReflectPercent(double damageReflectPercent) { this.damageReflectPercent = damageReflectPercent; }
-
-    public double getReflectPercent() { return reflectPercent; }
-    public void setReflectPercent(double reflectPercent) { this.reflectPercent = reflectPercent; }
-
-    public double getLifestealResistPercent() { return lifestealResistPercent; }
-    public void setLifestealResistPercent(double lifestealResistPercent) { this.lifestealResistPercent = lifestealResistPercent; }
-
-    public double getCritResistPercent() { return critResistPercent; }
-    public void setCritResistPercent(double critResistPercent) { this.critResistPercent = critResistPercent; }
-
-    public double getCritDamageResistPercent() { return critDamageResistPercent; }
-    public void setCritDamageResistPercent(double critDamageResistPercent) { this.critDamageResistPercent = critDamageResistPercent; }
-
-    public double getParryPercent() { return parryPercent; }
-    public void setParryPercent(double parryPercent) { this.parryPercent = parryPercent; }
-
-    public double getPvpMinAttack() { return pvpMinAttack; }
-    public void setPvpMinAttack(double pvpMinAttack) { this.pvpMinAttack = pvpMinAttack; }
-
-    public double getPvpMaxAttack() { return pvpMaxAttack; }
-    public void setPvpMaxAttack(double pvpMaxAttack) { this.pvpMaxAttack = pvpMaxAttack; }
-
-    public double getPvpDefenseMin() { return pvpDefenseMin; }
-    public void setPvpDefenseMin(double pvpDefenseMin) { this.pvpDefenseMin = pvpDefenseMin; }
-
-    public double getPvpDefenseMax() { return pvpDefenseMax; }
-    public void setPvpDefenseMax(double pvpDefenseMax) { this.pvpDefenseMax = pvpDefenseMax; }
-
-    public double getPvpAttackAverage() {
-        return (pvpMinAttack + pvpMaxAttack) / 2.0;
-    }
-
-    public double getPvpDefenseAverage() {
-        return (pvpDefenseMin + pvpDefenseMax) / 2.0;
-    }
-
-    public double getMoveSpeedPercent() { return moveSpeedPercent; }
-    public void setMoveSpeedPercent(double moveSpeedPercent) { this.moveSpeedPercent = moveSpeedPercent; }
-
-    public double getPoisonPercent() { return poisonPercent; }
-    public void setPoisonPercent(double poisonPercent) { this.poisonPercent = poisonPercent; }
-
-    public double getFreezePercent() { return freezePercent; }
-    public void setFreezePercent(double freezePercent) { this.freezePercent = freezePercent; }
-
-    public double getBlindPercent() { return blindPercent; }
-    public void setBlindPercent(double blindPercent) { this.blindPercent = blindPercent; }
-
-    public double getExpBonusPercent() { return expBonusPercent; }
-    public void setExpBonusPercent(double expBonusPercent) { this.expBonusPercent = expBonusPercent; }
-
-    public double getLifestealMultiplier() { return lifestealMultiplier; }
-    public void setLifestealMultiplier(double lifestealMultiplier) { this.lifestealMultiplier = lifestealMultiplier; }
-
-    // 护甲与穿透系统 getter/setter
-    public double getArmorPercent() { return armorPercent; }
-    public void setArmorPercent(double armorPercent) { this.armorPercent = armorPercent; }
-
-    public double getArmorStrength() { return armorStrength; }
-    public void setArmorStrength(double armorStrength) { this.armorStrength = armorStrength; }
-
-    public double getArmorPenetration() { return armorPenetration; }
-    public void setArmorPenetration(double armorPenetration) { this.armorPenetration = armorPenetration; }
-
-    public double getDefensePenetration() { return defensePenetration; }
-    public void setDefensePenetration(double defensePenetration) { this.defensePenetration = defensePenetration; }
-
-    public double getDamageReductionBonus() { return damageReductionBonus; }
-    public void setDamageReductionBonus(double damageReductionBonus) { this.damageReductionBonus = damageReductionBonus; }
-
-    // 躲避反伤系统 getter/setter
-    public double getDodgeReflectPercent() { return dodgeReflectPercent; }
-    public void setDodgeReflectPercent(double dodgeReflectPercent) { this.dodgeReflectPercent = dodgeReflectPercent; }
-
-    public double getDodgeReflectRatio() { return dodgeReflectRatio; }
-    public void setDodgeReflectRatio(double dodgeReflectRatio) { this.dodgeReflectRatio = dodgeReflectRatio; }
-
-    // 生命恢复系统 getter/setter
-    public double getHealthRegenPercent() { return healthRegenPercent; }
-    public void setHealthRegenPercent(double healthRegenPercent) { this.healthRegenPercent = healthRegenPercent; }
-
-    // 状态效果属性 getter/setter
-    public double getBurnPercent() { return burnPercent; }
-    public void setBurnPercent(double burnPercent) { this.burnPercent = burnPercent; }
-
-    public double getScorchPercent() { return scorchPercent; }
-    public void setScorchPercent(double scorchPercent) { this.scorchPercent = scorchPercent; }
-
-    // 击退抗性 getter/setter
-    public double getKnockbackResistPercent() { return knockbackResistPercent; }
-    public void setKnockbackResistPercent(double knockbackResistPercent) { this.knockbackResistPercent = knockbackResistPercent; }
-
-    // 环境伤害抗性 getter/setter
-    public double getFireResistPercent() { return fireResistPercent; }
-    public void setFireResistPercent(double fireResistPercent) { this.fireResistPercent = fireResistPercent; }
-
-    public double getFallResistPercent() { return fallResistPercent; }
-    public void setFallResistPercent(double fallResistPercent) { this.fallResistPercent = fallResistPercent; }
-
-    public double getDrowningResistPercent() { return drowningResistPercent; }
-    public void setDrowningResistPercent(double drowningResistPercent) { this.drowningResistPercent = drowningResistPercent; }
-
-    public double getPoisonResistPercent() { return poisonResistPercent; }
-    public void setPoisonResistPercent(double poisonResistPercent) { this.poisonResistPercent = poisonResistPercent; }
-
-    public double getWitherResistPercent() { return witherResistPercent; }
-    public void setWitherResistPercent(double witherResistPercent) { this.witherResistPercent = witherResistPercent; }
-
-    public double getLavaResistPercent() { return lavaResistPercent; }
-    public void setLavaResistPercent(double lavaResistPercent) { this.lavaResistPercent = lavaResistPercent; }
-
-    public double getMagicResistPercent() { return magicResistPercent; }
-    public void setMagicResistPercent(double magicResistPercent) { this.magicResistPercent = magicResistPercent; }
-
-    public double getExplosionResistPercent() { return explosionResistPercent; }
-    public void setExplosionResistPercent(double explosionResistPercent) { this.explosionResistPercent = explosionResistPercent; }
-
-    public double getProjectileResistPercent() { return projectileResistPercent; }
-    public void setProjectileResistPercent(double projectileResistPercent) { this.projectileResistPercent = projectileResistPercent; }
-    
     /**
      * 检查是否有任何属性
      */
     public boolean hasAnyStats() {
-        return maxHealth > 0 || minAttack > 0 || maxAttack > 0 || 
-               defenseMin > 0 || defenseMax > 0 || critChancePercent > 0 ||
-               critDamagePercent > 0 || lifestealPercent > 0 || healthRegen > 0 ||
-               dodgePercent > 0 || parryPercent > 0 || moveSpeedPercent > 0 ||
-               damageReflectPercent > 0 || reflectPercent > 0 ||
-               lifestealResistPercent > 0 || critResistPercent > 0 || critDamageResistPercent > 0 ||
-               pvpMinAttack > 0 || pvpMaxAttack > 0 || pvpDefenseMin > 0 || pvpDefenseMax > 0 ||
-               poisonPercent > 0 || freezePercent > 0 || blindPercent > 0 ||
-               expBonusPercent > 0 || lifestealMultiplier > 0 ||
-               armorPercent > 0 || armorStrength > 0 || armorPenetration > 0 || defensePenetration > 0 ||
-               damageReductionBonus > 0 || dodgeReflectPercent > 0 || dodgeReflectRatio > 0 ||
-               healthRegenPercent > 0 || burnPercent > 0 || scorchPercent > 0 ||
-               knockbackResistPercent > 0 ||
-               fireResistPercent > 0 || fallResistPercent > 0 || drowningResistPercent > 0 ||
-               poisonResistPercent > 0 || witherResistPercent > 0 || lavaResistPercent > 0 ||
-               magicResistPercent > 0 || explosionResistPercent > 0 || projectileResistPercent > 0;
+        for (AttributeType type : AttributeType.values()) {
+            if (get(type) > 0) {
+                return true;
+            }
+        }
+        return false;
     }
+
+    /**
+     * 获取平均攻击力
+     */
+    public double getAttackAverage() {
+        return (get(AttributeType.MIN_ATTACK) + get(AttributeType.MAX_ATTACK)) / 2.0;
+    }
+
+    /**
+     * 获取平均防御力
+     */
+    public double getDefenseAverage() {
+        return (get(AttributeType.DEFENSE_MIN) + get(AttributeType.DEFENSE_MAX)) / 2.0;
+    }
+
+    /**
+     * 获取平均 PVP 攻击力
+     */
+    public double getPvpAttackAverage() {
+        return (get(AttributeType.PVP_MIN_ATTACK) + get(AttributeType.PVP_MAX_ATTACK)) / 2.0;
+    }
+
+    /**
+     * 获取平均 PVP 防御力
+     */
+    public double getPvpDefenseAverage() {
+        return (get(AttributeType.PVP_DEFENSE_MIN) + get(AttributeType.PVP_DEFENSE_MAX)) / 2.0;
+    }
+
+    // ==================== 兼容性 getter 方法 ====================
+    // 为了避免大量修改现有代码，提供这些兼容方法
+
+    public double getMaxHealth() { return get(AttributeType.MAX_HEALTH); }
+    public double getMinAttack() { return get(AttributeType.MIN_ATTACK); }
+    public double getMaxAttack() { return get(AttributeType.MAX_ATTACK); }
+    public double getDefenseMin() { return get(AttributeType.DEFENSE_MIN); }
+    public double getDefenseMax() { return get(AttributeType.DEFENSE_MAX); }
+    public double getCritChancePercent() { return get(AttributeType.CRIT_CHANCE); }
+    public double getCritDamagePercent() { return get(AttributeType.CRIT_DAMAGE); }
+    public double getLifestealPercent() { return get(AttributeType.LIFESTEAL_CHANCE); }
+    public double getHealthRegen() { return get(AttributeType.HEALTH_REGEN); }
+    public double getDodgePercent() { return get(AttributeType.DODGE); }
+    public double getDamageReflectPercent() { return get(AttributeType.DAMAGE_REFLECT); }
+    public double getReflectPercent() { return get(AttributeType.REFLECT_RATIO); }
+    public double getLifestealResistPercent() { return get(AttributeType.LIFESTEAL_RESIST); }
+    public double getCritResistPercent() { return get(AttributeType.CRIT_RESIST); }
+    public double getCritDamageResistPercent() { return get(AttributeType.CRIT_DAMAGE_RESIST); }
+    public double getParryPercent() { return get(AttributeType.PARRY); }
+    public double getPvpMinAttack() { return get(AttributeType.PVP_MIN_ATTACK); }
+    public double getPvpMaxAttack() { return get(AttributeType.PVP_MAX_ATTACK); }
+    public double getPvpDefenseMin() { return get(AttributeType.PVP_DEFENSE_MIN); }
+    public double getPvpDefenseMax() { return get(AttributeType.PVP_DEFENSE_MAX); }
+    public double getMoveSpeedPercent() { return get(AttributeType.MOVE_SPEED); }
+    public double getPoisonPercent() { return get(AttributeType.POISON); }
+    public double getFreezePercent() { return get(AttributeType.FREEZE); }
+    public double getBlindPercent() { return get(AttributeType.BLIND); }
+    public double getExpBonusPercent() { return get(AttributeType.EXP_BONUS); }
+    public double getLifestealMultiplier() { return get(AttributeType.LIFESTEAL_MULTIPLIER); }
+    public double getArmorPercent() { return get(AttributeType.ARMOR); }
+    public double getArmorStrength() { return get(AttributeType.ARMOR_STRENGTH); }
+    public double getArmorPenetration() { return get(AttributeType.ARMOR_PENETRATION); }
+    public double getDefensePenetration() { return get(AttributeType.DEFENSE_PENETRATION); }
+    public double getDamageReductionBonus() { return get(AttributeType.DAMAGE_REDUCTION); }
+    public double getDodgeReflectPercent() { return get(AttributeType.DODGE_REFLECT_CHANCE); }
+    public double getDodgeReflectRatio() { return get(AttributeType.DODGE_REFLECT_RATIO); }
+    public double getHealthRegenPercent() { return get(AttributeType.HEALTH_REGEN_PERCENT); }
+    public double getBurnPercent() { return get(AttributeType.BURN); }
+    public double getScorchPercent() { return get(AttributeType.SCORCH); }
+    public double getKnockbackResistPercent() { return get(AttributeType.KNOCKBACK_RESIST); }
+    public double getFireResistPercent() { return get(AttributeType.FIRE_RESIST); }
+    public double getFallResistPercent() { return get(AttributeType.FALL_RESIST); }
+    public double getDrowningResistPercent() { return get(AttributeType.DROWNING_RESIST); }
+    public double getPoisonResistPercent() { return get(AttributeType.POISON_RESIST); }
+    public double getWitherResistPercent() { return get(AttributeType.WITHER_RESIST); }
+    public double getLavaResistPercent() { return get(AttributeType.LAVA_RESIST); }
+    public double getMagicResistPercent() { return get(AttributeType.MAGIC_RESIST); }
+    public double getExplosionResistPercent() { return get(AttributeType.EXPLOSION_RESIST); }
+    public double getProjectileResistPercent() { return get(AttributeType.PROJECTILE_RESIST); }
+
+    // ==================== 兼容性 setter 方法 ====================
+
+    public void setMaxHealth(double v) { set(AttributeType.MAX_HEALTH, v); }
+    public void setMinAttack(double v) { set(AttributeType.MIN_ATTACK, v); }
+    public void setMaxAttack(double v) { set(AttributeType.MAX_ATTACK, v); }
+    public void setDefenseMin(double v) { set(AttributeType.DEFENSE_MIN, v); }
+    public void setDefenseMax(double v) { set(AttributeType.DEFENSE_MAX, v); }
+    public void setCritChancePercent(double v) { set(AttributeType.CRIT_CHANCE, v); }
+    public void setCritDamagePercent(double v) { set(AttributeType.CRIT_DAMAGE, v); }
+    public void setLifestealPercent(double v) { set(AttributeType.LIFESTEAL_CHANCE, v); }
+    public void setHealthRegen(double v) { set(AttributeType.HEALTH_REGEN, v); }
+    public void setDodgePercent(double v) { set(AttributeType.DODGE, v); }
+    public void setDamageReflectPercent(double v) { set(AttributeType.DAMAGE_REFLECT, v); }
+    public void setReflectPercent(double v) { set(AttributeType.REFLECT_RATIO, v); }
+    public void setLifestealResistPercent(double v) { set(AttributeType.LIFESTEAL_RESIST, v); }
+    public void setCritResistPercent(double v) { set(AttributeType.CRIT_RESIST, v); }
+    public void setCritDamageResistPercent(double v) { set(AttributeType.CRIT_DAMAGE_RESIST, v); }
+    public void setParryPercent(double v) { set(AttributeType.PARRY, v); }
+    public void setPvpMinAttack(double v) { set(AttributeType.PVP_MIN_ATTACK, v); }
+    public void setPvpMaxAttack(double v) { set(AttributeType.PVP_MAX_ATTACK, v); }
+    public void setPvpDefenseMin(double v) { set(AttributeType.PVP_DEFENSE_MIN, v); }
+    public void setPvpDefenseMax(double v) { set(AttributeType.PVP_DEFENSE_MAX, v); }
+    public void setMoveSpeedPercent(double v) { set(AttributeType.MOVE_SPEED, v); }
+    public void setPoisonPercent(double v) { set(AttributeType.POISON, v); }
+    public void setFreezePercent(double v) { set(AttributeType.FREEZE, v); }
+    public void setBlindPercent(double v) { set(AttributeType.BLIND, v); }
+    public void setExpBonusPercent(double v) { set(AttributeType.EXP_BONUS, v); }
+    public void setLifestealMultiplier(double v) { set(AttributeType.LIFESTEAL_MULTIPLIER, v); }
+    public void setArmorPercent(double v) { set(AttributeType.ARMOR, v); }
+    public void setArmorStrength(double v) { set(AttributeType.ARMOR_STRENGTH, v); }
+    public void setArmorPenetration(double v) { set(AttributeType.ARMOR_PENETRATION, v); }
+    public void setDefensePenetration(double v) { set(AttributeType.DEFENSE_PENETRATION, v); }
+    public void setDamageReductionBonus(double v) { set(AttributeType.DAMAGE_REDUCTION, v); }
+    public void setDodgeReflectPercent(double v) { set(AttributeType.DODGE_REFLECT_CHANCE, v); }
+    public void setDodgeReflectRatio(double v) { set(AttributeType.DODGE_REFLECT_RATIO, v); }
+    public void setHealthRegenPercent(double v) { set(AttributeType.HEALTH_REGEN_PERCENT, v); }
+    public void setBurnPercent(double v) { set(AttributeType.BURN, v); }
+    public void setScorchPercent(double v) { set(AttributeType.SCORCH, v); }
+    public void setKnockbackResistPercent(double v) { set(AttributeType.KNOCKBACK_RESIST, v); }
+    public void setFireResistPercent(double v) { set(AttributeType.FIRE_RESIST, v); }
+    public void setFallResistPercent(double v) { set(AttributeType.FALL_RESIST, v); }
+    public void setDrowningResistPercent(double v) { set(AttributeType.DROWNING_RESIST, v); }
+    public void setPoisonResistPercent(double v) { set(AttributeType.POISON_RESIST, v); }
+    public void setWitherResistPercent(double v) { set(AttributeType.WITHER_RESIST, v); }
+    public void setLavaResistPercent(double v) { set(AttributeType.LAVA_RESIST, v); }
+    public void setMagicResistPercent(double v) { set(AttributeType.MAGIC_RESIST, v); }
+    public void setExplosionResistPercent(double v) { set(AttributeType.EXPLOSION_RESIST, v); }
+    public void setProjectileResistPercent(double v) { set(AttributeType.PROJECTILE_RESIST, v); }
 }

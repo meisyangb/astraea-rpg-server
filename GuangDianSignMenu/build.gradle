@@ -7,7 +7,7 @@ plugins {
 }
 
 dependencies {
-    compileOnly project(':plugins:RPGCore')
+    compileOnly files('libs/RPGCore-1.0.0.jar')
 }
 
 jar {

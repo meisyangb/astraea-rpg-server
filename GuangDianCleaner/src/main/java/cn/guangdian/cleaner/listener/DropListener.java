@@ -38,10 +38,10 @@ public class DropListener implements Listener {
     }
 
     /**
-     * 玩家退出时清理记录
+     * 玩家退出时清理掉落记录，防止内存泄漏
      */
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        // 玩家退出后，其掉落物保护记录会被自动清理
+        cleanManager.removePlayerDrop(event.getPlayer().getUniqueId());
     }
 }

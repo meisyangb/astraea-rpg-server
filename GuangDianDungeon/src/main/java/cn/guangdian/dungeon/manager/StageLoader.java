@@ -34,7 +34,6 @@ public class StageLoader {
         
         int timeLimit = config.getInt("settings.time-limit", 1800);
         session.setTimeLimit(timeLimit);
-        plugin.getLogger().info("[DEBUG] Dungeon time limit: " + timeLimit + " seconds");
         
         loadSpawnPoints(session, config);
         loadStages(session, config);
@@ -148,25 +147,17 @@ public class StageLoader {
         wave.setCompletionMessage(getString(map, "completion-message", null));
         wave.setStartMessage(getString(map, "start-message", null));
         
-        plugin.getLogger().info("[DEBUG] parseWave: id=" + wave.getId() + ", timeLimit=" + wave.getTimeLimit());
-        
         Map<?, ?> triggerMap = getMap(map, "next-wave-trigger");
         if (triggerMap != null) {
             wave.setNextWaveTrigger(parseWaveTrigger(triggerMap));
-            plugin.getLogger().info("[DEBUG] Wave trigger set: " + wave.getNextWaveTrigger().getType());
-        } else {
-            plugin.getLogger().info("[DEBUG] Wave has no trigger, using default ON_KILL_COMPLETE");
         }
         
         List<Map<?, ?>> spawnsList = getList(map, "spawns");
-        plugin.getLogger().info("[DEBUG] Wave spawns list: " + (spawnsList != null ? spawnsList.size() : "null"));
-        
         if (spawnsList != null) {
             for (Map<?, ?> spawnMap : spawnsList) {
                 MobSpawn spawn = parseMobSpawn(spawnMap);
                 if (spawn != null) {
                     wave.getSpawns().add(spawn);
-                    plugin.getLogger().info("[DEBUG] Added spawn: mob=" + spawn.getMobId() + ", amount=" + spawn.getAmount() + ", spawnPoint=" + spawn.getSpawnPointId());
                 }
             }
         }
@@ -174,10 +165,7 @@ public class StageLoader {
         Map<?, ?> completionMap = getMap(map, "completion");
         if (completionMap != null) {
             wave.setCompletion(parseCompletion(completionMap));
-            plugin.getLogger().info("[DEBUG] Wave completion: " + wave.getCompletion().getType());
         }
-        
-        plugin.getLogger().info("[DEBUG] Wave " + wave.getId() + " total spawns: " + wave.getSpawns().size());
         
         return wave;
     }
@@ -195,7 +183,6 @@ public class StageLoader {
         spawn.setAnnounceSkills(getBoolean(map, "announce-skills", true));
         spawn.setLevel(getInt(map, "level", 1));
 
-        // 解析 Boss 血量阈值触发器
         List<Map<?, ?>> hpTriggersList = getList(map, "boss-hp-triggers");
         if (hpTriggersList != null) {
             for (Map<?, ?> triggerMap : hpTriggersList) {
@@ -214,7 +201,6 @@ public class StageLoader {
                 }
                 spawn.getBossHpTriggers().add(trigger);
             }
-            plugin.getLogger().info("[DEBUG] Loaded " + spawn.getBossHpTriggers().size() + " boss HP triggers for " + spawn.getMobId());
         }
 
         return spawn;

@@ -1,0 +1,45 @@
+name: GuangDianChunkTrim
+version: 1.0.0
+main: cn.guangdian.chunktrim.GuangDianChunkTrim
+api-version: '1.21'
+author: Gumin
+description: 区块裁剪插件 - 保留指定区域，删除其他区块
+
+commands:
+  chunktrim:
+    description: 区块裁剪命令
+    usage: /chunktrim help
+    permission: guangdian.chunktrim.use
+    aliases: [ct, trim]
+
+permissions:
+  guangdian.chunktrim.use:
+    description: 基本使用权限
+    default: op
+  guangdian.chunktrim.we:
+    description: WorldEdit选区裁剪
+    default: op
+  guangdian.chunktrim.set:
+    description: 设置保留区域
+    default: op
+  guangdian.chunktrim.start:
+    description: 开始裁剪
+    default: op
+  guangdian.chunktrim.confirm:
+    description: 确认裁剪
+    default: op
+  guangdian.chunktrim.pause:
+    description: 暂停裁剪
+    default: op
+  guangdian.chunktrim.continue:
+    description: 继续裁剪
+    default: op
+  guangdian.chunktrim.cancel:
+    description: 取消裁剪
+    default: op
+  guangdian.chunktrim.status:
+    description: 查看状态
+    default: op
+  guangdian.chunktrim.list:
+    description: 列出任务
+    default: op

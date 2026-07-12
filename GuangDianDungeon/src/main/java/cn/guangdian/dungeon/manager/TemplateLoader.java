@@ -31,7 +31,7 @@ public class TemplateLoader {
                 DungeonTemplate template = loadTemplate(file);
                 if (template != null) {
                     templates.put(template.getId(), template);
-                    plugin.getLogger().info("加载副本模板: " + template.getId());
+                    plugin.getLogger().info("加载副本模板: " + template.getId() + " (地图: " + template.getMapName() + ")");
                 }
             } catch (Exception e) {
                 plugin.getLogger().warning("加载副本模板失败: " + file.getName() + " - " + e.getMessage());
@@ -45,7 +45,13 @@ public class TemplateLoader {
         String id = config.getString("id");
         String name = config.getString("name", id);
         String description = config.getString("description", "");
-        String worldTemplate = config.getString("world.template", config.getString("world-template", id));
+        // 新格式: "map" 字段；兼容旧格式: "world-template" / "world.template"
+        String mapName = config.getString("map", config.getString("world-template", config.getString("world.template", id)));
+
+        // 验证地图是否存在
+        if (!plugin.getMapInstanceManager().mapExists(mapName)) {
+            plugin.getLogger().warning("副本 " + id + " 的地图不存在: " + mapName + "，请将地图放入 map/" + mapName + "/ 目录");
+        }
 
         DungeonSettings settings = loadSettings(config);
         List<Difficulty> difficulties = loadDifficulties(config);
@@ -53,7 +59,7 @@ public class TemplateLoader {
         List<RewardDefinition> firstClearRewards = new ArrayList<>();
         List<ScoreReward> scoreRewards = new ArrayList<>();
 
-        return new DungeonTemplate(id, name, description, worldTemplate, settings,
+        return new DungeonTemplate(id, name, description, mapName, settings,
             difficulties, rewardPools, firstClearRewards, scoreRewards);
     }
 
@@ -134,11 +140,8 @@ public class TemplateLoader {
                 }
             }
 
-            // 解析经验奖励
             int expMin = poolSection.getInt("exp-min", 0);
             int expMax = poolSection.getInt("exp-max", 0);
-
-            // 解析金钱奖励
             double moneyMin = poolSection.getDouble("money-min", 0);
             double moneyMax = poolSection.getDouble("money-max", 0);
 

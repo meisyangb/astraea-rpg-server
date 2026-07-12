@@ -8,9 +8,9 @@ plugins {
 
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
-    compileOnly project(':plugins:RPGCore')
+    compileOnly files('libs/RPGCore-1.0.0.jar')
     
-    // 数据库驱动
+    // 数据库驱�?
     implementation 'mysql:mysql-connector-java:8.0.33'
     implementation 'org.xerial:sqlite-jdbc:3.45.1.0'
 }

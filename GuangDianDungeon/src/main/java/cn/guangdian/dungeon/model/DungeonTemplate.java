@@ -9,7 +9,7 @@ public class DungeonTemplate {
     private final String id;
     private final String name;
     private final String description;
-    private final String worldTemplate;
+    private final String mapName;  // 地图名称，对应 map/ 下的文件夹
     private final DungeonSettings settings;
     private final List<Difficulty> difficulties;
     private final Map<String, Difficulty> difficultyMap;
@@ -17,14 +17,14 @@ public class DungeonTemplate {
     private final List<RewardDefinition> firstClearRewards;
     private final List<ScoreReward> scoreRewards;
 
-    public DungeonTemplate(String id, String name, String description, String worldTemplate,
+    public DungeonTemplate(String id, String name, String description, String mapName,
                           DungeonSettings settings, List<Difficulty> difficulties,
                           Map<String, RewardPool> rewardPools,
                           List<RewardDefinition> firstClearRewards, List<ScoreReward> scoreRewards) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.worldTemplate = worldTemplate;
+        this.mapName = mapName;
         this.settings = settings;
         this.difficulties = difficulties;
         this.difficultyMap = difficulties.stream().collect(Collectors.toMap(Difficulty::getId, d -> d));
@@ -36,7 +36,9 @@ public class DungeonTemplate {
     public String getId() { return id; }
     public String getName() { return name; }
     public String getDescription() { return description; }
-    public String getWorldTemplate() { return worldTemplate; }
+    public String getMapName() { return mapName; }
+    // 兼容旧代码
+    public String getWorldTemplate() { return mapName; }
     public DungeonSettings getSettings() { return settings; }
     public List<Difficulty> getDifficulties() { return difficulties; }
     public Map<String, RewardPool> getRewardPools() { return rewardPools; }
@@ -52,7 +54,6 @@ public class DungeonTemplate {
     }
 
     public int getTotalPhases() {
-        // 阶段数量现在由 StageLoader 从 dungeons/*.yml 动态加载
         return 0;
     }
 }

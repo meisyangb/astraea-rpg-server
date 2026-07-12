@@ -1,0 +1,35 @@
+// ========================================
+// 根项目构建配置
+// ========================================
+
+plugins {
+    id 'java'
+}
+
+// 为所有子项目配置通用设置
+subprojects {
+    apply plugin: 'java'
+
+    repositories {
+        // 优先使用本地Maven仓库（服务器libraries目录）
+        maven {
+            url = uri('file:///E:/RPG/译梦传说/libraries')
+        }
+        // Maven Central
+        mavenCentral()
+        // PaperMC仓库
+        maven {
+            url = uri('https://repo.papermc.io/repository/maven-public/')
+        }
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.compilerArgs.add('--add-modules')
+        options.compilerArgs.add('jdk.incubator.vector')
+    }
+}

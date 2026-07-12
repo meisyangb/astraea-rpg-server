@@ -1,5 +1,6 @@
 package cn.guangdian.socket.parser;
 
+import cn.guangdian.rpgitems.attribute.CompoundAttributeCodec;
 import cn.guangdian.socket.GuangDianSocket;
 import cn.guangdian.socket.model.AttributeValue;
 import cn.guangdian.socket.model.GemData;
@@ -633,6 +634,16 @@ public class SocketParser {
 
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
 
+        // 优先读取复合存储格式
+        byte[] compoundData = pdc.get(
+            CompoundAttributeCodec.KEY_COMPOUND,
+            PersistentDataType.BYTE_ARRAY
+        );
+        if (compoundData != null) {
+            return parseGemAttributesFromCompound(compoundData);
+        }
+        // 回退到旧格式（向后兼容）
+
         // 定义范围属性（min/max 配对）
         String[][] rangeAttributes = {
             {"rpgitems:attack_min", "rpgitems:attack_max", "攻击力"},
@@ -730,6 +741,91 @@ public class SocketParser {
         }
 
         return attributes;
+    }
+
+    /**
+     * 从复合 byte[] 读取宝石属性
+     */
+    private static Map<String, AttributeValue> parseGemAttributesFromCompound(byte[] data) {
+        Map<String, AttributeValue> attributes = new HashMap<>();
+        double[] v = CompoundAttributeCodec.deserialize(data);
+
+        // 范围属性
+        double atkMin = v[CompoundAttributeCodec.ATTACK_MIN];
+        double atkMax = v[CompoundAttributeCodec.ATTACK_MAX];
+        if (atkMin > 0 || atkMax > 0) {
+            if (atkMax == 0) atkMax = atkMin;
+            attributes.put("攻击力", AttributeValue.range(atkMin, atkMax));
+        }
+
+        double defMin = v[CompoundAttributeCodec.DEFENSE_MIN];
+        double defMax = v[CompoundAttributeCodec.DEFENSE_MAX];
+        if (defMin > 0 || defMax > 0) {
+            if (defMax == 0) defMax = defMin;
+            attributes.put("防御力", AttributeValue.range(defMin, defMax));
+        }
+
+        double pvpAtkMin = v[CompoundAttributeCodec.PVP_ATTACK_MIN];
+        double pvpAtkMax = v[CompoundAttributeCodec.PVP_ATTACK_MAX];
+        if (pvpAtkMin > 0 || pvpAtkMax > 0) {
+            if (pvpAtkMax == 0) pvpAtkMax = pvpAtkMin;
+            attributes.put("PVP攻击力", AttributeValue.range(pvpAtkMin, pvpAtkMax));
+        }
+
+        double pvpDefMin = v[CompoundAttributeCodec.PVP_DEFENSE_MIN];
+        double pvpDefMax = v[CompoundAttributeCodec.PVP_DEFENSE_MAX];
+        if (pvpDefMin > 0 || pvpDefMax > 0) {
+            if (pvpDefMax == 0) pvpDefMax = pvpDefMin;
+            attributes.put("PVP防御力", AttributeValue.range(pvpDefMin, pvpDefMax));
+        }
+
+        // 单值属性
+        putIfPositive(attributes, "生命上限", v[CompoundAttributeCodec.MAX_HEALTH], false);
+        putIfPositive(attributes, "生命回复", v[CompoundAttributeCodec.HEALTH_REGEN], false);
+        putIfPositive(attributes, "暴击几率", v[CompoundAttributeCodec.CRIT_CHANCE], false);
+        putIfPositive(attributes, "暴击伤害", v[CompoundAttributeCodec.CRIT_DAMAGE], false);
+        putIfPositive(attributes, "吸血几率", v[CompoundAttributeCodec.LIFESTEAL_CHANCE], false);
+        putIfPositive(attributes, "吸血倍率", v[CompoundAttributeCodec.LIFESTEAL_MULTIPLIER], false);
+        putIfPositive(attributes, "闪避", v[CompoundAttributeCodec.DODGE_CHANCE], false);
+        putIfPositive(attributes, "招架", v[CompoundAttributeCodec.PARRY_CHANCE], false);
+        putIfPositive(attributes, "移动速度", v[CompoundAttributeCodec.MOVE_SPEED], false);
+        putIfPositive(attributes, "减伤", v[CompoundAttributeCodec.DAMAGE_REDUCTION], false);
+        putIfPositive(attributes, "暴击抵抗", v[CompoundAttributeCodec.CRIT_RESIST], false);
+        putIfPositive(attributes, "暴伤抵抗", v[CompoundAttributeCodec.CRIT_DAMAGE_RESIST], false);
+        putIfPositive(attributes, "吸血抵抗", v[CompoundAttributeCodec.LIFESTEAL_RESIST], false);
+        putIfPositive(attributes, "护甲", v[CompoundAttributeCodec.ARMOR], false);
+        putIfPositive(attributes, "护甲强度", v[CompoundAttributeCodec.ARMOR_STRENGTH], false);
+        putIfPositive(attributes, "护甲穿透", v[CompoundAttributeCodec.ARMOR_PENETRATION], false);
+        putIfPositive(attributes, "防御穿透", v[CompoundAttributeCodec.DEFENSE_PENETRATION], false);
+        putIfPositive(attributes, "伤害反弹", v[CompoundAttributeCodec.DAMAGE_REFLECT], false);
+        putIfPositive(attributes, "反弹比例", v[CompoundAttributeCodec.REFLECT_RATIO], false);
+        putIfPositive(attributes, "中毒几率", v[CompoundAttributeCodec.POISON_CHANCE], false);
+        putIfPositive(attributes, "冰冻几率", v[CompoundAttributeCodec.FREEZE_CHANCE], false);
+        putIfPositive(attributes, "致盲几率", v[CompoundAttributeCodec.BLIND_CHANCE], false);
+        putIfPositive(attributes, "燃烧几率", v[CompoundAttributeCodec.BURN_CHANCE], false);
+        putIfPositive(attributes, "灼烧几率", v[CompoundAttributeCodec.SCORCH_CHANCE], false);
+        putIfPositive(attributes, "火焰抗性", v[CompoundAttributeCodec.FIRE_RESIST], false);
+        putIfPositive(attributes, "摔落抗性", v[CompoundAttributeCodec.FALL_RESIST], false);
+        putIfPositive(attributes, "溺水抗性", v[CompoundAttributeCodec.DROWNING_RESIST], false);
+        putIfPositive(attributes, "中毒抗性", v[CompoundAttributeCodec.POISON_RESIST], false);
+        putIfPositive(attributes, "凋零抗性", v[CompoundAttributeCodec.WITHER_RESIST], false);
+        putIfPositive(attributes, "岩浆抗性", v[CompoundAttributeCodec.LAVA_RESIST], false);
+        putIfPositive(attributes, "魔法抗性", v[CompoundAttributeCodec.MAGIC_RESIST], false);
+        putIfPositive(attributes, "爆炸抗性", v[CompoundAttributeCodec.EXPLOSION_RESIST], false);
+        putIfPositive(attributes, "弹射物抗性", v[CompoundAttributeCodec.PROJECTILE_RESIST], false);
+        putIfPositive(attributes, "击退抗性", v[CompoundAttributeCodec.KNOCKBACK_RESIST], false);
+        putIfPositive(attributes, "经验加成", v[CompoundAttributeCodec.EXP_BONUS], false);
+        putIfPositive(attributes, "生命恢复百分比", v[CompoundAttributeCodec.HEALTH_REGEN_PERCENT], false);
+        putIfPositive(attributes, "闪避反弹几率", v[CompoundAttributeCodec.DODGE_REFLECT_CHANCE], false);
+        putIfPositive(attributes, "闪避反弹比例", v[CompoundAttributeCodec.DODGE_REFLECT_RATIO], false);
+
+        return attributes;
+    }
+
+    private static void putIfPositive(Map<String, AttributeValue> attributes, String name, double value, boolean isPercent) {
+        if (value > 0) {
+            attributes.put(name, AttributeValue.of(value));
+        }
     }
 
     /**

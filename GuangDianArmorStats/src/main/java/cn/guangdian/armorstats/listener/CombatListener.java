@@ -75,30 +75,26 @@ public class CombatListener implements Listener {
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player player) {
             double oldHealth = player.getHealth();
-            
+
             // 标记玩家受到伤害（用于回血系统）
             if (!event.isCancelled() && plugin.getRegenTask() != null) {
                 plugin.getRegenTask().markDamaged(player);
             }
-            
-            // 更新 BossBar
-            if (plugin.getBossBarManager() != null) {
-                org.bukkit.Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    if (player.isOnline()) {
-                        plugin.getBossBarManager().updateBossBar(player);
-                    }
-                }, 1L);
-            }
-            
-            // 发布血量变化事件
+
+            // 合并为单个延迟任务：同时更新 BossBar 和发布血量变化事件
             if (!event.isCancelled()) {
                 org.bukkit.Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    if (player.isOnline()) {
-                        double currentHealth = player.getHealth();
-                        double maxHealth = player.getAttribute(Attribute.MAX_HEALTH).getValue();
-                        
-                        publishHealthChangedEvent(player, oldHealth, currentHealth, maxHealth);
+                    if (!player.isOnline()) return;
+
+                    // 更新 BossBar
+                    if (plugin.getBossBarManager() != null) {
+                        plugin.getBossBarManager().updateBossBar(player);
                     }
+
+                    // 发布血量变化事件
+                    double currentHealth = player.getHealth();
+                    double maxHealth = player.getAttribute(Attribute.MAX_HEALTH).getValue();
+                    publishHealthChangedEvent(player, oldHealth, currentHealth, maxHealth);
                 }, 1L);
             }
         }

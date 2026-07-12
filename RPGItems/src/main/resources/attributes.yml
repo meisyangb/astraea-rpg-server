@@ -1,0 +1,169 @@
+# ========================================
+# RPGItems 属性配置文件
+# 定义所有可用的物品属性
+# ========================================
+
+# 属性定义格式：
+# key:
+#   type: double|int|string|list    # 属性值类型
+#   display: "显示名称"              # Lore显示名称（可选）
+#   format: "格式模板"               # Lore格式模板（可选）
+#   default: 默认值                  # 默认值（可选）
+
+attributes:
+  # ========== 武器属性 ==========
+  AttackMin:
+    type: double
+    display: "攻击力"
+    default: 0.0
+  
+  AttackMax:
+    type: double
+    display: "攻击力"
+    default: 0.0
+  
+  # ========== 防具属性 ==========
+  Armor:
+    type: double
+    display: "防御力"
+    format: "+{value}%"
+    default: 0.0
+  
+  MaxHealth:
+    type: double
+    display: "生命上限"
+    format: "+{value}"
+    default: 0.0
+  
+  HealthRegen:
+    type: double
+    display: "每秒回血"
+    format: "+{value}"
+    default: 0.0
+  
+  # ========== 暴击属性 ==========
+  CritChance:
+    type: double
+    display: "暴击几率"
+    format: "{value}%"
+    default: 0.0
+  
+  CritDamage:
+    type: double
+    display: "暴击伤害"
+    format: "{value}%"
+    default: 0.0
+  
+  CritResist:
+    type: double
+    display: "暴击抵抗"
+    format: "{value}%"
+    default: 0.0
+  
+  # ========== 吸血属性 ==========
+  LifestealChance:
+    type: double
+    display: "吸血几率"
+    format: "{value}%"
+    default: 0.0
+  
+  LifestealMultiplier:
+    type: double
+    display: "吸血倍率"
+    format: "{value}%"
+    default: 0.0
+  
+  LifestealResist:
+    type: double
+    display: "吸血抵抗"
+    format: "{value}%"
+    default: 0.0
+  
+  # ========== 移动/闪避 ==========
+  DodgeChance:
+    type: double
+    display: "闪避几率"
+    format: "{value}%"
+    default: 0.0
+  
+  MoveSpeed:
+    type: double
+    display: "移动速度"
+    format: "+{value}%"
+    default: 0.0
+  
+  # ========== 装备限制 ==========
+  Level:
+    type: int
+    display: "等级要求"
+    default: 0
+  
+  RequiredClass:
+    type: string
+    display: "职业要求"
+    default: ""
+  
+  # ========== 宝石系统 ==========
+  Sockets:
+    type: list
+    display: "宝石槽位"
+    default: []
+  
+  GemType:
+    type: string
+    display: "宝石类型"
+    default: ""
+  
+  # ========== 材料系统 ==========
+  MaterialType:
+    type: string
+    display: "材料类型"
+    default: ""
+
+  ExchangeCount:
+    type: int
+    display: "兑换数量"
+    default: 1
+
+  # ========== 强化系统 ==========
+  EnhanceLevel:
+    type: int
+    display: "强化等级"
+    default: 0
+    description: "装备强化等级"
+
+# ========================================
+# 物品类型分类
+# ========================================
+item_types:
+  weapon:
+    display: "武器"
+    slots: [MAIN_HAND, OFF_HAND]
+  
+  helmet:
+    display: "头盔"
+    slots: [HEAD]
+  
+  chestplate:
+    display: "胸甲"
+    slots: [CHEST]
+  
+  leggings:
+    display: "护腿"
+    slots: [LEGS]
+  
+  boots:
+    display: "战靴"
+    slots: [FEET]
+  
+  accessory:
+    display: "饰品"
+    slots: [OFF_HAND]
+  
+  gem:
+    display: "宝石"
+    slots: []
+  
+  material:
+    display: "材料"
+    slots: []

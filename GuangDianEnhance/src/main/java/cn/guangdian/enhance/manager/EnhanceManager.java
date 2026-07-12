@@ -6,12 +6,9 @@ import cn.guangdian.enhance.data.EnhanceData;
 import cn.guangdian.enhance.data.EnhanceResult;
 import cn.guangdian.enhance.stone.EnhanceStoneType;
 import cn.guangdian.enhance.storage.EnhanceStorage;
+import cn.guangdian.enhance.util.EnhanceAttributeHelper;
 import cn.guangdian.rpgcore.integration.ExternalServiceIntegration;
 import cn.guangdian.rpgcore.message.MiniMessageService;
-import cn.guangdian.rpgitems.RPGItems;
-import cn.guangdian.rpgitems.api.ItemAttributeAPI;
-import cn.guangdian.rpgitems.item.ItemFactory;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -51,8 +48,8 @@ public class EnhanceManager {
     public EnhanceResult enhance(Player player, ItemStack item, Set<EnhanceStoneType> stones) {
         UUID uuid = player.getUniqueId();
 
-        // 通过 PDC 判定是否可强化
-        if (!ItemFactory.isEnhanceable(item)) {
+        // 【枚举法】通过 PDC 判定是否可强化
+        if (!EnhanceAttributeHelper.isEnhanceable(item)) {
             return EnhanceResult.NOT_ENHANCEABLE;
         }
 
@@ -376,8 +373,9 @@ public class EnhanceManager {
         return rateCalculator.calculate(level, item);
     }
 
+    /** 【枚举法】获取指定等级的属性倍率 */
     public double getAttributeMultiplier(int level) {
-        return 1.0 + level * config.getAttributeBonusPerLevel();
+        return config.getMultiplierForLevel(level);
     }
 
     public SuccessRateCalculator getRateCalculator() {
@@ -443,7 +441,7 @@ public class EnhanceManager {
      * 根据物品阶位获取最高强化等级
      */
     private int getMaxLevelForItem(ItemStack item) {
-        String tierStr = ItemFactory.getItemTier(item);
+        String tierStr = EnhanceAttributeHelper.getItemTier(item);
         if (tierStr != null) {
             try {
                 int tier = Integer.parseInt(tierStr);
@@ -454,35 +452,20 @@ public class EnhanceManager {
     }
 
     /**
-     * 调用 RPGItems API 按强化等级更新物品属性
-     * 倍率公式: 1.0 + level * 0.12
+     * 【枚举法】按强化等级更新物品属性
+     * 直接使用 PDC 操作，不依赖外部 API
+     * 降级时强制同步属性到对应倍率，防止刷数值
      */
     private void applyAttributeMultiplier(ItemStack item, int level) {
-        if (level <= 0) return;
         if (item == null) return;
         
-        // 直接使用 ItemFactory 的静态方法判定（避免循环依赖）
-        if (!ItemFactory.isEnhanceable(item)) return;
+        // 使用工具类判定是否可强化
+        if (!EnhanceAttributeHelper.isEnhanceable(item)) return;
         
-        try {
-            // 通过 Bukkit 服务管理器获取 RPGItems API
-            RPGItems rpgItems = (RPGItems) Bukkit.getPluginManager().getPlugin("RPGItems");
-            if (rpgItems == null) {
-                plugin.getLogger().warning("RPGItems 未加载，无法更新属性");
-                return;
-            }
-            
-            ItemAttributeAPI api = rpgItems.getAttributeAPI();
-            if (api == null) {
-                plugin.getLogger().warning("ItemAttributeAPI 不可用");
-                return;
-            }
-            
-            double multiplier = getAttributeMultiplier(level);
-            api.updateAttributes(item, multiplier);
-            
-        } catch (Exception e) {
-            plugin.getLogger().warning("更新物品属性失败: " + e.getMessage());
-        }
+        // 【枚举法】获取固定倍率（level=0时倍率为1.0）
+        double multiplier = getAttributeMultiplier(level);
+        
+        // 使用验证方法：如果倍率不匹配则强制修正
+        EnhanceAttributeHelper.validateAndFixMultiplier(item, multiplier);
     }
 }

@@ -1,0 +1,3 @@
+rootProject.name = 'plugins'
+
+include 'RPGCore', 'RPGItems', 'GuangDianArmorStats', 'GuangDianClass', 'GuangDianSocket', 'GuangDianName', 'GuangDianPoints', 'GuangDianQuest', 'GuangDianDecompose', 'GuangDianWorldRules', 'GuangDianNPCCommand', 'GuangDianMenu', 'GuangDianGuild', 'GuangDianMarket', 'GuangDianDungeon', 'GuangDianCleaner'

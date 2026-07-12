@@ -10,8 +10,8 @@ repositories {
 
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
-    compileOnly project(':plugins:RPGCore')
-    compileOnly project(':plugins:RPGItems')
+    // 只需要RPGCore依赖，属性更新已自己实现
+    compileOnly files('../RPGCore/build/libs/RPGCore-1.0.0.jar')
     compileOnly name: 'PlaceholderAPI'
 }
 

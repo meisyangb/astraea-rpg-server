@@ -13,14 +13,14 @@ public class EnhanceConfig {
     
     private int maxLevel;
     private Map<Integer, Integer> tierMaxLevel;  // Tier → 最高强化等级
+    // 【枚举法】等级 → 固定属性倍率
+    private Map<Integer, Double> levelMultipliers;
     private double baseSuccessRate;
     private double decayFactor;
     private double minSuccessRate;
     private String failureType;
     private double degradeChance;
     private double destroyChance;
-    private double attributeBonusPerLevel;
-    private String attributeBonusType;
     private boolean protectionCharmEnabled;
     private Material protectionCharmItem;
     private boolean protectionCharmConsume;
@@ -43,14 +43,17 @@ public class EnhanceConfig {
     private void setDefaults() {
         maxLevel = 15;
         tierMaxLevel = new HashMap<>();
+        // 【枚举法】默认倍率表
+        levelMultipliers = new HashMap<>();
+        for (int i = 1; i <= 15; i++) {
+            levelMultipliers.put(i, 1.0 + i * 0.05); // 默认每级+5%
+        }
         baseSuccessRate = 1.0;
         decayFactor = 0.05;
         minSuccessRate = 0.01;
         failureType = "degrade";
         degradeChance = 0.5;
         destroyChance = 0.0;
-        attributeBonusPerLevel = 0.1;
-        attributeBonusType = "multiplier";
         protectionCharmEnabled = true;
         protectionCharmItem = Material.NETHER_STAR;
         protectionCharmConsume = true;
@@ -100,10 +103,18 @@ public class EnhanceConfig {
             destroyChance = failureSection.getDouble("destroy_chance", 0.0);
         }
         
-        ConfigurationSection bonusSection = config.getConfigurationSection("enhance.attribute_bonus");
-        if (bonusSection != null) {
-            attributeBonusPerLevel = bonusSection.getDouble("per_level", 0.1);
-            attributeBonusType = bonusSection.getString("type", "multiplier");
+        // 【枚举法】读取等级倍率表
+        ConfigurationSection multiplierSection = config.getConfigurationSection("enhance.level_multipliers");
+        if (multiplierSection != null) {
+            levelMultipliers = new HashMap<>();
+            for (String key : multiplierSection.getKeys(false)) {
+                try {
+                    int level = Integer.parseInt(key);
+                    double multiplier = multiplierSection.getDouble(key, 1.0 + level * 0.05);
+                    levelMultipliers.put(level, multiplier);
+                } catch (NumberFormatException ignored) {}
+            }
+            plugin.getLogger().info("已加载等级倍率表，共 " + levelMultipliers.size() + " 个等级");
         }
         
         ConfigurationSection protectionSection = config.getConfigurationSection("enhance.protection_charm");
@@ -234,14 +245,25 @@ public class EnhanceConfig {
         return tierMaxLevel.getOrDefault(tier, maxLevel);
     }
     
+    /** 【枚举法】获取指定等级的属性倍率 */
+    public double getMultiplierForLevel(int level) {
+        if (level <= 0) {
+            return 1.0;
+        }
+        return levelMultipliers.getOrDefault(level, 1.0);
+    }
+    
+    /** 获取整个等级倍率表 */
+    public Map<Integer, Double> getLevelMultipliers() {
+        return levelMultipliers;
+    }
+    
     public double getBaseSuccessRate() { return baseSuccessRate; }
     public double getDecayFactor() { return decayFactor; }
     public double getMinSuccessRate() { return minSuccessRate; }
     public String getFailureType() { return failureType; }
     public double getDegradeChance() { return degradeChance; }
     public double getDestroyChance() { return destroyChance; }
-    public double getAttributeBonusPerLevel() { return attributeBonusPerLevel; }
-    public String getAttributeBonusType() { return attributeBonusType; }
     public boolean isProtectionCharmEnabled() { return protectionCharmEnabled; }
     public Material getProtectionCharmItem() { return protectionCharmItem; }
     public boolean isProtectionCharmConsume() { return protectionCharmConsume; }

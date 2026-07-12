@@ -1,20 +1,24 @@
 // ========================================
-// GuangDianArmorStats - 装备属性系统
+// GuangDianArmorStats - 装备属性系�?
 // ========================================
 
 plugins {
     id 'java'
 }
 
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.papermc.io/repository/maven-public/' }
+}
+
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT'
-    compileOnly project(':plugins:RPGCore')
-    compileOnly project(':plugins:RPGItems')
-    compileOnly project(':plugins:GuangDianClass')
-    compileOnly project(':plugins:GuangDianSocket')
-    compileOnly files('libs/PlaceholderAPI.jar')
-    compileOnly files('libs/MythicMobs.jar')
-    compileOnly files('../../../MythicLib-dist-1.7.1-20260319.222439-90.jar')
+    compileOnly files('E:/RPG/译梦传说/plugins/RPGCore-1.0.0.jar')
+    compileOnly files('E:/RPG/译梦传说/plugins/RPGItems-1.0.0.jar')
+    compileOnly files('E:/RPG/译梦传说/plugins/GuangDianClass-1.0.0.jar')
+    compileOnly files('E:/RPG/译梦传说/plugins/GuangDianSocket-1.0.0.jar')
+    compileOnly files('E:/RPG/译梦传说/plugins/PlaceholderAPI.jar')
+    compileOnly files('E:/RPG/译梦传说/plugins/MythicMobs.jar')
 }
 
 jar {

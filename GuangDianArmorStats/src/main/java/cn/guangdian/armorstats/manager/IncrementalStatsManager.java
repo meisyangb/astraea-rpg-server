@@ -55,6 +55,9 @@ public class IncrementalStatsManager {
     
     // 玩家是否已加载
     private final ConcurrentHashMap<UUID, Boolean> loadedPlayers = new ConcurrentHashMap<>();
+
+    // 宝石属性缓存：物品哈希 -> 宝石属性（避免每次装备变化都重新加载宝石数据）
+    private final ConcurrentHashMap<String, java.util.Map<String, cn.guangdian.armorstats.data.AttributeValue>> gemAttrCache = new ConcurrentHashMap<>();
     
     public IncrementalStatsManager(GuangDianArmorStats plugin) {
         this.plugin = plugin;
@@ -168,9 +171,38 @@ public class IncrementalStatsManager {
     }
     
     /**
-     * 从 GuangDianSocket 获取宝石属性
+     * 从 GuangDianSocket 获取宝石属性（带缓存）
+     * 缓存 key：物品哈希，避免每次装备变化都重新加载宝石数据
      */
     private java.util.Map<String, cn.guangdian.armorstats.data.AttributeValue> getGemAttributes(ItemStack item) {
+        if (item == null || !item.hasItemMeta()) {
+            return java.util.Collections.emptyMap();
+        }
+
+        // 计算物品哈希作为缓存 key
+        String itemHash = cn.guangdian.armorstats.cache.EquipmentHash.calculate(item);
+
+        // 先查缓存
+        java.util.Map<String, cn.guangdian.armorstats.data.AttributeValue> cached = gemAttrCache.get(itemHash);
+        if (cached != null) {
+            return cached;
+        }
+
+        // 缓存未命中，执行原始加载逻辑
+        java.util.Map<String, cn.guangdian.armorstats.data.AttributeValue> attrs = loadGemAttributes(item);
+
+        // 写入缓存（上限 500，避免内存膨胀）
+        if (gemAttrCache.size() < 500) {
+            gemAttrCache.put(itemHash, attrs);
+        }
+
+        return attrs;
+    }
+
+    /**
+     * 实际加载宝石属性（原 getGemAttributes 逻辑）
+     */
+    private java.util.Map<String, cn.guangdian.armorstats.data.AttributeValue> loadGemAttributes(ItemStack item) {
         java.util.Map<String, cn.guangdian.armorstats.data.AttributeValue> attrs = new java.util.HashMap<>();
         
         if (item == null || !item.hasItemMeta()) {

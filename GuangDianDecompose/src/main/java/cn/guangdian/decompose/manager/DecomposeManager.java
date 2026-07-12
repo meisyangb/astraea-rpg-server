@@ -52,7 +52,7 @@ public class DecomposeManager {
             }
         }
 
-        plugin.getLogger().info("[DecomposeManager] 成功创建 " + rewards.size() + "/" + rule.getMaterials().size() + " 个材料物品");
+        plugin.debug("[DecomposeManager] 成功创建 " + rewards.size() + "/" + rule.getMaterials().size() + " 个材料物品");
         
         if (rewards.isEmpty()) {
             return DecomposeResult.failure("无法创建分解材料，请联系管理员！");
@@ -118,7 +118,7 @@ public class DecomposeManager {
     }
 
     private ItemStack createRewardItem(DecomposeRule.MaterialReward material) {
-        plugin.getLogger().info("[DecomposeManager] 创建奖励物品: " + material.getItemId() + " x" + material.getAmount() + " (类型: " + (material.isRPGItem() ? "RPGItem" : "Vanilla") + ")");
+        plugin.debug("[DecomposeManager] 创建奖励物品: " + material.getItemId() + " x" + material.getAmount() + " (类型: " + (material.isRPGItem() ? "RPGItem" : "Vanilla") + ")");
         
         if (material.isRPGItem()) {
             ItemStack item = plugin.getRPGItemsHook().getRPGItem(material.getItemId(), material.getAmount());
