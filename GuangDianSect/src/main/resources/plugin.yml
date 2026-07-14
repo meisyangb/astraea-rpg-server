@@ -1,0 +1,30 @@
+name: GuangDianSect
+version: 1.0.0
+main: cn.guangdian.sect.GuangDianSect
+api-version: '1.21'
+author: GuangDian
+description: 修仙门派系统插件
+
+# 插件依赖
+softdepend:
+  - RPGCore
+  - PlaceholderAPI
+
+commands:
+  sect:
+    description: 门派主命令
+    usage: /sect <join|leave|info|list|gui>
+    aliases: [menpai, zongmen]
+  sectadmin:
+    description: 门派管理命令
+    usage: /sectadmin <reload|setrank|setcontribution>
+    permission: guangdian.sect.admin
+    aliases: [sa]
+
+permissions:
+  guangdian.sect.join:
+    description: 加入门派权限
+    default: true
+  guangdian.sect.admin:
+    description: 门派管理权限
+    default: op

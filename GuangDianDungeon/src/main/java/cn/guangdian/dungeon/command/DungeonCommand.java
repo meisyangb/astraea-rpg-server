@@ -144,51 +144,99 @@ public class DungeonCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        // 使用 MapInstanceManager 创建世界实例
+        // 使用 MapInstanceManager 异步创建世界实例，显示进度条
         String mapName = template.getMapName();
-        player.sendMessage(plugin.color("<yellow>正在创建副本实例..."));
 
-        String instanceWorldName = plugin.getMapInstanceManager().createInstance(mapName);
-        if (instanceWorldName == null) {
-            player.sendMessage(plugin.color("<red>副本已满！当前地图 " + mapName + " 已达到最大实例数 (3)"));
-            return true;
-        }
+        // 创建 BossBar 进度条
+        org.bukkit.boss.BarColor barColor = org.bukkit.boss.BarColor.BLUE;
+        org.bukkit.boss.BarStyle barStyle = org.bukkit.boss.BarStyle.SEGMENTED_10;
+        org.bukkit.boss.BossBar bossBar = Bukkit.createBossBar(
+            "正在创建副本实例...", barColor, barStyle);
 
-        World instanceWorld = Bukkit.getWorld(instanceWorldName);
-        if (instanceWorld == null) {
-            player.sendMessage(plugin.color("<red>加载副本世界失败"));
-            plugin.getMapInstanceManager().destroyInstance(instanceWorldName);
-            return true;
-        }
-
-        // 使用 SessionManager.createSession 创建会话
-        DungeonSession session = plugin.getSessionManager().createSession(dungeonId, party, instanceWorld);
-        session.setInstanceWorldName(instanceWorldName);
-        session.setDifficulty(difficultyId);
-        session.setTimeLimit(template.getSettings().getTimeLimit() + difficulty.getTimeLimitModifier());
-
-        DungeonSession loadedSession = plugin.getStageLoader().loadDungeonConfig(dungeonId, instanceWorld);
-        if (loadedSession != null) {
-            session.setStages(loadedSession.getStages());
-            session.setSpawnPoints(loadedSession.getSpawnPoints());
-        }
-
-        // 传送所有队员到入口
-        org.bukkit.configuration.file.YamlConfiguration dungeonConfig =
-            org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
-                new java.io.File(plugin.getDataFolder(), "dungeons/" + dungeonId + ".yml"));
-        double entranceX = dungeonConfig.getDouble("teleports.entrance.x", 0);
-        double entranceY = dungeonConfig.getDouble("teleports.entrance.y", 64);
-        double entranceZ = dungeonConfig.getDouble("teleports.entrance.z", 0);
-
+        // 为所有队员显示进度条
         for (PartyMember member : party.getMembers()) {
             Player p = Bukkit.getPlayer(member.getPlayerId());
             if (p != null) {
-                p.teleport(new Location(instanceWorld, entranceX, entranceY, entranceZ));
+                bossBar.addPlayer(p);
+                p.sendMessage(plugin.color("<gold>正在创建副本实例，请稍候..."));
             }
         }
 
-        startDungeonWithAnnouncement(session);
+        final DungeonParty finalParty = party;
+        final DungeonTemplate finalTemplate = template;
+        final String finalDifficultyId = difficultyId;
+        final Difficulty finalDifficulty = difficulty;
+
+        // 异步创建世界实例
+        plugin.getMapInstanceManager().createInstanceAsync(mapName, (percent, message) -> {
+            // 更新 BossBar（需要在主线程）
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                bossBar.setProgress(percent / 100.0);
+                bossBar.setTitle(message);
+
+                // 给所有队员发送进度消息
+                for (PartyMember member : finalParty.getMembers()) {
+                    Player p = Bukkit.getPlayer(member.getPlayerId());
+                    if (p != null) {
+                        p.sendMessage(plugin.color("<gray>[" + percent + "%] " + message));
+                    }
+                }
+            });
+        }).thenAcceptAsync(instanceWorldName -> {
+            // 创建完成，在主线程执行后续逻辑
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                bossBar.removeAll();
+
+                if (instanceWorldName == null) {
+                    for (PartyMember member : finalParty.getMembers()) {
+                        Player p = Bukkit.getPlayer(member.getPlayerId());
+                        if (p != null) {
+                            p.sendMessage(plugin.color("<red>副本已满！当前地图 " + mapName + " 已达到最大实例数 (3)"));
+                        }
+                    }
+                    return;
+                }
+
+                World instanceWorld = Bukkit.getWorld(instanceWorldName);
+                if (instanceWorld == null) {
+                    player.sendMessage(plugin.color("<red>加载副本世界失败"));
+                    plugin.getMapInstanceManager().destroyInstance(instanceWorldName);
+                    return;
+                }
+
+                // 使用 SessionManager.createSession 创建会话
+                DungeonSession session = plugin.getSessionManager().createSession(dungeonId, finalParty, instanceWorld);
+                session.setInstanceWorldName(instanceWorldName);
+                session.setDifficulty(finalDifficultyId);
+                session.setTimeLimit(finalTemplate.getSettings().getTimeLimit() + finalDifficulty.getTimeLimitModifier());
+
+                DungeonSession loadedSession = plugin.getStageLoader().loadDungeonConfig(dungeonId, instanceWorld);
+                if (loadedSession != null) {
+                    session.setStages(loadedSession.getStages());
+                    session.setSpawnPoints(loadedSession.getSpawnPoints());
+                }
+
+                // 传送所有队员到入口
+                org.bukkit.configuration.file.YamlConfiguration dungeonConfig =
+                    org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
+                        new java.io.File(plugin.getDataFolder(), "dungeons/" + dungeonId + ".yml"));
+                double entranceX = dungeonConfig.getDouble("teleports.entrance.x", 0);
+                double entranceY = dungeonConfig.getDouble("teleports.entrance.y", 64);
+                double entranceZ = dungeonConfig.getDouble("teleports.entrance.z", 0);
+
+                for (PartyMember member : finalParty.getMembers()) {
+                    Player p = Bukkit.getPlayer(member.getPlayerId());
+                    if (p != null) {
+                        // 记录玩家进入副本前的位置
+                        session.setOriginalLocation(member.getPlayerId(), p.getLocation());
+                        p.teleport(new Location(instanceWorld, entranceX, entranceY, entranceZ));
+                        p.sendMessage(plugin.color("<green>成功进入副本！"));
+                    }
+                }
+
+                startDungeonWithAnnouncement(session);
+            });
+        });
         return true;
     }
 
@@ -242,7 +290,11 @@ public class DungeonCommand implements CommandExecutor, TabCompleter {
 
         for (PartyMember member : party.getMembers()) {
             Player p = Bukkit.getPlayer(member.getPlayerId());
-            if (p != null) p.teleport(new Location(instanceWorld, x, y, z));
+            if (p != null) {
+                // 记录玩家进入副本前的位置
+                session.setOriginalLocation(member.getPlayerId(), p.getLocation());
+                p.teleport(new Location(instanceWorld, x, y, z));
+            }
         }
 
         startDungeonWithAnnouncement(session);

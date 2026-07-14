@@ -325,9 +325,21 @@ public class SessionManager {
     }
 
     private void onWaveTimeout(DungeonSession session, Stage stage, Wave wave) {
-        broadcastMessage(session, "<red><bold>[副本]</bold> <white>波次超时！");
-        wave.setCompleted(true);
-        checkWaveCompletion(session, stage, wave);
+        // 波次超时 - 踢出所有玩家并销毁实例
+        broadcastMessage(session, "<red><bold>[副本超时]</bold> <white>未能在规定时间内完成波次！");
+        broadcastTitle(session, "<red><bold>副本失败", "<yellow>波次超时，即将退出...", 500, 2000, 500);
+
+        // 延迟3秒后踢出玩家
+        runSyncLater(() -> {
+            for (PartyMember member : session.getParty().getMembers()) {
+                Player p = plugin.getServer().getPlayer(member.getPlayerId());
+                if (p != null) {
+                    p.sendMessage(plugin.color("<red>副本超时失败！"));
+                }
+            }
+            // 结束会话（失败）
+            endSession(session, false);
+        }, 60L); // 3秒后执行
     }
 
     public void onMobKill(DungeonSession session, Entity entity) {
@@ -580,7 +592,9 @@ public class SessionManager {
         for (PartyMember member : session.getParty().getMembers()) {
             Player player = Bukkit.getPlayer(member.getPlayerId());
             if (player != null) {
-                plugin.getMapInstanceManager().teleportToExitWorld(player);
+                // 使用玩家进入副本前的原始位置
+                org.bukkit.Location originalLoc = session.getOriginalLocation(member.getPlayerId());
+                plugin.getMapInstanceManager().teleportToOriginalLocation(player, originalLoc);
             }
             playerSessions.remove(member.getPlayerId());
         }
@@ -613,7 +627,9 @@ public class SessionManager {
                         if (sound != null) {
                             broadcastSound(session, sound, action.getVolume(), 1.0f);
                         }
-                    } catch (Exception ignored) {}
+                    } catch (Exception e) {
+                        plugin.getLogger().warning("播放副本声音失败: " + action.getSound() + " - " + e.getMessage());
+                    }
                     break;
                 case DELAY:
                     break;

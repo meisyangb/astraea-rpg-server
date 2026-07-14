@@ -10,7 +10,7 @@ import java.util.Optional;
 
 /**
  * 强化石类型枚举
- * 通过 RPGItems PDC (rpgitems:enhance_stone) 识别强化石
+ * 通过 RPGItems PDC (rpgitems:attrs 复合存储) 识别强化石
  * 所有石头都需放入 GUI 对应槽位
  */
 public enum EnhanceStoneType {
@@ -49,7 +49,8 @@ public enum EnhanceStoneType {
     private final double value;
     private final String description;
 
-    private static final NamespacedKey PDC_KEY = new NamespacedKey("rpgitems", "enhance_stone");
+    // RPGItems PDC key
+    private static final NamespacedKey STONE_KEY = new NamespacedKey("rpgitems", "enhance_stone");
 
     EnhanceStoneType(String stoneId, Material material, String displayName,
                      StoneEffect effect, double value, String description) {
@@ -66,8 +67,10 @@ public enum EnhanceStoneType {
         if (item == null || !item.hasItemMeta()) return false;
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return false;
+        
         try {
-            String id = meta.getPersistentDataContainer().get(PDC_KEY, PersistentDataType.STRING);
+            // 直接从 rpgitems:enhance_stone 读取（RPGItems 已修复）
+            String id = meta.getPersistentDataContainer().get(STONE_KEY, PersistentDataType.STRING);
             return stoneId.equals(id);
         } catch (Exception e) {
             return false;

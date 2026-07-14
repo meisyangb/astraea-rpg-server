@@ -16,10 +16,12 @@ public class DungeonSettings {
     private final String permission;
     private final String iconMaterial;
     private final int recommendedLevel;
+    private final boolean keepInventoryOnDeath;  // 死亡是否保留物品，默认 true
 
     public DungeonSettings(int maxPlayers, int minPlayers, int timeLimit, int cooldown,
                           int maxDeaths, int reviveCooldown, int minLevel, int maxLevel,
-                          String permission, String iconMaterial, int recommendedLevel) {
+                          String permission, String iconMaterial, int recommendedLevel,
+                          boolean keepInventoryOnDeath) {
         this.maxPlayers = maxPlayers;
         this.minPlayers = minPlayers;
         this.timeLimit = timeLimit;
@@ -31,6 +33,7 @@ public class DungeonSettings {
         this.permission = permission;
         this.iconMaterial = iconMaterial;
         this.recommendedLevel = recommendedLevel;
+        this.keepInventoryOnDeath = keepInventoryOnDeath;
     }
 
     public int getMaxPlayers() { return maxPlayers; }
@@ -44,4 +47,5 @@ public class DungeonSettings {
     public String getPermission() { return permission; }
     public String getIconMaterial() { return iconMaterial; }
     public int getRecommendedLevel() { return recommendedLevel; }
+    public boolean isKeepInventoryOnDeath() { return keepInventoryOnDeath; }
 }

@@ -294,8 +294,8 @@ public class QuestCommand implements CommandExecutor, TabExecutor {
             return;
         }
 
-        // 打开对话GUI（自动查找NPC信息）
-        plugin.getDialogueGUI().openDialogueForNPC(targetPlayer, npcId);
+        // 打开聊天式对话
+        plugin.getChatDialogueManager().startDialogueForNPC(targetPlayer, npcId);
     }
 
     private void handleReload(CommandSender sender) {

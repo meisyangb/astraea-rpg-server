@@ -51,6 +51,9 @@ public class DefenseInterceptor implements DamageInterceptor {
     // 额外减伤上限（新增）
     private double maxBonusReduction = 0.25;   // 额外减伤上限25%
 
+    // 最小伤害
+    private double minDamage = 1.0;
+
     public DefenseInterceptor() {
         loadConfig();
     }
@@ -75,6 +78,8 @@ public class DefenseInterceptor implements DamageInterceptor {
             maxTotalCritResist = damageSection.getDouble("max_total_crit_resist", 0.75);
             // 额外减伤上限
             maxBonusReduction = damageSection.getDouble("max_bonus_reduction", 0.25);
+            // 最小伤害
+            minDamage = damageSection.getDouble("min_damage", 1.0);
         }
     }
 
@@ -203,12 +208,6 @@ public class DefenseInterceptor implements DamageInterceptor {
         }
 
         // ========== 5. 最小伤害 ==========
-        double minDamage = 1.0;
-        var config = GuangDianArmorStats.getInstance().getConfig();
-        var damageSection = config.getConfigurationSection("damage");
-        if (damageSection != null) {
-            minDamage = damageSection.getDouble("min_damage", 1.0);
-        }
         currentDamage = Math.max(minDamage, currentDamage);
 
         context.setFinalDamage(currentDamage);

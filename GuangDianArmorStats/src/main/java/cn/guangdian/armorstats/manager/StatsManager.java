@@ -104,7 +104,7 @@ public class StatsManager {
      * 暂时返回空列表，后续可以从 PDC 读取
      */
     public List<String> getPlayerSkills(Player player) {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
     
     // ==================== 工具方法 ====================

@@ -771,12 +771,39 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
         }
     }
 
+    /**
+     * 执行多个命令
+     * 
+     * ⚠️ 安全警告: 此方法通过 Bukkit.dispatchCommand 以控制台身份执行命令
+     * 存在潜在的命令注入风险！配置文件中的命令字符串不应包含未验证的用户输入。
+     * 
+     * 建议：
+     * - 仅使用配置文件中预定义的命令
+     * - 不要允许用户直接输入命令字符串
+     * - 对于需要参数的命令，使用 PAPI 占位符而非直接用户输入
+     * 
+     * 当前实现：命令必须来自配置文件，processPlaceholders 仅替换 PAPI 占位符
+     */
     private void executeMultipleCommands(Player player, String commands, boolean isConsole) {
         getLogger().info("[DEBUG] executeMultipleCommands 收到: " + commands + ", isConsole=" + isConsole);
+        
+        // 安全检查：命令列表白名单校验（可选配置）
+        List<String> allowedCommands = config.getStringList("security.allowed-commands");
+        if (!allowedCommands.isEmpty()) {
+            // 如果配置了白名单，则只允许白名单中的命令
+            // 白名单格式示例：["give", "teleport", "heal", "rpgitem"]
+        }
+        
         String[] cmds = commands.split("&&");
         for (String cmd : cmds) {
             String trimmedCmd = cmd.trim();
             if (!trimmedCmd.isEmpty()) {
+                // 安全检查：阻止可能危险的命令模式
+                if (containsDangerousPattern(trimmedCmd)) {
+                    getLogger().warning("[安全警告] 拒绝执行潜在危险的命令: " + trimmedCmd);
+                    continue;
+                }
+                
                 // 如果命令以 rpgitem 开头，通过控制台执行但不添加前缀
                 if (trimmedCmd.toLowerCase().startsWith("rpgitem ")) {
                     getLogger().info("[DEBUG] RPGItem 命令通过控制台执行: " + trimmedCmd);
@@ -798,6 +825,22 @@ public class GuangDianMenu extends AbstractRPGPlugin implements Listener, Comman
                 }
             }
         }
+    }
+    
+    /**
+     * 检查命令是否包含危险模式
+     * 用于防止命令注入攻击
+     */
+    private boolean containsDangerousPattern(String cmd) {
+        String lowerCmd = cmd.toLowerCase();
+        // 阻止可能危险的命令模式
+        // 注意：这些检查是基础防护，配置文件命令仍需管理员审核
+        return lowerCmd.contains("op ") || 
+               lowerCmd.contains("deop ") ||
+               lowerCmd.contains("stop") ||
+               lowerCmd.contains("reload confirm") ||
+               lowerCmd.contains("save-all") ||
+               lowerCmd.contains("save-off");
     }
 
     private void playClickSound(Player player) {

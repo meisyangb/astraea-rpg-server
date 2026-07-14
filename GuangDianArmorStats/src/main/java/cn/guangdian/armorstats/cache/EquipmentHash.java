@@ -1,73 +1,80 @@
 package cn.guangdian.armorstats.cache;
 
-import org.bukkit.inventory.ItemStack;
+import cn.guangdian.rpgitems.attribute.RPGItemsKeys;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 /**
  * 装备哈希计算器
- * 基于物品类型、名称、Lore 和 PDC 数据计算唯一哈希值
  *
- * 性能优化: 使用自定义哈希算法替代MD5，提升约3-5倍性能
- *
- * 关键：哈希包含 PDC 数据，当宝石镶嵌/强化/锻造修改 PDC 时，
- *       哈希自动变化，缓存自动失效，确保属性数据始终正确
+ * 枚举法：逐个 key 直接用已知类型读取，不用 getKeys() 循环和类型猜测。
+ * 稳定、高性能、无 IllegalArgumentException 风险。
  */
 public class EquipmentHash {
 
     private static final int PRIME = 31;
 
-    /**
-     * 计算装备的唯一哈希值
-     *
-     * 算法: 使用多项式滚动哈希，比MD5快约5倍
-     * 格式: MATERIAL:hashCode
-     *
-     * @param item 装备物品
-     * @return 哈希值字符串
-     */
+    /** 旧格式 DOUBLE key 列表（静态常量，避免每次创建） */
+    private static final NamespacedKey[] OLD_DOUBLE_KEYS = {
+        RPGItemsKeys.ATTACK_MIN, RPGItemsKeys.ATTACK_MAX, RPGItemsKeys.DEFENSE_MIN, RPGItemsKeys.DEFENSE_MAX,
+        RPGItemsKeys.MAX_HEALTH, RPGItemsKeys.HEALTH_REGEN, RPGItemsKeys.CRIT_CHANCE, RPGItemsKeys.CRIT_DAMAGE,
+        RPGItemsKeys.LIFESTEAL_CHANCE, RPGItemsKeys.LIFESTEAL_MULTIPLIER, RPGItemsKeys.DODGE_CHANCE, RPGItemsKeys.PARRY_CHANCE,
+        RPGItemsKeys.MOVE_SPEED, RPGItemsKeys.DAMAGE_REDUCTION, RPGItemsKeys.PVP_ATTACK_MIN, RPGItemsKeys.PVP_ATTACK_MAX,
+        RPGItemsKeys.PVP_DEFENSE_MIN, RPGItemsKeys.PVP_DEFENSE_MAX, RPGItemsKeys.CRIT_RESIST, RPGItemsKeys.CRIT_DAMAGE_RESIST,
+        RPGItemsKeys.LIFESTEAL_RESIST, RPGItemsKeys.ARMOR, RPGItemsKeys.ARMOR_STRENGTH, RPGItemsKeys.ARMOR_PENETRATION,
+        RPGItemsKeys.DEFENSE_PENETRATION, RPGItemsKeys.DAMAGE_REFLECT, RPGItemsKeys.REFLECT_RATIO, RPGItemsKeys.POISON_CHANCE,
+        RPGItemsKeys.FREEZE_CHANCE, RPGItemsKeys.BLIND_CHANCE, RPGItemsKeys.BURN_CHANCE, RPGItemsKeys.SCORCH_CHANCE,
+        RPGItemsKeys.IGNITE_CHANCE, RPGItemsKeys.SLOW_CHANCE, RPGItemsKeys.FIRE_RESIST, RPGItemsKeys.FALL_RESIST,
+        RPGItemsKeys.DROWNING_RESIST, RPGItemsKeys.POISON_RESIST, RPGItemsKeys.WITHER_RESIST, RPGItemsKeys.LAVA_RESIST,
+        RPGItemsKeys.MAGIC_RESIST, RPGItemsKeys.EXPLOSION_RESIST, RPGItemsKeys.PROJECTILE_RESIST, RPGItemsKeys.KNOCKBACK_RESIST,
+        RPGItemsKeys.EXP_BONUS, RPGItemsKeys.HEALTH_REGEN_PERCENT, RPGItemsKeys.DODGE_REFLECT_CHANCE, RPGItemsKeys.DODGE_REFLECT_RATIO,
+    };
+
+    /** 强化基础属性 key 列表 */
+    private static final NamespacedKey[] BASE_DOUBLE_KEYS = {
+        RPGItemsKeys.BASE_ATTACK_MIN, RPGItemsKeys.BASE_ATTACK_MAX, RPGItemsKeys.BASE_DEFENSE_MIN, RPGItemsKeys.BASE_DEFENSE_MAX,
+        RPGItemsKeys.BASE_MAX_HEALTH, RPGItemsKeys.BASE_CRIT_CHANCE, RPGItemsKeys.BASE_CRIT_DAMAGE,
+    };
+
+    // ================================================================
+    // 公共 API
+    // ================================================================
+
     public static String calculate(ItemStack item) {
         if (item == null || item.getType() == Material.AIR) {
             return "EMPTY";
         }
-
         StringBuilder sb = new StringBuilder(64);
         sb.append(item.getType().name()).append(":");
         sb.append(calculateContentHash(item));
         return sb.toString();
     }
 
-    /**
-     * 计算物品内容哈希（完整版本）
-     * 包含 PDC 数据，确保宝石镶嵌/强化/锻造后哈希变化
-     *
-     * @param item 装备物品
-     * @return 哈希值
-     */
+    public static String calculateFull(ItemStack item) {
+        return calculate(item);
+    }
+
+    // ================================================================
+    // 内部实现 - 枚举法
+    // ================================================================
+
     private static int calculateContentHash(ItemStack item) {
         int hash = 1;
-
-        // 物品数量
         hash = hash * PRIME + item.getAmount();
-
-        // 物品耐久/自定义数据
         hash = hash * PRIME + (int) item.getDurability();
 
         if (item.hasItemMeta()) {
             ItemMeta meta = item.getItemMeta();
-
-            // 显示名称
             if (meta.hasDisplayName()) {
                 hash = hash * PRIME + meta.getDisplayName().hashCode();
             }
-
-            // Lore内容
             if (meta.hasLore()) {
                 List<String> lore = meta.getLore();
                 if (lore != null) {
@@ -76,66 +83,120 @@ public class EquipmentHash {
                     }
                 }
             }
-
-            // 附魔
             if (meta.hasEnchants()) {
                 hash = hash * PRIME + meta.getEnchants().hashCode();
             }
-
-            // 自定义模型数据
             if (meta.hasCustomModelData()) {
                 hash = hash * PRIME + meta.getCustomModelData();
             }
-
-            // PDC 数据哈希（关键：包含宝石镶嵌、强化、锻造等修改的 PDC 数据）
             hash = hash * PRIME + calculatePDCHash(meta.getPersistentDataContainer());
         }
-
         return hash;
     }
 
     /**
-     * 计算 PDC 数据的哈希值
+     * 枚举法计算 PDC 哈希
      *
-     * 只需调用一次 pdc.getKeys() 获取所有 key，
-     * 然后遍历读取值计算哈希（纯内存操作）
-     *
-     * 当 PDC 数据变化时（宝石镶嵌/强化/锻造），哈希自动变化
+     * 每个 key 类型已知，直接用 has + get 读取，不做类型猜测。
+     * 无 IllegalArgumentException 风险，稳定高性能。
      */
     private static int calculatePDCHash(PersistentDataContainer pdc) {
         if (pdc == null) return 0;
-
-        Set<NamespacedKey> keys = pdc.getKeys();
-        if (keys.isEmpty()) return 0;
-
         int hash = 0;
-        for (NamespacedKey key : keys) {
-            // key 的哈希
-            hash = hash * PRIME + key.hashCode();
 
-            // 按类型读取值（has 检查避免类型不匹配的 IllegalArgumentException）
-            if (pdc.has(key, PersistentDataType.STRING)) {
-                hash = hash * PRIME + pdc.get(key, PersistentDataType.STRING).hashCode();
-            } else if (pdc.has(key, PersistentDataType.DOUBLE)) {
-                hash = hash * PRIME + Double.hashCode(pdc.get(key, PersistentDataType.DOUBLE));
-            } else if (pdc.has(key, PersistentDataType.INTEGER)) {
-                hash = hash * PRIME + pdc.get(key, PersistentDataType.INTEGER);
-            } else if (pdc.has(key, PersistentDataType.LONG)) {
-                hash = hash * PRIME + pdc.get(key, PersistentDataType.LONG).hashCode();
-            } else if (pdc.has(key, PersistentDataType.BYTE_ARRAY)) {
-                hash = hash * PRIME + java.util.Arrays.hashCode(pdc.get(key, PersistentDataType.BYTE_ARRAY));
-            }
+        // === STRING 类型：元数据 ===
+        hash = hashString(pdc, RPGItemsKeys.ID, hash);
+        hash = hashString(pdc, RPGItemsKeys.TIER, hash);
+        hash = hashString(pdc, RPGItemsKeys.REQUIRED_CLASS, hash);
+        hash = hashString(pdc, RPGItemsKeys.GEM_TYPE, hash);
+
+        // === INTEGER 类型 ===
+        hash = hashInteger(pdc, RPGItemsKeys.LEVEL, hash);
+
+        // === BYTE 类型 ===
+        if (pdc.has(RPGItemsKeys.IS_GEM, PersistentDataType.BYTE)) {
+            hash = hash * PRIME + pdc.get(RPGItemsKeys.IS_GEM, PersistentDataType.BYTE);
+        }
+
+        // === BYTE_ARRAY 类型：复合属性（核心）===
+        hash = hashByteArray(pdc, RPGItemsKeys.ATTRS, hash);
+        hash = hashByteArray(pdc, RPGItemsKeys.BASE_ATTRS, hash);
+
+        // === DOUBLE 类型：强化倍率 ===
+        hash = hashDouble(pdc, RPGItemsKeys.ENHANCE_MULT, hash);
+
+        // === DOUBLE 类型：强化基础属性（旧格式）===
+        for (NamespacedKey key : BASE_DOUBLE_KEYS) {
+            hash = hashDouble(pdc, key, hash);
+        }
+
+        // === Socket 系统：7 个槽位 ===
+        // 槽位 0
+        hash = hashString(pdc, RPGItemsKeys.GEM[0], hash);
+        hash = hashString(pdc, RPGItemsKeys.SOCKET[0], hash);
+        hash = hashInteger(pdc, RPGItemsKeys.LORE_IDX[0], hash);
+        // 槽位 1
+        hash = hashString(pdc, RPGItemsKeys.GEM[1], hash);
+        hash = hashString(pdc, RPGItemsKeys.SOCKET[1], hash);
+        hash = hashInteger(pdc, RPGItemsKeys.LORE_IDX[1], hash);
+        // 槽位 2
+        hash = hashString(pdc, RPGItemsKeys.GEM[2], hash);
+        hash = hashString(pdc, RPGItemsKeys.SOCKET[2], hash);
+        hash = hashInteger(pdc, RPGItemsKeys.LORE_IDX[2], hash);
+        // 槽位 3
+        hash = hashString(pdc, RPGItemsKeys.GEM[3], hash);
+        hash = hashString(pdc, RPGItemsKeys.SOCKET[3], hash);
+        hash = hashInteger(pdc, RPGItemsKeys.LORE_IDX[3], hash);
+        // 槽位 4
+        hash = hashString(pdc, RPGItemsKeys.GEM[4], hash);
+        hash = hashString(pdc, RPGItemsKeys.SOCKET[4], hash);
+        hash = hashInteger(pdc, RPGItemsKeys.LORE_IDX[4], hash);
+        // 槽位 5
+        hash = hashString(pdc, RPGItemsKeys.GEM[5], hash);
+        hash = hashString(pdc, RPGItemsKeys.SOCKET[5], hash);
+        hash = hashInteger(pdc, RPGItemsKeys.LORE_IDX[5], hash);
+        // 槽位 6
+        hash = hashString(pdc, RPGItemsKeys.GEM[6], hash);
+        hash = hashString(pdc, RPGItemsKeys.SOCKET[6], hash);
+        hash = hashInteger(pdc, RPGItemsKeys.LORE_IDX[6], hash);
+
+        // === 旧格式 DOUBLE 属性（向后兼容已有物品）===
+        for (NamespacedKey key : OLD_DOUBLE_KEYS) {
+            hash = hashDouble(pdc, key, hash);
+        }
+
+        return hash;
+    }
+
+    // ================================================================
+    // 类型安全的哈希辅助方法 - 无类型猜测，直接用已知类型读取
+    // ================================================================
+
+    private static int hashString(PersistentDataContainer pdc, NamespacedKey key, int hash) {
+        if (pdc.has(key, PersistentDataType.STRING)) {
+            return hash * PRIME + pdc.get(key, PersistentDataType.STRING).hashCode();
         }
         return hash;
     }
 
-    /**
-     * 完整哈希计算（用于需要精确匹配的场景）
-     *
-     * @param item 装备物品
-     * @return 完整哈希值
-     */
-    public static String calculateFull(ItemStack item) {
-        return calculate(item);
+    private static int hashInteger(PersistentDataContainer pdc, NamespacedKey key, int hash) {
+        if (pdc.has(key, PersistentDataType.INTEGER)) {
+            return hash * PRIME + pdc.get(key, PersistentDataType.INTEGER);
+        }
+        return hash;
+    }
+
+    private static int hashDouble(PersistentDataContainer pdc, NamespacedKey key, int hash) {
+        if (pdc.has(key, PersistentDataType.DOUBLE)) {
+            return hash * PRIME + Double.hashCode(pdc.get(key, PersistentDataType.DOUBLE));
+        }
+        return hash;
+    }
+
+    private static int hashByteArray(PersistentDataContainer pdc, NamespacedKey key, int hash) {
+        if (pdc.has(key, PersistentDataType.BYTE_ARRAY)) {
+            return hash * PRIME + Arrays.hashCode(pdc.get(key, PersistentDataType.BYTE_ARRAY));
+        }
+        return hash;
     }
 }

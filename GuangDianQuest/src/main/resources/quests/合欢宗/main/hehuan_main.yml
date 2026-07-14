@@ -1,0 +1,57 @@
+# ═══════════════════════════════════════════════════════
+#  合欢宗主线任务
+# ═══════════════════════════════════════════════════════
+
+hehuan_m001:
+  name: "情缘初现"
+  type: MAIN
+  questline: hehuan_main
+  order: 1
+  required_level: 1
+  description:
+    - "&d合欢一曲断人肠，红颜薄命亦如霜。"
+    - "&d师姐让你去收集10株情花，修炼媚术。"
+  objectives:
+    - type: COLLECT_ITEM
+      target: "情花"
+      amount: 10
+      description: "收集情花"
+  rewards:
+    money: 50
+    exp: 100
+
+hehuan_m002:
+  name: "红尘炼心"
+  type: MAIN
+  questline: hehuan_main
+  order: 2
+  required_level: 3
+  description:
+    - "&d媚术需在红尘中磨练。"
+    - "&d前往忘忧谷，击败10只魅妖。"
+  objectives:
+    - type: KILL_MOB
+      target: "魅妖"
+      amount: 10
+      description: "击杀魅妖"
+  rewards:
+    money: 100
+    exp: 200
+
+hehuan_m003:
+  name: "合欢试炼"
+  type: MAIN
+  questline: hehuan_main
+  order: 3
+  required_level: 5
+  description:
+    - "&d你的媚术已登堂入室。"
+    - "&d前往合欢殿，完成最终试炼。"
+  objectives:
+    - type: KILL_MOB
+      target: "情魔"
+      amount: 1
+      description: "击败情魔"
+  rewards:
+    money: 300
+    exp: 500

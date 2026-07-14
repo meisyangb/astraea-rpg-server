@@ -18,7 +18,7 @@ repositories {
 
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT'
-    compileOnly files('libs/RPGCore.jar')
+    compileOnly files('../RPGCore/build/libs/RPGCore-1.0.0.jar')
     compileOnly files('libs/GuangDianPoints.jar')
     compileOnly files('libs/PlaceholderAPI.jar')
     compileOnly files('libs/Vault.jar')

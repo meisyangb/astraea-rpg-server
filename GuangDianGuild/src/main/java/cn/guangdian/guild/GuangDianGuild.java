@@ -722,7 +722,7 @@ public class GuangDianGuild extends AbstractRPGPlugin implements Listener, Comma
         public String description = "";
         public String leader;
         public Map<String, GuildMember> members = new ConcurrentHashMap<>();
-        List<String> invites = new ArrayList<>();
+        public List<String> invites = new ArrayList<>();
 
         public Guild(String name, String leader) {
             this.name = name;

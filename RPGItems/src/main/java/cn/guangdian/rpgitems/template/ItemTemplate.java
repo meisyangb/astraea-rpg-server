@@ -122,6 +122,9 @@ public record ItemTemplate(
         // 宝石类型 (用于宝石物品)
         String gemType,
         
+        // 强化石类型 (用于强化石物品)
+        String enhanceStone,
+        
         // 槽位定义 (用于装备物品)
         List<String> sockets
     ) {
@@ -138,7 +141,7 @@ public record ItemTemplate(
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                 0.0, 0.0, 0.0, 0.0, 0.0,
-                0, "", null, null
+                0, "", null, null, null
             );
         }
     }

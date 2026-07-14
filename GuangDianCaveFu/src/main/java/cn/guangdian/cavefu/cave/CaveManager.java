@@ -210,9 +210,34 @@ public class CaveManager {
      */
     public void teleportHome(Player player) {
         Cave cave = dataManager.getCaveByMember(player.getUniqueId());
-        if (cave != null) {
-            player.teleport(cave.getHomeLocation());
+        if (cave == null) {
+            player.sendMessage(plugin.color("<red>你还没有洞府！"));
+            return;
+        }
+
+        // 获取洞府位置
+        org.bukkit.Location homeLoc = cave.getHomeLocation();
+        if (homeLoc == null || homeLoc.getWorld() == null) {
+            player.sendMessage(plugin.color("<red>洞府世界未加载！请尝试重新进入服务器。"));
+            plugin.getLogger().warning("玩家 " + player.getName() + " 洞府世界未加载: " + cave.getWorldName());
+            return;
+        }
+
+        // 检查世界是否已加载
+        if (!org.bukkit.Bukkit.getWorlds().contains(homeLoc.getWorld())) {
+            player.sendMessage(plugin.color("<red>洞府世界正在加载，请稍后再试..."));
+            plugin.getLogger().warning("玩家 " + player.getName() + " 洞府世界不在已加载列表中: " + cave.getWorldName());
+            return;
+        }
+
+        // 执行传送
+        boolean success = player.teleport(homeLoc);
+        if (success) {
             worldManager.onEnterCave(player);
+            player.sendMessage(plugin.color("<green>已传送回洞府！"));
+        } else {
+            player.sendMessage(plugin.color("<red>传送失败！请稍后再试。"));
+            plugin.getLogger().warning("玩家 " + player.getName() + " 传送到洞府失败");
         }
     }
 

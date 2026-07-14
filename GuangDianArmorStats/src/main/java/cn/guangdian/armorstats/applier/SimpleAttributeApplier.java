@@ -115,10 +115,17 @@ public class SimpleAttributeApplier {
         AttributeInstance attr = player.getAttribute(Attribute.MAX_HEALTH);
         if (attr == null) return;
         
+        // 【成熟 RPG 设计】
+        // 1. 先记录当前血量
+        double currentHealth = player.getHealth();
+        
+        // 2. 更新属性（注意：这个过程可能导致血量被 Minecraft 自动截断）
         removeAllModifiers(attr, healthKey);
         attr.setBaseValue(DEFAULT_MAX_HEALTH);
         
         double bonusHealth = stats.getMaxHealth();
+        double newMaxHealth = DEFAULT_MAX_HEALTH; // 先设为基础值
+        
         if (bonusHealth > 0) {
             double effectiveHealth = Math.min(DEFAULT_MAX_HEALTH + bonusHealth, MAX_HEALTH_LIMIT);
             double modifierValue = effectiveHealth - DEFAULT_MAX_HEALTH;
@@ -130,11 +137,25 @@ public class SimpleAttributeApplier {
                 EquipmentSlotGroup.ANY
             );
             attr.addModifier(modifier);
+            newMaxHealth = effectiveHealth;
         }
         
+        // 3. 【核心逻辑】
+        //    - 穿上装备（血量 <= 新上限）：血量保持不变，通过自然回血慢慢恢复
+        //    - 卸下装备（血量 > 新上限）：截断到新上限，至少保留1血防止濒死
+        if (currentHealth > newMaxHealth) {
+            double finalHealth = Math.max(1.0, newMaxHealth);
+            if (!player.isDead() && player.isValid()) {
+                player.setHealth(finalHealth);
+            }
+        }
+        // 注意：如果 currentHealth <= newMaxHealth，不做任何处理
+        // 玩家需要通过自然回血慢慢恢复
+        
         logConfig.logApply(player.getName() + 
-            " 生命上限: " + attr.getValue() + 
-            " (基础:" + DEFAULT_MAX_HEALTH + " + 加成:" + bonusHealth + ")");
+            " 生命上限: " + newMaxHealth + 
+            " (基础:" + DEFAULT_MAX_HEALTH + " + 加成:" + bonusHealth + ")" +
+            " 血量: " + currentHealth + " -> " + (currentHealth > newMaxHealth ? Math.max(1.0, newMaxHealth) : currentHealth));
     }
     
     /**

@@ -1,8 +1,8 @@
 package cn.guangdian.rpgitems.item;
 
 import cn.guangdian.rpgitems.attribute.CompoundAttributeCodec;
+import cn.guangdian.rpgitems.attribute.RPGItemsKeys;
 import cn.guangdian.rpgitems.template.ItemTemplate;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -14,99 +14,6 @@ import org.bukkit.persistence.PersistentDataType;
  * 根据模板创建物品实例，将所有属性存储到 PDC
  */
 public class ItemFactory {
-
-    // PDC Keys - 物品标识
-    private static final NamespacedKey KEY_ID = new NamespacedKey("rpgitems", "id");
-    
-    // PDC Keys - 攻击属性
-    private static final NamespacedKey KEY_ATTACK_MIN = new NamespacedKey("rpgitems", "attack_min");
-    private static final NamespacedKey KEY_ATTACK_MAX = new NamespacedKey("rpgitems", "attack_max");
-    
-    // PDC Keys - 防御属性
-    private static final NamespacedKey KEY_DEFENSE_MIN = new NamespacedKey("rpgitems", "defense_min");
-    private static final NamespacedKey KEY_DEFENSE_MAX = new NamespacedKey("rpgitems", "defense_max");
-    
-    // PDC Keys - 生命属性
-    private static final NamespacedKey KEY_MAX_HEALTH = new NamespacedKey("rpgitems", "max_health");
-    private static final NamespacedKey KEY_HEALTH_REGEN = new NamespacedKey("rpgitems", "health_regen");
-    
-    // PDC Keys - 暴击属性
-    private static final NamespacedKey KEY_CRIT_CHANCE = new NamespacedKey("rpgitems", "crit_chance");
-    private static final NamespacedKey KEY_CRIT_DAMAGE = new NamespacedKey("rpgitems", "crit_damage");
-    
-    // PDC Keys - 生命偷取
-    private static final NamespacedKey KEY_LIFESTEAL_CHANCE = new NamespacedKey("rpgitems", "lifesteal_chance");
-    private static final NamespacedKey KEY_LIFESTEAL_MULTIPLIER = new NamespacedKey("rpgitems", "lifesteal_multiplier");
-    
-    // PDC Keys - 闪避与格挡
-    private static final NamespacedKey KEY_DODGE_CHANCE = new NamespacedKey("rpgitems", "dodge_chance");
-    private static final NamespacedKey KEY_PARRY_CHANCE = new NamespacedKey("rpgitems", "parry_chance");
-    
-    // PDC Keys - 移动速度
-    private static final NamespacedKey KEY_MOVE_SPEED = new NamespacedKey("rpgitems", "move_speed");
-    
-    // PDC Keys - 减伤
-    private static final NamespacedKey KEY_DAMAGE_REDUCTION = new NamespacedKey("rpgitems", "damage_reduction");
-    
-    // PDC Keys - PVP属性
-    private static final NamespacedKey KEY_PVP_ATTACK_MIN = new NamespacedKey("rpgitems", "pvp_attack_min");
-    private static final NamespacedKey KEY_PVP_ATTACK_MAX = new NamespacedKey("rpgitems", "pvp_attack_max");
-    private static final NamespacedKey KEY_PVP_DEFENSE_MIN = new NamespacedKey("rpgitems", "pvp_defense_min");
-    private static final NamespacedKey KEY_PVP_DEFENSE_MAX = new NamespacedKey("rpgitems", "pvp_defense_max");
-    
-    // PDC Keys - 暴击抵抗
-    private static final NamespacedKey KEY_CRIT_RESIST = new NamespacedKey("rpgitems", "crit_resist");
-    private static final NamespacedKey KEY_CRIT_DAMAGE_RESIST = new NamespacedKey("rpgitems", "crit_damage_resist");
-    
-    // PDC Keys - 吸血抵抗
-    private static final NamespacedKey KEY_LIFESTEAL_RESIST = new NamespacedKey("rpgitems", "lifesteal_resist");
-    
-    // PDC Keys - 护甲与穿透
-    private static final NamespacedKey KEY_ARMOR = new NamespacedKey("rpgitems", "armor");
-    private static final NamespacedKey KEY_ARMOR_STRENGTH = new NamespacedKey("rpgitems", "armor_strength");
-    private static final NamespacedKey KEY_ARMOR_PENETRATION = new NamespacedKey("rpgitems", "armor_penetration");
-    private static final NamespacedKey KEY_DEFENSE_PENETRATION = new NamespacedKey("rpgitems", "defense_penetration");
-    
-    // PDC Keys - 伤害反弹
-    private static final NamespacedKey KEY_DAMAGE_REFLECT = new NamespacedKey("rpgitems", "damage_reflect");
-    private static final NamespacedKey KEY_REFLECT_RATIO = new NamespacedKey("rpgitems", "reflect_ratio");
-    
-    // PDC Keys - 状态效果
-    private static final NamespacedKey KEY_POISON_CHANCE = new NamespacedKey("rpgitems", "poison_chance");
-    private static final NamespacedKey KEY_FREEZE_CHANCE = new NamespacedKey("rpgitems", "freeze_chance");
-    private static final NamespacedKey KEY_BLIND_CHANCE = new NamespacedKey("rpgitems", "blind_chance");
-    private static final NamespacedKey KEY_BURN_CHANCE = new NamespacedKey("rpgitems", "burn_chance");
-    private static final NamespacedKey KEY_SCORCH_CHANCE = new NamespacedKey("rpgitems", "scorch_chance");
-    private static final NamespacedKey KEY_IGNITE_CHANCE = new NamespacedKey("rpgitems", "ignite_chance");
-    private static final NamespacedKey KEY_SLOW_CHANCE = new NamespacedKey("rpgitems", "slow_chance");
-    
-    // PDC Keys - 环境抗性
-    private static final NamespacedKey KEY_FIRE_RESIST = new NamespacedKey("rpgitems", "fire_resist");
-    private static final NamespacedKey KEY_FALL_RESIST = new NamespacedKey("rpgitems", "fall_resist");
-    private static final NamespacedKey KEY_DROWNING_RESIST = new NamespacedKey("rpgitems", "drowning_resist");
-    private static final NamespacedKey KEY_POISON_RESIST = new NamespacedKey("rpgitems", "poison_resist");
-    private static final NamespacedKey KEY_WITHER_RESIST = new NamespacedKey("rpgitems", "wither_resist");
-    private static final NamespacedKey KEY_LAVA_RESIST = new NamespacedKey("rpgitems", "lava_resist");
-    private static final NamespacedKey KEY_MAGIC_RESIST = new NamespacedKey("rpgitems", "magic_resist");
-    private static final NamespacedKey KEY_EXPLOSION_RESIST = new NamespacedKey("rpgitems", "explosion_resist");
-    private static final NamespacedKey KEY_PROJECTILE_RESIST = new NamespacedKey("rpgitems", "projectile_resist");
-    
-    // PDC Keys - 其他属性
-    private static final NamespacedKey KEY_KNOCKBACK_RESIST = new NamespacedKey("rpgitems", "knockback_resist");
-    private static final NamespacedKey KEY_EXP_BONUS = new NamespacedKey("rpgitems", "exp_bonus");
-    private static final NamespacedKey KEY_HEALTH_REGEN_PERCENT = new NamespacedKey("rpgitems", "health_regen_percent");
-    private static final NamespacedKey KEY_DODGE_REFLECT_CHANCE = new NamespacedKey("rpgitems", "dodge_reflect_chance");
-    private static final NamespacedKey KEY_DODGE_REFLECT_RATIO = new NamespacedKey("rpgitems", "dodge_reflect_ratio");
-    
-    // PDC Keys - 装备等级和职业
-    private static final NamespacedKey KEY_LEVEL = new NamespacedKey("rpgitems", "level");
-    private static final NamespacedKey KEY_REQUIRED_CLASS = new NamespacedKey("rpgitems", "required_class");
-    
-    // PDC Keys - 宝石和槽位
-    private static final NamespacedKey KEY_GEM_TYPE = new NamespacedKey("rpgitems", "gem_type");
-
-    // PDC Keys - 阶位
-    private static final NamespacedKey KEY_TIER = new NamespacedKey("rpgitems", "tier");
 
     /**
      * 根据模板创建物品
@@ -128,7 +35,7 @@ public class ItemFactory {
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
 
         // 物品 ID（必须设置）
-        pdc.set(KEY_ID, PersistentDataType.STRING, template.id());
+        pdc.set(RPGItemsKeys.ID, PersistentDataType.STRING, template.id());
 
         // 3. 将所有属性序列化为复合 byte[]（替代 48 个独立 PDC key）
         ItemTemplate.Attributes attrs = template.attributes();
@@ -184,38 +91,39 @@ public class ItemFactory {
             values[CompoundAttributeCodec.DODGE_REFLECT_RATIO] = attrs.dodgeReflectRatio();
 
             byte[] compoundData = CompoundAttributeCodec.serialize(values);
-            pdc.set(CompoundAttributeCodec.KEY_COMPOUND, PersistentDataType.BYTE_ARRAY, compoundData);
+            pdc.set(RPGItemsKeys.ATTRS, PersistentDataType.BYTE_ARRAY, compoundData);
 
             // 装备等级（必须设置，即使为0）
-            pdc.set(KEY_LEVEL, PersistentDataType.INTEGER, attrs.level());
+            pdc.set(RPGItemsKeys.LEVEL, PersistentDataType.INTEGER, attrs.level());
 
             // 需要职业（必须设置，即使为空）
             if (attrs.requiredClass() != null && !attrs.requiredClass().isEmpty()) {
-                pdc.set(KEY_REQUIRED_CLASS, PersistentDataType.STRING, attrs.requiredClass());
+                pdc.set(RPGItemsKeys.REQUIRED_CLASS, PersistentDataType.STRING, attrs.requiredClass());
             }
-            
+
             // 宝石类型（用于宝石物品）
             if (attrs.gemType() != null && !attrs.gemType().isEmpty()) {
-                pdc.set(KEY_GEM_TYPE, PersistentDataType.STRING, attrs.gemType());
+                pdc.set(RPGItemsKeys.GEM_TYPE, PersistentDataType.STRING, attrs.gemType());
             }
-            
+
+            // 强化石类型（用于强化石物品）
+            if (attrs.enhanceStone() != null && !attrs.enhanceStone().isEmpty()) {
+                pdc.set(RPGItemsKeys.ENHANCE_STONE, PersistentDataType.STRING, attrs.enhanceStone());
+            }
+
             // 槽位定义（用于装备物品）
             if (attrs.sockets() != null && !attrs.sockets().isEmpty()) {
-                for (int i = 0; i < attrs.sockets().size(); i++) {
+                for (int i = 0; i < attrs.sockets().size() && i < 7; i++) {
                     String socketType = attrs.sockets().get(i);
-                    NamespacedKey socketKey = new NamespacedKey("rpgitems", "socket_" + i);
-                    pdc.set(socketKey, PersistentDataType.STRING, socketType);
-
-                    // 初始化空宝石槽
-                    NamespacedKey gemKey = new NamespacedKey("rpgitems", "gem_" + i);
-                    pdc.set(gemKey, PersistentDataType.STRING, "");
+                    pdc.set(RPGItemsKeys.SOCKET[i], PersistentDataType.STRING, socketType);
+                    pdc.set(RPGItemsKeys.GEM[i], PersistentDataType.STRING, "");
                 }
             }
         }
 
         // 5. 存储阶位到 PDC (用于分解匹配)
         if (template.tier() != null && !template.tier().isEmpty()) {
-            pdc.set(KEY_TIER, PersistentDataType.STRING, template.tier());
+            pdc.set(RPGItemsKeys.TIER, PersistentDataType.STRING, template.tier());
         }
 
         // 4. 应用选项
@@ -246,8 +154,8 @@ public class ItemFactory {
             return null;
         }
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
-        if (pdc.has(KEY_ID, PersistentDataType.STRING)) {
-            return pdc.get(KEY_ID, PersistentDataType.STRING);
+        if (pdc.has(RPGItemsKeys.ID, PersistentDataType.STRING)) {
+            return pdc.get(RPGItemsKeys.ID, PersistentDataType.STRING);
         }
         return null;
     }
@@ -264,8 +172,8 @@ public class ItemFactory {
             return null;
         }
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
-        if (pdc.has(KEY_TIER, PersistentDataType.STRING)) {
-            return pdc.get(KEY_TIER, PersistentDataType.STRING);
+        if (pdc.has(RPGItemsKeys.TIER, PersistentDataType.STRING)) {
+            return pdc.get(RPGItemsKeys.TIER, PersistentDataType.STRING);
         }
         return null;
     }

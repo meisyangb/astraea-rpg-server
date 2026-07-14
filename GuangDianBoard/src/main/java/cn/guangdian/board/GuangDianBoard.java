@@ -394,10 +394,25 @@ public class GuangDianBoard extends AbstractRPGPlugin implements Listener {
             return;
         }
         
-        final long refreshPeriod = Math.max(1L, refreshInterval / 50);
+        // 节流机制：最小刷新间隔不低于 500ms (10tick)，避免过于频繁刷新
+        final long refreshPeriod = Math.max(10L, refreshInterval / 50);
+        
         refreshTaskId = scheduler.runSyncRepeating(() -> {
             if (!config.getBoolean("enabled", true)) return;
             
+            // 节流优化：如果脏标记机制启用，只刷新脏玩家
+            if (dirtyFlagEnabled && !dirtyPlayers.isEmpty()) {
+                // 只刷新标记为脏的玩家，减少不必要的刷新
+                for (UUID playerId : dirtyPlayers) {
+                    Player player = Bukkit.getPlayer(playerId);
+                    if (player != null && player.isOnline() && shouldShowBoard(player)) {
+                        updateBoard(player);
+                    }
+                }
+                return;
+            }
+            
+            // 脏标记机制禁用或没有脏玩家时，执行全量刷新（作为兜底）
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (shouldShowBoard(player)) {
                     updateBoard(player);

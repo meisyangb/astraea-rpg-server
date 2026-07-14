@@ -1,0 +1,24 @@
+feat: PDC 复合存储优化 + 副本系统重构 + 新增插件
+
+## PDC 存储优化
+- 将 RPGItems 物品的 48 个独立 PDC DOUBLE key 序列化为单个 byte[] (rpgitems:attrs)
+- 新增 CompoundAttributeCodec (RPGItems / ArmorStats / Enhance 各一份)
+- ItemFactory: 48 次 pdc.set → 1 次序列化写入
+- PDCAttributeReader (ArmorStats/RPGItems/Socket): 优先读复合格式，回退旧格式（向后兼容）
+- EnhanceAttributeHelper: 读复合→改倍率→序列化写回
+- 修复 EquipmentHash: pdc.get 先 has() 检查类型，新增 BYTE_ARRAY 支持
+
+## 副本系统重构
+- 新增 MapInstanceManager (多地图实例管理，支持 F1 等)
+- 删除 WorldInstanceManager，重构为更灵活的实例管理
+- 完善 TemplateLoader / StageLoader / SessionManager
+
+## 新增插件
+- GuangDianChunkTrim: 区块裁剪工具
+- GuangDianNetOpt: 网络优化
+
+## 其他更新
+- 各插件 build.gradle 规范化
+- 新增 gradle 配置: settings.gradle, gradle.properties
+- Guild SQLiteStorage 持久化
+- 修复多处源码警告

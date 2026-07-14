@@ -1,0 +1,211 @@
+# =====================================================
+# GuangDianSect 修仙门派系统配置文件
+# =====================================================
+
+# 门派配置
+sects:
+  # 青云宗 - 剑修，强化武器变强
+  qingyun:
+    name: "青云宗"
+    type: "正道"
+    element: "剑"
+    description: "青云直上九万里，剑气纵横天地间。青云宗以剑道著称，弟子通过强化武器获得力量。"
+    color: "<#55FFFF>"
+    icon: DIAMOND_SWORD
+    # 变强模式配置
+    power_mode:
+      type: "enhance_weapon"  # 强化武器变强
+      contribution_per_enhance: 10  # 每次强化获得贡献值
+      bonus_per_level: 5  # 每级强化额外奖励
+      
+  # 合欢宗 - 魔道媚术，结婚次数越多越强
+  hehuan:
+    name: "合欢宗"
+    type: "魔道"
+    element: "魅"
+    description: "合欢一曲断人肠，红颜薄命亦如霜。合欢宗弟子通过婚姻羁绊获得力量，结缘越多越强。"
+    color: "<#FF55FF>"
+    icon: NETHER_STAR
+    power_mode:
+      type: "marriage"  # 结婚变强
+      contribution_per_marriage: 100  # 每次结婚获得贡献值
+      bonus_per_spouse_level: 20  # 配偶等级加成
+      
+  # 天音寺 - 佛门正道，治疗救人变强
+  tianyin:
+    name: "天音寺"
+    type: "佛门"
+    element: "佛"
+    description: "天音梵唱度众生，慈悲为怀济世人。天音寺弟子通过治疗他人积累功德获得力量。"
+    color: "<#FFFF55>"
+    icon: GOLDEN_APPLE
+    power_mode:
+      type: "heal"  # 治疗变强
+      contribution_per_heal: 1  # 每恢复1点生命获得贡献值
+      min_heal_amount: 10  # 最小治疗量才计算
+      contribution_cap_per_action: 50  # 每次治疗最大贡献值
+      
+  # 焚香谷 - 火系正道，造成伤害变强
+  fenxiang:
+    name: "焚香谷"
+    type: "正道"
+    element: "火"
+    description: "焚香谷中火云涌，烈焰焚天震九州。焚香谷弟子通过战斗积累经验，越战越强。"
+    color: "<#FF5555>"
+    icon: BLAZE_POWDER
+    power_mode:
+      type: "damage"  # 伤害变强
+      contribution_per_damage: 1  # 每10点伤害获得1贡献值
+      damage_divisor: 10  # 伤害除数
+      mob_bonus: 1  # 怪物伤害额外倍率
+      boss_bonus: 5  # BOSS伤害额外倍率
+      
+  # 鬼王宗 - 鬼道魔门，杀人变强
+  guiwang:
+    name: "鬼王宗"
+    type: "魔道"
+    element: "鬼"
+    description: "鬼王宗内鬼气森，亡魂渡引祸众生。鬼王宗弟子通过收割灵魂获得力量，杀敌越多越强。"
+    color: "<#555555>"
+    icon: SOUL_SAND
+    power_mode:
+      type: "kill"  # 杀人变强
+      contribution_per_player_kill: 50  # 击杀玩家获得贡献值
+      contribution_per_mob_kill: 5  # 击杀怪物获得贡献值
+      contribution_per_boss_kill: 100  # 击杀BOSS获得贡献值
+      pvp_bonus: 2  # PVP击杀额外倍率
+      
+  # 长生堂 - 炼丹世家，炼丹变强
+  changsheng:
+    name: "长生堂"
+    type: "世家"
+    element: "丹"
+    description: "长生堂中炼灵丹，起死回生亦不难。长生堂弟子通过炼制丹药积累医术，丹成则力增。"
+    color: "<#55FF55>"
+    icon: BREWING_STAND
+    power_mode:
+      type: "alchemy"  # 炼丹变强
+      contribution_per_potion_brew: 10  # 酿造药水获得贡献值
+      contribution_per_custom_item: 30  # 炼制自定义丹药获得贡献值
+      tier_bonus_multiplier: 2  # 高级丹药倍率
+
+# 职位配置 (从低到高)
+ranks:
+  waomen_dizi:
+    name: "外门弟子"
+    level: 1
+    permission: ""
+    contribution_needed: 0
+    # 职位加成
+    bonuses:
+      damage_bonus: 0
+      health_bonus: 0
+      exp_bonus: 0
+  neimen_dizi:
+    name: "内门弟子"
+    level: 2
+    permission: ""
+    contribution_needed: 100
+    bonuses:
+      damage_bonus: 5
+      health_bonus: 10
+      exp_bonus: 5
+  chuanren_dizi:
+    name: "传人弟子"
+    level: 3
+    permission: ""
+    contribution_needed: 500
+    bonuses:
+      damage_bonus: 10
+      health_bonus: 20
+      exp_bonus: 10
+  zhenren:
+    name: "真人"
+    level: 4
+    permission: ""
+    contribution_needed: 1500
+    bonuses:
+      damage_bonus: 15
+      health_bonus: 30
+      exp_bonus: 15
+  zhanglao:
+    name: "长老"
+    level: 5
+    permission: "guangdian.sect.elder"
+    contribution_needed: 5000
+    bonuses:
+      damage_bonus: 20
+      health_bonus: 50
+      exp_bonus: 20
+  hufa:
+    name: "护法"
+    level: 6
+    permission: "guangdian.sect.protector"
+    contribution_needed: 10000
+    bonuses:
+      damage_bonus: 30
+      health_bonus: 80
+      exp_bonus: 30
+  fuzongzhu:
+    name: "副宗主"
+    level: 7
+    permission: "guangdian.sect.viceleader"
+    contribution_needed: 25000
+    bonuses:
+      damage_bonus: 50
+      health_bonus: 120
+      exp_bonus: 50
+  zongzhu:
+    name: "宗主"
+    level: 8
+    permission: "guangdian.sect.leader"
+    contribution_needed: 50000
+    bonuses:
+      damage_bonus: 80
+      health_bonus: 200
+      exp_bonus: 80
+
+# 设置
+settings:
+  # 是否允许玩家退出门派
+  allow_leave: true
+  # 退出门派冷却时间(秒)
+  leave_cooldown: 86400
+  # 门派聊天前缀
+  chat_prefix: "<gray>[<gold>宗门<gray>] "
+  # GUI标题
+  gui_title: "选择你的门派"
+  # 最大贡献值存储
+  max_contribution: 100000
+  # 新玩家自动触发门派选择GUI (已禁用，玩家需要手动使用 /sect gui)
+  auto_open_gui_for_new_player: false
+  # 贡献值提示频率 (每获得多少贡献提示一次)
+  contribution_notify_interval: 50
+
+# 消息配置
+messages:
+  prefix: "<gold>[宗门] <white>"
+  player-only: "<red>该命令只能由玩家执行!"
+  no-permission: "<red>你没有权限执行此操作!"
+  already-in-sect: "<red>你已经加入了门派!"
+  not-in-sect: "<red>你还没有加入门派!"
+  sect-not-found: "<red>门派不存在!"
+  join-success: "<green>你成功加入了 {sect}!"
+  leave-success: "<yellow>你已退出了 {sect} 门派!"
+  leave-cooldown: "<red>你需要等待 {time} 秒才能再次退出门派!"
+  sect-info-title: "<gold>========== {sect} 信息 =========="
+  sect-info-type: "<yellow>门派类型: <white>{type}"
+  sect-info-power: "<yellow>变强方式: <white>{power}"
+  sect-info-desc: "<yellow>门派简介: <white>{description}"
+  sect-info-members: "<yellow>门派人数: <white>{count}"
+  sect-info-contribution: "<yellow>你的贡献: <white>{contribution}"
+  rank-up: "<green>恭喜! 你的门派职位晋升为 {rank}!"
+  rank-set: "<green>已将 {player} 的职位设置为 {rank}!"
+  contribution-add: "<green>你获得了 {amount} 点门派贡献!"
+  contribution-notify: "<yellow>[{sect}] 贡献值 +{amount} (累计: {total})"
+  power-tip-qingyun: "<aqua>强化武器可获得门派贡献!"
+  power-tip-hehuan: "<light_purple>结婚可获得门派贡献!"
+  power-tip-tianyin: "<yellow>治疗他人可获得门派贡献!"
+  power-tip-fenxiang: "<red>战斗伤害可获得门派贡献!"
+  power-tip-guiwang: "<dark_gray>击杀敌人可获得门派贡献!"
+  power-tip-changsheng: "<green>炼制丹药可获得门派贡献!"

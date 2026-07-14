@@ -13,6 +13,8 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 public class MobSpawner {
@@ -21,6 +23,8 @@ public class MobSpawner {
     private final Logger log;
     private final NamespacedKey mobIdKey;
     private final MiniMessage mm = MiniMessage.miniMessage();
+    // BossBar 任务 ID 映射，用于在实体死亡时取消任务
+    private final Map<LivingEntity, Integer> bossBarTaskIds = new ConcurrentHashMap<>();
 
     public MobSpawner(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -86,9 +90,16 @@ public class MobSpawner {
             bar.setProgress(1.0);
             bar.setVisible(true);
 
-            // 动态更新血量 + 目标
-            plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
-                if (!entity.isValid() || entity.isDead()) { bar.removeAll(); return; }
+            // 动态更新血量 + 目标，保存任务 ID 以便在实体死亡时取消
+            final int[] taskIdHolder = new int[1];
+            taskIdHolder[0] = plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
+                if (!entity.isValid() || entity.isDead()) {
+                    bar.removeAll();
+                    // 取消自身任务并清理映射
+                    plugin.getServer().getScheduler().cancelTask(taskIdHolder[0]);
+                    bossBarTaskIds.remove(entity);
+                    return;
+                }
                 bar.setProgress(Math.max(0, entity.getHealth() / entity.getMaxHealth()));
                 bar.setTitle(buildTitle(titleTemplate, t.displayName(), entity));
 
@@ -98,7 +109,10 @@ public class MobSpawner {
                     if (d < 2500 && !viewers.contains(p)) bar.addPlayer(p);
                     else if (d > 3600 && viewers.contains(p)) bar.removePlayer(p);
                 }
-            }, 10, 20);
+            }, 10, 20).getTaskId();
+            
+            // 保存任务 ID
+            bossBarTaskIds.put(entity, taskIdHolder[0]);
         } catch (Exception e) { log.warning("BossBar 创建失败: " + e.getMessage()); }
     }
 

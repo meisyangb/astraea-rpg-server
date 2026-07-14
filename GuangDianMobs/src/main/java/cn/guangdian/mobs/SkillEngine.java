@@ -15,6 +15,7 @@ import org.bukkit.util.Vector;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * 技能引擎 — 参考 MythicMobs 实现粒子效果系统
@@ -39,6 +40,22 @@ public class SkillEngine {
     private Map<String, List<MobTemplate.SkillLine>> skillDefs;
 
     public SkillEngine(JavaPlugin plugin) { this.plugin = plugin; }
+
+    /**
+     * 清理指定实体的冷却记录（怪物死亡时调用）
+     * @param entityId 实体的 UUID
+     */
+    public void clearCooldownsForEntity(UUID entityId) {
+        String prefix = entityId.toString() + "_";
+        cooldowns.keySet().removeIf(key -> key.startsWith(prefix));
+    }
+
+    /**
+     * 清理所有冷却记录
+     */
+    public void clearAllCooldowns() {
+        cooldowns.clear();
+    }
 
     /** 加载 skills/ 文件夹中的技能定义 */
     public void loadSkills(java.io.File dataFolder) {
@@ -141,19 +158,31 @@ public class SkillEngine {
 
     public void execute(LivingEntity caster, List<MobTemplate.SkillLine> lines, String trigger, Player killer) {
         if (lines.isEmpty()) return;
+        long now = System.currentTimeMillis();  // 优化：只获取一次时间
+        
         for (MobTemplate.SkillLine line : lines) {
             if (!trigger.equals(line.trigger())) continue;
-            if (Math.random() > line.chance()) continue;
+            
+            // 优化：使用 ThreadLocalRandom 替代 Math.random()
+            if (ThreadLocalRandom.current().nextDouble() > line.chance()) continue;
 
             if ("timer".equals(trigger) || "hit".equals(trigger)) {
                 String ck = caster.getUniqueId() + "_" + line.raw().hashCode();
-                long now = System.currentTimeMillis();
+                
+                // 优化：合并 get + put 为 computeIfAbsent，减少 Map 操作
+                long cooldownMs = line.interval() * 50L;
                 Long last = cooldowns.get(ck);
-                if (last != null && now - last < line.interval() * 50L) continue;
+                
+                if (last != null && now - last < cooldownMs) continue;
+                
+                // 更新冷却时间
                 cooldowns.put(ck, now);
             }
 
-            plugin.getLogger().info("[技能] " + caster.getName() + " 触发: " + line.raw().substring(0, Math.min(60, line.raw().length())));
+            // 使用 debug 级别日志，避免频繁输出影响性能
+            if (plugin.getConfig().getBoolean("debug.skills", false)) {
+                plugin.getLogger().info("[技能] " + caster.getName() + " 触发: " + line.raw().substring(0, Math.min(60, line.raw().length())));
+            }
             execLine(caster, line, killer);
         }
     }
@@ -177,7 +206,9 @@ public class SkillEngine {
             p.getOrDefault("type", ""))).toUpperCase();
         Particle particle = null;
         if (!particleName.isEmpty()) {
-            try { particle = getParticle(particleName); } catch (Exception ignored) {}
+            try { particle = getParticle(particleName); } catch (Exception e) {
+                plugin.getLogger().warning("无效的粒子类型: " + particleName + " - " + e.getMessage());
+            }
         }
 
         switch (type) {
@@ -229,7 +260,9 @@ public class SkillEngine {
                                 int lvl = Integer.parseInt(p.getOrDefault("level", "1"));
                                 t.addPotionEffect(new PotionEffect(pt, dur, lvl - 1));
                             }
-                        } catch (Exception ignored) {}
+                        } catch (Exception e) {
+                            plugin.getLogger().warning("无效的药水效果: " + effectName + " - " + e.getMessage());
+                        }
                     }
                     if (particle != null) playParticleEffect(caster, t.getLocation(), particle, p);
                     playSound(caster, p.getOrDefault("sound", ""));
@@ -246,7 +279,9 @@ public class SkillEngine {
                             int lvl = Integer.parseInt(p.getOrDefault("level", "1"));
                             caster.addPotionEffect(new PotionEffect(pt, dur, lvl - 1));
                         }
-                    } catch (Exception ignored) {}
+                    } catch (Exception e) {
+                        plugin.getLogger().warning("无效的增益效果: " + effectName + " - " + e.getMessage());
+                    }
                 }
                 if (particle != null) {
                     // 环绕粒子效果

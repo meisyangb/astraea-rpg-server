@@ -1,6 +1,7 @@
 package cn.guangdian.enhance.util;
 
-import org.bukkit.NamespacedKey;
+import cn.guangdian.rpgitems.attribute.CompoundAttributeCodec;
+import cn.guangdian.rpgitems.attribute.RPGItemsKeys;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -11,78 +12,6 @@ import org.bukkit.persistence.PersistentDataType;
  * 直接通过PDC操作物品属性，不依赖外部API
  */
 public class EnhanceAttributeHelper {
-
-    // 物品标识Key（用于检测是否为RPGItems物品）
-    private static final NamespacedKey KEY_ID = new NamespacedKey("rpgitems", "id");
-    
-    // 攻击属性
-    private static final NamespacedKey KEY_ATTACK_MIN = new NamespacedKey("rpgitems", "attack_min");
-    private static final NamespacedKey KEY_ATTACK_MAX = new NamespacedKey("rpgitems", "attack_max");
-    
-    // 防御属性
-    private static final NamespacedKey KEY_DEFENSE_MIN = new NamespacedKey("rpgitems", "defense_min");
-    private static final NamespacedKey KEY_DEFENSE_MAX = new NamespacedKey("rpgitems", "defense_max");
-    
-    // 生命属性
-    private static final NamespacedKey KEY_MAX_HEALTH = new NamespacedKey("rpgitems", "max_health");
-    private static final NamespacedKey KEY_HEALTH_REGEN = new NamespacedKey("rpgitems", "health_regen");
-    
-    // 暴击属性
-    private static final NamespacedKey KEY_CRIT_CHANCE = new NamespacedKey("rpgitems", "crit_chance");
-    private static final NamespacedKey KEY_CRIT_DAMAGE = new NamespacedKey("rpgitems", "crit_damage");
-    
-    // 生命偷取
-    private static final NamespacedKey KEY_LIFESTEAL_CHANCE = new NamespacedKey("rpgitems", "lifesteal_chance");
-    private static final NamespacedKey KEY_LIFESTEAL_MULTIPLIER = new NamespacedKey("rpgitems", "lifesteal_multiplier");
-    
-    // 闪避与格挡
-    private static final NamespacedKey KEY_DODGE_CHANCE = new NamespacedKey("rpgitems", "dodge_chance");
-    private static final NamespacedKey KEY_PARRY_CHANCE = new NamespacedKey("rpgitems", "parry_chance");
-    
-    // 移动速度
-    private static final NamespacedKey KEY_MOVE_SPEED = new NamespacedKey("rpgitems", "move_speed");
-    
-    // 减伤
-    private static final NamespacedKey KEY_DAMAGE_REDUCTION = new NamespacedKey("rpgitems", "damage_reduction");
-    
-    // PVP属性
-    private static final NamespacedKey KEY_PVP_ATTACK_MIN = new NamespacedKey("rpgitems", "pvp_attack_min");
-    private static final NamespacedKey KEY_PVP_ATTACK_MAX = new NamespacedKey("rpgitems", "pvp_attack_max");
-    private static final NamespacedKey KEY_PVP_DEFENSE_MIN = new NamespacedKey("rpgitems", "pvp_defense_min");
-    private static final NamespacedKey KEY_PVP_DEFENSE_MAX = new NamespacedKey("rpgitems", "pvp_defense_max");
-    
-    // 暴击抵抗
-    private static final NamespacedKey KEY_CRIT_RESIST = new NamespacedKey("rpgitems", "crit_resist");
-    private static final NamespacedKey KEY_CRIT_DAMAGE_RESIST = new NamespacedKey("rpgitems", "crit_damage_resist");
-    
-    // 吸血抵抗
-    private static final NamespacedKey KEY_LIFESTEAL_RESIST = new NamespacedKey("rpgitems", "lifesteal_resist");
-    
-    // 护甲与穿透
-    private static final NamespacedKey KEY_ARMOR = new NamespacedKey("rpgitems", "armor");
-    private static final NamespacedKey KEY_ARMOR_STRENGTH = new NamespacedKey("rpgitems", "armor_strength");
-    private static final NamespacedKey KEY_ARMOR_PENETRATION = new NamespacedKey("rpgitems", "armor_penetration");
-    private static final NamespacedKey KEY_DEFENSE_PENETRATION = new NamespacedKey("rpgitems", "defense_penetration");
-    
-    // 伤害反弹
-    private static final NamespacedKey KEY_DAMAGE_REFLECT = new NamespacedKey("rpgitems", "damage_reflect");
-    private static final NamespacedKey KEY_REFLECT_RATIO = new NamespacedKey("rpgitems", "reflect_ratio");
-    
-    // 状态效果（不参与强化）
-    // 环境抗性（不参与强化）
-    // 其他属性（不参与强化）
-    
-    // 基础属性存储Key（用于保存原始属性值）
-    private static final NamespacedKey KEY_BASE_ATTACK_MIN = new NamespacedKey("rpgitems", "base_attack_min");
-    private static final NamespacedKey KEY_BASE_ATTACK_MAX = new NamespacedKey("rpgitems", "base_attack_max");
-    private static final NamespacedKey KEY_BASE_DEFENSE_MIN = new NamespacedKey("rpgitems", "base_defense_min");
-    private static final NamespacedKey KEY_BASE_DEFENSE_MAX = new NamespacedKey("rpgitems", "base_defense_max");
-    private static final NamespacedKey KEY_BASE_MAX_HEALTH = new NamespacedKey("rpgitems", "base_max_health");
-    private static final NamespacedKey KEY_BASE_CRIT_CHANCE = new NamespacedKey("rpgitems", "base_crit_chance");
-    private static final NamespacedKey KEY_BASE_CRIT_DAMAGE = new NamespacedKey("rpgitems", "base_crit_damage");
-    
-    // 当前倍率Key
-    private static final NamespacedKey KEY_CURRENT_MULTIPLIER = new NamespacedKey("rpgitems", "enhance_multiplier");
 
     /**
      * 检测物品是否可强化
@@ -97,7 +26,7 @@ public class EnhanceAttributeHelper {
             return false;
         }
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
-        return pdc.has(KEY_ID, PersistentDataType.STRING);
+        return pdc.has(RPGItemsKeys.ID, PersistentDataType.STRING);
     }
     
     /**
@@ -112,9 +41,8 @@ public class EnhanceAttributeHelper {
             return null;
         }
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
-        NamespacedKey KEY_TIER = new NamespacedKey("rpgitems", "tier");
-        if (pdc.has(KEY_TIER, PersistentDataType.STRING)) {
-            return pdc.get(KEY_TIER, PersistentDataType.STRING);
+        if (pdc.has(RPGItemsKeys.TIER, PersistentDataType.STRING)) {
+            return pdc.get(RPGItemsKeys.TIER, PersistentDataType.STRING);
         }
         return null;
     }
@@ -167,14 +95,14 @@ public class EnhanceAttributeHelper {
         } else {
             // 旧格式回退（向后兼容已有物品）
             // 首次强化时保存基础属性
-            if (!pdc.has(KEY_BASE_ATTACK_MIN, PersistentDataType.DOUBLE)) {
+            if (!pdc.has(RPGItemsKeys.BASE_ATTACK_MIN, PersistentDataType.DOUBLE)) {
                 saveBaseAttributes(pdc);
             }
             updateAttributesWithMultiplier(pdc, multiplier);
         }
 
         // 保存当前倍率
-        pdc.set(KEY_CURRENT_MULTIPLIER, PersistentDataType.DOUBLE, multiplier);
+        pdc.set(RPGItemsKeys.ENHANCE_MULT, PersistentDataType.DOUBLE, multiplier);
         item.setItemMeta(meta);
     }
     
@@ -199,8 +127,8 @@ public class EnhanceAttributeHelper {
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
 
         // 检查当前倍率是否匹配
-        if (pdc.has(KEY_CURRENT_MULTIPLIER, PersistentDataType.DOUBLE)) {
-            double currentMult = pdc.get(KEY_CURRENT_MULTIPLIER, PersistentDataType.DOUBLE);
+        if (pdc.has(RPGItemsKeys.ENHANCE_MULT, PersistentDataType.DOUBLE)) {
+            double currentMult = pdc.get(RPGItemsKeys.ENHANCE_MULT, PersistentDataType.DOUBLE);
             if (Math.abs(currentMult - correctMultiplier) < 0.001) {
                 return false;
             }
@@ -229,13 +157,13 @@ public class EnhanceAttributeHelper {
             pdc.set(CompoundAttributeCodec.KEY_COMPOUND, PersistentDataType.BYTE_ARRAY, CompoundAttributeCodec.serialize(attrs));
         } else {
             // 旧格式回退
-            if (!pdc.has(KEY_BASE_ATTACK_MIN, PersistentDataType.DOUBLE)) {
+            if (!pdc.has(RPGItemsKeys.BASE_ATTACK_MIN, PersistentDataType.DOUBLE)) {
                 saveBaseAttributes(pdc);
             }
             updateAttributesWithMultiplier(pdc, correctMultiplier);
         }
 
-        pdc.set(KEY_CURRENT_MULTIPLIER, PersistentDataType.DOUBLE, correctMultiplier);
+        pdc.set(RPGItemsKeys.ENHANCE_MULT, PersistentDataType.DOUBLE, correctMultiplier);
         item.setItemMeta(meta);
         return true;
     }
@@ -245,39 +173,39 @@ public class EnhanceAttributeHelper {
      */
     private static void saveBaseAttributes(PersistentDataContainer pdc) {
         // 攻击
-        if (pdc.has(KEY_ATTACK_MIN, PersistentDataType.DOUBLE)) {
-            pdc.set(KEY_BASE_ATTACK_MIN, PersistentDataType.DOUBLE, 
-                pdc.get(KEY_ATTACK_MIN, PersistentDataType.DOUBLE));
+        if (pdc.has(RPGItemsKeys.ATTACK_MIN, PersistentDataType.DOUBLE)) {
+            pdc.set(RPGItemsKeys.BASE_ATTACK_MIN, PersistentDataType.DOUBLE,
+                pdc.get(RPGItemsKeys.ATTACK_MIN, PersistentDataType.DOUBLE));
         }
-        if (pdc.has(KEY_ATTACK_MAX, PersistentDataType.DOUBLE)) {
-            pdc.set(KEY_BASE_ATTACK_MAX, PersistentDataType.DOUBLE, 
-                pdc.get(KEY_ATTACK_MAX, PersistentDataType.DOUBLE));
+        if (pdc.has(RPGItemsKeys.ATTACK_MAX, PersistentDataType.DOUBLE)) {
+            pdc.set(RPGItemsKeys.BASE_ATTACK_MAX, PersistentDataType.DOUBLE,
+                pdc.get(RPGItemsKeys.ATTACK_MAX, PersistentDataType.DOUBLE));
         }
-        
+
         // 防御
-        if (pdc.has(KEY_DEFENSE_MIN, PersistentDataType.DOUBLE)) {
-            pdc.set(KEY_BASE_DEFENSE_MIN, PersistentDataType.DOUBLE, 
-                pdc.get(KEY_DEFENSE_MIN, PersistentDataType.DOUBLE));
+        if (pdc.has(RPGItemsKeys.DEFENSE_MIN, PersistentDataType.DOUBLE)) {
+            pdc.set(RPGItemsKeys.BASE_DEFENSE_MIN, PersistentDataType.DOUBLE,
+                pdc.get(RPGItemsKeys.DEFENSE_MIN, PersistentDataType.DOUBLE));
         }
-        if (pdc.has(KEY_DEFENSE_MAX, PersistentDataType.DOUBLE)) {
-            pdc.set(KEY_BASE_DEFENSE_MAX, PersistentDataType.DOUBLE, 
-                pdc.get(KEY_DEFENSE_MAX, PersistentDataType.DOUBLE));
+        if (pdc.has(RPGItemsKeys.DEFENSE_MAX, PersistentDataType.DOUBLE)) {
+            pdc.set(RPGItemsKeys.BASE_DEFENSE_MAX, PersistentDataType.DOUBLE,
+                pdc.get(RPGItemsKeys.DEFENSE_MAX, PersistentDataType.DOUBLE));
         }
-        
+
         // 生命
-        if (pdc.has(KEY_MAX_HEALTH, PersistentDataType.DOUBLE)) {
-            pdc.set(KEY_BASE_MAX_HEALTH, PersistentDataType.DOUBLE, 
-                pdc.get(KEY_MAX_HEALTH, PersistentDataType.DOUBLE));
+        if (pdc.has(RPGItemsKeys.MAX_HEALTH, PersistentDataType.DOUBLE)) {
+            pdc.set(RPGItemsKeys.BASE_MAX_HEALTH, PersistentDataType.DOUBLE,
+                pdc.get(RPGItemsKeys.MAX_HEALTH, PersistentDataType.DOUBLE));
         }
-        
+
         // 暴击
-        if (pdc.has(KEY_CRIT_CHANCE, PersistentDataType.DOUBLE)) {
-            pdc.set(KEY_BASE_CRIT_CHANCE, PersistentDataType.DOUBLE, 
-                pdc.get(KEY_CRIT_CHANCE, PersistentDataType.DOUBLE));
+        if (pdc.has(RPGItemsKeys.CRIT_CHANCE, PersistentDataType.DOUBLE)) {
+            pdc.set(RPGItemsKeys.BASE_CRIT_CHANCE, PersistentDataType.DOUBLE,
+                pdc.get(RPGItemsKeys.CRIT_CHANCE, PersistentDataType.DOUBLE));
         }
-        if (pdc.has(KEY_CRIT_DAMAGE, PersistentDataType.DOUBLE)) {
-            pdc.set(KEY_BASE_CRIT_DAMAGE, PersistentDataType.DOUBLE, 
-                pdc.get(KEY_CRIT_DAMAGE, PersistentDataType.DOUBLE));
+        if (pdc.has(RPGItemsKeys.CRIT_DAMAGE, PersistentDataType.DOUBLE)) {
+            pdc.set(RPGItemsKeys.BASE_CRIT_DAMAGE, PersistentDataType.DOUBLE,
+                pdc.get(RPGItemsKeys.CRIT_DAMAGE, PersistentDataType.DOUBLE));
         }
     }
     
@@ -286,39 +214,39 @@ public class EnhanceAttributeHelper {
      */
     private static void updateAttributesWithMultiplier(PersistentDataContainer pdc, double multiplier) {
         // 攻击
-        if (pdc.has(KEY_BASE_ATTACK_MIN, PersistentDataType.DOUBLE)) {
-            double base = pdc.get(KEY_BASE_ATTACK_MIN, PersistentDataType.DOUBLE);
-            pdc.set(KEY_ATTACK_MIN, PersistentDataType.DOUBLE, base * multiplier);
+        if (pdc.has(RPGItemsKeys.BASE_ATTACK_MIN, PersistentDataType.DOUBLE)) {
+            double base = pdc.get(RPGItemsKeys.BASE_ATTACK_MIN, PersistentDataType.DOUBLE);
+            pdc.set(RPGItemsKeys.ATTACK_MIN, PersistentDataType.DOUBLE, base * multiplier);
         }
-        if (pdc.has(KEY_BASE_ATTACK_MAX, PersistentDataType.DOUBLE)) {
-            double base = pdc.get(KEY_BASE_ATTACK_MAX, PersistentDataType.DOUBLE);
-            pdc.set(KEY_ATTACK_MAX, PersistentDataType.DOUBLE, base * multiplier);
+        if (pdc.has(RPGItemsKeys.BASE_ATTACK_MAX, PersistentDataType.DOUBLE)) {
+            double base = pdc.get(RPGItemsKeys.BASE_ATTACK_MAX, PersistentDataType.DOUBLE);
+            pdc.set(RPGItemsKeys.ATTACK_MAX, PersistentDataType.DOUBLE, base * multiplier);
         }
-        
+
         // 防御
-        if (pdc.has(KEY_BASE_DEFENSE_MIN, PersistentDataType.DOUBLE)) {
-            double base = pdc.get(KEY_BASE_DEFENSE_MIN, PersistentDataType.DOUBLE);
-            pdc.set(KEY_DEFENSE_MIN, PersistentDataType.DOUBLE, base * multiplier);
+        if (pdc.has(RPGItemsKeys.BASE_DEFENSE_MIN, PersistentDataType.DOUBLE)) {
+            double base = pdc.get(RPGItemsKeys.BASE_DEFENSE_MIN, PersistentDataType.DOUBLE);
+            pdc.set(RPGItemsKeys.DEFENSE_MIN, PersistentDataType.DOUBLE, base * multiplier);
         }
-        if (pdc.has(KEY_BASE_DEFENSE_MAX, PersistentDataType.DOUBLE)) {
-            double base = pdc.get(KEY_BASE_DEFENSE_MAX, PersistentDataType.DOUBLE);
-            pdc.set(KEY_DEFENSE_MAX, PersistentDataType.DOUBLE, base * multiplier);
+        if (pdc.has(RPGItemsKeys.BASE_DEFENSE_MAX, PersistentDataType.DOUBLE)) {
+            double base = pdc.get(RPGItemsKeys.BASE_DEFENSE_MAX, PersistentDataType.DOUBLE);
+            pdc.set(RPGItemsKeys.DEFENSE_MAX, PersistentDataType.DOUBLE, base * multiplier);
         }
-        
+
         // 生命
-        if (pdc.has(KEY_BASE_MAX_HEALTH, PersistentDataType.DOUBLE)) {
-            double base = pdc.get(KEY_BASE_MAX_HEALTH, PersistentDataType.DOUBLE);
-            pdc.set(KEY_MAX_HEALTH, PersistentDataType.DOUBLE, base * multiplier);
+        if (pdc.has(RPGItemsKeys.BASE_MAX_HEALTH, PersistentDataType.DOUBLE)) {
+            double base = pdc.get(RPGItemsKeys.BASE_MAX_HEALTH, PersistentDataType.DOUBLE);
+            pdc.set(RPGItemsKeys.MAX_HEALTH, PersistentDataType.DOUBLE, base * multiplier);
         }
-        
+
         // 暴击
-        if (pdc.has(KEY_BASE_CRIT_CHANCE, PersistentDataType.DOUBLE)) {
-            double base = pdc.get(KEY_BASE_CRIT_CHANCE, PersistentDataType.DOUBLE);
-            pdc.set(KEY_CRIT_CHANCE, PersistentDataType.DOUBLE, base * multiplier);
+        if (pdc.has(RPGItemsKeys.BASE_CRIT_CHANCE, PersistentDataType.DOUBLE)) {
+            double base = pdc.get(RPGItemsKeys.BASE_CRIT_CHANCE, PersistentDataType.DOUBLE);
+            pdc.set(RPGItemsKeys.CRIT_CHANCE, PersistentDataType.DOUBLE, base * multiplier);
         }
-        if (pdc.has(KEY_BASE_CRIT_DAMAGE, PersistentDataType.DOUBLE)) {
-            double base = pdc.get(KEY_BASE_CRIT_DAMAGE, PersistentDataType.DOUBLE);
-            pdc.set(KEY_CRIT_DAMAGE, PersistentDataType.DOUBLE, base * multiplier);
+        if (pdc.has(RPGItemsKeys.BASE_CRIT_DAMAGE, PersistentDataType.DOUBLE)) {
+            double base = pdc.get(RPGItemsKeys.BASE_CRIT_DAMAGE, PersistentDataType.DOUBLE);
+            pdc.set(RPGItemsKeys.CRIT_DAMAGE, PersistentDataType.DOUBLE, base * multiplier);
         }
     }
     
@@ -334,8 +262,8 @@ public class EnhanceAttributeHelper {
             return 1.0;
         }
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
-        if (pdc.has(KEY_CURRENT_MULTIPLIER, PersistentDataType.DOUBLE)) {
-            return pdc.get(KEY_CURRENT_MULTIPLIER, PersistentDataType.DOUBLE);
+        if (pdc.has(RPGItemsKeys.ENHANCE_MULT, PersistentDataType.DOUBLE)) {
+            return pdc.get(RPGItemsKeys.ENHANCE_MULT, PersistentDataType.DOUBLE);
         }
         return 1.0;
     }

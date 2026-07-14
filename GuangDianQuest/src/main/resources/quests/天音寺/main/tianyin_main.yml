@@ -1,0 +1,57 @@
+# ═══════════════════════════════════════════════════════
+#  天音寺主线任务
+# ═══════════════════════════════════════════════════════
+
+tianyin_m001:
+  name: "皈依佛门"
+  type: MAIN
+  questline: tianyin_main
+  order: 1
+  required_level: 1
+  description:
+    - "&e天音梵唱度众生，慈悲为怀济世人。"
+    - "&e方丈命你前往藏经阁，抄写佛经10卷。"
+  objectives:
+    - type: COLLECT_ITEM
+      target: "佛经"
+      amount: 10
+      description: "抄写佛经"
+  rewards:
+    money: 50
+    exp: 100
+
+tianyin_m002:
+  name: "普度众生"
+  type: MAIN
+  questline: tianyin_main
+  order: 2
+  required_level: 3
+  description:
+    - "&e佛门弟子，当以普度众生为己任。"
+    - "&e前往乱葬岗，超度10只怨灵。"
+  objectives:
+    - type: KILL_MOB
+      target: "怨灵"
+      amount: 10
+      description: "超度怨灵"
+  rewards:
+    money: 100
+    exp: 200
+
+tianyin_m003:
+  name: "天音试炼"
+  type: MAIN
+  questline: tianyin_main
+  order: 3
+  required_level: 5
+  description:
+    - "&e你的佛法已有根基。"
+    - "&e前往天音塔，挑战心魔幻影。"
+  objectives:
+    - type: KILL_MOB
+      target: "心魔幻影"
+      amount: 1
+      description: "击败心魔幻影"
+  rewards:
+    money: 300
+    exp: 500

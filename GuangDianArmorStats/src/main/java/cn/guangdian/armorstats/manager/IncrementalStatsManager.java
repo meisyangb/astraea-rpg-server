@@ -39,6 +39,7 @@ public class IncrementalStatsManager {
     private final SimpleAttributeApplier applier;
     private final PlayerAttributeApplier combatApplier; // 战斗属性应用器
     private final AttributeApplyLogConfig logConfig;
+    private boolean debug = false;
     
     // 槽位枚举
     public enum Slot {
@@ -64,6 +65,14 @@ public class IncrementalStatsManager {
         this.applier = new SimpleAttributeApplier(plugin);
         this.combatApplier = new PlayerAttributeApplier();
         this.logConfig = AttributeApplyLogConfig.getInstance();
+        reloadDebugConfig();
+    }
+
+    /**
+     * 重新加载 debug 配置
+     */
+    public void reloadDebugConfig() {
+        this.debug = plugin.getConfig().getBoolean("debug", false);
     }
     
     // ==================== 槽位变化处理 ====================
@@ -78,7 +87,7 @@ public class IncrementalStatsManager {
     public void onSlotChange(Player player, Slot slot, ItemStack newItem) {
         UUID uuid = player.getUniqueId();
         
-        if (plugin.getConfig().getBoolean("debug", false)) {
+        if (debug) {
             plugin.getLogger().info("[槽位变化] " + player.getName() + " - " + slot.name() +
                 " -> " + (newItem == null ? "AIR" : newItem.getType().name()));
         }
@@ -124,14 +133,14 @@ public class IncrementalStatsManager {
         if (item == null || item.getType().isAir()) {
             // 清除该槽位的属性
             playerSlots.remove(slot);
-            if (plugin.getConfig().getBoolean("debug", false)) {
+            if (debug) {
                 plugin.getLogger().info("[缓存更新] 清除槽位: " + slot.name());
             }
         } else {
             // 解析物品属性并缓存
             PlayerStats slotStats = parseItemStats(item);
             playerSlots.put(slot, slotStats);
-            if (plugin.getConfig().getBoolean("debug", false)) {
+            if (debug) {
                 plugin.getLogger().info("[缓存更新] 更新槽位: " + slot.name() +
                     ", 攻击: " + slotStats.getMinAttack() + "-" + slotStats.getMaxAttack() +
                     ", 生命: " + slotStats.getMaxHealth());
@@ -157,7 +166,7 @@ public class IncrementalStatsManager {
         stats.addStats(gemAttrs);
         
         // 输出添加后的属性
-        if (plugin.getConfig().getBoolean("debug", false)) {
+        if (debug) {
             plugin.getLogger().info("[PDC解析] 物品: " + item.getType() +
                 ", 属性数: " + attrs.size() +
                 ", 攻击: " + stats.getMinAttack() + "-" + stats.getMaxAttack() +
@@ -230,7 +239,7 @@ public class IncrementalStatsManager {
                 return attrs;
             }
             
-            if (plugin.getConfig().getBoolean("debug", false)) {
+            if (debug) {
                 plugin.getLogger().info("[宝石属性] 找到 " + gems.size() + " 个宝石");
             }
             
@@ -238,7 +247,7 @@ public class IncrementalStatsManager {
             for (cn.guangdian.socket.model.GemData gem : gems) {
                 String gemId = gem.getItemId();
                 
-                if (plugin.getConfig().getBoolean("debug", false)) {
+                if (debug) {
                     plugin.getLogger().info("[宝石属性] 处理宝石: " + gemId);
                 }
                 
@@ -246,7 +255,7 @@ public class IncrementalStatsManager {
                 java.util.Map<String, cn.guangdian.socket.model.AttributeValue> socketAttrs = 
                     cn.guangdian.socket.parser.SocketParser.parseGemAttributesById(gemId);
                 
-                if (plugin.getConfig().getBoolean("debug", false)) {
+                if (debug) {
                     plugin.getLogger().info("[宝石属性] 解析宝石 " + gemId + " 属性: " + socketAttrs.size() + " 个");
                 }
                 
@@ -273,7 +282,7 @@ public class IncrementalStatsManager {
                                 }
                             }
                             attrs.put(attrName, cn.guangdian.armorstats.data.AttributeValue.ofRange(min, max));
-                            if (plugin.getConfig().getBoolean("debug", false)) {
+                            if (debug) {
                                 plugin.getLogger().info("[宝石属性] " + attrName + ": " + min + "-" + max);
                             }
                         }
@@ -289,7 +298,7 @@ public class IncrementalStatsManager {
                                 }
                             }
                             attrs.put(attrName, cn.guangdian.armorstats.data.AttributeValue.of(value));
-                            if (plugin.getConfig().getBoolean("debug", false)) {
+                            if (debug) {
                                 plugin.getLogger().info("[宝石属性] " + attrName + ": " + value);
                             }
                         }
@@ -297,7 +306,7 @@ public class IncrementalStatsManager {
                 }
             }
             
-            if (!attrs.isEmpty() && plugin.getConfig().getBoolean("debug", false)) {
+            if (!attrs.isEmpty() && debug) {
                 plugin.getLogger().info("[宝石属性] 总属性: " + attrs.size() + " 个");
             }
             
@@ -327,7 +336,7 @@ public class IncrementalStatsManager {
         addClassStats(uuid, total);
 
         // 仅在调试模式下输出属性合并日志
-        if (plugin.getConfig().getBoolean("debug", false)) {
+        if (debug) {
             plugin.getLogger().info("[属性合并] 总属性 - " +
                 "生命: " + total.getMaxHealth() +
                 ", 攻击: " + total.getMinAttack() + "-" + total.getMaxAttack() +
@@ -397,7 +406,7 @@ public class IncrementalStatsManager {
             stats.setCritDamagePercent(stats.getCritDamagePercent() + critDamage);
         }
 
-        if (plugin.getConfig().getBoolean("debug", false)) {
+        if (debug) {
             plugin.getLogger().info("[职业属性] 攻击: " + attack +
                 ", 防御: " + defense +
                 ", 生命: " + health);
@@ -436,7 +445,7 @@ public class IncrementalStatsManager {
             stats.getHealthRegenPercent()
         );
         
-        if (plugin.getConfig().getBoolean("debug", false)) {
+        if (debug) {
             AttributeInstance speedAttr = player.getAttribute(Attribute.MOVEMENT_SPEED);
             plugin.getLogger().info("[属性应用] " + player.getName() +
                 " - 生命上限: " + maxHealth +
@@ -480,7 +489,7 @@ public class IncrementalStatsManager {
         // 标记为已加载
         loadedPlayers.put(uuid, true);
         
-        if (plugin.getConfig().getBoolean("debug", false)) {
+        if (debug) {
             plugin.getLogger().info("[玩家登录] " + player.getName() + " 属性初始化完成");
         }
     }
@@ -501,7 +510,7 @@ public class IncrementalStatsManager {
         // 清理 PDC 战斗属性
         combatApplier.clearCombatAttributes(player);
         
-        if (plugin.getConfig().getBoolean("debug", false)) {
+        if (debug) {
             plugin.getLogger().info("[玩家退出] " + player.getName() + " 数据已清理");
         }
     }

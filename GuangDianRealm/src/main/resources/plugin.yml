@@ -1,0 +1,30 @@
+name: GuangDianRealm
+version: 1.0.0
+main: cn.guangdian.realm.GuangDianRealm
+api-version: '1.21'
+author: GuangDian
+description: 修炼境界系统插件
+
+softdepend:
+  - RPGCore
+  - PlaceholderAPI
+  - GuangDianMobs
+
+commands:
+  realm:
+    description: 境界主命令
+    usage: /realm <info|breakthrough|list>
+    aliases: [jingjie, xiuwei]
+  realmadmin:
+    description: 境界管理命令
+    usage: /realmadmin <setcultivation|setrealm|reload>
+    permission: guangdian.realm.admin
+    aliases: [ra]
+
+permissions:
+  guangdian.realm.breakthrough:
+    description: 突破境界权限
+    default: true
+  guangdian.realm.admin:
+    description: 境界管理权限
+    default: op

@@ -388,7 +388,9 @@ public class CollectionServiceImpl implements CollectionService {
                     (float) plugin.getConfigManager().getNotifyVolume(),
                     (float) plugin.getConfigManager().getNotifyPitch());
             }
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+            plugin.getLogger().warning("播放收藏通知声音失败: " + e.getMessage());
+        }
         
         if (category != null && isCategoryComplete(player, entry.getCategoryId())) {
             String completeMsg = plugin.getConfigManager().getMessage("category-complete")

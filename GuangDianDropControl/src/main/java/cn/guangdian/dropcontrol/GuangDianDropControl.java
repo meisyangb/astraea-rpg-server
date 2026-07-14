@@ -337,20 +337,9 @@ public class GuangDianDropControl extends AbstractRPGPlugin implements Listener,
      */
     private Component color(String message) {
         if (message == null) return Component.empty();
-        // 将 & 颜色代码转换为 MiniMessage 格式
-        String miniMessageText = message
-            .replace("<black>", "<black>").replace("<dark_blue>", "<dark_blue>")
-            .replace("<dark_green>", "<dark_green>").replace("<dark_aqua>", "<dark_aqua>")
-            .replace("<dark_red>", "<dark_red>").replace("<dark_purple>", "<dark_purple>")
-            .replace("<gold>", "<gold>").replace("<gray>", "<gray>")
-            .replace("<dark_gray>", "<dark_gray>").replace("<blue>", "<blue>")
-            .replace("<green>", "<green>").replace("<aqua>", "<aqua>")
-            .replace("<red>", "<red>").replace("<light_purple>", "<light_purple>")
-            .replace("<yellow>", "<yellow>").replace("<white>", "<white>")
-            .replace("<obfuscated>", "<obfuscated>").replace("<bold>", "<bold>")
-            .replace("<strikethrough>", "<strikethrough>").replace("<underlined>", "<underlined>")
-            .replace("<italic>", "<italic>").replace("<reset>", "<reset>");
-        return miniMessageParser.deserialize(miniMessageText);
+        // 优化：直接使用 MiniMessage 解析，无需无意义的 replace 链
+        // MiniMessage 格式本身就支持 <color> 标签
+        return miniMessageParser.deserialize(message);
     }
 
     /**

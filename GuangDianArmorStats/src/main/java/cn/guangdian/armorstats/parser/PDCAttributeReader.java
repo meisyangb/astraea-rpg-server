@@ -1,6 +1,8 @@
 package cn.guangdian.armorstats.parser;
 
 import cn.guangdian.armorstats.data.AttributeValue;
+import cn.guangdian.rpgitems.attribute.CompoundAttributeCodec;
+import cn.guangdian.rpgitems.attribute.RPGItemsKeys;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -36,87 +38,6 @@ public class PDCAttributeReader {
      *         后续 = 1 次哈希计算 + 1 次 ConcurrentHashMap.get（零 PDC 访问）
      */
     private static final Map<String, Map<String, AttributeValue>> attrCache = new ConcurrentHashMap<>();
-
-    // PDC Keys - 物品标识（RPGItems 创建物品时写入，用作快速判断标记）
-    private static final NamespacedKey KEY_ID = new NamespacedKey("rpgitems", "id");
-
-    // PDC Keys - 攻击属性
-    private static final NamespacedKey KEY_ATTACK_MIN = new NamespacedKey("rpgitems", "attack_min");
-    private static final NamespacedKey KEY_ATTACK_MAX = new NamespacedKey("rpgitems", "attack_max");
-    
-    // PDC Keys - 防御属性
-    private static final NamespacedKey KEY_DEFENSE_MIN = new NamespacedKey("rpgitems", "defense_min");
-    private static final NamespacedKey KEY_DEFENSE_MAX = new NamespacedKey("rpgitems", "defense_max");
-    
-    // PDC Keys - 生命属性
-    private static final NamespacedKey KEY_MAX_HEALTH = new NamespacedKey("rpgitems", "max_health");
-    private static final NamespacedKey KEY_HEALTH_REGEN = new NamespacedKey("rpgitems", "health_regen");
-    
-    // PDC Keys - 暴击属性
-    private static final NamespacedKey KEY_CRIT_CHANCE = new NamespacedKey("rpgitems", "crit_chance");
-    private static final NamespacedKey KEY_CRIT_DAMAGE = new NamespacedKey("rpgitems", "crit_damage");
-    
-    // PDC Keys - 生命偷取
-    private static final NamespacedKey KEY_LIFESTEAL_CHANCE = new NamespacedKey("rpgitems", "lifesteal_chance");
-    private static final NamespacedKey KEY_LIFESTEAL_MULTIPLIER = new NamespacedKey("rpgitems", "lifesteal_multiplier");
-    
-    // PDC Keys - 闪避与格挡
-    private static final NamespacedKey KEY_DODGE_CHANCE = new NamespacedKey("rpgitems", "dodge_chance");
-    private static final NamespacedKey KEY_PARRY_CHANCE = new NamespacedKey("rpgitems", "parry_chance");
-    
-    // PDC Keys - 移动速度
-    private static final NamespacedKey KEY_MOVE_SPEED = new NamespacedKey("rpgitems", "move_speed");
-    
-    // PDC Keys - 减伤
-    private static final NamespacedKey KEY_DAMAGE_REDUCTION = new NamespacedKey("rpgitems", "damage_reduction");
-
-    // PDC Keys - PVP属性
-    private static final NamespacedKey KEY_PVP_ATTACK_MIN = new NamespacedKey("rpgitems", "pvp_attack_min");
-    private static final NamespacedKey KEY_PVP_ATTACK_MAX = new NamespacedKey("rpgitems", "pvp_attack_max");
-    private static final NamespacedKey KEY_PVP_DEFENSE_MIN = new NamespacedKey("rpgitems", "pvp_defense_min");
-    private static final NamespacedKey KEY_PVP_DEFENSE_MAX = new NamespacedKey("rpgitems", "pvp_defense_max");
-
-    // PDC Keys - 暴击抵抗
-    private static final NamespacedKey KEY_CRIT_RESIST = new NamespacedKey("rpgitems", "crit_resist");
-    private static final NamespacedKey KEY_CRIT_DAMAGE_RESIST = new NamespacedKey("rpgitems", "crit_damage_resist");
-
-    // PDC Keys - 吸血抵抗
-    private static final NamespacedKey KEY_LIFESTEAL_RESIST = new NamespacedKey("rpgitems", "lifesteal_resist");
-
-    // PDC Keys - 护甲与穿透
-    private static final NamespacedKey KEY_ARMOR = new NamespacedKey("rpgitems", "armor");
-    private static final NamespacedKey KEY_ARMOR_STRENGTH = new NamespacedKey("rpgitems", "armor_strength");
-    private static final NamespacedKey KEY_ARMOR_PENETRATION = new NamespacedKey("rpgitems", "armor_penetration");
-    private static final NamespacedKey KEY_DEFENSE_PENETRATION = new NamespacedKey("rpgitems", "defense_penetration");
-
-    // PDC Keys - 伤害反弹
-    private static final NamespacedKey KEY_DAMAGE_REFLECT = new NamespacedKey("rpgitems", "damage_reflect");
-    private static final NamespacedKey KEY_REFLECT_RATIO = new NamespacedKey("rpgitems", "reflect_ratio");
-
-    // PDC Keys - 状态效果
-    private static final NamespacedKey KEY_POISON_CHANCE = new NamespacedKey("rpgitems", "poison_chance");
-    private static final NamespacedKey KEY_FREEZE_CHANCE = new NamespacedKey("rpgitems", "freeze_chance");
-    private static final NamespacedKey KEY_BLIND_CHANCE = new NamespacedKey("rpgitems", "blind_chance");
-    private static final NamespacedKey KEY_BURN_CHANCE = new NamespacedKey("rpgitems", "burn_chance");
-    private static final NamespacedKey KEY_SCORCH_CHANCE = new NamespacedKey("rpgitems", "scorch_chance");
-
-    // PDC Keys - 环境抗性
-    private static final NamespacedKey KEY_FIRE_RESIST = new NamespacedKey("rpgitems", "fire_resist");
-    private static final NamespacedKey KEY_FALL_RESIST = new NamespacedKey("rpgitems", "fall_resist");
-    private static final NamespacedKey KEY_DROWNING_RESIST = new NamespacedKey("rpgitems", "drowning_resist");
-    private static final NamespacedKey KEY_POISON_RESIST = new NamespacedKey("rpgitems", "poison_resist");
-    private static final NamespacedKey KEY_WITHER_RESIST = new NamespacedKey("rpgitems", "wither_resist");
-    private static final NamespacedKey KEY_LAVA_RESIST = new NamespacedKey("rpgitems", "lava_resist");
-    private static final NamespacedKey KEY_MAGIC_RESIST = new NamespacedKey("rpgitems", "magic_resist");
-    private static final NamespacedKey KEY_EXPLOSION_RESIST = new NamespacedKey("rpgitems", "explosion_resist");
-    private static final NamespacedKey KEY_PROJECTILE_RESIST = new NamespacedKey("rpgitems", "projectile_resist");
-
-    // PDC Keys - 其他属性
-    private static final NamespacedKey KEY_KNOCKBACK_RESIST = new NamespacedKey("rpgitems", "knockback_resist");
-    private static final NamespacedKey KEY_EXP_BONUS = new NamespacedKey("rpgitems", "exp_bonus");
-    private static final NamespacedKey KEY_HEALTH_REGEN_PERCENT = new NamespacedKey("rpgitems", "health_regen_percent");
-    private static final NamespacedKey KEY_DODGE_REFLECT_CHANCE = new NamespacedKey("rpgitems", "dodge_reflect_chance");
-    private static final NamespacedKey KEY_DODGE_REFLECT_RATIO = new NamespacedKey("rpgitems", "dodge_reflect_ratio");
 
     /**
      * 从 PDC 读取所有属性（带哈希缓存）
@@ -171,355 +92,271 @@ public class PDCAttributeReader {
      */
     private static Map<String, AttributeValue> parseAllPDCAttributes(PersistentDataContainer pdc) {
         // 优先读取复合存储格式
-        byte[] compoundData = pdc.get(CompoundAttributeCodec.KEY_COMPOUND, PersistentDataType.BYTE_ARRAY);
+        byte[] compoundData = pdc.get(RPGItemsKeys.ATTRS, PersistentDataType.BYTE_ARRAY);
         if (compoundData != null) {
             return parseFromCompound(compoundData);
         }
         // 回退到旧格式（向后兼容已有物品）
         Map<String, AttributeValue> attrs = new HashMap<>();
-        
+
         // 攻击属性
-        if (pdc.has(KEY_ATTACK_MIN, PersistentDataType.DOUBLE)) {
-            double min = pdc.get(KEY_ATTACK_MIN, PersistentDataType.DOUBLE);
-            double max = pdc.has(KEY_ATTACK_MAX, PersistentDataType.DOUBLE)
-                ? pdc.get(KEY_ATTACK_MAX, PersistentDataType.DOUBLE) : min;
-            if (min > 0 || max > 0) {
-                attrs.put("攻击力", AttributeValue.ofRange(min, max));
-            }
+        double min = pdc.getOrDefault(RPGItemsKeys.ATTACK_MIN, PersistentDataType.DOUBLE, 0.0);
+        double max = pdc.getOrDefault(RPGItemsKeys.ATTACK_MAX, PersistentDataType.DOUBLE, 0.0);
+        if (min > 0 || max > 0) {
+            if (max == 0) max = min;
+            attrs.put("攻击力", AttributeValue.ofRange(min, max));
         }
 
         // 防御属性
-        if (pdc.has(KEY_DEFENSE_MIN, PersistentDataType.DOUBLE)) {
-            double min = pdc.get(KEY_DEFENSE_MIN, PersistentDataType.DOUBLE);
-            double max = pdc.has(KEY_DEFENSE_MAX, PersistentDataType.DOUBLE)
-                ? pdc.get(KEY_DEFENSE_MAX, PersistentDataType.DOUBLE) : min;
-            if (min > 0 || max > 0) {
-                attrs.put("防御力", AttributeValue.ofRange(min, max));
-            }
+        min = pdc.getOrDefault(RPGItemsKeys.DEFENSE_MIN, PersistentDataType.DOUBLE, 0.0);
+        max = pdc.getOrDefault(RPGItemsKeys.DEFENSE_MAX, PersistentDataType.DOUBLE, 0.0);
+        if (min > 0 || max > 0) {
+            if (max == 0) max = min;
+            attrs.put("防御力", AttributeValue.ofRange(min, max));
         }
-        
+
         // 生命上限
-        if (pdc.has(KEY_MAX_HEALTH, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_MAX_HEALTH, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("生命上限", AttributeValue.of(value));
-            }
+        double value = pdc.getOrDefault(RPGItemsKeys.MAX_HEALTH, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("生命上限", AttributeValue.of(value));
         }
-        
+
         // 生命恢复
-        if (pdc.has(KEY_HEALTH_REGEN, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_HEALTH_REGEN, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("生命回复", AttributeValue.of(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.HEALTH_REGEN, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("生命回复", AttributeValue.of(value));
         }
-        
+
         // 暴击几率
-        if (pdc.has(KEY_CRIT_CHANCE, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_CRIT_CHANCE, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("暴击几率", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.CRIT_CHANCE, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("暴击几率", AttributeValue.ofPercent(value));
         }
-        
+
         // 暴击伤害
-        if (pdc.has(KEY_CRIT_DAMAGE, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_CRIT_DAMAGE, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("暴击伤害", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.CRIT_DAMAGE, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("暴击伤害", AttributeValue.ofPercent(value));
         }
-        
+
         // 吸血几率
-        if (pdc.has(KEY_LIFESTEAL_CHANCE, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_LIFESTEAL_CHANCE, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("吸血几率", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.LIFESTEAL_CHANCE, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("吸血几率", AttributeValue.ofPercent(value));
         }
-        
+
         // 吸血倍率
-        if (pdc.has(KEY_LIFESTEAL_MULTIPLIER, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_LIFESTEAL_MULTIPLIER, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("吸血倍率", AttributeValue.of(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.LIFESTEAL_MULTIPLIER, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("吸血倍率", AttributeValue.of(value));
         }
-        
+
         // 闪避
-        if (pdc.has(KEY_DODGE_CHANCE, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_DODGE_CHANCE, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("闪避", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.DODGE_CHANCE, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("闪避", AttributeValue.ofPercent(value));
         }
-        
+
         // 格挡（招架）
-        if (pdc.has(KEY_PARRY_CHANCE, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_PARRY_CHANCE, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("招架", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.PARRY_CHANCE, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("招架", AttributeValue.ofPercent(value));
         }
-        
+
         // 移动速度
-        if (pdc.has(KEY_MOVE_SPEED, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_MOVE_SPEED, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("移动速度", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.MOVE_SPEED, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("移动速度", AttributeValue.ofPercent(value));
         }
-        
+
         // 减伤
-        if (pdc.has(KEY_DAMAGE_REDUCTION, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_DAMAGE_REDUCTION, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("减伤", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.DAMAGE_REDUCTION, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("减伤", AttributeValue.ofPercent(value));
         }
 
         // PVP攻击属性
-        if (pdc.has(KEY_PVP_ATTACK_MIN, PersistentDataType.DOUBLE)) {
-            double min = pdc.get(KEY_PVP_ATTACK_MIN, PersistentDataType.DOUBLE);
-            double max = pdc.has(KEY_PVP_ATTACK_MAX, PersistentDataType.DOUBLE)
-                ? pdc.get(KEY_PVP_ATTACK_MAX, PersistentDataType.DOUBLE) : min;
-            if (min > 0 || max > 0) {
-                attrs.put("PVP攻击力", AttributeValue.ofRange(min, max));
-            }
+        min = pdc.getOrDefault(RPGItemsKeys.PVP_ATTACK_MIN, PersistentDataType.DOUBLE, 0.0);
+        max = pdc.getOrDefault(RPGItemsKeys.PVP_ATTACK_MAX, PersistentDataType.DOUBLE, 0.0);
+        if (min > 0 || max > 0) {
+            if (max == 0) max = min;
+            attrs.put("PVP攻击力", AttributeValue.ofRange(min, max));
         }
 
         // PVP防御属性
-        if (pdc.has(KEY_PVP_DEFENSE_MIN, PersistentDataType.DOUBLE)) {
-            double min = pdc.get(KEY_PVP_DEFENSE_MIN, PersistentDataType.DOUBLE);
-            double max = pdc.has(KEY_PVP_DEFENSE_MAX, PersistentDataType.DOUBLE)
-                ? pdc.get(KEY_PVP_DEFENSE_MAX, PersistentDataType.DOUBLE) : min;
-            if (min > 0 || max > 0) {
-                attrs.put("PVP防御力", AttributeValue.ofRange(min, max));
-            }
+        min = pdc.getOrDefault(RPGItemsKeys.PVP_DEFENSE_MIN, PersistentDataType.DOUBLE, 0.0);
+        max = pdc.getOrDefault(RPGItemsKeys.PVP_DEFENSE_MAX, PersistentDataType.DOUBLE, 0.0);
+        if (min > 0 || max > 0) {
+            if (max == 0) max = min;
+            attrs.put("PVP防御力", AttributeValue.ofRange(min, max));
         }
 
         // 暴击抵抗
-        if (pdc.has(KEY_CRIT_RESIST, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_CRIT_RESIST, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("暴击抵抗", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.CRIT_RESIST, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("暴击抵抗", AttributeValue.ofPercent(value));
         }
 
         // 暴伤抵抗
-        if (pdc.has(KEY_CRIT_DAMAGE_RESIST, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_CRIT_DAMAGE_RESIST, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("暴伤抵抗", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.CRIT_DAMAGE_RESIST, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("暴伤抵抗", AttributeValue.ofPercent(value));
         }
 
         // 吸血抵抗
-        if (pdc.has(KEY_LIFESTEAL_RESIST, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_LIFESTEAL_RESIST, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("吸血抵抗", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.LIFESTEAL_RESIST, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("吸血抵抗", AttributeValue.ofPercent(value));
         }
 
         // 护甲值
-        if (pdc.has(KEY_ARMOR, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_ARMOR, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("护甲值", AttributeValue.of(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.ARMOR, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("护甲值", AttributeValue.of(value));
         }
 
         // 护甲强度
-        if (pdc.has(KEY_ARMOR_STRENGTH, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_ARMOR_STRENGTH, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("护甲强度", AttributeValue.of(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.ARMOR_STRENGTH, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("护甲强度", AttributeValue.of(value));
         }
 
         // 护甲穿透
-        if (pdc.has(KEY_ARMOR_PENETRATION, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_ARMOR_PENETRATION, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("护甲穿透", AttributeValue.of(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.ARMOR_PENETRATION, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("护甲穿透", AttributeValue.of(value));
         }
 
         // 防御穿透
-        if (pdc.has(KEY_DEFENSE_PENETRATION, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_DEFENSE_PENETRATION, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("防御穿透", AttributeValue.of(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.DEFENSE_PENETRATION, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("防御穿透", AttributeValue.of(value));
         }
 
         // 伤害反弹
-        if (pdc.has(KEY_DAMAGE_REFLECT, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_DAMAGE_REFLECT, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("伤害反弹", AttributeValue.of(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.DAMAGE_REFLECT, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("伤害反弹", AttributeValue.of(value));
         }
 
         // 反伤比例
-        if (pdc.has(KEY_REFLECT_RATIO, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_REFLECT_RATIO, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("反伤比例", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.REFLECT_RATIO, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("反伤比例", AttributeValue.ofPercent(value));
         }
 
         // 中毒几率
-        if (pdc.has(KEY_POISON_CHANCE, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_POISON_CHANCE, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("中毒", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.POISON_CHANCE, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("中毒", AttributeValue.ofPercent(value));
         }
 
         // 冰冻几率
-        if (pdc.has(KEY_FREEZE_CHANCE, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_FREEZE_CHANCE, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("冰冻", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.FREEZE_CHANCE, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("冰冻", AttributeValue.ofPercent(value));
         }
 
         // 致盲几率
-        if (pdc.has(KEY_BLIND_CHANCE, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_BLIND_CHANCE, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("致盲", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.BLIND_CHANCE, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("致盲", AttributeValue.ofPercent(value));
         }
 
         // 燃烧几率
-        if (pdc.has(KEY_BURN_CHANCE, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_BURN_CHANCE, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("燃烧", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.BURN_CHANCE, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("燃烧", AttributeValue.ofPercent(value));
         }
 
         // 灼烧几率
-        if (pdc.has(KEY_SCORCH_CHANCE, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_SCORCH_CHANCE, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("灼烧", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.SCORCH_CHANCE, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("灼烧", AttributeValue.ofPercent(value));
         }
 
         // 火焰抗性
-        if (pdc.has(KEY_FIRE_RESIST, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_FIRE_RESIST, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("火焰抗性", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.FIRE_RESIST, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("火焰抗性", AttributeValue.ofPercent(value));
         }
 
         // 摔落抗性
-        if (pdc.has(KEY_FALL_RESIST, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_FALL_RESIST, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("摔落抗性", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.FALL_RESIST, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("摔落抗性", AttributeValue.ofPercent(value));
         }
 
         // 溺水抗性
-        if (pdc.has(KEY_DROWNING_RESIST, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_DROWNING_RESIST, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("溺水抗性", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.DROWNING_RESIST, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("溺水抗性", AttributeValue.ofPercent(value));
         }
 
         // 中毒抗性
-        if (pdc.has(KEY_POISON_RESIST, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_POISON_RESIST, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("中毒抗性", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.POISON_RESIST, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("中毒抗性", AttributeValue.ofPercent(value));
         }
 
         // 凋零抗性
-        if (pdc.has(KEY_WITHER_RESIST, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_WITHER_RESIST, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("凋零抗性", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.WITHER_RESIST, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("凋零抗性", AttributeValue.ofPercent(value));
         }
 
         // 岩浆抗性
-        if (pdc.has(KEY_LAVA_RESIST, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_LAVA_RESIST, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("岩浆抗性", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.LAVA_RESIST, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("岩浆抗性", AttributeValue.ofPercent(value));
         }
 
         // 魔法抗性
-        if (pdc.has(KEY_MAGIC_RESIST, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_MAGIC_RESIST, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("魔法抗性", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.MAGIC_RESIST, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("魔法抗性", AttributeValue.ofPercent(value));
         }
 
         // 爆炸抗性
-        if (pdc.has(KEY_EXPLOSION_RESIST, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_EXPLOSION_RESIST, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("爆炸抗性", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.EXPLOSION_RESIST, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("爆炸抗性", AttributeValue.ofPercent(value));
         }
 
         // 弹射物抗性
-        if (pdc.has(KEY_PROJECTILE_RESIST, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_PROJECTILE_RESIST, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("弹射物抗性", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.PROJECTILE_RESIST, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("弹射物抗性", AttributeValue.ofPercent(value));
         }
 
         // 击退抗性
-        if (pdc.has(KEY_KNOCKBACK_RESIST, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_KNOCKBACK_RESIST, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("击退抗性", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.KNOCKBACK_RESIST, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("击退抗性", AttributeValue.ofPercent(value));
         }
 
         // 经验加成
-        if (pdc.has(KEY_EXP_BONUS, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_EXP_BONUS, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("经验加成", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.EXP_BONUS, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("经验加成", AttributeValue.ofPercent(value));
         }
 
         // 生命恢复百分比
-        if (pdc.has(KEY_HEALTH_REGEN_PERCENT, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_HEALTH_REGEN_PERCENT, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("生命恢复", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.HEALTH_REGEN_PERCENT, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("生命恢复", AttributeValue.ofPercent(value));
         }
 
         // 躲避反伤几率
-        if (pdc.has(KEY_DODGE_REFLECT_CHANCE, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_DODGE_REFLECT_CHANCE, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("躲避反伤", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.DODGE_REFLECT_CHANCE, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("躲避反伤", AttributeValue.ofPercent(value));
         }
 
         // 躲避反弹比例
-        if (pdc.has(KEY_DODGE_REFLECT_RATIO, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_DODGE_REFLECT_RATIO, PersistentDataType.DOUBLE);
-            if (value > 0) {
-                attrs.put("躲避反弹比例", AttributeValue.ofPercent(value));
-            }
+        value = pdc.getOrDefault(RPGItemsKeys.DODGE_REFLECT_RATIO, PersistentDataType.DOUBLE, 0.0);
+        if (value > 0) {
+            attrs.put("躲避反弹比例", AttributeValue.ofPercent(value));
         }
 
         return attrs;
@@ -805,7 +642,7 @@ public class PDCAttributeReader {
         System.out.println(debugPrefix + "=== 开始读取 RPGItems PDC 属性 ===");
         
         // 优先读取复合存储格式
-        byte[] compoundData = pdc.get(CompoundAttributeCodec.KEY_COMPOUND, PersistentDataType.BYTE_ARRAY);
+        byte[] compoundData = pdc.get(RPGItemsKeys.ATTRS, PersistentDataType.BYTE_ARRAY);
         if (compoundData != null) {
             System.out.println(debugPrefix + "检测到复合存储格式，使用快速路径解析");
             return parseFromCompound(compoundData);
@@ -813,10 +650,10 @@ public class PDCAttributeReader {
         System.out.println(debugPrefix + "使用旧格式（独立 PDC key）解析");
         
         // 攻击属性
-        if (pdc.has(KEY_ATTACK_MIN, PersistentDataType.DOUBLE)) {
-            double min = pdc.get(KEY_ATTACK_MIN, PersistentDataType.DOUBLE);
-            double max = pdc.has(KEY_ATTACK_MAX, PersistentDataType.DOUBLE)
-                ? pdc.get(KEY_ATTACK_MAX, PersistentDataType.DOUBLE) : min;
+        if (pdc.has(RPGItemsKeys.ATTACK_MIN, PersistentDataType.DOUBLE)) {
+            double min = pdc.get(RPGItemsKeys.ATTACK_MIN, PersistentDataType.DOUBLE);
+            double max = pdc.has(RPGItemsKeys.ATTACK_MAX, PersistentDataType.DOUBLE)
+                ? pdc.get(RPGItemsKeys.ATTACK_MAX, PersistentDataType.DOUBLE) : min;
             System.out.println(debugPrefix + "  [PDC读取] 攻击力: " + min + " - " + max);
             if (min > 0 || max > 0) {
                 attrs.put("攻击力", AttributeValue.ofRange(min, max));
@@ -826,10 +663,10 @@ public class PDCAttributeReader {
         }
         
         // 防御属性
-        if (pdc.has(KEY_DEFENSE_MIN, PersistentDataType.DOUBLE)) {
-            double min = pdc.get(KEY_DEFENSE_MIN, PersistentDataType.DOUBLE);
-            double max = pdc.has(KEY_DEFENSE_MAX, PersistentDataType.DOUBLE)
-                ? pdc.get(KEY_DEFENSE_MAX, PersistentDataType.DOUBLE) : min;
+        if (pdc.has(RPGItemsKeys.DEFENSE_MIN, PersistentDataType.DOUBLE)) {
+            double min = pdc.get(RPGItemsKeys.DEFENSE_MIN, PersistentDataType.DOUBLE);
+            double max = pdc.has(RPGItemsKeys.DEFENSE_MAX, PersistentDataType.DOUBLE)
+                ? pdc.get(RPGItemsKeys.DEFENSE_MAX, PersistentDataType.DOUBLE) : min;
             System.out.println(debugPrefix + "  [PDC读取] 防御力: " + min + " - " + max);
             if (min > 0 || max > 0) {
                 attrs.put("防御力", AttributeValue.ofRange(min, max));
@@ -839,8 +676,8 @@ public class PDCAttributeReader {
         }
         
         // 生命上限
-        if (pdc.has(KEY_MAX_HEALTH, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_MAX_HEALTH, PersistentDataType.DOUBLE);
+        if (pdc.has(RPGItemsKeys.MAX_HEALTH, PersistentDataType.DOUBLE)) {
+            double value = pdc.get(RPGItemsKeys.MAX_HEALTH, PersistentDataType.DOUBLE);
             System.out.println(debugPrefix + "  [PDC读取] 生命上限: " + value);
             if (value > 0) {
                 attrs.put("生命上限", AttributeValue.of(value));
@@ -850,8 +687,8 @@ public class PDCAttributeReader {
         }
         
         // 生命恢复
-        if (pdc.has(KEY_HEALTH_REGEN, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_HEALTH_REGEN, PersistentDataType.DOUBLE);
+        if (pdc.has(RPGItemsKeys.HEALTH_REGEN, PersistentDataType.DOUBLE)) {
+            double value = pdc.get(RPGItemsKeys.HEALTH_REGEN, PersistentDataType.DOUBLE);
             System.out.println(debugPrefix + "  [PDC读取] 生命回复: " + value);
             if (value > 0) {
                 attrs.put("生命回复", AttributeValue.of(value));
@@ -861,8 +698,8 @@ public class PDCAttributeReader {
         }
         
         // 暴击几率
-        if (pdc.has(KEY_CRIT_CHANCE, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_CRIT_CHANCE, PersistentDataType.DOUBLE);
+        if (pdc.has(RPGItemsKeys.CRIT_CHANCE, PersistentDataType.DOUBLE)) {
+            double value = pdc.get(RPGItemsKeys.CRIT_CHANCE, PersistentDataType.DOUBLE);
             System.out.println(debugPrefix + "  [PDC读取] 暴击几率: " + value + "%");
             if (value > 0) {
                 attrs.put("暴击几率", AttributeValue.ofPercent(value));
@@ -872,8 +709,8 @@ public class PDCAttributeReader {
         }
         
         // 暴击伤害
-        if (pdc.has(KEY_CRIT_DAMAGE, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_CRIT_DAMAGE, PersistentDataType.DOUBLE);
+        if (pdc.has(RPGItemsKeys.CRIT_DAMAGE, PersistentDataType.DOUBLE)) {
+            double value = pdc.get(RPGItemsKeys.CRIT_DAMAGE, PersistentDataType.DOUBLE);
             System.out.println(debugPrefix + "  [PDC读取] 暴击伤害: " + value + "%");
             if (value > 0) {
                 attrs.put("暴击伤害", AttributeValue.ofPercent(value));
@@ -883,8 +720,8 @@ public class PDCAttributeReader {
         }
         
         // 吸血几率
-        if (pdc.has(KEY_LIFESTEAL_CHANCE, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_LIFESTEAL_CHANCE, PersistentDataType.DOUBLE);
+        if (pdc.has(RPGItemsKeys.LIFESTEAL_CHANCE, PersistentDataType.DOUBLE)) {
+            double value = pdc.get(RPGItemsKeys.LIFESTEAL_CHANCE, PersistentDataType.DOUBLE);
             System.out.println(debugPrefix + "  [PDC读取] 吸血几率: " + value + "%");
             if (value > 0) {
                 attrs.put("吸血几率", AttributeValue.ofPercent(value));
@@ -894,8 +731,8 @@ public class PDCAttributeReader {
         }
         
         // 吸血倍率
-        if (pdc.has(KEY_LIFESTEAL_MULTIPLIER, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_LIFESTEAL_MULTIPLIER, PersistentDataType.DOUBLE);
+        if (pdc.has(RPGItemsKeys.LIFESTEAL_MULTIPLIER, PersistentDataType.DOUBLE)) {
+            double value = pdc.get(RPGItemsKeys.LIFESTEAL_MULTIPLIER, PersistentDataType.DOUBLE);
             System.out.println(debugPrefix + "  [PDC读取] 吸血倍率: " + value);
             if (value > 0) {
                 attrs.put("吸血倍率", AttributeValue.of(value));
@@ -905,8 +742,8 @@ public class PDCAttributeReader {
         }
         
         // 闪避
-        if (pdc.has(KEY_DODGE_CHANCE, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_DODGE_CHANCE, PersistentDataType.DOUBLE);
+        if (pdc.has(RPGItemsKeys.DODGE_CHANCE, PersistentDataType.DOUBLE)) {
+            double value = pdc.get(RPGItemsKeys.DODGE_CHANCE, PersistentDataType.DOUBLE);
             System.out.println(debugPrefix + "  [PDC读取] 闪避: " + value + "%");
             if (value > 0) {
                 attrs.put("闪避", AttributeValue.ofPercent(value));
@@ -916,8 +753,8 @@ public class PDCAttributeReader {
         }
         
         // 格挡（招架）
-        if (pdc.has(KEY_PARRY_CHANCE, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_PARRY_CHANCE, PersistentDataType.DOUBLE);
+        if (pdc.has(RPGItemsKeys.PARRY_CHANCE, PersistentDataType.DOUBLE)) {
+            double value = pdc.get(RPGItemsKeys.PARRY_CHANCE, PersistentDataType.DOUBLE);
             System.out.println(debugPrefix + "  [PDC读取] 招架: " + value + "%");
             if (value > 0) {
                 attrs.put("招架", AttributeValue.ofPercent(value));
@@ -927,8 +764,8 @@ public class PDCAttributeReader {
         }
         
         // 移动速度
-        if (pdc.has(KEY_MOVE_SPEED, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_MOVE_SPEED, PersistentDataType.DOUBLE);
+        if (pdc.has(RPGItemsKeys.MOVE_SPEED, PersistentDataType.DOUBLE)) {
+            double value = pdc.get(RPGItemsKeys.MOVE_SPEED, PersistentDataType.DOUBLE);
             System.out.println(debugPrefix + "  [PDC读取] 移动速度: " + value + "%");
             if (value > 0) {
                 attrs.put("移动速度", AttributeValue.ofPercent(value));
@@ -938,8 +775,8 @@ public class PDCAttributeReader {
         }
         
         // 减伤
-        if (pdc.has(KEY_DAMAGE_REDUCTION, PersistentDataType.DOUBLE)) {
-            double value = pdc.get(KEY_DAMAGE_REDUCTION, PersistentDataType.DOUBLE);
+        if (pdc.has(RPGItemsKeys.DAMAGE_REDUCTION, PersistentDataType.DOUBLE)) {
+            double value = pdc.get(RPGItemsKeys.DAMAGE_REDUCTION, PersistentDataType.DOUBLE);
             System.out.println(debugPrefix + "  [PDC读取] 减伤: " + value + "%");
             if (value > 0) {
                 attrs.put("减伤", AttributeValue.ofPercent(value));
@@ -976,6 +813,6 @@ public class PDCAttributeReader {
      * 性能提升：O(1) 单次查找，替代 O(n) 40+ 次查找
      */
     private static boolean hasAnyRPGItemsData(PersistentDataContainer pdc) {
-        return pdc.has(KEY_ID, PersistentDataType.STRING);
+        return pdc.has(RPGItemsKeys.ID, PersistentDataType.STRING);
     }
 }

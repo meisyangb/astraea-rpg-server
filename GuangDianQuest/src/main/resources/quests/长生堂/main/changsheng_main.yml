@@ -1,0 +1,57 @@
+# ═══════════════════════════════════════════════════════
+#  长生堂主线任务
+# ═══════════════════════════════════════════════════════
+
+changsheng_m001:
+  name: "丹道入门"
+  type: MAIN
+  questline: changsheng_main
+  order: 1
+  required_level: 1
+  description:
+    - "&a长生堂中炼灵丹，起死回生亦不难。"
+    - "&a师父让你收集炼丹材料：草药10株。"
+  objectives:
+    - type: COLLECT_ITEM
+      target: "草药"
+      amount: 10
+      description: "收集草药"
+  rewards:
+    money: 50
+    exp: 100
+
+changsheng_m002:
+  name: "丹火纯青"
+  type: MAIN
+  questline: changsheng_main
+  order: 2
+  required_level: 3
+  description:
+    - "&a炼丹需要实战经验。"
+    - "&a前往药王谷，击杀10只毒蟾。"
+  objectives:
+    - type: KILL_MOB
+      target: "毒蟾"
+      amount: 10
+      description: "击杀毒蟾"
+  rewards:
+    money: 100
+    exp: 200
+
+changsheng_m003:
+  name: "长生试炼"
+  type: MAIN
+  questline: changsheng_main
+  order: 3
+  required_level: 5
+  description:
+    - "&a你的丹道已有小成。"
+    - "&a前往丹房，炼制一枚筑基丹。"
+  objectives:
+    - type: COLLECT_ITEM
+      target: "筑基丹"
+      amount: 1
+      description: "炼制筑基丹"
+  rewards:
+    money: 300
+    exp: 500

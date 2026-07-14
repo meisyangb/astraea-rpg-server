@@ -158,6 +158,12 @@ public class GuangDianName extends AbstractRPGPlugin implements Listener {
     
     private void unregisterPlaceholderAPI() {
         if (namePlaceholder != null) {
+            // 正确注销 PlaceholderAPI 扩展
+            try {
+                me.clip.placeholderapi.PlaceholderAPI.unregisterExpansion(namePlaceholder);
+            } catch (Exception e) {
+                getLogger().warning("注销 PlaceholderAPI 扩展失败: " + e.getMessage());
+            }
             namePlaceholder = null;
         }
     }

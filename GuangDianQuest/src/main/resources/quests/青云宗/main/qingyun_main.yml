@@ -1,0 +1,59 @@
+# ═══════════════════════════════════════════════════════
+#  青云宗主线任务
+# ═══════════════════════════════════════════════════════
+
+qingyun_m001:
+  name: "初识剑道"
+  type: MAIN
+  questline: qingyun_main
+  order: 1
+  required_level: 1
+  description:
+    - "&b青云直上九万里，剑气纵横天地间。"
+    - "&b师兄命你前往剑冢，取得一把灵剑。"
+  objectives:
+    - type: COLLECT_ITEM
+      target: "灵剑"
+      amount: 1
+      description: "取得灵剑"
+  rewards:
+    money: 50
+    exp: 100
+    items:
+      - "IRON_SWORD:1"
+
+qingyun_m002:
+  name: "剑心通明"
+  type: MAIN
+  questline: qingyun_main
+  order: 2
+  required_level: 3
+  description:
+    - "&b剑修之道，首重剑心。"
+    - "&b前往练剑台修炼剑法，击杀10只剑灵。"
+  objectives:
+    - type: KILL_MOB
+      target: "剑灵"
+      amount: 10
+      description: "击杀剑灵"
+  rewards:
+    money: 100
+    exp: 200
+
+qingyun_m003:
+  name: "青云试剑"
+  type: MAIN
+  questline: qingyun_main
+  order: 3
+  required_level: 5
+  description:
+    - "&b你的剑法已有小成。"
+    - "&b前往试剑峰，挑战剑尊幻影。"
+  objectives:
+    - type: KILL_MOB
+      target: "剑尊幻影"
+      amount: 1
+      description: "击败剑尊幻影"
+  rewards:
+    money: 300
+    exp: 500

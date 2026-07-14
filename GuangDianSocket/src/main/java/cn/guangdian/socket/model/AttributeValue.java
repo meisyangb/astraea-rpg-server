@@ -24,6 +24,10 @@ public abstract class AttributeValue {
         return fv;
     }
 
+    public static AttributeValue ofPercent(double value) {
+        return of(value, true);
+    }
+
     public static AttributeValue range(double min, double max) {
         return new RangeValue(min, max);
     }

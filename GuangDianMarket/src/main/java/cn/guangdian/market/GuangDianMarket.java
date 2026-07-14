@@ -753,6 +753,10 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
             playSound(buyer, "purchase-success");
 
             getLogger().info("玩家 " + buyer.getName() + " 成功购买物品 ID: " + item.id + " 价格: " + formatCurrency(currencyType, price));
+
+            // ✅ 立即保存数据，防止数据不同步
+            saveData();
+
             return true;
         } else {
             buyer.sendMessage(colorize("<red>购买失败: 物品已被他人购买!"));
@@ -793,6 +797,9 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
             }
             player.sendMessage(colorize(config.getString("messages.listing-cancelled", "<green>已取消上架!")));
             getLogger().info("玩家 " + player.getName() + " 成功下架物品: " + item.item.getType() + " ID: " + item.id);
+
+            // ✅ 立即保存数据，防止数据不同步
+            saveData();
         } else {
             player.sendMessage(colorize("<red>下架失败: 物品已被处理!"));
             getLogger().warning("玩家 " + player.getName() + " 下架物品失败，物品可能已被重复处理 ID: " + item.id);
@@ -1313,7 +1320,9 @@ public class GuangDianMarket extends AbstractRPGPlugin implements Listener, TabC
                 if (map.containsKey("currencyType")) {
                     try {
                         currencyType = CurrencyType.valueOf((String) map.get("currencyType"));
-                    } catch (Exception ignored) {}
+                    } catch (Exception e) {
+                        instance.getLogger().warning("解析货币类型失败: " + map.get("currencyType") + " - 使用默认 POINTS");
+                    }
                 }
                 
                 return new MarketItem(id, seller, sellerName, item, price, expireTime, currencyType);

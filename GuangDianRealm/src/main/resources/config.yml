@@ -1,0 +1,384 @@
+# =====================================================
+# GuangDianRealm 修炼境界系统配置文件
+# =====================================================
+
+# 境界配置 (从低到高)
+realms:
+  # ========== 练气期 ==========
+  lianqi_1:
+    name: "练气一阶"
+    realm_type: "lianqi"
+    stage: 1
+    required_cultivation: 100
+    bonuses:
+      max_health: 2
+      attack_damage: 1
+      defense: 0
+    description: "初入修仙之道，感知天地灵气"
+    
+  lianqi_2:
+    name: "练气二阶"
+    realm_type: "lianqi"
+    stage: 2
+    required_cultivation: 300
+    bonuses:
+      max_health: 4
+      attack_damage: 2
+      defense: 1
+    description: "引气入体，凝练真气"
+    
+  lianqi_3:
+    name: "练气三阶"
+    realm_type: "lianqi"
+    stage: 3
+    required_cultivation: 700
+    bonuses:
+      max_health: 6
+      attack_damage: 3
+      defense: 2
+    description: "真气渐充，气血旺盛"
+    
+  lianqi_4:
+    name: "练气四阶"
+    realm_type: "lianqi"
+    stage: 4
+    required_cultivation: 1500
+    bonuses:
+      max_health: 10
+      attack_damage: 5
+      defense: 3
+    description: "真气充沛，百脉畅通"
+    
+  lianqi_5:
+    name: "练气五阶"
+    realm_type: "lianqi"
+    stage: 5
+    required_cultivation: 3100
+    bonuses:
+      max_health: 15
+      attack_damage: 7
+      defense: 4
+    description: "真气精纯，力逾千斤"
+    
+  lianqi_6:
+    name: "练气六阶"
+    realm_type: "lianqi"
+    stage: 6
+    required_cultivation: 6300
+    bonuses:
+      max_health: 20
+      attack_damage: 10
+      defense: 5
+    description: "真气化液，内息悠长"
+    
+  lianqi_7:
+    name: "练气七阶"
+    realm_type: "lianqi"
+    stage: 7
+    required_cultivation: 12700
+    bonuses:
+      max_health: 30
+      attack_damage: 15
+      defense: 7
+    description: "气海充盈，可御气飞行"
+    
+  lianqi_8:
+    name: "练气八阶"
+    realm_type: "lianqi"
+    stage: 8
+    required_cultivation: 25500
+    bonuses:
+      max_health: 40
+      attack_damage: 20
+      defense: 10
+    description: "真气凝实，即将筑基"
+    
+  lianqi_9:
+    name: "练气九阶"
+    realm_type: "lianqi"
+    stage: 9
+    required_cultivation: 50000
+    bonuses:
+      max_health: 60
+      attack_damage: 30
+      defense: 15
+    description: "练气圆满，筑基在即"
+    
+  # ========== 筑基期 ==========
+  zhuji_early:
+    name: "筑基初期"
+    realm_type: "zhuji"
+    stage: 1
+    required_cultivation: 100000
+    bonuses:
+      max_health: 100
+      attack_damage: 50
+      defense: 25
+    description: "筑基成功，法力无边"
+    
+  zhuji_mid:
+    name: "筑基中期"
+    realm_type: "zhuji"
+    stage: 2
+    required_cultivation: 200000
+    bonuses:
+      max_health: 150
+      attack_damage: 80
+      defense: 40
+    description: "法力渐深，道心稳固"
+    
+  zhuji_late:
+    name: "筑基后期"
+    realm_type: "zhuji"
+    stage: 3
+    required_cultivation: 400000
+    bonuses:
+      max_health: 200
+      attack_damage: 120
+      defense: 60
+    description: "筑基圆满，可凝假丹"
+    
+  # ========== 假丹期 ==========
+  jiadan_early:
+    name: "假丹初期"
+    realm_type: "jiadan"
+    stage: 1
+    required_cultivation: 800000
+    bonuses:
+      max_health: 300
+      attack_damage: 180
+      defense: 90
+    description: "凝炼假丹，接近金丹"
+    
+  jiadan_mid:
+    name: "假丹中期"
+    realm_type: "jiadan"
+    stage: 2
+    required_cultivation: 1500000
+    bonuses:
+      max_health: 400
+      attack_damage: 250
+      defense: 120
+    description: "假丹渐成，金丹有望"
+    
+  jiadan_late:
+    name: "假丹后期"
+    realm_type: "jiadan"
+    stage: 3
+    required_cultivation: 3000000
+    bonuses:
+      max_health: 500
+      attack_damage: 350
+      defense: 160
+    description: "假丹圆满，即将结丹"
+    
+  # ========== 金丹期 ==========
+  jindan_1:
+    name: "金丹一转"
+    realm_type: "jindan"
+    stage: 1
+    required_cultivation: 6000000
+    bonuses:
+      max_health: 700
+      attack_damage: 500
+      defense: 220
+    description: "金丹初成，寿元倍增"
+    
+  jindan_2:
+    name: "金丹二转"
+    realm_type: "jindan"
+    stage: 2
+    required_cultivation: 12000000
+    bonuses:
+      max_health: 1000
+      attack_damage: 700
+      defense: 300
+    description: "金丹渐固，法力深厚"
+    
+  jindan_3:
+    name: "金丹三转"
+    realm_type: "jindan"
+    stage: 3
+    required_cultivation: 25000000
+    bonuses:
+      max_health: 1500
+      attack_damage: 1000
+      defense: 400
+    description: "金丹圆满，可凝元婴"
+    
+  # ========== 元婴期 ==========
+  yuanying_early:
+    name: "元婴初期"
+    realm_type: "yuanying"
+    stage: 1
+    required_cultivation: 50000000
+    bonuses:
+      max_health: 2000
+      attack_damage: 1500
+      defense: 500
+    description: "元婴初成，神识大增"
+    
+  yuanying_mid:
+    name: "元婴中期"
+    realm_type: "yuanying"
+    stage: 2
+    required_cultivation: 100000000
+    bonuses:
+      max_health: 3000
+      attack_damage: 2200
+      defense: 700
+    description: "元婴渐固，法力无边"
+    
+  yuanying_late:
+    name: "元婴后期"
+    realm_type: "yuanying"
+    stage: 3
+    required_cultivation: 200000000
+    bonuses:
+      max_health: 5000
+      attack_damage: 3500
+      defense: 1000
+    description: "元婴圆满，可证化神"
+    
+  # ========== 化神期 ==========
+  huashen_early:
+    name: "化神初期"
+    realm_type: "huashen"
+    stage: 1
+    required_cultivation: 400000000
+    bonuses:
+      max_health: 8000
+      attack_damage: 5000
+      defense: 1500
+    description: "化神成功，可御天地"
+    
+  huashen_mid:
+    name: "化神中期"
+    realm_type: "huashen"
+    stage: 2
+    required_cultivation: 800000000
+    bonuses:
+      max_health: 12000
+      attack_damage: 8000
+      defense: 2000
+    description: "神识通天，法力无边"
+    
+  huashen_late:
+    name: "化神后期"
+    realm_type: "huashen"
+    stage: 3
+    required_cultivation: 1500000000
+    bonuses:
+      max_health: 20000
+      attack_damage: 15000
+      defense: 3000
+    description: "化神圆满，可窥天道"
+
+# 怪物修为配置
+mob_cultivation:
+  # 低级怪物 (练气期)
+  鸡精:
+    level: 1
+    cultivation: 5
+    realm_requirement: ""
+  猪妖:
+    level: 3
+    cultivation: 15
+    realm_requirement: ""
+  狼妖:
+    level: 5
+    cultivation: 35
+    realm_requirement: ""
+  蜘蛛精:
+    level: 8
+    cultivation: 80
+    realm_requirement: ""
+  狐妖:
+    level: 10
+    cultivation: 150
+    realm_requirement: ""
+  蛇妖:
+    level: 12
+    cultivation: 250
+    realm_requirement: ""
+  虎妖:
+    level: 15
+    cultivation: 400
+    realm_requirement: ""
+  熊妖:
+    level: 18
+    cultivation: 600
+    realm_requirement: ""
+  龙龟:
+    level: 20
+    cultivation: 800
+    realm_requirement: ""
+    
+  # 中级怪物 (筑基期)
+  灵兽:
+    level: 25
+    cultivation: 1200
+    realm_requirement: "zhuji"
+  妖将:
+    level: 30
+    cultivation: 2000
+    realm_requirement: "zhuji"
+  妖帅:
+    level: 35
+    cultivation: 3500
+    realm_requirement: "zhuji"
+    
+  # 高级怪物 (假丹/金丹期)
+  妖王:
+    level: 40
+    cultivation: 6000
+    realm_requirement: "jiadan"
+  妖皇:
+    level: 50
+    cultivation: 10000
+    realm_requirement: "jindan"
+    
+  # 顶级怪物 (元婴/化神期)
+  妖帝:
+    level: 60
+    cultivation: 20000
+    realm_requirement: "yuanying"
+  妖圣:
+    level: 70
+    cultivation: 50000
+    realm_requirement: "huashen"
+
+# 默认配置：按怪物等级计算修为 (如果怪物不在上面列表中)
+default_cultivation:
+  enabled: true
+  # 公式: 基础值 * 等级^系数
+  base: 1
+  exponent: 1.5
+  # 最大修为奖励
+  max_cultivation: 100000
+
+# 设置
+settings:
+  # 是否需要突破才能晋升
+  require_breakthrough: true
+  # 突破成功率基础值
+  base_breakthrough_chance: 80
+  # 每低一境界增加的成功率
+  lower_realm_bonus: 5
+  # 突破失败损失修为比例
+  fail_loss_percent: 10
+  # 修为通知间隔
+  cultivation_notify_interval: 100
+
+# 消息配置
+messages:
+  prefix: "<gold>[境界] <white>"
+  cultivation_gain: "<yellow>获得 {amount} 点修为! (累计: {total})"
+  breakthrough_success: "<green>突破成功! 你已晋升为 {realm}!"
+  breakthrough_fail: "<red>突破失败! 损失了 {loss} 点修为..."
+  realm_info: "<yellow>当前境界: <white>{realm}"
+  cultivation_info: "<yellow>当前修为: <white>{cultivation} / {required}"
+  next_realm: "<yellow>下一境界: <white>{next_realm} (需要 {required} 修为)"
+  realm_max: "<gold>你已达到最高境界!"
+  not_ready: "<red>修为不足，无法突破!"
+  no_realm: "<red>你还没有境界!"

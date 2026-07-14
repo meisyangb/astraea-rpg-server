@@ -229,6 +229,9 @@ public class ItemRegistry {
         // 宝石类型
         String gemType = section.getString("GemType", null);
         
+        // 强化石类型
+        String enhanceStone = section.getString("EnhanceStone", null);
+        
         // 槽位定义
         List<String> sockets = section.getStringList("Sockets");
         if (sockets.isEmpty()) {
@@ -251,7 +254,7 @@ public class ItemRegistry {
             fireResist, fallResist, drowningResist, poisonResist, witherResist,
             lavaResist, magicResist, explosionResist, projectileResist,
             knockbackResist, expBonus, healthRegenPercent, dodgeReflectChance, dodgeReflectRatio,
-            level, requiredClass, gemType, sockets
+            level, requiredClass, gemType, enhanceStone, sockets
         );
     }
 

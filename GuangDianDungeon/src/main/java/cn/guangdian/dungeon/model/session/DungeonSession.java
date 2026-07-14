@@ -3,6 +3,7 @@ package cn.guangdian.dungeon.model.session;
 import cn.guangdian.dungeon.model.DungeonParty;
 import cn.guangdian.dungeon.model.stage.Stage;
 import cn.guangdian.dungeon.model.stage.Wave;
+import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.*;
@@ -25,7 +26,9 @@ public class DungeonSession {
     private Set<UUID> spawnedMobs;
     private String difficulty;
     private int timeLimit;
-    
+    // 玩家进入副本前的位置记录 (玩家UUID -> 进入前位置)
+    private final Map<UUID, Location> originalLocations = new HashMap<>();
+
     public DungeonSession() {
         this.stages = new ArrayList<>();
         this.spawnPoints = new HashMap<>();
@@ -146,6 +149,27 @@ public class DungeonSession {
     public long getElapsedTime() {
         if (startTime == 0) return 0;
         return (endTime > 0 ? endTime : System.currentTimeMillis()) - startTime;
+    }
+    
+    /**
+     * 记录玩家进入副本前的位置
+     */
+    public void setOriginalLocation(UUID playerId, Location location) {
+        originalLocations.put(playerId, location.clone());
+    }
+    
+    /**
+     * 获取玩家进入副本前的位置
+     */
+    public Location getOriginalLocation(UUID playerId) {
+        return originalLocations.get(playerId);
+    }
+    
+    /**
+     * 移除玩家的位置记录
+     */
+    public void removeOriginalLocation(UUID playerId) {
+        originalLocations.remove(playerId);
     }
     
     public enum SessionState {

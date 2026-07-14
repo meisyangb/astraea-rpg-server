@@ -89,7 +89,8 @@ public class GuangDianMusic extends JavaPlugin {
             return;
         }
 
-        String soundEvent = "yimeng." + musicId;
+        // 修复：命名空间从 yimeng 改为 guangdian（与插件名一致）
+        String soundEvent = "guangdian." + musicId;
         
         Key soundKey = Key.key(soundEvent);
         Sound sound = Sound.sound(
@@ -126,7 +127,8 @@ public class GuangDianMusic extends JavaPlugin {
 
         String musicId = getPlayerMusicId(player);
         if (musicId != null) {
-            String soundEvent = "yimeng." + musicId;
+            // 修复：命名空间从 yimeng 改为 guangdian
+            String soundEvent = "guangdian." + musicId;
             Key soundKey = Key.key(soundEvent);
             Sound sound = Sound.sound(
                 soundKey,
@@ -160,7 +162,8 @@ public class GuangDianMusic extends JavaPlugin {
 
         PlayerMusicState state = playerStates.get(player.getUniqueId());
         if (state != null && state.getCurrentMusic() != null) {
-            String soundEvent = "yimeng." + state.getCurrentMusic();
+            // 修复：命名空间从 yimeng 改为 guangdian
+            String soundEvent = "guangdian." + state.getCurrentMusic();
             Key soundKey = Key.key(soundEvent);
             Sound sound = Sound.sound(
                 soundKey,

@@ -5,6 +5,7 @@ import cn.guangdian.portal.listener.PortalListener;
 import cn.guangdian.portal.manager.PortalManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class GuangDianPortal extends JavaPlugin {
@@ -82,8 +83,12 @@ public class GuangDianPortal extends JavaPlugin {
         return teleportSoundEnabled;
     }
 
+    /**
+     * 将 MiniMessage 格式文本转换为 Legacy 格式字符串（用于需要字符串输出的场景）
+     */
     public String colorize(String text) {
-        return miniMessage.deserialize(text).toString();
+        Component component = miniMessage.deserialize(text);
+        return LegacyComponentSerializer.legacySection().serialize(component);
     }
 
     public Component colorizeToComponent(String text) {

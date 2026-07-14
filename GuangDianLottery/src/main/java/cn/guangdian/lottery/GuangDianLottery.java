@@ -298,6 +298,7 @@ public class GuangDianLottery extends AbstractRPGPlugin implements Listener, Tab
             }
         }
         
+        // TODO: 命令执行是临时方案，如果相关插件提供 API，应改用直接调用
         for (String cmd : prize.getCommands()) {
             String parsedCmd = cmd.replace("%player%", player.getName())
                 .replace("%prize%", prize.getDisplayName())
@@ -323,6 +324,9 @@ public class GuangDianLottery extends AbstractRPGPlugin implements Listener, Tab
     }
     
     private void giveMythicMobsItem(Player player, Prize prize) {
+        // TODO: 这是临时方案，通过 dispatchCommand 调用 MythicMobs 命令效率较低
+        // MythicMobs 提供 API: MythicBukkit.inst().getItemManager().getItemStack(type)
+        // 应改用: ItemStack item = MythicBukkit.inst().getItemManager().getItemStack(prize.getMythicMobsItem()).orElse(null);
         String cmd = "mm items give " + player.getName() + " " + prize.getMythicMobsItem();
         if (prize.getAmount() > 1) {
             cmd += " " + prize.getAmount();
@@ -344,6 +348,9 @@ public class GuangDianLottery extends AbstractRPGPlugin implements Listener, Tab
     }
     
     private boolean chargePoints(Player player, int amount) {
+        // TODO: 这是临时方案，通过 dispatchCommand 执行 points 命令效率较低
+        // PlayerPoints 提供 API: PlayerPointsPlugin.getAPI().take(uuid, amount)
+        // 应改用直接 API 调用
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), 
             "points take " + player.getName() + " " + amount);
         return true;

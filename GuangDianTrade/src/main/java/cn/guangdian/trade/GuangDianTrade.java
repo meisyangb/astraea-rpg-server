@@ -407,7 +407,7 @@ public class GuangDianTrade extends AbstractRPGPlugin implements Listener {
             }
             
             session.nextBreathingFrame();
-        }, 0L, 10L);
+        }, 0L, 20L); // 优化：呼吸灯动画从 10tick 改为 20tick（1秒），减少主线程占用
         
         session.setBreathingAnimationTask(taskId);
     }

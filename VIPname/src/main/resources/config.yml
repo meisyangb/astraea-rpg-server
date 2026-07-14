@@ -1,0 +1,77 @@
+# ═══════════════════════════════════════════════════════
+#  VIPname 称号插件配置
+# ═══════════════════════════════════════════════════════
+
+# 称号配置
+titles:
+  # 称号ID
+  vip:
+    name: "VIP"
+    display: "<gold>✦ VIP"
+    prefix: ""
+    suffix: " "
+    priority: 10
+    permission: "vipname.title.vip"
+    variables: []
+  
+  svip:
+    name: "SVIP"
+    display: "<gradient:#FFD700:#FFA500>✦ SVIP</gradient>"
+    prefix: ""
+    suffix: " "
+    priority: 20
+    permission: "vipname.title.svip"
+    variables: []
+  
+  mvp:
+    name: "MVP"
+    display: "<bold><gradient:#FF55FF:#55FFFF>★ MVP ★</gradient></bold>"
+    prefix: ""
+    suffix: " "
+    priority: 30
+    permission: "vipname.title.mvp"
+    variables: []
+  
+  admin:
+    name: "管理员"
+    display: "<red><bold>[管理员]</bold></red>"
+    prefix: ""
+    suffix: " "
+    priority: 100
+    permission: "vipname.title.admin"
+    variables: []
+  
+  builder:
+    name: "建筑师"
+    display: "<aqua>◈ 建筑师</aqua>"
+    prefix: ""
+    suffix: " "
+    priority: 50
+    permission: "vipname.title.builder"
+    variables: []
+  
+  # 使用变量的示例
+  level_master:
+    name: "等级大师"
+    display: "<green>[Lv.{player_level}]</green>"
+    prefix: ""
+    suffix: " "
+    priority: 15
+    permission: "vipname.title.level"
+    variables:
+      - "player_level"
+
+# 自定义变量
+variables:
+  server_name: "译梦传说"
+  server_version: "1.21.6"
+  
+# 消息配置
+messages:
+  no_permission: "<red>你没有权限执行此操作"
+  title_not_found: "<red>称号不存在"
+  title_not_owned: "<red>你还没有获得该称号"
+  title_set: "<green>已设置称号为: {title}"
+  title_clear: "<green>已清除称号"
+  title_granted: "<green>你获得了称号: {title}"
+  title_removed: "<yellow>你的称号 {title} 已被移除"

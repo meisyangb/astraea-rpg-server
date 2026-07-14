@@ -31,7 +31,9 @@ public class GuangDianItemLabel extends AbstractRPGPlugin {
         getCommand("itemlabel").setExecutor(command);
         getCommand("itemlabel").setTabCompleter(command);
 
-        long updateInterval = getConfig().getLong("update-interval", 20L);
+        // 优化：更新间隔最小为 5 tick（防止高频刷新拖慢主线程）
+        // 默认 20 tick = 1秒更新一次标签
+        long updateInterval = Math.max(5L, getConfig().getLong("update-interval", 20L));
         scheduler.runSyncRepeating(itemLabelManager::updateLabels, updateInterval, updateInterval);
 
         getLogger().info(getPluginName() + " 已启动 - 物品标签系统已激活");

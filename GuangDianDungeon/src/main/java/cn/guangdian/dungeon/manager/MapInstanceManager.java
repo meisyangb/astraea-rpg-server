@@ -116,56 +116,158 @@ public class MapInstanceManager {
      * @return 实例世界名，如果地图已满返回 null
      */
     public String createInstance(String mapName) {
+        return createInstanceAsync(mapName, null).join();
+    }
+
+    /**
+     * 异步创建副本实例（支持进度回调）
+     *
+     * @param mapName 地图名称
+     * @param progressCallback 进度回调 (0-100, 状态消息)
+     * @return CompletableFuture 包含实例世界名
+     */
+    public java.util.concurrent.CompletableFuture<String> createInstanceAsync(String mapName, ProgressCallback progressCallback) {
         AtomicInteger counter = instanceCounters.computeIfAbsent(mapName, k -> new AtomicInteger(0));
 
         // CAS 自旋：尝试将计数 +1，如果已达上限则失败
-        // 比 synchronized 更轻量，不会阻塞其他线程
         int current;
         do {
             current = counter.get();
             if (current >= MAX_INSTANCES_PER_MAP) {
                 plugin.getLogger().warning("地图 " + mapName + " 已达到最大实例数 (" + MAX_INSTANCES_PER_MAP + ")");
-                return null;
+                return java.util.concurrent.CompletableFuture.completedFuture(null);
             }
         } while (!counter.compareAndSet(current, current + 1));
 
+        return java.util.concurrent.CompletableFuture.supplyAsync(() -> {
+            try {
+                return doCreateInstance(mapName, counter, progressCallback);
+            } catch (Exception e) {
+                plugin.getLogger().severe("创建副本实例失败: " + e.getMessage());
+                counter.decrementAndGet();
+                return null;
+            }
+        });
+    }
+
+    /**
+     * 进度回调接口
+     */
+    @FunctionalInterface
+    public interface ProgressCallback {
+        void onProgress(int percent, String message);
+    }
+
+    /**
+     * 执行创建实例的实际逻辑
+     */
+    private String doCreateInstance(String mapName, AtomicInteger counter, ProgressCallback progressCallback) {
         // 生成实例名
         String instanceName = INSTANCE_PREFIX + mapName + "_" + UUID.randomUUID().toString().substring(0, 8);
 
-        // 复制地图文件夹
+        // 阶段1: 检查地图 (0-25%)
+        notifyProgressMilestone(progressCallback, 25, "检查地图文件...");
         File mapDir = new File(plugin.getDataFolder(), "map/" + mapName);
-        File instanceDir = new File(Bukkit.getWorldContainer(), instanceName);
-
         if (!mapDir.exists()) {
             plugin.getLogger().severe("地图文件夹不存在: " + mapDir.getAbsolutePath());
             counter.decrementAndGet();
             return null;
         }
 
+        // 阶段2: 复制地图文件夹 (25%-50%)
+        notifyProgressMilestone(progressCallback, 50, "复制地图数据...");
+        File instanceDir = new File(Bukkit.getWorldContainer(), instanceName);
+
         try {
-            copyWorldFolder(mapDir.toPath(), instanceDir.toPath());
+            copyWorldFolderSilent(mapDir.toPath(), instanceDir.toPath());
         } catch (IOException e) {
             plugin.getLogger().severe("复制地图失败: " + mapName + " - " + e.getMessage());
             counter.decrementAndGet();
             return null;
         }
 
-        // 删除 uid.dat（避免世界冲突）
+        // 阶段3: 删除 uid.dat (50%-75%)
+        notifyProgressMilestone(progressCallback, 75, "初始化副本世界...");
         deleteUidFile(instanceDir);
 
-        // 加载世界（必须在主线程）
-        World world = new WorldCreator(instanceName).createWorld();
-        if (world == null) {
-            plugin.getLogger().severe("加载实例世界失败: " + instanceName);
-            deleteWorldFolder(instanceDir);
+        // 阶段4: 加载世界 (75%-100%) - 必须在主线程
+        final String finalInstanceName = instanceName;
+        java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(1);
+        final World[] worldHolder = new World[1];
+        final boolean[] successHolder = {false};
+
+        Bukkit.getScheduler().runTask(plugin, () -> {
+            try {
+                World world = new WorldCreator(finalInstanceName).createWorld();
+                if (world == null) {
+                    plugin.getLogger().severe("加载实例世界失败: " + finalInstanceName);
+                    deleteWorldFolder(instanceDir);
+                    counter.decrementAndGet();
+                } else {
+                    worldHolder[0] = world;
+                    successHolder[0] = true;
+
+                    // 记录活跃实例
+                    activeInstances.computeIfAbsent(mapName, k -> ConcurrentHashMap.newKeySet()).add(finalInstanceName);
+                    plugin.getLogger().info("创建副本实例: " + finalInstanceName + " (地图: " + mapName + ", 当前实例数: " + counter.get() + "/" + MAX_INSTANCES_PER_MAP + ")");
+                }
+            } finally {
+                latch.countDown();
+            }
+        });
+
+        try {
+            latch.await(30, java.util.concurrent.TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            plugin.getLogger().warning("等待世界加载超时");
             counter.decrementAndGet();
             return null;
         }
 
-        // 记录活跃实例
-        activeInstances.computeIfAbsent(mapName, k -> ConcurrentHashMap.newKeySet()).add(instanceName);
-        plugin.getLogger().info("创建副本实例: " + instanceName + " (地图: " + mapName + ", 当前实例数: " + counter.get() + "/" + MAX_INSTANCES_PER_MAP + ")");
+        if (!successHolder[0]) {
+            return null;
+        }
+
+        notifyProgressMilestone(progressCallback, 100, "副本准备完成！");
+
+        // 等待一小段时间让世界稳定
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ignored) {}
+
         return instanceName;
+    }
+
+    /**
+     * 通知进度里程碑（仅在25%、50%、75%、100%时通知）
+     */
+    private void notifyProgressMilestone(ProgressCallback callback, int percent, String message) {
+        if (callback != null) {
+            callback.onProgress(percent, message);
+        }
+    }
+
+    /**
+     * 静默复制世界文件夹（不发送进度通知）
+     */
+    private void copyWorldFolderSilent(Path source, Path target) throws IOException {
+        Files.walkFileTree(source, new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                Files.createDirectories(target.resolve(source.relativize(dir)));
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                String fileName = file.getFileName().toString();
+                if (fileName.equals("uid.dat") || fileName.equals("session.lock")) {
+                    return FileVisitResult.CONTINUE;
+                }
+                Files.copy(file, target.resolve(source.relativize(file)), StandardCopyOption.REPLACE_EXISTING);
+                return FileVisitResult.CONTINUE;
+            }
+        });
     }
 
     /**
@@ -279,7 +381,7 @@ public class MapInstanceManager {
     }
 
     /**
-     * 将玩家传送到出口世界
+     * 将玩家传送到出口世界（配置的默认位置）
      */
     public void teleportToExitWorld(Player player) {
         String exitWorldName = plugin.getConfig().getString("exit-world.world", "world");
@@ -295,6 +397,28 @@ public class MapInstanceManager {
         }
 
         player.teleport(new org.bukkit.Location(exitWorld, x, y, z, yaw, pitch));
+    }
+
+    /**
+     * 将玩家传送到其进入副本前的原始位置
+     * @param player 玩家
+     * @param originalLocation 玩家进入副本前的位置
+     */
+    public void teleportToOriginalLocation(Player player, org.bukkit.Location originalLocation) {
+        if (originalLocation == null) {
+            teleportToExitWorld(player);
+            return;
+        }
+
+        // 检查原始位置的世界是否加载
+        org.bukkit.World world = originalLocation.getWorld();
+        if (world == null || Bukkit.getWorld(world.getName()) == null) {
+            // 世界未加载，使用默认出口
+            teleportToExitWorld(player);
+            return;
+        }
+
+        player.teleport(originalLocation);
     }
 
     // ========== 内部方法 ==========

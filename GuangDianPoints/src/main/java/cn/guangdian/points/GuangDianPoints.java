@@ -136,6 +136,9 @@ public class GuangDianPoints extends AbstractRPGPlugin implements Listener, TabC
         // 加载 YAML 数据文件
         loadData();
 
+        // 初始化 SQLite 数据库存储
+        initDatabase();
+
         initOptimizationComponents();
         recoverUnfinishedTransactions();
         registerEvents();

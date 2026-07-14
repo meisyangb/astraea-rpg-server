@@ -1,0 +1,57 @@
+# ═══════════════════════════════════════════════════════
+#  焚香谷主线任务
+# ═══════════════════════════════════════════════════════
+
+fenxiang_m001:
+  name: "引火入体"
+  type: MAIN
+  questline: fenxiang_main
+  order: 1
+  required_level: 1
+  description:
+    - "&c焚香谷中火云涌，烈焰焚天震九州。"
+    - "&c长老命你前往火灵谷，收集10枚火灵晶。"
+  objectives:
+    - type: COLLECT_ITEM
+      target: "火灵晶"
+      amount: 10
+      description: "收集火灵晶"
+  rewards:
+    money: 50
+    exp: 100
+
+fenxiang_m002:
+  name: "烈焰焚天"
+  type: MAIN
+  questline: fenxiang_main
+  order: 2
+  required_level: 3
+  description:
+    - "&c火系功法，讲究以战养战。"
+    - "&c前往炎魔洞，击杀10只炎魔。"
+  objectives:
+    - type: KILL_MOB
+      target: "炎魔"
+      amount: 10
+      description: "击杀炎魔"
+  rewards:
+    money: 100
+    exp: 200
+
+fenxiang_m003:
+  name: "焚香试炼"
+  type: MAIN
+  questline: fenxiang_main
+  order: 3
+  required_level: 5
+  description:
+    - "&c你的火焰之力日益精纯。"
+    - "&c前往焚香台，挑战火凤凰。"
+  objectives:
+    - type: KILL_MOB
+      target: "火凤凰"
+      amount: 1
+      description: "击败火凤凰"
+  rewards:
+    money: 300
+    exp: 500

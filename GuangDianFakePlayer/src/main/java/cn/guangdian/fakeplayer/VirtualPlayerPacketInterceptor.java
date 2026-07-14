@@ -26,6 +26,7 @@ public class VirtualPlayerPacketInterceptor {
     private final GuangDianFakePlayer plugin;
     private final ProtocolManager protocolManager;
     private final VirtualPlayerDataManager dataManager;
+    private com.comphenix.protocol.events.PacketListener packetListener;
 
     public VirtualPlayerPacketInterceptor(GuangDianFakePlayer plugin, VirtualPlayerDataManager dataManager) {
         this.plugin = plugin;
@@ -42,7 +43,7 @@ public class VirtualPlayerPacketInterceptor {
         final GuangDianFakePlayer fakePlayerPlugin = this.plugin;
         final FakePlayerConfig config = fakePlayerPlugin.getFakePlayerConfig();
         
-        protocolManager.addPacketListener(new PacketAdapter(
+        packetListener = new PacketAdapter(
             plugin,
             ListenerPriority.NORMAL,
             PacketType.Play.Server.PLAYER_INFO
@@ -126,9 +127,21 @@ public class VirtualPlayerPacketInterceptor {
                     }
                 }
             }
-        });
+        };
 
+        protocolManager.addPacketListener(packetListener);
         plugin.getLogger().info("已注册PlayerInfo数据包拦截器");
+    }
+
+    /**
+     * 停止数据包拦截器，注销监听器
+     */
+    public void stop() {
+        if (packetListener != null) {
+            protocolManager.removePacketListener(packetListener);
+            packetListener = null;
+            plugin.getLogger().info("已注销PlayerInfo数据包拦截器");
+        }
     }
 
     /**

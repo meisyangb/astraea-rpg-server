@@ -146,6 +146,7 @@ public class GuangDianFakePlayer extends JavaPlugin implements Listener {
      */
     public void reloadConfig() {
         super.reloadConfig();
+        FakePlayerConfig oldConfig = config;
         config = new FakePlayerConfig(this);
 
         // 清理虚拟玩家数据文件（可选）
@@ -154,13 +155,20 @@ public class GuangDianFakePlayer extends JavaPlugin implements Listener {
             getLogger().info("虚拟玩家数据文件已保留");
         }
 
-        // 停止动态调度器
+        // 先停止旧的动态调度器（如果存在）
         if (dynamicScheduler != null) {
             dynamicScheduler.stop();
-            getLogger().info("动态玩家调度器已停止");
+            getLogger().info("旧的动态玩家调度器已停止");
         }
 
-        // 重新创建虚拟玩家数据文件
+        // 先停止旧的数据包拦截器（如果存在）
+        if (packetInterceptor != null) {
+            packetInterceptor.stop();
+            packetInterceptor = null;
+            getLogger().info("旧的数据包拦截器已停止");
+        }
+
+        // 重新创建虚拟玩家数据文件（仅在启用时）
         if (config.isVirtualPlayersEnabled()) {
             if (dataManager == null) {
                 dataManager = new VirtualPlayerDataManager(this);
@@ -170,19 +178,15 @@ public class GuangDianFakePlayer extends JavaPlugin implements Listener {
             getLogger().info("已创建 " + config.getVirtualPlayersCount() + " 个虚拟玩家数据文件");
         }
 
-        // 重新初始化数据包拦截器
+        // 重新初始化数据包拦截器（仅在启用且 ProtocolLib 可用时）
         if (config.isVirtualPlayersEnabled() && config.isUseProtocolLib() && dataManager != null && Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-            if (packetInterceptor == null) {
-                packetInterceptor = new VirtualPlayerPacketInterceptor(this, dataManager);
-            }
+            packetInterceptor = new VirtualPlayerPacketInterceptor(this, dataManager);
             getLogger().info("数据包拦截器已重新初始化");
         }
 
-        // 重新启动动态调度器
+        // 重新启动动态调度器（仅在启用时）
         if (config.isDynamicEnabled() && dataManager != null) {
-            if (dynamicScheduler == null) {
-                dynamicScheduler = new DynamicPlayerScheduler(this, dataManager);
-            }
+            dynamicScheduler = new DynamicPlayerScheduler(this, dataManager);
             dynamicScheduler.start();
             getLogger().info("动态玩家调度器已启动");
         }

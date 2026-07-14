@@ -189,8 +189,10 @@ public class GuangDianClass extends AbstractRPGPlugin {
             }
         }
         
-        if (scheduler != null) {
-            scheduler.cancelAllTasks();
+        // 取消本插件注册的定时任务
+        if (scheduler != null && classSaveTaskId >= 0) {
+            scheduler.cancelTask(classSaveTaskId);
+            classSaveTaskId = -1;
         }
         
         getLogger().info("GuangDianClass 职业系统已关闭!");

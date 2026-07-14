@@ -3,7 +3,6 @@ package cn.guangdian.armorstats;
 import cn.guangdian.armorstats.adapter.ArmorStatsServiceAdapter;
 import cn.guangdian.armorstats.boss.BossAnnouncer;
 import cn.guangdian.armorstats.debug.DebugLogManager;
-import cn.guangdian.armorstats.cache.EquipmentCacheManager;
 import cn.guangdian.armorstats.config.ConfigManager;
 import cn.guangdian.armorstats.lifecycle.ArmorStatsDataHandler;
 import cn.guangdian.armorstats.manager.BossBarOptimizer;
@@ -50,7 +49,6 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
     // 优化组件 - 优先使用 RPGCore 服务，本地实现作为降级方案
     private AsyncExecutorService asyncExecutor;  // 本地异步执行器（降级用）
     private cn.guangdian.rpgcore.api.AsyncExecutor rpgCoreAsyncExecutor;  // RPGCore 统一异步执行器
-    private EquipmentCacheManager equipmentCacheManager;  // 本地装备缓存
     private BossBarOptimizer bossBarOptimizer;
     private ArmorStatsStorage armorStorage;
     private int armorSaveId = -1;
@@ -226,19 +224,6 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
             }
         }
         
-        // 初始化装备缓存管理器 - 优先使用 RPGCore CacheProvider
-        ConfigurationSection cacheConfig = optConfig.getConfigurationSection("equipment_cache");
-        if (cacheConfig != null && cacheConfig.getBoolean("enabled", true)) {
-            int maxSize = cacheConfig.getInt("max_size", 1000);
-            // 如果 RPGCore CacheProvider 可用，使用统一缓存；否则使用本地实现
-            if (cacheProvider != null) {
-                getLogger().info("使用 RPGCore 统一 CacheProvider（推荐）");
-            }
-            // 本地装备缓存管理器仍然需要，用于装备解析逻辑
-            equipmentCacheManager = new EquipmentCacheManager(this, maxSize);
-            getLogger().info("装备缓存已启用 (最大缓存: " + maxSize + ")");
-        }
-        
         // 初始化BossBar优化器
         ConfigurationSection bossBarOptConfig = optConfig.getConfigurationSection("bossbar_optimizer");
         if (bossBarOptConfig != null && bossBarOptConfig.getBoolean("enabled", true)) {
@@ -269,7 +254,6 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
         getLogger().info("异步执行器: " + (rpgCoreAsyncExecutor != null ? "RPGCore统一" : (asyncExecutor != null ? "本地" : "未启用")));
         getLogger().info("SyncScheduler: " + (rpgCoreScheduler != null ? "RPGCore统一" : "本地"));
         getLogger().info("ExternalServices: " + (externalServices != null ? "RPGCore统一" : "未启用"));
-        getLogger().info("装备缓存: " + (equipmentCacheManager != null ? "已启用" : "未启用"));
         getLogger().info("BossBar优化: " + (bossBarOptimizer != null ? "已启用" : "未启用"));
         getLogger().info("==========================================");
     }
@@ -289,16 +273,11 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
             serviceAdapter.unregister();
         }
         
-        // 取消所有任务
-        if (scheduler != null) {
-            scheduler.cancelAllTasks();
-        }
+        // 注意：不调用 scheduler.cancelAllTasks()，因为 RPGCore 调度器是共享的，取消会影响其他插件
+        // 也不调用 rpgCoreAsyncExecutor.shutdownNow()，因为异步执行器由 RPGCore 自己管理
         
-        // 直接关闭异步执行器，不等待（关服时数据已在其他时机保存）
-        if (rpgCoreAsyncExecutor != null) {
-            getLogger().info("关闭 RPGCore 异步执行器...");
-            rpgCoreAsyncExecutor.shutdownNow();
-        } else if (asyncExecutor != null) {
+        // 仅关闭本地异步执行器（降级方案）
+        if (asyncExecutor != null) {
             getLogger().info("关闭本地异步执行器...");
             asyncExecutor.shutdown();
         }
@@ -327,11 +306,6 @@ public final class GuangDianArmorStats extends AbstractRPGPlugin {
                 statsManager.clearPlayerAttributes(player);
                 statsManager.removePlayer(player.getUniqueId());
             });
-        }
-        
-        // 输出缓存统计
-        if (equipmentCacheManager != null) {
-            getLogger().info("装备缓存统计: " + equipmentCacheManager.getStats());
         }
         
         // 关闭调试日志

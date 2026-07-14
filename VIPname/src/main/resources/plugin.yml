@@ -1,0 +1,38 @@
+name: VIPname
+version: 1.0.0
+main: cn.guangdian.vipname.VIPname
+api-version: '1.21'
+author: GuangDian
+description: VIPname 称号插件
+
+softdepend:
+  - PlaceholderAPI
+
+commands:
+  vipname:
+    description: VIPname 称号系统命令
+    usage: /vipname <list|set|clear|grant|remove|reload>
+    aliases:
+      - vn
+      - title
+
+permissions:
+  vipname.use:
+    description: 使用称号系统的基本权限
+    default: true
+  
+  vipname.admin:
+    description: 管理员权限
+    default: op
+  
+  vipname.title.vip:
+    description: VIP 称号权限
+    default: false
+  
+  vipname.title.svip:
+    description: SVIP 称号权限
+    default: false
+  
+  vipname.title.mvp:
+    description: MVP 称号权限
+    default: false

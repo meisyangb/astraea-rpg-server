@@ -35,6 +35,8 @@ public class GuangDianGearScore extends AbstractRPGPlugin implements Listener, T
     
     private final Map<UUID, Long> playerScores = new ConcurrentHashMap<>();
     private final Map<UUID, Long> scoreCache = new ConcurrentHashMap<>();
+    // 优化：玩家名称缓存，避免阻塞调用 Bukkit.getOfflinePlayer(uuid)
+    private final Map<UUID, String> playerNameCache = new ConcurrentHashMap<>();
     
     private int updateInterval;
     private int leaderboardSize;
@@ -166,8 +168,35 @@ public class GuangDianGearScore extends AbstractRPGPlugin implements Listener, T
         List<Map.Entry<UUID, Long>> top = getTopPlayers(index + 1);
         if (index < top.size()) {
             UUID uuid = top.get(index).getKey();
+            // 优化：使用缓存优先，避免阻塞调用 getOfflinePlayer
+            String cachedName = playerNameCache.get(uuid);
+            if (cachedName != null) {
+                return cachedName;
+            }
+            
+            // 尝试获取在线玩家
+            Player onlinePlayer = Bukkit.getPlayer(uuid);
+            if (onlinePlayer != null) {
+                String name = onlinePlayer.getName();
+                playerNameCache.put(uuid, name);
+                return name;
+            }
+            
+            // 使用非阻塞的缓存获取方法（1.19+ API）
+            OfflinePlayer cachedPlayer = Bukkit.getOfflinePlayerIfCached(uuid);
+            if (cachedPlayer != null && cachedPlayer.getName() != null) {
+                playerNameCache.put(uuid, cachedPlayer.getName());
+                return cachedPlayer.getName();
+            }
+            
+            // 最后尝试阻塞获取（仅当必要时）
             OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
-            return player.getName() != null ? player.getName() : "未知";
+            String name = player.getName();
+            if (name != null) {
+                playerNameCache.put(uuid, name);
+                return name;
+            }
+            return "未知";
         }
         return "-";
     }
@@ -240,8 +269,8 @@ public class GuangDianGearScore extends AbstractRPGPlugin implements Listener, T
         List<Map.Entry<UUID, Long>> top = getTopPlayers(leaderboardSize);
         for (int i = 0; i < top.size(); i++) {
             Map.Entry<UUID, Long> entry = top.get(i);
-            OfflinePlayer player = Bukkit.getOfflinePlayer(entry.getKey());
-            String name = player.getName() != null ? player.getName() : "未知";
+            // 优化：使用缓存的方法获取玩家名称，避免阻塞调用
+            String name = getTopPlayerName(i);
             
             sender.sendMessage(colorize(config.getString("messages.leaderboard-line", "<yellow>#%rank% <white>%player% <gray>- <gold>%score%")
                 .replace("%rank%", String.valueOf(i + 1))

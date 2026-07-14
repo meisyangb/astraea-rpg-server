@@ -1,7 +1,6 @@
 package cn.guangdian.rpgitems.attribute;
 
 import org.bukkit.NamespacedKey;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.nio.ByteBuffer;
 
@@ -53,10 +52,10 @@ public final class CompoundAttributeCodec {
         DODGE_REFLECT_CHANCE = 46, DODGE_REFLECT_RATIO = 47;
 
     /** 复合属性的 PDC key */
-    public static final NamespacedKey KEY_COMPOUND = new NamespacedKey("rpgitems", "attrs");
+    public static final NamespacedKey KEY_COMPOUND = RPGItemsKeys.ATTRS;
 
     /** 强化基础属性的 PDC key（保存强化前的原始值） */
-    public static final NamespacedKey KEY_BASE_COMPOUND = new NamespacedKey("rpgitems", "base_attrs");
+    public static final NamespacedKey KEY_BASE_COMPOUND = RPGItemsKeys.BASE_ATTRS;
 
     /** byte[] 大小 */
     public static final int BYTE_SIZE = COUNT * 8; // 384

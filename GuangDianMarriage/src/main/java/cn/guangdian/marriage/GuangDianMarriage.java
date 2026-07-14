@@ -47,7 +47,6 @@ public class GuangDianMarriage extends AbstractRPGPlugin implements Listener, Co
         config = getConfig();
         mStorage = new MarriageStorage(this);
         if (mStorage.init()) { mStorage.load(); for (var m : mStorage.all()) { Map<String,Object> data = new HashMap<>(); data.put("player1",m.p1());data.put("player2",m.p2());data.put("marryDate",m.d());data.put("lovePoints",m.lp());data.put("player1Nickname",m.n1());data.put("player2Nickname",m.n2()); Marriage mar = Marriage.deserialize(data); if (mar != null) { marriages.put(mar.player1.toLowerCase(), mar); marriages.put(mar.player2.toLowerCase(), mar); } } }
-        loadMarriages();
         mSaveId = getServer().getScheduler().runTaskTimerAsynchronously(this, () -> { if (mStorage != null) { mStorage.clear(); for (Marriage mar : new HashSet<>(marriages.values())) mStorage.add(mar.player1, mar.player2, mar.marryDate, mar.lovePoints, mar.player1Nickname, mar.player2Nickname); mStorage.saveAsync(); } }, 6000L, 6000L).getTaskId();
         getCommand("marriage").setExecutor(this);
         getCommand("marriage").setTabCompleter(this);
@@ -182,23 +181,25 @@ public class GuangDianMarriage extends AbstractRPGPlugin implements Listener, Co
     // ==================== 辅助方法 ====================
 
     /**
-     * 从UUID获取玩家名称（优先在线玩家）
+     * 从UUID获取玩家名称（优先在线玩家，避免阻塞的数据库查询）
      */
     private String getPlayerNameFromUUID(UUID uuid) {
         org.bukkit.entity.Player online = getServer().getPlayer(uuid);
         if (online != null) return online.getName();
-        org.bukkit.OfflinePlayer offline = getServer().getOfflinePlayer(uuid);
-        return offline.getName();
+        // 使用非阻塞的缓存查询，避免主线程卡顿
+        org.bukkit.OfflinePlayer cached = getServer().getOfflinePlayerIfCached(uuid);
+        return cached != null ? cached.getName() : null;
     }
 
     /**
-     * 从名称获取玩家UUID
+     * 从名称获取玩家UUID（避免阻塞的数据库查询）
      */
     private UUID getPlayerUUIDFromName(String name) {
         org.bukkit.entity.Player online = getServer().getPlayerExact(name);
         if (online != null) return online.getUniqueId();
-        org.bukkit.OfflinePlayer offline = getServer().getOfflinePlayer(name);
-        if (offline.hasPlayedBefore()) return offline.getUniqueId();
+        // 使用非阻塞的缓存查询
+        org.bukkit.OfflinePlayer cached = getServer().getOfflinePlayerIfCached(name);
+        if (cached != null && cached.hasPlayedBefore()) return cached.getUniqueId();
         return null;
     }
 

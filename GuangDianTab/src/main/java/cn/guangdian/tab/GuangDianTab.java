@@ -176,8 +176,9 @@ public class GuangDianTab extends AbstractRPGPlugin implements Listener, TabComp
     }
 
     private void loadFormats() {
-        refreshTicks = Math.max(1L, config.getLong("refresh-interval", 1000L) / 50L);
-        headerFooterTicks = Math.max(1L, config.getLong("header.refresh-interval", 1000L) / 50L);
+        // 节流机制：最小刷新间隔不低于 500ms (10tick)，避免过于频繁刷新导致性能问题
+        refreshTicks = Math.max(10L, config.getLong("refresh-interval", 1000L) / 50L);
+        headerFooterTicks = Math.max(10L, config.getLong("header.refresh-interval", 1000L) / 50L);
 
         ConfigurationSection defaultSection = config.getConfigurationSection("default-format");
         defaultFormat = new GroupFormat(

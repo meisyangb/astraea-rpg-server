@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+}
+
+group = 'cn.guangdian'
+version = '1.0.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.papermc.io/repository/maven-public/' }
+    maven { url 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT'
+    compileOnly 'me.clip:placeholderapi:2.11.6'
+}
+
+tasks.jar {
+    archiveFileName = 'VIPname.jar'
+    destinationDirectory = file('build/libs')
+}
+
+tasks.processResources {
+    expand project.properties
+}

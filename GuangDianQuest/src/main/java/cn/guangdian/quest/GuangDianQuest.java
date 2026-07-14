@@ -4,7 +4,6 @@ import cn.guangdian.quest.adapter.QuestServiceAdapter;
 import cn.guangdian.quest.command.QuestCommand;
 import cn.guangdian.quest.dialogue.ChatDialogueManager;
 import cn.guangdian.quest.dialogue.DialogueListener;
-import cn.guangdian.quest.gui.DialogueGUI;
 import cn.guangdian.quest.gui.QuestGUIManager;
 import cn.guangdian.quest.lifecycle.QuestDataHandler;
 import cn.guangdian.quest.listener.QuestEventListener;
@@ -43,7 +42,6 @@ public class GuangDianQuest extends AbstractRPGPlugin {
     private ChatMessageService chatMessageService;
     private QuestUnlockManager unlockManager;
     private QuestGUIManager guiManager;
-    private DialogueGUI dialogueGUI;
     private ChatDialogueManager chatDialogueManager;
 
     private MiniMessageService miniMessage;
@@ -160,7 +158,6 @@ public class GuangDianQuest extends AbstractRPGPlugin {
         chatMessageService = new ChatMessageService(this);
         unlockManager = new QuestUnlockManager(this);
         guiManager = new QuestGUIManager(this);
-        dialogueGUI = new DialogueGUI(this);
         chatDialogueManager = new ChatDialogueManager(this);
     }
 
@@ -333,7 +330,6 @@ public class GuangDianQuest extends AbstractRPGPlugin {
     public QuestEventListener getQuestEventListener() { return questEventListener; }
     public QuestUnlockManager getQuestUnlockManager() { return unlockManager; }
     public QuestGUIManager getQuestGUIManager() { return guiManager; }
-    public DialogueGUI getDialogueGUI() { return dialogueGUI; }
     public ChatDialogueManager getChatDialogueManager() { return chatDialogueManager; }
     public int getMaxActiveQuests() { return maxActiveQuests; }
     public int getDailyQuestLimit() { return dailyQuestLimit; }

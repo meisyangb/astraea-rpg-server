@@ -66,7 +66,7 @@ public class TemplateLoader {
     private DungeonSettings loadSettings(YamlConfiguration config) {
         var settingsSection = config.getConfigurationSection("settings");
         if (settingsSection == null) {
-            return new DungeonSettings(5, 1, 1800, 3600, 10, 30, 0, 0, null, null, 1);
+            return new DungeonSettings(5, 1, 1800, 3600, 10, 30, 0, 0, null, null, 1, true);
         }
 
         return new DungeonSettings(
@@ -80,7 +80,8 @@ public class TemplateLoader {
             settingsSection.getInt("requirements.max-level", 0),
             settingsSection.getString("requirements.permission", null),
             settingsSection.getString("icon-material", null),
-            settingsSection.getInt("recommended-level", 1)
+            settingsSection.getInt("recommended-level", 1),
+            settingsSection.getBoolean("keep-inventory-on-death", true)  // 默认保留物品
         );
     }
 

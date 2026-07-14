@@ -13,6 +13,7 @@ import cn.guangdian.battlepass.manager.SeasonManager;
 import cn.guangdian.battlepass.storage.BattlePassStorage;
 import cn.guangdian.battlepass.placeholder.BattlePassPlaceholder;
 import cn.guangdian.rpgcore.RPGCore;
+import cn.guangdian.rpgcore.integration.RPGCoreHelper;
 import cn.guangdian.rpgcore.plugin.AbstractRPGPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -105,28 +106,40 @@ public class GuangDianBattlePass extends AbstractRPGPlugin {
         }, 0L, 20L * 60 * 60 * 24);
     }
     
+    /**
+     * 给予点券（通过 GuangDianPoints 点券系统）
+     */
     public void givePoints(Player player, int amount) {
-        if (externalServices != null && externalServices.isVaultEnabled()) {
-            externalServices.deposit(player, amount);
+        if (RPGCoreHelper.isPointsServiceAvailable()) {
+            RPGCoreHelper.addBalance(player.getUniqueId(), amount, "BattlePass奖励");
         }
     }
     
+    /**
+     * 给予金币（通过 Vault 经济系统）
+     */
     public void giveMoney(Player player, int amount) {
         if (externalServices != null && externalServices.isVaultEnabled()) {
             externalServices.deposit(player, amount);
         }
     }
     
+    /**
+     * 扣除点券（通过 GuangDianPoints 点券系统）
+     */
     public boolean takePoints(Player player, int amount) {
-        if (externalServices != null && externalServices.isVaultEnabled()) {
-            return externalServices.withdraw(player, amount);
+        if (RPGCoreHelper.isPointsServiceAvailable()) {
+            return RPGCoreHelper.removeBalance(player.getUniqueId(), amount, "BattlePass消费");
         }
         return false;
     }
     
+    /**
+     * 获取点券余额（通过 GuangDianPoints 点券系统）
+     */
     public long getPoints(Player player) {
-        if (externalServices != null && externalServices.isVaultEnabled()) {
-            return (long) externalServices.getBalance(player);
+        if (RPGCoreHelper.isPointsServiceAvailable()) {
+            return RPGCoreHelper.getBalance(player.getUniqueId());
         }
         return 0;
     }

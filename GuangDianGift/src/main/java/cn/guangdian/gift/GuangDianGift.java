@@ -417,7 +417,10 @@ public class GuangDianGift extends AbstractRPGPlugin {
             }
         }
 
-        // 给予物品 (使用 RPGItems 命令)
+        // 给予物品
+        // TODO: 这是临时方案，通过 dispatchCommand 调用 RPGItems 命令效率较低
+        // 如果 RPGItems 提供公开 API（如 RPGItems.getItem(itemName).giveTo(player, amount)），
+        // 应改用直接 API 调用以提高性能和可靠性
         List<String> items = config.getItems();
         for (String item : items) {
             String[] parts = item.split(":");
@@ -487,7 +490,7 @@ public class GuangDianGift extends AbstractRPGPlugin {
             return false;
         }
         // 使用PDC检查RPGItem名称
-        org.bukkit.NamespacedKey key = new org.bukkit.NamespacedKey("rpgitems", "item");
+        org.bukkit.NamespacedKey key = new org.bukkit.NamespacedKey("rpgitems", "id");
         String rpgItemName = item.getItemMeta().getPersistentDataContainer().get(key, org.bukkit.persistence.PersistentDataType.STRING);
         return itemName.equals(rpgItemName);
     }

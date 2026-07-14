@@ -49,11 +49,13 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
 
     private static class CachedLuckPermsMeta {
         final String prefix;
+        final String suffix;
         final String primaryGroup;
         final long timestamp;
 
-        CachedLuckPermsMeta(String prefix, String primaryGroup) {
+        CachedLuckPermsMeta(String prefix, String suffix, String primaryGroup) {
             this.prefix = prefix;
+            this.suffix = suffix;
             this.primaryGroup = primaryGroup;
             this.timestamp = System.currentTimeMillis();
         }
@@ -385,9 +387,10 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
         
         String prefix = cachedMeta != null ? cachedMeta.prefix : "";
         replaceAll(sb, "%luckperms_prefix%", prefix != null ? prefix : "");
-        String suffix = cachedMeta != null && cachedMeta.primaryGroup != null ? cachedMeta.primaryGroup : "default";
-        replaceAll(sb, "%luckperms_suffix%", "");
-        replaceAll(sb, "%luckperms_primary_group_name%", suffix);
+        String suffix = cachedMeta != null ? cachedMeta.suffix : "";
+        replaceAll(sb, "%luckperms_suffix%", suffix != null ? suffix : "");
+        String primaryGroup = cachedMeta != null && cachedMeta.primaryGroup != null ? cachedMeta.primaryGroup : "default";
+        replaceAll(sb, "%luckperms_primary_group_name%", primaryGroup);
 
         String result = sb.toString();
         if (externalServices != null && externalServices.isPlaceholderAPIEnabled()) {
@@ -411,14 +414,16 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
         }
 
         String prefix = "";
+        String suffix = "";
         String primaryGroup = "default";
 
         if (externalServices != null) {
             prefix = externalServices.getPlayerPrefix(player);
+            suffix = externalServices.getPlayerSuffix(player);
             primaryGroup = externalServices.getPlayerPrimaryGroup(player);
         }
 
-        CachedLuckPermsMeta newCache = new CachedLuckPermsMeta(prefix, primaryGroup);
+        CachedLuckPermsMeta newCache = new CachedLuckPermsMeta(prefix, suffix, primaryGroup);
         luckPermsCache.put(player.getUniqueId(), newCache);
         return newCache;
     }
@@ -428,35 +433,15 @@ public class GuangDianChat extends AbstractRPGPlugin implements Listener, TabCom
         return cached != null ? cached.primaryGroup : "default";
     }
 
-    private String getLuckPermsMeta(Player player, boolean prefix) {
+    private String getLuckPermsMeta(Player player, boolean wantPrefix) {
         CachedLuckPermsMeta cached = getCachedLuckPermsMeta(player);
-        return cached != null ? cached.prefix : "";
+        if (cached == null) return "";
+        return wantPrefix ? cached.prefix : cached.suffix;
     }
 
     private String getPrimaryGroup(Player player) {
         CachedLuckPermsMeta cached = getCachedLuckPermsMeta(player);
         return cached != null ? cached.primaryGroup : "default";
-    }
-
-    /**
-     * 使用 MiniMessage 解析颜色代码
-     * 将 & 颜色代码转换为 MiniMessage 格式
-     */
-    private String color(String input) {
-        if (input == null) return "";
-        // 将传统 & 颜色代码转换为 MiniMessage 格式
-        return input
-            .replace("<black>", "<black>").replace("<dark_blue>", "<dark_blue>")
-            .replace("<dark_green>", "<dark_green>").replace("<dark_aqua>", "<dark_aqua>")
-            .replace("<dark_red>", "<dark_red>").replace("<dark_purple>", "<dark_purple>")
-            .replace("<gold>", "<gold>").replace("<gray>", "<gray>")
-            .replace("<dark_gray>", "<dark_gray>").replace("<blue>", "<blue>")
-            .replace("<green>", "<green>").replace("<aqua>", "<aqua>")
-            .replace("<red>", "<red>").replace("<light_purple>", "<light_purple>")
-            .replace("<yellow>", "<yellow>").replace("<white>", "<white>")
-            .replace("<obfuscated>", "<obfuscated>").replace("<bold>", "<bold>")
-            .replace("<strikethrough>", "<strikethrough>").replace("<underlined>", "<underlined>")
-            .replace("<italic>", "<italic>").replace("<reset>", "<reset>");
     }
 
     /**
