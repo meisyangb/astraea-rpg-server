@@ -23,6 +23,7 @@ public class Quest {
     
     private String questLine;
     private int order;
+    private String sect; // null = 所有门派, "guiwang"等 = 指定门派限制
     
     private int timeLimit;
     private int dailyWeight;
@@ -69,6 +70,7 @@ public class Quest {
         quest.requiredLevel = section.getInt("required_level", 0);
         quest.questLine = section.getString("questline");
         quest.order = section.getInt("order", 0);
+        quest.sect = section.getString("sect"); // null = 所有门派可用
         quest.timeLimit = section.getInt("time_limit", 0);
         quest.dailyWeight = section.getInt("daily_weight", 1);
         quest.repeatable = section.getBoolean("repeatable", false);
@@ -119,6 +121,7 @@ public class Quest {
     public int getRequiredLevel() { return requiredLevel; }
     public String getQuestLine() { return questLine; }
     public int getOrder() { return order; }
+    public String getSect() { return sect; }
     public int getTimeLimit() { return timeLimit; }
     public int getDailyWeight() { return dailyWeight; }
     public boolean isRepeatable() { return repeatable; }
@@ -131,6 +134,7 @@ public class Quest {
     public void setReward(QuestReward reward) { this.reward = reward; }
     public void setQuestLine(String questLine) { this.questLine = questLine; }
     public void setOrder(int order) { this.order = order; }
+    public void setSect(String sect) { this.sect = sect; }
     
     public int getObjectiveCount() { return objectives.size(); }
     public QuestObjective getObjective(int index) {

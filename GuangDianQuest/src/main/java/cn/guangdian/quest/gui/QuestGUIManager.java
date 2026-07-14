@@ -4,6 +4,7 @@ import cn.guangdian.quest.GuangDianQuest;
 import cn.guangdian.quest.manager.QuestUnlockManager.QuestStatus;
 import cn.guangdian.quest.model.PlayerQuestData;
 import cn.guangdian.quest.model.Quest;
+import cn.guangdian.quest.model.QuestLine;
 import cn.guangdian.quest.model.QuestObjective;
 import cn.guangdian.quest.model.QuestType;
 import net.kyori.adventure.text.Component;
@@ -168,42 +169,92 @@ public class QuestGUIManager implements Listener {
 
     // ==================== 任务线列表 ====================
 
+    // ==================== 任务线列表（按门派过滤） ====================
+
     private void openQuestLines(Player player) {
-        Inventory gui = createInventory(GUIType.QUEST_LINES, null, 27, "<dark_gray>任务线");
-        ItemStack sep = item(Material.GRAY_STAINED_GLASS_PANE, "<dark_gray>─");
+        UUID pid = player.getUniqueId();
+        
+        // 收集该玩家可见的任务线
+        List<QuestLine> availableLines = new ArrayList<>();
+        for (QuestLine line : plugin.getQuestLineManager().getAllQuestLines()) {
+            String lineSect = line.getSect();
+            if (lineSect == null || lineSect.isEmpty()) {
+                availableLines.add(line); // 通用任务线，所有人可见
+            } else {
+                String playerSect = plugin.getQuestUnlockManager().getPlayerSect(pid);
+                if (lineSect.equalsIgnoreCase(playerSect)) {
+                    availableLines.add(line); // 门派专属任务线
+                }
+            }
+        }
+        
+        int size = calcSize(availableLines.size());
+        Inventory gui = createInventory(GUIType.QUEST_LINES, null, size, "<dark_gray>任务线");
+        fillBorder(gui, size);
 
-        for (int i = 0; i < 27; i++) gui.setItem(i, sep);
+        int slot = 9;
+        for (QuestLine line : availableLines) {
+            if (slot >= size - 9) break;
+            
+            // 用不同材质区分
+            Material mat = Material.NETHER_STAR;
+            String lineName = line.getName();
+            if (lineName.contains("鬼王")) mat = Material.SOUL_SAND;
+            else if (lineName.contains("青云")) mat = Material.DIAMOND_SWORD;
+            else if (lineName.contains("合欢")) mat = Material.NETHER_STAR;
+            else if (lineName.contains("天音")) mat = Material.GOLDEN_APPLE;
+            else if (lineName.contains("焚香")) mat = Material.BLAZE_POWDER;
+            else if (lineName.contains("长生")) mat = Material.BREWING_STAND;
+            else if (lineName.contains("圣门")) mat = Material.NETHER_STAR;
+            
+            List<String> lore = new ArrayList<>();
+            lore.add("<gray>" + line.getDescription());
+            if (line.getChapters() != null && !line.getChapters().isEmpty()) {
+                lore.add("");
+                for (String ch : line.getChapters()) {
+                    lore.add(ch);
+                }
+            }
+            lore.add("");
+            lore.add("<yellow>点击查看详情");
+            
+            gui.setItem(slot, item(mat, line.getName(), lore.toArray(new String[0])));
+            slot++;
+        }
 
-        gui.setItem(11, item(Material.NETHER_STAR, "<gold><bold>主线 · 光之迷城",
-            "<gray>点击查看主线任务进度"));
-
-        gui.setItem(13, item(Material.BOOK, "<aqua><bold>支线任务",
-            "<gray>点击查看支线任务"));
-
-        gui.setItem(15, item(Material.CLOCK, "<yellow><bold>每日任务",
-            "<gray>点击查看每日任务"));
-
-        gui.setItem(22, item(Material.ARROW, "<yellow>返回"));
+        gui.setItem(size - 5, item(Material.ARROW, "<yellow>返回"));
+        gui.setItem(size - 1, item(Material.BARRIER, "<red>关闭"));
 
         player.openInventory(gui);
     }
 
-    // ==================== 主线任务进度 ====================
+    // ==================== 主线任务进度（按任务线） ====================
 
-    private void openMainQuestLine(Player player) {
+    private void openMainQuestLine(Player player, String questLineId) {
         List<Quest> mainQuests = new ArrayList<>();
+        UUID pid = player.getUniqueId();
         for (Quest q : plugin.getQuestRepository().getAllQuests()) {
-            if (q.getType() == QuestType.MAIN && q.getQuestLine() != null) {
-                mainQuests.add(q);
+            if (q.getType() == QuestType.MAIN && questLineId.equals(q.getQuestLine())) {
+                // 门派过滤
+                if (plugin.getQuestUnlockManager().matchesSect(pid, q)) {
+                    mainQuests.add(q);
+                }
             }
         }
         mainQuests.sort(Comparator.comparingInt(Quest::getOrder));
 
+        plugin.getLogger().info("[DEBUG] openMainQuestLine: questLineId=" + questLineId + ", quests=" + mainQuests.size());
+        for (Quest q : mainQuests) {
+            plugin.getLogger().info("[DEBUG]   - " + q.getId() + " (order=" + q.getOrder() + ")");
+        }
+
+        QuestLine line = plugin.getQuestLineManager().getQuestLine(questLineId);
+        String title = line != null ? line.getName() : questLineId;
+
         int size = calcSize(mainQuests.size());
-        Inventory gui = createInventory(GUIType.MAIN_LINE, null, size, "<dark_gray>主线 · 光之迷城");
+        Inventory gui = createInventory(GUIType.MAIN_LINE, questLineId, size, "<dark_gray>" + title);
         fillBorder(gui, size);
 
-        UUID pid = player.getUniqueId();
         int slot = 9;
         for (Quest quest : mainQuests) {
             if (slot >= size - 9) break;
@@ -463,7 +514,7 @@ public class QuestGUIManager implements Listener {
             case MAIN_MENU -> handleMainMenu(player, clicked);
             case ACTIVE_LIST -> handleActiveList(player, slot, clicked);
             case AVAILABLE_LIST -> handleAvailableList(player, slot, clicked);
-            case QUEST_LINES -> handleQuestLines(player, clicked);
+            case QUEST_LINES -> handleQuestLines(player, slot, clicked);
             case MAIN_LINE -> handleMainLine(player, slot, clicked);
             case DAILY_LIST -> handleDailyList(player, slot, clicked);
             case SIDE_LIST -> handleSideList(player, slot, clicked);
@@ -507,12 +558,31 @@ public class QuestGUIManager implements Listener {
         if (idx < available.size()) openQuestDetail(player, available.get(idx));
     }
 
-    private void handleQuestLines(Player player, ItemStack clicked) {
+    private void handleQuestLines(Player player, int slot, ItemStack clicked) {
         Material mat = clicked.getType();
-        if (mat == Material.NETHER_STAR) openMainQuestLine(player);
-        else if (mat == Material.BOOK) openSideQuests(player);
-        else if (mat == Material.CLOCK) openDailyQuests(player);
-        else if (mat == Material.ARROW) openMainMenu(player);
+        if (mat == Material.ARROW) { openMainMenu(player); return; }
+        if (mat == Material.BARRIER) { player.closeInventory(); return; }
+        if (slot < 9) return;
+        
+        // 从当前打开的 GUI 中重建任务线列表
+        UUID pid = player.getUniqueId();
+        List<QuestLine> availableLines = new ArrayList<>();
+        for (QuestLine line : plugin.getQuestLineManager().getAllQuestLines()) {
+            String lineSect = line.getSect();
+            if (lineSect == null || lineSect.isEmpty()) {
+                availableLines.add(line);
+            } else {
+                String playerSect = plugin.getQuestUnlockManager().getPlayerSect(pid);
+                if (lineSect.equalsIgnoreCase(playerSect)) {
+                    availableLines.add(line);
+                }
+            }
+        }
+        
+        int idx = slot - 9;
+        if (idx < availableLines.size()) {
+            openMainQuestLine(player, availableLines.get(idx).getId());
+        }
     }
 
     private void handleMainLine(Player player, int slot, ItemStack clicked) {
@@ -520,16 +590,43 @@ public class QuestGUIManager implements Listener {
         if (clicked.getType() == Material.ARROW) { openQuestLines(player); return; }
         if (slot < 9) return;
 
+        // 从 holder 获取任务线 ID
+        String questLineId = null;
+        if (player.getOpenInventory().getTopInventory().getHolder() instanceof QuestMenuHolder holder) {
+            questLineId = holder.getData();
+        }
+        
+        plugin.getLogger().info("[DEBUG] handleMainLine: questLineId=" + questLineId + ", slot=" + slot);
+
         List<Quest> mainQuests = new ArrayList<>();
+        UUID pid = player.getUniqueId();
         for (Quest q : plugin.getQuestRepository().getAllQuests()) {
-            if (q.getType() == QuestType.MAIN && q.getQuestLine() != null) {
-                mainQuests.add(q);
+            if (q.getType() == QuestType.MAIN && questLineId != null && questLineId.equals(q.getQuestLine())) {
+                if (plugin.getQuestUnlockManager().matchesSect(pid, q)) {
+                    mainQuests.add(q);
+                }
             }
         }
         mainQuests.sort(Comparator.comparingInt(Quest::getOrder));
+        
+        plugin.getLogger().info("[DEBUG] mainQuests count: " + mainQuests.size());
 
         int idx = slot - 9;
-        if (idx < mainQuests.size()) openQuestDetail(player, mainQuests.get(idx).getId());
+        plugin.getLogger().info("[DEBUG] idx=" + idx);
+        
+        if (idx < mainQuests.size()) {
+            Quest quest = mainQuests.get(idx);
+            plugin.getLogger().info("[DEBUG] opening quest detail: " + quest.getId());
+            try {
+                openQuestDetail(player, quest.getId());
+                plugin.getLogger().info("[DEBUG] openQuestDetail completed successfully");
+            } catch (Exception e) {
+                plugin.getLogger().severe("[DEBUG] openQuestDetail failed: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            plugin.getLogger().info("[DEBUG] idx out of bounds: idx=" + idx + ", size=" + mainQuests.size());
+        }
     }
 
     private void handleDailyList(Player player, int slot, ItemStack clicked) {

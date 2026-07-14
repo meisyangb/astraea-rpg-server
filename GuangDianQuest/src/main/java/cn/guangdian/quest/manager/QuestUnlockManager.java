@@ -4,20 +4,73 @@ import cn.guangdian.quest.GuangDianQuest;
 import cn.guangdian.quest.model.PlayerQuestData;
 import cn.guangdian.quest.model.Quest;
 import cn.guangdian.quest.model.QuestType;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * 任务解锁管理器
- * 主线任务按order顺序自动解锁，无需额外配置
+ * 主线任务按order顺序自动解锁，支持门派过滤
  */
 public class QuestUnlockManager {
 
     private final GuangDianQuest plugin;
+    
+    // 门派查询器，由 GuangDianSect 插件注册
+    private Function<UUID, String> sectProvider;
 
     public QuestUnlockManager(GuangDianQuest plugin) {
         this.plugin = plugin;
+    }
+
+    /**
+     * 注册门派查询器（由 GuangDianSect 调用）
+     */
+    public void setSectProvider(Function<UUID, String> provider) {
+        this.sectProvider = provider;
+    }
+
+    /**
+     * 获取玩家的门派（直接调用 GuangDianSect API）
+     * @return 门派ID (如 "guiwang", "qingyun")，无门派返回 null
+     */
+    public String getPlayerSect(UUID playerId) {
+        // 方式1: 通过 sectProvider 直接查询（由 GuangDianSect 注册）
+        if (sectProvider != null) {
+            String sect = sectProvider.apply(playerId);
+            if (sect != null) return sect;
+        }
+        
+        // 方式2: 直接调用 GuangDianSect API
+        try {
+            org.bukkit.plugin.Plugin sectPlugin = Bukkit.getPluginManager().getPlugin("GuangDianSect");
+            if (sectPlugin != null && sectPlugin.isEnabled()) {
+                Player player = Bukkit.getPlayer(playerId);
+                if (player != null) {
+                    // 反射调用 GuangDianSect.getInstance().getPlayerSect(player).getId()
+                    Object instance = sectPlugin.getClass().getMethod("getInstance").invoke(null);
+                    Object sect = instance.getClass().getMethod("getPlayerSect", Player.class).invoke(instance, player);
+                    if (sect != null) {
+                        return (String) sect.getClass().getMethod("getId").invoke(sect);
+                    }
+                }
+            }
+        } catch (Exception ignored) {}
+        
+        return null;
+    }
+
+    /**
+     * 检查任务是否匹配玩家门派
+     */
+    public boolean matchesSect(UUID playerId, Quest quest) {
+        String questSect = quest.getSect();
+        if (questSect == null || questSect.isEmpty()) return true; // 通用任务，所有门派可用
+        
+        String playerSect = getPlayerSect(playerId);
+        return questSect.equalsIgnoreCase(playerSect);
     }
 
     /**
@@ -26,6 +79,11 @@ public class QuestUnlockManager {
     public boolean isQuestUnlocked(UUID playerId, String questId) {
         Quest quest = plugin.getQuestManager().getQuest(questId);
         if (quest == null) return false;
+
+        // 门派检查
+        if (!matchesSect(playerId, quest)) {
+            return false;
+        }
 
         // 主线任务：按order顺序解锁
         if (quest.getType() == QuestType.MAIN) {
@@ -114,11 +172,14 @@ public class QuestUnlockManager {
         String questLine = completedQuest.getQuestLine();
         if (questLine == null) return;
 
-        // 找下一个任务
+        UUID playerId = player.getUniqueId();
+
+        // 找下一个任务（同门派）
         for (Quest q : plugin.getQuestRepository().getAllQuests()) {
             if (questLine.equals(q.getQuestLine()) 
                 && q.getType() == QuestType.MAIN 
-                && q.getOrder() == completedQuest.getOrder() + 1) {
+                && q.getOrder() == completedQuest.getOrder() + 1
+                && matchesSect(playerId, q)) {
                 player.sendMessage(GuangDianQuest.color(
                     "<green>✓ 新任务已解锁: <gold>" + q.getName()));
                 try {

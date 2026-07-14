@@ -1,0 +1,66 @@
+# ═══════════════════════════════════════════════════════
+#  鬼王宗主线任务
+# 
+#   放在 quests/鬼王宗/ 目录下
+#   sect 自动继承文件夹名，无需手动写
+# ═══════════════════════════════════════════════════════
+
+# 第一章：鬼道入门
+guiwang_m001:
+  name: "鬼道入门"
+  type: MAIN
+  questline: guiwang_main
+  order: 1
+  required_level: 1
+  description:
+    - "&7鬼王宗内鬼气森森，亡魂哀嚎不断。"
+    - "&7宗主命你前往鬼哭岭，击杀10只怨灵"
+    - "&7以吸收鬼气，开启鬼道修行。"
+  objectives:
+    - type: KILL_MOB
+      target: "怨灵"
+      amount: 10
+      description: "击杀怨灵"
+  rewards:
+    money: 50
+    exp: 100
+    items:
+      - "IRON_SWORD:1"
+
+guiwang_m002:
+  name: "噬魂夺魄"
+  type: MAIN
+  questline: guiwang_main
+  order: 2
+  required_level: 3
+  description:
+    - "&7初入鬼道，你需要学会吞噬灵魂。"
+    - "&7前往乱葬岗收集20个亡魂碎片。"
+  objectives:
+    - type: COLLECT_ITEM
+      target: "亡魂碎片"
+      amount: 20
+      description: "收集亡魂碎片"
+  rewards:
+    money: 100
+    exp: 200
+
+guiwang_m003:
+  name: "鬼王之试"
+  type: MAIN
+  questline: guiwang_main
+  order: 3
+  required_level: 5
+  description:
+    - "&7修炼有成，宗主命你前往幽冥洞"
+    - "&7击败鬼将，证明你的实力。"
+  objectives:
+    - type: KILL_MOB
+      target: "鬼将"
+      amount: 1
+      description: "击败鬼将"
+  rewards:
+    money: 300
+    exp: 500
+    items:
+      - "DIAMOND_SWORD:1"

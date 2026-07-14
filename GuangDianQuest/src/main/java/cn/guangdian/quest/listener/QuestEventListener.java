@@ -130,6 +130,7 @@ public class QuestEventListener implements Listener {
             return true;
         }
 
+        // 检查 MythicMobs
         if (mythicMobsAvailable && isMythicMob(entity)) {
             String mythicId = getMythicMobId(entity);
             if (mythicId != null && mythicId.equalsIgnoreCase(target)) {
@@ -137,7 +138,25 @@ public class QuestEventListener implements Listener {
             }
         }
 
+        // 检查 GuangDianMobs（通过自定义名称匹配）
+        String customName = getEntityCustomName(entity);
+        if (customName != null && customName.equalsIgnoreCase(target)) {
+            return true;
+        }
+
         return false;
+    }
+
+    /**
+     * 从实体自定义名称中提取纯文本（去除 MiniMessage 颜色代码）
+     */
+    private String getEntityCustomName(LivingEntity entity) {
+        Component name = entity.customName();
+        if (name == null) return null;
+        
+        // 使用 MiniMessage 反序列化为纯文本
+        String plainText = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(name);
+        return plainText.trim();
     }
 
     private boolean isMythicMob(LivingEntity entity) {
@@ -364,27 +383,8 @@ public class QuestEventListener implements Listener {
         plugin.getLogger().info("[DEBUG] onNPCInteract called: npcId=" + npcId + ", player=" + player.getName());
         plugin.getLogger().info("[DEBUG] Active quest count: " + data.getActiveQuestCount());
 
-        boolean found = false;
-        for (TypedObjective to : getObjectivesByType(data, QuestObjective.ObjectiveType.TALK)) {
-            QuestObjective obj = to.objective();
-            plugin.getLogger().info("[DEBUG] Found TALK objective, target=" + obj.getTarget() + ", npcId=" + npcId);
-            if (obj.getTarget().equalsIgnoreCase(npcId)) {
-                int[] progress = data.getProgress(to.questId());
-                int current = (progress != null && obj.getIndex() < progress.length) ? progress[obj.getIndex()] : 0;
-                plugin.getLogger().info("[DEBUG] Progress: " + current + "/" + obj.getAmount());
-                if (current < obj.getAmount()) {
-                    plugin.getProgressManager().incrementProgress(playerId, to.questId(), obj.getIndex(), 1);
-                    plugin.getLogger().info("[DEBUG] Sending info message to player");
-                    player.sendMessage("§b§lℹ §b任务进度更新: " + to.quest().getName());
-                    found = true;
-                }
-            }
-        }
-
-        if (!found && data.getActiveQuestCount() == 0) {
-            plugin.getLogger().info("[DEBUG] No active quests, sending hint");
-            player.sendMessage("§e提示: 你还没有接取任何任务，使用 §a/quest list §e查看可接取的任务");
-        }
+        // 使用新的聊天式对话系统
+        plugin.getChatDialogueManager().startDialogueForNPC(player, npcId);
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

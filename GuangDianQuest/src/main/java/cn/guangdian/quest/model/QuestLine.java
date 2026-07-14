@@ -15,6 +15,7 @@ public class QuestLine {
     private final String id;                  // 任务线ID
     private String name;                      // 任务线名称
     private String description;               // 任务线描述
+    private String sect;                      // 门派限制, null = 所有门派
     private List<String> questIds;            // 任务ID列表（按顺序）
     private List<String> chapters;            // 章节名称
     private int currentChapter;               // 当前章节
@@ -34,6 +35,7 @@ public class QuestLine {
         
         line.name = section.getString("name", id);
         line.description = section.getString("description", "");
+        line.sect = section.getString("sect"); // null = 所有门派
         line.questIds = section.getStringList("quests");
         line.chapters = section.getStringList("chapters");
         
@@ -44,6 +46,7 @@ public class QuestLine {
     public String getId() { return id; }
     public String getName() { return name; }
     public String getDescription() { return description; }
+    public String getSect() { return sect; }
     public List<String> getQuestIds() { return questIds; }
     public List<String> getChapters() { return chapters; }
     public int getCurrentChapter() { return currentChapter; }

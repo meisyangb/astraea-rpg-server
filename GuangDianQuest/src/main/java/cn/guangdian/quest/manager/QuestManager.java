@@ -67,18 +67,24 @@ public class QuestManager {
 
     public boolean acceptQuest(UUID playerId, String questId) {
         Quest quest = getQuest(questId);
-        if (quest == null) return false;
+        if (quest == null) {
+            plugin.getLogger().info("[DEBUG] acceptQuest failed: quest not found: " + questId);
+            return false;
+        }
 
         PlayerQuestData data = playerRepository.getPlayerData(playerId);
         if (data.isQuestActive(questId) || data.isQuestCompleted(questId)) {
+            plugin.getLogger().info("[DEBUG] acceptQuest failed: already active or completed: " + questId);
             return false;
         }
 
         if (!checkPrerequisites(data, quest)) {
+            plugin.getLogger().info("[DEBUG] acceptQuest failed: prerequisites not met: " + questId);
             return false;
         }
 
         if (data.getActiveQuestCount() >= plugin.getMaxActiveQuests()) {
+            plugin.getLogger().info("[DEBUG] acceptQuest failed: max active quests reached: " + questId);
             return false;
         }
 
@@ -86,10 +92,12 @@ public class QuestManager {
         if (player != null && quest.getRequiredLevel() > 0) {
             int level = getPlayerLevel(playerId);
             if (level < quest.getRequiredLevel()) {
+                plugin.getLogger().info("[DEBUG] acceptQuest failed: level too low: " + questId + ", required=" + quest.getRequiredLevel() + ", current=" + level);
                 return false;
             }
         }
 
+        plugin.getLogger().info("[DEBUG] acceptQuest success: " + questId);
         data.acceptQuest(questId, quest.getObjectiveCount());
 
         publishQuestEvent(playerId, questId, "ACCEPT");
@@ -240,7 +248,9 @@ public class QuestManager {
                     return;
                 }
             }
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+            plugin.getLogger().warning("通过 RPGCore 发放积分奖励失败: " + e.getMessage());
+        }
 
         if (Bukkit.getPluginManager().isPluginEnabled("GuangDianPoints")) {
             try {
@@ -251,7 +261,9 @@ public class QuestManager {
                     java.lang.reflect.Method addMethod = api.getClass().getMethod("addBalance", UUID.class, long.class);
                     addMethod.invoke(api, playerId, (long) amount);
                 }
-            } catch (Exception ignored) {}
+            } catch (Exception e) {
+                plugin.getLogger().warning("通过 GuangDianPoints 发放积分奖励失败: " + e.getMessage());
+            }
         }
     }
 

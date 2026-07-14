@@ -2,6 +2,8 @@ package cn.guangdian.quest;
 
 import cn.guangdian.quest.adapter.QuestServiceAdapter;
 import cn.guangdian.quest.command.QuestCommand;
+import cn.guangdian.quest.dialogue.ChatDialogueManager;
+import cn.guangdian.quest.dialogue.DialogueListener;
 import cn.guangdian.quest.gui.DialogueGUI;
 import cn.guangdian.quest.gui.QuestGUIManager;
 import cn.guangdian.quest.lifecycle.QuestDataHandler;
@@ -42,6 +44,7 @@ public class GuangDianQuest extends AbstractRPGPlugin {
     private QuestUnlockManager unlockManager;
     private QuestGUIManager guiManager;
     private DialogueGUI dialogueGUI;
+    private ChatDialogueManager chatDialogueManager;
 
     private MiniMessageService miniMessage;
     private final MiniMessage miniMessageParser = MiniMessage.miniMessage();
@@ -158,6 +161,7 @@ public class GuangDianQuest extends AbstractRPGPlugin {
         unlockManager = new QuestUnlockManager(this);
         guiManager = new QuestGUIManager(this);
         dialogueGUI = new DialogueGUI(this);
+        chatDialogueManager = new ChatDialogueManager(this);
     }
 
     private void saveDefaultQuests() {
@@ -179,6 +183,10 @@ public class GuangDianQuest extends AbstractRPGPlugin {
     private void registerListeners() {
         questEventListener = new QuestEventListener(this);
         Bukkit.getPluginManager().registerEvents(questEventListener, this);
+        
+        // 注册聊天式对话监听器
+        Bukkit.getPluginManager().registerEvents(new DialogueListener(this, chatDialogueManager), this);
+        
         subscribeRPGCoreEvents();
         if (Bukkit.getPluginManager().isPluginEnabled("RPGCore")) {
             dataHandler = new QuestDataHandler(this);
@@ -326,6 +334,7 @@ public class GuangDianQuest extends AbstractRPGPlugin {
     public QuestUnlockManager getQuestUnlockManager() { return unlockManager; }
     public QuestGUIManager getQuestGUIManager() { return guiManager; }
     public DialogueGUI getDialogueGUI() { return dialogueGUI; }
+    public ChatDialogueManager getChatDialogueManager() { return chatDialogueManager; }
     public int getMaxActiveQuests() { return maxActiveQuests; }
     public int getDailyQuestLimit() { return dailyQuestLimit; }
     public int getAutoSaveInterval() { return autoSaveInterval; }

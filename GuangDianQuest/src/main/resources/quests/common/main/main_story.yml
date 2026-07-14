@@ -1,0 +1,59 @@
+# ═══════════════════════════════════════════════════════
+#  通用主线任务（新手引导，未加入门派时）
+# ═══════════════════════════════════════════════════════
+
+main_001:
+  name: "初入修仙界"
+  type: MAIN
+  questline: main_story
+  order: 1
+  required_level: 1
+  description:
+    - "&7欢迎来到修仙世界！"
+    - "&7你需要先了解这个世界的基本规则。"
+    - "&7前往新手村找到村长，接受新手指导。"
+  objectives:
+    - type: TALK_NPC
+      target: "村长"
+      amount: 1
+      description: "与村长对话"
+  rewards:
+    money: 10
+    exp: 50
+
+main_002:
+  name: "拜入宗门"
+  type: MAIN
+  questline: main_story
+  order: 2
+  required_level: 1
+  description:
+    - "&7修仙之路，当先拜入宗门。"
+    - "&7使用 &e/sect &7打开宗门选择界面。"
+    - "&7六大宗门各有特色，选择与你契合的吧！"
+  objectives:
+    - type: JOIN_SECT
+      target: "any"
+      amount: 1
+      description: "加入任意宗门"
+  rewards:
+    money: 100
+    exp: 100
+
+main_003:
+  name: "宗门试炼"
+  type: MAIN
+  questline: main_story
+  order: 3
+  required_level: 2
+  description:
+    - "&7入门后，宗门会给你第一个试炼任务。"
+    - "&7打开 &e/q &7查看宗门主线任务。"
+  objectives:
+    - type: OPEN_QUEST_GUI
+      target: "quest"
+      amount: 1
+      description: "打开任务界面"
+  rewards:
+    money: 50
+    exp: 100

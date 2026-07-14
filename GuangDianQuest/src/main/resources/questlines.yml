@@ -1,26 +1,134 @@
-﻿# ========================================
-# 任务线配置
+# ========================================
+# 任务线配置 - 支持门派独立主线
+# ========================================
+# 
+# sect 字段说明:
+#   null 或不写 = 所有门派通用
+#   "guiwang" = 仅鬼王宗弟子可见
+#   "qingyun" = 仅青云宗弟子可见
+#   等等...
+#
+# 使用方式:
+#   每个门派的主线任务按 order 顺序自动解锁
+#   questline 字段相同的任务属于同一任务线
 # ========================================
 
 questlines:
+  # ========== 通用主线（无门派时显示） ==========
   main_story:
     name: "<gold>主线剧情"
-    description: "光之迷城的故事主线"
+    description: "未加入门派时的新手引导"
+    sect: null
     quests:
       - main_001
       - main_002
       - main_003
-      - main_004
-      - main_005
     chapters:
-      - "<yellow>第一章：初入迷城"
-      - "<yellow>第二章：黑暗降临"
-      - "<yellow>第三章：勇者觉醒"
-      - "<yellow>第四章：最终之战"
-  
+      - "<yellow>第一章：初入修仙界"
+      - "<yellow>第二章：拜入宗门"
+      - "<yellow>第三章：宗门试炼"
+
+  # ========== 鬼王宗主线 ==========
+  guiwang_main:
+    name: "<dark_gray>鬼王宗 · 鬼道之路"
+    description: "鬼王宗弟子的修炼之路"
+    sect: "guiwang"
+    quests:
+      - guiwang_m001
+      - guiwang_m002
+      - guiwang_m003
+      - guiwang_m004
+      - guiwang_m005
+    chapters:
+      - "<dark_gray>第一章：鬼道入门"
+      - "<dark_gray>第二章：噬魂夺魄"
+      - "<dark_gray>第三章：鬼王降临"
+
+  # ========== 青云宗主线 ==========
+  qingyun_main:
+    name: "<aqua>青云宗 · 剑道通天"
+    description: "青云宗弟子的剑修之路"
+    sect: "qingyun"
+    quests:
+      - qingyun_m001
+      - qingyun_m002
+      - qingyun_m003
+      - qingyun_m004
+      - qingyun_m005
+    chapters:
+      - "<aqua>第一章：初识剑道"
+      - "<aqua>第二章：剑心通明"
+      - "<aqua>第三章：青云直上"
+
+  # ========== 合欢宗主线 ==========
+  hehuan_main:
+    name: "<light_purple>合欢宗 · 红尘情缘"
+    description: "合欢宗弟子的情缘之路"
+    sect: "hehuan"
+    quests:
+      - hehuan_m001
+      - hehuan_m002
+      - hehuan_m003
+      - hehuan_m004
+      - hehuan_m005
+    chapters:
+      - "<light_purple>第一章：情缘初现"
+      - "<light_purple>第二章：红尘炼心"
+      - "<light_purple>第三章：合欢双修"
+
+  # ========== 天音寺主线 ==========
+  tianyin_main:
+    name: "<yellow>天音寺 · 普度众生"
+    description: "天音寺弟子的佛修之路"
+    sect: "tianyin"
+    quests:
+      - tianyin_m001
+      - tianyin_m002
+      - tianyin_m003
+      - tianyin_m004
+      - tianyin_m005
+    chapters:
+      - "<yellow>第一章：皈依佛门"
+      - "<yellow>第二章：普度众生"
+      - "<yellow>第三章：天音梵唱"
+
+  # ========== 焚香谷主线 ==========
+  fenxiang_main:
+    name: "<red>焚香谷 · 烈焰焚天"
+    description: "焚香谷弟子的火修之路"
+    sect: "fenxiang"
+    quests:
+      - fenxiang_m001
+      - fenxiang_m002
+      - fenxiang_m003
+      - fenxiang_m004
+      - fenxiang_m005
+    chapters:
+      - "<red>第一章：引火入体"
+      - "<red>第二章：烈焰焚天"
+      - "<red>第三章：焚香证道"
+
+  # ========== 长生堂主线 ==========
+  changsheng_main:
+    name: "<green>长生堂 · 丹道长生"
+    description: "长生堂弟子的炼丹之路"
+    sect: "changsheng"
+    quests:
+      - changsheng_m001
+      - changsheng_m002
+      - changsheng_m003
+      - changsheng_m004
+      - changsheng_m005
+    chapters:
+      - "<green>第一章：丹道入门"
+      - "<green>第二章：丹火纯青"
+      - "<green>第三章：长生不老"
+
+  # ========== 通用支线 ==========
   cave_exploration:
     name: "<aqua>洞府探索"
     description: "探索各个洞府的秘密"
+    sect: null
     quests:
       - cave_001
       - cave_002
